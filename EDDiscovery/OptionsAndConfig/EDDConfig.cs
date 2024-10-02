@@ -616,8 +616,8 @@ namespace EDDiscovery
                 edsmfullsystemsurl = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("EDSMFullSystemsURL", "Default");
                 spanshsystemsurl = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("SpanshSystemsURL", "Default");
 
-                CaptainsLogTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("CaptainsLogPanelTagNames", "Expedition=Journal.FSDJump;Died=Journal.Died");
-                BookmarkTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("BookmarkTagNames", "Expedition=Journal.FSDJump;Died=Journal.Died");
+                CaptainsLogTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("CaptainsLogPanelTagNames", "Expedition=Journal.FSDJump" + TagSplitStringCL + "Died=Journal.Died");
+                BookmarkTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("BookmarkTagNames", "Expedition=Journal.FSDJump" + TagSplitStringBK + "Died=Journal.Died");
                 
                 webserverport = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("WebServerPort", 6502);
                 webserverenable = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("WebServerEnable", false);

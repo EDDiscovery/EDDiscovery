@@ -425,6 +425,7 @@ namespace EDDiscovery
         UserControlMaterialCommodities_buttonClear_ToolTip,
         UserControlMaterialCommodities_extButtonFont_ToolTip,
         UserControlMaterialCommodities_buttonExtImport_ToolTip,
+        UserControlMaterialCommodities_extCheckBoxMaterialView_ToolTip,
 
         UserControlMaterialCommodities_checkBoxShowZeros_ToolTip, // ToolTip 'Green will show materials with zero counts, red means remove them'
         UserControlMaterialCommodities_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
@@ -434,6 +435,7 @@ namespace EDDiscovery
         UserControlMaterialCommodities_Total, // Data !! NOTE
         UserControlMaterialCommodities_Rare, // Rare !! NOTE
         UserControlMaterialCommodities_ShipLocker,
+        UserControlMaterialCommodities_Progress,
         UserControlMaterialCommodities_AllMats,
         UserControlMaterialCommodities_AllCommods,
         UserControlMaterialCommodities_AllMicroresources,
@@ -689,6 +691,7 @@ namespace EDDiscovery
         UserControlJournalGrid_buttonFilter_ToolTip, // ToolTip 'Filter out entries based on event type'
         UserControlJournalGrid_buttonExtExcel_ToolTip, // ToolTip 'Send data on grid to excel'
         UserControlJournalGrid_checkBoxCursorToTop_ToolTip, // ToolTip 'Automatically move the cursor to the latest entry when it arrives'
+        UserControlJournalGrid_buttonField_ToolTip,
         UserControlJournalGrid_TT1, //  showing {0} original {1}
         UserControlJournalGrid_TTFilt1, // Filtered {0}
         UserControlJournalGrid_TTSelAge, // Select the entries by age,
@@ -1426,13 +1429,10 @@ namespace EDDiscovery
         UserControlMarketData_GalAvgCol, // Column Header 'Galactic Avg'
         UserControlMarketData_ProfitToCol, // Column Header 'Profit To cr/t'
         UserControlMarketData_ProfitFromCol, // Column Header 'Profit From cr/t'
-        UserControlMarketData_labelLocation, // Control 'No Data'
         UserControlMarketData_labelVs, // Control 'Vs'
         UserControlMarketData_checkBoxBuyOnly, // Control 'Buy Only'
         UserControlMarketData_checkBoxHasDemand, // Control 'Has Demand'
         UserControlMarketData_checkBoxAutoSwap, // Control 'AutoSwap'
-        UserControlMarketData_comboBoxCustomFrom_ToolTip, // ToolTip 'Click to select between tracking the cursor or a particular market data set'
-        UserControlMarketData_comboBoxCustomTo_ToolTip, // ToolTip 'Click to select a comparision market data set'
         UserControlMarketData_checkBoxBuyOnly_ToolTip, // ToolTip 'Show items you can buy only'
         UserControlMarketData_checkBoxHasDemand_ToolTip, // ToolTip 'Show items that has demand'
 
@@ -1468,6 +1468,7 @@ namespace EDDiscovery
         UserControlLedger_buttonFilter_ToolTip, // ToolTip 'Display entries matching this event type filter'
         UserControlLedger_buttonExtExcel_ToolTip, // ToolTip 'Send data on grid to excel'
         UserControlLedger_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
+        UserControlLedger_checkBoxCursorToTop_ToolTip, 
         UserControlLedger_CashTransactions, // Cash Transactions
         UserControlLedger_NOLG, // No Ledger available
 
@@ -1494,8 +1495,11 @@ namespace EDDiscovery
         UserControlScanGrid_colClass, // Column Header 'Class'
         UserControlScanGrid_colDistance, // Column Header 'Distance'
         UserControlScanGrid_colBriefing, // Column Header 'Information'
+        UserControlScanGrid_ColCurValue, 
+        UserControlScanGrid_ColMaxValue,
+        UserControlScanGrid_ColOrganics,
         UserControlScanGrid_extButtonShowControl_ToolTip, // ToolTip 'Configure overall settings'
-        UserControlScanGrid_extButtonHabZones_ToolTip, // ToolTip 'Configure hab zone information'
+        UserControlScanGrid_extButtonHighValue_ToolTip,
         UserControlScanGrid_MainStar, // Main Star
         UserControlScanGrid_Mass, // Mass
         UserControlScanGrid_Radius, // Radius
@@ -1508,7 +1512,6 @@ namespace EDDiscovery
         UserControlScanGrid_BC, // This body contains:
         UserControlScanGrid_Ring, // Has 1 ring:
         UserControlScanGrid_Belt, // Belt:
-        UserControlScanGrid_Value, // Value
         UserControlScanGrid_GS, // This is a green system, as it has all existing jumponium materials available!
         UserControlScanGrid_JS, //  jumponium materials found in system.
         UserControlScanGrid_ScanSummaryfor, // Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons
@@ -1516,7 +1519,7 @@ namespace EDDiscovery
         UserControlScanGrid_structuresToolStripMenuItem_beltsToolStripMenuItem,
         UserControlScanGrid_structuresToolStripMenuItem_ringsToolStripMenuItem,
         UserControlScanGrid_materialsToolStripMenuItem,
-        UserControlScanGrid_valuesToolStripMenuItem,
+
 
         UserControlCommonBase_Copyingtexttoclipboardfailed, // Copying text to clipboard failed
 
@@ -1609,25 +1612,37 @@ namespace EDDiscovery
         UserControlFactions_colDataLinkVictimFaction, 
         UserControlFactions_colDataLinkPayeeFaction, 
         UserControlFactions_colDataLinkPayeeValue,
+        UserControlFactions_colLastRep,
+        UserControlFactions_colSystem,
+        UserControlFactions_labelSearch,
+        UserControlFactions_colFactionState, 
+        UserControlFactions_colFactionGov,
+        UserControlFactions_colFactionAllegiance, 
+        UserControlFactions_colFactionSystemInfluence, 
+        UserControlFactions_colFactionOtherSystemInfo,
+        UserControlFactions_colOrganicDataSold,
         UserControlFactions_colInfo, // Column Header 'Other Info'
         UserControlFactions_labelTo, // Control 'to'
         UserControlFactions_showMissionsForFactionToolStripMenuItem, // ToolStrip control 'Show missions for faction'
         UserControlFactions_showCommoditymaterialTradesForFactionToolStripMenuItem, // ToolStrip control 'Show commodity/material trades for faction'
         UserControlFactions_showBountiesAndBondsForFactionToolStripMenuItem, // ToolStrip control 'Show bounties and bonds for faction'
-        UserControlFactions_showFactionSystemDetailToolStripMenuItem, // ToolStrip control 'Show system detail for faction'
         UserControlFactions_startDateTimePicker_ToolTip, // ToolTip 'Include from'
         UserControlFactions_endDateTimePicker_ToolTip, // ToolTip 'Include to'
         UserControlFactions_buttonExtExcel_ToolTip,
-        UserControlFactions_SystemAddress, // System Address
+        UserControlFactions_extCheckBoxShowHideSystemInfo_ToolTip,
+        UserControlFactions_extCheckBoxShowHideMission_ToolTip,
+        UserControlFactions_extCheckBoxShowHideCommodities_ToolTip,
+        UserControlFactions_extCheckBoxShowHideMaterials_ToolTip,
+        UserControlFactions_extCheckBoxShowHideBounties_ToolTip,
+        UserControlFactions_extCheckBoxShowHideInterdictions_ToolTip,
+        UserControlFactions_extCheckBoxShowHideKillBonds_ToolTip,
+        UserControlFactions_extCheckBoxShowHideDataLink_ToolTip,
+        UserControlFactions_extCheckBoxShowHideCartographic_ToolTip,
         UserControlFactions_colInfluence,   // +Influence
         UserControlFactions_CBought,        // Commds +
         UserControlFactions_CSold,  // Commds -
         UserControlFactions_MBought, // Mats +
         UserControlFactions_MSold,  // Mats-
-        UserControlFactions_RewardsPlural, // Rewards
-        UserControlFactions_BountiesPlural, // Bounties
-        UserControlFactions_BondsPlural, // Bonds
-        UserControlFactions_SystemsDetailFor, // Systems Detail for
 
 
         FindSystemsUserControl_extCheckBoxExcludeVisitedSystems, // Control 'Exclude Visited Systems'

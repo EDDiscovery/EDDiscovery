@@ -40,6 +40,8 @@ namespace EDDiscovery
         {
             Trace.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Refresh complete");
 
+            PostHistoryLoadDebug();
+
             RefreshButton(true);
             actioncontroller.ActionRunOnRefresh();
 

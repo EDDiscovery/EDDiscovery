@@ -248,7 +248,6 @@ namespace EDDiscovery.UserControls
                         grd.GetLine += delegate (int r)
                         {
                             HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[r].Tag;
-                            he.FillInformation(out string EventDescription, out string EventDetailedInfo);
                             return new Object[] {
                                 EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
                                 he.EventSummary,
@@ -256,8 +255,8 @@ namespace EDDiscovery.UserControls
                                 he.WhereAmI,
                                 he.ShipInformation != null ? he.ShipInformation.Name : "Unknown",
                                 he.EventSummary,
-                                EventDescription,
-                                EventDetailedInfo,
+                                he.GetInfo(),
+                                he.GetDetailed()??"",       // may return null
                                 dataGridViewTravel.Rows[r].Cells[4].Value,
                                 he.isTravelling ? he.TravelledDistance.ToString("N1",grd.FormatCulture) : "",
                                 he.isTravelling ? he.TravelledSeconds.ToString("d'd 'h'h 'm'm 's's'",grd.FormatCulture) : "",

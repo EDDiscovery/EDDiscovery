@@ -45,10 +45,10 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlStarList));
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.checkBoxCursorToTop = new ExtendedControls.ExtCheckBox();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.textBoxSearch = new ExtendedControls.ExtTextBox();
@@ -74,6 +74,7 @@ namespace EDDiscovery.UserControls
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonDisplayFilters = new ExtendedControls.ExtButton();
             this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
+            this.extButtonTimeRanges = new ExtendedControls.ExtButton();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStarList)).BeginInit();
@@ -100,7 +101,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.ImageIndeterminate = null;
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
-            this.checkBoxCursorToTop.Location = new System.Drawing.Point(467, 1);
+            this.checkBoxCursorToTop.Location = new System.Drawing.Point(503, 1);
             this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxCursorToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCursorToTop.Name = "checkBoxCursorToTop";
@@ -115,7 +116,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(431, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(467, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
@@ -136,9 +137,10 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSearch.EndButtonEnable = true;
             this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSearch.EndButtonImage")));
+            this.textBoxSearch.EndButtonSize16ths = 10;
             this.textBoxSearch.EndButtonVisible = false;
             this.textBoxSearch.InErrorCondition = false;
-            this.textBoxSearch.Location = new System.Drawing.Point(195, 1);
+            this.textBoxSearch.Location = new System.Drawing.Point(231, 1);
             this.textBoxSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.textBoxSearch.Multiline = false;
             this.textBoxSearch.Name = "textBoxSearch";
@@ -149,6 +151,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.Size = new System.Drawing.Size(148, 20);
             this.textBoxSearch.TabIndex = 1;
             this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxSearch.TextNoChange = "";
             this.toolTip.SetToolTip(this.textBoxSearch, resources.GetString("textBoxSearch.ToolTip"));
             this.textBoxSearch.WordWrap = true;
             this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
@@ -156,7 +159,7 @@ namespace EDDiscovery.UserControls
             // labelSearch
             // 
             this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(146, 1);
+            this.labelSearch.Location = new System.Drawing.Point(182, 1);
             this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelSearch.Name = "labelSearch";
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
@@ -310,14 +313,14 @@ namespace EDDiscovery.UserControls
             | System.Windows.Forms.AnchorStyles.Left)));
             this.dataGridViewStarList.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
             this.dataGridViewStarList.AutoSortByColumnName = false;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewStarList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewStarList.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.dataGridViewStarList.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewStarList.ColumnReorder = true;
             this.dataGridViewStarList.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -327,26 +330,26 @@ namespace EDDiscovery.UserControls
             this.ColumnInformation,
             this.Value});
             this.dataGridViewStarList.ContextMenuStrip = this.contextMenuStrip;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.dataGridViewStarList.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.dataGridViewStarList.DefaultCellStyle = dataGridViewCellStyle3;
             this.dataGridViewStarList.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewStarList.Name = "dataGridViewStarList";
             this.dataGridViewStarList.PerColumnWordWrapControl = true;
             this.dataGridViewStarList.RowHeaderMenuStrip = null;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.dataGridViewStarList.RowHeadersDefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.dataGridViewStarList.RowHeadersDefaultCellStyle = dataGridViewCellStyle4;
             this.dataGridViewStarList.RowHeadersWidth = 50;
             this.dataGridViewStarList.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewStarList.SingleRowSelect = true;
@@ -378,8 +381,8 @@ namespace EDDiscovery.UserControls
             // 
             // ColumnVisits
             // 
-            dataGridViewCellStyle6.NullValue = null;
-            this.ColumnVisits.DefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.NullValue = null;
+            this.ColumnVisits.DefaultCellStyle = dataGridViewCellStyle2;
             this.ColumnVisits.FillWeight = 40F;
             this.ColumnVisits.HeaderText = "Visits";
             this.ColumnVisits.MinimumWidth = 50;
@@ -405,6 +408,7 @@ namespace EDDiscovery.UserControls
             this.topPanel.AutoSize = true;
             this.topPanel.Controls.Add(this.labelTime);
             this.topPanel.Controls.Add(this.comboBoxTime);
+            this.topPanel.Controls.Add(this.extButtonTimeRanges);
             this.topPanel.Controls.Add(this.labelSearch);
             this.topPanel.Controls.Add(this.textBoxSearch);
             this.topPanel.Controls.Add(this.extButtonDisplayFilters);
@@ -422,7 +426,7 @@ namespace EDDiscovery.UserControls
             this.extButtonDisplayFilters.BackColor = System.Drawing.SystemColors.Control;
             this.extButtonDisplayFilters.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonDisplayFilters.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.extButtonDisplayFilters.Location = new System.Drawing.Point(359, 1);
+            this.extButtonDisplayFilters.Location = new System.Drawing.Point(395, 1);
             this.extButtonDisplayFilters.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.extButtonDisplayFilters.Name = "extButtonDisplayFilters";
             this.extButtonDisplayFilters.Size = new System.Drawing.Size(28, 28);
@@ -433,13 +437,24 @@ namespace EDDiscovery.UserControls
             // edsmSpanshButton
             // 
             this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
-            this.edsmSpanshButton.Location = new System.Drawing.Point(399, 1);
+            this.edsmSpanshButton.Location = new System.Drawing.Point(435, 1);
             this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
             this.edsmSpanshButton.Name = "edsmSpanshButton";
             this.edsmSpanshButton.SettingsSplittingChar = ';';
             this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
             this.edsmSpanshButton.TabIndex = 32;
             this.edsmSpanshButton.UseVisualStyleBackColor = true;
+            // 
+            // extButtonTimeRanges
+            // 
+            this.extButtonTimeRanges.Image = global::EDDiscovery.Icons.Controls.Clock;
+            this.extButtonTimeRanges.Location = new System.Drawing.Point(146, 1);
+            this.extButtonTimeRanges.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonTimeRanges.Name = "extButtonTimeRanges";
+            this.extButtonTimeRanges.Size = new System.Drawing.Size(28, 28);
+            this.extButtonTimeRanges.TabIndex = 25;
+            this.extButtonTimeRanges.UseVisualStyleBackColor = true;
+            this.extButtonTimeRanges.Click += new System.EventHandler(this.extButtonTimeRanges_Click);
             // 
             // UserControlStarList
             // 
@@ -485,5 +500,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton extButtonDisplayFilters;
         private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
         private EDSMSpanshButton edsmSpanshButton;
+        private ExtendedControls.ExtButton extButtonTimeRanges;
     }
 }

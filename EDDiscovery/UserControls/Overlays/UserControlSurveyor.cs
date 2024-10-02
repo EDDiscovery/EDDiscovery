@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 - 2022 EDDiscovery development team
+ * Copyright © 2016 - 2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,8 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
  */
+
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls
             extCheckBoxWordWrap.Checked = GetSetting("wordwrap", false);
             extCheckBoxWordWrap.Click += wordWrapToolStripMenuItem_Click;
 
-            fsssignalsdisplayed = GetSetting("fsssignals", "");
+            fsssignalstodisplay = GetSetting("fsssignals", "");
 
             DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
-            // received a new navroute, and we have navroute selected, reload
+            // received a new navroute, and we have navroute selected (-1), reload
             if (he.EntryType == JournalTypeEnum.NavRoute && currentRoute != null && currentRoute.Id == -1)
             {
                 //System.Diagnostics.Debug.WriteLine("Surveyor {displaynumber} new entry, load nav route");
@@ -124,6 +124,8 @@ namespace EDDiscovery.UserControls
                 cur_sys = DiscoveryForm.History.GetLast?.System;      // may be null, make sure its set.
                 CalculateThenDrawSystemSignals(cur_sys);
             }
+
+            eventsseen++;
         }
 
         private void Discoveryform_OnNewTarget(object obj)
@@ -212,16 +214,23 @@ namespace EDDiscovery.UserControls
 
         bool instartjump = false;
 
+
+        // travelgrid sends this when cursor position changes, either up or down
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             // something has changed and just blindly for now recalc the fsd info
             shipfsdinfo = he.GetJumpInfo(DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
             shipinfo = he.ShipInformation;
 
-            bool islatest = Object.ReferenceEquals(DiscoveryForm.History.GetLast, he);        // is this the latest
+            // calculate if tracking history.  is_latest is used to gate action triggers - they only occur if we are tracking the top of history
+            is_latest = Object.ReferenceEquals(DiscoveryForm.History.GetLast, he);
+
+            // set if we have completed a jump
             bool jumpover = he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.CarrierJump;
 
-            if (islatest)       // if at top of history.. if not, we don't do startjump sequencing
+            System.Diagnostics.Debug.WriteLine($"Surveyor HE {he.EventTimeUTC} {he.EventSummary} state latest {is_latest} jumpover {jumpover}");
+
+            if (is_latest)       // if at top of history.. if not, we don't do startjump sequencing
             {
                 if (instartjump && !jumpover)       // if in a start jump, and jump not over.. throw away all events between start jump and fsd jump
                 {
@@ -235,7 +244,7 @@ namespace EDDiscovery.UserControls
                     return;
                 }
 
-                if (jumpover)       // when jump is over, we release instartjump, ensure cur_sys has the full info, and then kick for a full display
+                if (jumpover)       // when jump is over, we release instartjump, ensure cur_sys has the full info, clear all recorded triggers, and then kick for a full display
                 {
                     instartjump = false;
                     cur_sys = he.System;        // ensure fully populated
@@ -248,14 +257,17 @@ namespace EDDiscovery.UserControls
             if (he.EntryType == JournalTypeEnum.StartJump)                  // start jump stops rest of below working
             {
                 JournalStartJump jsj = he.journalEntry as JournalStartJump;
-                
+
                 // needs to be a hyperspace one, not supercruise, and needs to be at top of list, so we are processing real time
-                if (jsj.IsHyperspace && islatest ) 
+                if (jsj.IsHyperspace && is_latest)
                 {
                     // important need system address as scan uses it for quick lookup
                     // set our system to the next system
                     cur_sys = new SystemClass(jsj.StarSystem, jsj.SystemAddress);
                     System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor start jump changed to {cur_sys.Name} Draw title, scan summary, scan system");
+
+                    // clear the system triggers memory here, in case we get something during start jump sequence
+                    cursystriggered = new Dictionary<string, HashSet<string>>();
 
                     starclass = jsj.FriendlyStarClass;  // reset vars
                     bodies_found = 0;
@@ -281,7 +293,7 @@ namespace EDDiscovery.UserControls
                 bodies_found = 0;
                 all_found = false;
                 cur_sys = he.System;       // and set, then
-                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} Surveyor noted system change to {cur_sys.Name} DrawAll");
+                System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor noted system change to {cur_sys.Name} DrawAll");
                 DrawAll(cur_sys);
                 return;         // finish, do nothing else
             }
@@ -492,22 +504,22 @@ namespace EDDiscovery.UserControls
                         if (IsSet(RouteControl.shownotetext) && closest.waypointnote.HasChars())
                             lastroutetext = lastroutetext.AppendPrePad(closest.waypointnote, Environment.NewLine);
 
-                        string name = closest.nextsystem.Name;
+                        string closestsystem = closest.nextsystem.Name;
 
-                        if (lastsystemroute == null || name.CompareTo(lastsystemroute) != 0)
+                        if (lastsystemonroute == null || closestsystem.CompareTo(lastsystemonroute) != 0)
                         {
                             if (IsSet(RouteControl.autocopy))
-                                SetClipboardText(name);
+                                SetClipboardText(closestsystem);
 
                             if (IsSet(RouteControl.settarget))
                             {
-                                if (TargetClass.SetTargetOnSystemConditional(name, closest.nextsystem.X, closest.nextsystem.Y, closest.nextsystem.Z))
+                                if (TargetClass.SetTargetOnSystemConditional(closestsystem, closest.nextsystem.X, closest.nextsystem.Y, closest.nextsystem.Z))
                                 {
                                     DiscoveryForm.NewTargetSet(this);
                                 }
                             }
 
-                            lastsystemroute = name;
+                            lastsystemonroute = closestsystem;
                         }
                     }
                 }
@@ -641,6 +653,9 @@ namespace EDDiscovery.UserControls
 
             if (sys != null)      // if we have a system
             {
+                // record triggers for this system
+                Dictionary<string, HashSet<string>> triggers = new Dictionary<string, HashSet<string>>();
+
                 // perform searches, and store them in searchresults, keyed by body name matched
 
                 var searchresults = new Dictionary<string, List<HistoryListQueries.ResultEntry>>();
@@ -693,9 +708,7 @@ namespace EDDiscovery.UserControls
                     {
                         var sd = sn.ScanData;
 
-                        searchresults.TryGetValue(sn.FullName, out List<HistoryListQueries.ResultEntry> searchresultfornode);     // will be null if not found
-
-                        var surveyordisplay = searchresultfornode != null;      // if we have a search node, display
+                        // compute some properties of the object
 
                         bool hasgeosignals = sn.CountGeoSignals > 0;
                         bool hasbiosignals = sn.CountBioSignals > 0;
@@ -717,9 +730,53 @@ namespace EDDiscovery.UserControls
                         bool matchedlandablevolcanism = sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism);
                         bool matchedvolcanism = sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism);
 
-                        if (surveyordisplay == false && (!sd.IsWebSourced || edsmSpanshButton.IsAnySet)) // if to perform inbuilt checks - must have scan data to do this
+                        // make up triggers for the action programs
+
+                        triggers.Add(sd.BodyName, new HashSet<string>());
+                        var en = triggers[sd.BodyName];
+
+                        // we only send trigger actions when we are tracking the latest travel history, not when we are back in the history
+                        // and we have had new events come in (showing we are not just started up cold)
+
+                        bool producetriggers = is_latest && eventsseen > 0;
+
+                        if (producetriggers)
                         {
-                            // work out if we want to display
+                            // test
+                            //en.Add(TTThargoidSignals); en.Add(TTMiningSignals); en.Add(TTHighGravity + sd.nSurfaceGravityG.Value.ToStringInvariant("#.##")); en.Add(TTHuge);
+
+                            if (hasminingsignals) en.Add(TTMiningSignals);
+                            if (hasgeosignals) en.Add(TTGeoSignals);
+                            if (hasbiosignals) en.Add(TTBioSignals);
+                            if (hasthargoidsignals) en.Add(TTThargoidSignals);
+                            if (hasguardiansignals) en.Add(TTGuardianSignals);
+                            if (hashumansignals) en.Add(TTHumanSignals);
+                            if (hasothersignals) en.Add(TTOtherSignals);
+                            if (sd.CanBeTerraformable) en.Add(TTCanBeTerraformed);
+                            if (sd.IsLandable) en.Add(TTLandable);
+                            if (sd.HasMeaningfulVolcanism) en.Add(TTVolcanism);
+                            if (sd.HasRings) en.Add(TTRings);
+                            if (sd.HasBelts) en.Add(TTBelts);
+                            if (sd.Earthlike) en.Add(TTEarthlike);
+                            if (sd.WaterWorld) en.Add(TTWaterWorld);
+                            if (sd.AmmoniaWorld) en.Add(TTAmmoniaWorld);
+                            if (sd.nEccentricity >= eccentricityLimit) en.Add(TTEccentric);
+                            if (sd.nRadius < lowRadiusLimit && sd.IsPlanet) en.Add(TTTiny);
+                            if (sd.nRadius > largeRadiusLimit && sd.IsPlanet && sd.IsLandable) en.Add(TTHuge);
+                            if (sd.HasAtmosphericComposition) en.Add(TTAtmosphere + sd.Atmosphere);
+                            if (sd.IsPlanet && sd.nSurfaceGravityG >= 2) en.Add(TTHighGravity + sd.nSurfaceGravityG.Value.ToStringInvariant("#.##"));
+                        }
+
+                        // compute if we want search results displayed
+
+                        searchresults.TryGetValue(sn.FullName, out List<HistoryListQueries.ResultEntry> searchresultfornode);     // will be null if not found
+
+                        var surveyordisplay = searchresultfornode != null;      // if we have a search node, display
+
+                        // work out if we want to display if we don't have searchresult, as long as not websourced or allow web sourced
+
+                        if (surveyordisplay == false && (!sd.IsWebSourced || edsmSpanshButton.IsAnySet)) 
+                        {
                             surveyordisplay = (sd.IsLandable && IsSet(CtrlList.isLandable)) ||
                                 matchedlandablewithatmosphere ||
                                 matchedlandablevolcanism ||
@@ -747,6 +804,7 @@ namespace EDDiscovery.UserControls
                         // if we do display..
                         if (surveyordisplay)
                         {
+                            // surveyor line, some of these use the triggers above
                             var silstring = sd.SurveyorInfoLine(sys,
                                     matchedminingsignals || (hasminingsignals && IsSet(CtrlList.showsignals)),
                                     matchedgeosignals || (hasgeosignals && IsSet(CtrlList.showsignals)),
@@ -767,6 +825,12 @@ namespace EDDiscovery.UserControls
 
                             if (searchresultfornode != null) // if search results are set for this body, add text
                             {
+                                if (producetriggers)
+                                {
+                                    foreach (var x in searchresultfornode)      // add on the filters passed here
+                                        en.Add(TTDiscovery + x.FilterPassed);
+                                }
+
                                 string info = string.Join(", ", searchresultfornode.Select(x=>x.FilterPassed).Distinct());
                                 silstring += " : " + info;
                             }
@@ -778,7 +842,7 @@ namespace EDDiscovery.UserControls
 
                         // if we had a search result, remove it from the list as we have considered it above.  Even if we decided not to print it!
                         if ( searchresultfornode != null )
-                            searchresults.Remove(sn.FullName);  
+                            searchresults.Remove(sn.FullName);
 
                     }   // end for..
                 }       // end of system node look thru
@@ -794,19 +858,19 @@ namespace EDDiscovery.UserControls
 
                 // any FSS items, if we have system node
 
-                if (systemnode != null && fsssignalsdisplayed.HasChars())
+                if (systemnode != null && fsssignalstodisplay.HasChars())
                 {
-                    string[] filter = fsssignalsdisplayed.Split(';');
+                    string[] filter = fsssignalstodisplay.Split(';');
 
                     var signallist = JournalFSSSignalDiscovered.SignalList(systemnode.FSSSignalList);
 
                     // mirrors scandisplaynodes
 
                     var notexpired = signallist.Where(x => (!x.SignalName.Contains("-class") && (!x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow)) || (x.SignalName.Contains("-class") && x.RecordedUTC > DateTime.UtcNow.AddDays(-14))).ToList();
-                    notexpired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
+                    notexpired.Sort(delegate (FSSSignal l, FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
 
                     var expired = signallist.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
-                    expired.Sort(delegate (JournalFSSSignalDiscovered.FSSSignal l, JournalFSSSignalDiscovered.FSSSignal r) { return r.ExpiryUTC.CompareTo(l.ExpiryUTC); });
+                    expired.Sort(delegate (FSSSignal l, FSSSignal r) { return r.ExpiryUTC.CompareTo(l.ExpiryUTC); });
 
                     int expiredpos = notexpired.Count;
                     notexpired.AddRange(expired);
@@ -820,7 +884,7 @@ namespace EDDiscovery.UserControls
                             filter.ComparisionContains(fsssig.SpawningFaction_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                             filter.ComparisionContains(fsssig.USSTypeLocalised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                             filter.ComparisionContains(fsssig.ClassOfSignal.ToString(), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                            fsssignalsdisplayed.Equals("*"))
+                            fsssignalstodisplay.Equals("*"))
                         {
                             if (pos++ == expiredpos)
                                 ldrawsystemsignallist = ldrawsystemsignallist.AppendPrePad("Expired:".T(EDTx.UserControlScan_Expired), Environment.NewLine + Environment.NewLine);
@@ -829,6 +893,35 @@ namespace EDDiscovery.UserControls
                         }
                     }
                 }
+
+                foreach (var kvp in triggers)
+                {
+                    BaseUtils.Variables v = new BaseUtils.Variables();
+
+                    int index = 1;
+                    foreach (var str in kvp.Value)
+                    {
+                        if (!cursystriggered.TryGetValue(kvp.Key, out HashSet<string> hs))      // if cursys triggered does not have this body, add
+                            hs = cursystriggered[kvp.Key] = new HashSet<string>();
+
+                        if (!hs.Contains(str))     // if a new trigger
+                        {
+                            hs.Add(str);
+                            v["EventName" + index.ToStringInvariant()] = str.Substring(0, str.IndexOfOrLength(":"));
+                            v["Value" + index.ToStringInvariant()] = str.Contains(":") ? str.Substring(str.IndexOf(':') + 1) : "";
+                            index++;
+                        }
+                    }
+
+                    if ( v.Count>0 )
+                    {
+                        v["Body"] = kvp.Key;
+                        v["BodyShortName"] = kvp.Key.ReplaceIfStartsWith(sys.Name).Trim();
+                        System.Diagnostics.Debug.WriteLine($"Surveryor Run Action on Body {kvp.Key} Trigger {v.ToString()}");
+                        DiscoveryForm.ActionRun(Actions.ActionEventEDList.onSurveyor, v);
+                    }
+                }
+
             }       // end sys
 
             if (sys != cur_sys)
@@ -1132,7 +1225,7 @@ namespace EDDiscovery.UserControls
 
             int width = 430;
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Text", typeof(ExtendedControls.ExtTextBox), fsssignalsdisplayed, new Point(10, 40), new Size(width - 10 - 20, 110), "List Names to show") { TextBoxMultiline = true });
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Text", typeof(ExtendedControls.ExtTextBox), fsssignalstodisplay, new Point(10, 40), new Size(width - 10 - 20, 110), "List Names to show") { TextBoxMultiline = true });
 
             f.AddOK(new Point(width - 100, 180));
             f.AddCancel(new Point(width - 200, 180));
@@ -1152,8 +1245,8 @@ namespace EDDiscovery.UserControls
             DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "List signals to display, semicolon seperated".T(EDTx.UserControlSurveyor_fsssignals), closeicon: true);
             if (res == DialogResult.OK)
             {
-                fsssignalsdisplayed = f.Get("Text");
-                PutSetting("fsssignals", fsssignalsdisplayed);
+                fsssignalstodisplay = f.Get("Text");
+                PutSetting("fsssignals", fsssignalstodisplay);
                 CalculateThenDrawSystemSignals(cur_sys);
             }
         }
@@ -1213,16 +1306,18 @@ namespace EDDiscovery.UserControls
 
             if (name.HasChars())
             {
-                if (name.Equals(NavRouteNameLabel))
+                if (name.Equals(NavRouteNameLabel))     // if selecting navroutes
                 {
+                    // find last from history
                     var route = DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
-                    if (route?.Route != null)
+
+                    if (route?.Route != null)   // if found
                     {
                         // pick out x/y/z to fill in route so it does not need any system lookup
                         var systems = route.Route.Where(x => x.StarSystem.HasChars()).
                                 Select(rt => new SavedRouteClass.SystemEntry(rt.StarSystem,"",rt.StarPos.X,rt.StarPos.Y,rt.StarPos.Z)).ToList();
 
-                        currentRoute = new SavedRouteClass(translatednavroutename, systems);      // with an ID of -1 note
+                        currentRoute = new SavedRouteClass(translatednavroutename, systems);      // with an ID of -1 note, used to detect navroutes
                         //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Loaded Nav route with {systems.Length}");
                     }
                     else
@@ -1303,7 +1398,6 @@ namespace EDDiscovery.UserControls
 
         // we keep the results of the last CalculatethenDrawSystem so we can just DrawSystem later
         // we also set it to null in case DrawSystem gets called first before a calculate
-
         private SortedList<string, string> drawsystemtext = new SortedList<string, string>(new CollectionStaticHelpers.AlphaIntCompare<string>());
         private string drawsystemsignallist = "";
         private long drawsystemvalue = 0;
@@ -1311,33 +1405,66 @@ namespace EDDiscovery.UserControls
         // we keep the results of the last scan summary
         private string scansummarytext = "";
 
-        private StringAlignment alignment = StringAlignment.Near;
-        private string fsssignalsdisplayed = "";
+        // picked up from startjump and displayed
+        private string starclass = "";
+
+        // bodies found from FSSAllBodies found or DiscoveryScan
+        private int bodies_found;
+        private bool all_found = false;
+
+        // the UI state is kept for display visibility
+        private EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
+        private EliteDangerousCore.UIEvents.UIMode.ModeType uimode = EliteDangerousCore.UIEvents.UIMode.ModeType.None;
+
+        // Route selection
+        private const string NavRouteNameLabel = "!*NavRoute";      // special label to identify a save of using the nav route - not user presented
+        private string translatednavroutename = "";     // presented to the user, found by the translator
+        private SavedRouteClass currentRoute = null;    // the current route selected by the user. ID=-1 means a navroute
+        private string lastsystemonroute;               // last system on route, used to check for updates
+
+        // fsd
+        private Ship shipinfo;   // and last ship info
+        private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;        // last values of fsd info
+
+        // user selections
+        private Font displayfont;                       // font selected
+        private StringAlignment alignment = StringAlignment.Near;   // text alignment
+        private string fsssignalstodisplay = "";        // fss signals to show selector
+
+        // tracking state
+        private int eventsseen = 0;             // counts OnNewEvent calls, so we can actually see we are playing
+        private bool is_latest = false;         // set to indicate latest travel entry is at top of history
+        private ISystem cur_sys = null;         // set to indicate system on display
+        private Timer drawsystemupdatetimer;    // delay before displaying system, to limit processing in case multiple scans are received at once
+        private bool doresize = false;          // enable resize processing and display, limited until we know the display is set up after initial display
 
         private const int lowRadiusLimit = 300 * 1000; // tiny body limit in km converted to m
         private const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
         private const double eccentricityLimit = 0.95; //orbital eccentricity limit
 
-        private EliteDangerousCore.UIEvents.UIGUIFocus.Focus uistate = EliteDangerousCore.UIEvents.UIGUIFocus.Focus.NoFocus;
-        private EliteDangerousCore.UIEvents.UIMode.ModeType uimode = EliteDangerousCore.UIEvents.UIMode.ModeType.None;
+        Dictionary<string, HashSet<string>> cursystriggered = new Dictionary<string, HashSet<string>>();    // triggers already played
 
-        private const string NavRouteNameLabel = "!*NavRoute";      // special label to identify a save of using the nav route - not user presented
-        private string translatednavroutename = "";
-        private SavedRouteClass currentRoute = null;
-        private string lastsystemroute;
-
-        private Ship shipinfo;   // and last ship info
-        private EliteDangerousCalculations.FSDSpec.JumpInfo shipfsdinfo;        // last values of fsd info
-
-        private Font displayfont;
-
-        private ISystem cur_sys = null;
-        private string starclass = "";
-        private Timer drawsystemupdatetimer;
-        private int bodies_found;
-        private bool all_found = false;
-        private bool doresize = false;
-
+        public const string TTMiningSignals = "MiningSignals";      // triggering names
+        public const string TTGeoSignals = "GeoSignals";
+        public const string TTBioSignals = "BioSignals";
+        public const string TTThargoidSignals = "ThargoidSignals";
+        public const string TTGuardianSignals = "GuardianSignals";
+        public const string TTHumanSignals = "HumanSignals";
+        public const string TTOtherSignals = "OtherSignals";
+        public const string TTCanBeTerraformed = "Terraformable";
+        public const string TTLandable = "Landable";
+        public const string TTVolcanism = "Volcanism";
+        public const string TTRings = "Rings";
+        public const string TTBelts = "Belts";
+        public const string TTEccentric = "Eccentric";
+        public const string TTTiny = "TinyPlanetRadius";
+        public const string TTHuge = "HugePlanetRadius";
+        public const string TTAtmosphere = "Atmosphere:";
+        public const string TTDiscovery = "Discovery:";
+        public const string TTHighGravity = "HighGravity:";
+        public const string TTEarthlike = "Earthlike";
+        public const string TTWaterWorld = "WaterWorld";
+        public const string TTAmmoniaWorld = "AmmoniaWorld";
 
         #endregion
 

@@ -72,19 +72,19 @@ namespace EDDiscovery.UserControls
 
             int vpos = topmargin;
 
-            f.AddLabelAndEntry("Search radius", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("radius", csradius[si], new Point(dataleft, 0), numberboxsize, "Search radius along path to search for worlds") { NumberBoxLongMinimum = 10 });
-            f.AddLabelAndEntry("Max Systems", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("maxsystems", csmaxsys[si], new Point(dataleft, 0), numberboxsize, "Maximum systems to route through") { NumberBoxLongMinimum = 1 });
+            f.AddLabelAndEntry("Search radius", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("radius", csradius[si], new Point(dataleft, 0), numberboxsize, "Search radius along path to search for worlds") { NumberBoxLongMinimum = 10 });
+            f.AddLabelAndEntry("Max Systems", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("maxsystems", csmaxsys[si], new Point(dataleft, 0), numberboxsize, "Maximum systems to route through") { NumberBoxLongMinimum = 1 });
 
             if (roadtoriches)
-                f.Add(ref vpos, 32, new ConfigurableForm.Entry("mappingvalue", csusemap, "Use mapping value", new Point(4, 0), checkboxsize, "Base on mapping not scan value") { ContentAlign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("mappingvalue", csusemap, "Use mapping value", new Point(4, 0), checkboxsize, "Base on mapping not scan value") { ContentAlign = ContentAlignment.MiddleRight });
 
-            f.Add(ref vpos, 32, new ConfigurableForm.Entry("avoidthargoids", csavoidt[si], "Avoid thargoids", new Point(4, 0), checkboxsize, "Avoid Thargoids") { ContentAlign = ContentAlignment.MiddleRight });
-            f.AddLabelAndEntry("Max LS", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("maxls", csmaxls[si], new Point(dataleft, 0), numberboxsize, "Maximum LS from arrival to consider") { NumberBoxLongMinimum = 10 });
+            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("avoidthargoids", csavoidt[si], "Avoid thargoids", new Point(4, 0), checkboxsize, "Avoid Thargoids") { ContentAlign = ContentAlignment.MiddleRight });
+            f.AddLabelAndEntry("Max LS", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("maxls", csmaxls[si], new Point(dataleft, 0), numberboxsize, "Maximum LS from arrival to consider") { NumberBoxLongMinimum = 10 });
 
             if (roadtoriches)
-                f.AddLabelAndEntry("Min Scan Value", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("minscan", csminvalue, new Point(dataleft, 0), numberboxsize, "Minimum value of body") { NumberBoxLongMinimum = 100 });
+                f.AddLabelAndEntry("Min Scan Value", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("minscan", csminvalue, new Point(dataleft, 0), numberboxsize, "Minimum value of body") { NumberBoxLongMinimum = 100 });
 
-            f.Add(ref vpos, 32, new ConfigurableForm.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = textBox_To.Text.IsEmpty(), Enabled = !textBox_To.Text.HasChars(), ContentAlign = ContentAlignment.MiddleRight });
+            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = textBox_To.Text.IsEmpty(), Enabled = !textBox_To.Text.HasChars(), ContentAlign = ContentAlignment.MiddleRight });
 
             f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
             f.InstallStandardTriggers();
@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls
 
             int vpos = topmargin;
 
-            f.AddLabelAndEntry("Efficiency", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("efficiency", nrefficiency, new Point(dataleft, 0), numberboxsize, "How far off the straight line route to allow. 100 means no deviation") { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 100 });
+            f.AddLabelAndEntry("Efficiency", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("efficiency", nrefficiency, new Point(dataleft, 0), numberboxsize, "How far off the straight line route to allow. 100 means no deviation") { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 100 });
             f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
             f.InstallStandardTriggers();
             f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
@@ -171,17 +171,17 @@ namespace EDDiscovery.UserControls
                 if (tradestation == null)
                     tradestation = stationnames[0];
 
-                f.AddLabelAndEntry("Station", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("station", tradestation, new Point(dataleft, 0), comboboxsize, "Station name", stationnames));
-                f.AddLabelAndEntry("Starting Capital", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("capital", tradecapital, new Point(dataleft, 0), numberboxsize, "Starting capital") { NumberBoxLongMinimum = 100 });
-                f.AddLabelAndEntry("Max Cargo", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("cargo", tradecargo, new Point(dataleft, 0), numberboxsize, "Maximum cargo you can carry") { NumberBoxLongMinimum = 1 });
-                f.AddLabelAndEntry("Max Hops", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("hops", tradehops, new Point(dataleft, 0), numberboxsize, "Maximum hops between stations") { NumberBoxLongMinimum = 1 });
-                f.AddLabelAndEntry("Max Arrival distance", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("dls", tradedls, new Point(dataleft, 0), numberboxsize, "Maximum arrival distance of station") { NumberBoxLongMinimum = 1 });
-                f.AddLabelAndEntry("Max Market Age (Days)", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("mage", trademage, new Point(dataleft, 0), numberboxsize, "Maximum age of the station data you accept") { NumberBoxDoubleMinimum = 0.01 });
-                f.Add(ref vpos, 32, new ConfigurableForm.Entry("largepad", tradelpad, "Require Large Pad", new Point(4, 0), checkboxsize, "Ship needs a large pad") { ContentAlign = ContentAlignment.MiddleRight });
-                f.Add(ref vpos, 32, new ConfigurableForm.Entry("planetary", tradeallowp, "Allow Planetary", new Point(4, 0), checkboxsize, "Accept planetary ports") { ContentAlign = ContentAlignment.MiddleRight });
-                f.Add(ref vpos, 32, new ConfigurableForm.Entry("prohibited", tradeproh, "Allow Prohibited", new Point(4, 0), checkboxsize, "Allow prohibited commodities") { ContentAlign = ContentAlignment.MiddleRight });
-                f.Add(ref vpos, 32, new ConfigurableForm.Entry("loop", tradeloops, "Avoid Loops", new Point(4, 0), checkboxsize, "Don't loop back to previous station") { ContentAlign = ContentAlignment.MiddleRight });
-                f.Add(ref vpos, 32, new ConfigurableForm.Entry("permit", tradepermit, "Allow Permit Systems", new Point(4, 0), checkboxsize, "You have the permit to these systems") { ContentAlign = ContentAlignment.MiddleRight });
+                f.AddLabelAndEntry("Station", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("station", tradestation, new Point(dataleft, 0), comboboxsize, "Station name", stationnames));
+                f.AddLabelAndEntry("Starting Capital", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("capital", tradecapital, new Point(dataleft, 0), numberboxsize, "Starting capital") { NumberBoxLongMinimum = 100 });
+                f.AddLabelAndEntry("Max Cargo", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("cargo", tradecargo, new Point(dataleft, 0), numberboxsize, "Maximum cargo you can carry") { NumberBoxLongMinimum = 1 });
+                f.AddLabelAndEntry("Max Hops", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("hops", tradehops, new Point(dataleft, 0), numberboxsize, "Maximum hops between stations") { NumberBoxLongMinimum = 1 });
+                f.AddLabelAndEntry("Max Arrival distance", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("dls", tradedls, new Point(dataleft, 0), numberboxsize, "Maximum arrival distance of station") { NumberBoxLongMinimum = 1 });
+                f.AddLabelAndEntry("Max Market Age (Days)", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("mage", trademage, new Point(dataleft, 0), numberboxsize, "Maximum age of the station data you accept") { NumberBoxDoubleMinimum = 0.01 });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("largepad", tradelpad, "Require Large Pad", new Point(4, 0), checkboxsize, "Ship needs a large pad") { ContentAlign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("planetary", tradeallowp, "Allow Planetary", new Point(4, 0), checkboxsize, "Accept planetary ports") { ContentAlign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("prohibited", tradeproh, "Allow Prohibited", new Point(4, 0), checkboxsize, "Allow prohibited commodities") { ContentAlign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("loop", tradeloops, "Avoid Loops", new Point(4, 0), checkboxsize, "Don't loop back to previous station") { ContentAlign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("permit", tradepermit, "Allow Permit Systems", new Point(4, 0), checkboxsize, "You have the permit to these systems") { ContentAlign = ContentAlignment.MiddleRight });
                 f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
                 f.InstallStandardTriggers();
                 f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
@@ -224,8 +224,8 @@ namespace EDDiscovery.UserControls
 
             int vpos = topmargin;
 
-            f.AddLabelAndEntry("Capacity Used", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("cap", fccapused, new Point(dataleft, 0), numberboxsize, "Capacity in use from upper right corner of carrier management screen") { NumberBoxLongMinimum = 0 });
-            f.Add(ref vpos, 32, new ConfigurableForm.Entry("tritium", fcdeterminetritium, "Determine Tritium", new Point(4, 0), checkboxsize, "Calculate how much tritium is needed") { ContentAlign = ContentAlignment.MiddleRight });
+            f.AddLabelAndEntry("Capacity Used", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("cap", fccapused, new Point(dataleft, 0), numberboxsize, "Capacity in use from upper right corner of carrier management screen") { NumberBoxLongMinimum = 0 });
+            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("tritium", fcdeterminetritium, "Determine Tritium", new Point(4, 0), checkboxsize, "Calculate how much tritium is needed") { ContentAlign = ContentAlignment.MiddleRight });
 
             int addvpos = vpos;                         // record where these fields start from
             int controlnumber = 0;                      // a unique ID which always incremements
@@ -236,7 +236,7 @@ namespace EDDiscovery.UserControls
                 vpos += 32;
             }
 
-            f.Add(ref vpos, 32, new ConfigurableForm.Entry("add", typeof(ExtButton), "+ Stop", new Point(4, 0), numberboxsize, "Add a new stop"));
+            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("add", typeof(ExtButton), "+ Stop", new Point(4, 0), numberboxsize, "Add a new stop"));
             f.AddOK(new Point(140, vpos + 16), "OK");
             f.InstallStandardTriggers();
             f.Trigger += (name, control, obj) =>
@@ -282,8 +282,8 @@ namespace EDDiscovery.UserControls
         {
             ExtTextBoxAutoComplete ac = new ExtTextBoxAutoComplete();
             ac.SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList, true);
-            f.Add(new ConfigurableForm.Entry("del:" + controlnumber, typeof(ExtButton), "X", new Point(textboxsize.Width + 10, vpos), new Size(24, 24), "Delete stop"));
-            f.Add(new ConfigurableForm.Entry(ac, "idest:" + controlnumber, value, new Point(4, vpos), textboxsize, "Set an intermediate stop"));
+            f.Add(new ConfigurableEntryList.Entry("del:" + controlnumber, typeof(ExtButton), "X", new Point(textboxsize.Width + 10, vpos), new Size(24, 24), "Delete stop"));
+            f.Add(new ConfigurableEntryList.Entry(ac, "idest:" + controlnumber, value, new Point(4, vpos), textboxsize, "Set an intermediate stop"));
         }
 
         private int gpcargo = 0;
@@ -303,12 +303,12 @@ namespace EDDiscovery.UserControls
             {
                 int vpos = topmargin;
 
-                f.AddLabelAndEntry("Cargo", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("cargo", gpcargo, new Point(dataleft, 0), numberboxsize, "Amount of cargo to carry") { NumberBoxLongMinimum = 0 });
-                f.Add(ref vpos, 32, new ConfigurableForm.Entry("asc", gpsupercharged, "Already supercharged", new Point(4, 0), checkboxsize, "Ship already is neutron boosted") { ContentAlign = ContentAlignment.MiddleRight });
-                f.Add(ref vpos, 32, new ConfigurableForm.Entry("usc", gpusesupercharge, "Use supercharge", new Point(4, 0), checkboxsize, "Use neutron boosts") { ContentAlign = ContentAlignment.MiddleRight });
-                f.Add(ref vpos, 32, new ConfigurableForm.Entry("fsd", gpusefsdinjections, "Use FSD Injections", new Point(4, 0), checkboxsize, "Use FSD Injections to speed travel") { ContentAlign = ContentAlignment.MiddleRight });
-                f.Add(ref vpos, 32, new ConfigurableForm.Entry("ess", gpexcludesecondary, "Exclude secondary stars", new Point(4, 0), checkboxsize, "Exclude secondary stars from consideration for neutron boosting/scooping") { ContentAlign = ContentAlignment.MiddleRight });
-                f.Add(ref vpos, 32, new ConfigurableForm.Entry("algo", gpalgo, new Point(4, 0), textboxsize, "Pick routing algorithm", new List<string> { "Optimistic", "Fuel", "Fuel Jumps", "Guided", "Pessimistic"}));
+                f.AddLabelAndEntry("Cargo", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("cargo", gpcargo, new Point(dataleft, 0), numberboxsize, "Amount of cargo to carry") { NumberBoxLongMinimum = 0 });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("asc", gpsupercharged, "Already supercharged", new Point(4, 0), checkboxsize, "Ship already is neutron boosted") { ContentAlign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("usc", gpusesupercharge, "Use supercharge", new Point(4, 0), checkboxsize, "Use neutron boosts") { ContentAlign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("fsd", gpusefsdinjections, "Use FSD Injections", new Point(4, 0), checkboxsize, "Use FSD Injections to speed travel") { ContentAlign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("ess", gpexcludesecondary, "Exclude secondary stars", new Point(4, 0), checkboxsize, "Exclude secondary stars from consideration for neutron boosting/scooping") { ContentAlign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("algo", gpalgo, new Point(4, 0), textboxsize, "Pick routing algorithm", new List<string> { "Optimistic", "Fuel", "Fuel Jumps", "Guided", "Pessimistic"}));
 
                 f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
                 f.InstallStandardTriggers();
@@ -349,11 +349,11 @@ namespace EDDiscovery.UserControls
 
             int vpos = topmargin;
 
-            f.AddLabelAndEntry("Search radius", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("radius", exosearchradius, new Point(dataleft, 0), numberboxsize, "Search radius along path to search for worlds") { NumberBoxLongMinimum = 10 });
-            f.AddLabelAndEntry("Max Systems", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("maxsystems", exomaxsystems, new Point(dataleft, 0), numberboxsize, "Maximum systems to route through") { NumberBoxLongMinimum = 1 });
-            f.Add(ref vpos, 32, new ConfigurableForm.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = textBox_To.Text.IsEmpty(), Enabled = !textBox_To.Text.HasChars(), ContentAlign = ContentAlignment.MiddleRight });
-            f.AddLabelAndEntry("Max LS", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("maxls", exomaxls, new Point(dataleft, 0), numberboxsize, "Maximum LS from arrival to consider") { NumberBoxLongMinimum = 10 });
-            f.AddLabelAndEntry("Min Value", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableForm.Entry("minv", exominvalue, new Point(dataleft, 0), numberboxsize, "Minimum value of scans") { NumberBoxLongMinimum = 100 });
+            f.AddLabelAndEntry("Search radius", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("radius", exosearchradius, new Point(dataleft, 0), numberboxsize, "Search radius along path to search for worlds") { NumberBoxLongMinimum = 10 });
+            f.AddLabelAndEntry("Max Systems", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("maxsystems", exomaxsystems, new Point(dataleft, 0), numberboxsize, "Maximum systems to route through") { NumberBoxLongMinimum = 1 });
+            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = textBox_To.Text.IsEmpty(), Enabled = !textBox_To.Text.HasChars(), ContentAlign = ContentAlignment.MiddleRight });
+            f.AddLabelAndEntry("Max LS", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("maxls", exomaxls, new Point(dataleft, 0), numberboxsize, "Maximum LS from arrival to consider") { NumberBoxLongMinimum = 10 });
+            f.AddLabelAndEntry("Min Value", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("minv", exominvalue, new Point(dataleft, 0), numberboxsize, "Minimum value of scans") { NumberBoxLongMinimum = 100 });
             f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
             f.InstallStandardTriggers();
             f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };

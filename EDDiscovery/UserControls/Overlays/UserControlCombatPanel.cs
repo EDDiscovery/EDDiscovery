@@ -292,10 +292,9 @@ namespace EDDiscovery.UserControls
             if (CreateEntry(he, out var rewardcol))
             {
                 var rw = dataGridViewCombat.RowTemplate.Clone() as DataGridViewRow;
-                he.FillInformation(out var eventDescription, out _);
 
                 rw.CreateCells(dataGridViewCombat, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
-                    he.EventSummary, eventDescription, rewardcol);
+                    he.EventSummary, he.GetInfo(), rewardcol);
 
                 rw.Tag = he;
                 return rw;
@@ -578,23 +577,23 @@ namespace EDDiscovery.UserControls
 
             int width = 430;
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Name".T(EDTx.UserControlCombatPanel_Name) + ":", new Point(10, 40), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Name", typeof(ExtendedControls.ExtTextBox), entry.Name, new Point(100, 40), new Size(width - 100 - 20, 24), "Give name to campaign".T(EDTx.UserControlCombatPanel_C1)) { TextBoxClearOnFirstChar = newentry });
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Name".T(EDTx.UserControlCombatPanel_Name) + ":", new Point(10, 40), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Name", typeof(ExtendedControls.ExtTextBox), entry.Name, new Point(100, 40), new Size(width - 100 - 20, 24), "Give name to campaign".T(EDTx.UserControlCombatPanel_C1)) { TextBoxClearOnFirstChar = newentry });
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Faction".T(EDTx.UserControlCombatPanel_Faction) + ":", new Point(10, 70), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Faction", typeof(ExtendedControls.ExtTextBox), entry.TargetFaction, new Point(100, 70), new Size(width - 100 - 20, 24), "Optional faction to target".T(EDTx.UserControlCombatPanel_C2)) );
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Faction".T(EDTx.UserControlCombatPanel_Faction) + ":", new Point(10, 70), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Faction", typeof(ExtendedControls.ExtTextBox), entry.TargetFaction, new Point(100, 70), new Size(width - 100 - 20, 24), "Optional faction to target".T(EDTx.UserControlCombatPanel_C2)) );
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Start".T(EDTx.UserControlCombatPanel_Start) + ":", new Point(10, 100), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("DTS", typeof(ExtendedControls.ExtDateTimePicker), starttime.ToStringZulu(), new Point(100, 100), new Size(width - 100 - 20, 24), "Select Start time".T(EDTx.UserControlCombatPanel_C3)) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Start".T(EDTx.UserControlCombatPanel_Start) + ":", new Point(10, 100), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("DTS", typeof(ExtendedControls.ExtDateTimePicker), starttime.ToStringZulu(), new Point(100, 100), new Size(width - 100 - 20, 24), "Select Start time".T(EDTx.UserControlCombatPanel_C3)) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "End".T(EDTx.UserControlCombatPanel_End) + ":", new Point(10, 130), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("DTE", typeof(ExtendedControls.ExtDateTimePicker), endtime.ToStringZulu(), new Point(100, 130), new Size(width - 100 - 20, 24), "Select Start time".T(EDTx.UserControlCombatPanel_C4)) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "End".T(EDTx.UserControlCombatPanel_End) + ":", new Point(10, 130), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("DTE", typeof(ExtendedControls.ExtDateTimePicker), endtime.ToStringZulu(), new Point(100, 130), new Size(width - 100 - 20, 24), "Select Start time".T(EDTx.UserControlCombatPanel_C4)) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
 
             f.AddOK(new Point(width - 100, 180), "Press to Accept".T(EDTx.UserControlCombatPanel_C5));
             f.AddCancel(new Point(width - 200, 180), "Press to Cancel".T(EDTx.UserControlCombatPanel_C6));
 
             if ( allowdel )
-                f.Add(new ExtendedControls.ConfigurableForm.Entry("Delete", typeof(ExtendedControls.ExtButton), "Delete".T(EDTx.Delete), new Point(10, 180), new Size(80, 24), "Press to Delete".T(EDTx.UserControlCombatPanel_C7)));
+                f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Delete", typeof(ExtendedControls.ExtButton), "Delete".T(EDTx.Delete), new Point(10, 180), new Size(80, 24), "Press to Delete".T(EDTx.UserControlCombatPanel_C7)));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -658,18 +657,16 @@ namespace EDDiscovery.UserControls
 
                 var leftclicksystem = (HistoryEntry)dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Tag;
 
-                leftclicksystem.FillInformation(out string EventDescription, out string EventDetailedInfo);
 
                 if (expanded) // put it back to original text
                 {
-                    dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Cells[2].Value = EventDescription;
+                    dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Cells[2].Value = leftclicksystem.GetInfo();
                     row.Cells[0].Tag = null;
-
                     row.Cells[2].Style.WrapMode = row.Cells[1].Style.WrapMode = DataGridViewTriState.NotSet;
                 }
                 else
                 {
-                    dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Cells[2].Value = EventDescription + ((EventDetailedInfo.Length > 0) ? (Environment.NewLine + EventDetailedInfo) : "");
+                    dataGridViewCombat.Rows[dataGridViewCombat.LeftClickRow].Cells[2].Value = leftclicksystem.GetInfoDetailed(); 
                     row.Cells[0].Tag = true;
                     row.Cells[2].Style.WrapMode = row.Cells[1].Style.WrapMode = DataGridViewTriState.True;
                 }

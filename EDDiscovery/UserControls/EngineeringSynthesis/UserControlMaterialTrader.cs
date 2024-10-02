@@ -471,23 +471,23 @@ namespace EDDiscovery.UserControls
 
                         var butl = new ExtendedControls.ExtButton();
                         butl.Image = BaseUtils.Icons.IconSet.GetIcon("Controls.MaterialTrader.LeftArrow");
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry(butl, "less", "", new Point(margin, 64), new Size(32, 32), null));
+                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry(butl, "less", "", new Point(margin, 64), new Size(32, 32), null));
                         var butr = new ExtendedControls.ExtButton();
                         butr.Image = BaseUtils.Icons.IconSet.GetIcon("Controls.MaterialTrader.RightArrow");
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry(butr, "more", "", new Point(width - margin - 32, 64), new Size(32, 32), null));
+                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry(butr, "more", "", new Point(width - margin - 32, 64), new Size(32, 32), null));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("olabel", typeof(Label), "Offer".T(EDTx.UserControlMaterialTrader_Offer), new Point(margin, 30), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
+                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("olabel", typeof(Label), "Offer".T(EDTx.UserControlMaterialTrader_Offer), new Point(margin, 30), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("offer", typeof(Label), "0/" + currenttotal.ToStringInvariant(), new Point(width / 2 - 12, 50), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
+                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("offer", typeof(Label), "0/" + currenttotal.ToStringInvariant(), new Point(width / 2 - 12, 50), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
 
                         var bar = new PictureBox();
                         bar.SizeMode = PictureBoxSizeMode.StretchImage;
                         bar.Image = BaseUtils.Icons.IconSet.GetIcon("Controls.MaterialTrader.TraderBar");
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry(bar, "bar", "", new Point(width / 2 - 32, 70), new Size(64, 16), null));
+                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry(bar, "bar", "", new Point(width / 2 - 32, 70), new Size(64, 16), null));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("receive", typeof(Label), "0", new Point(width / 2 - 12, 90), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
+                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("receive", typeof(Label), "0", new Point(width / 2 - 12, 90), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
 
-                        f.Add(new ExtendedControls.ConfigurableForm.Entry("rlabel", typeof(Label), "Receive".T(EDTx.UserControlMaterialTrader_Receive), new Point(margin, 110), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
+                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("rlabel", typeof(Label), "Receive".T(EDTx.UserControlMaterialTrader_Receive), new Point(margin, 110), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
                         f.AddOK(new Point(width - margin - 80, 150), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept));
                         f.AddCancel(new Point(margin, 150), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel));

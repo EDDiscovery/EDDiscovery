@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2023 EDDiscovery development team
+ * Copyright © 2016 - 2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -32,9 +32,11 @@ namespace EDDiscovery.UserControls
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
         private const string dbFilter = "EventFilter2";
-        private const string dbHistorySave = "EDUIHistory";
+        private const string dbTimeSelector = "EDUIHistory";
         private const string dbFieldFilter = "ControlFieldFilter";
         private const string dbUserGroups = "UserGroups";
+        private const string dbTimeDates = "TimeDates";
+
 
         public delegate void PopOut();
         public PopOut OnPopOut;
@@ -109,13 +111,18 @@ namespace EDDiscovery.UserControls
                 EDTx.UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem };
 
             var enumlisttt = new Enum[] { EDTx.UserControlJournalGrid_comboBoxTime_ToolTip, EDTx.UserControlJournalGrid_textBoxSearch_ToolTip, 
-                EDTx.UserControlJournalGrid_buttonFilter_ToolTip, EDTx.UserControlJournalGrid_buttonExtExcel_ToolTip, EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip };
+                EDTx.UserControlJournalGrid_buttonFilter_ToolTip, EDTx.UserControlJournalGrid_buttonExtExcel_ToolTip, 
+                EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip, EDTx.UserControlJournalGrid_buttonField_ToolTip };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
             BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, this);
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbHistorySave, ""), true,true,true);
+            // set up the combo box, and if we can't find the setting, reset the setting
+            if ( TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), true,true,true, GetSetting(dbTimeDates, "")) == false)
+            {
+                PutSetting(dbTimeSelector, comboBoxTime.Text);
+            }
 
             if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it (share with travel grid)
                 searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);
@@ -321,10 +328,7 @@ namespace EDDiscovery.UserControls
                 return null;
 
             DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
-            he.FillInformation(out string EventDescription, out string EventDetailedInfo);
-            string detail = EventDescription;
-            //detail = detail.AppendPrePad(EventDetailedInfo.LineLimit(15, Environment.NewLine + "..."), Environment.NewLine);
-            detail = detail.AppendPrePad(EventDetailedInfo, Environment.NewLine);
+            string text = he.GetInfoDetailed();
 
             if (search.Enabled)
             {
@@ -337,7 +341,7 @@ namespace EDDiscovery.UserControls
                     string entryrow = rown.ToStringInvariant();
                     matched = timestr.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                     he.EventSummary.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                    detail.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                                    text.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                     entryrow.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0;
 
                 }
@@ -355,8 +359,11 @@ namespace EDDiscovery.UserControls
                     return null;
             }
 
+            string cuttext = text.LineLimit(10, Environment.NewLine + "...");
+
             var rw = dataGridViewJournal.RowTemplate.Clone() as DataGridViewRow;
-            rw.CreateCells(dataGridViewJournal, time, "", he.EventSummary, detail);
+            rw.CreateCells(dataGridViewJournal, time, "", he.EventSummary, cuttext);
+            rw.Cells[ColumnInformation.Index].ToolTipText = text;
 
             rw.Tag = he;
 
@@ -404,7 +411,7 @@ namespace EDDiscovery.UserControls
 
         private void comboBoxJournalWindow_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PutSetting(dbHistorySave, comboBoxTime.Text);
+            PutSetting(dbTimeSelector, comboBoxTime.Text);
             Display(current_historylist, false);
         }
 
@@ -418,6 +425,23 @@ namespace EDDiscovery.UserControls
                 Display(current_historylist, false);
             }
         }
+
+        private void extButtonTimeRanges_Click(object sender, EventArgs e)
+        {
+            string set = TravelHistoryFilter.EditUserDataTimeRange(this.FindForm(), GetSetting(dbTimeDates, ""));
+            if (set != null)
+            {
+                PutSetting(dbTimeDates, set);
+
+                // if we can't stay on the same setting, it will move it to all, 
+                if (TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), true, true, true, GetSetting(dbTimeDates, "")) == false)
+                {
+                    // time selector will be invalid, invalid will select all. Leave alone
+                    Display(current_historylist, false);
+                }
+            }
+        }
+
 
         #endregion
 
@@ -455,10 +479,8 @@ namespace EDDiscovery.UserControls
             if (dataGridViewJournal.LeftClickRowValid)                                                   // Click expands it..
             {
                 ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                leftclickhe.FillInformation(out string EventDescription, out string EventDetailedInfo);
-                string infodetailed = EventDescription.AppendPrePad(EventDetailedInfo, Environment.NewLine);
                 info.Info( (EDDConfig.Instance.ConvertTimeToSelectedFromUTC(leftclickhe.EventTimeUTC)) + ": " + leftclickhe.EventSummary,
-                    FindForm().Icon, infodetailed);
+                    FindForm().Icon, leftclickhe.GetInfoDetailed());
                 info.Size = new Size(1200, 800);
                 info.Show(FindForm());
             }
@@ -504,8 +526,7 @@ namespace EDDiscovery.UserControls
                 HistoryEntry he = row.Tag as HistoryEntry;
                 if (he.IsFSD || he.StopMarker || he == rightclickhe)
                 {
-                    he.FillInformation(out string eventdescription, out string unuseddetailinfo);       // recalc it and redisplay
-                    row.Cells[ColumnInformation.Index].Value = eventdescription;
+                    row.Cells[ColumnInformation.Index].Value = he.GetInfo();
                 }
             }
 
@@ -668,8 +689,8 @@ namespace EDDiscovery.UserControls
         }
 
 
-        #endregion
 
+        #endregion
 
     }
 }

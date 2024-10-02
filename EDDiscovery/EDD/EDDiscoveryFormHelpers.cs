@@ -105,32 +105,32 @@ namespace EDDiscovery
 
                 DateTime lasthe = helist.Last().EventTimeUTC;
 
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("UC", typeof(Label),
+                cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("UC", typeof(Label),
                             string.Format("There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent.".T(EDTx.EDDiscoveryForm_SendEDSMCaption), helist.Count),
                              new Point(5, 30), new Size(width - 5 - 20, 100), null)
                 { TextBoxMultiline = true });
 
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("All", typeof(ExtendedControls.ExtButton),
+                cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("All", typeof(ExtendedControls.ExtButton),
                             "Send All to EDSM".T(EDTx.EDDiscoveryForm_SendEDSMAll),
                              new Point(5, 130), new Size(width - 5 - 20, 24), null));
 
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("Today", typeof(ExtendedControls.ExtButton),
+                cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("Today", typeof(ExtendedControls.ExtButton),
                             "Send Last 24 Hours of entries to EDSM".T(EDTx.EDDiscoveryForm_SendEDSM24),
                              new Point(5, 180), new Size(width - 5 - 20, 24), null));
 
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("Custom", typeof(ExtendedControls.ExtButton),
+                cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("Custom", typeof(ExtendedControls.ExtButton),
                             "Send From".T(EDTx.EDDiscoveryForm_SendEDSMFrom),
                              new Point(5, 230), new Size(80, 24), null));
 
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("Date", typeof(ExtendedControls.ExtDateTimePicker),
+                cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("Date", typeof(ExtendedControls.ExtDateTimePicker),
                                             lasthe.AddDays(-28).ToStringZulu(),
                                              new Point(100, 230), new Size(width - 100 - 20, 24), null));
 
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("None", typeof(ExtendedControls.ExtButton),
+                cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("None", typeof(ExtendedControls.ExtButton),
                             "EDSM is up to date - send Nothing more".T(EDTx.EDDiscoveryForm_SendEDSMNone),
                              new Point(5, 280), new Size(width - 5 - 20, 24), null));
 
-                cf.Add(new ExtendedControls.ConfigurableForm.Entry("Cancel", typeof(ExtendedControls.ExtButton),
+                cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("Cancel", typeof(ExtendedControls.ExtButton),
                             "I'll decide later, do nothing".T(EDTx.EDDiscoveryForm_SendEDSMCancel),
                              new Point(5, 330), new Size(width - 5 - 20, 24), null));
 

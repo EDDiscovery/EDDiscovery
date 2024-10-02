@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
             extCheckBoxShowIncomplete.Checked = GetSetting("ShowIncomplete", true);
             extCheckBoxShowIncomplete.Click += ExtCheckBoxShowIncomplete_Click;
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, "", true, false, false);
+            TravelHistoryFilter.InitialiseComboBox(comboBoxTime, "", true, false, false);
             comboBoxTime.Text = "";
             this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxTime_SelectedIndexChanged);
 
@@ -232,7 +232,7 @@ namespace EDDiscovery.UserControls
                                                 (Math.Round(node.ScanData.nSurfaceGravityG.Value, 2, MidpointRounding.AwayFromZero).ToString() ?? "?") + " g", node.ScanData.Atmosphere, node.CountBioSignals.ToString(), ((node.Genuses != null && node.CountBioSignals > 0) ? ": " + String.Join(", ", node.Genuses?.Select(x => x.Genus_Localised).ToArray()) : ""));
                     }
 
-                    string s = node.Organics != null ? JournalScanOrganic.OrganicList(node.Organics) : "No organic scanned";
+                    string s = node.Organics != null ? JournalScanOrganic.OrganicListString(node.Organics, 0, false) : "No organic scanned";
 
                     var i = new ExtPictureBox.ImageElement();
                     i.TextAutoSize(new Point(3, vpos),

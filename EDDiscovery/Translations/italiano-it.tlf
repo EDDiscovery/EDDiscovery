@@ -18,6 +18,12 @@ Unknown: "Unknown" => "Sconosciuto"
 Information: "Information" => "Informazione"
 NoPos: "No Pos" => "Nessuna Posizione"
 RemoveAll: "Remove All" @
+Hostile: "Hostile" @
+Unfriendly: "Unfriendly" @
+Neutral: "Neutral" @
+Cordial: "Cordial" @
+Friendly: "Friendly" @
+Allied: "Allied" @
 Disabled: "Disabled" @
 
 SECTION StartUp

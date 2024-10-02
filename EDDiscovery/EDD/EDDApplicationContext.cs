@@ -201,13 +201,18 @@ namespace EDDiscovery
 
                 UserDatabase.Instance.Name = "UserDB";
                 UserDatabase.Instance.MinThreads = 1;
-                UserDatabase.Instance.MaxThreads = 2;     
+                UserDatabase.Instance.MaxThreads = 2;
                 UserDatabase.Instance.MultiThreaded = true;     // starts up the threads
 
                 if (EDDOptions.Instance.DeleteSystemDB)
                     BaseUtils.FileHelpers.DeleteFileNoError(EliteDangerousCore.EliteConfigInstance.InstanceOptions.SystemDatabasePath);
                 if (EDDOptions.Instance.DeleteUserDB)
-                    BaseUtils.FileHelpers.DeleteFileNoError(EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath);
+                {
+                    if (MessageBox.Show("Confirm deletion of user DB") == DialogResult.OK)
+                    {
+                        BaseUtils.FileHelpers.DeleteFileNoError(EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath);
+                    }
+                }
 
                 try
                 {
@@ -224,6 +229,14 @@ namespace EDDiscovery
                     UserDatabase.Instance.Stop();
                     SwitchContext(new SafeModeForm(false));
                     return;
+                }
+
+                if (EDDOptions.Instance.DeleteUserJournals)
+                {
+                    if (MessageBox.Show($"Confirm deletion of user journals in {EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath}", "WARNING", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    {
+                        UserDatabase.Instance.ClearJournals();
+                    }
                 }
 
                 SystemsDatabase.WALMode = true;

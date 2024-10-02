@@ -18,6 +18,12 @@ Unknown: "Unknown" @
 Information: "Information" @
 NoPos: "No Pos" @
 RemoveAll: "Remove All" @
+Hostile: "Hostile" @
+Unfriendly: "Unfriendly" @
+Neutral: "Neutral" @
+Cordial: "Cordial" @
+Friendly: "Friendly" @
+Allied: "Allied" @
 
 // from extended controls
 

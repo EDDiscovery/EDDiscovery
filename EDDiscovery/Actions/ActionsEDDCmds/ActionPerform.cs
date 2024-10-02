@@ -95,11 +95,11 @@ namespace EDDiscovery.Actions
 
                     else if (cmdname.Equals("configurevoice"))
                     {
-                        var res = ac.ConfigureVoice(nextword, thirdword!=null,fifthword=="NORATE", thirdword=="NOVOICENAME", 
+                        var res = ac.ConfigureVoice(nextword, thirdword != null, fifthword == "NORATE", thirdword == "NOVOICENAME",
                                                                 thirdword, fourthword, fifthword, sixthword);
 
                         ap["DialogResult"] = res != null ? "1" : "0";
-                        if (res!=null && thirdword != null)     // if we are getting the config, not globally setting it
+                        if (res != null && thirdword != null)     // if we are getting the config, not globally setting it
                         {
                             ap["VoiceName"] = res.Item1;
                             ap["Volume"] = res.Item2;
@@ -109,7 +109,7 @@ namespace EDDiscovery.Actions
                     }
                     else if (cmdname.Equals("configurewave"))
                     {
-                        var res = ac.ConfigureWave(thirdword!=null, nextword, thirdword, fourthword);
+                        var res = ac.ConfigureWave(thirdword != null, nextword, thirdword, fourthword);
                         ap["DialogResult"] = res != null ? "1" : "0";
                         if (res != null && thirdword != null)     // if we are getting the config, not globally setting it
                         {
@@ -336,65 +336,46 @@ namespace EDDiscovery.Actions
                     {
                         if (nextword != null)
                         {
+                            // see if its a triggername
+
                             ActionEvent f = ActionEventEDList.EventList(excludejournal: true).Find(x => x.TriggerName.Equals(nextword));
 
                             if (f != null)
                             {
-                                BaseUtils.Variables c = new BaseUtils.Variables();
+                                Variables c = CollectVars(exp, 2, ap);
 
-                                for (int w = 2; w < exp.Count; w++)
+                                if (c != null)      // if did not fail..
                                 {
-                                    string vname = exp[w];
-                                    int asterisk = vname.IndexOf('*');
-
-                                    if (asterisk >= 0)     // pass in name* no complaining if not there
+                                    // if UI event, then trigger the onUIEvent as well as the nominal event
+                                    if (f.TriggerName.StartsWith("UI") || f.TriggerName.Equals("onEliteUIEvent"))
                                     {
-                                        string prefix = vname.Substring(0, asterisk);
-
-                                        foreach (string jkey in ap.variables.NameEnumuerable)
-                                        {
-                                            if (jkey.StartsWith(prefix))
-                                                c[jkey] = ap.variables[jkey];
-                                        }
+                                        c["EventClass_EventTimeUTC"] = DateTime.UtcNow.ToStringUSInvariant();
+                                        c["EventClass_EventTypeID"] = c["EventClass_EventTypeStr"] = f.TriggerName.Substring(2);
+                                        c["EventClass_UIDisplayed"] = "0";
+                                        ac.ActionRun(Actions.ActionEventEDList.onUIEvent, c);
                                     }
-                                    else
-                                    {
-                                        if (ap.variables.Exists(vname))     // pass in explicit name
-                                            c[vname] = ap.variables[vname];
-                                        else
-                                        {
-                                            ap.ReportError("No such variable '" + vname + "'");
-                                            return true;
-                                        }
-                                    }
-                                }
 
-                                if (f.TriggerName.StartsWith("UI") || f.TriggerName.Equals("onEliteUIEvent"))
-                                {
-                                    c["EventClass_EventTimeUTC"] = DateTime.UtcNow.ToStringUSInvariant();
-                                    c["EventClass_EventTypeID"] = c["EventClass_EventTypeStr"] = f.TriggerName.Substring(2);
-                                    c["EventClass_UIDisplayed"] = "0";
-                                    ac.ActionRun(Actions.ActionEventEDList.onUIEvent, c);
+                                    ac.ActionRun(f, c, now: true);
                                 }
-
-                                ac.ActionRun(f, c, now: true);
                             }
                             else
                             {
                                 try
                                 {
+                                    // from nextword, which is the JSON of the event, try and make an event
+
                                     EliteDangerousCore.JournalEntry je = EliteDangerousCore.JournalEntry.CreateJournalEntry(nextword);
 
                                     ap["GenerateEventName"] = je.EventTypeStr;
 
-                                    if (je is EliteDangerousCore.JournalEvents.JournalUnknown)
+                                    if (je is EliteDangerousCore.JournalEvents.JournalUnknown)  // if it returned unknown event, return error
                                     {
                                         ap.ReportError("Unknown journal event");
                                     }
                                     else
                                     {
-                                        EliteDangerousCore.HistoryEntry he = EliteDangerousCore.HistoryEntry.FromJournalEntry(je, null, null);
-                                        ac.ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he), now: true);
+                                        EliteDangerousCore.HistoryEntry he = EliteDangerousCore.HistoryEntry.FromJournalEntry(je, null, null);   // create a false HE
+                                        ac.ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he), now: true);     // and action
                                     }
                                 }
                                 catch
@@ -406,6 +387,20 @@ namespace EDDiscovery.Actions
                         else
                             ap.ReportError("No journal event or event name after GenerateEvent");
                     }
+                    else if (cmdname.Equals("actionevent"))
+                    {
+                        if (nextword != null && thirdword != null)
+                        {
+                            Variables c = CollectVars(exp, 3, ap);  // collect vars after 3rd word incl
+
+                            if (c != null)      // if did not fail..
+                            {
+                                ac.ActionRun(new ActionEvent(nextword,thirdword,"Program",null), c, now: true);
+                            }
+                        }
+                        else
+                            ap.ReportError("Missing triggername and/or triggertype after ActionEvent");
+                    }
                     else
                         ap.ReportError("Unknown command " + cmdname + " in Performaction");
                 }
@@ -416,6 +411,44 @@ namespace EDDiscovery.Actions
                 ap.ReportError("Perform command line not in correct format");
 
             return true;
+        }
+
+
+        // Collect vars from list of strings, from start, using ap.
+        // if a variable does not exist, complain, and return null
+        // can have zero variables - thats okay
+        private Variables CollectVars(List<string> exp, int start, ActionProgramRun ap)
+        {
+            Variables vars = new Variables();
+
+            for (int w = start; w < exp.Count; w++)     // go thru variable names
+            {
+                string vname = exp[w];
+                int asterisk = vname.IndexOf('*');
+
+                if (asterisk >= 0)     // pass in name* no complaining if not there
+                {
+                    string prefix = vname.Substring(0, asterisk);
+
+                    foreach (string jkey in ap.variables.NameEnumuerable)
+                    {
+                        if (jkey.StartsWith(prefix))
+                            vars[jkey] = ap.variables[jkey];
+                    }
+                }
+                else
+                {
+                    if (ap.variables.Exists(vname))     // pass in explicit name
+                        vars[vname] = ap.variables[vname];
+                    else
+                    {
+                        ap.ReportError("No such variable '" + vname + "'");
+                        return null;
+                    }
+                }
+            }
+            
+            return vars;
         }
     }
 }

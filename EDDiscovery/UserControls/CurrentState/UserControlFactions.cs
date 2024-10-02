@@ -26,8 +26,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlFactions : UserControlCommonBase
     {
-        private DateTime NextExpiryUTC;
-        private HistoryEntry last_he = null;
+        private DateTime NextExpiryUTC = DateTime.MaxValue;
+        private HistoryEntry last_he_received = null;           // tracks the last entry in history
+        private Timer searchtimer;
 
         #region Init
 
@@ -42,8 +43,9 @@ namespace EDDiscovery.UserControls
 
             dataGridView.MakeDoubleBuffered();
 
-            for (int col = 1; col < dataGridView.ColumnCount - 1; col++)
+            for (int col = colMissions.Index; col < colInfo.Index; col++)
                 dataGridView.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
 
             startDateTimePicker.Value = GetSetting("StartDate", DateTime.UtcNow).StartOfDay();
             startDateTimePicker.Checked = GetSetting("StartDateChecked", false);
@@ -54,6 +56,7 @@ namespace EDDiscovery.UserControls
             endDateTimePicker.ValueChanged += new System.EventHandler(this.endDateTime_ValueChanged);
 
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry += DiscoveryForm_OnNewEntry;
 
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
@@ -67,40 +70,60 @@ namespace EDDiscovery.UserControls
                         EDTx.UserControlFactions_KillBondVictim, EDTx.UserControlFactions_KillBondsAward, EDTx.UserControlFactions_KillBondsValue, 
                         EDTx.UserControlFactions_colInfo, EDTx.UserControlFactions_labelTo, EDTx.UserControlFactions_CartoValue,
                         EDTx.UserControlFactions_colRedeemVoucher, EDTx.UserControlFactions_colFines, EDTx.UserControlFactions_colBountyValue,
-                        EDTx.UserControlFactions_colDataLinkVictimFaction, EDTx.UserControlFactions_colDataLinkPayeeFaction, EDTx.UserControlFactions_colDataLinkPayeeValue
+                        EDTx.UserControlFactions_colDataLinkVictimFaction, EDTx.UserControlFactions_colDataLinkPayeeFaction, EDTx.UserControlFactions_colDataLinkPayeeValue,
+                        EDTx.UserControlFactions_colLastRep,EDTx.UserControlFactions_colSystem,
+                        EDTx.UserControlFactions_labelSearch,
+                        EDTx.UserControlFactions_colFactionState, EDTx.UserControlFactions_colFactionGov,
+                        EDTx.UserControlFactions_colFactionAllegiance, EDTx.UserControlFactions_colFactionSystemInfluence, EDTx.UserControlFactions_colFactionOtherSystemInfo,
+                        EDTx.UserControlFactions_colOrganicDataSold,
+
                         };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
-            var enumlistcms = new Enum[] { EDTx.UserControlFactions_showMissionsForFactionToolStripMenuItem, EDTx.UserControlFactions_showCommoditymaterialTradesForFactionToolStripMenuItem,
-                        EDTx.UserControlFactions_showBountiesAndBondsForFactionToolStripMenuItem, EDTx.UserControlFactions_showFactionSystemDetailToolStripMenuItem
+            var enumlistcms = new Enum[] { EDTx.UserControlFactions_showMissionsForFactionToolStripMenuItem, 
+                                           EDTx.UserControlFactions_showCommoditymaterialTradesForFactionToolStripMenuItem,
+                                           EDTx.UserControlFactions_showBountiesAndBondsForFactionToolStripMenuItem,
                 };
 
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
 
-            var enumlisttt = new Enum[] { EDTx.UserControlFactions_startDateTimePicker_ToolTip, EDTx.UserControlFactions_endDateTimePicker_ToolTip, EDTx.UserControlFactions_buttonExtExcel_ToolTip
+            var enumlisttt = new Enum[] { EDTx.UserControlFactions_startDateTimePicker_ToolTip, EDTx.UserControlFactions_endDateTimePicker_ToolTip, 
+                                        EDTx.UserControlFactions_buttonExtExcel_ToolTip,
+                                        EDTx.UserControlFactions_extCheckBoxShowHideSystemInfo_ToolTip, EDTx.UserControlFactions_extCheckBoxShowHideMission_ToolTip,
+                                        EDTx.UserControlFactions_extCheckBoxShowHideCommodities_ToolTip, EDTx.UserControlFactions_extCheckBoxShowHideMaterials_ToolTip,
+                                        EDTx.UserControlFactions_extCheckBoxShowHideBounties_ToolTip, EDTx.UserControlFactions_extCheckBoxShowHideInterdictions_ToolTip,
+                                        EDTx.UserControlFactions_extCheckBoxShowHideKillBonds_ToolTip, EDTx.UserControlFactions_extCheckBoxShowHideDataLink_ToolTip,
+                                        EDTx.UserControlFactions_extCheckBoxShowHideCartographic_ToolTip
                     };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             labelInfo.Text = "";
-        }
 
+            searchtimer = new Timer() { Interval = 500 };
+            searchtimer.Tick += (e, s) => { searchtimer.Stop(); Display(); };
+        }
 
         public override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridView);
+            SetHideButtonState();
         }
 
         public override void InitialDisplay()
         {
-            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            last_he_received = DiscoveryForm.History.GetLast;
+            Display();
         }
 
         public override void Closing()
         {
+            searchtimer.Stop();
+
             DGVSaveColumnLayout(dataGridView);
 
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
+            DiscoveryForm.OnNewEntry -= DiscoveryForm_OnNewEntry;
 
             PutSetting("StartDate", startDateTimePicker.Value);                 // picker value is stored..
             PutSetting("StartDateChecked", startDateTimePicker.Checked);
@@ -110,20 +133,28 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange()     // may have changed date system, this causes this
         {
+            last_he_received = DiscoveryForm.History.GetLast;       // set last he received to the top
             VerifyDates();
             Display();
         }
 
-        // follow travel history cursor, he is never null
-        public override void ReceiveHistoryEntry(HistoryEntry he)
+        private void DiscoveryForm_OnNewEntry(HistoryEntry he)
         {
-            if (he.MissionList != last_he?.MissionList || he.EventTimeUTC > NextExpiryUTC)      // note this works if last_he is null....
+            UTCRange(out DateTime start, out DateTime end);
+
+            if (he.EventTimeUTC >= start && he.EventTimeUTC <= end)     // if event is within the date range of the display
             {
-                last_he = he;
-                Display();
-                var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he.MissionList, he.EventTimeUTC);    // will always return an array
-                NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EliteReleaseDates.GameEndTime;
-                //System.Diagnostics.Debug.WriteLine($"Faction List recalc {he.EventTimeUTC} {he.MissionList} vs {last_he?.MissionList}, next expiry time {NextExpiryUTC}");
+                //System.Diagnostics.Debug.WriteLine($"Faction List past initial triage, {start}->{end} he time {he.EventTimeUTC}");
+    
+                // mission list changes, or its an IStats affecting the Stats, or event time has exceeded
+                if (he.MissionList != last_he_received?.MissionList || he.journalEntry is IStatsJournalEntry || he.EventTimeUTC > NextExpiryUTC)        
+                {
+                    last_he_received = he;
+                    Display();
+                    var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he.MissionList, he.EventTimeUTC);    // will always return an array
+                    NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EliteReleaseDates.GameEndTime;
+                    //System.Diagnostics.Debug.WriteLine($"Faction List recalc {he.EventTimeUTC} {he.MissionList} vs {last_he_received?.MissionList}, next expiry time {NextExpiryUTC}");
+                }
             }
         }
 
@@ -133,96 +164,156 @@ namespace EDDiscovery.UserControls
 
         private void Display()
         {
-            DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
+            DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : null;      // default is no sort, as per the order coming from stats computer
             SortOrder sortorder = dataGridView.SortOrder != SortOrder.None ? dataGridView.SortOrder : SortOrder.Ascending;
-            string toprowfaction = dataGridView.SafeFirstDisplayedScrollingRowIndex() >= 0 ? (dataGridView.Rows[dataGridView.SafeFirstDisplayedScrollingRowIndex()].Tag as FactionStats.FactionStatistics).Name : "";
+            string toprowfaction = dataGridView.SafeFirstDisplayedScrollingRowIndex() >= 0 ? (dataGridView.Rows[dataGridView.SafeFirstDisplayedScrollingRowIndex()].Tag as FactionStatsComputer.FactionResults).Name : "";
 
             dataGridView.Rows.Clear();
 
-            DateTime startdateutc = startDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTimePicker.Value) : EliteReleaseDates.GameRelease;
-            DateTime enddateutc = endDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(endDateTimePicker.Value) : EliteReleaseDates.GameEndTime;
-            bool timepicked = startDateTimePicker.Checked || endDateTimePicker.Checked;
+            bool timepicked = UTCRange(out DateTime startdateutc, out DateTime enddateutc);
 
-            var factionslist = EliteDangerousCore.FactionStats.Compute(DiscoveryForm.History.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0),
-                                                                       timepicked ? null : DiscoveryForm.History.GetStatsAtGeneration(last_he?.Statistics ?? 0),
-                                                                       DiscoveryForm.History, startdateutc, enddateutc);
+            var laststatsfromcomputer = FactionStatsComputer.Compute(DiscoveryForm.History.MissionListAccumulator.GetAllMissions(), // pass in all missions, the computer will filter them out 
+                                                                       timepicked ? null : DiscoveryForm.History.Stats,     // if we are timepicking, we let the computer make stats up. Else we pass in the latest
+                                                                       DiscoveryForm.History,
+                                                                       startdateutc, enddateutc);
+            List<DataGridViewRow> rows = new List<DataGridViewRow>();
 
-            // now update the grid with faction info
-
-            if (factionslist.Count > 0)
+            foreach (FactionStatsComputer.FactionResults fr in laststatsfromcomputer.Values)
             {
-                var rows = new List<DataGridViewRow>();
-                foreach (FactionStats.FactionStatistics fs in factionslist.Values)
+                var systems = fr.FactionStats?.PerSystemData.Keys.ToHashSet();      // faction stats may be null
+                if (systems != null)
+                    systems.UnionWith(fr.PerSystemData.Keys.ToList());       // MissionPerSystemData always there.
+                else
+                    systems = fr.PerSystemData.Keys.ToHashSet();
+
+                int sysindex = 0;
+                foreach ( var systemname in systems)
                 {
+                    //System.Diagnostics.Debug.WriteLine($"{fr.Name} in {systemname}");
+
+                    Stats.FactionStatistics.PerSystem fs = null;
+                    if ( fr.FactionStats != null)
+                        fr.FactionStats.PerSystemData.TryGetValue(systemname, out fs);        // may be null
+
+                    fr.PerSystemData.TryGetValue(systemname, out FactionStatsComputer.FactionResults.PerSystem ms);        // may be null
+
                     var info = "";
 
-                    if (fs.MissionsInProgress > 0)
-                        info = info.AppendPrePad("Missions In Progress:".T(EDTx.UserControlFactions_MissionsInProgress) + " " + fs.MissionsInProgress , ", ");
-
-                    foreach (var reward in fs.MissionRewards.Values)
+                    if (ms != null)
                     {
-                        info = info.AppendPrePad(reward.Count + " " + reward.Name, ", ");
+                        if (ms.MissionsInProgress > 0)
+                            info = info.AppendPrePad("Missions In Progress:".T(EDTx.UserControlFactions_MissionsInProgress) + " " + ms.MissionsInProgress, ", ");
+
+                        foreach (var reward in ms.MissionRewards.Values)
+                        {
+                            info = info.AppendPrePad(reward.Count + " " + reward.Name, ", ");
+                        }
                     }
 
-                    if (fs.FactionStats.CapShipAwardAsVictimFaction > 0 )
-                        info = info.AppendPrePad("Capital ship Victims: ".T(EDTx.UserControlFactions_CapShipVictims) + fs.FactionStats.CapShipAwardAsVictimFaction, ", ");
-                    if (fs.FactionStats.CapShipAwardAsAwaringFaction > 0 )
-                        info = info.AppendPrePad("Capital ship Award: ".T(EDTx.UserControlFactions_CapShipAward) + fs.FactionStats.CapShipAwardAsAwaringFaction + ":" + fs.FactionStats.CapShipAwardAsAwaringFactionValue.ToString("N0") + "cr", ", ");
+                    if (fs != null)
+                    {
+                        if (fs.CapShipAwardAsVictimFaction > 0)
+                            info = info.AppendPrePad("Capital ship Victims: ".T(EDTx.UserControlFactions_CapShipVictims) + fs.CapShipAwardAsVictimFaction, ", ");
+                        if (fs.CapShipAwardAsAwaringFaction > 0)
+                            info = info.AppendPrePad("Capital ship Award: ".T(EDTx.UserControlFactions_CapShipAward) + fs.CapShipAwardAsAwaringFaction + ":" + fs.CapShipAwardAsAwaringFactionValue.ToString("N0") + "cr", ", ");
+                    }
 
-                    object[] rowobj = { fs.Name,
-                                        fs.TotalMissions.ToString("N0"), fs.Influence.ToString("N0"), fs.Reputation.ToString("N0"), fs.MissionCredits.ToString("N0"),
-                                        fs.FactionStats.BoughtCommodity.ToString("N0"), fs.FactionStats.SoldCommodity.ToString("N0"),fs.FactionStats.ProfitCommodity.ToString("N0"),
-                                        fs.FactionStats.BoughtMaterial.ToString("N0"), fs.FactionStats.SoldMaterial.ToString("N0"),
-                                        fs.FactionStats.CrimesAgainst.ToString("N0") ,
-                                        fs.FactionStats.BountyKill.ToString("N0"), fs.FactionStats.BountyRewards.ToString("N0"), fs.FactionStats.BountyRewardsValue.ToString("N0"),
-                                        fs.FactionStats.RedeemVoucherValue.ToString("N0"), fs.FactionStats.FineValue.ToString("N0"),fs.FactionStats.PayBountyValue.ToString("N0"),                 
-                                        fs.FactionStats.Interdicted.ToString("N0"), fs.FactionStats.Interdiction.ToString("N0"),
-                                        fs.FactionStats.KillBondAwardAsVictimFaction.ToString("N0"), fs.FactionStats.KillBondAwardAsAwaringFaction.ToString("N0"), fs.FactionStats.KillBondAwardAsAwaringFactionValue.ToString("N0"),
-                                        fs.FactionStats.CartographicDataSold.ToString("N0"),
-                                        fs.FactionStats.DataLinkAwardAsVictimFaction.ToString("N0"),fs.FactionStats.DataLinkAwardAsPayeeFaction.ToString("N0"),fs.FactionStats.DataLinkAwardAsPayeeFactionValue.ToString("N0"),
-                                        info };
+                    System.Text.StringBuilder factionstring = new System.Text.StringBuilder();
+                    if (fs?.FactionInfo != null)
+                        fs.FactionInfo.ToString(factionstring, true, false, true, true,true,false);
 
-                    var row = dataGridView.RowTemplate.Clone() as DataGridViewRow;
-                    row.CreateCells(dataGridView, rowobj);
-                    row.Tag = fs;
-                    rows.Add(row);
+                    object[] rowobj = { fr.Name, ms!=null ? ms.System.Name : fs.System.Name,
+                                                fr.FactionStats?.LastReputation != null ? $"{FactionDefinitions.FactionInformation.Reputation(fr.FactionStats.LastReputation)} ({fr.FactionStats.LastReputation:0.#})" : "",
+                                                fs?.FactionInfo != null ? FactionDefinitions.ToLocalisedLanguage(fs.FactionInfo.FactionState) : "",
+                                                fs?.FactionInfo != null ? GovernmentDefinitions.ToLocalisedLanguage(fs.FactionInfo.Government) : "",
+                                                fs?.FactionInfo != null ? AllegianceDefinitions.ToLocalisedLanguage(fs.FactionInfo.Allegiance) : "",
+                                                fs?.FactionInfo != null ? (fs.FactionInfo.Influence*100).ToString("N1") + "%" : "",
+                                                factionstring.ToString(),
+                                                ms != null ? ms.Missions.ToString("N0") : "0",
+                                                ms != null ? ms.Influence.ToString("N0") : "0",
+                                                ms != null ? ms.Reputation.ToString("N0") : "0",
+                                                ms != null ? ms.MissionCredits.ToString("N0") : "0",
+                                                fs != null ? fs.BoughtCommodity.ToString("N0") : "0",
+                                                fs != null ? fs.SoldCommodity.ToString("N0") : "0",
+                                                fs != null ? fs.ProfitCommodity.ToString("N0") : "0",
+                                                fs != null ? fs.BoughtMaterial.ToString("N0") : "0",
+                                                fs != null ? fs.SoldMaterial.ToString("N0") : "0",
+                                                fs != null ? fs.CrimesAgainst.ToString("N0") : "0",
+                                                fs != null ? fs.BountyKill.ToString("N0") : "0",
+                                                fs != null ? fs.BountyRewards.ToString("N0") : "0",
+                                                fs != null ? fs.BountyRewardsValue.ToString("N0") : "0",
+                                                fs != null ? fs.RedeemVoucherValue.ToString("N0") : "0",
+                                                fs != null ? fs.FineValue.ToString("N0") : "0",
+                                                fs != null ? fs.PayBountyValue.ToString("N0") : "0",
+                                                fs != null ? fs.Interdicted.ToString("N0") : "0",
+                                                fs != null ? fs.Interdiction.ToString("N0") : "0",
+                                                fs != null ? fs.KillBondAwardAsVictimFaction.ToString("N0") : "0",
+                                                fs != null ? fs.KillBondAwardAsAwardingFaction.ToString("N0") : "0",
+                                                fs != null ? fs.KillBondAwardAsAwardingFactionValue.ToString("N0") : "0",
+                                                fs != null ? fs.CartographicDataSold.ToString("N0") : "0",
+                                                fs != null ? fs.OrganicDataSold.ToString("N0") : "0",
+                                                fs != null ? fs.DataLinkAwardAsVictimFaction.ToString("N0") : "0",
+                                                fs != null ? fs.DataLinkAwardAsPayeeFaction.ToString("N0") : "0",
+                                                fs != null ? fs.DataLinkAwardAsPayeeFactionValue.ToString("N0") : "0",
+                                                info };
+
+                    bool matched = false;
+                    if (textBoxSearch.Text.HasChars())
+                    {
+                        foreach (var c in rowobj)
+                        {
+                            if (((string)c).ContainsIIC(textBoxSearch.Text))
+                            {
+                                matched = true;
+                                break;
+                            }
+                        }
+                    }
+                    else
+                        matched = true;
+
+                    if (matched)
+                    {
+                        var row = dataGridView.RowTemplate.Clone() as DataGridViewRow;
+                        row.CreateCells(dataGridView, rowobj);
+                        row.Tag = fr;
+
+                        if (sysindex++ >= 1)
+                            row.Cells[0].Style.Alignment = DataGridViewContentAlignment.MiddleRight;    // to indicate second or futher systems
+                        rows.Add(row);
+
+                    }
                 }
 
-                dataGridView.Rows.AddRange(rows.ToArray());
+            }
 
+            dataGridView.Rows.AddRange(rows.ToArray());
+
+            if (sortcol != null)
+            {
                 dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
                 dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+            }
 
-                if (toprowfaction.HasChars())
+            if (toprowfaction.HasChars())
+            {
+                for (int i = 0; i < dataGridView.RowCount; i++)
                 {
-                    for( int i = 0; i < dataGridView.RowCount; i++ )
+                    var fs = dataGridView.Rows[i].Tag as FactionStatsComputer.FactionResults;
+                    if (fs.Name == toprowfaction)
                     {
-                        var fs = dataGridView.Rows[i].Tag as FactionStats.FactionStatistics;
-                        if ( fs.Name == toprowfaction )
-                        {
-                            dataGridView.SafeFirstDisplayedScrollingRowIndex(i);
-                            break;
-                        }
+                        dataGridView.SafeFirstDisplayedScrollingRowIndex(i);
+                        break;
                     }
                 }
             }
 
-            labelInfo.Text = factionslist.Count + " " + "Factions".T(EDTx.UserControlFactions_FactionsPlural);
+            labelInfo.Text = laststatsfromcomputer.Count + " " + "Factions".T(EDTx.UserControlFactions_FactionsPlural);
         }
 
         #endregion
 
-        #region Misc
-
-        private void VerifyDates()
-        {
-            if (!EDDConfig.Instance.DateTimeInRangeForGame(startDateTimePicker.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(endDateTimePicker.Value))
-            {
-                startDateTimePicker.Checked = endDateTimePicker.Checked = false;
-                startDateTimePicker.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EliteReleaseDates.GameRelease);
-                endDateTimePicker.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow.EndOfDay());
-            }
-        }
+        #region UI
 
         private void startDateTime_ValueChanged(object sender, EventArgs e)
         {
@@ -234,373 +325,323 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void dataGridViewFactions_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        private void textBoxSearch_TextChanged(object sender, EventArgs e)
         {
-            if (e.Column.Index >= 1 && e.Column.Index <= dataGridView.ColumnCount-2)
+            searchtimer.Stop();
+            searchtimer.Start();
+        }
+
+        private void dataGridView_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex >= 0)
             {
-                e.SortDataGridViewColumnNumeric();
+                if (e.ColumnIndex >= colMissions.Index && e.ColumnIndex <= colMissionCredits.Index)
+                {
+                    ShowMissionInfo(e.RowIndex);
+                }
+                else if (e.ColumnIndex >= CBought.Index && e.ColumnIndex <= MSold.Index)
+                {
+                    ShowCommodityMaterialTrades(e.RowIndex);
+                }
+                else if ((e.ColumnIndex >= BountyKills.Index && e.ColumnIndex <= BountyRewardsValue.Index) ||
+                        (e.ColumnIndex >= KillBondVictim.Index && e.ColumnIndex <= KillBondsValue.Index))
+                {
+                    ShowBountiesAndBonds(e.RowIndex);
+                }
             }
         }
 
+        private void SetHideButtonState()
+        {
+            changinghide = true;
+            extCheckBoxShowHideSystemInfo.Checked = colFactionState.Visible || colFactionGov.Visible || colFactionAllegiance.Visible ||
+                colFactionSystemInfluence.Visible || colFactionOtherSystemInfo.Visible;
+            extCheckBoxShowHideMission.Checked = colMissions.Visible || colInfluence.Visible || colReputation.Visible || colMissionCredits.Visible;
+            extCheckBoxShowHideCommodities.Checked = CBought.Visible || CSold.Visible || CProfit.Visible;
+            extCheckBoxShowHideMaterials.Checked = MBought.Visible || MSold.Visible;
+            extCheckBoxShowHideBounties.Checked = CrimeCommitted.Visible || BountyKills.Visible || BountyRewardsValue.Visible || BountyValue.Visible ||
+                                colRedeemVoucher.Visible || colFines.Visible || colBountyValue.Visible;
+            extCheckBoxShowHideInterdictions.Checked = Interdiction.Visible || Interdicted.Visible;
+            extCheckBoxShowHideKillBonds.Checked = KillBondVictim.Visible || KillBondsAward.Visible || KillBondsValue.Visible;
+            extCheckBoxShowHideCartographic.Checked = colOrganicDataSold.Visible || CartoValue.Visible;
+            extCheckBoxShowHideDataLink.Checked = colDataLinkPayeeFaction.Visible || colDataLinkVictimFaction.Visible || colDataLinkPayeeValue.Visible;
+            changinghide = false;
+        }
+
+        bool changinghide = true;
+        private void extCheckBoxShowHideSystemInfo_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!changinghide)
+            {
+                colFactionState.Visible = colFactionGov.Visible = colFactionAllegiance.Visible =
+                    colFactionSystemInfluence.Visible = colFactionOtherSystemInfo.Visible = extCheckBoxShowHideSystemInfo.Checked;
+            }
+        }
+
+        private void extCheckBoxShowHideMission_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!changinghide)
+                colMissions.Visible = colInfluence.Visible = colReputation.Visible = colMissionCredits.Visible = extCheckBoxShowHideMission.Checked;
+        }
+        private void extCheckBoxShowHideMaterials_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!changinghide)
+                MBought.Visible = MSold.Visible = extCheckBoxShowHideMaterials.Checked;
+        }
+
+        private void extCheckBoxShowHideCommodities_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!changinghide)
+                CBought.Visible = CSold.Visible = CProfit.Visible = extCheckBoxShowHideCommodities.Checked;
+        }
+
+        private void extCheckBoxShowHideBounties_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!changinghide)
+                CrimeCommitted.Visible = BountyKills.Visible = BountyRewardsValue.Visible = BountyValue.Visible =
+                            colRedeemVoucher.Visible = colFines.Visible = colBountyValue.Visible = extCheckBoxShowHideBounties.Checked;
+        }
+
+        private void extCheckBoxShowHideInterdictions_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!changinghide)
+                Interdiction.Visible = Interdicted.Visible = extCheckBoxShowHideInterdictions.Checked;
+        }
+
+        private void extCheckBoxShowHideKillBonds_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!changinghide)
+                KillBondVictim.Visible = KillBondsAward.Visible = KillBondsValue.Visible = extCheckBoxShowHideKillBonds.Checked;
+        }
+        private void extCheckBoxShowHideCartographic_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!changinghide)
+                colOrganicDataSold.Visible = CartoValue.Visible = extCheckBoxShowHideCartographic.Checked;
+
+        }
+
+        private void extCheckBoxShowHideDataLink_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!changinghide)
+                colDataLinkPayeeFaction.Visible = colDataLinkVictimFaction.Visible = colDataLinkPayeeValue.Visible = extCheckBoxShowHideDataLink.Checked;
+        }
         #endregion
 
         #region Right clicks
 
-        private void showMissionsForFactionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void contextMenuStrip_Opening(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            int row = dataGridView.RightClickRow;
-
-            if (row >= 0)
-            {
-                var fs = dataGridView.Rows[row].Tag as FactionStats.FactionStatistics;
-
-                ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
-                MissionListUserControl mluc = new MissionListUserControl();
-
-                mluc.Start();
-
-                List<MissionState> ml = DiscoveryForm.History.MissionListAccumulator.GetMissionList(last_he?.MissionList ?? 0);
-
-                DateTime startdateutc = startDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTimePicker.Value) : EliteReleaseDates.GameRelease;
-                DateTime enddateutc = endDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(endDateTimePicker.Value) : EliteReleaseDates.GameEndTime;
-
-                if (ml != null)
-                {
-                    foreach (MissionState ms in ml)
-                    {
-                        if (ms.State == MissionState.StateTypes.Completed && ms.Completed != null)
-                        {
-                            if (DateTime.Compare(ms.Completed.EventTimeUTC, startdateutc) >= 0 &&
-                                DateTime.Compare(ms.Completed.EventTimeUTC, enddateutc) <= 0)
-                            {
-                                var faction = ms.Mission.Faction;
-                                if (faction == fs.Name)
-                                    mluc.Add(ms, true,"");
-                            }
-                        }
-                    }
-
-                    mluc.CompletedFill();
-                }
-
-                mluc.Finish();
-
-                DGVLoadColumnLayout(mluc.dataGridView, "ShowMission");
-
-                f.Add(new ExtendedControls.ConfigurableForm.Entry(mluc, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
-                { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
-
-                f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
-                f.InstallStandardTriggers();
-
-                f.AllowResize = true;
-
-                f.ShowDialogCentred(FindForm(), FindForm().Icon, "Missions for ".T(EDTx.UserControlFactions_MissionsFor) + fs.Name, closeicon: true);
-
-                DGVSaveColumnLayout(mluc.dataGridView, "ShowMission");
-            }
         }
 
-        // From last_he, and using the start/end time if required, filter history before this date, with the predicate
-
-        private List<HistoryEntry> FilterHistory(Predicate<HistoryEntry> where)
+        private void showMissionsForFactionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (last_he != null)
-            {
-                DateTime startdateutc = startDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTimePicker.Value) : EliteReleaseDates.GameRelease;
-                DateTime enddateutc = endDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(endDateTimePicker.Value) : EliteReleaseDates.GameEndTime;
-                return HistoryList.FilterBefore(DiscoveryForm.History.EntryOrder(), last_he, 
-                                    (x) => ((DateTime.Compare(x.EventTimeUTC, startdateutc) >= 0 &&
-                                             DateTime.Compare(x.EventTimeUTC, enddateutc) <= 0) &&
-                                             where(x)));
-            }
-            else
-            {
-                return new List<HistoryEntry>();
-            }
+            if (dataGridView.RightClickRow >= 0)
+                ShowMissionInfo(dataGridView.RightClickRow);
         }
 
         private void showCommoditymaterialTradesForFactionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (dataGridView.RightClickRow >= 0)
-            {
-                var fs = dataGridView.Rows[dataGridView.RightClickRow].Tag as FactionStats.FactionStatistics;
-
-                var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
-                dgvpanel.DataGrid.CreateTextColumns("Date".T(EDTx.UserControlOutfitting_Date), 100, 5,
-                                                    "Item".T(EDTx.UserControlFactions_Item), 150, 5,
-                                                    "Bought".T(EDTx.UserControlStats_GoodsBought), 50, 5,
-                                                    "Sold".T(EDTx.UserControlStats_GoodsSold), 50, 5,
-                                                    "Profit".T(EDTx.UserControlStats_GoodsProfit), 50, 5);
-
-                dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 2) ev.SortDataGridViewColumnNumeric(); };
-                dgvpanel.DataGrid.RowHeadersVisible = false;
-                dgvpanel.DataGrid.Columns[2].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvpanel.DataGrid.Columns[3].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-                dgvpanel.DataGrid.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-
-                DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowCommdsMats");
-
-                long profit = 0;
-
-                foreach (var he in FilterHistory((x) => x.journalEntry is IStatsJournalEntryMatCommod && x.Status.StationFaction == fs.Name))
-                {
-                    var items = (he.journalEntry as IStatsJournalEntryMatCommod).ItemsList;
-                    foreach (var i in items)
-                    {
-                        var m = EliteDangerousCore.MaterialCommodityMicroResourceType.GetByFDName(i.FDName);     // and we see if we actually have some at this time
-                        string name = m?.TranslatedName ?? i.FDName;
-
-                        int bought = i.Count > 0 ? i.Count : 0;
-                        int sold = i.Count < 0 ? -i.Count : 0;
-
-                        object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
-                                            name,
-                                            bought.ToString("N0"),
-                                            sold.ToString("N0"),
-                                            i.Profit.ToString("N0")};
-                        var row = dgvpanel.DataGrid.RowTemplate.Clone() as DataGridViewRow;
-                        row.CreateCells(dgvpanel.DataGrid, rowobj);
-                        dgvpanel.DataGrid.Rows.Add(row);
-
-                        profit += i.Profit;
-                    }
-                }
-
-                ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
-                f.Add(new ExtendedControls.ConfigurableForm.Entry(dgvpanel, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
-                { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
-                f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
-                f.InstallStandardTriggers();
-                f.AllowResize = true;
-
-                string title = "Materials/Commodities for ".T(EDTx.UserControlFactions_MaterialCommodsFor) + fs.Name;
-                if (profit != 0)
-                    title += " (" + profit.ToString("N0") + "cr)";
-                f.ShowDialogCentred(FindForm(), FindForm().Icon, title  , closeicon: true);
-
-                DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowCommdsMats");
-
-            }
+                ShowCommodityMaterialTrades(dataGridView.RightClickRow);
         }
 
         private void showBountiesAndBondsForFactionToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (dataGridView.RightClickRow >= 0)
+                ShowBountiesAndBonds(dataGridView.RightClickRow);
+        }
+
+        #endregion
+
+        #region Pop out dialogs
+        private void ShowMissionInfo(int row)
+        { 
+            var fr = dataGridView.Rows[row].Tag as FactionStatsComputer.FactionResults;      // grab relevant FS
+            string factionname = fr.Name;
+
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+            MissionListUserControl mluc = new MissionListUserControl();
+
+            mluc.Start();
+
+            UTCRange(out DateTime startdateutc, out DateTime enddateutc);
+
+            List<MissionState> ml = DiscoveryForm.History.MissionListAccumulator.GetMissionsBetween(startdateutc, enddateutc);  // get missions in date range
+
+            foreach (MissionState ms in ml)
             {
-                var fs = dataGridView.Rows[dataGridView.RightClickRow].Tag as FactionStats.FactionStatistics;
-
-                var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
-                dgvpanel.DataGrid.CreateTextColumns("Date".T(EDTx.UserControlOutfitting_Date), 100, 5,
-                                                    "Bounty/Bond".T(EDTx.UserControlFactions_BountyBond), 80, 5,
-                                                    "Target".T(EDTx.UserControlFactions_Target), 150, 5,
-                                                    "Target Faction".T(EDTx.UserControlFactions_TargetFaction), 150, 5,
-                                                    "Reward".T(EDTx.UserControlFactions_Reward), 60, 5);
-                dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 4) ev.SortDataGridViewColumnNumeric(); };
-                dgvpanel.DataGrid.RowHeadersVisible = false;
-                dgvpanel.DataGrid.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-
-                DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowBonds");
-
-                foreach (var he in FilterHistory((x) => x.journalEntry is IStatsJournalEntryBountyOrBond &&
-                                                    (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name)))
+                if (ms.State == MissionState.StateTypes.Completed && ms.Completed != null)
                 {
-                    var bb = he.journalEntry as IStatsJournalEntryBountyOrBond;
+                    if (ms.Mission.Faction == factionname)
+                    {
+                        mluc.Add(ms, true, "");
+                        System.Diagnostics.Debug.WriteLine($"Mission {ms.Mission.MissionBasicInfo(false)}");
+                    }
+                }
+            }
+
+            mluc.CompletedFill();
+
+            mluc.Finish();
+
+            DGVLoadColumnLayout(mluc.dataGridView, "ShowMission");
+
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry(mluc, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
+            { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
+
+            f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
+            f.InstallStandardTriggers();
+
+            f.AllowResize = true;
+
+            f.ShowDialogCentred(FindForm(), FindForm().Icon, "Missions for ".T(EDTx.UserControlFactions_MissionsFor) + factionname, closeicon: true);
+
+            DGVSaveColumnLayout(mluc.dataGridView, "ShowMission");
+        }
+
+        private void ShowCommodityMaterialTrades(int row)
+        { 
+            var fr = dataGridView.Rows[row].Tag as FactionStatsComputer.FactionResults;      // grab relevant FS
+            string factionname = fr.Name;
+
+            var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
+            dgvpanel.DataGrid.CreateTextColumns("Date".T(EDTx.UserControlOutfitting_Date), 100, 5,
+                                                "System".T(EDTx.CaptainsLogEntries_ColSystem), 150, 5,
+                                                "Station".T(EDTx.ScanDisplayForm_Station), 150, 5,
+                                                "Item".T(EDTx.UserControlFactions_Item), 150, 5,
+                                                "Bought".T(EDTx.UserControlStats_GoodsBought), 50, 5,
+                                                "Sold".T(EDTx.UserControlStats_GoodsSold), 50, 5,
+                                                "Profit".T(EDTx.UserControlStats_GoodsProfit), 50, 5);
+
+            dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 4) ev.SortDataGridViewColumnNumeric(); };
+            dgvpanel.DataGrid.RowHeadersVisible = false;
+            dgvpanel.DataGrid.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgvpanel.DataGrid.Columns[5].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+            dgvpanel.DataGrid.Columns[6].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
+
+            DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowCommdsMats");
+
+            long profit = 0;
+
+            var helist = FilterHistoryDatePredicate((x) => x.journalEntry is IStatsJournalEntryMatCommod && x.Status.StationFaction == factionname);
+
+            foreach (var he in helist)
+            {
+                System.Diagnostics.Debug.WriteLine($"HE {he.EventTimeUTC} {he.EventSummary}");
+
+                var items = (he.journalEntry as IStatsJournalEntryMatCommod).ItemsList;
+                foreach (var i in items)
+                {
+                    var m = EliteDangerousCore.MaterialCommodityMicroResourceType.GetByFDName(i.FDName);     // and we see if we actually have some at this time
+                    string name = m?.TranslatedName ?? i.FDName;
+
+                    int bought = i.Count > 0 ? i.Count : 0;
+                    int sold = i.Count < 0 ? -i.Count : 0;
+
                     object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
-                                        bb.Type, bb.Target, bb.TargetFaction, bb.FactionReward(fs.Name).ToString("N0") };
-                    var row = dgvpanel.DataGrid.RowTemplate.Clone() as DataGridViewRow;
-                    row.CreateCells(dgvpanel.DataGrid, rowobj);
-                    dgvpanel.DataGrid.Rows.Add(row);
+                                        he.System.Name,
+                                        he.WhereAmI,
+                                        name,
+                                        bought.ToString("N0"),
+                                        sold.ToString("N0"),
+                                        i.Profit.ToString("N0")};
+                    var dgvrow = dgvpanel.DataGrid.RowTemplate.Clone() as DataGridViewRow;
+                    dgvrow.CreateCells(dgvpanel.DataGrid, rowobj);
+                    dgvpanel.DataGrid.Rows.Add(dgvrow);
+
+                    profit += i.Profit;
                 }
-
-                ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
-                f.Add(new ExtendedControls.ConfigurableForm.Entry(dgvpanel, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
-                { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
-                f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
-                f.InstallStandardTriggers();
-                f.AllowResize = true;
-
-                f.ShowDialogCentred(FindForm(), FindForm().Icon, "Bounties/Bonds for ".T(EDTx.UserControlFactions_BountiesBondsFor) + fs.Name, closeicon: true);
-
-                DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowBonds");
             }
+
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry(dgvpanel, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
+            { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
+            f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
+            f.InstallStandardTriggers();
+            f.AllowResize = true;
+
+            string title = "Materials/Commodities for ".T(EDTx.UserControlFactions_MaterialCommodsFor) + factionname;
+            if (profit != 0)
+                title += " (" + profit.ToString("N0") + "cr)";
+            f.ShowDialogCentred(FindForm(), FindForm().Icon, title, closeicon: true);
+
+            DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowCommdsMats");
         }
 
-        private class SystemInfo
-        {
-            public string Name { get; set; }
-            public long? Address { get; set; }
-            public int? Influence { get; set; }
-            public int? Missions { get; set; }
-            public int? CommoditiesSold { get; private set; }
-            public int? CommoditiesBought { get; private set; }
-            public int? MaterialsSold { get; private set; }
-            public int? MaterialsBought { get; private set; }
-            public int? Bounties { get; private set; }
-            public long? BountyRewardsValue { get; private set; }
-            public int? KillBonds { get; private set; }
-            public long? BondsRewardsValue { get; private set; }
-            public long? CartographicValue { get; private set; }
+        private void ShowBountiesAndBonds(int row)
+        { 
+            var fr = dataGridView.Rows[row].Tag as FactionStatsComputer.FactionResults;      // grab relevant FS
+            string factionname = fr.Name;
 
-            public void AddCommoditiesSold(int a) { CommoditiesSold = (CommoditiesSold ?? 0) + a; }
-            public void AddCommoditiesBought(int a) { CommoditiesBought = (CommoditiesBought ?? 0) + a; }
-            public void AddMaterialsSold(int a) { MaterialsSold = (MaterialsSold ?? 0) + a; }
-            public void AddMaterialsBought(int a) { MaterialsBought = (MaterialsBought ?? 0) + a; }
-            public void AddBounties(int a) { Bounties = (Bounties ?? 0) + a; }
-            public void AddBountyRewardsValue(long a) { BountyRewardsValue = (BountyRewardsValue ?? 0) + a; }
-            public void AddKillBonds(int a) { KillBonds = (KillBonds ?? 0) + a; }
-            public void AddBondsRewardsValue(long a) { BondsRewardsValue = (BondsRewardsValue ?? 0) + a; }
-            public void AddCartographicValue(long a) { CartographicValue = (CartographicValue ?? 0) + a; }
-        }
+            var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
+            dgvpanel.DataGrid.CreateTextColumns("Date".T(EDTx.UserControlOutfitting_Date), 100, 5,
+                                                "Bounty/Bond".T(EDTx.UserControlFactions_BountyBond), 80, 5,
+                                                "Target".T(EDTx.UserControlFactions_Target), 150, 5,
+                                                "Target Faction".T(EDTx.UserControlFactions_TargetFaction), 150, 5,
+                                                "Reward".T(EDTx.UserControlFactions_Reward), 60, 5);
+            dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 4) ev.SortDataGridViewColumnNumeric(); };
+            dgvpanel.DataGrid.RowHeadersVisible = false;
+            dgvpanel.DataGrid.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
 
+            DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowBonds");
 
-
-        private void showFactionSystemDetailToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (dataGridView.RightClickRow >= 0)
+            foreach (var he in FilterHistoryDatePredicate((x) => x.journalEntry is IStatsJournalEntryBountyOrBond &&
+                                                (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(factionname)))
             {
-               var fs = dataGridView.Rows[dataGridView.RightClickRow].Tag as FactionStats.FactionStatistics;
-
-                var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
-                dgvpanel.DataGrid.CreateTextColumns("System".T(EDTx.UserControlModules_System), 100, 5,
-                                                    "System Address".T(EDTx.UserControlFactions_SystemAddress), 60, 5,
-                                                    "Missions".T(EDTx.UserControlMissions_MPlural), 50, 5,
-                                                    "+Influence".T(EDTx.UserControlFactions_colInfluence), 50, 5,       // these align with columns of main view, with same names
-                                                    "Commds +".T(EDTx.UserControlFactions_CBought), 50, 5,      
-                                                    "Commds -".T(EDTx.UserControlFactions_CSold), 50, 5,
-                                                    "Mats +".T(EDTx.UserControlFactions_MBought), 50, 5,
-                                                    "Mats -".T(EDTx.UserControlFactions_MSold), 50, 5,
-                                                    "Bounties".T(EDTx.UserControlFactions_BountiesPlural), 50, 5,
-                                                    "Rewards".T(EDTx.UserControlFactions_RewardsPlural), 60, 5,
-                                                    "Bonds".T(EDTx.UserControlFactions_BondsPlural), 50, 5,
-                                                    "Rewards".T(EDTx.UserControlFactions_RewardsPlural), 60, 5,
-                                                    "Cartographic Value".T(EDTx.UserControlFactions_CartoValue), 60, 5);
-                dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 1) ev.SortDataGridViewColumnNumeric(); };
-                dgvpanel.DataGrid.RowHeadersVisible = false;
-                dgvpanel.DataGrid.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-                for (int col = 1; col < dgvpanel.DataGrid.ColumnCount - 1; col++)
-                    dgvpanel.DataGrid.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
-
-                DGVLoadColumnLayout(dgvpanel.DataGrid, "ShowSystemDetail");
-
-                // systems to present
-                var systems = new List<SystemInfo>();
-
-                // look thru the influence systems and add it to the list of systems
-
-                foreach (var si in fs.MissionSystemsWithInfluence.Values)
-                {
-                    string systemName = null;
-                    if (last_he != null)
-                    {
-                        foreach (var he in HistoryList.FilterBefore(DiscoveryForm.History.EntryOrder(), last_he, 
-                                    (x) => x.System.SystemAddress == si.SystemAddress))
-                        {
-                            systemName = he.System.Name;
-                            break;
-                        }
-                    }
-                    systems.Add(new SystemInfo { Name = systemName, Address = si.SystemAddress, Missions = si.Missions, Influence = si.Influence });
-                }
-
-                // find all the history entries with faction, taking into account start/end date, and last_he position
-
-                var list = FilterHistory((x) =>
-                        (x.journalEntry is IStatsJournalEntryMatCommod && x.Status.StationFaction == fs.Name) ||  // he's with changes in stats due to MatCommod trading
-                        (x.journalEntry is IStatsJournalEntryBountyOrBond && (x.journalEntry as IStatsJournalEntryBountyOrBond).HasFaction(fs.Name) ) ||  // he's with Bountry/bond
-                        ((x.journalEntry.EventTypeID == JournalTypeEnum.SellExplorationData || x.journalEntry.EventTypeID == JournalTypeEnum.MultiSellExplorationData) && x.Status.StationFaction == fs.Name)// he's for exploration
-                        );
-
-                foreach (var he in list)
-                {
-                    SystemInfo si = systems.Find(x =>           // do we have this previous entry?
-                        (he.System.SystemAddress != null && x.Address == he.System.SystemAddress) ||
-                        (he.System.Name != null && x.Name == he.System.Name));
-
-                    if (si == null)     // no, add it to the system list
-                    {
-                        si = new SystemInfo { Name = he.System.Name, Address = he.System.SystemAddress };
-                        systems.Add(si);
-                    }
-
-                    if (he.journalEntry is IStatsJournalEntryMatCommod)         // is this a material or commodity trade?
-                    {
-                        var items = (he.journalEntry as IStatsJournalEntryMatCommod).ItemsList;
-                        foreach (var i in items)
-                        {
-                            if (he.journalEntry.EventTypeID == JournalTypeEnum.MaterialTrade)       // material trade is only counter for mats
-                            {
-                                if (i.Count > 0)
-                                    si.AddMaterialsBought(i.Count);
-                                else if (i.Count < 0)
-                                    si.AddMaterialsSold(-i.Count);
-                            }
-                            else
-                            {                                               // all others are commds
-                                if (i.Count > 0)
-                                    si.AddCommoditiesBought(i.Count);
-                                else
-                                    si.AddCommoditiesSold(-i.Count);        // value is negative, invert
-                            }
-                        }
-                    }
-                    else
-                    {
-                      //  System.Diagnostics.Debug.WriteLine($"Faction {fs.Name} Journal entry {he.journalEntry.EventTypeStr} {he.System.Name}");
-
-                        if (he.journalEntry.EventTypeID == JournalTypeEnum.Bounty)
-                        {
-                            si.AddBounties(1);
-                            si.AddBountyRewardsValue((he.journalEntry as IStatsJournalEntryBountyOrBond).FactionReward(fs.Name));
-                        }
-                        else if (he.journalEntry.EventTypeID == JournalTypeEnum.FactionKillBond)
-                        {
-                            si.AddKillBonds(1);
-                            si.AddBondsRewardsValue((he.journalEntry as IStatsJournalEntryBountyOrBond).FactionReward(fs.Name));
-                        }
-                        else if (he.journalEntry.EventTypeID == JournalTypeEnum.SellExplorationData)
-                        {
-                            si.AddCartographicValue((he.journalEntry as EliteDangerousCore.JournalEvents.JournalSellExplorationData).TotalEarnings);
-                        }
-                        else if (he.journalEntry.EventTypeID == JournalTypeEnum.MultiSellExplorationData)
-                        {
-                            si.AddCartographicValue((he.journalEntry as EliteDangerousCore.JournalEvents.JournalMultiSellExplorationData).TotalEarnings);
-                        }
-                    }
-                }
-
-                foreach (var system in systems)
-                {
-                    object[] rowobj = { system.Name,
-                                        system.Address,
-                                        system.Missions?.ToString("N0"),
-                                        system.Influence?.ToString("N0"),
-                                        system.CommoditiesBought?.ToString("N0"),
-                                        system.CommoditiesSold?.ToString("N0"),
-                                        system.MaterialsBought?.ToString("N0"),
-                                        system.MaterialsSold?.ToString("N0"),
-                                        system.Bounties?.ToString("N0"),
-                                        system.BountyRewardsValue?.ToString("N0"),
-                                        system.KillBonds?.ToString("N0"),
-                                        system.BondsRewardsValue?.ToString("N0"),
-                                        system.CartographicValue?.ToString("N0"),
-                                    };
-                    var row = dgvpanel.DataGrid.RowTemplate.Clone() as DataGridViewRow;
-                    row.CreateCells(dgvpanel.DataGrid, rowobj);
-                    dgvpanel.DataGrid.Rows.Add(row);
-                }
-
-                ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
-                f.Add(new ExtendedControls.ConfigurableForm.Entry(dgvpanel, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(960, 400), null)
-                { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
-                f.AddOK(new Point(960 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
-                f.InstallStandardTriggers();
-                f.AllowResize = true;
-
-                f.ShowDialogCentred(FindForm(), FindForm().Icon, "Systems Detail for ".T(EDTx.UserControlFactions_SystemsDetailFor) + fs.Name, closeicon: true);
-
-                DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowSystemDetail");
+                System.Diagnostics.Debug.WriteLine($"HE {he.EventTimeUTC} {he.EventSummary}");
+                var bb = he.journalEntry as IStatsJournalEntryBountyOrBond;
+                object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC),
+                                    bb.Type, bb.Target, bb.TargetFaction, bb.FactionReward(factionname).ToString("N0") };
+                var dgvrow = dgvpanel.DataGrid.RowTemplate.Clone() as DataGridViewRow;
+                dgvrow.CreateCells(dgvpanel.DataGrid, rowobj);
+                dgvpanel.DataGrid.Rows.Add(dgvrow);
             }
+
+            ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry(dgvpanel, "Grid", "", new System.Drawing.Point(3, 30), new System.Drawing.Size(800, 400), null)
+            { Anchor = AnchorStyles.Left | AnchorStyles.Right | AnchorStyles.Top | AnchorStyles.Bottom });
+            f.AddOK(new Point(800 - 100, 460), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
+            f.InstallStandardTriggers();
+            f.AllowResize = true;
+
+            f.ShowDialogCentred(FindForm(), FindForm().Icon, "Bounties/Bonds for ".T(EDTx.UserControlFactions_BountiesBondsFor) + factionname, closeicon: true);
+
+            DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowBonds");
+        }
+
+        #endregion
+
+        #region Helpers
+        private bool UTCRange(out DateTime start, out DateTime end)
+        {
+            start = startDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(startDateTimePicker.Value) : EliteReleaseDates.GameRelease;
+            end = endDateTimePicker.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(endDateTimePicker.Value) : EliteReleaseDates.GameEndTime;
+            return startDateTimePicker.Checked || endDateTimePicker.Checked;
+        }
+
+        // From top, and using the start/end time if required, filter history before this date, with the predicate
+        private List<HistoryEntry> FilterHistoryDatePredicate(Predicate<HistoryEntry> where)
+        {
+            UTCRange(out DateTime start, out DateTime end);
+            return HistoryList.FilterByDateRange(DiscoveryForm.History.EntryOrder(), start, end, where);
+        }
+        private void VerifyDates()
+        {
+            if (!EDDConfig.Instance.DateTimeInRangeForGame(startDateTimePicker.Value) || !EDDConfig.Instance.DateTimeInRangeForGame(endDateTimePicker.Value))
+            {
+                startDateTimePicker.Checked = endDateTimePicker.Checked = false;
+                startDateTimePicker.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EliteReleaseDates.GameRelease);
+                endDateTimePicker.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow.EndOfDay());
+            }
+        }
+
+        private void dataGridViewFactions_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            // nasty but required
+            if ( e.Column.Index >= colMissions.Index && e.Column.Index <= colDataLinkPayeeValue.Index || e.Column == colFactionSystemInfluence)
+                e.SortDataGridViewColumnNumeric();
+            else
+                e.SortDataGridViewColumnAlpha();    // use this for others, will push "" down bottom
         }
 
         #endregion
@@ -636,6 +677,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
+
+
         #endregion
+
     }
 }

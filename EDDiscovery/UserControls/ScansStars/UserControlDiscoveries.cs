@@ -71,7 +71,7 @@ namespace EDDiscovery.UserControls
 
             rollUpPanelTop.SetToolTip(toolTip);     // set after translator
 
-            TravelHistoryFilter.InitaliseComboBox(comboBoxTime, GetSetting(dbTimeWindow, ""), true,false,true);
+            TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeWindow, ""), true,false,true);
 
             PopulateCtrlList();
 

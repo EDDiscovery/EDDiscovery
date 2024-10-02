@@ -89,9 +89,10 @@ namespace EDDiscovery
         public bool EnableTGRightDebugClicks { get; private set; }
         public bool AutoLoadNextCommander { get; private set; }
         public int HistoryLoadDayLimit { get; private set; }    // default zero not set
-
-        public bool DeleteSystemDB { get; private set; }
+            
+        public bool DeleteSystemDB { get; private set; }        
         public bool DeleteUserDB { get; private set; }
+        public bool DeleteUserJournals { get; private set; }
 
         public bool KeepSystemDataDownloadedFiles { get; private set; }
         public string Culture { get; private set; }             // default null use system culture, use de-DE etc
@@ -526,6 +527,7 @@ namespace EDDiscovery
                     case "null": break;     // null option - used by installer when it writes a app options file if it does not want to do anything
                     case "deletesystemdb": DeleteSystemDB = true; break;
                     case "deleteuserdb": DeleteUserDB = true; break;
+                    case "deleteuserjournals": DeleteUserJournals = true; break;
                     case "keepsystemdownloadedfiles": KeepSystemDataDownloadedFiles = true; break;
                     case "noeddnfornewcommanders": SetEDDNforNewCommanders = false; break;
                     default:

@@ -72,6 +72,7 @@ namespace EDDiscovery.UserControls
             this.labelTime = new System.Windows.Forms.Label();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonTimeRanges = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).BeginInit();
             this.historyContextMenu.SuspendLayout();
@@ -102,13 +103,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(788, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(785, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 686);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(19, 686);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
@@ -140,9 +141,8 @@ namespace EDDiscovery.UserControls
             this.dataGridViewJournal.PerColumnWordWrapControl = true;
             this.dataGridViewJournal.RowHeaderMenuStrip = null;
             this.dataGridViewJournal.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewJournal.ShowCellToolTips = false;
             this.dataGridViewJournal.SingleRowSelect = true;
-            this.dataGridViewJournal.Size = new System.Drawing.Size(788, 686);
+            this.dataGridViewJournal.Size = new System.Drawing.Size(785, 686);
             this.dataGridViewJournal.TabIndex = 0;
             this.dataGridViewJournal.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewJournal_CellClick);
             this.dataGridViewJournal.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewJournal_CellDoubleClick);
@@ -281,7 +281,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.ImageIndeterminate = null;
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
-            this.checkBoxCursorToTop.Location = new System.Drawing.Point(459, 1);
+            this.checkBoxCursorToTop.Location = new System.Drawing.Point(495, 1);
             this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.checkBoxCursorToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCursorToTop.Name = "checkBoxCursorToTop";
@@ -295,7 +295,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(423, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(459, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
@@ -307,11 +307,12 @@ namespace EDDiscovery.UserControls
             // buttonField
             // 
             this.buttonField.Image = global::EDDiscovery.Icons.Controls.FieldFilter;
-            this.buttonField.Location = new System.Drawing.Point(387, 1);
+            this.buttonField.Location = new System.Drawing.Point(423, 1);
             this.buttonField.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonField.Name = "buttonField";
             this.buttonField.Size = new System.Drawing.Size(28, 28);
             this.buttonField.TabIndex = 25;
+            this.toolTip.SetToolTip(this.buttonField, "Filter out entries matching the field selection");
             this.buttonField.UseVisualStyleBackColor = true;
             this.buttonField.Click += new System.EventHandler(this.buttonField_Click);
             // 
@@ -327,9 +328,10 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSearch.EndButtonEnable = true;
             this.textBoxSearch.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSearch.EndButtonImage")));
+            this.textBoxSearch.EndButtonSize16ths = 10;
             this.textBoxSearch.EndButtonVisible = false;
             this.textBoxSearch.InErrorCondition = false;
-            this.textBoxSearch.Location = new System.Drawing.Point(195, 1);
+            this.textBoxSearch.Location = new System.Drawing.Point(231, 1);
             this.textBoxSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.textBoxSearch.Multiline = false;
             this.textBoxSearch.Name = "textBoxSearch";
@@ -340,6 +342,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.Size = new System.Drawing.Size(148, 20);
             this.textBoxSearch.TabIndex = 1;
             this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxSearch.TextNoChange = "";
             this.toolTip.SetToolTip(this.textBoxSearch, resources.GetString("textBoxSearch.ToolTip"));
             this.textBoxSearch.WordWrap = true;
             this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
@@ -347,7 +350,7 @@ namespace EDDiscovery.UserControls
             // labelSearch
             // 
             this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(146, 1);
+            this.labelSearch.Location = new System.Drawing.Point(182, 1);
             this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.labelSearch.Name = "labelSearch";
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
@@ -357,7 +360,7 @@ namespace EDDiscovery.UserControls
             // buttonFilter
             // 
             this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
-            this.buttonFilter.Location = new System.Drawing.Point(351, 1);
+            this.buttonFilter.Location = new System.Drawing.Point(387, 1);
             this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(28, 28);
@@ -413,6 +416,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.AutoSize = true;
             this.panelTop.Controls.Add(this.labelTime);
             this.panelTop.Controls.Add(this.comboBoxTime);
+            this.panelTop.Controls.Add(this.extButtonTimeRanges);
             this.panelTop.Controls.Add(this.labelSearch);
             this.panelTop.Controls.Add(this.textBoxSearch);
             this.panelTop.Controls.Add(this.buttonFilter);
@@ -424,6 +428,17 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(804, 30);
             this.panelTop.TabIndex = 31;
+            // 
+            // extButtonTimeRanges
+            // 
+            this.extButtonTimeRanges.Image = global::EDDiscovery.Icons.Controls.Clock;
+            this.extButtonTimeRanges.Location = new System.Drawing.Point(146, 1);
+            this.extButtonTimeRanges.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonTimeRanges.Name = "extButtonTimeRanges";
+            this.extButtonTimeRanges.Size = new System.Drawing.Size(28, 28);
+            this.extButtonTimeRanges.TabIndex = 25;
+            this.extButtonTimeRanges.UseVisualStyleBackColor = true;
+            this.extButtonTimeRanges.Click += new System.EventHandler(this.extButtonTimeRanges_Click);
             // 
             // UserControlJournalGrid
             // 
@@ -472,5 +487,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.FlowLayoutPanel panelTop;
         private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewScanDisplayToolStripMenuItem;
+        private ExtendedControls.ExtButton extButtonTimeRanges;
     }
 }

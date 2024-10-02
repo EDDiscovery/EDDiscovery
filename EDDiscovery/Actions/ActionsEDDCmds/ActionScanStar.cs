@@ -172,8 +172,8 @@ namespace EDDiscovery.Actions
             ap[storename + "_assignedname"] = scannode.OwnName;
             ap[storename + "_assignedfullname"] = scannode.FullName;
             ap[storename + "_data"] = (sc != null) ? "1" : "0";
-            ap[storename + "_signals"] = scannode.Signals != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.SignalList(scannode.Signals, 0, ",", true) : "";
-            ap[storename + "_genuses"] = scannode.Genuses != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.GenusList(scannode.Genuses, 0, ",", true) : "";
+            ap[storename + "_signals"] = scannode.Signals != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.SignalListString(scannode.Signals, 0,false, true) : "";
+            ap[storename + "_genuses"] = scannode.Genuses != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.GenusListString(scannode.Genuses, 0, false, true) : "";
 
             if ( sc != null )
             {

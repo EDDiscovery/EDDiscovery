@@ -396,8 +396,8 @@ namespace EDDiscovery.UserControls
             int width = 430;
             int ctrlleft = 150;
 
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("L", typeof(Label), "Planet:".T(EDTx.SurfaceBookmarkUserControl_PL), new Point(10, 40), new Size(140, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableForm.Entry("Planet", typeof(ExtendedControls.ExtTextBox),
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Planet:".T(EDTx.SurfaceBookmarkUserControl_PL), new Point(10, 40), new Size(140, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Planet", typeof(ExtendedControls.ExtTextBox),
                 "", new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter planet name".T(EDTx.SurfaceBookmarkUserControl_EPN)));
 
             f.AddOK(new Point(width - 100, 70), "Press to Accept".T(EDTx.SurfaceBookmarkUserControl_PresstoAccept));
