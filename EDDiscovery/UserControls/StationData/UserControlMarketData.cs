@@ -54,9 +54,6 @@ namespace EDDiscovery.UserControls
 
             checkBoxAutoSwap.Checked = GetSetting(dbAutoSwap, false);
 
-            DiscoveryForm.OnNewEntry += OnNewEntry;
-            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
-
             var enumlist = new Enum[] { EDTx.UserControlMarketData_CategoryCol, EDTx.UserControlMarketData_NameCol, EDTx.UserControlMarketData_SellCol, EDTx.UserControlMarketData_BuyCol, 
                             EDTx.UserControlMarketData_CargoCol, EDTx.UserControlMarketData_DemandCol, EDTx.UserControlMarketData_SupplyCol, EDTx.UserControlMarketData_GalAvgCol, 
                             EDTx.UserControlMarketData_ProfitToCol, EDTx.UserControlMarketData_ProfitFromCol,  EDTx.UserControlMarketData_labelVs, 
@@ -82,60 +79,65 @@ namespace EDDiscovery.UserControls
             PutSetting(dbBuyOnly, checkBoxBuyOnly.Checked);
             PutSetting(dbHasDemand, checkBoxHasDemand.Checked);
             PutSetting(dbAutoSwap, checkBoxAutoSwap.Checked);
-            DiscoveryForm.OnNewEntry -= OnNewEntry;
-            DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
         }
+
+
+        #endregion
+
+        #region History
+
+        private HistoryEntry last_he;           // last HE seen by receive history entry 
+        private HistoryEntry last_commodity_he; // last edd market data from he found
+        private HistoryEntry market_left;        // eddmd left comparision, null means use last_commodity_he
+        private HistoryEntry market_right;       // what we are comparing with, null means none
+        private HistoryEntry last_market_displayed;       // last market displayed
 
         public override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        #endregion
-
-        #region History
-
-        private HistoryEntry last_he;           // last HE
-        private HistoryEntry last_eddmd;        // last edd market data from last_he
-        private bool failedtofind = false;      // if we did not find one, record it, so we don't keep on checking. cleared on history change or an new journal entry of right type
-        private HistoryEntry eddmd_left;        // eddmd left comparision, null means use last_eddmd
-        private HistoryEntry eddmd_right;       // what we are comparing with, null means none
-        
-        private void Discoveryform_OnHistoryChange()
-        {
-            failedtofind = false;
-        }
-
-        private void OnNewEntry(HistoryEntry he)
-        {
-            if (he.journalEntry is JournalCommodityPricesBase)            // new CMPB say reset failedtofind
-            {
-                failedtofind = false;
-            }
-        }
-
+        // from the travel history, give the current HE we are pointing at.  Never fires if he = null
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            if (!Object.ReferenceEquals(he, last_he))       // if last was null, or he has changed, we have a possible change..
+            bool changed = last_he != he;       
+
+            // if we have a last he, and he index is one better than last, and he is last entry
+            bool trackingtop = last_he != null && he.Index == last_he.Index + 1 && DiscoveryForm.History.GetLast == he;
+
+            // if we are tracking the top, we
+
+            bool find = last_commodity_he == null ||       // if we don't have an estimate of the last commodity HE
+                        (trackingtop && he.journalEntry is JournalCommodityPricesBase) || // or we are tracking the top and the new HE is a commodity one
+                        (!trackingtop && last_he != he);
+
+            System.Diagnostics.Debug.WriteLine($"Market Data RHE : changed {changed} trackingtop {trackingtop} find {find} last_he {last_he?.EventTimeUTC} {last_he?.EventSummary} : HE {he.EventTimeUTC} {he.EventSummary}");
+
+            if (find)   // we should refind
             {
-                // Find last commodity entry, if notfoundeedmd is true.  notfoundeddmd is cleared on a new market data entry of commodity prices
-                HistoryEntry new_last_eddmd = failedtofind ? null : DiscoveryForm.History.GetLastHistoryEntry(x => x.journalEntry is JournalCommodityPricesBase && (x.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0, he);
-                failedtofind = new_last_eddmd == null;
+                var new_last_commodity_he = DiscoveryForm.History.GetLastHistoryEntry(x => x.journalEntry is JournalCommodityPricesBase && (x.journalEntry as JournalCommodityPricesBase).Commodities.Count > 0, he);
 
-                bool eddmdchanged = !Object.ReferenceEquals(new_last_eddmd, last_eddmd);
-                bool cargochanged = !Object.ReferenceEquals(last_he?.MaterialCommodity, he?.MaterialCommodity); // is cargo different between he and last_he
+                bool marketchanged = !Object.ReferenceEquals(new_last_commodity_he, last_commodity_he);
+                bool cargochanged = last_he?.MaterialCommodity != he.MaterialCommodity; // is cargo different between he and last_he
+                
+                System.Diagnostics.Debug.WriteLine($".. Market Data RHE : station `{(new_last_commodity_he?.journalEntry as JournalCommodityPricesBase)?.Station}` changed market {marketchanged} cargo changed {cargochanged}");
 
-                last_eddmd = new_last_eddmd;
+                last_commodity_he = new_last_commodity_he;
                 last_he = he;
 
                 //System.Diagnostics.Debug.WriteLine("left {0} right {1} eddmchanged {2} cargo {3}", last_eddmd?.Indexno, last_he?.Indexno, eddmdchanged, cargochanged);
 
-                if (eddmd_left == null)    // if showing travel.. if not, no update due to this.  Need to keep the last_he/last_eddmd going for swapping back
+                if (market_left == null)    // if showing travel.. if not, no update due to this.  Need to keep the last_he/last_eddmd going for swapping back
                 {
-                    if (eddmdchanged || cargochanged)        // if last_eddmd changed.. or cargo
+                    if (marketchanged || cargochanged)        // if last_eddmd changed.. or cargo
                         Display();
                 }
             }
+            else
+            {
+                last_he = he;       // we did not find, but we have considered this one, so we record it
+            }
+
         }
 
         #endregion
@@ -155,39 +157,28 @@ namespace EDDiscovery.UserControls
             
             dataGridView.Rows.Clear();
 
-            HistoryEntry left = (eddmd_left != null) ? eddmd_left : last_eddmd;       // if we have a selected left, use it, else use the last eddmd
-            HistoryEntry cargo = (eddmd_left != null) ? eddmd_left : last_he;           // if we have a selected left, use it, else use the last he
+            HistoryEntry left = (market_left != null) ? market_left : last_commodity_he;       // if we have a selected left, use it, else use the last eddmd
+            HistoryEntry cargo = (market_left != null) ? market_left : last_he;           // if we have a selected left, use it, else use the last he
 
             if (left != null)       // we know it has a journal entry of EDD commodity..
             {
-                //System.Diagnostics.Debug.WriteLine(Environment.NewLine + "From " + current_displayed?.WhereAmI + " to " + left.WhereAmI);
-
                 JournalCommodityPricesBase ecp = left.journalEntry as JournalCommodityPricesBase;
                 List<CCommodities> list = ecp.Commodities;
 
                 //System.Diagnostics.Debug.WriteLine("Test Right " + eddmd_right?.WhereAmI + " vs " + left.WhereAmI);
-                if (eddmd_right != null && !Object.ReferenceEquals(eddmd_right, left))   // if got a comparision, and not the same data..
+                if (market_right != null && !Object.ReferenceEquals(market_right, left))   // if got a comparision, and not the same data..
                 {
                     if (checkBoxAutoSwap.Checked &&
-                        left.System.Name.Equals(eddmd_right.System.Name) &&     // if left system being displayed is same as right system
-                        left.WhereAmI.Equals(eddmd_right.WhereAmI))            // that means we can autoswap comparisions around
+                        last_market_displayed != null &&
+                        left.System.Name.Equals(market_right.System.Name) &&     // if left system being displayed is same as right system
+                        left.WhereAmI.Equals(market_right.WhereAmI))            // that means we can autoswap comparisions around
                     {
-                        //System.Diagnostics.Debug.WriteLine("Arrived at last left station, repick " + current_displayed.WhereAmI + " as comparision");
+                        System.Diagnostics.Debug.WriteLine($"Market Data autoswap left station equals right comparision");
 
-     //                   int index = comboboxentries.FindIndex(x => x.System.Name.Equals(current_displayed.System.Name) && x.WhereAmI.Equals(current_displayed.WhereAmI));
-     //                   if (index >= 0)       // if found it, swap to last instance of system
-     //                   {
-     ////tbd                       comboBoxCustomTo.Enabled = false;
-     //                       //comboBoxCustomTo.SelectedIndex = index + 1;
-     //                       //comboBoxCustomTo.Enabled = true;
-     //                       eddmd_right = comboboxentries[index];
-     //                       //System.Diagnostics.Debug.WriteLine("Right is now " + eddmd_right.WhereAmI);
-     //                   }
-
+                        market_right = last_market_displayed;     // set eddmd right to the last market displayed
                     }
 
-                    //System.Diagnostics.Debug.WriteLine("Right " + eddmd_right.System.Name + " " + eddmd_right.WhereAmI);
-                    list = CCommodities.Merge(list, ((JournalCommodityPricesBase)eddmd_right.journalEntry).Commodities);
+                    list = CCommodities.Merge(list, ((JournalCommodityPricesBase)market_right.journalEntry).Commodities);
                 }
 
                 // look thru out mclist and copmare it with market data, and produce a not found list to show
@@ -219,7 +210,7 @@ namespace EDDiscovery.UserControls
 
                         string name = mc?.TranslatedName ?? c.locName;
                         if (c.ComparisionRightOnly)
-                            name += " @ " + eddmd_right.WhereAmI;
+                            name += " @ " + market_right.WhereAmI;
 
                         object[] rowobj = { mc?.TranslatedType ?? c.loccategory.Alt(c.category) ,
                                             name,
@@ -278,9 +269,11 @@ namespace EDDiscovery.UserControls
                 }
 
                 labelLocation.Text = left.System.Name + ":" + left.WhereAmI + " @ " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(left.EventTimeUTC).ToString();
-                labelComparison.Text = eddmd_right == null ? "-" : eddmd_right.System.Name + ":" + eddmd_right.WhereAmI + " @ " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(eddmd_right.EventTimeUTC).ToString();
+                labelComparison.Text = market_right == null ? "-" : market_right.System.Name + ":" + market_right.WhereAmI + " @ " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(market_right.EventTimeUTC).ToString();
                 string r = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(left.EventTimeUTC).ToString();
                 toolTip.SetToolTip(labelLocation, r);
+
+                last_market_displayed = left;       // record what we are displaying, for the auto swap facility, as we will set right to this in the right cirumstances above
             }
             else
             {
@@ -378,19 +371,19 @@ namespace EDDiscovery.UserControls
                 if ( stag == "th")
                 {
                     System.Diagnostics.Debug.WriteLine($"Left Travel history");
-                    eddmd_left = null;
+                    market_left = null;
                     Display();
                 }
                 else if (stag == "st")
                 {
-                    eddmd_left = ((CheckedIconUserControl.SubForm)utag).Items[0].UserTag as HistoryEntry;
-                    System.Diagnostics.Debug.WriteLine($"Left Whereis Button pressed {eddmd_left.EventTimeUTC}");
+                    market_left = ((CheckedIconUserControl.SubForm)utag).Items[0].UserTag as HistoryEntry;
+                    System.Diagnostics.Debug.WriteLine($"Left Whereis Button pressed {market_left.EventTimeUTC}");
                     Display();
                 }
                 else if (stag == "e")
                 {
-                    eddmd_left = utag as HistoryEntry;
-                    System.Diagnostics.Debug.WriteLine($"Left HE Button pressed {eddmd_left.EventTimeUTC}");
+                    market_left = utag as HistoryEntry;
+                    System.Diagnostics.Debug.WriteLine($"Left HE Button pressed {market_left.EventTimeUTC}");
                     Display();
                 }
                 else
@@ -417,19 +410,19 @@ namespace EDDiscovery.UserControls
                 if (stag == "none")
                 {
                     System.Diagnostics.Debug.WriteLine($"Right None");
-                    eddmd_right = null;
+                    market_right = null;
                     Display();
                 }
                 else if (stag == "st")
                 {
-                    eddmd_right = ((CheckedIconUserControl.SubForm)utag).Items[0].UserTag as HistoryEntry;
-                    System.Diagnostics.Debug.WriteLine($"Right Whereis Button pressed {eddmd_right.EventTimeUTC}");
+                    market_right = ((CheckedIconUserControl.SubForm)utag).Items[0].UserTag as HistoryEntry;
+                    System.Diagnostics.Debug.WriteLine($"Right Whereis Button pressed {market_right.EventTimeUTC}");
                     Display();
                 }
                 else if (stag == "e")
                 {
-                    eddmd_right = utag as HistoryEntry;
-                    System.Diagnostics.Debug.WriteLine($"Right HE Button pressed {eddmd_right.EventTimeUTC}");
+                    market_right = utag as HistoryEntry;
+                    System.Diagnostics.Debug.WriteLine($"Right HE Button pressed {market_right.EventTimeUTC}");
                     Display();
                 }
                 else

@@ -398,6 +398,10 @@ namespace EDDiscovery
 
             DLLStart();
 
+            //----------------------------------------------------------------- Python plugins
+
+            PythonStart();
+
             // ---------------------------------------------------------------- Web server
 
             WebServer = new WebServer.EDDWebServer(this);

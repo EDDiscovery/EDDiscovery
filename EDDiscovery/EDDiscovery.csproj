@@ -200,6 +200,9 @@
     <Compile Include="EDD\EDDiscoveryFormDebug.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="EDD\EDDiscoveryFormPython.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="EDD\EDDiscoveryFormToolbar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -209,6 +212,7 @@
     <Compile Include="Forms\ImportExportForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="PythonRunner\PythonRunner.cs" />
     <Compile Include="TabsPanelsAndPopOuts\EDDHelp.cs" />
     <Compile Include="EDD\EDDiscoveryFormDLL.cs">
       <SubType>Form</SubType>

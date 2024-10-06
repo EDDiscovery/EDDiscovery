@@ -126,6 +126,7 @@ namespace EDDiscovery
         public string DownloadedImages() { return SubAppDirectory("Images"); }
         public string HelpDirectory() { return SubAppDirectory("Help"); }
         public string CAPIDirectory() { return SubAppDirectory("CAPI"); }
+        public string PythonDirectory() { return SubAppDirectory("Python"); }
         public string TempMoveDirectory() { return SubAppDirectory("MoveFolder"); }
         public string WebView2ProfileDirectory() { return SubAppDirectory("WebView2"); }
         public string TranslatorDirectory() { return translationfolder; }

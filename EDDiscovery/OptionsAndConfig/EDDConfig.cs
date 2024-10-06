@@ -64,6 +64,7 @@ namespace EDDiscovery
         private int webserverport = 6502;
         private bool webserverenable = false;
         private string dllpermissions = "";
+        private string dlluserpanelsregisteredlist = "";
         Dictionary<string, string> captainslogtaglist;
         Dictionary<string, string> bookmarkstaglist;
 
@@ -585,6 +586,39 @@ namespace EDDiscovery
             }
         }
 
+        private const string UserPanelSplitStr = "\u2737";
+
+        public string DLLUserPanelsRegisteredList
+        {
+            get
+            {
+                return dlluserpanelsregisteredlist;
+            }
+            set
+            {
+                dlluserpanelsregisteredlist = value;
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLUserPanelsRegisteredList", value);
+            }
+        }
+
+        public string[] DLLUserPanelsRegisteredListSet
+        {
+            get { return DLLUserPanelsRegisteredList.Split(UserPanelSplitStr, emptyarrayifempty: true); }
+        }
+
+        public int FindAddUserPanelID(string id)
+        {
+            string[] registeredpanels = EDDConfig.Instance.DLLUserPanelsRegisteredListSet;
+            int indexof = Array.IndexOf(registeredpanels, id);  // find if there
+            int panelid = PanelInformation.DLLUserPanelsStart + (indexof < 0 ? registeredpanels.Length : indexof);       // set panel id, if there, its the index, else its the next one
+            if (indexof == -1)
+            {
+                DLLUserPanelsRegisteredList = DLLUserPanelsRegisteredList.AppendPrePad(id, UserPanelSplitStr);  // write updated string back
+            }
+
+            return panelid;
+        }
+
         #endregion
 
         #region Update at start
@@ -622,6 +656,8 @@ namespace EDDiscovery
                 webserverport = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("WebServerPort", 6502);
                 webserverenable = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("WebServerEnable", false);
                 dllpermissions = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLAllowed", "");
+
+                dlluserpanelsregisteredlist = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLUserPanelsRegisteredList", "");
             }
             catch (Exception ex)
             {

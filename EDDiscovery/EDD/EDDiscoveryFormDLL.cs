@@ -55,15 +55,7 @@ namespace EDDiscovery
             DLLCallBacks.AddPanel = (id, paneltype, wintitle, refname, description, image) =>
             {
                 // registered panels, search the stored list, see if there, then it gets the index, else its added to the list
-                string regpanelstr = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLUserPanelsRegisteredList", "");
-                string splitstr = "\u2737";
-                string[] registeredpanels = regpanelstr.Split(splitstr, emptyarrayifempty: true);
-                int indexof = Array.IndexOf(registeredpanels, id);
-                int panelid = PanelInformation.DLLUserPanelsStart + (indexof < 0 ? registeredpanels.Length : indexof);       // set panel id
-                if (indexof == -1)
-                {
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLUserPanelsRegisteredList", regpanelstr.AppendPrePad(id, splitstr));
-                }
+                int panelid = EDDConfig.Instance.FindAddUserPanelID(id);
 
                 // IF we had more versions of IEDDPanelExtensions in future, we would add more clauses here and have other UserControlExtPanel classes to handle them
 
