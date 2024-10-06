@@ -212,7 +212,6 @@
     <Compile Include="Forms\ImportExportForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PythonRunner\PythonRunner.cs" />
     <Compile Include="TabsPanelsAndPopOuts\EDDHelp.cs" />
     <Compile Include="EDD\EDDiscoveryFormDLL.cs">
       <SubType>Form</SubType>
@@ -294,6 +293,12 @@
     </Compile>
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.Designer.cs">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\ExtPanel\UserControlPythonPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\ExtPanel\UserControlPythonPanel.Designer.cs">
+      <DependentUpon>UserControlPythonPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Helpers\RouteHelpers.cs" />
     <Compile Include="UserControls\Helpers\ScanDisplayBodyFiltersButton.cs">
@@ -858,6 +863,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlEngineers.resx">
       <DependentUpon>UserControlEngineers.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\ExtPanel\UserControlPythonPanel.resx">
+      <DependentUpon>UserControlPythonPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ExtPanel\UserControlExtPanel.resx">
       <DependentUpon>UserControlExtPanel.cs</DependentUpon>

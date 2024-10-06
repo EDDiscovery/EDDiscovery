@@ -114,7 +114,7 @@ namespace EDDiscovery.Actions
             {
                 if (actionfilesmessagefilter == null)
                 {
-                    actionfilesmessagefilter = new ActionMessageFilter(discoveryform, this, keyignoredforms);
+                    actionfilesmessagefilter = new ActionMessageFilter(DiscoveryForm, this, keyignoredforms);
                     Application.AddMessageFilter(actionfilesmessagefilter);
                 }
             }
@@ -132,7 +132,7 @@ namespace EDDiscovery.Actions
             {
                 // do not run directly, we are in a message filter here, so can't add new ones (see Keyform). Instead delay invoke on discovery form
 
-                discoveryform.BeginInvoke(new Action(() => ActionRun(ActionEventEDList.onKeyPress, new Variables("KeyPress", keyname)) ) );
+                DiscoveryForm.BeginInvoke(new Action(() => ActionRun(ActionEventEDList.onKeyPress, new Variables("KeyPress", keyname)) ) );
                 return true;
             }
             else
@@ -142,7 +142,7 @@ namespace EDDiscovery.Actions
         {
             if (actionfileskeyeventskeyup.Contains("<" + keyname + ">"))  // fast string comparision to determine if key is overridden..
             {
-                discoveryform.BeginInvoke(new Action(() => ActionRun(ActionEventEDList.onKeyReleased, new Variables("KeyPress", keyname))));
+                DiscoveryForm.BeginInvoke(new Action(() => ActionRun(ActionEventEDList.onKeyReleased, new Variables("KeyPress", keyname))));
                 return true;
             }
             else

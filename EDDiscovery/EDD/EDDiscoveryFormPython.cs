@@ -29,17 +29,16 @@ namespace EDDiscovery
         {
             string pythonfolder = EDDOptions.Instance.PythonDirectory();
 
-            foreach (var plugin in Directory.GetDirectories(pythonfolder))
+            foreach (var plugin in Directory.GetDirectories(pythonfolder))  // all folders in python folder
             {
                 string pluginfolder = Path.Combine(pythonfolder, plugin);
                 string optfile = Path.Combine(pluginfolder, "config.json");
-                string imagefile = Path.Combine(pluginfolder, "icon.bmp");
                 string optcontents;
                 JToken cf;
 
+                // check we can read the config
                 if (File.Exists(optfile) && (optcontents = BaseUtils.FileHelpers.TryReadAllTextFromFile(optfile)) != null &&
-                        (cf = JToken.Parse(optfile, JToken.ParseOptions.CheckEOL)) != null &&
-                        File.Exists(imagefile))
+                        (cf = JToken.Parse(optcontents, JToken.ParseOptions.CheckEOL | JToken.ParseOptions.AllowTrailingCommas)) != null )
                 {
                     JObject panel = cf["Panel"].Object();
                     if (panel != null)
@@ -48,16 +47,22 @@ namespace EDDiscovery
                         string wintitle = panel["WinTitle"].Str();      // name as known to EDD Panel plugins, must be unique
                         string refname = panel["RefName"].Str();      // name as known to EDD Panel plugins, must be unique
                         string description = panel["Description"].Str();      // name as known to EDD Panel plugins, must be unique
+                        string icon = panel["Icon"].Str();      // icon
 
-                        Image image = Image.FromFile(imagefile);
+                        if (id != null && wintitle != null && refname != null && description != null && icon != null && File.Exists(Path.Combine(pluginfolder,icon)))
+                        {
+                            Image image = Image.FromFile(Path.Combine(pluginfolder,icon));
 
-                        // registered panels, search the stored list, see if there, then it gets the index, else its added to the list
-                        int panelid = EDDConfig.Instance.FindAddUserPanelID(id);
+                            // registered panels, search the stored list, see if there, then it gets the index, else its added to the list
+                            int panelid = EDDConfig.Instance.FindAddUserPanelID(id);
 
-                        PanelInformation.AddPanel(panelid,
-                                            typeof(UserControls.UserControlExtPanel),       // driver panel containing the UC to draw into, responsible for running action scripts/talking to the plugin
-                                            pluginfolder,
-                                            wintitle, refname, description, image);
+                            PanelInformation.AddPanel(panelid,
+                                                typeof(UserControls.UserControlPythonPanel),       // driver panel containing the UC to draw into, responsible for running action scripts/talking to the plugin
+                                                pluginfolder,
+                                                wintitle, refname, description, image);
+                        }
+                        else
+                            System.Diagnostics.Trace.WriteLine($"Python folder {pluginfolder} config missing items to create panel");
                     }
                 }
                 else
