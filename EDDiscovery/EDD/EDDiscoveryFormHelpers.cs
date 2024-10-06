@@ -517,8 +517,18 @@ namespace EDDiscovery
                 EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(cname, theme.GetColor(ci).ToArgb());
             }
         }
-  
+
 
         #endregion
+
+        #region AC
+
+        public Actions.ActionController MakeAC()
+        {
+            return new Actions.ActionController(this, audioqueuewave, audioqueuespeech, speechsynth, frontierbindings, this.Icon, new Type[] { });
+        }
+
+        #endregion
+
     }
 }

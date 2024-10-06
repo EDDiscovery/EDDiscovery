@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
             DiscoveryForm.OnNewTarget += Discoveryform_OnNewTarget;
 
-          //  actioncontroller = new Actions.ActionController(DiscoveryForm, DiscoveryForm.Icon, new Type[] { }, true);
+            actioncontroller = DiscoveryForm.MakeAC();
         }
 
         public override void SetTransparency(bool ison, Color curcol)

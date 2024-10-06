@@ -10,20 +10,17 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using AudioExtensions;
 using System;
 using System.Runtime.CompilerServices;
 
-namespace EDDiscovery.Actions
+namespace EDDiscovery
 {
     /*
      * Add a layer of indirection to prevent a TypeLoadException due to static initializer hoisting
      */
-
     public static class AudioHelper
     {
         public static ISpeechEngine GetSpeechEngine(Action<string> log)

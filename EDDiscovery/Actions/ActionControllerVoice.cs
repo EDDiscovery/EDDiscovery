@@ -23,52 +23,50 @@ namespace EDDiscovery.Actions
 {
     public partial class ActionController : ActionCoreController
     {
-        public AudioExtensions.IVoiceRecognition VoiceRecognition { get { return voicerecon; } }
+        public AudioExtensions.IVoiceRecognition VoiceRecognition { get { return VoiceRecon; } }
 
         public bool EnableVoiceReconEvent { get; set; } = true;           // set to false to stop VoiceRecognition Events being generated
 
-        private AudioExtensions.IVoiceRecognition voicerecon;
-
         public bool VoiceReconOn(string culture = null)     // perform enableVR
         {
-            voicerecon.Close(); // can close without stopping
-            voicerecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture),true);
-            return voicerecon.IsOpen;
+            VoiceRecon.Close(); // can close without stopping
+            VoiceRecon.Open(System.Globalization.CultureInfo.GetCultureInfo(culture),true);
+            return VoiceRecon.IsOpen;
         }
 
         public void VoiceReconOff()                         // perform disableVR
         {
-            voicerecon.Close();
+            VoiceRecon.Close();
         }
 
         public void VoiceReconConfidence(float conf)
         {
-            voicerecon.Confidence = conf;
+            VoiceRecon.Confidence = conf;
         }
 
         public void VoiceReconParameters(int babble, int initialsilence, int endsilence, int endsilenceambigious)
         {
-            if (voicerecon.IsOpen)
+            if (VoiceRecon.IsOpen)
             {
-                voicerecon.UpdateParas(babble, endsilence, endsilenceambigious, initialsilence);
+                VoiceRecon.UpdateParas(babble, endsilence, endsilenceambigious, initialsilence);
             }
         }
 
         public void VoiceLoadEvents()       // kicked by Action.Perform so synchornised with voice pack (or via editor)
         {
-            if (voicerecon.IsOpen)
+            if (VoiceRecon.IsOpen)
             {
-                voicerecon.BeginGrammarUpdate();
+                VoiceRecon.BeginGrammarUpdate();
 
                 var ret = actionfiles.ReturnSpecificConditions(ActionEventEDList.onVoiceInput.TriggerName, "VoiceInput", new List<ConditionEntry.MatchType>() { ConditionEntry.MatchType.MatchSemicolonList, ConditionEntry.MatchType.MatchSemicolon });        // need these to decide
 
                 foreach (var vp in ret.EmptyIfNull())
                 {
                    // System.Diagnostics.Debug.WriteLine($"VR Add {vp.Item1}:{vp.Item2.MatchString}");
-                    voicerecon.AddGrammar(vp.Item2.MatchString);
+                    VoiceRecon.AddGrammar(vp.Item2.MatchString);
                 }
 
-                voicerecon.EndGrammarUpdate();
+                VoiceRecon.EndGrammarUpdate();
             }
         }
 

@@ -104,6 +104,14 @@ namespace EDDiscovery
         private Timer periodicchecktimer;
         private bool in_system_sync = false;        // between start/end sync of databases
 
+        private AudioExtensions.IAudioDriver audiodriverwave;
+        private AudioExtensions.AudioQueue audioqueuewave;
+        private AudioExtensions.IAudioDriver audiodriverspeech;
+        private AudioExtensions.AudioQueue audioqueuespeech;
+        private AudioExtensions.SpeechSynthesizer speechsynth;
+
+        private BindingsFile frontierbindings;
+
         #endregion
 
         #region Initialisation
@@ -319,9 +327,50 @@ namespace EDDiscovery
             this.TopMost = EDDConfig.Instance.KeepOnTop;
             notifyIconEDD.Visible = EDDConfig.Instance.UseNotifyIcon;
 
-            // create the action controller and install commands before we executre tabs, since some tabs need these set up
+            // create audio system, now done in here not in action controller
 
-            actioncontroller = new Actions.ActionController(this, Controller, this.Icon, new Type[] { });
+#if !NO_SYSTEM_SPEECH
+            // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5 && !EDDOptions.Instance.NoSound)
+            {
+                audiodriverwave = AudioHelper.GetAudioDriver(LogLineHighlight, EDDConfig.Instance.DefaultWaveDevice);
+                audiodriverspeech = AudioHelper.GetAudioDriver(LogLineHighlight, EDDConfig.Instance.DefaultVoiceDevice);
+                AudioExtensions.ISpeechEngine speechengine;
+
+                speechengine = AudioHelper.GetSpeechEngine(LogLineHighlight);
+                speechsynth = new AudioExtensions.SpeechSynthesizer(speechengine);
+            }
+            else
+            {
+                audiodriverwave = new AudioExtensions.AudioDriverDummy();
+                audiodriverspeech = new AudioExtensions.AudioDriverDummy();
+                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
+            }
+#else
+            audiodriverwave = new AudioExtensions.AudioDriverDummy();
+            audiodriverspeech = new AudioExtensions.AudioDriverDummy();
+            speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
+#endif
+
+            audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
+            audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
+
+            // Frontier bindings
+
+            frontierbindings = new BindingsFile();
+
+            frontierbindings.LoadBindingsFile(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier Developments", "Elite Dangerous", "Options", "Bindings"), true);
+
+            //System.Diagnostics.Debug.WriteLine("Bindings" + frontierbindings.ListBindings());
+            //System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames("{","}"));
+
+            // install extra functions
+
+            Functions.GetCFH = ConditionEDDFunctions.DefaultGetCFH;
+
+            // create the action controller and install commands before we execute tabs, since some tabs need these set up
+
+            actioncontroller = MakeAC();
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
@@ -879,6 +928,13 @@ namespace EDDiscovery
             actioncontroller.CloseDown();
 
             DLLManager.UnLoad();
+
+            audioqueuespeech.StopAll();
+            audioqueuewave.StopAll();
+            audioqueuespeech.Dispose();     // in order..
+            audiodriverspeech.Dispose();
+            audioqueuewave.Dispose();
+            audiodriverwave.Dispose();
 
             disallowclose = false;
             Close();

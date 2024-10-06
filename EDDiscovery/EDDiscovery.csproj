@@ -410,7 +410,7 @@
     <Compile Include="Actions\ActionsEDDCmds\ActionTarget.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionDLLCall.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionBookmarks.cs" />
-    <Compile Include="Actions\AudioHelper.cs" />
+    <Compile Include="EDD\AudioHelper.cs" />
     <Compile Include="EDD\EDDiscoveryControllerNewEntry.cs" />
     <Compile Include="EDD\EDDiscoveryControllerHistory.cs" />
     <Compile Include="EDD\EDDiscoveryControllerSync.cs" />
@@ -442,7 +442,7 @@
     <Compile Include="Actions\ActionsEDDCmds\ActionTimer.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionMenuItem.cs" />
     <Compile Include="Actions\ActionVars.cs" />
-    <Compile Include="Actions\ConditionFunctionsEDD.cs" />
+    <Compile Include="EDD\ConditionFunctionsEDD.cs" />
     <Compile Include="OptionsAndConfig\EDDOptions.cs" />
     <Compile Include="Forms\GalaxySectorSelect.cs">
       <SubType>Form</SubType>

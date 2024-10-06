@@ -19,12 +19,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace EDDiscovery.Actions
+namespace EDDiscovery
 {
     // inherit from base functions and add/override some functions
 
     public class ConditionEDDFunctions : FunctionsBasic
     {
+        static public BaseUtils.FunctionHandlers DefaultGetCFH(BaseUtils.Functions c, BaseUtils.Variables vars, BaseUtils.FunctionPersistentData handles, int recdepth)
+        {
+            return new ConditionEDDFunctions(c, vars, handles, recdepth);
+        }
+
         public ConditionEDDFunctions(Functions c, Variables v, FunctionPersistentData h, int recd) : base(c, v, h, recd)
         {
             if (functions == null)        // one time init, done like this cause can't do it in {}
