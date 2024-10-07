@@ -216,7 +216,7 @@ namespace EDDiscovery.UserControls
                             bdClass.Append(sn.ScanData.StarTypeText);
 
                         // is the main star?
-                        if (sn.ScanData.BodyName.EndsWith(" A", StringComparison.Ordinal))
+                        if (sn.ScanData.BodyName.EndsWith(" A", StringComparison.Ordinal) || sn.ScanData.BodyName == sn.SystemNode.System.Name)
                         {
                             bdDist.Append("Main Star".T(EDTx.UserControlScanGrid_MainStar));
                         }
