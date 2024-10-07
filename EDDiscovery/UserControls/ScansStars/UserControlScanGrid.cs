@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
 
                         if (Math.Abs(sn.ScanData.DistanceFromArrivalLS) > 0)
                         {
-                            bdDist.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / BodyPhysicalConstants.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
+                            bdDist.AppendFormat("{0:N2} AU ({1:N1} ls)", sn.ScanData.DistanceFromArrivalLS / BodyPhysicalConstants.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
                         }
 
                         texttoadd = new string[] { sn.ScanData.BodyDesignationOrName, bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() };
@@ -224,22 +224,22 @@ namespace EDDiscovery.UserControls
                         else if (sn.ScanData.nSemiMajorAxis.HasValue)
                         {
                             if (sn.ScanData.IsStar || sn.ScanData.nSemiMajorAxis.Value > BodyPhysicalConstants.oneAU_m / 10)
-                                bdDist.AppendFormat("{0:0.00}AU ({1:0.00}ls)", (sn.ScanData.nSemiMajorAxis.Value / BodyPhysicalConstants.oneAU_m), sn.ScanData.nSemiMajorAxis.Value / BodyPhysicalConstants.oneLS_m);
+                                bdDist.AppendFormat("{0:N2} AU ({1:N1} ls)", (sn.ScanData.nSemiMajorAxis.Value / BodyPhysicalConstants.oneAU_m), sn.ScanData.nSemiMajorAxis.Value / BodyPhysicalConstants.oneLS_m);
                             else
-                                bdDist.AppendFormat("{0}km", (sn.ScanData.nSemiMajorAxis.Value / 1000).ToString("N1"));
+                                bdDist.AppendFormat("{0} km", (sn.ScanData.nSemiMajorAxis.Value / 1000).ToString("N1"));
                         }
 
                         // display stellar bodies mass, in sols
                         if (sn.ScanData.nStellarMass.HasValue)
-                            bdDetails.Append("Mass".T(EDTx.UserControlScanGrid_Mass)).AppendColonS().Append(sn.ScanData.nStellarMass.Value.ToString("N2")).AppendCS();
+                            bdDetails.Append("Mass".T(EDTx.UserControlScanGrid_Mass)).AppendColonS().Append(sn.ScanData.nStellarMass.Value.ToString("N2")).Append(" SM, ");
 
                         // display stellar bodies radius in sols
                         if (sn.ScanData.nRadius.HasValue)
-                            bdDetails.Append("Radius".T(EDTx.UserControlScanGrid_Radius)).AppendColonS().Append((sn.ScanData.nRadius.Value / BodyPhysicalConstants.oneSolRadius_m).ToString("N2")).AppendCS();
+                            bdDetails.Append("Radius".T(EDTx.UserControlScanGrid_Radius)).AppendColonS().Append((sn.ScanData.nRadius.Value / BodyPhysicalConstants.oneSolRadius_m).ToString("N2")).Append(" SR, ");
 
                         // show the temperature
                         if (sn.ScanData.nSurfaceTemperature.HasValue)
-                            bdDetails.Append("Temperature".T(EDTx.UserControlScanGrid_Temperature)).AppendColonS().Append((sn.ScanData.nSurfaceTemperature.Value)).Append("K.");
+                            bdDetails.Append("Temperature".T(EDTx.UserControlScanGrid_Temperature)).AppendColonS().Append((sn.ScanData.nSurfaceTemperature.Value.ToString("N2"))).Append(" K.");
 
                         // habitable zone for stars - do not display for black holes.
                         if (sn.ScanData.StarTypeID != EDStar.H)
@@ -299,7 +299,7 @@ namespace EDDiscovery.UserControls
                                 else
                                     terrestrial++;
 
-                                bdDist.AppendFormat("{0:0.00}AU ({1:0.0}ls)", sn.ScanData.DistanceFromArrivalLS / BodyPhysicalConstants.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
+                                bdDist.AppendFormat("{0:N2} AU ({1:N1} ls)", sn.ScanData.DistanceFromArrivalLS / BodyPhysicalConstants.oneAU_LS, sn.ScanData.DistanceFromArrivalLS);
                             }
                             else
                             {
@@ -309,7 +309,7 @@ namespace EDDiscovery.UserControls
 
                                 // moon distances from center body are measured from in SemiMajorAxis
                                 if (sn.ScanData.nSemiMajorAxis.HasValue)
-                                    bdDist.AppendFormat("{0:0.0}ls ({1:0}km)", sn.ScanData.nSemiMajorAxis.Value / BodyPhysicalConstants.oneLS_m, sn.ScanData.nSemiMajorAxis.Value / 1000);
+                                    bdDist.AppendFormat("{0:N1} ls ({1:N0} km)", sn.ScanData.nSemiMajorAxis.Value / BodyPhysicalConstants.oneLS_m, sn.ScanData.nSemiMajorAxis.Value / 1000);
                             }
                         }
 
@@ -319,16 +319,16 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData.nRadius.HasValue)
                         {
                             bdDetails.Append("Radius".T(EDTx.UserControlScanGrid_Radius)).AppendColonS()
-                                .Append((sn.ScanData.nRadius.Value / 1000.0).ToString("N0")).Append("km (").
-                                Append((sn.ScanData.nRadius.Value / BodyPhysicalConstants.oneEarthRadius_m).ToString("N2")).Append("ER), ");
+                                .Append((sn.ScanData.nRadius.Value / 1000.0).ToString("N0")).Append(" km (").
+                                Append((sn.ScanData.nRadius.Value / BodyPhysicalConstants.oneEarthRadius_m).ToString("N2")).Append(" ER), ");
                         }
 
                         // show the temperature, both in K and C degrees
                         if (sn.ScanData.nSurfaceTemperature.HasValue)
                         {
                             bdDetails.Append("Temperature".T(EDTx.UserControlScanGrid_Temperature)).AppendColonS()
-                            .Append((sn.ScanData.nSurfaceTemperature.Value).ToString("N2")).Append("K, (")
-                            .Append((sn.ScanData.nSurfaceTemperature.Value - 273.15).ToString("N2")).Append("C).");
+                            .Append((sn.ScanData.nSurfaceTemperature.Value).ToString("N2")).Append(" K, (")
+                            .Append((sn.ScanData.nSurfaceTemperature.Value - 273.15).ToString("N2")).Append(" C).");
                         }
 
                         // print the main atmospheric composition and pressure, if presents
@@ -337,7 +337,7 @@ namespace EDDiscovery.UserControls
                             bdDetails.AppendCR().Append(sn.ScanData.Atmosphere);
                             if (sn.ScanData.nSurfacePressure.HasValue)
                             {
-                                bdDetails.Append(", ").Append((sn.ScanData.nSurfacePressure.Value / BodyPhysicalConstants.oneAtmosphere_Pa).ToString("N3")).Append("Pa.");
+                                bdDetails.Append(", ").Append((sn.ScanData.nSurfacePressure.Value / BodyPhysicalConstants.oneAtmosphere_Pa).ToString("N3")).Append(" Pa.");
                             }
                         }
 
@@ -349,7 +349,7 @@ namespace EDDiscovery.UserControls
                             if (sn.ScanData.nSurfaceGravity.HasValue)
                             {
                                 var g = sn.ScanData.nSurfaceGravity / BodyPhysicalConstants.oneGee_m_s2;
-                                Gg = " (G: " + g.Value.ToString("N1") + ")";
+                                Gg = " (G: " + g.Value.ToString("N1") + " g)";
                             }
 
                             bdDetails.AppendCR().Append("Landable".T(EDTx.UserControlScanGrid_Landable)).Append(Gg).Append(". ");
@@ -422,7 +422,7 @@ namespace EDDiscovery.UserControls
                                     bdDetails.AppendCR().Append("Belt: ".T(EDTx.UserControlScanGrid_Belt));
                                     var RingName = sn.ScanData.Rings[r].Name;
                                     bdDetails.Append(sn.ScanData.Rings[r].TranslatedRingClass()).AppendSPC();
-                                    bdDetails.Append((sn.ScanData.Rings[r].InnerRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append("ls to ").Append((sn.ScanData.Rings[r].OuterRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append("ls. ");
+                                    bdDetails.Append((sn.ScanData.Rings[r].InnerRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append(" ls to ").Append((sn.ScanData.Rings[r].OuterRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append(" ls. ");
                                 }
                             }
                             else
@@ -433,7 +433,7 @@ namespace EDDiscovery.UserControls
                                     bdDetails.AppendCR().Append("Ring: ".T(EDTx.UserControlScanGrid_Ring));
                                     var RingName = sn.ScanData.Rings[r].Name;
                                     bdDetails.Append(sn.ScanData.Rings[r].TranslatedRingClass()).AppendSPC();
-                                    bdDetails.Append((sn.ScanData.Rings[r].InnerRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append("ls to ").Append((sn.ScanData.Rings[r].OuterRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append("ls. ");
+                                    bdDetails.Append((sn.ScanData.Rings[r].InnerRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append(" ls to ").Append((sn.ScanData.Rings[r].OuterRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append(" ls. ");
                                 }
                             }
                         }
@@ -568,7 +568,7 @@ namespace EDDiscovery.UserControls
             string ct = systemnode.System.Name;
             long totalv = systemnode.ScanValue(edsmSpanshButton.IsAnySet) + organicvaluetotal;
             if (totalv > 0)
-                ct += " ~" + totalv.ToString("N0") + "cr";
+                ct += " ~" + totalv.ToString("N0") + " cr";
             SetControlText( ct ); 
 
             toolStripStatusTotalValue.Text = string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), systemnode.System.Name, stars, planets, terrestrial, gasgiants, moons);
