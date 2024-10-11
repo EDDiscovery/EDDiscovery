@@ -234,7 +234,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom2.Dock = System.Windows.Forms.DockStyle.Top;
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.vScrollBarCustom2.HideScrollBar = true;
+            this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 0;
             this.vScrollBarCustom2.Location = new System.Drawing.Point(988, 0);
             this.vScrollBarCustom2.Maximum = -1;

@@ -416,7 +416,7 @@ namespace EDDiscovery.UserControls.Helpers
                 int max = f.AddBools(commodities.Select(x => x.EnglishName + separ + x.FDName).ToArray(), commodities.Select(x => x.TranslatedName).ToArray(), commoditiesstate, 4, 24, 1000, 4, 200, "S_");
                 f.AddBools(rarecommodities.Select(x => x.EnglishName + separ + x.FDName).ToArray(), rarecommodities.Select(x => x.TranslatedName).ToArray(), commoditiesstate, max + 16, 24, 500, 4, 200, "S_");
 
-                f.Add(new ConfigurableEntryList.Entry("B_Buy", showcommoditiesselltostation, "Sell to Station", new Point(600, 4), new Size(100, 22), "Set = Search for stations with a station buy price and has demand, Clear = Search for stations with stock to sell") { Panel = ConfigurableEntryList.Entry.PanelType.Top });
+                f.Add(new ConfigurableEntryList.Entry("B_Buy", showcommoditiesselltostation, "Sell to Station", new Point(600, 4), new Size(100, 22), "Set = Search for stations with a station buy price and has demand, Clear = Search for stations with stock to sell") { PlacedInPanel = ConfigurableEntryList.Entry.PanelType.Top });
 
                 AddSearchEntries(f, commoditiessearchdistance, commoditiesclearfilters, commoditieslargepad, commoditiescarriers, lpadx:700,carrierx:800,clearfilterx:900);
 
@@ -474,11 +474,11 @@ namespace EDDiscovery.UserControls.Helpers
                 var commodities = MaterialCommodityMicroResourceType.GetNormalCommodities(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
                 var rarecommodities = MaterialCommodityMicroResourceType.GetRareCommodities(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
                 f.Add(new ConfigurableEntryList.Entry("B_Buy", showcommoditiesselltostation, "Sell to Station", new Point(600, 4), new Size(160, 22), 
-                                    $"Set = Show price station buys the commodity at {Environment.NewLine} Clear = Show station sell price") { Panel = ConfigurableEntryList.Entry.PanelType.Top });
+                                    $"Set = Show price station buys the commodity at {Environment.NewLine} Clear = Show station sell price") { PlacedInPanel = ConfigurableEntryList.Entry.PanelType.Top });
 
                 int max = f.AddBools(commodities.Select(x => x.FDName).ToArray(), commodities.Select(x => x.TranslatedName).ToArray(), showcommoditiesstate, 4, 24, 1000, 4, 200, "S_");
                 f.AddBools(rarecommodities.Select(x => x.FDName).ToArray(), rarecommodities.Select(x => x.TranslatedName).ToArray(), showcommoditiesstate, max + 16, 24, 500, 4, 200, "S_");
-                f.Add(new ConfigurableEntryList.Entry("OK", typeof(ExtButton), "Show", new Point(300, 4), new Size(80, 24), null) { Panel = ConfigurableEntryList.Entry.PanelType.Top });
+                f.Add(new ConfigurableEntryList.Entry("OK", typeof(ExtButton), "Show", new Point(300, 4), new Size(80, 24), null) { PlacedInPanel = ConfigurableEntryList.Entry.PanelType.Top });
 
                 f.Trigger += (d, ctrlname, text) => { f.RadioButton("S_", ctrlname, 3); };
             },
@@ -681,12 +681,12 @@ namespace EDDiscovery.UserControls.Helpers
 
         private void AddSearchEntries(ConfigurableForm f, int searchdistance, bool clearfilters, bool lpad, bool? carrier, int maxdx = 400, int lpadx = 600, int carrierx = 700, int clearfilterx = 800)
         {
-            f.Add(new ConfigurableEntryList.Entry("OK", typeof(ExtButton), "Show", new Point(300, 4), new Size(80, 24), null) { Panel = ConfigurableEntryList.Entry.PanelType.Top });
-            f.AddLabelAndEntry("Maximum Distance", new Point(maxdx, 8), labelsize, new ConfigurableEntryList.Entry("radius", searchdistance, new Point(maxdx + labelsize.Width, 4), numberboxsize, "Maximum distance") { NumberBoxLongMinimum = 1, Panel = ConfigurableEntryList.Entry.PanelType.Top });
-            f.Add(new ConfigurableEntryList.Entry("LPAD", lpad, "Large Pad", new Point(lpadx, 4), new Size(100, 22), "Large pad is required") { Panel = ConfigurableEntryList.Entry.PanelType.Top });
+            f.Add(new ConfigurableEntryList.Entry("OK", typeof(ExtButton), "Show", new Point(300, 4), new Size(80, 24), null) { PlacedInPanel = ConfigurableEntryList.Entry.PanelType.Top });
+            f.AddLabelAndEntry("Maximum Distance", new Point(maxdx, 8), labelsize, new ConfigurableEntryList.Entry("radius", searchdistance, new Point(maxdx + labelsize.Width, 4), numberboxsize, "Maximum distance") { NumberBoxLongMinimum = 1, PlacedInPanel = ConfigurableEntryList.Entry.PanelType.Top });
+            f.Add(new ConfigurableEntryList.Entry("LPAD", lpad, "Large Pad", new Point(lpadx, 4), new Size(100, 22), "Large pad is required") { PlacedInPanel = ConfigurableEntryList.Entry.PanelType.Top });
             if (carrier.HasValue)
-                f.Add(new ConfigurableEntryList.Entry("CARRIER", carrier.Value, "Incl Carriers", new Point(carrierx, 4), new Size(100, 22), "Drake Class Carriers are to be included") { Panel = ConfigurableEntryList.Entry.PanelType.Top });
-            f.Add(new ConfigurableEntryList.Entry("CLRF", clearfilters, "Clear other filters", new Point(clearfilterx, 4), new Size(160, 22), "Type filter is cleared, clear the others as well") { Panel = ConfigurableEntryList.Entry.PanelType.Top });
+                f.Add(new ConfigurableEntryList.Entry("CARRIER", carrier.Value, "Incl Carriers", new Point(carrierx, 4), new Size(100, 22), "Drake Class Carriers are to be included") { PlacedInPanel = ConfigurableEntryList.Entry.PanelType.Top });
+            f.Add(new ConfigurableEntryList.Entry("CLRF", clearfilters, "Clear other filters", new Point(clearfilterx, 4), new Size(160, 22), "Type filter is cleared, clear the others as well") { PlacedInPanel = ConfigurableEntryList.Entry.PanelType.Top });
         }
         private void SetValues(ConfigurableForm f, ref int commoditiessearchdistance, ref bool commoditiesclearfilters, ref bool commoditieslargepad, ref bool commoditiescarriers)
         {

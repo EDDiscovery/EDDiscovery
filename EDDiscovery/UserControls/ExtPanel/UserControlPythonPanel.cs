@@ -15,6 +15,7 @@
 using QuickJSON;
 using System;
 using System.Drawing;
+using System.IO;
 using System.Windows.Forms;
 using static EDDDLLInterfaces.EDDDLLIF;
 
@@ -23,6 +24,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlPythonPanel : UserControlCommonBase
     {
         private Actions.ActionController actioncontroller;
+        private string pluginfolder;
 
         public UserControlPythonPanel()
         {
@@ -36,6 +38,7 @@ namespace EDDiscovery.UserControls
             base.Creation(p);
             System.Diagnostics.Debug.WriteLine($"Python panel create class {p.WindowTitle} db {DBBaseName}");
             DBBaseName = "ExtPanel" + p.PopoutID;
+            pluginfolder = p.Tag as string;
         }
 
         public override void Init()
@@ -50,7 +53,10 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
             DiscoveryForm.OnNewTarget += Discoveryform_OnNewTarget;
 
-            actioncontroller = DiscoveryForm.MakeAC();
+            actioncontroller = DiscoveryForm.MakeAC(pluginfolder,null,null);     // action files are in this folder, don't allow management
+
+            //JToken config = JToken.Parse(BaseUtils.FileHelpers.TryReadAllTextFromFile(Path.Combine(pluginfolder, "config.json")), JToken.ParseOptions.CheckEOL | JToken.ParseOptions.AllowTrailingCommas));
+
         }
 
         public override void SetTransparency(bool ison, Color curcol)
@@ -59,6 +65,19 @@ namespace EDDiscovery.UserControls
 
         public override void LoadLayout()
         {
+            configurableUC.Init("UC", "");
+
+            actioncontroller.ReLoad();
+
+            ActionLanguage.ActionFile af = actioncontroller.GetFile("UIInterface");
+            if (af != null)
+                af.Dialogs["UC"] = configurableUC;      // add the UC
+            else
+                ExtendedControls.MessageBoxTheme.Show($"Missing UIInterface.act action file in python plugin folder {pluginfolder}");
+
+            actioncontroller.onStartup();
+
+            actioncontroller.CheckWarn();
         }
         public override void InitialDisplay()
         {

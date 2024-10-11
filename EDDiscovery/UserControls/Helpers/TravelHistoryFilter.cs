@@ -306,16 +306,16 @@ namespace EDDiscovery.UserControls
                     int pos = addvpos + numcontrols * spacing;           // work out where next should be
                     frm.MoveControls(pos - 10, spacing);                     // move anything after this (less a bit for safety) to space
                     AddDT(frm, DateTime.UtcNow.StartOfMinute(), DateTime.UtcNow.StartOfMinute(), pos, controlnumber++);
-                    frm.UpdateDisplayAfterAddNewControls();
+                    frm.UpdateEntries();
                 }
                 else if (control.StartsWith("del:"))
                 {
                     //System.Diagnostics.Debug.WriteLine($"Delete control {control}");
                     frm.MoveControls(control, -32);                   // move everything at or below this up
-                    frm.RemoveEntry(control);                         // and remove the two controls
-                    frm.RemoveEntry("dates:" + control.Substring(4));
-                    frm.RemoveEntry("datee:" + control.Substring(4));
-                    frm.UpdateDisplayAfterAddNewControls();
+                    frm.Remove(control);                         // and remove the two controls
+                    frm.Remove("dates:" + control.Substring(4));
+                    frm.Remove("datee:" + control.Substring(4));
+                    frm.UpdateEntries();
                 }
 
             };

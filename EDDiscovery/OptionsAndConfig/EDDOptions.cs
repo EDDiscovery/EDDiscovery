@@ -114,6 +114,7 @@ namespace EDDiscovery
         public string NotificationsAppDirectory() { return NotificationFolderOverride ?? SubAppDirectory("Notifications"); }
         public string ExpeditionsAppDirectory() { return SubAppDirectory("Expeditions"); }
         public string ActionsAppDirectory() { return SubAppDirectory("Actions"); }
+        public string OtherInstallFilesDirectory() { return SubAppDirectory("AddonFiles"); }
         public string VideosAppDirectory() { return SubAppDirectory("Videos"); }
         public string SoundsAppDirectory() { return SubAppDirectory("Sounds"); }
         public string IconsAppDirectory() { return SubAppDirectory("Icons"); }
@@ -127,6 +128,7 @@ namespace EDDiscovery
         public string HelpDirectory() { return SubAppDirectory("Help"); }
         public string CAPIDirectory() { return SubAppDirectory("CAPI"); }
         public string PythonDirectory() { return SubAppDirectory("Python"); }
+        public string TempDirectory() { return SubAppDirectory("Temp"); }
         public string TempMoveDirectory() { return SubAppDirectory("MoveFolder"); }
         public string WebView2ProfileDirectory() { return SubAppDirectory("WebView2"); }
         public string TranslatorDirectory() { return translationfolder; }
@@ -223,10 +225,7 @@ namespace EDDiscovery
             // here because 1 user did not have a big enough C: drive to holds the SQL temp files!  This may be an over-engineer!
             if (TempDirInDataDir == true)
             {
-                var tempdir = Path.Combine(AppDataDirectory, "Temp");
-                if (!Directory.Exists(tempdir))
-                    Directory.CreateDirectory(tempdir);
-
+                var tempdir = TempDirectory();
                 Environment.SetEnvironmentVariable("TMP", tempdir);
                 Environment.SetEnvironmentVariable("TEMP", tempdir);
             }

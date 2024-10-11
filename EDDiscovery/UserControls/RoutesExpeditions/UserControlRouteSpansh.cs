@@ -247,15 +247,15 @@ namespace EDDiscovery.UserControls
                     int pos = addvpos + numcontrols * 32;           // work out where next should be
                     f.MoveControls(pos - 10, 32);                     // move anything after this (less a bit for safety) to space
                     AddFCDest(f, controlnumber++, pos);             // and add
-                    f.UpdateDisplayAfterAddNewControls();
+                    f.UpdateEntries();
                 }
                 else if (control.StartsWith("del:"))
                 {
                     //System.Diagnostics.Debug.WriteLine($"Delete control {control}");
                     f.MoveControls(control, -32);                   // move everything at or below this up
-                    f.RemoveEntry(control);                         // and remove the two controls
-                    f.RemoveEntry("idest:" + control.Substring(4));
-                    f.UpdateDisplayAfterAddNewControls();
+                    f.Remove(control);                         // and remove the two controls
+                    f.Remove("idest:" + control.Substring(4));
+                    f.UpdateEntries();
                 }
                 else
                     f.GetControl("OK").Enabled = f.IsAllValid();

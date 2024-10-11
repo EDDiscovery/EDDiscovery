@@ -66,8 +66,7 @@ namespace EDDiscovery.UserControls
             Bitmap selback = (Bitmap)(brigthness < 0.3 ? EDDiscovery.Icons.Controls.Selector : EDDiscovery.Icons.Controls.Selector2);
 
             {
-                ActionLanguage.Manager.VersioningManager mgr = new ActionLanguage.Manager.VersioningManager();
-                ActionLanguage.Manager.AddOnManagerForm.ReadLocalFiles(mgr, EDDOptions.Instance.AppDataDirectory, true);
+                ActionLanguage.Manager.VersioningManager mgr = ActionLanguage.Manager.AddOnManagerForm.CreateVersionManager(EDDOptions.Instance.AppDataDirectory, System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Actions"), null);
 
                 int i = mgr.DownloadItems.Count;
 

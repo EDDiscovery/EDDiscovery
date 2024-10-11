@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017-2023 EDDiscovery development team
+ * Copyright 2017-2023 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -31,26 +31,33 @@ namespace EDDiscovery.Actions
         public ActionFile[] Get(string[] name, StringComparison c = StringComparison.InvariantCultureIgnoreCase) { return actionfiles.Get(name, c); }
         public ActionFile[] Get(string[] name, bool enabledstate, StringComparison c = StringComparison.InvariantCultureIgnoreCase) { return actionfiles.Get(name, enabledstate, c); }
 
-        private string lasteditedpack;
-
         public override AudioExtensions.AudioQueue AudioQueueWave { get;  }
         public override AudioExtensions.AudioQueue AudioQueueSpeech { get;  }
         public override AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get; }
         public AudioExtensions.IVoiceRecognition VoiceRecon { get; }
         public BindingsFile FrontierBindings { get; }
 
-        public string ErrorList;        // set on Reload, use to display warnings at right point
+        private string actfolder;       // where the action files are stored
+        private string approotfolder;   // folder location root where to install stuff into
+        private string otherinstalledfilesfolder;   // other installed files
+        private string errorlist;       // set on Reload, use to display warnings at right point
+        private string lasteditedpack;
+        private DirectInputDevices.InputDeviceList inputdevices;
+        private Actions.ActionsFromInputDevices inputdevicesactions;
+        private Type[] keyignoredforms;
 
-        DirectInputDevices.InputDeviceList inputdevices;
-        Actions.ActionsFromInputDevices inputdevicesactions;
-
-        Type[] keyignoredforms;
-
-        public ActionController(EDDiscoveryForm frm, AudioExtensions.AudioQueue wave, AudioExtensions.AudioQueue speech, AudioExtensions.SpeechSynthesizer synth, 
-                                                    BindingsFile frontierbindings,
-                                                    System.Drawing.Icon ic, Type[] keyignoredforms = null) : base(frm, ic)
+        public ActionController(string actfolder,       // where the action files are located, for reload
+                                string approotfolder,  // null if don't allow management, else root for Manage/Edit Addons
+                                string otherinstalledfilesfolder, // null if don't do it
+                                EDDiscoveryForm frm, 
+                                AudioExtensions.AudioQueue wave, AudioExtensions.AudioQueue speech, AudioExtensions.SpeechSynthesizer synth, 
+                                BindingsFile frontierbindings, bool nosound,
+                                System.Drawing.Icon ic, Type[] keyignoredforms = null) : base(frm, ic)
         {
-            DiscoveryForm = frm;
+            this.actfolder = actfolder;
+            this.approotfolder = approotfolder;
+            this.otherinstalledfilesfolder = otherinstalledfilesfolder;
+            this.DiscoveryForm = frm;
             this.keyignoredforms = keyignoredforms;
 
             AudioQueueWave = wave;
@@ -63,7 +70,7 @@ namespace EDDiscovery.Actions
 
             // we own the voice recon
 #if !NO_SYSTEM_SPEECH
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5 && !EDDOptions.Instance.NoSound)
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5 && !nosound)
                 VoiceRecon = AudioHelper.GetVoiceRecognition(frm.LogLineHighlight);
             else
 #endif
@@ -107,17 +114,17 @@ namespace EDDiscovery.Actions
             if (completereload)
                 actionfiles = new ActionFileList();     // clear the list
 
-            ErrorList = actionfiles.LoadAllActionFiles(EDDOptions.Instance.ActionsAppDirectory());
+            errorlist = actionfiles.LoadAllActionFiles(actfolder);
 
-            AdditionalChecks(ref ErrorList);
+            AdditionalChecks(ref errorlist);
 
             actionrunasync = new ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
         }
 
         public void CheckWarn()
         {
-            if (ErrorList.Length > 0)
-                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Failed to load files\r\n" + ErrorList, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            if (errorlist.Length > 0)
+                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Failed to load files\r\n" + errorlist, "WARNING!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         public void AdditionalChecks(ref string errlist)        // perform additional checks which can only be done when
@@ -167,7 +174,7 @@ namespace EDDiscovery.Actions
             {
                 string collapsestate = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ActionEditorCollapseState_" + name, "");  // get any collapsed state info for this pack
 
-                frm.Init("Edit pack " + name, this.Icon, this, EDDOptions.Instance.ActionsAppDirectory(), f, ActionEventEDList.EventList(excludejournaluitranslatedevents:true), collapsestate);
+                frm.Init("Edit pack " + name, this.Icon, this, actfolder, f, ActionEventEDList.EventList(excludejournaluitranslatedevents:true), collapsestate);
 
                 frm.ShowDialog(DiscoveryForm); // don't care about the result, the form does all the saving
 
@@ -361,7 +368,7 @@ namespace EDDiscovery.Actions
             {
                 if (actionfiles.Get(r, StringComparison.InvariantCultureIgnoreCase) == null)
                 {
-                    actionfiles.CreateSet(r, EDDOptions.Instance.ActionsAppDirectory());
+                    actionfiles.CreateSet(r, actfolder);
                 }
                 else
                     ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Duplicate name", "Create Action File Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -384,6 +391,9 @@ namespace EDDiscovery.Actions
 
         private bool ManagerAddOns(bool manage)
         {
+            if (approotfolder == null)
+                return false;
+
             bool changed = false;
 
             using (ActionLanguage.Manager.AddOnManagerForm dmf = new ActionLanguage.Manager.AddOnManagerForm())
@@ -391,7 +401,13 @@ namespace EDDiscovery.Actions
                 var edversion = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionValues();
                 System.Diagnostics.Debug.Assert(edversion != null);
 
-                dmf.Init("EDDiscovery", manage, this.Icon, edversion, EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.TempMoveDirectory(), Properties.Resources.URLGithubDataDownload , EDDOptions.Instance.CheckGithubFiles );
+                dmf.Init("EDDiscovery", manage, this.Icon, edversion, 
+                                            approotfolder,
+                                            actfolder,
+                                            manage ? otherinstalledfilesfolder : null,      // only on manage!
+                                            EDDOptions.Instance.TempDirectory(),
+                                            EDDOptions.Instance.TempMoveDirectory(), Properties.Resources.URLGithubDataDownload , 
+                                            EDDOptions.Instance.CheckGithubFiles );
 
                 dmf.EditActionFile += Dmf_OnEditActionFile;     // only used when manage = false
                 dmf.EditGlobals += Dmf_OnEditGlobals;

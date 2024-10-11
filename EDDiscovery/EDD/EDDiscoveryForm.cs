@@ -370,7 +370,7 @@ namespace EDDiscovery
 
             // create the action controller and install commands before we execute tabs, since some tabs need these set up
 
-            actioncontroller = MakeAC();
+            actioncontroller = MakeAC(EDDOptions.Instance.ActionsAppDirectory(), EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.OtherInstallFilesDirectory());
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
