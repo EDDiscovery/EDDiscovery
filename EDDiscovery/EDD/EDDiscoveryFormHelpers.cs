@@ -523,10 +523,11 @@ namespace EDDiscovery
 
         #region AC
 
-        public Actions.ActionController MakeAC(string appfolder, string manageappfolder, string otherinstalledfilesfolder)
+        public Actions.ActionController MakeAC(string appfolder, string manageappfolder, string otherinstalledfilesfolder, Action<string> logger)
         {
             return new Actions.ActionController(appfolder, manageappfolder,otherinstalledfilesfolder,
                                                 this, audioqueuewave, audioqueuespeech, speechsynth, frontierbindings, EDDOptions.Instance.NoSound,
+                                                logger,
                                                 this.Icon, new Type[] { });
         }
 

@@ -34,7 +34,7 @@ namespace EDDiscovery.Actions
             {
                 System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
-                vars[prefix + "CurrentMode"] = he.TravelState.ToString();
+                vars[prefix + "CurrentMode"] = he.Status.TravelState.ToString();
                 vars[prefix + "JID"] = he.Journalid.ToString(ct);
                 vars[prefix + "UTCTime"] = he.EventTimeUTC.ToStringUSInvariant();
                 vars[prefix + "LocalTime"] = he.EventTimeUTC.ToLocalTime().ToStringUSInvariant();
@@ -84,7 +84,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "Wanted"] = he.Status.Wanted.ToStringIntValue();
                 vars[prefix + "MarketId"] = he.Status.MarketID.HasValue ? he.Status.MarketID.ToStringInvariant() : "0";
 
-                vars[prefix + "Note"] = he.GetNoteText;
+                vars[prefix + "Note"] = he.GetNoteText();
 
                 vars[prefix + "EventDescription"] = he.GetInfo();
                 vars[prefix + "EventDetailedInfo"] = he.GetDetailed() ?? "";

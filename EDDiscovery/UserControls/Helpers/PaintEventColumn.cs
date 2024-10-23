@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
 
                 e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.None;
 
-                e.Graphics.DrawImage(he.journalEntry.Icon, new Rectangle(hstart, top, size, size));
+                e.Graphics.DrawImage(he.journalEntry.Icon(), new Rectangle(hstart, top, size, size));
                 hstart += size + padding;
 
                 if (he.journalEntry is IJournalJumpColor && showfsdmapcolour)

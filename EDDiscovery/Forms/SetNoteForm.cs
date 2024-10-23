@@ -26,7 +26,7 @@ namespace EDDiscovery.Forms
 
         public SetNoteForm(HistoryEntry he)
         {
-            Init(he.GetNoteText, he.EventTimeUTC, he.System.Name, he.GetInfo(), he.GetDetailed() ?? "");
+            Init(he.GetNoteText(), he.EventTimeUTC, he.System.Name, he.GetInfo(), he.GetDetailed() ?? "");
         }
         public SetNoteForm()
         {

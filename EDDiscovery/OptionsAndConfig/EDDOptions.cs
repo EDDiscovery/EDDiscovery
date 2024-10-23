@@ -97,6 +97,8 @@ namespace EDDiscovery
         public bool KeepSystemDataDownloadedFiles { get; private set; }
         public string Culture { get; private set; }             // default null use system culture, use de-DE etc
 
+        public int PythonDebugPort { get; set; } = 12300;       // < 10000 does not launch python, you should be running the script via the debugger
+
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
             string path = Path.Combine(AppDataDirectory, subfolder);
@@ -401,6 +403,11 @@ namespace EDDiscovery
             else if (optname == "-profile")
             {
                 Profile = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname == "-pythondebugport")
+            {
+                string s = toeol ? ca.Rest() : ca.NextEmpty();
+                PythonDebugPort = s.InvariantParseInt(12300);
             }
             else if (optname == "-systemsdbpath")
             {

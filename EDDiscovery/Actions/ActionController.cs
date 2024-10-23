@@ -45,6 +45,7 @@ namespace EDDiscovery.Actions
         private DirectInputDevices.InputDeviceList inputdevices;
         private Actions.ActionsFromInputDevices inputdevicesactions;
         private Type[] keyignoredforms;
+        private Action<string> logLineOut;
 
         public ActionController(string actfolder,       // where the action files are located, for reload
                                 string approotfolder,  // null if don't allow management, else root for Manage/Edit Addons
@@ -52,6 +53,7 @@ namespace EDDiscovery.Actions
                                 EDDiscoveryForm frm, 
                                 AudioExtensions.AudioQueue wave, AudioExtensions.AudioQueue speech, AudioExtensions.SpeechSynthesizer synth, 
                                 BindingsFile frontierbindings, bool nosound,
+                                Action<string> logger,
                                 System.Drawing.Icon ic, Type[] keyignoredforms = null) : base(frm, ic)
         {
             this.actfolder = actfolder;
@@ -59,6 +61,7 @@ namespace EDDiscovery.Actions
             this.otherinstalledfilesfolder = otherinstalledfilesfolder;
             this.DiscoveryForm = frm;
             this.keyignoredforms = keyignoredforms;
+            this.logLineOut = logger;
 
             AudioQueueWave = wave;
             AudioQueueSpeech = speech;
@@ -118,7 +121,7 @@ namespace EDDiscovery.Actions
 
             AdditionalChecks(ref errorlist);
 
-            actionrunasync = new ActionRun(this, actionfiles);        // this is the guy who runs programs asynchronously
+            actionrun = new ActionRun(this, actionfiles);        // this is the guy who runs the programs (default async)
         }
 
         public void CheckWarn()
@@ -418,7 +421,7 @@ namespace EDDiscovery.Actions
 
                 if (dmf.ChangeList.Count > 0)
                 {
-                    actionrunasync?.TerminateAll();
+                    actionrun?.TerminateAll();
                     AudioQueueSpeech?.StopAll();
                     AudioQueueWave?.StopAll();
 
@@ -601,9 +604,9 @@ namespace EDDiscovery.Actions
 
                 if (actionfiles.CheckActions(ale, he?.journalEntry, testvars, functions) > 0)
                 {
-                    actionfiles.RunActions(now, ale, actionrunasync, eventvars);  // add programs to action run
+                    actionfiles.RunActions(now, ale, actionrun, eventvars);  // add programs to action run
 
-                    actionrunasync.Execute();       // See if needs executing
+                    actionrun.Execute();       // See if needs executing
                 }
             }
 
@@ -616,8 +619,8 @@ namespace EDDiscovery.Actions
 
             if (found != null)
             {
-                actionrunasync.Run(now, found.Item1, found.Item2, runvars);
-                actionrunasync.Execute();       // See if needs executing
+                actionrun.Run(now, found.Item1, found.Item2, runvars);
+                actionrun.Execute();       // See if needs executing
 
                 return true;
             }
@@ -639,7 +642,7 @@ namespace EDDiscovery.Actions
         public void HoldTillProgStops()
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
-            actionrunasync.WaitTillFinished(10000, true);
+            actionrun.WaitTillFinished(10000, true);
         }
 
         public void CloseDown()
@@ -656,7 +659,7 @@ namespace EDDiscovery.Actions
 
         public override void LogLine(string s)
         {
-            DiscoveryForm.LogLine(s);
+            logLineOut.Invoke(s);
         }
 
         #region Misc overrides

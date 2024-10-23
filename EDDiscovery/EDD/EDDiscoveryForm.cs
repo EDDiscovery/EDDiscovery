@@ -75,6 +75,7 @@ namespace EDDiscovery
         public event Action OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
         public event Action<HistoryEntry> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered { add { Controller.OnNewHistoryEntryUnfiltered += value; } remove { Controller.OnNewHistoryEntryUnfiltered -= value; } }
+        public event Action<JournalEntry> OnNewJournalEntryUnfiltered { add { Controller.OnNewJournalEntryUnfiltered += value; } remove { Controller.OnNewJournalEntryUnfiltered -= value; } }
         public event Action<UIEvent> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
         public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
         public event Action<long, long> OnSyncComplete { add { Controller.OnSyncComplete += value; } remove { Controller.OnSyncComplete -= value; } }
@@ -370,7 +371,7 @@ namespace EDDiscovery
 
             // create the action controller and install commands before we execute tabs, since some tabs need these set up
 
-            actioncontroller = MakeAC(EDDOptions.Instance.ActionsAppDirectory(), EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.OtherInstallFilesDirectory());
+            actioncontroller = MakeAC(EDDOptions.Instance.ActionsAppDirectory(), EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.OtherInstallFilesDirectory(), LogLine);
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 

@@ -434,7 +434,7 @@ namespace EDDiscovery.UserControls
 
             if (layoutorder == 0 && Config(Configuration.showNotes))
             {
-                coldata.Add(he.GetNoteText.Replace("\r\n", " "));
+                coldata.Add(he.GetNoteText().Replace("\r\n", " "));
             }
 
             if (layoutorder == 2 && Config(Configuration.showDistancePerStar))
@@ -449,7 +449,7 @@ namespace EDDiscovery.UserControls
 
             if (layoutorder > 0 && Config(Configuration.showNotes))
             {
-                coldata.Add(he.GetNoteText.Replace("\r\n", " "));
+                coldata.Add(he.GetNoteText().Replace("\r\n", " "));
             }
 
             if (layoutorder < 2 && Config(Configuration.showDistancePerStar))
@@ -483,7 +483,7 @@ namespace EDDiscovery.UserControls
 
                 if (coldata[i].Equals("`!!ICON!!"))            // marker for ICON..
                 {
-                    Image img = he.journalEntry.Icon;
+                    Image img = he.journalEntry.Icon();
                     var e = pictureBox.AddImage(new Rectangle(scanpostextoffset.X + columnpos[colnum + i], rowpos, img.Width, img.Height), img, null, null, false); 
                     maxrowpos = Math.Max(maxrowpos, e.Location.Bottom);
                     items.Add(e);

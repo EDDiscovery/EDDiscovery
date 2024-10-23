@@ -93,11 +93,11 @@ namespace EDDiscovery.WebServer
                 EliteDangerousCore.HistoryEntry he = hl.EntryOrder()[i];
 
                 JArray jent = new JArray();
-                jent.Add(he.journalEntry.GetIconPackPath);
+                jent.Add(he.journalEntry.GetIconPackPath());
                 jent.Add(he.journalEntry.EventTimeUTC);
                 jent.Add(he.EventSummary);
                 jent.Add(he.GetInfo());
-                jent.Add(he.GetNoteText);
+                jent.Add(he.GetNoteText());
                 jarray.Add(jent);
             }
 

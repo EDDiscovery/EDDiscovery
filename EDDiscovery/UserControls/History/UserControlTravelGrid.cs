@@ -462,12 +462,12 @@ namespace EDDiscovery.UserControls
             string colDescription = he.EventSummary;
             string colInformation = he.GetInfo();
 
-            string colNote = he.GetNoteText;
+            string colNote = he.GetNoteText();
 
             if (debugmode)
             {
                 colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss:fff");
-                colTime += Environment.NewLine + $"{he.TravelState} @ {he.System.Name}:{he.System.SystemAddress}\r\n"
+                colTime += Environment.NewLine + $"{he.Status.TravelState} @ {he.System.Name}:{he.System.SystemAddress}\r\n"
                                + $"b{he.Status.BodyName},{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}\r\n"
                                + $"s{he.Status.StationName},{he.Status.StationType}\r\n"
                                + $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}/ml{he.MissionList}\r\n"
@@ -705,7 +705,7 @@ namespace EDDiscovery.UserControls
             if ( rowsbyjournalid.TryGetValue(he.Journalid,out DataGridViewRow row))
             {
                 //System.Diagnostics.Debug.WriteLine($"TravelGrid update note due to external {row.Index} {he.GetNoteText} {he.EventSummary}");
-                string s = he.GetNoteText;  
+                string s = he.GetNoteText();  
                 row.Cells[ColumnNote.Index].Value = s;
             }
         }

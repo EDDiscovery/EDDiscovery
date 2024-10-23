@@ -121,7 +121,7 @@ namespace EDDiscovery.UserControls
                         for (int pos = hefsd.Index; pos < DiscoveryForm.History.Count && (pos==hefsd.Index || !DiscoveryForm.History[pos].IsFSDCarrierJump); pos++)
                         {
                             HistoryEntry cur = DiscoveryForm.History[pos];
-                            string notetext = cur.GetNoteText;
+                            string notetext = cur.GetNoteText();
                             if ( notetext.HasChars())
                                 botline += notetext.WordWrap(60) + Environment.NewLine;
                         }

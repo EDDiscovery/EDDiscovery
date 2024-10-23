@@ -189,7 +189,7 @@ namespace EDDiscovery.WebServer
             response["Credits"] = he.Credits.ToStringInvariant();
             response["Commander"] = EDCommander.Current.Name;
 
-            response["Mode"] = he.TravelState.ToString();           
+            response["Mode"] = he.Status.TravelState.ToString();           
 
             response["OnFoot"] = he.Status.OnFoot;      // nov 23
             response["OnFootFleetCarrier"] = he.Status.OnFootFleetCarrier;

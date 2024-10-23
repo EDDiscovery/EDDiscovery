@@ -232,7 +232,7 @@ namespace EDDiscovery.UserControls
                                 fsd.FuelUsed,
                                 fsd.FuelLevel,
                                 fsd.BoostUsed,
-                                he.GetNoteText,
+                                he.GetNoteText(),
                             };
 
                         };
