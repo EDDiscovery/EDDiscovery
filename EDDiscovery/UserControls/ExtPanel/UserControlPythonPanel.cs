@@ -168,14 +168,14 @@ namespace EDDiscovery.UserControls
                     File.WriteAllText(modulecheckfile, script);
 
                     var output = (Tuple<string, string>)BaseUtils.PythonLaunch.PyExeLaunch(modulecheckfile, "", pluginfolder, null, true);
-                    if (output.Item2.HasChars())   // this is standard error
-                    {
-                        Log("****** Failed to install required python modules ******\r\n\r\n");
-                        Log(output.Item1);
-                        Log(output.Item2);
-                        good = false;
-                        BaseUtils.FileHelpers.DeleteFileNoError(modulecheckfile);
-                    }
+                    Log(output.Item1);
+                    Log(output.Item2);
+                    //if (output.Item2.HasChars())   // this is standard error
+                    //{
+                    //    Log("****** Failed to install required python modules ******\r\n\r\n");
+                    //    good = false;
+                    //    BaseUtils.FileHelpers.DeleteFileNoError(modulecheckfile);
+                    //}
                 }
                 else
                 {
