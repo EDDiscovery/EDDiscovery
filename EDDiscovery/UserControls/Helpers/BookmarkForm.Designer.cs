@@ -65,18 +65,18 @@ namespace EDDiscovery.UserControls
             this.textBoxName = new ExtendedControls.ExtTextBoxAutoComplete();
             this.statusStripCustom = new ExtendedControls.ExtStatusStrip();
             this.extPanelScroll = new ExtendedControls.ExtPanelScroll();
+            this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
             this.extButtonSpanshSystem = new ExtendedControls.ExtButton();
             this.extButtonInaraSystem = new ExtendedControls.ExtButton();
             this.extButtonEDSMSystem = new ExtendedControls.ExtButton();
-            this.extScrollBar1 = new ExtendedControls.ExtScrollBar();
             this.panelTags = new System.Windows.Forms.Panel();
+            this.SurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarkUserControl();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extButtonDrawnClose = new ExtendedControls.ExtButtonDrawn();
             this.panelOuter = new System.Windows.Forms.Panel();
             this.panelTop = new System.Windows.Forms.Panel();
             this.labelTitle = new System.Windows.Forms.Label();
             this.panelBotButtons = new System.Windows.Forms.Panel();
-            this.SurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarkUserControl();
             this.extPanelScroll.SuspendLayout();
             this.panelOuter.SuspendLayout();
             this.panelTop.SuspendLayout();
@@ -444,6 +444,36 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.MouseDown += new System.Windows.Forms.MouseEventHandler(this.extPanelScroll_MouseDown);
             this.extPanelScroll.MouseUp += new System.Windows.Forms.MouseEventHandler(this.extPanelScroll_MouseUp);
             // 
+            // extScrollBar1
+            // 
+            this.extScrollBar1.AlwaysHideScrollBar = false;
+            this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBar1.ArrowColorScaling = 0.5F;
+            this.extScrollBar1.ArrowDownDrawAngle = 270F;
+            this.extScrollBar1.ArrowUpDrawAngle = 90F;
+            this.extScrollBar1.BorderColor = System.Drawing.Color.White;
+            this.extScrollBar1.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extScrollBar1.HideScrollBar = false;
+            this.extScrollBar1.LargeChange = 10;
+            this.extScrollBar1.Location = new System.Drawing.Point(878, 0);
+            this.extScrollBar1.Maximum = -12;
+            this.extScrollBar1.Minimum = 0;
+            this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBar1.Name = "extScrollBar1";
+            this.extScrollBar1.Size = new System.Drawing.Size(19, 702);
+            this.extScrollBar1.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBar1.SmallChange = 1;
+            this.extScrollBar1.TabIndex = 15;
+            this.extScrollBar1.Text = "extScrollBar1";
+            this.extScrollBar1.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBar1.ThumbColorScaling = 0.5F;
+            this.extScrollBar1.ThumbDrawAngle = 0F;
+            this.extScrollBar1.Value = -12;
+            this.extScrollBar1.ValueLimited = -12;
+            // 
             // extButtonSpanshSystem
             // 
             this.extButtonSpanshSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
@@ -453,7 +483,6 @@ namespace EDDiscovery.UserControls
             this.extButtonSpanshSystem.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonSpanshSystem.Size = new System.Drawing.Size(48, 28);
             this.extButtonSpanshSystem.TabIndex = 17;
-            this.extButtonSpanshSystem.Text = "S";
             this.extButtonSpanshSystem.Click += new System.EventHandler(this.extButtonSpanshSystem_Click);
             // 
             // extButtonInaraSystem
@@ -478,36 +507,6 @@ namespace EDDiscovery.UserControls
             this.extButtonEDSMSystem.TabIndex = 19;
             this.extButtonEDSMSystem.Click += new System.EventHandler(this.extButtonEDSMSystem_Click);
             // 
-            // extScrollBar1
-            // 
-            this.extScrollBar1.AlwaysHideScrollBar = false;
-            this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBar1.ArrowColorScaling = 0.5F;
-            this.extScrollBar1.ArrowDownDrawAngle = 270F;
-            this.extScrollBar1.ArrowUpDrawAngle = 90F;
-            this.extScrollBar1.BorderColor = System.Drawing.Color.White;
-            this.extScrollBar1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.extScrollBar1.HideScrollBar = false;
-            this.extScrollBar1.LargeChange = 10;
-            this.extScrollBar1.Location = new System.Drawing.Point(881, 0);
-            this.extScrollBar1.Maximum = -12;
-            this.extScrollBar1.Minimum = 0;
-            this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
-            this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
-            this.extScrollBar1.Name = "extScrollBar1";
-            this.extScrollBar1.Size = new System.Drawing.Size(16, 702);
-            this.extScrollBar1.SliderColor = System.Drawing.Color.DarkGray;
-            this.extScrollBar1.SmallChange = 1;
-            this.extScrollBar1.TabIndex = 15;
-            this.extScrollBar1.Text = "extScrollBar1";
-            this.extScrollBar1.ThumbBorderColor = System.Drawing.Color.Yellow;
-            this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBar1.ThumbColorScaling = 0.5F;
-            this.extScrollBar1.ThumbDrawAngle = 0F;
-            this.extScrollBar1.Value = -12;
-            this.extScrollBar1.ValueLimited = -12;
-            // 
             // panelTags
             // 
             this.panelTags.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -517,11 +516,21 @@ namespace EDDiscovery.UserControls
             this.panelTags.TabIndex = 16;
             this.panelTags.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panelTags_MouseDown);
             // 
+            // SurfaceBookmarks
+            // 
+            this.SurfaceBookmarks.Location = new System.Drawing.Point(13, 392);
+            this.SurfaceBookmarks.Name = "SurfaceBookmarks";
+            this.SurfaceBookmarks.Size = new System.Drawing.Size(852, 289);
+            this.SurfaceBookmarks.TabIndex = 12;
+            this.SurfaceBookmarks.TagFilter = null;
+            // 
             // extButtonDrawnClose
             // 
             this.extButtonDrawnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnClose.AutoEllipsis = false;
             this.extButtonDrawnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnClose.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnClose.BorderWidth = 1;
             this.extButtonDrawnClose.Image = null;
             this.extButtonDrawnClose.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.extButtonDrawnClose.Location = new System.Drawing.Point(872, 2);
@@ -578,13 +587,6 @@ namespace EDDiscovery.UserControls
             this.panelBotButtons.Name = "panelBotButtons";
             this.panelBotButtons.Size = new System.Drawing.Size(899, 34);
             this.panelBotButtons.TabIndex = 17;
-            // 
-            // SurfaceBookmarks
-            // 
-            this.SurfaceBookmarks.Location = new System.Drawing.Point(13, 392);
-            this.SurfaceBookmarks.Name = "SurfaceBookmarks";
-            this.SurfaceBookmarks.Size = new System.Drawing.Size(852, 289);
-            this.SurfaceBookmarks.TabIndex = 12;
             // 
             // BookmarkForm
             // 

@@ -470,6 +470,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetDist.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTargetDist.EndButtonEnable = true;
             this.textBoxTargetDist.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTargetDist.EndButtonImage")));
+            this.textBoxTargetDist.EndButtonSize16ths = 10;
             this.textBoxTargetDist.EndButtonVisible = false;
             this.textBoxTargetDist.InErrorCondition = false;
             this.textBoxTargetDist.Location = new System.Drawing.Point(341, 327);
@@ -484,6 +485,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetDist.TabIndex = 15;
             this.textBoxTargetDist.TabStop = false;
             this.textBoxTargetDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxTargetDist.TextNoChange = "";
             this.toolTip.SetToolTip(this.textBoxTargetDist, "Distance to target");
             this.textBoxTargetDist.WordWrap = true;
             this.textBoxTargetDist.Click += new System.EventHandler(this.clickTextBox);
@@ -509,7 +511,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
             this.textBoxTarget.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxTarget.EndButtonEnable = false;
-            this.textBoxTarget.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTarget.EndButtonImage")));
+            this.textBoxTarget.EndButtonSize16ths = 10;
             this.textBoxTarget.EndButtonVisible = true;
             this.textBoxTarget.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.textBoxTarget.InErrorCondition = false;
@@ -525,6 +527,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.TabStop = false;
             this.textBoxTarget.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxTarget.TextChangedEvent = "";
+            this.textBoxTarget.TextNoChange = "";
             this.toolTip.SetToolTip(this.textBoxTarget, "Sets the target");
             this.textBoxTarget.WordWrap = true;
             this.textBoxTarget.Click += new System.EventHandler(this.clickTextBox);
@@ -624,13 +627,13 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBar1.HideScrollBar = true;
             this.extScrollBar1.LargeChange = 10;
-            this.extScrollBar1.Location = new System.Drawing.Point(1008, 0);
+            this.extScrollBar1.Location = new System.Drawing.Point(1005, 0);
             this.extScrollBar1.Maximum = -303;
             this.extScrollBar1.Minimum = 0;
             this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBar1.Name = "extScrollBar1";
-            this.extScrollBar1.Size = new System.Drawing.Size(16, 832);
+            this.extScrollBar1.Size = new System.Drawing.Size(19, 832);
             this.extScrollBar1.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBar1.SmallChange = 1;
             this.extScrollBar1.TabIndex = 49;
@@ -653,6 +656,7 @@ namespace EDDiscovery.UserControls
             this.extTextBoxNextDestinationPosition.ControlBackground = System.Drawing.SystemColors.Control;
             this.extTextBoxNextDestinationPosition.EndButtonEnable = true;
             this.extTextBoxNextDestinationPosition.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxNextDestinationPosition.EndButtonImage")));
+            this.extTextBoxNextDestinationPosition.EndButtonSize16ths = 10;
             this.extTextBoxNextDestinationPosition.EndButtonVisible = false;
             this.extTextBoxNextDestinationPosition.InErrorCondition = false;
             this.extTextBoxNextDestinationPosition.Location = new System.Drawing.Point(641, 240);
@@ -666,6 +670,7 @@ namespace EDDiscovery.UserControls
             this.extTextBoxNextDestinationPosition.TabIndex = 52;
             this.extTextBoxNextDestinationPosition.TabStop = false;
             this.extTextBoxNextDestinationPosition.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.extTextBoxNextDestinationPosition.TextNoChange = "";
             this.extTextBoxNextDestinationPosition.WordWrap = true;
             this.extTextBoxNextDestinationPosition.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.extTextBoxNextDestinationPosition.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -683,6 +688,7 @@ namespace EDDiscovery.UserControls
             this.extTextBoxNextDestinationDistance.ControlBackground = System.Drawing.SystemColors.Control;
             this.extTextBoxNextDestinationDistance.EndButtonEnable = true;
             this.extTextBoxNextDestinationDistance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxNextDestinationDistance.EndButtonImage")));
+            this.extTextBoxNextDestinationDistance.EndButtonSize16ths = 10;
             this.extTextBoxNextDestinationDistance.EndButtonVisible = false;
             this.extTextBoxNextDestinationDistance.InErrorCondition = false;
             this.extTextBoxNextDestinationDistance.Location = new System.Drawing.Point(549, 240);
@@ -696,6 +702,7 @@ namespace EDDiscovery.UserControls
             this.extTextBoxNextDestinationDistance.TabIndex = 52;
             this.extTextBoxNextDestinationDistance.TabStop = false;
             this.extTextBoxNextDestinationDistance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.extTextBoxNextDestinationDistance.TextNoChange = "";
             this.extTextBoxNextDestinationDistance.WordWrap = true;
             this.extTextBoxNextDestinationDistance.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.extTextBoxNextDestinationDistance.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -713,6 +720,7 @@ namespace EDDiscovery.UserControls
             this.extTextBox1.ControlBackground = System.Drawing.SystemColors.Control;
             this.extTextBox1.EndButtonEnable = true;
             this.extTextBox1.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBox1.EndButtonImage")));
+            this.extTextBox1.EndButtonSize16ths = 10;
             this.extTextBox1.EndButtonVisible = false;
             this.extTextBox1.InErrorCondition = false;
             this.extTextBox1.Location = new System.Drawing.Point(377, 500);
@@ -726,6 +734,7 @@ namespace EDDiscovery.UserControls
             this.extTextBox1.TabIndex = 52;
             this.extTextBox1.TabStop = false;
             this.extTextBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.extTextBox1.TextNoChange = "";
             this.extTextBox1.WordWrap = true;
             this.extTextBox1.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.extTextBox1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -743,6 +752,7 @@ namespace EDDiscovery.UserControls
             this.extTextBoxNextDestination.ControlBackground = System.Drawing.SystemColors.Control;
             this.extTextBoxNextDestination.EndButtonEnable = true;
             this.extTextBoxNextDestination.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxNextDestination.EndButtonImage")));
+            this.extTextBoxNextDestination.EndButtonSize16ths = 10;
             this.extTextBoxNextDestination.EndButtonVisible = false;
             this.extTextBoxNextDestination.InErrorCondition = false;
             this.extTextBoxNextDestination.Location = new System.Drawing.Point(549, 216);
@@ -756,6 +766,7 @@ namespace EDDiscovery.UserControls
             this.extTextBoxNextDestination.TabIndex = 52;
             this.extTextBoxNextDestination.TabStop = false;
             this.extTextBoxNextDestination.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.extTextBoxNextDestination.TextNoChange = "";
             this.extTextBoxNextDestination.WordWrap = true;
             this.extTextBoxNextDestination.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.extTextBoxNextDestination.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -785,6 +796,7 @@ namespace EDDiscovery.UserControls
             this.extTextBoxStationFaction.ControlBackground = System.Drawing.SystemColors.Control;
             this.extTextBoxStationFaction.EndButtonEnable = true;
             this.extTextBoxStationFaction.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxStationFaction.EndButtonImage")));
+            this.extTextBoxStationFaction.EndButtonSize16ths = 10;
             this.extTextBoxStationFaction.EndButtonVisible = false;
             this.extTextBoxStationFaction.InErrorCondition = false;
             this.extTextBoxStationFaction.Location = new System.Drawing.Point(230, 179);
@@ -798,6 +810,7 @@ namespace EDDiscovery.UserControls
             this.extTextBoxStationFaction.TabIndex = 50;
             this.extTextBoxStationFaction.TabStop = false;
             this.extTextBoxStationFaction.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.extTextBoxStationFaction.TextNoChange = "";
             this.extTextBoxStationFaction.WordWrap = true;
             this.extTextBoxStationFaction.Click += new System.EventHandler(this.clickTextBox);
             this.extTextBoxStationFaction.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -828,6 +841,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSystem.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSystem.EndButtonEnable = true;
             this.textBoxSystem.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSystem.EndButtonImage")));
+            this.textBoxSystem.EndButtonSize16ths = 10;
             this.textBoxSystem.EndButtonVisible = false;
             this.textBoxSystem.InErrorCondition = false;
             this.textBoxSystem.Location = new System.Drawing.Point(229, 16);
@@ -841,6 +855,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSystem.TabIndex = 1;
             this.textBoxSystem.TabStop = false;
             this.textBoxSystem.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxSystem.TextNoChange = "";
             this.textBoxSystem.WordWrap = true;
             this.textBoxSystem.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxSystem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -851,6 +866,8 @@ namespace EDDiscovery.UserControls
             // 
             this.extButtonEDSMTarget.AutoEllipsis = false;
             this.extButtonEDSMTarget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonEDSMTarget.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonEDSMTarget.BorderWidth = 1;
             this.extButtonEDSMTarget.Image = null;
             this.extButtonEDSMTarget.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.InverseText;
             this.extButtonEDSMTarget.Location = new System.Drawing.Point(393, 327);
@@ -883,6 +900,7 @@ namespace EDDiscovery.UserControls
             this.extTextBoxSecurity.ControlBackground = System.Drawing.SystemColors.Control;
             this.extTextBoxSecurity.EndButtonEnable = true;
             this.extTextBoxSecurity.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxSecurity.EndButtonImage")));
+            this.extTextBoxSecurity.EndButtonSize16ths = 10;
             this.extTextBoxSecurity.EndButtonVisible = false;
             this.extTextBoxSecurity.InErrorCondition = false;
             this.extTextBoxSecurity.Location = new System.Drawing.Point(377, 465);
@@ -896,6 +914,7 @@ namespace EDDiscovery.UserControls
             this.extTextBoxSecurity.TabIndex = 47;
             this.extTextBoxSecurity.TabStop = false;
             this.extTextBoxSecurity.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.extTextBoxSecurity.TextNoChange = "";
             this.extTextBoxSecurity.WordWrap = true;
             this.extTextBoxSecurity.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.extTextBoxSecurity.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -913,6 +932,7 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxJumpRange.EndButtonEnable = true;
             this.textBoxJumpRange.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxJumpRange.EndButtonImage")));
+            this.textBoxJumpRange.EndButtonSize16ths = 10;
             this.textBoxJumpRange.EndButtonVisible = false;
             this.textBoxJumpRange.InErrorCondition = false;
             this.textBoxJumpRange.Location = new System.Drawing.Point(377, 439);
@@ -926,6 +946,7 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange.TabIndex = 47;
             this.textBoxJumpRange.TabStop = false;
             this.textBoxJumpRange.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxJumpRange.TextNoChange = "";
             this.textBoxJumpRange.WordWrap = true;
             this.textBoxJumpRange.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.textBoxJumpRange.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -1069,7 +1090,6 @@ namespace EDDiscovery.UserControls
             this.extButtonSpanshStation.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonSpanshStation.Size = new System.Drawing.Size(44, 20);
             this.extButtonSpanshStation.TabIndex = 4;
-            this.extButtonSpanshStation.Text = "S";
             this.extButtonSpanshStation.Click += new System.EventHandler(this.extButtonSpanshStation_Click);
             this.extButtonSpanshStation.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.extButtonSpanshStation.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -1084,7 +1104,6 @@ namespace EDDiscovery.UserControls
             this.extButtonSpanshSystem.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonSpanshSystem.Size = new System.Drawing.Size(44, 20);
             this.extButtonSpanshSystem.TabIndex = 4;
-            this.extButtonSpanshSystem.Text = "S";
             this.extButtonSpanshSystem.Click += new System.EventHandler(this.extButtonSpanshSystem_Click);
             this.extButtonSpanshSystem.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.extButtonSpanshSystem.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -1246,6 +1265,7 @@ namespace EDDiscovery.UserControls
             this.textBoxVisits.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxVisits.EndButtonEnable = true;
             this.textBoxVisits.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxVisits.EndButtonImage")));
+            this.textBoxVisits.EndButtonSize16ths = 10;
             this.textBoxVisits.EndButtonVisible = false;
             this.textBoxVisits.InErrorCondition = false;
             this.textBoxVisits.Location = new System.Drawing.Point(700, 11);
@@ -1259,6 +1279,7 @@ namespace EDDiscovery.UserControls
             this.textBoxVisits.TabIndex = 10;
             this.textBoxVisits.TabStop = false;
             this.textBoxVisits.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxVisits.TextNoChange = "";
             this.textBoxVisits.WordWrap = true;
             this.textBoxVisits.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxVisits.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1301,6 +1322,7 @@ namespace EDDiscovery.UserControls
             this.textBoxBody.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxBody.EndButtonEnable = true;
             this.textBoxBody.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxBody.EndButtonImage")));
+            this.textBoxBody.EndButtonSize16ths = 10;
             this.textBoxBody.EndButtonVisible = false;
             this.textBoxBody.InErrorCondition = false;
             this.textBoxBody.Location = new System.Drawing.Point(229, 72);
@@ -1314,6 +1336,7 @@ namespace EDDiscovery.UserControls
             this.textBoxBody.TabIndex = 3;
             this.textBoxBody.TabStop = false;
             this.textBoxBody.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxBody.TextNoChange = "";
             this.textBoxBody.WordWrap = true;
             this.textBoxBody.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxBody.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1324,6 +1347,7 @@ namespace EDDiscovery.UserControls
             // 
             this.richTextBoxScrollMissions.BorderColor = System.Drawing.Color.Transparent;
             this.richTextBoxScrollMissions.BorderColorScaling = 0.5F;
+            this.richTextBoxScrollMissions.DetectUrls = true;
             this.richTextBoxScrollMissions.HideScrollBar = true;
             this.richTextBoxScrollMissions.Location = new System.Drawing.Point(549, 107);
             this.richTextBoxScrollMissions.Name = "richTextBoxScrollMissions";
@@ -1376,6 +1400,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelJumps.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTravelJumps.EndButtonEnable = true;
             this.textBoxTravelJumps.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTravelJumps.EndButtonImage")));
+            this.textBoxTravelJumps.EndButtonSize16ths = 10;
             this.textBoxTravelJumps.EndButtonVisible = false;
             this.textBoxTravelJumps.InErrorCondition = false;
             this.textBoxTravelJumps.Location = new System.Drawing.Point(706, 81);
@@ -1389,6 +1414,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelJumps.TabIndex = 8;
             this.textBoxTravelJumps.TabStop = false;
             this.textBoxTravelJumps.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxTravelJumps.TextNoChange = "";
             this.textBoxTravelJumps.WordWrap = true;
             this.textBoxTravelJumps.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxTravelJumps.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1419,6 +1445,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelTime.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTravelTime.EndButtonEnable = true;
             this.textBoxTravelTime.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTravelTime.EndButtonImage")));
+            this.textBoxTravelTime.EndButtonSize16ths = 10;
             this.textBoxTravelTime.EndButtonVisible = false;
             this.textBoxTravelTime.InErrorCondition = false;
             this.textBoxTravelTime.Location = new System.Drawing.Point(626, 81);
@@ -1432,6 +1459,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelTime.TabIndex = 8;
             this.textBoxTravelTime.TabStop = false;
             this.textBoxTravelTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxTravelTime.TextNoChange = "";
             this.textBoxTravelTime.WordWrap = true;
             this.textBoxTravelTime.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxTravelTime.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1450,6 +1478,7 @@ namespace EDDiscovery.UserControls
             this.textBoxEconomy.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxEconomy.EndButtonEnable = true;
             this.textBoxEconomy.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxEconomy.EndButtonImage")));
+            this.textBoxEconomy.EndButtonSize16ths = 10;
             this.textBoxEconomy.EndButtonVisible = false;
             this.textBoxEconomy.InErrorCondition = false;
             this.textBoxEconomy.Location = new System.Drawing.Point(377, 241);
@@ -1463,6 +1492,7 @@ namespace EDDiscovery.UserControls
             this.textBoxEconomy.TabIndex = 33;
             this.textBoxEconomy.TabStop = false;
             this.textBoxEconomy.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxEconomy.TextNoChange = "";
             this.textBoxEconomy.WordWrap = true;
             this.textBoxEconomy.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxEconomy.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1481,6 +1511,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFuel.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxFuel.EndButtonEnable = true;
             this.textBoxFuel.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxFuel.EndButtonImage")));
+            this.textBoxFuel.EndButtonSize16ths = 10;
             this.textBoxFuel.EndButtonVisible = false;
             this.textBoxFuel.InErrorCondition = false;
             this.textBoxFuel.Location = new System.Drawing.Point(230, 409);
@@ -1494,6 +1525,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFuel.TabIndex = 8;
             this.textBoxFuel.TabStop = false;
             this.textBoxFuel.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxFuel.TextNoChange = "";
             this.textBoxFuel.WordWrap = true;
             this.textBoxFuel.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxFuel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1525,6 +1557,7 @@ namespace EDDiscovery.UserControls
             this.extTextBoxMR.ControlBackground = System.Drawing.SystemColors.Control;
             this.extTextBoxMR.EndButtonEnable = true;
             this.extTextBoxMR.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxMR.EndButtonImage")));
+            this.extTextBoxMR.EndButtonSize16ths = 10;
             this.extTextBoxMR.EndButtonVisible = false;
             this.extTextBoxMR.InErrorCondition = false;
             this.extTextBoxMR.Location = new System.Drawing.Point(548, 170);
@@ -1538,6 +1571,7 @@ namespace EDDiscovery.UserControls
             this.extTextBoxMR.TabIndex = 8;
             this.extTextBoxMR.TabStop = false;
             this.extTextBoxMR.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.extTextBoxMR.TextNoChange = "";
             this.extTextBoxMR.WordWrap = true;
             this.extTextBoxMR.Click += new System.EventHandler(this.clickTextBox);
             this.extTextBoxMR.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1556,6 +1590,7 @@ namespace EDDiscovery.UserControls
             this.textBoxData.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxData.EndButtonEnable = true;
             this.textBoxData.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxData.EndButtonImage")));
+            this.textBoxData.EndButtonSize16ths = 10;
             this.textBoxData.EndButtonVisible = false;
             this.textBoxData.InErrorCondition = false;
             this.textBoxData.Location = new System.Drawing.Point(231, 442);
@@ -1569,6 +1604,7 @@ namespace EDDiscovery.UserControls
             this.textBoxData.TabIndex = 8;
             this.textBoxData.TabStop = false;
             this.textBoxData.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxData.TextNoChange = "";
             this.textBoxData.WordWrap = true;
             this.textBoxData.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxData.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1587,6 +1623,7 @@ namespace EDDiscovery.UserControls
             this.textBoxGovernment.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxGovernment.EndButtonEnable = true;
             this.textBoxGovernment.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxGovernment.EndButtonImage")));
+            this.textBoxGovernment.EndButtonSize16ths = 10;
             this.textBoxGovernment.EndButtonVisible = false;
             this.textBoxGovernment.InErrorCondition = false;
             this.textBoxGovernment.Location = new System.Drawing.Point(230, 241);
@@ -1600,6 +1637,7 @@ namespace EDDiscovery.UserControls
             this.textBoxGovernment.TabIndex = 35;
             this.textBoxGovernment.TabStop = false;
             this.textBoxGovernment.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxGovernment.TextNoChange = "";
             this.textBoxGovernment.WordWrap = true;
             this.textBoxGovernment.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxGovernment.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1618,6 +1656,7 @@ namespace EDDiscovery.UserControls
             this.textBoxMaterials.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxMaterials.EndButtonEnable = true;
             this.textBoxMaterials.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxMaterials.EndButtonImage")));
+            this.textBoxMaterials.EndButtonSize16ths = 10;
             this.textBoxMaterials.EndButtonVisible = false;
             this.textBoxMaterials.InErrorCondition = false;
             this.textBoxMaterials.Location = new System.Drawing.Point(240, 468);
@@ -1631,6 +1670,7 @@ namespace EDDiscovery.UserControls
             this.textBoxMaterials.TabIndex = 8;
             this.textBoxMaterials.TabStop = false;
             this.textBoxMaterials.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxMaterials.TextNoChange = "";
             this.textBoxMaterials.WordWrap = true;
             this.textBoxMaterials.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxMaterials.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1662,6 +1702,7 @@ namespace EDDiscovery.UserControls
             this.textBoxCredits.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxCredits.EndButtonEnable = true;
             this.textBoxCredits.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxCredits.EndButtonImage")));
+            this.textBoxCredits.EndButtonSize16ths = 10;
             this.textBoxCredits.EndButtonVisible = false;
             this.textBoxCredits.InErrorCondition = false;
             this.textBoxCredits.Location = new System.Drawing.Point(61, 16);
@@ -1675,6 +1716,7 @@ namespace EDDiscovery.UserControls
             this.textBoxCredits.TabIndex = 8;
             this.textBoxCredits.TabStop = false;
             this.textBoxCredits.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxCredits.TextNoChange = "";
             this.textBoxCredits.WordWrap = true;
             this.textBoxCredits.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxCredits.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1693,6 +1735,7 @@ namespace EDDiscovery.UserControls
             this.textBoxAllegiance.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxAllegiance.EndButtonEnable = true;
             this.textBoxAllegiance.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxAllegiance.EndButtonImage")));
+            this.textBoxAllegiance.EndButtonSize16ths = 10;
             this.textBoxAllegiance.EndButtonVisible = false;
             this.textBoxAllegiance.InErrorCondition = false;
             this.textBoxAllegiance.Location = new System.Drawing.Point(377, 223);
@@ -1706,6 +1749,7 @@ namespace EDDiscovery.UserControls
             this.textBoxAllegiance.TabIndex = 14;
             this.textBoxAllegiance.TabStop = false;
             this.textBoxAllegiance.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxAllegiance.TextNoChange = "";
             this.textBoxAllegiance.WordWrap = true;
             this.textBoxAllegiance.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxAllegiance.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1724,6 +1768,7 @@ namespace EDDiscovery.UserControls
             this.textBoxCargo.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxCargo.EndButtonEnable = true;
             this.textBoxCargo.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxCargo.EndButtonImage")));
+            this.textBoxCargo.EndButtonSize16ths = 10;
             this.textBoxCargo.EndButtonVisible = false;
             this.textBoxCargo.InErrorCondition = false;
             this.textBoxCargo.Location = new System.Drawing.Point(372, 406);
@@ -1737,6 +1782,7 @@ namespace EDDiscovery.UserControls
             this.textBoxCargo.TabIndex = 8;
             this.textBoxCargo.TabStop = false;
             this.textBoxCargo.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxCargo.TextNoChange = "";
             this.textBoxCargo.WordWrap = true;
             this.textBoxCargo.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxCargo.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1768,6 +1814,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelDist.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxTravelDist.EndButtonEnable = true;
             this.textBoxTravelDist.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxTravelDist.EndButtonImage")));
+            this.textBoxTravelDist.EndButtonSize16ths = 10;
             this.textBoxTravelDist.EndButtonVisible = false;
             this.textBoxTravelDist.InErrorCondition = false;
             this.textBoxTravelDist.Location = new System.Drawing.Point(549, 81);
@@ -1781,6 +1828,7 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelDist.TabIndex = 8;
             this.textBoxTravelDist.TabStop = false;
             this.textBoxTravelDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxTravelDist.TextNoChange = "";
             this.textBoxTravelDist.WordWrap = true;
             this.textBoxTravelDist.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxTravelDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1799,6 +1847,7 @@ namespace EDDiscovery.UserControls
             this.textBoxState.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxState.EndButtonEnable = true;
             this.textBoxState.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxState.EndButtonImage")));
+            this.textBoxState.EndButtonSize16ths = 10;
             this.textBoxState.EndButtonVisible = false;
             this.textBoxState.InErrorCondition = false;
             this.textBoxState.Location = new System.Drawing.Point(230, 223);
@@ -1812,6 +1861,7 @@ namespace EDDiscovery.UserControls
             this.textBoxState.TabIndex = 37;
             this.textBoxState.TabStop = false;
             this.textBoxState.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxState.TextNoChange = "";
             this.textBoxState.WordWrap = true;
             this.textBoxState.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxState.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1830,6 +1880,7 @@ namespace EDDiscovery.UserControls
             this.textBoxShip.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxShip.EndButtonEnable = true;
             this.textBoxShip.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxShip.EndButtonImage")));
+            this.textBoxShip.EndButtonSize16ths = 10;
             this.textBoxShip.EndButtonVisible = false;
             this.textBoxShip.InErrorCondition = false;
             this.textBoxShip.Location = new System.Drawing.Point(231, 353);
@@ -1843,6 +1894,7 @@ namespace EDDiscovery.UserControls
             this.textBoxShip.TabIndex = 8;
             this.textBoxShip.TabStop = false;
             this.textBoxShip.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxShip.TextNoChange = "";
             this.textBoxShip.WordWrap = true;
             this.textBoxShip.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxShip.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1874,6 +1926,7 @@ namespace EDDiscovery.UserControls
             this.textBoxGameMode.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxGameMode.EndButtonEnable = true;
             this.textBoxGameMode.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxGameMode.EndButtonImage")));
+            this.textBoxGameMode.EndButtonSize16ths = 10;
             this.textBoxGameMode.EndButtonVisible = false;
             this.textBoxGameMode.InErrorCondition = false;
             this.textBoxGameMode.Location = new System.Drawing.Point(549, 55);
@@ -1887,6 +1940,7 @@ namespace EDDiscovery.UserControls
             this.textBoxGameMode.TabIndex = 8;
             this.textBoxGameMode.TabStop = false;
             this.textBoxGameMode.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxGameMode.TextNoChange = "";
             this.textBoxGameMode.WordWrap = true;
             this.textBoxGameMode.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxGameMode.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1905,6 +1959,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSolDist.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxSolDist.EndButtonEnable = true;
             this.textBoxSolDist.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxSolDist.EndButtonImage")));
+            this.textBoxSolDist.EndButtonSize16ths = 10;
             this.textBoxSolDist.EndButtonVisible = false;
             this.textBoxSolDist.InErrorCondition = false;
             this.textBoxSolDist.Location = new System.Drawing.Point(390, 152);
@@ -1918,6 +1973,7 @@ namespace EDDiscovery.UserControls
             this.textBoxSolDist.TabIndex = 44;
             this.textBoxSolDist.TabStop = false;
             this.textBoxSolDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxSolDist.TextNoChange = "";
             this.textBoxSolDist.WordWrap = true;
             this.textBoxSolDist.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxSolDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1936,6 +1992,7 @@ namespace EDDiscovery.UserControls
             this.textBoxPosition.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxPosition.EndButtonEnable = true;
             this.textBoxPosition.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxPosition.EndButtonImage")));
+            this.textBoxPosition.EndButtonSize16ths = 10;
             this.textBoxPosition.EndButtonVisible = false;
             this.textBoxPosition.InErrorCondition = false;
             this.textBoxPosition.Location = new System.Drawing.Point(229, 121);
@@ -1949,6 +2006,7 @@ namespace EDDiscovery.UserControls
             this.textBoxPosition.TabIndex = 8;
             this.textBoxPosition.TabStop = false;
             this.textBoxPosition.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxPosition.TextNoChange = "";
             this.textBoxPosition.WordWrap = true;
             this.textBoxPosition.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxPosition.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
@@ -1993,6 +2051,7 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.ControlBackground = System.Drawing.SystemColors.Control;
             this.textBoxHomeDist.EndButtonEnable = true;
             this.textBoxHomeDist.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("textBoxHomeDist.EndButtonImage")));
+            this.textBoxHomeDist.EndButtonSize16ths = 10;
             this.textBoxHomeDist.EndButtonVisible = false;
             this.textBoxHomeDist.InErrorCondition = false;
             this.textBoxHomeDist.Location = new System.Drawing.Point(237, 153);
@@ -2006,6 +2065,7 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.TabIndex = 42;
             this.textBoxHomeDist.TabStop = false;
             this.textBoxHomeDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.textBoxHomeDist.TextNoChange = "";
             this.textBoxHomeDist.WordWrap = true;
             this.textBoxHomeDist.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxHomeDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);

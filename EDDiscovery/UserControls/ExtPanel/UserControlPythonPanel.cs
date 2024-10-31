@@ -33,7 +33,7 @@ namespace EDDiscovery.UserControls
         private bool panelgood;
 
         private System.Diagnostics.Process pythonprocess;
-        private NetMQUtils.NetMQJsonServer server;
+        private NetMQUtils.NetMQJsonServer zmqconnection;
 
         public UserControlPythonPanel()
         {
@@ -113,13 +113,13 @@ namespace EDDiscovery.UserControls
             actioncontroller.AddReturnCallBack((actf, fname, str) =>
             {
                 System.Diagnostics.Debug.WriteLine($"Return closing return {af.Name} {fname} {str} ");
-                if (server != null)
+                if (zmqconnection != null)
                 {
                     JToken reply = JToken.Parse(str);
                     reply["responsetype"] = "runactionprogram";
                     reply["name"] = fname;
                     if (reply != null)
-                        server.Send(reply);
+                        zmqconnection.Send(reply);
                     else
                         Log("Bad return format from action program - not in JSON format");
                 }
@@ -189,16 +189,16 @@ namespace EDDiscovery.UserControls
                 try
                 {
                     int socketnumber = EDDOptions.Instance.PythonDebugPort;
-                    server = new NetMQUtils.NetMQJsonServer();
-                    server.Received += (list) => { 
+                    zmqconnection = new NetMQUtils.NetMQJsonServer();
+                    zmqconnection.Received += (list) => { 
                         //System.Diagnostics.Debug.WriteLine($"Received {list[0].ToString()}");
                         this.BeginInvoke((MethodInvoker)delegate { HandleClientMessages(list); }); };
 
-                    server.Accepted += () => { System.Diagnostics.Debug.WriteLine($"Accepted"); };
-                    server.Disconnected += () => { System.Diagnostics.Debug.WriteLine($"Disconnected"); this.BeginInvoke((MethodInvoker)delegate { Log("Python Disconnected"); }); };
+                    zmqconnection.Accepted += () => { System.Diagnostics.Debug.WriteLine($"Accepted"); };
+                    zmqconnection.Disconnected += () => { System.Diagnostics.Debug.WriteLine($"Disconnected"); this.BeginInvoke((MethodInvoker)delegate { Log("Python Disconnected"); }); };
 
                     string threadname = "NetMQPoller:" + DBBaseName;
-                    if (server.Init("tcp://localhost", socketnumber, threadname))
+                    if (zmqconnection.Init("tcp://localhost", socketnumber, threadname))
                     {
 
                         // socket numbers <10000 do not launch python, instead you should have the debugger running it ready to connect 
@@ -209,7 +209,7 @@ namespace EDDiscovery.UserControls
                             if (pythonprocess == null)
                             {
                                 Log($"Cannot launch {pluginfolder} / {pyfile}");
-                                server.Close();
+                                zmqconnection.Close();
                             }
                             else
                                 EDDOptions.Instance.PythonDebugPort++;      // python launched, next window gets another port number
@@ -219,25 +219,28 @@ namespace EDDiscovery.UserControls
 
                     }
                     else
-                        Log($"Server failed to start on socket number {socketnumber}");
+                    {
+                        Log($"Server failed to start on socket number {socketnumber} - probably a python panel is hanging around without being closed properly. Close using task manager");
+                        zmqconnection = null;
+                    }
                 }
                 catch (Exception ex)
                 {
                     Log($"Cannot launch {pluginfolder} / {pyfile} exception {ex}");
-                    server.Close();
+                    zmqconnection.Close();
                 }
             }
         }
 
         public override bool AllowClose() 
         { 
-            if ( server?.Running ?? false )     // protect against close before server running
+            if ( zmqconnection?.Running ?? false )     // protect against close before server running
             {
                 System.Diagnostics.Debug.WriteLine("Python {DBBaseName} Send terminate");
                 SendTerminate();
                 MSTicks ms = new MSTicks(1000);
 
-                while ( !exitreceived && server.Running && !ms.TimedOut)        // we horribly just sit here waiting for the exit received to be sent..
+                while ( !exitreceived && zmqconnection.Running && !ms.TimedOut)        // we horribly just sit here waiting for the exit received to be sent..
                 {
                     Application.DoEvents();
                     System.Threading.Thread.Sleep(20);
@@ -262,7 +265,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
             DiscoveryForm.OnNewTarget -= Discoveryform_OnNewTarget;
 
-            server?.Close();
+            zmqconnection?.Close();
 
             if (pythonprocess != null && !pythonprocess.HasExited)
             {
@@ -309,7 +312,7 @@ namespace EDDiscovery.UserControls
                                 ["commander"] = commander,
                                 ["config"] = GetSetting("Config", ""),
                             };
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                             Log($"Python connected with version {json["pythonversion"].Str()}");
                             SelectView(true);
                             break;
@@ -360,7 +363,7 @@ namespace EDDiscovery.UserControls
                                 //System.Diagnostics.Debug.WriteLine($"Return {jo.ToString(true)}");
                                 //System.Diagnostics.Debug.WriteLine($"Return {jo.ToString()}");
                             }
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
 
                         break;
@@ -380,7 +383,7 @@ namespace EDDiscovery.UserControls
                                 ["jid"] = jid,
                                 ["entry"] = jo,
                             };
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
 
                         break;
@@ -425,7 +428,7 @@ namespace EDDiscovery.UserControls
 
                             System.Diagnostics.Debug.WriteLine($"Mission response {reply.ToString(true)}");
 
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
                     case "ship":
@@ -439,7 +442,7 @@ namespace EDDiscovery.UserControls
                                 ["ship"] = he == null ? null : JToken.FromObject(he.ShipInformation, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
 
@@ -452,7 +455,7 @@ namespace EDDiscovery.UserControls
                                 ["shiplist"] = sl == null ? null : JToken.FromObject(sl, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
 
@@ -474,7 +477,7 @@ namespace EDDiscovery.UserControls
 
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
                     case "carrier":
@@ -488,7 +491,7 @@ namespace EDDiscovery.UserControls
 
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
                     case "ledger":
@@ -502,7 +505,7 @@ namespace EDDiscovery.UserControls
 
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
 
@@ -517,7 +520,7 @@ namespace EDDiscovery.UserControls
 
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
 
@@ -532,7 +535,7 @@ namespace EDDiscovery.UserControls
 
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
 
@@ -555,7 +558,7 @@ namespace EDDiscovery.UserControls
 
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
 
@@ -572,7 +575,7 @@ namespace EDDiscovery.UserControls
 
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
 
@@ -585,7 +588,7 @@ namespace EDDiscovery.UserControls
 
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
 
@@ -602,7 +605,7 @@ namespace EDDiscovery.UserControls
                                 ["mcmr"] = cr == null ? null : JToken.FromObject(cr, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
 
@@ -617,7 +620,7 @@ namespace EDDiscovery.UserControls
                                 ["value"] = value,
                             };
 
-                            server.Send(reply);
+                            zmqconnection.Send(reply);
                         }
                         break;
                     case "uisuspend":
@@ -750,7 +753,7 @@ namespace EDDiscovery.UserControls
                                     ["control"] = controlname,
                                     ["settings"] = tk,
                                 };
-                                server.Send(reply);
+                                zmqconnection.Send(reply);
                             }
                             else
                                 Log($"PythonPanel error getcolumnsetting unknown control");
@@ -852,7 +855,7 @@ namespace EDDiscovery.UserControls
                                         ["message"] = message,
                                         ["response"] = res.ToString(),
                                     };
-                                    server.Send(reply);
+                                    zmqconnection.Send(reply);
                                 }
                             }
                         }
@@ -877,7 +880,7 @@ namespace EDDiscovery.UserControls
                                     ["name"] = progname,
                                     ["status"] = "Program not found",
                                 };
-                                server.Send(reply);
+                                zmqconnection.Send(reply);
                             }
                         }
                         break;
@@ -946,7 +949,7 @@ namespace EDDiscovery.UserControls
                 reply["value2"] = tk;
             }
 
-            server.Send(reply);
+            zmqconnection.Send(reply);
         }
 
         #endregion
@@ -959,12 +962,12 @@ namespace EDDiscovery.UserControls
                 ["responsetype"] = "terminate",
             };
 
-            server.Send(reply);
+            zmqconnection.Send(reply);
         }
 
         private void Discoveryform_OnHistoryChange()
         {
-            if (server != null)
+            if (zmqconnection != null)
             {
                 JObject reply = new JObject
                 {
@@ -973,14 +976,14 @@ namespace EDDiscovery.UserControls
                     ["commander"] = DiscoveryForm.History.CommanderName(),
                 };
 
-                server.Send(reply);
+                zmqconnection.Send(reply);
             }
         }
 
         // travel history changed cursor
         public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
-            if (server != null)
+            if (zmqconnection != null)
             {
                 JObject reply = new JObject
                 {
@@ -988,14 +991,14 @@ namespace EDDiscovery.UserControls
                     ["row"] = he.Index,
                 };
 
-                server.Send(reply);
+                zmqconnection.Send(reply);
             }
         }
 
         // new unfiltered journal entry
         private void DiscoveryForm_OnNewJournalEntryUnfiltered(EliteDangerousCore.JournalEntry obj)
         {
-            if (server != null)
+            if (zmqconnection != null)
             {
                 JToken jo = JToken.FromObject(obj, true, new Type[] { typeof(Bitmap), typeof(Image) }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
 
@@ -1006,14 +1009,14 @@ namespace EDDiscovery.UserControls
                     ["journalEntry"] = jo,
                 };
 
-                server.Send(reply);
+                zmqconnection.Send(reply);
             }
         }
 
         // new history list entry
         private void Discoveryform_OnNewEntry(EliteDangerousCore.HistoryEntry he)
         {
-            if (server != null)
+            if (zmqconnection != null)
             {
 
                 JObject reply = new JObject
@@ -1032,13 +1035,13 @@ namespace EDDiscovery.UserControls
                 jo["Info"] = he.GetInfo();      // add in these extra coded fields
                 jo["Detailed"] = he.GetDetailed();
 
-                server.Send(reply);
+                zmqconnection.Send(reply);
             }
         }
 
         private void Discoveryform_OnNewUIEvent(EliteDangerousCore.UIEvent uievent)
         {
-            if (server != null)
+            if (zmqconnection != null)
             {
                 QuickJSON.JToken t = QuickJSON.JToken.FromObject(uievent, ignoreunserialisable: true,
                                                             ignored: new Type[] { typeof(Bitmap), typeof(Image) },
@@ -1051,13 +1054,13 @@ namespace EDDiscovery.UserControls
                     ["event"] = t,
                 };
 
-                server.Send(reply);
+                zmqconnection.Send(reply);
             }
         }
 
         private void Discoveryform_ScreenShotCaptured(string file, Size size)
         {
-            if (server != null)
+            if (zmqconnection != null)
             {
                 JObject reply = new JObject
                 {
@@ -1067,13 +1070,13 @@ namespace EDDiscovery.UserControls
                     ["height"] = size.Height,
                 };
 
-                server.Send(reply);
+                zmqconnection.Send(reply);
             }
         }
 
         private void Discoveryform_OnNewTarget(object obj)
         {
-            if (server != null)
+            if (zmqconnection != null)
             {
                 var hastarget = EliteDangerousCore.DB.TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
 
@@ -1088,7 +1091,7 @@ namespace EDDiscovery.UserControls
                         ["Z"] = z,
                     };
 
-                    server.Send(reply);
+                    zmqconnection.Send(reply);
                 }
             }
         }
