@@ -55,6 +55,20 @@ namespace EDDiscovery.WebServer
     // Query requesttype = presskey, fields              : key = binding name optional keydelay, shiftdelay, updelay
     //          responsetype = status, 100 or 400.
     //-------------------------------------------------------------------------------------------------------------------
+    // Query requesttype = texts, fields entry, length - from this history entry, report this number of send or receive text's
+    //          responsetype = texts, fields            : entry = as per above
+    //                                                  : length = number of reports
+    //                                                  : entries = array of entries. Each entry is an array itself, of [time,"Send Text", tofield, message]
+    //                                                                                or [time,channel,from localised, message localised]
+    // Push responsetype="textchanged" when history has been refreshed
+    //-------------------------------------------------------------------------------------------------------------------
+    // Query requesttype = missions, fields entry - report information on missions at this entry, or -1 for latest mission list
+    //          responsetype = missionslist, fields     : entry = reported entry number
+    //                                                  : length = number of reports
+    //                                                  : current = array of current missions, each one an array containing mission data
+    //                                                  : previous = array of previous missions, each one an array containing mission data
+    // Push responsetype="missionschanged" when history has been refreshed
+    //-------------------------------------------------------------------------------------------------------------------
     // Query requesttype=scandata : fields entry number, "edsm" true/false, "spansh" true/false (EDD 17.0)
     //          responsetype = entry, objectlist..          : entry = -1 none, or entry number. See code for fields
     //
@@ -163,7 +177,7 @@ namespace EDDiscovery.WebServer
             jsondispatch.Add("missions", missions);   // mission list
 
             texts = new TextsRequest(discoveryform);
-            jsondispatch.Add("texts", texts);   // mission list
+            jsondispatch.Add("texts", texts);   // text messages
 
             // add for protocol EDDJSON the responder.
 

@@ -371,7 +371,11 @@ namespace EDDiscovery
 
             // create the action controller and install commands before we execute tabs, since some tabs need these set up
 
-            actioncontroller = MakeAC(EDDOptions.Instance.ActionsAppDirectory(), EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.OtherInstallFilesDirectory(), LogLine);
+            string eddiscoveryglobalvars = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("UserGlobalActionVars", "");
+            actioncontroller = MakeAC(this,
+                        EDDOptions.Instance.ActionsAppDirectory(), EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.OtherInstallFilesDirectory(), 
+                        eddiscoveryglobalvars,
+                        LogLine);
 
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
@@ -448,9 +452,10 @@ namespace EDDiscovery
 
             DLLStart();
 
-            //----------------------------------------------------------------- Python plugins
+            //----------------------------------------------------------------- Action controller (moved here oct 24 to have panels created before load)
 
-            PythonStart();
+            actioncontroller.ReLoad();          // load the action system up here, with the UI running
+            actioncontroller.CreatePanels();     // create any panels related to plugins
 
             // ---------------------------------------------------------------- Web server
 
@@ -644,8 +649,6 @@ namespace EDDiscovery
                 SystemsDatabase.Instance.SetGridIDs(ressel.Item3);
                 EDDConfig.Instance.SystemDBDownload = ressel.Item3 != "None";
             }
-
-            actioncontroller.ReLoad();          // load the action system up here, with the UI running
 
             Controller.PostInit_Shown();        // form is up, controller is released, create controller background thread
 
@@ -919,14 +922,15 @@ namespace EDDiscovery
 
             SaveThemeToDB(ExtendedControls.Theme.Current);
 
-            tabControlMain.CloseTabList();      // close and save tab list
+            tabControlMain.CloseSaveTabs();      // close and save tab list
 
             PopOuts.SaveCurrentPopouts();
 
             notifyIconEDD.Visible = false;
             notifyIconEDD.Dispose();
 
-            actioncontroller.CloseDown();
+            string persistentvars = actioncontroller.CloseDown();
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("UserGlobalActionVars", persistentvars);
 
             DLLManager.UnLoad();
 

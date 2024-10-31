@@ -216,7 +216,7 @@ namespace EDDiscovery
 
         private string DLLGetSuitWeaponsLoadout()
         {
-            var wlist = JToken.FromObject(History.WeaponList.Weapons.Get(History.GetLast?.Weapons ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var wlist = JToken.FromObject(History.WeaponList.weapons.Get(History.GetLast?.Weapons ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             var slist = JToken.FromObject(History.SuitList.Suits(History.GetLast?.Suits ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             var sloadoutlist = JToken.FromObject(History.SuitLoadoutList.Loadouts(History.GetLast?.Loadouts ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
 

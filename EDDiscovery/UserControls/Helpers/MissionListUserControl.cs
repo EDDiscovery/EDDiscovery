@@ -100,7 +100,7 @@ namespace EDDiscovery.UserControls.Helpers
                                     ms.Mission.Faction,
                                     ms.DestinationSystemStationSettlement(),
                                     ms.Mission.TargetFaction,
-                                    previousmissions ? ms.StateText : ms.Mission.Reward.GetValueOrDefault().ToString("N0"),
+                                    previousmissions ? ms.StateText() : ms.Mission.Reward.GetValueOrDefault().ToString("N0"),
                                     ms.MissionInfoColumn()
                 };
 
@@ -119,7 +119,7 @@ namespace EDDiscovery.UserControls.Helpers
 
                 if (previousmissions)
                 {
-                    totalreward += ms.Value;
+                    totalreward += ms.Value();
                 }
                 else if (ms.Mission.Reward.HasValue)
                 {

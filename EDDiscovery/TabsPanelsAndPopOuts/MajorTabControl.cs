@@ -125,7 +125,7 @@ namespace EDDiscovery
             return true;
         }
 
-        public void CloseTabList()
+        public void CloseSaveTabs()
         {
             List<int> idlist = new List<int>();
 
@@ -137,7 +137,7 @@ namespace EDDiscovery
             {
                 UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
                 uccb.CloseDown();
-                idlist.Add( Object.ReferenceEquals(uccb, PrimarySplitterTab) ? -1 : (int)uccb.PanelID);      // primary is marked -1
+                idlist.Add(Object.ReferenceEquals(uccb, PrimarySplitterTab) ? -1 : (int)uccb.PanelID);      // primary is marked -1
                 idlist.Add(uccb.DisplayNumber);
                 tabnames += p.Text + ";";
             }
@@ -204,6 +204,22 @@ namespace EDDiscovery
                 uccb.CloseDown();
                 page.Dispose();
             }
+        }
+
+        // of type P, close
+        public void CloseAllTabs(PanelInformation.PanelIDs p)
+        {
+            List<TabPage> toclose = new List<TabPage>();
+
+            foreach (TabPage tp in TabPages)        // make a close list
+            {
+                var f = ((UserControls.UserControlCommonBase)tp.Controls[0]).Find(p);
+                if (f != null)
+                    toclose.Add(tp);
+            }
+
+            foreach (var x in toclose)
+                RemoveTab(x);         // from right click menu
         }
 
         public bool SelectPrimarySplitterTab()      // select the primary splitter

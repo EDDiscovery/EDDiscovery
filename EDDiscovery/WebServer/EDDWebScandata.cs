@@ -81,7 +81,7 @@ namespace EDDiscovery.WebServer
 
                     var scannode = discoveryform.History.StarScan.FindSystemSynchronous(he.System, lookup);  
 
-                    var bodylist = scannode?.Bodies.ToList();       // may be null
+                    var bodylist = scannode?.Bodies().ToList();       // may be null
 
                     response["Count"] = bodylist?.Count ?? 0;
 

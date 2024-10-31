@@ -386,7 +386,8 @@ namespace EDDiscovery.UserControls
                 ((UserControlForm)(this.Parent)).UpdateTransparency();
         }
 
-        public virtual UserControlCommonBase Find( PanelInformation.PanelIDs p)      // find a UCCB of type T - this simple case just compares, overriden in splitter/grid
+        // find a UCCB of type T - this simple case just compares, overriden in splitter/grid to find sub parts
+        public virtual UserControlCommonBase Find( PanelInformation.PanelIDs p)      
         {
             //System.Diagnostics.Debug.WriteLine($"UCCB Find of {t.Name} on {this.GetType().Name}");
             return PanelID == p ? this : null;

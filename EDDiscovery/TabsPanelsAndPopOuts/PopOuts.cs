@@ -54,6 +54,11 @@ namespace EDDiscovery
             usercontrolsforms.CloseAll();
         }
 
+        public void CloseAllPopouts(PanelInformation.PanelIDs p)
+        {
+            usercontrolsforms.CloseAll(p);
+        }
+
         public void SaveCurrentPopouts()
         {
             PanelInformation.PanelIDs[] userselectablepanels = PanelInformation.GetUserSelectablePanelIDs(false);        // get list of panels in system

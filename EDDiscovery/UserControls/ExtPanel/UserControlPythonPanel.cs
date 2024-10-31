@@ -13,14 +13,13 @@
  */
 
 using BaseUtils;
-using NetMQ;
-using NetMQ.Monitoring;
-using NetMQ.Sockets;
+using EliteDangerousCore;
 using QuickJSON;
 using System;
-using System.Diagnostics;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
@@ -31,13 +30,10 @@ namespace EDDiscovery.UserControls
         
         private string pluginfolder;
         private JToken config;
-  
-        private Process pythonprocess;
-        private DealerSocket server;
-        private NetMQPoller poller;
-        private NetMQMonitor monitor;
+        private bool panelgood;
 
-        private bool ServerRunning => server != null;
+        private System.Diagnostics.Process pythonprocess;
+        private NetMQUtils.NetMQJsonServer server;
 
         public UserControlPythonPanel()
         {
@@ -54,31 +50,40 @@ namespace EDDiscovery.UserControls
             DBBaseName = "PythonPanel" + p.PopoutID + ":";
             pluginfolder = p.Tag as string;
             string optfile = Path.Combine(pluginfolder, "config.json");
-            string optcontents = BaseUtils.FileHelpers.TryReadAllTextFromFile(optfile);
-            config = JToken.Parse(optcontents, JToken.ParseOptions.CheckEOL | JToken.ParseOptions.AllowTrailingCommas);
+            string optcontents =  BaseUtils.FileHelpers.TryReadAllTextFromFile(optfile);
+            config = optcontents != null ? JToken.Parse(optcontents, JToken.ParseOptions.CheckEOL | JToken.ParseOptions.AllowTrailingCommas) : null;
+            panelgood = config != null;
+            if (!panelgood)
+                config = new JToken();
         }
 
         public override void Init()
         {
             System.Diagnostics.Debug.WriteLine($"Python panel Init {DBBaseName}");
 
-            DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
-            DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
-            DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
-            DiscoveryForm.OnNewJournalEntryUnfiltered += DiscoveryForm_OnNewJournalEntryUnfiltered;
-            DiscoveryForm.OnThemeChanged += Discoveryform_OnThemeChanged;
-            DiscoveryForm.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
-            DiscoveryForm.OnNewTarget += Discoveryform_OnNewTarget;
+            SelectView(false);      // view log
+            configurableUC.Dock = DockStyle.Fill;
+            panelLog.Dock = DockStyle.Fill;
 
-            actioncontroller = DiscoveryForm.MakeAC(pluginfolder,null,null,Log);     // action files are in this folder, don't allow management
+            if (panelgood)
+            {
+                DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+                DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
+                DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
+                DiscoveryForm.OnNewJournalEntryUnfiltered += DiscoveryForm_OnNewJournalEntryUnfiltered;
+                DiscoveryForm.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
+                DiscoveryForm.OnNewTarget += Discoveryform_OnNewTarget;
 
-            extRichTextBoxErrorLog.Visible = false;
+                actioncontroller = DiscoveryForm.MakeAC(this.FindForm(), pluginfolder, null, null, null, Log);     // action files are in this folder, don't allow management
 
-            Log("Awaiting python connecting");
+                Log("Awaiting python connecting");
+            }
+            else
+                Log("Missing python config.json file");
         }
 
         public override bool SupportTransparency { get { return config["Panel"].I("SupportTransparency").Bool(false); } } 
-        public override bool DefaultTransparent { get { return config["Panel"].I("DefaultTransparent").Bool(false); } }
+        public override bool DefaultTransparent { get { return config["Panel"].I("DefaultTransparent").Bool(false);} }
         // gets called before load layout, will need to keep track for initial display
         public override void SetTransparency(bool ison, Color curcol)
         {
@@ -92,6 +97,8 @@ namespace EDDiscovery.UserControls
         // the UC sizes and themes itself
         public override void LoadLayout()
         {
+            if (!panelgood)
+                return;
             configurableUC.Init("UC", "");
 
             actioncontroller.ReLoad();
@@ -101,6 +108,22 @@ namespace EDDiscovery.UserControls
                 af.Dialogs["UC"] = configurableUC;      // add the UC
             else
                 Log($"Missing UIInterface.act action file in python plugin folder {pluginfolder}");
+
+            // hook any returns from action files to a report to the python
+            actioncontroller.AddReturnCallBack((actf, fname, str) =>
+            {
+                System.Diagnostics.Debug.WriteLine($"Return closing return {af.Name} {fname} {str} ");
+                if (server != null)
+                {
+                    JToken reply = JToken.Parse(str);
+                    reply["responsetype"] = "runactionprogram";
+                    reply["name"] = fname;
+                    if (reply != null)
+                        server.Send(reply);
+                    else
+                        Log("Bad return format from action program - not in JSON format");
+                }
+            });
 
             actioncontroller.onStartup();
             actioncontroller.CheckWarn();
@@ -117,6 +140,9 @@ namespace EDDiscovery.UserControls
         // On Initial display, start up the python system
         public override void InitialDisplay()
         {
+            if (!panelgood)
+                return;
+
             string modulecheckfile = Path.Combine(pluginfolder, "pymodcheck.py");
             string pyfile = config["Python"].I("Start").Str();
 
@@ -162,57 +188,61 @@ namespace EDDiscovery.UserControls
             {
                 try
                 {
-                    server = new DealerSocket();
                     int socketnumber = EDDOptions.Instance.PythonDebugPort;
-                    string bindstring = "tcp://localhost:" + socketnumber.ToStringInvariant();
-                    server.Bind(bindstring);
+                    server = new NetMQUtils.NetMQJsonServer();
+                    server.Received += (list) => { 
+                        //System.Diagnostics.Debug.WriteLine($"Received {list[0].ToString()}");
+                        this.BeginInvoke((MethodInvoker)delegate { HandleClientMessages(list); }); };
 
-                    poller = new NetMQPoller();
-                    poller.Add(server);
-                    poller.RunAsync("NetMQPoller:" + DBBaseName);
+                    server.Accepted += () => { System.Diagnostics.Debug.WriteLine($"Accepted"); };
+                    server.Disconnected += () => { System.Diagnostics.Debug.WriteLine($"Disconnected"); this.BeginInvoke((MethodInvoker)delegate { Log("Python Disconnected"); }); };
 
-                    monitor = new NetMQMonitor(server, $"inproc://addr:" + socketnumber.ToStringInvariant(), SocketEvents.All);
-                    monitor.AttachToPoller(poller);
-
-                    server.ReceiveReady += (s, e) => { this.BeginInvoke((MethodInvoker)delegate { ServerReceived(s, e); }); };
-                    monitor.Disconnected += (s, e) => { this.BeginInvoke((MethodInvoker)delegate { Monitor_Disconnected(s, e); }); };
-
-                    // socket numbers <10000 do not launch python, instead you should have the debugginer running it ready to connect 
-                    if (socketnumber >= 10000)      
+                    string threadname = "NetMQPoller:" + DBBaseName;
+                    if (server.Init("tcp://localhost", socketnumber, threadname))
                     {
-                        pythonprocess = (Process)BaseUtils.PythonLaunch.PyExeLaunch(pyfile, socketnumber.ToStringInvariant(), pluginfolder, null, false);
 
-                        if (pythonprocess == null)
+                        // socket numbers <10000 do not launch python, instead you should have the debugger running it ready to connect 
+                        if (socketnumber >= 10000)
                         {
-                            Log($"Cannot launch {pluginfolder} / {pyfile}");
-                            CloseNetMQ();
-                        }
-                        else
-                            EDDOptions.Instance.PythonDebugPort++;      // python launched, next window gets another port number
-                    }
+                            pythonprocess = (System.Diagnostics.Process)BaseUtils.PythonLaunch.PyExeLaunch(pyfile, socketnumber.ToStringInvariant(), pluginfolder, null, false);
 
-                    configurableUC.TriggerAdv += ConfigurableUC_TriggerAdv;
+                            if (pythonprocess == null)
+                            {
+                                Log($"Cannot launch {pluginfolder} / {pyfile}");
+                                server.Close();
+                            }
+                            else
+                                EDDOptions.Instance.PythonDebugPort++;      // python launched, next window gets another port number
+                        }
+
+                        configurableUC.TriggerAdv += ConfigurableUC_TriggerAdv;
+
+                    }
+                    else
+                        Log($"Server failed to start on socket number {socketnumber}");
                 }
                 catch (Exception ex)
                 {
                     Log($"Cannot launch {pluginfolder} / {pyfile} exception {ex}");
-                    CloseNetMQ();
+                    server.Close();
                 }
             }
         }
 
         public override bool AllowClose() 
         { 
-            if ( ServerRunning )
+            if ( server?.Running ?? false )     // protect against close before server running
             {
-                System.Diagnostics.Debug.WriteLine("Python Send terminate");
+                System.Diagnostics.Debug.WriteLine("Python {DBBaseName} Send terminate");
                 SendTerminate();
-                while( !exitreceived && ServerRunning)        // we horribly just sit here waiting for the exit received to be sent..
+                MSTicks ms = new MSTicks(1000);
+
+                while ( !exitreceived && server.Running && !ms.TimedOut)        // we horribly just sit here waiting for the exit received to be sent..
                 {
                     Application.DoEvents();
                     System.Threading.Thread.Sleep(20);
                 }
-                System.Diagnostics.Debug.WriteLine("Python received exit {exitreceived}");
+                System.Diagnostics.Debug.WriteLine($"Python {DBBaseName} received exit {exitreceived}");
             }
 
             return true;
@@ -220,35 +250,26 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            System.Diagnostics.Debug.WriteLine($"Python panel Closing {DBBaseName}");
+            System.Diagnostics.Debug.WriteLine($"Python {DBBaseName} panel Closing ");
+
+            if (!panelgood)
+                return;
 
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
             DiscoveryForm.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
             DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
             DiscoveryForm.OnNewJournalEntryUnfiltered -= DiscoveryForm_OnNewJournalEntryUnfiltered;
-            DiscoveryForm.OnThemeChanged -= Discoveryform_OnThemeChanged;
             DiscoveryForm.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
             DiscoveryForm.OnNewTarget -= Discoveryform_OnNewTarget;
 
-            CloseNetMQ();
-        }
-
-        private void CloseNetMQ()
-        {
-            if (server != null)
-            {
-                monitor.DetachFromPoller();         // temperamental.
-                monitor.Stop();
-                poller.RemoveAndDispose(server);
-                poller.Stop();
-                server.Close();
-                server = null;
-            }
+            server?.Close();
 
             if (pythonprocess != null && !pythonprocess.HasExited)
             {
                 pythonprocess.Kill();
             }
+
+            actioncontroller.CloseDown();       // with persistent vars if required
         }
 
         #endregion
@@ -257,138 +278,638 @@ namespace EDDiscovery.UserControls
 
         private bool exitreceived = false;
 
-        // Message received from python
-        private void ServerReceived(object sender, NetMQ.NetMQSocketEventArgs e)
+        // Message received from python, in UI thread due to thunk above
+        private async void HandleClientMessages(List<JToken> list)
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
-            while (server.TryReceiveFrameString(out string clientsend))
+
+            foreach (JObject json in list)
             {
-                JObject json = JObject.Parse(clientsend);
-                if (json != null)
+               // System.Diagnostics.Debug.Write($"Received {json.ToString()}");
+
+                string request = json["requesttype"].Str();
+                string commander = DiscoveryForm.History.CommanderName();
+
+                string controlname = json["control"].Str();     // commonly used
+                string value = json["value"].Str(); // commonly used
+
+                HistoryList hl = DiscoveryForm.History;
+
+                switch (request)
                 {
-                    string request = json["requesttype"].Str();
-                    string commander = DiscoveryForm.History.CommanderName();
-
-                    switch (request)
-                    {
-                        case "start":
+                    case "start":
+                        {
+                            string curver = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionString();
+                            JObject reply = new JObject
                             {
-                                string curver = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionString();
-                                JObject reply = new JObject
-                                {
-                                    ["responsetype"] = "start",
-                                    ["eddversion"] = curver,
-                                    ["apiversion"] = 1,
-                                    ["historylength"] = DiscoveryForm.History.Count,
-                                    ["commander"] = commander,
-                                    ["config"] = GetSetting("Config", ""),
-                                };
-                                SendMessage(reply);
-                                Log($"Python connected with version {json["pythonversion"].Str()}");
-                                extRichTextBoxErrorLog.Visible = false;
-                                configurableUC.Visible = true;
-                                break;
-                            }
-
-                        case "history":
-                            {
-                                int start = json["start"].Int();
-                                int length = json["length"].Int();
-
-                                if (start >= 0 && start < DiscoveryForm.History.Count)
-                                {
-                                    length = Math.Min(length, DiscoveryForm.History.Count - start);
-                                }
-                                else
-                                {
-                                    start = -1;
-                                    length = 0;
-                                }
-
-                                JObject reply = new JObject
-                                {
-                                    ["responsetype"] = "historyrequest",
-                                    ["firstrow"] = start,
-                                    ["length"] = length,
-                                    ["commander"] = commander,
-                                    ["Rows"] = new JArray()
-                                };
-
-                                while(length-- > 0 )
-                                {
-                                    EliteDangerousCore.HistoryEntry he = DiscoveryForm.History[start++];
-                                    JToken jo = JToken.FromObject(he, true, new Type[] { typeof(Bitmap), typeof(Image), 
-                                                    typeof(EliteDangerousCore.EDCommander) }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-                                    jo["Info"] = he.GetInfo();
-                                    jo["Detailed"] = he.GetDetailed();
-                                    reply["Rows"].Array().Add(jo);
-                                }
-
-                                SendMessage(reply);
-                            }
-
+                                ["responsetype"] = "start",
+                                ["eddversion"] = curver,
+                                ["apiversion"] = 1,
+                                ["historylength"] = DiscoveryForm.History.Count,
+                                ["commander"] = commander,
+                                ["config"] = GetSetting("Config", ""),
+                            };
+                            server.Send(reply);
+                            Log($"Python connected with version {json["pythonversion"].Str()}");
+                            SelectView(true);
                             break;
+                        }
 
-                        case "exit":
+                    case "exit":
+                        {
+                            string reason = json["reason"].Str();
+                            if (reason.HasChars())
+                                Log("Python requested termination due to " + reason);
+                            string config = json["config"].Str();
+                            if (config.HasChars())
                             {
-                                string reason = json["reason"].Str();
-                                if (reason.HasChars())
-                                    Log("Python requested termination due to " + reason);
-                                string config = json["config"].Str();
-                                if (config.HasChars())
-                                {
-                                    PutSetting("Config", config);
-                                    Log($"Python config {config}");
-                                    System.Diagnostics.Debug.WriteLine($"Python config {config}");
-                                }
-                                exitreceived = true;
+                                PutSetting("Config", config);
+                                Log($"Python config {config}");
+                                System.Diagnostics.Debug.WriteLine($"Python config {config}");
                             }
-                            break;
+                            exitreceived = true;
+                        }
+                        break;
+                    case "history":
+                        {
+                            int start = json["start"].Int();
+                            int length = json["length"].Int();
 
-                        case "uiget":
+                            // limit length to area available.  0 if out of range.
+                            length = start >= 0 && start < DiscoveryForm.History.Count ? Math.Min(length, DiscoveryForm.History.Count - start) : 0;
+
+                            JObject reply = new JObject
                             {
-                                string controlname = json["control"].Str();
-                                string value = configurableUC.Get(controlname);
+                                ["responsetype"] = request,
+                                ["start"] = start,
+                                ["length"] = length,
+                                ["commander"] = commander,
+                                ["rows"] = new JArray()
+                            };
 
+                            JArray rows = reply["rows"].Array();
+
+                            while (length-- > 0)
+                            {
+                                HistoryEntry he = hl[start++];
+                                JToken jo = JToken.FromObject(he, true, new Type[] { typeof(Bitmap), typeof(Image),
+                                                        typeof(EliteDangerousCore.EDCommander) }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                                jo["Info"] = he.GetInfo();
+                                jo["Detailed"] = he.GetDetailed();
+                                rows.Add(jo);
+                                //System.Diagnostics.Debug.WriteLine($"Return {jo.ToString(true)}");
+                                //System.Diagnostics.Debug.WriteLine($"Return {jo.ToString()}");
+                            }
+                            server.Send(reply);
+                        }
+
+                        break;
+
+                    case "historyjid":
+                        {
+                            long jid = json["jid"].Long();
+
+                            HistoryEntry he = hl.GetByJID(jid);     // null if not there
+
+                            JToken jo = he == null ? null : JToken.FromObject(he, true, new Type[] { typeof(Bitmap), typeof(Image),
+                                                        typeof(EliteDangerousCore.EDCommander) }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["jid"] = jid,
+                                ["entry"] = jo,
+                            };
+                            server.Send(reply);
+                        }
+
+                        break;
+
+                    case "missions":
+                        {
+                            HistoryEntry he = GetHE(json["entry"].Int());
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["entry"] = he.Index,
+                                ["current"] = he == null ? null : new JArray(),
+                                ["previous"] = he == null ? null : new JArray(),
+                            };
+
+                            if (he != null)
+                            {
+                                List<MissionState> ml = hl.MissionListAccumulator.GetMissionList(he.MissionList);
+
+                                List<MissionState> mcurrent = MissionListAccumulator.GetAllCurrentMissions(ml, he.EventTimeUTC);
+
+                                var cur = reply["current"].Array();
+
+                                foreach (MissionState ms in mcurrent)
+                                {
+                                    JToken jo = JToken.FromObject(ms, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+
+                                    cur.Add(jo);
+                                }
+
+                                List<MissionState> mprev = MissionListAccumulator.GetAllExpiredMissions(ml, he.EventTimeUTC);
+
+                                JArray prev = reply["previous"].Array();
+
+                                foreach (MissionState ms in mprev)
+                                {
+                                    JToken jo = JToken.FromObject(ms, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                                    prev.Add(jo);
+                                }
+                            }
+
+                            System.Diagnostics.Debug.WriteLine($"Mission response {reply.ToString(true)}");
+
+                            server.Send(reply);
+                        }
+                        break;
+                    case "ship":
+                        {
+                            HistoryEntry he = GetHE(json["entry"].Int());
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["entry"] = he.Index,
+                                ["ship"] = he == null ? null : JToken.FromObject(he.ShipInformation, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+                            };
+                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            server.Send(reply);
+                        }
+                        break;
+
+                    case "shiplist":
+                        {
+                            var sl = DiscoveryForm.History.ShipInformationList;
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["shiplist"] = sl == null ? null : JToken.FromObject(sl, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+                            };
+                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            server.Send(reply);
+                        }
+                        break;
+
+                    case "suitsweapons":
+                        {
+                            HistoryEntry he = GetHE(json["entry"].Int());
+
+                            var sl = hl.SuitList.Suits(he.Suits);
+                            var wp = hl.WeaponList.Weapons(he.Weapons);
+                            var lo = hl.SuitLoadoutList.Loadouts(he.Loadouts);
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["entry"] = he.Index,
+                                ["suits"] = sl == null ? null : JToken.FromObject(sl, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+                                ["weapons"] = wp == null ? null : JToken.FromObject(wp, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+                                ["loadouts"] = lo == null ? null : JToken.FromObject(lo, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+
+                            };
+                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            server.Send(reply);
+                        }
+                        break;
+                    case "carrier":
+                        {
+                            var cr = hl.Carrier;
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["carrier"] = cr == null ? null : JToken.FromObject(cr, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+
+                            };
+                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            server.Send(reply);
+                        }
+                        break;
+                    case "ledger":
+                        {
+                            var cr = hl.CashLedger;
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["ledger"] = cr == null ? null : JToken.FromObject(cr, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+
+                            };
+                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            server.Send(reply);
+                        }
+                        break;
+
+                    case "shipyards":
+                        {
+                            var cr = hl.Shipyards;
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["shipyards"] = cr == null ? null : JToken.FromObject(cr, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+
+                            };
+                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            server.Send(reply);
+                        }
+                        break;
+
+                    case "outfitting":
+                        {
+                            var cr = hl.Outfitting;
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["outfitting"] = cr == null ? null : JToken.FromObject(cr, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+
+                            };
+                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            server.Send(reply);
+                        }
+                        break;
+
+                    case "scandata":
+                        {
+                            string system = json["system"].Str();
+                            long? systemid = json["systemid"].LongNull();
+                            WebExternalDataLookup wdl = json["weblookup"].EnumStr<WebExternalDataLookup>(WebExternalDataLookup.None, true);
+                            var sc = new SystemClass(system, systemid);
+                            var node = await hl.StarScan.FindSystemAsync(sc, wdl);
+                            if (IsClosed)
+                                return;
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["system"] = system,
+                                ["systemid"] = systemid,
+                                ["scan"] = node == null ? null : JToken.FromObject(node, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+
+                            };
+                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            server.Send(reply);
+                        }
+                        break;
+
+                    case "faction":
+                        {
+                            string faction = json["faction"].Str();
+                            var fs = hl.Stats.GetFaction(faction);
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["faction"] = faction,
+                                ["data"] = fs == null ? null : JToken.FromObject(fs, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+
+                            };
+                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            server.Send(reply);
+                        }
+                        break;
+
+                    case "factions":
+                        {
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["data"] = JToken.FromObject(hl.Stats.FactionData, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+
+                            };
+                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            server.Send(reply);
+                        }
+                        break;
+
+                    case "mcmr":       // commods/mats/mrs
+                        {
+                            HistoryEntry he = GetHE(json["entry"].Int());
+
+                            var cr = hl.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity);
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["entry"] = he.Index,
+                                ["mcmr"] = cr == null ? null : JToken.FromObject(cr, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+                            };
+                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            server.Send(reply);
+                        }
+                        break;
+
+                    case "uiget":
+                        {
+                            value = configurableUC.Get(controlname);
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = "uiget",
+                                ["control"] = controlname,
+                                ["value"] = value,
+                            };
+
+                            server.Send(reply);
+                        }
+                        break;
+                    case "uisuspend":
+                        {
+                            if (!configurableUC.Suspend(controlname))
+                                Log($"PythonPanel suspend unknown control");
+                        }
+                        break;
+                    case "uiresume":
+                        {
+                            if (!configurableUC.Resume(controlname))
+                                Log($"PythonPanel resume unknown control");
+                        }
+                        break;
+                    case "uiset":
+                    case "uisetescape":
+                        {
+                            if (controlname.HasChars() && value != null)
+                                configurableUC.Set(controlname, value, request == "uisetescape");
+                        }
+                        break;
+                    case "uiaddtext":
+                        {
+                            if (controlname.HasChars() && value != null)
+                                configurableUC.AddText(controlname, value);
+                        }
+                        break;
+                    case "uiadd":
+                        {
+                            JArray controldef = json["controldefinitions"].Array();
+                            if (controldef?.IsArray ?? false)
+                            {
+                                foreach (string str in controldef)
+                                {
+                                    System.Diagnostics.Debug.WriteLine($"Make new control {str}");
+                                    string res = str != null ? configurableUC.Add(str) : "Bad string";
+                                    if (res != null)
+                                        Log($"PythonPanel error making new control: {str}");
+                                }
+
+                                configurableUC.UpdateEntries();
+                            }
+                            else
+                                Log($"PythonPanel error making new control: missing control array");
+
+                        }
+                        break;
+                    case "uiremove":
+                        {
+                            JArray controldef = json["controllist"].Array();
+                            if (controldef?.IsArray ?? false)
+                            {
+                                foreach (string str in controldef.EmptyIfNull())
+                                {
+                                    if (str==null || !configurableUC.Remove(str))
+                                        Log($"PythonPanel error removing {str}");
+                                }
+
+                                configurableUC.UpdateEntries();
+                            }
+                            else
+                                Log($"PythonPanel error removing controls: missing control array");
+                        }
+                        break;
+                    case "uiaddsetrows":
+                        {
+                            var changelist = json["changelist"].Array();
+                            string err = changelist != null ? configurableUC.AddSetRows(controlname, changelist) : "No change list";
+                            if (err != null)
+                                Log($"PythonPanel error addsetrows {controlname} : {err}");
+                        }
+                        break;
+                    case "uiinsertcolumns":
+                        {
+                            int pos = json["position"].Int(0);
+
+                            JArray controldef = json["columndefinitions"].Array();
+                            if (controldef?.IsArray ?? false)
+                            {
+                                foreach (JObject col in controldef)
+                                {
+                                    if (col != null)
+                                    {
+                                        string coltype = col["type"].Str();
+                                        string headertext = col["headertext"].Str();
+                                        int fillsize = col["fillsize"].Int(100);
+                                        string sortmode = col["sortmode"].Str("Alpha");
+                                        if (!configurableUC.InsertColumn(controlname, pos++, coltype, headertext, fillsize, sortmode))
+                                            Log($"PythonPanel error insertcolumns {controlname}");
+                                    }
+                                }
+                            }
+                            else
+                                Log($"PythonPanel error insertcolumns {controlname} no columns");
+                        }
+                        break;
+                    case "uiremovecolumns":
+                        {
+                            int pos = json["position"].Int(0);
+                            int count = json["count"].Int(1);
+                            if (!configurableUC.RemoveColumns(controlname,pos,count))
+                                Log($"PythonPanel error removecolumns {controlname}");
+                        }
+                        break;
+                    case "uirightclickmenu":
+                        {
+                            try
+                            {
+                                string[] tags = json["tags"].Array().Select(x => x.Str()).ToArray();        // could easily except
+                                string[] text = json["text"].Array().Select(x => x.Str()).ToArray();
+                                if (tags.Length != text.Length)
+                                    throw new Exception();
+                                if ( !configurableUC.SetRightClickMenu(controlname, tags, text))
+                                    Log($"PythonPanel error rightclickmenu unknown control");
+                            }
+                            catch
+                            {
+                                Log($"PythonPanel error rightclickmenu missing fields");
+                            }
+                        }
+                        break;
+                    case "uigetcolumnssetting":
+                        {
+                            JToken tk = (JToken)configurableUC.GetDGVColumnSettings(controlname);
+                            if ( tk != null)
+                            {
                                 JObject reply = new JObject
                                 {
-                                    ["responsetype"] = "uiget",
+                                    ["responsetype"] = request,
                                     ["control"] = controlname,
-                                    ["value"] = value,
+                                    ["settings"] = tk,
                                 };
+                                server.Send(reply);
+                            }
+                            else
+                                Log($"PythonPanel error getcolumnsetting unknown control");
 
-                                SendMessage(reply);
-                            }
-                            break;
-                        case "uiset":
-                        case "uisetescape":
+                        }
+                        break;
+                    case "uisetcolumnssetting":
+                        {
+                            JToken tk = json["settings"];
+                            if ( tk == null || !configurableUC.SetDGVColumnSettings(controlname,tk))
+                                Log($"PythonPanel error setcolumnsetting missing data or unknown control");
+                         }
+                        break;
+                    case "uisetdgvsetting":
+                        {
+                            bool? cr = json["columnreorder"].BoolNull();
+                            bool? pcww = json["percolumnwordwrap"].BoolNull();
+                            bool? headervis = json["allowheadervisibility"].BoolNull();
+                            bool? srs = json["singlerowselect"].BoolNull();
+                            if (cr.HasValue && pcww.HasValue && headervis.HasValue && srs.HasValue &&
+                                        configurableUC.SetDGVSettings(controlname, cr.Value, pcww.Value, headervis.Value, srs.Value))
                             {
-                                string controlname = json["control"].Str();
-                                string value = json["value"].Str();
-                                if (controlname.HasChars() && value != null)
-                                    configurableUC.Set(controlname, value, request == "uisetescape");
+
                             }
-                            break;
-                        default:
-                            Log($"ERROR Unknown request from client {request}");
-                            break;
-                    }
+                            else
+                                Log($"PythonPanel error setdgvsetting missing data or unknown control");
+                        }
+                        break;
+                    case "uisetwordwrap":
+                        {
+                            bool? ww = json["wordwrap"].BoolNull();
+                            if (ww.HasValue && configurableUC.SetWordWrap(controlname,ww.Value))
+                            {
+
+                            }
+                            else
+                                Log($"PythonPanel error setwordwrap missing data or unknown control");
+                        }
+                        break;
+                    case "uiclear":
+                        {
+                            if (!configurableUC.Clear(controlname))
+                                Log($"PythonPanel error clearing {controlname}");
+                        }
+                        break;
+                    case "uiremoverows":
+                        {
+                            int rowstart = json["rowstart"].Int();
+                            int count = json["count"].Int();
+                            int ret = configurableUC.RemoveRows(controlname, rowstart, count);
+                            if ( ret < 0 )
+                                Log($"PythonPanel error removing rows {controlname}");
+                        }
+                        break;
+                    case "uienable":
+                        {
+                            bool state = json["state"].Bool(false);
+                            if (!configurableUC.SetEnable(controlname, state))
+                                Log($"PythonPanel error enable state {controlname}");
+                        }
+                        break;
+                    case "uivisible":
+                        {
+                            bool state = json["state"].Bool(false);
+                            if (!configurableUC.SetVisible(controlname, state))
+                                Log($"PythonPanel error visible state {controlname}");
+                        }
+                        break;
+                    case "uiposition":
+                        {
+                            if (!configurableUC.SetPosition(controlname, new Point(json["x"].Int(), json["y"].Int())))
+                                Log($"PythonPanel error position {controlname}");
+
+                        }
+                        break;
+                    case "uisize":
+                        {
+                            if (!configurableUC.SetSize(controlname, new Size(json["width"].Int(), json["height"].Int())))
+                                Log($"PythonPanel error size {controlname}");
+                        }
+                        break;
+                    case "uiclosedropdownbutton":
+                        {
+                            configurableUC.CloseDropDown();
+                        }
+                        break;
+
+                    case "uimessagebox":
+                        {
+                            if (Enum.TryParse<MessageBoxButtons>(json["buttons"].Str(), true, out MessageBoxButtons buttons))
+                            {
+                                if (Enum.TryParse<MessageBoxIcon>(json["icon"].Str(), true, out MessageBoxIcon icon))
+                                {
+                                    string message = json["message"].Str();
+                                    DialogResult res = ExtendedControls.MessageBoxTheme.Show(this.FindForm(), message, json["caption"].Str(), buttons, icon);
+                                    JObject reply = new JObject
+                                    {
+                                        ["responsetype"] = request,
+                                        ["message"] = message,
+                                        ["response"] = res.ToString(),
+                                    };
+                                    server.Send(reply);
+                                }
+                            }
+                        }
+                        break;
+
+
+                    case "runactionprogram":
+                        {
+                            Variables vars = new Variables();
+                            if (json.Contains("variables"))
+                                vars.FromJSON(json["variables"], "");
+
+                            string progname = json["name"].Str("??");
+
+                            bool success = actioncontroller.RunProgram(progname, vars, false);
+
+                            if ( !success )
+                            {
+                                JObject reply = new JObject
+                                {
+                                    ["responsetype"] = request,
+                                    ["name"] = progname,
+                                    ["status"] = "Program not found",
+                                };
+                                server.Send(reply);
+                            }
+                        }
+                        break;
+
+                    case "showlog":
+                        SelectView(false);
+                        break;
+
+                        //missions
+                        //commodities
+                        //    shipyard
+
+                    default:
+                        Log($"ERROR Unknown request from client {request}");
+                        break;
                 }
-                else
-                    Log("ERROR Server Received bad JSON:" + clientsend);
             }
         }
 
-        private void Monitor_Disconnected(object sender, NetMQMonitorSocketEventArgs e)
+
+        HistoryEntry GetHE(int entry)
         {
-            System.Diagnostics.Debug.Assert(Application.MessageLoop);
-            Log("Python Disconnected");
+            HistoryList hl = DiscoveryForm.History;
+            if (entry < 0 || entry >= hl.Count)
+                entry = hl.Count - 1;
+            return hl[entry];
         }
         #endregion
 
         #region UI Events
 
-        private void ConfigurableUC_TriggerAdv(string dialogname, string controlnameevent, object eventdata, object callertag)
+        private void ConfigurableUC_TriggerAdv(string dialogname, string controlnameevent, object eventdata, object eventdata2, object callertag)
         {
             int firstcolon = controlnameevent.IndexOf(':');
 
@@ -399,28 +920,33 @@ namespace EDDiscovery.UserControls
 
             if ( firstcolon == -1)
             {
-                reply["controlname"] = controlnameevent;
+                reply["control"] = controlnameevent;
             }
             else
             {
-                reply["controlname"] = controlnameevent.Substring(0, firstcolon);
+                reply["control"] = controlnameevent.Substring(0, firstcolon);
                 int secondcolon = controlnameevent.IndexOf(':', firstcolon + 1);
                 if ( secondcolon == -1 )
                     reply["event"] = controlnameevent.Substring(firstcolon + 1);
                 else
                 {
-                    reply["event"] = controlnameevent.Substring(firstcolon + 1,secondcolon-firstcolon-1);
+                    reply["event"] = controlnameevent.Substring(firstcolon + 1, secondcolon - firstcolon - 1);
                     reply["data"] = controlnameevent.Substring(secondcolon + 1);
-               }
+                }
             };
 
-            if ( eventdata != null)
+            if (eventdata != null)
             {
                 JToken tk = JToken.FromObject(eventdata, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
                 reply["value"] = tk;
             }
+            if (eventdata2 != null)
+            {
+                JToken tk = JToken.FromObject(eventdata2, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                reply["value2"] = tk;
+            }
 
-            SendMessage(reply);
+            server.Send(reply);
         }
 
         #endregion
@@ -433,108 +959,164 @@ namespace EDDiscovery.UserControls
                 ["responsetype"] = "terminate",
             };
 
-            SendMessage(reply);
+            server.Send(reply);
         }
 
         private void Discoveryform_OnHistoryChange()
         {
-            JObject reply = new JObject
+            if (server != null)
             {
-                ["responsetype"] = "historyload",
-                ["historylength"] = DiscoveryForm.History.Count,
-                ["commander"] = DiscoveryForm.History.CommanderName(),
-            };
-            SendMessage(reply);
+                JObject reply = new JObject
+                {
+                    ["responsetype"] = "historyload",
+                    ["historylength"] = DiscoveryForm.History.Count,
+                    ["commander"] = DiscoveryForm.History.CommanderName(),
+                };
 
+                server.Send(reply);
+            }
         }
 
         // travel history changed cursor
         public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
-            JObject reply = new JObject
+            if (server != null)
             {
-                ["responsetype"] = "travelhistorymoved",
-                ["row"] = he.Index,
-            };
+                JObject reply = new JObject
+                {
+                    ["responsetype"] = "travelhistorymoved",
+                    ["row"] = he.Index,
+                };
 
-            SendMessage(reply);
+                server.Send(reply);
+            }
         }
 
+        // new unfiltered journal entry
         private void DiscoveryForm_OnNewJournalEntryUnfiltered(EliteDangerousCore.JournalEntry obj)
         {
-            JToken jo = JToken.FromObject(obj, true, new Type[] { typeof(Bitmap), typeof(Image)}, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-
-            JObject reply = new JObject
+            if (server != null)
             {
-                ["responsetype"] = "journalpush",
-                ["commander"] = EliteDangerousCore.EDCommander.Current.Name,
-                ["journalEntry"] = jo,
-            };
+                JToken jo = JToken.FromObject(obj, true, new Type[] { typeof(Bitmap), typeof(Image) }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
 
-            SendMessage(reply);
+                JObject reply = new JObject
+                {
+                    ["responsetype"] = "journalpush",
+                    ["commander"] = EliteDangerousCore.EDCommander.Current.Name,
+                    ["journalEntry"] = jo,
+                };
 
-            throw new NotImplementedException();
+                server.Send(reply);
+            }
         }
 
+        // new history list entry
         private void Discoveryform_OnNewEntry(EliteDangerousCore.HistoryEntry he)
         {
-            JObject reply = new JObject
+            if (server != null)
             {
-                ["responsetype"] = "historypush",
-                ["firstrow"] = he.Index,
-                ["length"] = 1,
-                ["commander"] = EliteDangerousCore.EDCommander.Current.Name,
-                ["Rows"] = new JArray()
-            };
 
-            JToken jo = JToken.FromObject(he, true, new Type[] { typeof(Bitmap), typeof(Image),
-                                                    typeof(EliteDangerousCore.EDCommander) }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-            reply["Rows"].Array().Add(jo);
-            jo["Info"] = he.GetInfo();
-            jo["Detailed"] = he.GetDetailed();
-            SendMessage(reply);
+                JObject reply = new JObject
+                {
+                    ["responsetype"] = "historypush",
+                    ["firstrow"] = he.Index,
+                    ["length"] = 1,
+                    ["commander"] = EliteDangerousCore.EDCommander.Current.Name,
+                    ["Rows"] = new JArray()
+                };
+
+                JToken jo = JToken.FromObject(he, true, new Type[] { typeof(Bitmap), typeof(Image),
+                                                        typeof(EliteDangerousCore.EDCommander) }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                reply["Rows"].Array().Add(jo);
+
+                jo["Info"] = he.GetInfo();      // add in these extra coded fields
+                jo["Detailed"] = he.GetDetailed();
+
+                server.Send(reply);
+            }
         }
 
         private void Discoveryform_OnNewUIEvent(EliteDangerousCore.UIEvent uievent)
         {
-            QuickJSON.JToken t = QuickJSON.JToken.FromObject(uievent, ignoreunserialisable: true,
+            if (server != null)
+            {
+                QuickJSON.JToken t = QuickJSON.JToken.FromObject(uievent, ignoreunserialisable: true,
                                                             ignored: new Type[] { typeof(Bitmap), typeof(Image) },
                                                             maxrecursiondepth: 3);
-        }
 
-        private void Discoveryform_OnThemeChanged()
-        {
-            var th = ExtendedControls.Theme.Current;
-            var jo = JObject.FromObject(th, true, maxrecursiondepth: 5, membersearchflags: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                JObject reply = new JObject
+                {
+                    ["responsetype"] = "edduievent",
+                    ["type"] = uievent.GetType().Name,
+                    ["event"] = t,
+                };
+
+                server.Send(reply);
+            }
         }
 
         private void Discoveryform_ScreenShotCaptured(string file, Size size)
         {
+            if (server != null)
+            {
+                JObject reply = new JObject
+                {
+                    ["responsetype"] = "screenshot",
+                    ["outfile"] = file,
+                    ["width"] = size.Width,
+                    ["height"] = size.Height,
+                };
+
+                server.Send(reply);
+            }
         }
 
         private void Discoveryform_OnNewTarget(object obj)
         {
-            var hastarget = EliteDangerousCore.DB.TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
+            if (server != null)
+            {
+                var hastarget = EliteDangerousCore.DB.TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
+
+                if (hastarget)
+                {
+                    JObject reply = new JObject
+                    {
+                        ["responsetype"] = "newtarget",
+                        ["system"] = name,
+                        ["X"] = x,
+                        ["Y"] = y,
+                        ["Z"] = z,
+                    };
+
+                    server.Send(reply);
+                }
+            }
         }
 
         #endregion
 
         #region Helpers
 
-        private void SendMessage(JToken reply)
+        public void SelectView(bool dialog)
         {
-            if (!server.TrySendFrame(reply.ToString()))
-                Log($"ERROR Server failed to send {reply.ToString()}");
+            if (configurableUC.Visible != dialog)
+            {
+                panelLog.Visible = !dialog;
+                configurableUC.Visible = dialog;
+            }
         }
 
         public void Log(string logtext)
         {
             extRichTextBoxErrorLog.AppendText(logtext + Environment.NewLine);
-           configurableUC.Visible = false;
-           extRichTextBoxErrorLog.Visible = true;
-           extRichTextBoxErrorLog.Dock = DockStyle.Fill;
+            SelectView(false);
         }
 
+        private void extButtonViewDialog_Click(object sender, EventArgs e)
+        {
+            SelectView(true);
+        }
         #endregion
+
     }
 }

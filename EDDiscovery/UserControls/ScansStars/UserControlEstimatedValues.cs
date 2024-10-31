@@ -139,7 +139,7 @@ namespace EDDiscovery.UserControls
             {
                 long totalvalue = 0;
 
-                foreach (var bodies in last_sn.Bodies)
+                foreach (var bodies in last_sn.Bodies())
                 {
                     // we have scan data, and a name, and either edsm spansh set or no web bordies
 

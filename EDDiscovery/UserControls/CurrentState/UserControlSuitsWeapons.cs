@@ -98,7 +98,7 @@ namespace EDDiscovery.UserControls
 
             if (last_weapons >= 0)
             {
-                var weaponlist = DiscoveryForm.History.WeaponList.Weapons.Get(last_weapons,x => x.Sold == false); // get unsold weapons
+                var weaponlist = DiscoveryForm.History.WeaponList.weapons.Get(last_weapons,x => x.Sold == false); // get unsold weapons
 
                 foreach (var w in weaponlist)
                 {

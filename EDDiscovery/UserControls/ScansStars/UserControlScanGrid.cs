@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            System.Diagnostics.Debug.WriteLine($"Scan grid update display at {he.System.Name} found with {systemnode.Bodies.Count()} bodies");
+            System.Diagnostics.Debug.WriteLine($"Scan grid update display at {he.System.Name} found with {systemnode.Bodies().Count()} bodies");
 
             if (redrawall || !samesys)
             {
@@ -160,7 +160,7 @@ namespace EDDiscovery.UserControls
 
             long organicvaluetotal = 0;     // total of organic values
 
-            var bodynodes = systemnode.Bodies.ToList(); // flatten tree of scan nodes to prepare for listing
+            var bodynodes = systemnode.Bodies().ToList(); // flatten tree of scan nodes to prepare for listing
             foreach (StarScan.ScanNode sn in bodynodes)
             {
                 // define strings to be populated

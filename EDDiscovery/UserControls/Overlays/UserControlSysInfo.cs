@@ -478,7 +478,7 @@ namespace EDDiscovery.UserControls
                 if (he.isTravelling)
                 {
                     textBoxTravelDist.Text = he.TravelledDistance.ToString("0.0") + "ly";
-                    textBoxTravelTime.Text = he.TravelledSeconds.ToString();
+                    textBoxTravelTime.Text = he.TravelledTimeSpan().ToString();
                     textBoxTravelJumps.Text = he.TravelledJumps.ToString();
                 }
                 else

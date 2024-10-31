@@ -419,7 +419,7 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        foreach( var bodies in sysnode.Bodies)
+                        foreach( var bodies in sysnode.Bodies())
                         {
                             System.Diagnostics.Debug.WriteLine($"..Compass no current body processing {bodies.FullName}");
 

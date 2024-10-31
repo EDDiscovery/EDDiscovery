@@ -59,11 +59,12 @@ namespace EDDiscovery.Actions
                 vars[prefix + "BookedTaxi"] = he.Status.BookedTaxi.ToStringIntValue();
                 vars[prefix + "ShipId"] = he.Status.ShipID.ToString(ct);
                 vars[prefix + "IndexOf"] = he.EntryNumber.ToString(ct);
+                vars[prefix + "Index"] = he.Index.ToString(ct);
 
                 vars[prefix + "Credits"] = he.Credits.ToString(ct);
 
                 vars[prefix + "TravelledDistance"] = he.TravelledDistance.ToStringInvariant("0.0");
-                vars[prefix + "TravelledSeconds"] = he.TravelledSeconds.ToString();
+                vars[prefix + "TravelledSeconds"] = he.TravelledTimeSec.ToString();
                 vars[prefix + "IsTravelling"] = he.isTravelling.ToStringIntValue();
                 vars[prefix + "TravelledJumps"] = he.TravelledJumps.ToStringInvariant();
                 vars[prefix + "TravelledMissingJumps"] = he.TravelledMissingJumps.ToStringInvariant();

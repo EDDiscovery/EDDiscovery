@@ -223,6 +223,16 @@ namespace EDDiscovery
 
         #endregion
 
+        #region Closing panels
+
+        public void CloseAllTabsPopouts(PanelInformation.PanelIDs p)
+        {
+            tabControlMain.CloseAllTabs(p);
+            PopOuts.CloseAllPopouts(p);
+        }
+
+        #endregion
+
         #region Add Ons
 
         public bool AddNewMenuItemToAddOns(string menu, string menutext, string icon, string menuname, string packname)
@@ -523,10 +533,12 @@ namespace EDDiscovery
 
         #region AC
 
-        public Actions.ActionController MakeAC(string appfolder, string manageappfolder, string otherinstalledfilesfolder, Action<string> logger)
+        public Actions.ActionController MakeAC(Form uiform, string appfolder, string manageappfolder, string otherinstalledfilesfolder, string globalvars, Action<string> logger)
         {
-            return new Actions.ActionController(appfolder, manageappfolder,otherinstalledfilesfolder,
-                                                this, audioqueuewave, audioqueuespeech, speechsynth, frontierbindings, EDDOptions.Instance.NoSound,
+            return new Actions.ActionController(this, uiform,
+                                                appfolder, manageappfolder,otherinstalledfilesfolder, 
+                                                globalvars,
+                                                audioqueuewave, audioqueuespeech, speechsynth, frontierbindings, EDDOptions.Instance.NoSound,
                                                 logger,
                                                 this.Icon, new Type[] { });
         }

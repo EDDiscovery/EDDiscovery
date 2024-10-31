@@ -223,7 +223,7 @@ namespace EDDiscovery.UserControls
                         }
                         if (!last_he.Status.IsLandedInShipOrSRV && last_sn != null)
                         {
-                            var landables = last_sn.Bodies.Where(b => b.ScanData != null && (!b.ScanData.IsWebSourced || useEDSMForSystemAvailability) &&
+                            var landables = last_sn.Bodies().Where(b => b.ScanData != null && (!b.ScanData.IsWebSourced || useEDSMForSystemAvailability) &&
                                                                  b.ScanData.HasMaterials && b.ScanData.Materials.ContainsKey(c.Item1.Details.FDName));
                             if (landables.Count() > 0)
                             {

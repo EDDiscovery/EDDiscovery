@@ -171,7 +171,7 @@ namespace EDDiscovery.UserControls
             foreach (Tuple<ShipYard, ShipYard.ShipyardItem> i in shiplist)
             {
                 double distance = DiscoveryForm.History.DistanceCurrentTo(i.Item1.StarSystem);
-                string dte = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(i.Item1.Datetime).ToString();
+                string dte = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(i.Item1.DateTimeUTC).ToString();
                 object[] rowobj = { dte, i.Item1.Location, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), i.Item2.ShipPrice.ToString("N0") + "cr" };
                 dataGridViewShips.Rows.Add(rowobj);
             }

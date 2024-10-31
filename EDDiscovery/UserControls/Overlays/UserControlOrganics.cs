@@ -274,7 +274,7 @@ namespace EDDiscovery.UserControls
                 {
                     foreach (var starkvp in syskvp.Value.StarNodes)
                     {
-                        foreach (var body in starkvp.Value.Bodies)
+                        foreach (var body in starkvp.Value.Bodies())
                         {
                             if (body.Organics != null)
                             {

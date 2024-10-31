@@ -157,7 +157,7 @@ namespace EDDiscovery.WebServer
                 travel["Dist"] = he.TravelledDistance.ToStringInvariant("0.0");
                 travel["Jumps"] = he.TravelledJumps.ToStringInvariant();
                 travel["UnknownJumps"] = he.TravelledMissingJumps.ToStringInvariant();
-                travel["Time"] = he.TravelledSeconds.ToString();
+                travel["Time"] = he.TravelledTimeSpan().ToString();
             }
             else
                 travel["Time"] = travel["Jumps"] = travel["Dist"] = "";

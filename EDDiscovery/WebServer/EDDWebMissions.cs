@@ -117,7 +117,7 @@ namespace EDDiscovery.WebServer
                 ms.Mission.Faction,
                 ms.DestinationSystemStationSettlement(),
                 ms.Mission.TargetFaction,
-                previousmissions ? ms.StateText : ms.Mission.Reward.GetValueOrDefault().ToString("N0"),
+                previousmissions ? ms.StateText() : ms.Mission.Reward.GetValueOrDefault().ToString("N0"),
                 ms.MissionInfoColumn()
             };
 

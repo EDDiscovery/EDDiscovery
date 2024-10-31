@@ -15,6 +15,7 @@
 using ActionLanguage;
 using BaseUtils;
 using EliteDangerousCore;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -37,29 +38,23 @@ namespace EDDiscovery.Actions
         public AudioExtensions.IVoiceRecognition VoiceRecon { get; }
         public BindingsFile FrontierBindings { get; }
 
-        private string actfolder;       // where the action files are stored
-        private string approotfolder;   // folder location root where to install stuff into
-        private string otherinstalledfilesfolder;   // other installed files
-        private string errorlist;       // set on Reload, use to display warnings at right point
-        private string lasteditedpack;
-        private DirectInputDevices.InputDeviceList inputdevices;
-        private Actions.ActionsFromInputDevices inputdevicesactions;
-        private Type[] keyignoredforms;
-        private Action<string> logLineOut;
-
-        public ActionController(string actfolder,       // where the action files are located, for reload
+        public ActionController(
+                                EDDiscoveryForm eddiscoveryform,        // need this for access to data
+                                Form uiform,        // what UI form is the parent
+                                string actfolder,       // where the action files are located, for reload
                                 string approotfolder,  // null if don't allow management, else root for Manage/Edit Addons
                                 string otherinstalledfilesfolder, // null if don't do it
-                                EDDiscoveryForm frm, 
+                                string globalvars,      // null if none, else load these global vars
                                 AudioExtensions.AudioQueue wave, AudioExtensions.AudioQueue speech, AudioExtensions.SpeechSynthesizer synth, 
-                                BindingsFile frontierbindings, bool nosound,
+                                BindingsFile frontierbindings, 
+                                bool nosound,
                                 Action<string> logger,
-                                System.Drawing.Icon ic, Type[] keyignoredforms = null) : base(frm, ic)
+                                System.Drawing.Icon ic, Type[] keyignoredforms = null) : base(uiform, ic)
         {
             this.actfolder = actfolder;
             this.approotfolder = approotfolder;
             this.otherinstalledfilesfolder = otherinstalledfilesfolder;
-            this.DiscoveryForm = frm;
+            this.DiscoveryForm = eddiscoveryform;
             this.keyignoredforms = keyignoredforms;
             this.logLineOut = logger;
 
@@ -74,7 +69,7 @@ namespace EDDiscovery.Actions
             // we own the voice recon
 #if !NO_SYSTEM_SPEECH
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5 && !nosound)
-                VoiceRecon = AudioHelper.GetVoiceRecognition(frm.LogLineHighlight);
+                VoiceRecon = AudioHelper.GetVoiceRecognition(eddiscoveryform.LogLineHighlight);
             else
 #endif
                 VoiceRecon = new AudioExtensions.VoiceRecognitionDummy();
@@ -82,7 +77,8 @@ namespace EDDiscovery.Actions
             VoiceRecon.SpeechRecognised += Voicerecon_SpeechRecognised;
             VoiceRecon.SpeechNotRecognised += Voicerecon_SpeechNotRecognised;
 
-            LoadPeristentVariables(new Variables(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("UserGlobalActionVars", ""), Variables.FromMode.MultiEntryComma));
+            if ( globalvars != null)
+                LoadPeristentVariables(new Variables(globalvars, Variables.FromMode.MultiEntryComma));
 
             lasteditedpack = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ActionPackLastFile", "");
 
@@ -122,6 +118,47 @@ namespace EDDiscovery.Actions
             AdditionalChecks(ref errorlist);
 
             actionrun = new ActionRun(this, actionfiles);        // this is the guy who runs the programs (default async)
+        }
+
+        // Call this to add any PanelConfig panels defined by active action files to the panel IDs list
+        public void CreatePanels()
+        {
+            foreach( ActionFile af in actionfiles.Enumerable)
+            {
+                if (af.Enabled && af.InstallationVariables.TryGet("PlugInPanel", out string cf))
+                {
+                    StringParser sp = new StringParser(cf);
+
+                    string id = sp.NextQuotedWordComma();
+                    string type = sp.NextQuotedWordComma();
+                    string wintitle = sp.NextQuotedWordComma();
+                    string refname = sp.NextQuotedWordComma();
+                    string description = sp.NextQuotedWordComma();
+                    string iconname = sp.NextQuotedWordComma();
+                    string path = sp.NextQuotedWord();
+                    string iconpath = null;
+                    if (path.HasChars())
+                    {
+                        path = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, path);
+                        iconpath = System.IO.Path.Combine(path, iconname);
+                    }
+
+                    Type ptype = type.HasChars() ? Type.GetType(type) : null;
+
+                    if ( ptype!=null && id.HasChars() && wintitle.HasChars() && refname.HasChars() && description.HasChars() && path.HasChars() && System.IO.File.Exists(iconpath))
+                    {
+                        var image = System.Drawing.Image.FromFile(iconpath);
+
+                        // registered panels, search the stored list, see if there, then it gets the index, else its added to the list
+                        int panelid = EDDConfig.Instance.FindAddUserPanelID(id);
+
+                        PanelInformation.AddPanel(panelid,
+                                            ptype,       // driver panel containing the UC to draw into, responsible for running action scripts/talking to the plugin
+                                            path,
+                                            wintitle, refname, description, image);
+                    }
+                }
+            }
         }
 
         public void CheckWarn()
@@ -371,7 +408,7 @@ namespace EDDiscovery.Actions
             {
                 if (actionfiles.Get(r, StringComparison.InvariantCultureIgnoreCase) == null)
                 {
-                    actionfiles.CreateSet(r, actfolder);
+                    actionfiles.AddNewFile(r, actfolder);
                 }
                 else
                     ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Duplicate name", "Create Action File Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
@@ -426,6 +463,7 @@ namespace EDDiscovery.Actions
                     AudioQueueWave?.StopAll();
 
                     ReLoad(false);      // reload from disk, new ones if required, refresh old ones and keep the vars
+                    CreatePanels();
                     CheckWarn();
 
                     string changes = "", updates="", removes="";
@@ -581,10 +619,10 @@ namespace EDDiscovery.Actions
         public int ActionRun(ActionEvent ev, 
                                 HistoryEntry he = null, 
                                 Variables additionalvars = null,
-                                string flagstart = null,                    //set flagstart to be the first flag of the actiondata..
+                                string actionvarnamepresent = null,                    // action var present, if not null, must be there
                                 bool now = false)       
         {
-            List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.TriggerName, flagstart);      // look thru all actions, find matching ones
+            List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.TriggerName, actionvarnamepresent);      // look thru all actions, find matching ones
 
             if (ale.Count > 0)
             {
@@ -613,23 +651,9 @@ namespace EDDiscovery.Actions
             return ale.Count;
         }
 
-        public bool ActionRunProgram(string packname, string programname, Variables runvars, bool now = false)
-        {
-            Tuple<ActionFile, ActionProgram> found = actionfiles.FindProgram(packname, programname);
-
-            if (found != null)
-            {
-                actionrun.Run(now, found.Item1, found.Item2, runvars);
-                actionrun.Execute();       // See if needs executing
-
-                return true;
-            }
-            else
-                return false;
-        }
-
         #endregion
 
+        // generate the start up events and configure the keys
         public void onStartup()     // on main thread
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
@@ -639,24 +663,27 @@ namespace EDDiscovery.Actions
             ActionConfigureKeys();          // reload keys
         }
 
-        public void HoldTillProgStops()
+        // wait until action program finishes
+        public void HoldTillProgStops(int timeout = 10000)
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
-            actionrun.WaitTillFinished(10000, true);
+            actionrun.WaitTillFinished(timeout, true);
         }
 
-        public void CloseDown()
+        // close down, return global variables to store
+        public string CloseDown()
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("UserGlobalActionVars", PersistentVariables.ToString());
-
             inputdevicesactions.Stop();
             inputdevices.Clear();
 
             VoiceRecon.Close();
 
             System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " AC Closedown complete");
+
+            return PersistentVariables.ToString();
         }
 
+        // output a log - overridden from core
         public override void LogLine(string s)
         {
             logLineOut.Invoke(s);
@@ -722,6 +749,20 @@ namespace EDDiscovery.Actions
 
             return s;
         }
+
+        #endregion
+
+        #region vars
+
+        private string actfolder;       // where the action files are stored
+        private string approotfolder;   // folder location root where to install stuff into
+        private string otherinstalledfilesfolder;   // other installed files
+        private string errorlist;       // set on Reload, use to display warnings at right point
+        private string lasteditedpack;
+        private DirectInputDevices.InputDeviceList inputdevices;
+        private Actions.ActionsFromInputDevices inputdevicesactions;
+        private Type[] keyignoredforms;
+        private Action<string> logLineOut;
 
         #endregion
 

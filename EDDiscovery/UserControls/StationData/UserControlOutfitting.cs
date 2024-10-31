@@ -178,7 +178,7 @@ namespace EDDiscovery.UserControls
             foreach (var yard in itemlist)
             {
                 double distance = DiscoveryForm.History.DistanceCurrentTo(yard.Item1.StarSystem);
-                string dte = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(yard.Item1.Datetimeutc).ToString();
+                string dte = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(yard.Item1.DateTimeUTC).ToString();
                 string yardname = yard.Item1.Location;
 
                 foreach (var item in yard.Item2)

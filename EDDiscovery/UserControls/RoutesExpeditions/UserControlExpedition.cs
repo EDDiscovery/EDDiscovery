@@ -475,7 +475,7 @@ namespace EDDiscovery.UserControls
                     row.Cells[Stars.Index].Value = sysnode.StarTypesFound(false);
 
                     string info = "";
-                    foreach (var sn in sysnode.Bodies)
+                    foreach (var sn in sysnode.Bodies())
                     {
                         if (sn?.ScanData != null)  // must have scan data..
                         {

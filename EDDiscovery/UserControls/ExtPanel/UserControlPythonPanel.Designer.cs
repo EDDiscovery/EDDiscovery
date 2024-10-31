@@ -45,12 +45,17 @@ namespace EDDiscovery.UserControls
         {
             this.configurableUC = new ExtendedControls.ConfigurableUC();
             this.extRichTextBoxErrorLog = new ExtendedControls.ExtRichTextBox();
+            this.panelLog = new System.Windows.Forms.Panel();
+            this.panelLogToolbar = new System.Windows.Forms.Panel();
+            this.extButtonViewDialog = new ExtendedControls.ExtButton();
+            this.panelLog.SuspendLayout();
+            this.panelLogToolbar.SuspendLayout();
             this.SuspendLayout();
             // 
             // configurableUC
             // 
+            this.configurableUC.BackColor = System.Drawing.SystemColors.ActiveCaption;
             this.configurableUC.DialogResult = System.Windows.Forms.DialogResult.None;
-            this.configurableUC.Dock = System.Windows.Forms.DockStyle.Fill;
             this.configurableUC.Location = new System.Drawing.Point(0, 0);
             this.configurableUC.Name = "configurableUC";
             this.configurableUC.PanelBorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -63,8 +68,9 @@ namespace EDDiscovery.UserControls
             this.extRichTextBoxErrorLog.BorderColor = System.Drawing.Color.Transparent;
             this.extRichTextBoxErrorLog.BorderColorScaling = 0.5F;
             this.extRichTextBoxErrorLog.DetectUrls = true;
+            this.extRichTextBoxErrorLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extRichTextBoxErrorLog.HideScrollBar = true;
-            this.extRichTextBoxErrorLog.Location = new System.Drawing.Point(102, 64);
+            this.extRichTextBoxErrorLog.Location = new System.Drawing.Point(0, 32);
             this.extRichTextBoxErrorLog.Name = "extRichTextBoxErrorLog";
             this.extRichTextBoxErrorLog.ReadOnly = false;
             this.extRichTextBoxErrorLog.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
@@ -82,19 +88,49 @@ namespace EDDiscovery.UserControls
             this.extRichTextBoxErrorLog.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
             this.extRichTextBoxErrorLog.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extRichTextBoxErrorLog.ShowLineCount = false;
-            this.extRichTextBoxErrorLog.Size = new System.Drawing.Size(200, 100);
+            this.extRichTextBoxErrorLog.Size = new System.Drawing.Size(349, 188);
             this.extRichTextBoxErrorLog.TabIndex = 1;
             this.extRichTextBoxErrorLog.TextBoxBackColor = System.Drawing.SystemColors.Control;
             this.extRichTextBoxErrorLog.TextBoxForeColor = System.Drawing.SystemColors.ControlText;
+            // 
+            // panelLog
+            // 
+            this.panelLog.Controls.Add(this.extRichTextBoxErrorLog);
+            this.panelLog.Controls.Add(this.panelLogToolbar);
+            this.panelLog.Location = new System.Drawing.Point(29, 230);
+            this.panelLog.Name = "panelLog";
+            this.panelLog.Size = new System.Drawing.Size(349, 220);
+            this.panelLog.TabIndex = 2;
+            // 
+            // panelLogToolbar
+            // 
+            this.panelLogToolbar.Controls.Add(this.extButtonViewDialog);
+            this.panelLogToolbar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelLogToolbar.Location = new System.Drawing.Point(0, 0);
+            this.panelLogToolbar.Name = "panelLogToolbar";
+            this.panelLogToolbar.Size = new System.Drawing.Size(349, 32);
+            this.panelLogToolbar.TabIndex = 2;
+            // 
+            // extButtonViewDialog
+            // 
+            this.extButtonViewDialog.Location = new System.Drawing.Point(4, 4);
+            this.extButtonViewDialog.Name = "extButtonViewDialog";
+            this.extButtonViewDialog.Size = new System.Drawing.Size(100, 23);
+            this.extButtonViewDialog.TabIndex = 0;
+            this.extButtonViewDialog.Text = "View Dialog";
+            this.extButtonViewDialog.UseVisualStyleBackColor = true;
+            this.extButtonViewDialog.Click += new System.EventHandler(this.extButtonViewDialog_Click);
             // 
             // UserControlPythonPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.extRichTextBoxErrorLog);
+            this.Controls.Add(this.panelLog);
             this.Controls.Add(this.configurableUC);
             this.Name = "UserControlPythonPanel";
-            this.Size = new System.Drawing.Size(496, 224);
+            this.Size = new System.Drawing.Size(1101, 564);
+            this.panelLog.ResumeLayout(false);
+            this.panelLogToolbar.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -103,5 +139,8 @@ namespace EDDiscovery.UserControls
 
         private ExtendedControls.ConfigurableUC configurableUC;
         private ExtendedControls.ExtRichTextBox extRichTextBoxErrorLog;
+        private System.Windows.Forms.Panel panelLog;
+        private System.Windows.Forms.Panel panelLogToolbar;
+        private ExtendedControls.ExtButton extButtonViewDialog;
     }
 }

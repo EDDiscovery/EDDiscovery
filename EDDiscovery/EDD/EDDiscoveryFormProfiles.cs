@@ -43,12 +43,11 @@ namespace EDDiscovery
                     else if (PopOuts.AllowClose() == false)
                         return;
 
-                    tabControlMain.CloseTabList();
+                    tabControlMain.CloseSaveTabs();
                     PopOuts.SaveCurrentPopouts();
                 }
 
                 PopOuts.CloseAllPopouts();
-
 
                 comboBoxCustomProfiles.Enabled = false;                         // and update the selection box, making sure we don't trigger a change
                 comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(id);

@@ -437,7 +437,7 @@ namespace EDDiscovery.UserControls
 
                 bool showjumponium = displayfilters.Contains("jumponium");                
 
-                foreach (StarScan.ScanNode sn in sysnode.Bodies)
+                foreach (StarScan.ScanNode sn in sysnode.Bodies())
                 {
                     if (sn?.ScanData != null )  // must have scan data..
                     {
@@ -815,7 +815,7 @@ namespace EDDiscovery.UserControls
                             he.GetInfo(),
                             he.GetDetailed()??"",
                             he.isTravelling ? he.TravelledDistance.ToString("N1",grd.FormatCulture) : "",
-                            he.isTravelling ? he.TravelledSeconds.ToString("d'd 'h'h 'm'm 's's'",grd.FormatCulture) : "",
+                            he.isTravelling ? he.TravelledTimeSpan().ToString("d'd 'h'h 'm'm 's's'",grd.FormatCulture) : "",
                             he.isTravelling ? he.TravelledJumps.ToString("N0",grd.FormatCulture) : "",
                             he.isTravelling ? he.TravelledMissingJumps.ToString("N0",grd.FormatCulture) : "",
                             };

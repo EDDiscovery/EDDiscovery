@@ -704,7 +704,7 @@ namespace EDDiscovery.UserControls
                 {
                     System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor Process node {sys.Name}");
 
-                    foreach (StarScan.ScanNode sn in systemnode.Bodies.EmptyIfNull().Where(x => x.ScanData != null))        // only nodes with scan data can be treated here
+                    foreach (StarScan.ScanNode sn in systemnode.Bodies().EmptyIfNull().Where(x => x.ScanData != null))        // only nodes with scan data can be treated here
                     {
                         var sd = sn.ScanData;
 

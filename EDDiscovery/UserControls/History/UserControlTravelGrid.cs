@@ -474,7 +474,7 @@ namespace EDDiscovery.UserControls
                                + $"b{he.journalEntry.IsBeta}/h{ he.journalEntry.IsHorizons}/o{ he.journalEntry.IsOdyssey}\r\n"
                                + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship} mp {he.Status.IsInMultiPlayer}\r\n"
                                + $"jcb{he.Status.CurrentBoost} fsds{he.Status.FSDJumpSequence} jm'{he.Status.FSDJumpNextSystemName??"NoJump"}' ad{he.Status.FSDJumpNextSystemAddress??-1}\r\n"
-                               + $"tv{he.isTravelling} dist {he.TravelledDistance} sec {he.TravelledSeconds} jmps {he.TravelledJumps}"
+                               + $"tv{he.isTravelling} dist {he.TravelledDistance} sec {he.TravelledTimeSec} jmps {he.TravelledJumps}"
                                ;
 
                 colDescription = he.journalEntry.EventTypeStr.SplitCapsWord() == he.EventSummary ? he.EventSummary : (he.journalEntry.EventTypeStr + Environment.NewLine + he.EventSummary);
