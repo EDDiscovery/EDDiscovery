@@ -307,6 +307,7 @@ SECTION UserControlJournalGrid
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Saisir un texte pour rechercher dans tous les champs une correspondance"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Envoi les données du tableau dans Excel"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Place le curseur automatiquement sur l'entrée la plus récente quand elle arrive"
+.buttonField_ToolTip: "Filter out entries matching the field selection" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtrer les entrées en fonction du type d'événement"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Supprimer le tri de colonne"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Aller à l'entrée"
@@ -391,7 +392,7 @@ SECTION UserControlMaterialCommodities
 .AllMats: "All Materials" @
 .AllCommods: "All Commodities" @
 .AllMicroresources: "All Microresources" @
-.textBoxItems1.ToolTip: "Count of Items" = UserControlMaterialCommodities.textBoxItems2.ToolTip
+.textBoxItems1.ToolTip: "Count of Items" @
 .textBoxItems2.ToolTip: "Count of Items" => "Qté de marchandise"
 .buttonFilter.ToolTip: "Filter out items" => "Exclure des marchandises"
 .buttonClear.ToolTip: "Set all wanted values to zero" @
@@ -722,8 +723,11 @@ SECTION UserControlScanGrid
 .colClass: "Class" => "Classe"
 .colDistance: "Distance" @
 .colBriefing: "Information" @
+.ColCurValue: "Current Value" @
+.ColMaxValue: "Max Value" @
+.ColOrganics: "Organics Value" @
 .extButtonShowControl.ToolTip: "Configure overall settings" @
-.extButtonHabZones.ToolTip: "Configure hab zone information" @
+.extButtonHighValue_ToolTip: "Set High Value Limit" @
 .MainStar: "Main Star" => "Étoile principale"
 .Mass: "Mass" = UserControlModules.Mass
 .Radius: "Radius" => "Rayon"
@@ -736,14 +740,12 @@ SECTION UserControlScanGrid
 .BC: "This body contains: " => "Ce corps contient: "
 .Ring: "Ring: " => "Anneau: "
 .Belt: "Belt: " => "Ceinture: "
-.Value: "Value" = UserControlModules.Value
 .GS: "This is a green system, as it has all existing jumponium materials available!" @
 .JS: " jumponium materials found in system." @
 .ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Résumé de scan de {0}: {1} étoiles; {2} planètes ({3} telluriques, {4} géantes gazeuses), {5} lunes"
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" => "Ceintures"
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Anneaux"
 .materialsToolStripMenuItem: "Show materials" = UserControlMaterialCommodities.Mats
-.valuesToolStripMenuItem: "Show values" => "Valeurs"
 
 SECTION UserControlSettings
 

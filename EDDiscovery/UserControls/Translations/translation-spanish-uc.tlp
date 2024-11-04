@@ -307,6 +307,7 @@ SECTION UserControlJournalGrid
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Especifica un término de búsqueda para filtrar eventos según el contenido de las columnas. También puedes usar system:<sistema>, body:<cuerpo>, station:<estación> y stationfaction:<\"Facción en control\"> para filtrar eventos que ocurran con esas propiedades."
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Mueva automáticamente el cursor a la última entrada cuando llegue"
+.buttonField_ToolTip: "Filter out entries matching the field selection" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtrar las entradas según el tipo de evento"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Eliminar ordenación de columnas"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Ir a la entrada"
@@ -391,7 +392,7 @@ SECTION UserControlMaterialCommodities
 .AllMats: "All Materials" => "Todos los Materiales"
 .AllCommods: "All Commodities" => "Todas las Mercancías"
 .AllMicroresources: "All Microresources" => "Todos los Microrecursos"
-.textBoxItems1.ToolTip: "Count of Items" = UserControlMaterialCommodities.textBoxItems2.ToolTip
+.textBoxItems1.ToolTip: "Count of Items" @
 .textBoxItems2.ToolTip: "Count of Items" => "Recuento de elementos"
 .buttonFilter.ToolTip: "Filter out items" => "Filtrar elementos"
 .buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
@@ -722,8 +723,11 @@ SECTION UserControlScanGrid
 .colClass: "Class" => "Clase"
 .colDistance: "Distance" = UserControlOutfitting.Distance
 .colBriefing: "Information" = Information
+.ColCurValue: "Current Value" @
+.ColMaxValue: "Max Value" @
+.ColOrganics: "Organics Value" @
 .extButtonShowControl.ToolTip: "Configure overall settings" => "Configurar ajustes generales"
-.extButtonHabZones.ToolTip: "Configure hab zone information" => "Configurar información de la zona habitable"
+.extButtonHighValue_ToolTip: "Set High Value Limit" @
 .MainStar: "Main Star" => "Estrella principal"
 .Mass: "Mass" = UserControlModules.Mass
 .Radius: "Radius" => "Radio"
@@ -736,14 +740,12 @@ SECTION UserControlScanGrid
 .BC: "This body contains: " => "Este cuerpo contiene: "
 .Ring: "Ring: " => "Anillo: "
 .Belt: "Belt: " => "Cinturón: "
-.Value: "Value" = UserControlModules.Value
 .GS: "This is a green system, as it has all existing jumponium materials available!" => "¡Este es un sistema ecológico, ya que tiene disponibles todos los materiales Jumponium existentes!"
 .JS: " jumponium materials found in system." => " materiales de jumponium encontrados en el sistema"
 .ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Resumen de exploración de {0}: {1} estrellas; {2} planetas ({3} terrestres, {4} gigantes gaseosos), {5} lunas"
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" => "Cinturones"
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Anillos"
 .materialsToolStripMenuItem: "Show materials" = UserControlMaterialCommodities.Mats
-.valuesToolStripMenuItem: "Show values" => "Valores"
 
 SECTION UserControlSettings
 
@@ -913,7 +915,7 @@ SECTION UserControlSpanel
 .extButtonShowControl.ToolTip: "Configure overall settings" = UserControlScanGrid.extButtonShowControl.ToolTip
 .extButtonColumns.ToolTip: "Configure columns shown" => "Configurar columnas mostradas"
 .extButtonColumnOrder.ToolTip: "Configure column order" => "Configurar orden de columnas"
-.extButtonHabZones.ToolTip: "Configure hab zone information" = UserControlScanGrid.extButtonHabZones.ToolTip
+.extButtonHabZones.ToolTip: "Configure hab zone information" => "Configurar información de la zona habitable"
 .buttonFilter.ToolTip: "Select what journal events to show" => "Seleccionar qué eventos del diario mostrar"
 .buttonField.ToolTip: "Filter out events" => "Filtrar eventos"
 .extButtonScanShow.ToolTip: "Configure scan display" => "Configurar visualización de escaneo"
