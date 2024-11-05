@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlPythonPanel
+    partial class UserControlZMQPanel
     {
         /// <summary> 
         /// Required designer variable.

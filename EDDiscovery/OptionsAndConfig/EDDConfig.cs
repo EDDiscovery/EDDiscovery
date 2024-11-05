@@ -601,22 +601,20 @@ namespace EDDiscovery
             }
         }
 
-        public string[] DLLUserPanelsRegisteredListSet
+        // return panelid of ID, or -1 if not found. Allow creation if required
+        public int FindCreatePanelID(string id, bool createnew = true)
         {
-            get { return DLLUserPanelsRegisteredList.Split(UserPanelSplitStr, emptyarrayifempty: true); }
-        }
-
-        public int FindAddUserPanelID(string id)
-        {
-            string[] registeredpanels = EDDConfig.Instance.DLLUserPanelsRegisteredListSet;
+            string[] registeredpanels = DLLUserPanelsRegisteredList.Split(UserPanelSplitStr, emptyarrayifempty: true); // split the string
             int indexof = Array.IndexOf(registeredpanels, id);  // find if there
-            int panelid = PanelInformation.DLLUserPanelsStart + (indexof < 0 ? registeredpanels.Length : indexof);       // set panel id, if there, its the index, else its the next one
-            if (indexof == -1)
+            if (indexof >= 0)      // if there
+                return PanelInformation.DLLUserPanelsStart + indexof;   // return it
+            if ( createnew )
             {
                 DLLUserPanelsRegisteredList = DLLUserPanelsRegisteredList.AppendPrePad(id, UserPanelSplitStr);  // write updated string back
+                return PanelInformation.DLLUserPanelsStart + registeredpanels.Length;
             }
 
-            return panelid;
+            return -1;
         }
 
         #endregion

@@ -119,7 +119,7 @@ namespace EDDiscovery.Actions
 
             actionrun = new ActionRun(this, actionfiles);        // this is the guy who runs the programs (default async)
         }
-
+        
         // Call this to add any PanelConfig panels defined by active action files to the panel IDs list
         public void CreatePanels()
         {
@@ -145,20 +145,35 @@ namespace EDDiscovery.Actions
 
                     Type ptype = type.HasChars() ? Type.GetType(type) : null;
 
-                    if ( ptype!=null && id.HasChars() && wintitle.HasChars() && refname.HasChars() && description.HasChars() && path.HasChars() && System.IO.File.Exists(iconpath))
+                    if (ptype != null && id.HasChars() && wintitle.HasChars() && refname.HasChars() && description.HasChars() && path.HasChars() && System.IO.File.Exists(iconpath))
                     {
                         var image = System.Drawing.Image.FromFile(iconpath);
 
                         // registered panels, search the stored list, see if there, then it gets the index, else its added to the list
-                        int panelid = EDDConfig.Instance.FindAddUserPanelID(id);
+                        int panelid = EDDConfig.Instance.FindCreatePanelID(id);
 
-                        PanelInformation.AddPanel(panelid,
+                        DiscoveryForm.AddPanel(panelid,
                                             ptype,       // driver panel containing the UC to draw into, responsible for running action scripts/talking to the plugin
                                             path,
                                             wintitle, refname, description, image);
                     }
+                    else
+                        System.Diagnostics.Trace.WriteLine($"Panel {id} did not install due to missing items");
                 }
             }
+        }
+
+        // is this panel a plug in panel to us, -1 if not, else panel id. Must have been registered by CreatePanels()
+        public int GetPanelID(Variables vars)
+        {
+            if (vars.TryGet("PlugInPanel", out string cf))
+            {
+                StringParser sp = new StringParser(cf);
+                string id = sp.NextQuotedWordComma();
+                if (id.HasChars())
+                    return EDDConfig.Instance.FindCreatePanelID(id, false);
+            }
+            return -1;
         }
 
         public void CheckWarn()
@@ -441,18 +456,26 @@ namespace EDDiscovery.Actions
                 var edversion = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionValues();
                 System.Diagnostics.Debug.Assert(edversion != null);
 
-                dmf.Init("EDDiscovery", manage, this.Icon, edversion, 
+                dmf.Init("EDDiscovery", manage, this.Icon, edversion,
                                             approotfolder,
                                             actfolder,
                                             manage ? otherinstalledfilesfolder : null,      // only on manage!
                                             EDDOptions.Instance.TempDirectory(),
-                                            EDDOptions.Instance.TempMoveDirectory(), Properties.Resources.URLGithubDataDownload , 
-                                            EDDOptions.Instance.CheckGithubFiles );
+                                            EDDOptions.Instance.TempMoveDirectory(), Properties.Resources.URLGithubDataDownload,
+                                            EDDOptions.Instance.CheckGithubFiles);
 
                 dmf.EditActionFile += Dmf_OnEditActionFile;     // only used when manage = false
                 dmf.EditGlobals += Dmf_OnEditGlobals;
                 dmf.CreateActionFile += Dmf_OnCreateActionFile;
                 dmf.CheckActionLoaded += Dmf_checkActionLoaded;
+                dmf.DeleteActionFile += (item) =>
+                {
+                    int panelid = GetPanelID(item.LocalVars);
+                    if (panelid != -1)
+                    {
+                        DiscoveryForm.RemovePanel((PanelInformation.PanelIDs)panelid);
+                    };
+                };
 
                 dmf.ShowDialog(DiscoveryForm);
 

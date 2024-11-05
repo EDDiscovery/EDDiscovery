@@ -293,11 +293,11 @@
     <Compile Include="UserControls\EngineeringSynthesis\UserControlMaterialTrader.Designer.cs">
       <DependentUpon>UserControlMaterialTrader.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ExtPanel\UserControlPythonPanel.cs">
+    <Compile Include="UserControls\ExtPanel\UserControlZMQPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ExtPanel\UserControlPythonPanel.Designer.cs">
-      <DependentUpon>UserControlPythonPanel.cs</DependentUpon>
+    <Compile Include="UserControls\ExtPanel\UserControlZMQPanel.Designer.cs">
+      <DependentUpon>UserControlZMQPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Form\UserControlFormList.cs" />
     <Compile Include="UserControls\Helpers\RouteHelpers.cs" />
@@ -864,8 +864,8 @@
     <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlEngineers.resx">
       <DependentUpon>UserControlEngineers.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ExtPanel\UserControlPythonPanel.resx">
-      <DependentUpon>UserControlPythonPanel.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\ExtPanel\UserControlZMQPanel.resx">
+      <DependentUpon>UserControlZMQPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\ExtPanel\UserControlExtPanel.resx">
       <DependentUpon>UserControlExtPanel.cs</DependentUpon>

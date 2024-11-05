@@ -24,18 +24,21 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlPythonPanel : UserControlCommonBase
+    public partial class UserControlZMQPanel : UserControlCommonBase
     {
         private Actions.ActionController actioncontroller;
         
         private string pluginfolder;
         private JToken config;
         private bool panelgood;
+        private int pluginapiversion;
 
-        private System.Diagnostics.Process pythonprocess;
+        const int APIVERSION = 1;
+
+        private System.Diagnostics.Process exeprocess;
         private NetMQUtils.NetMQJsonServer zmqconnection;
 
-        public UserControlPythonPanel()
+        public UserControlZMQPanel()
         {
             InitializeComponent();
         }
@@ -46,12 +49,18 @@ namespace EDDiscovery.UserControls
         public override void Creation(PanelInformation.PanelInfo p)
         {
             base.Creation(p);
-            System.Diagnostics.Debug.WriteLine($"Python panel create class {p.WindowTitle} db {DBBaseName}");
-            DBBaseName = "PythonPanel" + p.PopoutID + ":";
+            System.Diagnostics.Debug.WriteLine($"MZQ panel create class {p.WindowTitle} db {DBBaseName}");
+            DBBaseName = "MZQPanel" + p.PopoutID + ":";
+
+            // the panel is created with the panel tag info set to the folder where the config file is in
+
             pluginfolder = p.Tag as string;
-            string optfile = Path.Combine(pluginfolder, "config.json");
-            string optcontents =  BaseUtils.FileHelpers.TryReadAllTextFromFile(optfile);
-            config = optcontents != null ? JToken.Parse(optcontents, JToken.ParseOptions.CheckEOL | JToken.ParseOptions.AllowTrailingCommas) : null;
+
+            // ensure we have a good config file, if not, set panelgood to bad and make an empty config JSON
+
+            string configfilepath = Path.Combine(pluginfolder, "config.json");
+            string configfilecontents =  BaseUtils.FileHelpers.TryReadAllTextFromFile(configfilepath);
+            config = configfilecontents != null ? JToken.Parse(configfilecontents, JToken.ParseOptions.CheckEOL | JToken.ParseOptions.AllowTrailingCommas) : null;
             panelgood = config != null;
             if (!panelgood)
                 config = new JToken();
@@ -59,7 +68,7 @@ namespace EDDiscovery.UserControls
 
         public override void Init()
         {
-            System.Diagnostics.Debug.WriteLine($"Python panel Init {DBBaseName}");
+            System.Diagnostics.Debug.WriteLine($"ZMQ panel Init {DBBaseName}");
 
             SelectView(false);      // view log
             configurableUC.Dock = DockStyle.Fill;
@@ -75,19 +84,19 @@ namespace EDDiscovery.UserControls
                 DiscoveryForm.OnNewTarget += Discoveryform_OnNewTarget;
 
                 actioncontroller = DiscoveryForm.MakeAC(this.FindForm(), pluginfolder, null, null, null, Log);     // action files are in this folder, don't allow management
-
-                Log("Awaiting python connecting");
             }
             else
-                Log("Missing python config.json file");
+                Log("Missing panel config.json file");
         }
 
         public override bool SupportTransparency { get { return config["Panel"].I("SupportTransparency").Bool(false); } } 
         public override bool DefaultTransparent { get { return config["Panel"].I("DefaultTransparent").Bool(false);} }
+        
         // gets called before load layout, will need to keep track for initial display
         public override void SetTransparency(bool ison, Color curcol)
         {
         }
+        
         // When the user changes mode
         public override void TransparencyModeChanged(bool on) 
         { 
@@ -97,22 +106,23 @@ namespace EDDiscovery.UserControls
         // the UC sizes and themes itself
         public override void LoadLayout()
         {
-            if (!panelgood)
-                return;
+            if (!panelgood)     // abort in bad state
+                return; 
+
             configurableUC.Init("UC", "");
 
             actioncontroller.ReLoad();
 
             ActionLanguage.ActionFile af = actioncontroller.GetFile("UIInterface");
             if (af != null)
-                af.Dialogs["UC"] = configurableUC;      // add the UC
+                af.Dialogs["UC"] = configurableUC;      // add the UC as a static dialog to the file
             else
-                Log($"Missing UIInterface.act action file in python plugin folder {pluginfolder}");
+                Log($"Missing UIInterface.act action file in ZMQ plugin folder {pluginfolder}");
 
-            // hook any returns from action files to a report to the python
+            // hook any returns from action files to a report to the ZMQ
             actioncontroller.AddReturnCallBack((actf, fname, str) =>
             {
-                System.Diagnostics.Debug.WriteLine($"Return closing return {af.Name} {fname} {str} ");
+                System.Diagnostics.Debug.WriteLine($"ZMQ Panel Return closing return {af.Name} {fname} {str} ");
                 if (zmqconnection != null)
                 {
                     JToken reply = JToken.Parse(str);
@@ -140,47 +150,76 @@ namespace EDDiscovery.UserControls
         // On Initial display, start up the python system
         public override void InitialDisplay()
         {
-            if (!panelgood)
+            if (!panelgood) // abort in bad situation
                 return;
 
-            string modulecheckfile = Path.Combine(pluginfolder, "pymodcheck.py");
-            string pyfile = config["Python"].I("Start").Str();
+            bool good = false;
 
-            // go thru the required modules list, write out a script to install them (ran in user mode, so it will be a per user install)
-            // we only check once after install, the modulecheckfile indicates we checked
+            JObject pythonconfig = config["Python"].Object();       // are we running a python program
+            string startpyfile = pythonconfig?["Start"].StrNull();
 
-            bool good = true;
-
-            JArray ja = config["Python"].I("Modules").Array();
-            if (ja != null && !File.Exists(modulecheckfile))
+            if (pythonconfig != null )      // if its a python launch
             {
-                string[] pycontents = pyfile != null ? BaseUtils.FileHelpers.TryReadAllLinesFromFile(Path.Combine(pluginfolder, pyfile)) : null;
+                string[] pycontents = startpyfile != null ? BaseUtils.FileHelpers.TryReadAllLinesFromFile(Path.Combine(pluginfolder, startpyfile)) : null;
 
-                if (pycontents != null && pycontents.Length > 0)        // we have the py start, get its shebang
+                if (pycontents != null && pycontents.Length > 1)
                 {
-                    string script = pycontents[0] + "\r\n" +       // shebang from start file
-                                "import subprocess\r\nimport sys\r\n" +
-                                "def install(package): subprocess.check_call([sys.executable, \"-m\", \"pip\", \"install\", package])\r\n";
+                    int tries = 3;
+                    while (tries-->0)
+                    {
+                        if (PythonModuleCheck() == false)
+                        {
+                            JArray modlist = pythonconfig["Modules"].Array();
 
-                    foreach (var x in ja)
-                        script += "install('" + x.Str() + "')\r\n";
+                            if (modlist != null)
+                            {
+                                Log($"Module check failed, trying to install modules: {string.Join(", ", modlist)}");
 
-                    File.WriteAllText(modulecheckfile, script);
+                                string modulecheckfile = Path.Combine(pluginfolder, "pymodcheck.py");
+                                string script = pycontents[0] + "\r\n" +       // shebang from start file
+                                            "import subprocess\r\nimport sys\r\n" +
+                                            "def install(package): subprocess.check_call([sys.executable, \"-m\", \"pip\", \"install\", package])\r\n";
 
-                    var output = (Tuple<string, string>)BaseUtils.PythonLaunch.PyExeLaunch(modulecheckfile, "", pluginfolder, null, true);
-                    Log(output.Item1);
-                    Log(output.Item2);
-                    //if (output.Item2.HasChars())   // this is standard error
-                    //{
-                    //    Log("****** Failed to install required python modules ******\r\n\r\n");
-                    //    good = false;
-                    //    BaseUtils.FileHelpers.DeleteFileNoError(modulecheckfile);
-                    //}
+                                foreach (var x in modlist)
+                                {
+                                    script += "print('Install Package ' + '" + x.Str() + "')\r\n";
+                                    script += "install('" + x.Str() + "')\r\n";
+                                }
+
+                                File.WriteAllText(modulecheckfile, script);
+
+                                var output = (Tuple<string, string>)BaseUtils.PythonLaunch.PyExeLaunch(modulecheckfile, "", pluginfolder, null, true);
+
+                                if (output != null)
+                                {
+                                    Log($"Module check ran, gave:");
+                                    Log(output.Item1);
+                                    Log(output.Item2);
+                                }
+                                else
+                                {
+                                    Log($"Module check failed to run. Check your python install. Ensure py.exe is installed and runnable from the command line");
+                                    break;
+                                }
+                            }
+                            else
+                            {
+                                Log("Modules check failed, check your python install. Manually add modules if required");
+                            }
+                        }
+                        else
+                        {
+                            good = true;
+                            break;
+                        }
+                    }
+
+                    if ( tries < 0)
+                        Log("Modules check failed - panel cannot be run. Check your python installation.  Make sure py.exe works from the command line.");
                 }
                 else
                 {
-                    Log($"Cannot read py file {pyfile}");
-                    good = false;
+                    Log($"Missing start file {startpyfile}");
                 }
             }
 
@@ -188,45 +227,59 @@ namespace EDDiscovery.UserControls
             {
                 try
                 {
-                    int socketnumber = EDDOptions.Instance.PythonDebugPort;
+                    int socketnumber = EDDOptions.Instance.ZMQPort;
                     zmqconnection = new NetMQUtils.NetMQJsonServer();
                     zmqconnection.Received += (list) => { 
                         //System.Diagnostics.Debug.WriteLine($"Received {list[0].ToString()}");
                         this.BeginInvoke((MethodInvoker)delegate { HandleClientMessages(list); }); };
 
                     zmqconnection.Accepted += () => { System.Diagnostics.Debug.WriteLine($"Accepted"); };
-                    zmqconnection.Disconnected += () => { System.Diagnostics.Debug.WriteLine($"Disconnected"); this.BeginInvoke((MethodInvoker)delegate { Log("Python Disconnected"); }); };
+                    zmqconnection.Disconnected += () => { System.Diagnostics.Debug.WriteLine($"Disconnected"); this.BeginInvoke((MethodInvoker)delegate { Log("ZMQ Disconnected"); }); };
 
                     string threadname = "NetMQPoller:" + DBBaseName;
                     if (zmqconnection.Init("tcp://localhost", socketnumber, threadname))
                     {
-
-                        // socket numbers <10000 do not launch python, instead you should have the debugger running it ready to connect 
+                        // socket numbers <10000 do not launch the exe, instead you should have the debugger running it ready to connect 
                         if (socketnumber >= 10000)
                         {
-                            pythonprocess = (System.Diagnostics.Process)BaseUtils.PythonLaunch.PyExeLaunch(pyfile, socketnumber.ToStringInvariant(), pluginfolder, null, false);
-
-                            if (pythonprocess == null)
+                            if (startpyfile != null)      // if starting python
                             {
-                                Log($"Cannot launch {pluginfolder} / {pyfile}");
-                                zmqconnection.Close();
+                                bool createnowindow = pythonconfig["CreateNoWindow"].Bool(false);
+
+                                exeprocess = (System.Diagnostics.Process)BaseUtils.PythonLaunch.PyExeLaunch(startpyfile, socketnumber.ToStringInvariant(), pluginfolder, null, false, createnowindow);
+
+                                if (exeprocess == null)
+                                {
+                                    Log($"Cannot launch {pluginfolder} / {startpyfile}");
+                                    zmqconnection.Close();
+                                }
+                                else
+                                {
+                                    EDDOptions.Instance.ZMQPort++;      // python launched, next window gets another port number
+                                    Log("Running plugin, awaiting connection");
+                                }
                             }
                             else
-                                EDDOptions.Instance.PythonDebugPort++;      // python launched, next window gets another port number
+                            {
+                                System.Diagnostics.Debug.Assert(false, "To add exe launch");
+                            }
+                        }
+                        else
+                        {
+                            Log("Running in debug mode, run plugin in your IDE now");
                         }
 
                         configurableUC.TriggerAdv += ConfigurableUC_TriggerAdv;
-
                     }
                     else
                     {
-                        Log($"Server failed to start on socket number {socketnumber} - probably a python panel is hanging around without being closed properly. Close using task manager");
+                        Log($"Server failed to start on socket number {socketnumber} - probably another panel is active without having been closed properly. Close using task manager, close this panel and retry");
                         zmqconnection = null;
                     }
                 }
                 catch (Exception ex)
                 {
-                    Log($"Cannot launch {pluginfolder} / {pyfile} exception {ex}");
+                    Log($"Cannot launch {pluginfolder} exception {ex}");
                     zmqconnection.Close();
                 }
             }
@@ -236,7 +289,7 @@ namespace EDDiscovery.UserControls
         { 
             if ( zmqconnection?.Running ?? false )     // protect against close before server running
             {
-                System.Diagnostics.Debug.WriteLine("Python {DBBaseName} Send terminate");
+                System.Diagnostics.Debug.WriteLine("ZMQ {DBBaseName} Send terminate");
                 SendTerminate();
                 MSTicks ms = new MSTicks(1000);
 
@@ -245,7 +298,7 @@ namespace EDDiscovery.UserControls
                     Application.DoEvents();
                     System.Threading.Thread.Sleep(20);
                 }
-                System.Diagnostics.Debug.WriteLine($"Python {DBBaseName} received exit {exitreceived}");
+                System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} received exit {exitreceived}");
             }
 
             return true;
@@ -253,7 +306,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            System.Diagnostics.Debug.WriteLine($"Python {DBBaseName} panel Closing ");
+            System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} panel Closing ");
 
             if (!panelgood)
                 return;
@@ -267,9 +320,9 @@ namespace EDDiscovery.UserControls
 
             zmqconnection?.Close();
 
-            if (pythonprocess != null && !pythonprocess.HasExited)
+            if (exeprocess != null && !exeprocess.HasExited)
             {
-                pythonprocess.Kill();
+                exeprocess.Kill();
             }
 
             actioncontroller.CloseDown();       // with persistent vars if required
@@ -281,7 +334,7 @@ namespace EDDiscovery.UserControls
 
         private bool exitreceived = false;
 
-        // Message received from python, in UI thread due to thunk above
+        // Message received from plugin, in UI thread due to thunk above
         private async void HandleClientMessages(List<JToken> list)
         {
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
@@ -302,18 +355,20 @@ namespace EDDiscovery.UserControls
                 {
                     case "start":
                         {
+                            pluginapiversion = json["apiversion"].Int(0);
+
                             string curver = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionString();
                             JObject reply = new JObject
                             {
                                 ["responsetype"] = "start",
                                 ["eddversion"] = curver,
-                                ["apiversion"] = 1,
+                                ["apiversion"] = APIVERSION,
                                 ["historylength"] = DiscoveryForm.History.Count,
                                 ["commander"] = commander,
                                 ["config"] = GetSetting("Config", ""),
                             };
                             zmqconnection.Send(reply);
-                            Log($"Python connected with version {json["pythonversion"].Str()}");
+                            Log($"Connected with version {json["version"].Str()} at API {pluginapiversion}");
                             SelectView(true);
                             break;
                         }
@@ -322,13 +377,13 @@ namespace EDDiscovery.UserControls
                         {
                             string reason = json["reason"].Str();
                             if (reason.HasChars())
-                                Log("Python requested termination due to " + reason);
+                                Log("Panel requested termination due to " + reason);
                             string config = json["config"].Str();
                             if (config.HasChars())
                             {
                                 PutSetting("Config", config);
-                                Log($"Python config {config}");
-                                System.Diagnostics.Debug.WriteLine($"Python config {config}");
+                                //Log($"ZMQ config {config}");
+                                System.Diagnostics.Debug.WriteLine($"ZMQ config {config}");
                             }
                             exitreceived = true;
                         }
@@ -626,13 +681,13 @@ namespace EDDiscovery.UserControls
                     case "uisuspend":
                         {
                             if (!configurableUC.Suspend(controlname))
-                                Log($"PythonPanel suspend unknown control");
+                                Log($"Panel suspend unknown control");
                         }
                         break;
                     case "uiresume":
                         {
                             if (!configurableUC.Resume(controlname))
-                                Log($"PythonPanel resume unknown control");
+                                Log($"Panel resume unknown control");
                         }
                         break;
                     case "uiset":
@@ -658,13 +713,13 @@ namespace EDDiscovery.UserControls
                                     System.Diagnostics.Debug.WriteLine($"Make new control {str}");
                                     string res = str != null ? configurableUC.Add(str) : "Bad string";
                                     if (res != null)
-                                        Log($"PythonPanel error making new control: {str}");
+                                        Log($"Panel error making new control: {str}");
                                 }
 
                                 configurableUC.UpdateEntries();
                             }
                             else
-                                Log($"PythonPanel error making new control: missing control array");
+                                Log($"Panel error making new control: missing control array");
 
                         }
                         break;
@@ -676,13 +731,13 @@ namespace EDDiscovery.UserControls
                                 foreach (string str in controldef.EmptyIfNull())
                                 {
                                     if (str==null || !configurableUC.Remove(str))
-                                        Log($"PythonPanel error removing {str}");
+                                        Log($"Panel error removing {str}");
                                 }
 
                                 configurableUC.UpdateEntries();
                             }
                             else
-                                Log($"PythonPanel error removing controls: missing control array");
+                                Log($"Panel error removing controls: missing control array");
                         }
                         break;
                     case "uiaddsetrows":
@@ -690,7 +745,7 @@ namespace EDDiscovery.UserControls
                             var changelist = json["changelist"].Array();
                             string err = changelist != null ? configurableUC.AddSetRows(controlname, changelist) : "No change list";
                             if (err != null)
-                                Log($"PythonPanel error addsetrows {controlname} : {err}");
+                                Log($"Panel error addsetrows {controlname} : {err}");
                         }
                         break;
                     case "uiinsertcolumns":
@@ -709,12 +764,12 @@ namespace EDDiscovery.UserControls
                                         int fillsize = col["fillsize"].Int(100);
                                         string sortmode = col["sortmode"].Str("Alpha");
                                         if (!configurableUC.InsertColumn(controlname, pos++, coltype, headertext, fillsize, sortmode))
-                                            Log($"PythonPanel error insertcolumns {controlname}");
+                                            Log($"Panel error insertcolumns {controlname}");
                                     }
                                 }
                             }
                             else
-                                Log($"PythonPanel error insertcolumns {controlname} no columns");
+                                Log($"Panel error insertcolumns {controlname} no columns");
                         }
                         break;
                     case "uiremovecolumns":
@@ -722,7 +777,7 @@ namespace EDDiscovery.UserControls
                             int pos = json["position"].Int(0);
                             int count = json["count"].Int(1);
                             if (!configurableUC.RemoveColumns(controlname,pos,count))
-                                Log($"PythonPanel error removecolumns {controlname}");
+                                Log($"Panel error removecolumns {controlname}");
                         }
                         break;
                     case "uirightclickmenu":
@@ -734,11 +789,11 @@ namespace EDDiscovery.UserControls
                                 if (tags.Length != text.Length)
                                     throw new Exception();
                                 if ( !configurableUC.SetRightClickMenu(controlname, tags, text))
-                                    Log($"PythonPanel error rightclickmenu unknown control");
+                                    Log($"Panel error rightclickmenu unknown control");
                             }
                             catch
                             {
-                                Log($"PythonPanel error rightclickmenu missing fields");
+                                Log($"Panel error rightclickmenu missing fields");
                             }
                         }
                         break;
@@ -756,7 +811,7 @@ namespace EDDiscovery.UserControls
                                 zmqconnection.Send(reply);
                             }
                             else
-                                Log($"PythonPanel error getcolumnsetting unknown control");
+                                Log($"Panel error getcolumnsetting unknown control");
 
                         }
                         break;
@@ -764,7 +819,7 @@ namespace EDDiscovery.UserControls
                         {
                             JToken tk = json["settings"];
                             if ( tk == null || !configurableUC.SetDGVColumnSettings(controlname,tk))
-                                Log($"PythonPanel error setcolumnsetting missing data or unknown control");
+                                Log($"Panel error setcolumnsetting missing data or unknown control");
                          }
                         break;
                     case "uisetdgvsetting":
@@ -779,7 +834,7 @@ namespace EDDiscovery.UserControls
 
                             }
                             else
-                                Log($"PythonPanel error setdgvsetting missing data or unknown control");
+                                Log($"Panel error setdgvsetting missing data or unknown control");
                         }
                         break;
                     case "uisetwordwrap":
@@ -790,13 +845,13 @@ namespace EDDiscovery.UserControls
 
                             }
                             else
-                                Log($"PythonPanel error setwordwrap missing data or unknown control");
+                                Log($"Panel error setwordwrap missing data or unknown control");
                         }
                         break;
                     case "uiclear":
                         {
                             if (!configurableUC.Clear(controlname))
-                                Log($"PythonPanel error clearing {controlname}");
+                                Log($"Panel error clearing {controlname}");
                         }
                         break;
                     case "uiremoverows":
@@ -805,34 +860,34 @@ namespace EDDiscovery.UserControls
                             int count = json["count"].Int();
                             int ret = configurableUC.RemoveRows(controlname, rowstart, count);
                             if ( ret < 0 )
-                                Log($"PythonPanel error removing rows {controlname}");
+                                Log($"Panel error removing rows {controlname}");
                         }
                         break;
                     case "uienable":
                         {
                             bool state = json["state"].Bool(false);
                             if (!configurableUC.SetEnable(controlname, state))
-                                Log($"PythonPanel error enable state {controlname}");
+                                Log($"Panel error enable state {controlname}");
                         }
                         break;
                     case "uivisible":
                         {
                             bool state = json["state"].Bool(false);
                             if (!configurableUC.SetVisible(controlname, state))
-                                Log($"PythonPanel error visible state {controlname}");
+                                Log($"Panel error visible state {controlname}");
                         }
                         break;
                     case "uiposition":
                         {
                             if (!configurableUC.SetPosition(controlname, new Point(json["x"].Int(), json["y"].Int())))
-                                Log($"PythonPanel error position {controlname}");
+                                Log($"Panel error position {controlname}");
 
                         }
                         break;
                     case "uisize":
                         {
                             if (!configurableUC.SetSize(controlname, new Size(json["width"].Int(), json["height"].Int())))
-                                Log($"PythonPanel error size {controlname}");
+                                Log($"Panel error size {controlname}");
                         }
                         break;
                     case "uiclosedropdownbutton":
@@ -1119,6 +1174,41 @@ namespace EDDiscovery.UserControls
         {
             SelectView(true);
         }
+
+        // for python, run the ModulesCheck py.exe to check for modules ok
+        private bool PythonModuleCheck()
+        {
+            JObject pythonconfig = config["Python"].Object();       // are we running a python program
+
+            if (pythonconfig["ModulesCheck"] != null)           // if it wants a module check procedure
+            {
+                string modulecheckfile = Path.Combine(pluginfolder, pythonconfig["ModulesCheck"].Str());
+
+                // launch the check file.. this also checked py.exe is available
+
+                var output = (Tuple<string, string>)BaseUtils.PythonLaunch.PyExeLaunch(modulecheckfile, "", pluginfolder, null, true, true);
+
+                if (output == null)
+                {
+                    Log("ERROR: py.exe is not available. Check your python installation. Make sure during install you clicked on \"py Launcher\"");
+                    return false;
+                }
+                else if (!output.Item1.Contains("Module Check OK"))   // must contain this
+                {
+                    Log("ERROR: Python Module check gave:");
+                    Log(output.Item1);
+                    Log(output.Item2);
+                    return false;
+                }
+                else
+                    Log("Success. Python Module check ran successfully");
+            }
+
+            return true;
+
+        }
+
+
         #endregion
 
     }

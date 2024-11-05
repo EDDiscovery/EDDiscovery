@@ -60,7 +60,8 @@ namespace EDDiscovery
         public event Action<Object> OnNewTarget;
         public event Action<Object, HistoryEntry> OnNoteChanged;        // UI.Note has been updated attached to this note
         public event Action OnAddOnsChanged;                            // add on changed
-        public event Action OnPanelAdded;                               // panel was added by a user DLL
+        public event Action<PanelInformation.PanelIDs> OnPanelAdded;    // panel was added (DLL, action script panels)
+        public event Action<PanelInformation.PanelIDs> OnPanelRemoved;  // panel was removed (ditto)
         public event Action<int,string> OnEDSMSyncComplete;             // EDSM journal sync has completed 
         public event Action<int> OnEDDNSyncComplete;                    // Sync has completed
                                                                         // theme is changing/ then has been changed by settings, hook if you have some UI which needs refreshing due to it. 
@@ -455,7 +456,7 @@ namespace EDDiscovery
             //----------------------------------------------------------------- Action controller (moved here oct 24 to have panels created before load)
 
             actioncontroller.ReLoad();          // load the action system up here, with the UI running
-            actioncontroller.CreatePanels();     // create any panels related to plugins
+            actioncontroller.CreatePanels();    // create any panels related to plugins
 
             // ---------------------------------------------------------------- Web server
 

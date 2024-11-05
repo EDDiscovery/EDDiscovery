@@ -231,7 +231,8 @@ namespace EDDiscovery
             userselectablepanellist = (from x in displayablepanels where x.Description.Length>0 select x).ToList(); //remove non selectables..
         }
 
-        public static void AddPanel(int id, Type uccbtype, Object tag, string wintitle, string refname, string description, Image image)
+        // add panel, indicate if its fresh
+        public static PanelInfo AddPanel(int id, Type uccbtype, Object tag, string wintitle, string refname, string description, Image image)
         {
             PanelIDs pid = (PanelIDs)id;
 
@@ -240,7 +241,24 @@ namespace EDDiscovery
                 PanelInfo p = new PanelInfo(pid, uccbtype, wintitle, refname, description, image, tag);
                 displayablepanels.Add(p);
                 userselectablepanellist.Add(p);
+                return p;
             }
+            else
+                return null;
+        }
+
+        // add panel, indicate if its fresh
+        public static bool RemovePanel(PanelInformation.PanelIDs pid)
+        {
+            var p = GetPanelInfoByPanelID(pid);
+            if ( p != null )
+            {
+                displayablepanels.Remove(p);
+                userselectablepanellist.Remove(p);
+                return true;
+            }
+            else
+                return false;
         }
 
         [System.Diagnostics.DebuggerDisplay("{PopoutID} {WindowTitle}")]

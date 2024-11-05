@@ -36,6 +36,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnAddOnsChanged += Redraw;
             DiscoveryForm.OnThemeChanging += Redraw;     // because we pick the image for the composite button based on theme
             DiscoveryForm.OnPanelAdded += Redraw;
+            DiscoveryForm.OnPanelRemoved += Redraw;
         }
 
         public override void LoadLayout()
@@ -54,6 +55,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnAddOnsChanged -= Redraw;
             DiscoveryForm.OnThemeChanging -= Redraw;
             DiscoveryForm.OnPanelAdded -= Redraw;
+            DiscoveryForm.OnPanelRemoved -= Redraw;
         }
         public void Draw()
         {
@@ -66,7 +68,7 @@ namespace EDDiscovery.UserControls
             Bitmap selback = (Bitmap)(brigthness < 0.3 ? EDDiscovery.Icons.Controls.Selector : EDDiscovery.Icons.Controls.Selector2);
 
             {
-                ActionLanguage.Manager.VersioningManager mgr = ActionLanguage.Manager.AddOnManagerForm.CreateVersionManager(EDDOptions.Instance.AppDataDirectory, System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, "Actions"), null);
+                ActionLanguage.Manager.VersioningManager mgr = ActionLanguage.Manager.AddOnManagerForm.CreateVersionManager(EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.ActionsAppDirectory(), null, false);
 
                 int i = mgr.DownloadItems.Count;
 
@@ -176,6 +178,12 @@ namespace EDDiscovery.UserControls
         }
 
         private void Redraw()
+        {
+            Draw();
+            ExtendedControls.Theme.Current.ApplyStd(this);
+            Position();
+        }
+        private void Redraw(PanelInformation.PanelIDs p)
         {
             Draw();
             ExtendedControls.Theme.Current.ApplyStd(this);

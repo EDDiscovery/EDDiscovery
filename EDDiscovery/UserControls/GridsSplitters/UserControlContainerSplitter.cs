@@ -113,6 +113,7 @@ namespace EDDiscovery.UserControls
             });
 
             DiscoveryForm.OnPanelAdded += PanelAdded;
+            DiscoveryForm.OnPanelRemoved += PanelAdded;
 
             // contract states the PanelAndPopOuts OR the MajorTabControl will now theme and size it.
         }
@@ -186,9 +187,11 @@ namespace EDDiscovery.UserControls
             });
 
             DiscoveryForm.OnPanelAdded -= PanelAdded;
+            DiscoveryForm.OnPanelRemoved -= PanelAdded;
+
         }
 
-        public void PanelAdded()
+        public void PanelAdded(PanelInformation.PanelIDs p)
         {
             RunActionOnSplitterTree((sp, c, uccb) =>
             {

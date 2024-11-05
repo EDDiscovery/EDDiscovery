@@ -223,12 +223,28 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Closing panels
+        #region Handling panels
 
-        public void CloseAllTabsPopouts(PanelInformation.PanelIDs p)
+        public void AddPanel(int id, Type uccbtype, Object tag, string wintitle, string refname, string description, Image image)
+        {
+            PanelInformation.PanelInfo p = PanelInformation.AddPanel(id, uccbtype, tag, wintitle, refname, description, image);
+            if (p != null)
+            {
+                System.Diagnostics.Trace.WriteLine($"Added panel {id} {uccbtype.Name} {wintitle} {refname} {description} {p.PopoutID}");
+                UpdatePanelListInContextMenuStrip();
+                OnPanelAdded?.Invoke(p.PopoutID);
+            }
+        }
+
+        public void RemovePanel(PanelInformation.PanelIDs p)
         {
             tabControlMain.CloseAllTabs(p);
             PopOuts.CloseAllPopouts(p);
+            if (PanelInformation.RemovePanel(p))
+            {
+                System.Diagnostics.Trace.WriteLine($"Removed panel {p}");
+                OnPanelRemoved?.Invoke(p);
+            }
         }
 
         #endregion

@@ -55,22 +55,18 @@ namespace EDDiscovery
             DLLCallBacks.AddPanel = (id, paneltype, wintitle, refname, description, image) =>
             {
                 // registered panels, search the stored list, see if there, then it gets the index, else its added to the list
-                int panelid = EDDConfig.Instance.FindAddUserPanelID(id);
+                int panelid = EDDConfig.Instance.FindCreatePanelID(id);
 
                 // IF we had more versions of IEDDPanelExtensions in future, we would add more clauses here and have other UserControlExtPanel classes to handle them
 
                 if (typeof(EDDDLLInterfaces.EDDDLLIF.IEDDPanelExtension).IsAssignableFrom(paneltype))
                 {
-                    System.Diagnostics.Trace.WriteLine($"DLL added panel for IEDDPanelExtension and UserControlExtPanel: {id} {paneltype.Name} {wintitle} {refname} {description} {panelid}");
-                    PanelInformation.AddPanel(panelid, typeof(UserControls.UserControlExtPanel), paneltype, wintitle, refname, description, image);
+                    AddPanel(panelid, typeof(UserControls.UserControlExtPanel), paneltype, wintitle, refname, description, image);
                 }
                 else
                 {
                     System.Diagnostics.Trace.WriteLine($"***** DLL unknown panel interface type - ignoring {id}");
                 }
-
-                UpdatePanelListInContextMenuStrip();
-                OnPanelAdded?.Invoke();
             };
 
             dllsalloweddisallowed = EDDConfig.Instance.DLLPermissions;

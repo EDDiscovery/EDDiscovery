@@ -20,6 +20,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
+    // tbd paneladded/removed
     public partial class UserControlContainerGrid : UserControlCommonBase        // circular, huh! neat!
     {
         public UserControlTravelGrid GetTravelGrid { get { return GetUserControl<UserControlTravelGrid>(PanelInformation.PanelIDs.TravelGrid); } }
