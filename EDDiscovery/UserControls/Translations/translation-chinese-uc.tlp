@@ -307,6 +307,7 @@ SECTION UserControlJournalGrid
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "输入文本以搜索所有的域"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "选中后当事件更新时，使光标自动返回顶部。"
+.buttonField_ToolTip: "Filter out entries matching the field selection" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "根据事件类型筛选条目"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "取消排序"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "跳至行"
@@ -391,7 +392,7 @@ SECTION UserControlMaterialCommodities
 .AllMats: "All Materials" @
 .AllCommods: "All Commodities" @
 .AllMicroresources: "All Microresources" @
-.textBoxItems1.ToolTip: "Count of Items" = UserControlMaterialCommodities.textBoxItems2.ToolTip
+.textBoxItems1.ToolTip: "Count of Items" @
 .textBoxItems2.ToolTip: "Count of Items" => "商品数量"
 .buttonFilter.ToolTip: "Filter out items" @
 .buttonClear.ToolTip: "Set all wanted values to zero" @
@@ -722,8 +723,11 @@ SECTION UserControlScanGrid
 .colClass: "Class" => "星体种类"
 .colDistance: "Distance" @
 .colBriefing: "Information" = SearchScans.ColumnInformation
+.ColCurValue: "Current Value" @
+.ColMaxValue: "Max Value" @
+.ColOrganics: "Organics Value" @
 .extButtonShowControl.ToolTip: "Configure overall settings" @
-.extButtonHabZones.ToolTip: "Configure hab zone information" @
+.extButtonHighValue_ToolTip: "Set High Value Limit" @
 .MainStar: "Main Star" = UserControlExpedition.Stars
 .Mass: "Mass" = UserControlOutfitting.Mass
 .Radius: "Radius" => "半径"
@@ -736,14 +740,12 @@ SECTION UserControlScanGrid
 .BC: "This body contains: " => "这个星体有："
 .Ring: "Ring: " => "有1个环"
 .Belt: "Belt: " => "小行星带："
-.Value: "Value" = UserControlModules.Value
 .GS: "This is a green system, as it has all existing jumponium materials available!" @
 .JS: " jumponium materials found in system." @
 .ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "星系{0}的扫描概要：{1}个恒星; {2}个行星（{3}个类地行星，{4}个气态巨行星），{5}个卫星"
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" => "小行星带(Belts)"
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "环(Rings)"
 .materialsToolStripMenuItem: "Show materials" = UserControlMaterialCommodities.Mats
-.valuesToolStripMenuItem: "Show values" = UserControlModules.Value
 
 SECTION UserControlSettings
 

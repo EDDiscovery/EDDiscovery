@@ -307,6 +307,7 @@ SECTION UserControlJournalGrid
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" = UserControlDiscoveries.textBoxSearch.ToolTip
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Sende Daten im Gitter an Excel"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Zeiger automatisch zum neuesten Eintrag bewegen sobald dieser eintrifft"
+.buttonField_ToolTip: "Filter out entries matching the field selection" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Einträge auf Basis von Ereignisart ausfiltern"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Entferne Spaltensortierung"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Springe zu Eintrag"
@@ -722,8 +723,11 @@ SECTION UserControlScanGrid
 .colClass: "Class" => "Klasse"
 .colDistance: "Distance" = UserControlOutfitting.Distance
 .colBriefing: "Information" = Information
+.ColCurValue: "Current Value" @
+.ColMaxValue: "Max Value" @
+.ColOrganics: "Organics Value" @
 .extButtonShowControl.ToolTip: "Configure overall settings" => "Konfiguriere allgemeine Einstellungen"
-.extButtonHabZones.ToolTip: "Configure hab zone information" => "Konfiguriere Informationen der habitablen Zone"
+.extButtonHighValue_ToolTip: "Set High Value Limit" @
 .MainStar: "Main Star" => "Hauptstern"
 .Mass: "Mass" = UserControlModules.labelMass
 .Radius: "Radius" => "Radius"
@@ -736,14 +740,12 @@ SECTION UserControlScanGrid
 .BC: "This body contains: " => "Dieser Körper enthält: "
 .Ring: "Ring: " => "Ring: "
 .Belt: "Belt: " => "Gürtel: "
-.Value: "Value" = UserControlModules.Value
 .GS: "This is a green system, as it has all existing jumponium materials available!" => "Dies ist ein grünes System, denn in ihm sind alle verschiedenen Sprungmaterialien vorhanden"
 .JS: " jumponium materials found in system." => " Sprungmaterialien im System gefunden."
 .ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Scanzusammenfassung für {0}: {1} Sterne; {2} Planeten ({3} terrestrisch, {4} Gasriesen), {5} Monde"
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" = UserControlScan.Belt
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Ringe"
 .materialsToolStripMenuItem: "Show materials" => "Materialien"
-.valuesToolStripMenuItem: "Show values" => "Werte"
 
 SECTION UserControlSettings
 
@@ -913,7 +915,7 @@ SECTION UserControlSpanel
 .extButtonShowControl.ToolTip: "Configure overall settings" = UserControlScanGrid.extButtonShowControl.ToolTip
 .extButtonColumns.ToolTip: "Configure columns shown" => "Konfiguriere sichtbare Spalten"
 .extButtonColumnOrder.ToolTip: "Configure column order" => "Konfiguriere Spaltenreihenfolge"
-.extButtonHabZones.ToolTip: "Configure hab zone information" = UserControlScanGrid.extButtonHabZones.ToolTip
+.extButtonHabZones.ToolTip: "Configure hab zone information" => "Konfiguriere Informationen der habitablen Zone"
 .buttonFilter.ToolTip: "Select what journal events to show" => "Konfiguriere Ereignisfilter..."
 .buttonField.ToolTip: "Filter out events" => "Konfiguriere Feldfilter..."
 .extButtonScanShow.ToolTip: "Configure scan display" => "Konfiguriere Scananzeige"
