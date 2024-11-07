@@ -1055,6 +1055,7 @@ namespace EDDiscovery
         UserControlSysInfo_toolStripReset, // ToolStrip control 'Reset'
         UserControlSysInfo_toolStripRemoveAll, // ToolStrip control 'Remove All'
         UserControlSysInfo_displayNextDestinationToolStripMenuItem,
+        UserControlSysInfo_disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem,
 
         UserControlSysInfo_ToolTip, // ToolTip 'Hold down Ctrl Key then left drag a item to reposition, 8 columns are available'
         UserControlSysInfo_textBoxTargetDist_ToolTip, // ToolTip 'Distance to target'
