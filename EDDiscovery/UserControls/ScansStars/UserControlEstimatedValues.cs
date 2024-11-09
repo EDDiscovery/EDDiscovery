@@ -157,7 +157,7 @@ namespace EDDiscovery.UserControls
 
                         string mappedstr = mappedvalue > 0 ? (mappedefficiently.ToString("N0") + " / " + mappedvalue.ToString("N0")) : "";
                         string firstmappedeffstr = firstmappedvalue > 0 ? (firstmappedefficiently.ToString("N0") + " / " + firstmappedvalue.ToString("N0")) : "";
-                        string fdmappedstr = firstdiscoveredmappedvalue > 0 ? (firstdiscoveredmappedefficiently + " / " + firstdiscoveredmappedvalue) : "";
+                        string fdmappedstr = firstdiscoveredmappedvalue > 0 ? (firstdiscoveredmappedefficiently.ToString("N0") + " / " + firstdiscoveredmappedvalue.ToString("N0")) : "";
 
                         // System.Diagnostics.Debug.WriteLine($"EV was map {bodies.ScanData.IsPreviouslyMapped} was dis {bodies.ScanData.IsPreviouslyDiscovered} we map {bodies.ScanData.Mapped}");
 
