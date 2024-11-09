@@ -98,13 +98,14 @@ namespace EDDiscovery.UserControls
 
         #region PopulateGrid
 
+        // HE will be null if there is no systems data available (empty db) and we change an option, so you need to defend against it
         private async void DrawSystem(HistoryEntry he, bool redrawall = false)
         {
             StarScan.SystemNode systemnode = null;
 
             var samesys = last_he?.System != null && he?.System != null && he.System.Name == last_he.System.Name;       // is it the same system
 
-            bool scanupdate = he.journalEntry is IStarScan;      // possible update to data..
+            bool scanupdate = he?.journalEntry is IStarScan;      // possible update to data..
 
             System.Diagnostics.Debug.WriteLine($"Scan grid @{he?.EventTimeUTC} {he?.EventSummary} Samesync {samesys} force {redrawall} istarscan {scanupdate}");
 
