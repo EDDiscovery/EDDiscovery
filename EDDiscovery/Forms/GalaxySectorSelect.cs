@@ -253,7 +253,12 @@ namespace EDDiscovery.Forms
                     f.ReturnResult(DialogResult.OK);
             };
 
-            f.Shown += (e1,e2) => { ((ExtendedControls.ExtComboBox)f.GetControl("Source")).Activate(); };
+            f.Shown += (e1, e2) =>
+            {
+                var cb = ((ExtendedControls.ExtComboBox)f.GetControl("Source"));
+                cb.SelectedIndex = 1;
+                cb.Activate();
+            };
 
             DialogResult res = f.ShowDialogCentred(parent, parent.Icon, "Select Galaxy Data".T(EDTx.GalaxySectorSelect_GALSELTitle));
 

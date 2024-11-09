@@ -60,11 +60,13 @@ namespace EDDiscovery.UserControls
             BitSelNextDestination = 24,
             BitSelEDSMButtonsNextLine = 28,       // other options
             BitSelSkinny = 29,
+
+            BitSelDisableCopyToClipboardWhenClickingOnTextBoxes = 40,
             BitSelNotValid = -1,
         };
 
         const int BitSelTotal = 25; // total number of main items
-        const int BitSelDefault = ((1 << BitSelTotal) - 1) + (1 << (int)ControlBits.BitSelEDSMButtonsNextLine);
+        const long BitSelDefault = ((1L << BitSelTotal) - 1) + (1L << (int)ControlBits.BitSelEDSMButtonsNextLine);
 
         private int[] ItemSize = new int[]      // size of items in HorzPosititons (1/2/3/4 etc)
         {
@@ -109,7 +111,7 @@ namespace EDDiscovery.UserControls
 
         private ToolStripMenuItem[] toolstriplist;          // ref to toolstrip items for each bit above. in same order as bits BitSel..
 
-        private int Selection;          // selection bits
+        private long Selection;          // selection bits
         private List<BaseUtils.LineStore> Lines;            // stores settings on each line, values are BitN+1, 0 means position not used.
 
         private EliteDangerousCore.JournalEvents.JournalFSDTarget lasttarget = null;        // set when UI FSDTarget passes thru and not in jump sequence on top of history
@@ -155,7 +157,8 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlSysInfo_toolStripMaterialCounts, EDTx.UserControlSysInfo_displayMicroresourcesCountToolStripMenuItem,
                                         EDTx.UserControlSysInfo_toolStripCredits, EDTx.UserControlSysInfo_toolStripGameMode, EDTx.UserControlSysInfo_toolStripTravel,
                                         EDTx.UserControlSysInfo_toolStripMissionList, EDTx.UserControlSysInfo_toolStripJumpRange, EDTx.UserControlSysInfo_toolStripSkinny,
-                                        EDTx.UserControlSysInfo_toolStripReset, EDTx.UserControlSysInfo_toolStripRemoveAll , EDTx.UserControlSysInfo_displayNextDestinationToolStripMenuItem};
+                                        EDTx.UserControlSysInfo_toolStripReset, EDTx.UserControlSysInfo_toolStripRemoveAll , EDTx.UserControlSysInfo_displayNextDestinationToolStripMenuItem,
+                                        EDTx.UserControlSysInfo_disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem};
             var enumlisttt = new Enum[] { EDTx.UserControlSysInfo_ToolTip, EDTx.UserControlSysInfo_textBoxTargetDist_ToolTip, EDTx.UserControlSysInfo_textBoxTarget_ToolTip };
             
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
@@ -206,7 +209,7 @@ namespace EDDiscovery.UserControls
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
-                        Selection |= (1 << bitn);
+                        Selection |= (1L << bitn);
                     }
                     else if (cb == ControlBits.BitSelShipyardButtons)
                     {
@@ -214,7 +217,7 @@ namespace EDDiscovery.UserControls
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
-                        Selection |= (1 << bitn);
+                        Selection |= (1L << bitn);
                     }
                     else if (cb == ControlBits.BitSelStationFaction)
                     {
@@ -222,7 +225,7 @@ namespace EDDiscovery.UserControls
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
-                        Selection |= (1 << bitn);
+                        Selection |= (1L << bitn);
                     }
                     else if (cb == ControlBits.BitSelMR)
                     {
@@ -230,7 +233,7 @@ namespace EDDiscovery.UserControls
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
-                        Selection |= (1 << bitn);
+                        Selection |= (1L << bitn);
                     }
                     else if (cb == ControlBits.BitSelSecurity)
                     {
@@ -238,7 +241,7 @@ namespace EDDiscovery.UserControls
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
-                        Selection |= (1 << bitn);
+                        Selection |= (1L << bitn);
                     }
                     else if (cb == ControlBits.BitSelNextDestination)
                     {
@@ -246,7 +249,7 @@ namespace EDDiscovery.UserControls
                         if (p != null)
                             insertat = Lines.IndexOf(p) + 1;
 
-                        Selection |= (1 << bitn);
+                        Selection |= (1L << bitn);
                     }
 
                     Lines.Insert(insertat, new BaseUtils.LineStore() { Items = new int[HorzPositions] { bitn + 1, 0, 0, 0, 0, 0, 0, 0 } });
@@ -840,7 +843,8 @@ namespace EDDiscovery.UserControls
 
         private void clickTextBox(object sender, EventArgs e)
         {
-            SetClipboardText(((Control)sender).Text);
+            if ( (Selection & (1L<<(int)(ControlBits.BitSelDisableCopyToClipboardWhenClickingOnTextBoxes))) == 0)
+                SetClipboardText(((Control)sender).Text);
         }
 
         private void toolStripSystem_Click(object sender, EventArgs e)
@@ -952,7 +956,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripRemoveAll_Click(object sender, EventArgs e)
         {
-            Selection = (Selection | ((1 << BitSelTotal) - 1)) ^ ((1 << BitSelTotal) - 1);
+            Selection = (Selection | ((1L << BitSelTotal) - 1)) ^ ((1L << BitSelTotal) - 1);
             UpdateViewOnSelection();
         }
 
@@ -962,12 +966,18 @@ namespace EDDiscovery.UserControls
             UpdateTransparency();
         }
 
+        private void disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Selection = Selection ^ (1L << (int)ControlBits.BitSelDisableCopyToClipboardWhenClickingOnTextBoxes);
+            UpdateViewOnSelection();
+        }
+
         void ToggleSelection(Object sender, ControlBits bit)
         {
             ToolStripMenuItem mi = sender as ToolStripMenuItem;
             if (mi.Enabled)
             {
-                Selection ^= (1 << (int)bit);
+                Selection ^= (1L << (int)bit);
                 UpdateViewOnSelection();
             }
         }
@@ -984,9 +994,10 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine("Selection is " + sel);
 
-            bool selEDSMonNextLine = (Selection & (1 << (int)ControlBits.BitSelEDSMButtonsNextLine)) != 0;
+            bool selEDSMonNextLine = (Selection & (1L << (int)ControlBits.BitSelEDSMButtonsNextLine)) != 0;
             toolStripEDSMDownLine.Checked = selEDSMonNextLine;
-            toolStripSkinny.Checked = (Selection & (1 << (int)ControlBits.BitSelSkinny)) != 0;
+            toolStripSkinny.Checked = (Selection & (1L << (int)ControlBits.BitSelSkinny)) != 0;
+            disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem.Checked = (Selection & (1L << (int)ControlBits.BitSelDisableCopyToClipboardWhenClickingOnTextBoxes)) != 0;
 
             int data1offset = textBoxCredits.Left - labelCredits.Left;      // offset between first item to initial label - basing it on actual pos allow the auto font scale to work
             int lab2offset = textBoxCredits.Right + 4 - labelCredits.Left;  // offset between second label and initial label
@@ -1008,7 +1019,7 @@ namespace EDDiscovery.UserControls
 
                     if (bitno >= 0 && bitno < toolstriplist.Length && toolstriplist[bitno] != null )     // ensure within range, ignore any out of range, in case going backwards in versions
                     {
-                        bool ison = (Selection & (1 << bitno)) != 0;
+                        bool ison = (Selection & (1L << bitno)) != 0;
 
                         toolstriplist[bitno].Enabled = false;
                         toolstriplist[bitno].Checked = ison;
@@ -1038,7 +1049,7 @@ namespace EDDiscovery.UserControls
                                     panelFD.Tag = si;
                                     panelFD.Visible = true;
 
-                                    if (!selEDSMonNextLine && (Selection & (1 << (int)ControlBits.BitSelEDSM)) != 0)
+                                    if (!selEDSMonNextLine && (Selection & (1L << (int)ControlBits.BitSelEDSM)) != 0)
                                     {
                                         extButtonEDSMSystem.Location = new Point(panelFD.Right + hspacing, datapos.Y);
                                         extButtonInaraSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
@@ -1389,7 +1400,7 @@ namespace EDDiscovery.UserControls
             BackColor = curcol;
             extPanelScroll.BackColor = curcol;
 
-            bool skinny = (Selection & (1 << (int)ControlBits.BitSelSkinny)) != 0;
+            bool skinny = (Selection & (1L << (int)ControlBits.BitSelSkinny)) != 0;
 
             foreach (Control c in extPanelScroll.Controls)
             {
@@ -1426,8 +1437,8 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
 
+        #endregion
 
     }
 }

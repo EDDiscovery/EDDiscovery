@@ -1157,6 +1157,7 @@ SECTION UserControlSysInfo
 .toolStripReset: "Reset" @
 .toolStripRemoveAll: "Remove All" @
 .displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
+.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" @
 .textBoxTargetDist.ToolTip: "Distance to target" @
 .textBoxTarget.ToolTip: "Sets the target" @

@@ -325,45 +325,48 @@ namespace EDDiscovery.UserControls
 
                             StringBuilder sb = new StringBuilder();
 
-                            if (sn != null && sn.StarNodes.Count > 0 && sn.StarNodes.Values[0].ScanData != null)
-                            {
-                                JournalScan sd = sn.StarNodes.Values[0].ScanData;
-                                JournalScan.HabZones hz = sd.GetHabZones();
+                            if (sn != null && sn.StarNodes.Count > 0)   // if we have a star node
+                            {   
+                                JournalScan sd = sn.StarNodes.Values[0].ScanData;       // may be null, defend
+                                JournalScan.HabZones hz = sd?.GetHabZones();            // defend against sd being null
 
-                                if (Config(Configuration.showHabInformation))
+                                if (hz != null)     // defend against missing data
                                 {
-                                    sd.HabZoneText_Hab(hz, sb);
-                                    sb.AppendCR();
-                                }
+                                    if (Config(Configuration.showHabInformation))
+                                    {
+                                        sd.HabZoneText_Hab(hz, sb);
+                                        sb.AppendCR();
+                                    }
 
-                                if (Config(Configuration.showMetalRichZone))
-                                {
-                                    sd.HabZoneText_MRP(hz, sb); 
-                                    sb.AppendCR();
-                                }
+                                    if (Config(Configuration.showMetalRichZone))
+                                    {
+                                        sd.HabZoneText_MRP(hz, sb);
+                                        sb.AppendCR();
+                                    }
 
-                                if (Config(Configuration.showWaterWrldZone))
-                                {
-                                    sd.HabZoneText_WW(hz, sb);
-                                    sb.AppendCR();
-                                }
+                                    if (Config(Configuration.showWaterWrldZone))
+                                    {
+                                        sd.HabZoneText_WW(hz, sb);
+                                        sb.AppendCR();
+                                    }
 
-                                if (Config(Configuration.showEarthLikeZone))
-                                {
-                                    sd.HabZoneText_EL(hz, sb);
-                                    sb.AppendCR();
-                                }
+                                    if (Config(Configuration.showEarthLikeZone))
+                                    {
+                                        sd.HabZoneText_EL(hz, sb);
+                                        sb.AppendCR();
+                                    }
 
-                                if (Config(Configuration.showAmmonWrldZone))
-                                {
-                                    sd.HabZoneText_AW(hz, sb);
-                                    sb.AppendCR();
-                                }
+                                    if (Config(Configuration.showAmmonWrldZone))
+                                    {
+                                        sd.HabZoneText_AW(hz, sb);
+                                        sb.AppendCR();
+                                    }
 
-                                if (Config(Configuration.showIcyPlanetZone))
-                                {
-                                    sd.HabZoneText_ZIP(hz, sb); 
-                                    sb.AppendCR();
+                                    if (Config(Configuration.showIcyPlanetZone))
+                                    {
+                                        sd.HabZoneText_ZIP(hz, sb);
+                                        sb.AppendCR();
+                                    }
                                 }
                             }
 
