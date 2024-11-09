@@ -462,7 +462,7 @@ namespace EDDiscovery.UserControls
 
             string value = (sm.Value.HasValue && sm.Value.Value > 0) ? sm.Value.Value.ToString("N0") : "";
 
-            string eng = "";
+            string blueprintcol = "";
             string engtooltip = null;
 
             if (sm.Engineering != null)
@@ -477,15 +477,15 @@ namespace EDDiscovery.UserControls
                     sb.Append(sm.Engineering.ExperimentalEffect_Localised);
                 }
 
-                eng = sb.ToString();
+                blueprintcol = sb.ToString();
 
                 System.Text.StringBuilder sbtt = new System.Text.StringBuilder(1024);
                 sm.Engineering.Build(sbtt);
-                engtooltip = sm.ToString();
+                engtooltip = sbtt.ToString();
 
                 if (displayfilters.Contains("fullblueprint"))
                 {
-                    eng = engtooltip;
+                    blueprintcol = engtooltip;
                 }
             }
 
@@ -493,7 +493,8 @@ namespace EDDiscovery.UserControls
                                 JournalFieldNaming.GetForeignModuleName(sm.ItemFD,sm.LocalisedItem),
                                 ShipSlots.ToLocalisedLanguage(sm.SlotFD),
                                 infoentry,
-                                sm.Mass() > 0 ? (sm.Mass().ToString("0.#")+"t") : "",                                eng,
+                                sm.Mass() > 0 ? (sm.Mass().ToString("0.#")+"t") : "",                                
+                                blueprintcol,
                                 value, 
                                 sm.PE() };
 
