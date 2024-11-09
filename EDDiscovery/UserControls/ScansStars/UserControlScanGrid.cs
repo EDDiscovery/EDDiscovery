@@ -241,11 +241,10 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData.nSurfaceTemperature.HasValue)
                             bdDetails.Append("Temperature".T(EDTx.UserControlScanGrid_Temperature)).AppendColonS().Append((sn.ScanData.nSurfaceTemperature.Value.ToString("N2"))).Append(" K.");
 
-                        // habitable zone for stars - do not display for black holes.
-                        if (sn.ScanData.StarTypeID != EDStar.H)
+                        JournalScan.HabZones hz;
+                        // habitable zone for stars - do not display for black holes.  And defend against hab zones returning null due to missing data
+                        if (sn.ScanData.StarTypeID != EDStar.H && (hz = sn.ScanData.GetHabZones()) != null)
                         {
-                            JournalScan.HabZones hz = sn.ScanData.GetHabZones();
-
                             if (IsSet(CtrlList.showHabitable))
                             {
                                 bdDetails.AppendCR();
