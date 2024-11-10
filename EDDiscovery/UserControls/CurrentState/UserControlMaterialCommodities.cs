@@ -407,7 +407,7 @@ namespace EDDiscovery.UserControls
 
                         if (PanelMode == PanelType.Materials)
                         {
-                            int limit = mcmrt.MaterialLimit() ?? 0;
+                            int limit = mcmrt.MaterialLimitOrNull() ?? 0;
 
                             rowobj = new[] { mcmrt.TranslatedName, mcmrt.Shortname, mcmrt.TranslatedCategory,
                                                 mcmrt.TranslatedType + ( limit>0 ? " (" + limit.ToString() + ")" : "") ,
@@ -430,7 +430,7 @@ namespace EDDiscovery.UserControls
                         }
                         else if (PanelMode == PanelType.All)
                         {
-                            int? limit = mcmrt.MaterialLimit();
+                            int? limit = mcmrt.MaterialLimitOrNull();
 
                             rowobj = new[] { mcmrt.TranslatedName, mcmrt.Shortname, mcmrt.TranslatedCategory,
                                                 mcmrt.IsMicroResources ? "" : (mcmrt.TranslatedType + ( limit.HasValue ? " (" + limit.Value.ToString() + ")" : "")) ,
@@ -463,8 +463,8 @@ namespace EDDiscovery.UserControls
                                 var pcell= new BaseUtils.DataGridViewProgressCell();
                                 pcell.BarForeColor = ExtendedControls.Theme.Current.TextBlockSuccessColor;
 
-                                int limit = mcmrt.MaterialLimit().Value;
-                                pcell.Value = 100 * matcounts[0] / limit;
+                                int? limit = mcmrt.MaterialLimitOrNull();
+                                pcell.Value = 100 * matcounts[0] / (limit??250);        // just protect it against a rouge synthesised material
                                 pcell.TextToRightPreferentially = true;
                                 // no need pcell.PercentageTextFormat = "{0:0.#}% (" + limit.ToStringInvariant() + ")";
                                 rw.Cells[ColPrice.Index] = pcell;
@@ -557,7 +557,7 @@ namespace EDDiscovery.UserControls
                     {
                         MaterialCommodityMicroResource m = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_mcl.Value, mcmrt.FDName);      // at generation mcl, find fdname.
                         int count = m != null ? m.Count : 0;
-                        int limit = mcmrt.MaterialLimit().Value;
+                        int limit = mcmrt.MaterialLimitOrNull() ?? 250;     // protect against a rogue material creeping in due to synth
 
                         tbc = new DataGridViewTextBoxCell();
                         tbc.Value = $"{mcmrt.TranslatedName} ({count}/{limit})";
