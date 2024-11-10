@@ -307,7 +307,7 @@ SECTION UserControlJournalGrid
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" = UserControlDiscoveries.textBoxSearch.ToolTip
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Sende Daten im Gitter an Excel"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Zeiger automatisch zum neuesten Eintrag bewegen sobald dieser eintrifft"
-.buttonField_ToolTip: "Filter out entries matching the field selection" @
+.buttonField_ToolTip: "Filter out entries matching the field selection" => "Mit der Feldauswahl übereinstimmende Einträge ausfiltern"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Einträge auf Basis von Ereignisart ausfiltern"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Entferne Spaltensortierung"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Springe zu Eintrag"
@@ -344,7 +344,7 @@ SECTION UserControlLedger
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Sende Daten am Gitter an Excel"
 .NOLG: "No Ledger available" => "Kein Kassabuch verfügbar"
 .TotalProfit: "Total Profit" => "Gesamter Profit"
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Zeiger automatisch zum neuesten Eintrag bewegen sobald dieser eintrifft"
 
 SECTION UserControlLog
 
@@ -398,7 +398,7 @@ SECTION UserControlMaterialCommodities
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Setze alle 'Gewollt'-Werte auf Null"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "Grün zeigt Einträge auf Null, Rot filtert diese"
-.extCheckBoxMaterialView.ToolTip: "Switch Material Views" @
+.extCheckBoxMaterialView.ToolTip: "Switch Material Views" => "Wechsle Materialansicht"
 .extButtonFont.ToolTip: "Font for shopping list" => "Schrift für Einkaufsliste"
 .buttonExtImport.ToolTip: "Import materials list into panel" => "Importiere Materialienliste in Panel"
 .openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" => "Öffne Rezept in Fenster"
@@ -406,7 +406,7 @@ SECTION UserControlMaterialCommodities
 .clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" => "Lösche alle angezeigten Elemente in Einkaufsliste"
 .displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" => "Zeige alle 'Nicht Null'-Elemente in Einkaufsliste"
 .toolStripMenuItemSLClearAll: "Clear all display items in shopping list" = UserControlMaterialCommodities.clearAllDisplayItemsInShoppingListToolStripMenuItem
-.Progress: "Progress" @
+.Progress: "Progress" => "Fortschritt"
 
 SECTION UserControlMissionOverlay
 
@@ -558,7 +558,7 @@ SECTION UserControlModules
 .labelWep: "Weapons:" => "Waffen"
 .extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" => "Speichere diese Konfiguration im EDD-Loadout-Ordner"
 .extButtonDeleteLoadout.ToolTip: "Delete loadout" => "Konfiguration löschen"
-.SaveLoadout: "Enter loadout description to save ship with" @
+.SaveLoadout: "Enter loadout description to save ship with" => "Konfigurationsbeschreibung unter der das Schiff gespeichert wird eingeben"
 
 SECTION UserControlNotePanel
 
@@ -659,8 +659,8 @@ SECTION UserControlRoute
 .buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "Öffne das Routenstartsystem in EDSM"
 .extButtonExpeditionSave.ToolTip: "Save as an expedition for use on expedition and surveyor panels" => "Als Expedition speichern um es im Expeditions- oder Gutachterpanel zu benutzen"
 .labelCargo: "Cargo" = UserControlMarketData.CargoCol
-.Confirm: "This will result in a large number ({0}) of jumps\r\nConfirm please" @
-.NoRoute: "No route set up, retry" @
+.Confirm: "This will result in a large number ({0}) of jumps\r\nConfirm please" => "Dies wird eine hohe Anzahl ({0}) an Sprüngen ergeben\r\nBitte bestätigen"
+.NoRoute: "No route set up, retry" => "Keine Route eingerichtet, wiederholen"
 
 SECTION UserControlRouteTracker
 
@@ -687,8 +687,8 @@ SECTION UserControlRouteTracker
 
 SECTION UserControlScan
 
-.scanDisplayBodyFiltersButton.ToolTip: "Configure scan display body filters" @
-.scanDisplayConfigureButton.ToolTip: "Configure scan display" @
+.scanDisplayBodyFiltersButton.ToolTip: "Configure scan display body filters" => "Konfiguriere Körperfilter für Scananzeige"
+.scanDisplayConfigureButton.ToolTip: "Configure scan display" => "Konfiguriere Scananzeige"
 .extCheckBoxStar.ToolTip: "Select another system to view" = UserControlWebBrowser.extCheckBoxStar.ToolTip
 .buttonSize.ToolTip: "Select image size" => "Wähle Bildgröße"
 .extButtonHighValue.ToolTip: "Set High Value Limit" => "Setze Limit für 'hoher Wert'"
@@ -723,11 +723,11 @@ SECTION UserControlScanGrid
 .colClass: "Class" => "Klasse"
 .colDistance: "Distance" = UserControlOutfitting.Distance
 .colBriefing: "Information" = Information
-.ColCurValue: "Current Value" @
-.ColMaxValue: "Max Value" @
-.ColOrganics: "Organics Value" @
+.ColCurValue: "Current Value" => "Derzeitiger Wert"
+.ColMaxValue: "Max Value" => "Maximaler Wert"
+.ColOrganics: "Organics Value" => "Wert der Organismen"
 .extButtonShowControl.ToolTip: "Configure overall settings" => "Konfiguriere allgemeine Einstellungen"
-.extButtonHighValue_ToolTip: "Set High Value Limit" @
+.extButtonHighValue_ToolTip: "Set High Value Limit" => "Setze Limit für 'hoher Wert'"
 .MainStar: "Main Star" => "Hauptstern"
 .Mass: "Mass" = UserControlModules.labelMass
 .Radius: "Radius" => "Radius"
@@ -1428,24 +1428,24 @@ SECTION UserControlFactions
 .colDataLinkPayeeFaction: "DL Payee Faction" => "DL auszahlende Fraktion"
 .colDataLinkPayeeValue: "DL Payee Value" => "DL Auszahlungswert"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Schicke Gitterdaten an Excel"
-.colSystem: "System" @
-.colLastRep: "Last Known Reputation" @
-.colFactionState: "Last State" @
-.colFactionGov: "Government" @
-.colFactionAllegiance: "Allegiance" @
-.colFactionSystemInfluence: "System Influence" @
-.colFactionOtherSystemInfo: "Other System Info" @
-.colOrganicDataSold: "Organic Data Value" @
-.labelSearch: "Search" @
-.extCheckBoxShowHideSystemInfo.ToolTip: "Show/Hide System Info" @
-.extCheckBoxShowHideMission.ToolTip: "Show/Hide Mission" @
-.extCheckBoxShowHideCommodities.ToolTip: "Show/Hide Commodities" @
-.extCheckBoxShowHideMaterials.ToolTip: "Show/Hide Materials" @
-.extCheckBoxShowHideBounties.ToolTip: "Show/Hide Crimes/Bounties" @
-.extCheckBoxShowHideInterdictions.ToolTip: "Show/Hide Interdictions" @
-.extCheckBoxShowHideKillBonds.ToolTip: "Show/Hide Kill Bonds" @
-.extCheckBoxShowHideDataLink.ToolTip: "Show/Hide Datalink" @
-.extCheckBoxShowHideCartographic.ToolTip: "Show Hide Cartographic/Organic Sold" @
+.colSystem: "System" => "System"
+.colLastRep: "Last Known Reputation" => "Letzter bekannter Ruf"
+.colFactionState: "Last State" => "Letzter Zustand"
+.colFactionGov: "Government" => "Regierung"
+.colFactionAllegiance: "Allegiance" => "Gefolgschaft"
+.colFactionSystemInfluence: "System Influence" => "Systemeinfluss"
+.colFactionOtherSystemInfo: "Other System Info" => "Andere Systeminfos"
+.colOrganicDataSold: "Organic Data Value" => "Wert der organischen Daten"
+.labelSearch: "Search" => "Suche"
+.extCheckBoxShowHideSystemInfo.ToolTip: "Show/Hide System Info" => "Zeige/Verstecke Systeminformationen"
+.extCheckBoxShowHideMission.ToolTip: "Show/Hide Mission" => "Zeige/Verstecke Missionen"
+.extCheckBoxShowHideCommodities.ToolTip: "Show/Hide Commodities" => "Zeige/Verstecke Handelswaren"
+.extCheckBoxShowHideMaterials.ToolTip: "Show/Hide Materials" => "Zeige/Verstecke Materialien"
+.extCheckBoxShowHideBounties.ToolTip: "Show/Hide Crimes/Bounties" => "Zeige/Verstecke Verbrechen/Kopfgelder"
+.extCheckBoxShowHideInterdictions.ToolTip: "Show/Hide Interdictions" => "Zeige/Verstecke Unterbrechungen"
+.extCheckBoxShowHideKillBonds.ToolTip: "Show/Hide Kill Bonds" => "Zeige/Verstecke Tötungsbelohnungen"
+.extCheckBoxShowHideDataLink.ToolTip: "Show/Hide Datalink" => "Zeige/Verstecke Datenverbindungen"
+.extCheckBoxShowHideCartographic.ToolTip: "Show Hide Cartographic/Organic Sold" => "Zeige/Verstecke verkaufte Kartographie/Organismen"
 
 SECTION UserControlOrganics
 

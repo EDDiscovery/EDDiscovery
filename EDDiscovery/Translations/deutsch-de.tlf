@@ -18,13 +18,13 @@ Unknown: "Unknown" => "Unbekannt"
 Information: "Information" => "Information"
 NoPos: "No Pos" => "Keine Position"
 RemoveAll: "Remove All" => "Alle entfernen"
-Hostile: "Hostile" @
-Unfriendly: "Unfriendly" @
-Neutral: "Neutral" @
-Cordial: "Cordial" @
-Friendly: "Friendly" @
-Allied: "Allied" @
-Disabled: "Disabled" @
+Hostile: "Hostile" => "Feindlich"
+Unfriendly: "Unfriendly" => "Unbeliebt"
+Neutral: "Neutral" => "Neutral"
+Cordial: "Cordial" => "Akzeptiert"
+Friendly: "Friendly" => "Befreundet"
+Allied: "Allied" => "Verbündet"
+Disabled: "Disabled" => "Deaktiviert"
 
 SECTION StartUp
 
@@ -334,7 +334,7 @@ ImportExportForm: "Export data" => "Daten exportieren"
 .labelPaste: "Click Paste or drag text or files to input box" => "Kopiere Text in, oder ziehe Dateien auf Eingabefeld"
 .extRadioButtonTab: "Tab" => "Tabulator"
 .extCheckBoxExcludeHeader: "Exclude Header Row" => "Ignoriere Headerzeile"
-.labelSaveImport: "Save Import As" @
+.labelSaveImport: "Save Import As" => "Speichere Import als"
 
 SECTION GalaxySectorSelect
 
@@ -356,7 +356,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Galaxiesektor wählen"
 .GALSELEN: "Select the data set" => "Wähle das Datenset"
 .PresstoAccept: "Press to Accept" => "Drücke um anzunehmen"
 .GALSELTitle: "Select Galaxy Data" => "Wähle Galaxiedaten"
-.Area: "Area:" @
+.Area: "Area:" => "Gebiet"
 
 SECTION MoveToCommander
 
