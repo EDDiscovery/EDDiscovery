@@ -514,7 +514,7 @@ namespace EDDiscovery.UserControls
             Color textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
             Color backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
 
-            System.Diagnostics.Debug.WriteLine($"Draw shopping list with {textcolour} {backcolour}");
+            //System.Diagnostics.Debug.WriteLine($"Draw shopping list with {textcolour} {backcolour}");
             extPictureBoxShoppingList.ClearImageList();
 
             extPictureBoxShoppingList.AddTextAutoSize(
