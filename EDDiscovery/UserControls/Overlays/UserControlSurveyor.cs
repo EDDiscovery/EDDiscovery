@@ -732,7 +732,7 @@ namespace EDDiscovery.UserControls
 
                         // make up triggers for the action programs
 
-                        triggers.Add(sd.BodyName, new HashSet<string>());
+                        triggers[sd.BodyName] = new HashSet<string>();
                         var en = triggers[sd.BodyName];
 
                         // we only send trigger actions when we are tracking the latest travel history, not when we are back in the history
