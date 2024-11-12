@@ -121,7 +121,7 @@ namespace EDDiscovery.Actions
         }
         
         // Call this to add any PanelConfig panels defined by active action files to the panel IDs list
-        public void CreatePanels()
+        public void CreatePanelsFromActionFiles()
         {
             foreach( ActionFile af in actionfiles.Enumerable)
             {
@@ -147,18 +147,25 @@ namespace EDDiscovery.Actions
 
                     if (ptype != null && id.HasChars() && wintitle.HasChars() && refname.HasChars() && description.HasChars() && path.HasChars() && System.IO.File.Exists(iconpath))
                     {
-                        var image = System.Drawing.Image.FromFile(iconpath);
+                        try
+                        {
+                            var image = iconpath.LoadBitmapNoLock();        // may except, so protect
 
-                        // registered panels, search the stored list, see if there, then it gets the index, else its added to the list
-                        int panelid = EDDConfig.Instance.FindCreatePanelID(id);
+                            // registered panels, search the stored list, see if there, then it gets the index, else its added to the list
+                            int panelid = EDDConfig.Instance.FindCreatePanelID(id);
 
-                        DiscoveryForm.AddPanel(panelid,
-                                            ptype,       // driver panel containing the UC to draw into, responsible for running action scripts/talking to the plugin
-                                            path,
-                                            wintitle, refname, description, image);
+                            DiscoveryForm.AddPanel(panelid,
+                                                ptype,       // driver panel containing the UC to draw into, responsible for running action scripts/talking to the plugin
+                                                path,
+                                                wintitle, refname, description, image);
+                        }
+                        catch( Exception ex)
+                        {
+                            System.Diagnostics.Trace.WriteLine($"*** Failed to load panel {ex}");
+                        }
                     }
                     else
-                        System.Diagnostics.Trace.WriteLine($"Panel {id} did not install due to missing items");
+                        System.Diagnostics.Trace.WriteLine($"*** Panel {id} did not install due to missing items");
                 }
             }
         }
@@ -486,7 +493,7 @@ namespace EDDiscovery.Actions
                     AudioQueueWave?.StopAll();
 
                     ReLoad(false);      // reload from disk, new ones if required, refresh old ones and keep the vars
-                    CreatePanels();
+                    CreatePanelsFromActionFiles();
                     CheckWarn();
 
                     string changes = "", updates="", removes="";

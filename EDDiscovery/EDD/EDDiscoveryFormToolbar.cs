@@ -144,7 +144,7 @@ namespace EDDiscovery
         private void buttonReloadActions_Click(object sender, EventArgs e)
         {
             actioncontroller.ReLoad();
-            actioncontroller.CreatePanels();
+            actioncontroller.CreatePanelsFromActionFiles();
             actioncontroller.CheckWarn();
             actioncontroller.onStartup();
             Controller.ResetUIStatus();

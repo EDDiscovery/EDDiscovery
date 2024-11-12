@@ -456,7 +456,7 @@ namespace EDDiscovery
             //----------------------------------------------------------------- Action controller (moved here oct 24 to have panels created before load)
 
             actioncontroller.ReLoad();          // load the action system up here, with the UI running
-            actioncontroller.CreatePanels();    // create any panels related to plugins
+            actioncontroller.CreatePanelsFromActionFiles();    // create any panels related to plugins
 
             // ---------------------------------------------------------------- Web server
 

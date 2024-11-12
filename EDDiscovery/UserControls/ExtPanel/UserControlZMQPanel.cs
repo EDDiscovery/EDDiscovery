@@ -195,6 +195,7 @@ namespace EDDiscovery.UserControls
                                     Log($"Module check ran, gave:");
                                     Log(output.Item1);
                                     Log(output.Item2);
+                                    FileHelpers.DeleteFileNoError(modulecheckfile);
                                 }
                                 else
                                 {
@@ -388,6 +389,7 @@ namespace EDDiscovery.UserControls
                             exitreceived = true;
                         }
                         break;
+                    
                     case "history":
                         {
                             int start = json["start"].Int();
@@ -445,12 +447,14 @@ namespace EDDiscovery.UserControls
 
                     case "missions":
                         {
-                            HistoryEntry he = GetHE(json["entry"].Int());
+                            int entry = json["entry"].Int();
+                            HistoryEntry he = GetHEByIndex(entry);
 
                             JObject reply = new JObject
                             {
                                 ["responsetype"] = request,
-                                ["entry"] = he.Index,
+                                ["entry"] = entry,
+                                ["entryreturned"] = he?.Index ?? -1,
                                 ["current"] = he == null ? null : new JArray(),
                                 ["previous"] = he == null ? null : new JArray(),
                             };
@@ -486,14 +490,17 @@ namespace EDDiscovery.UserControls
                             zmqconnection.Send(reply);
                         }
                         break;
+
                     case "ship":
                         {
-                            HistoryEntry he = GetHE(json["entry"].Int());
+                            int entry = json["entry"].Int();
+                            HistoryEntry he = GetHEByIndex(entry);
 
                             JObject reply = new JObject
                             {
                                 ["responsetype"] = request,
-                                ["entry"] = he.Index,
+                                ["entry"] = entry,
+                                ["entryreturned"] = he?.Index ?? -1,
                                 ["ship"] = he == null ? null : JToken.FromObject(he.ShipInformation, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
@@ -516,25 +523,30 @@ namespace EDDiscovery.UserControls
 
                     case "suitsweapons":
                         {
-                            HistoryEntry he = GetHE(json["entry"].Int());
+                            int entry = json["entry"].Int();
 
-                            var sl = hl.SuitList.Suits(he.Suits);
-                            var wp = hl.WeaponList.Weapons(he.Weapons);
-                            var lo = hl.SuitLoadoutList.Loadouts(he.Loadouts);
+                            HistoryEntry he = GetHEByIndex(entry);
+
+                            var sl = he != null ? hl.SuitList.Suits(he.Suits) : null;
+                            var wp = he != null ? hl.WeaponList.Weapons(he.Weapons) : null;
+                            var lo = he != null ? hl.SuitLoadoutList.Loadouts(he.Loadouts) : null;
 
                             JObject reply = new JObject
                             {
                                 ["responsetype"] = request,
-                                ["entry"] = he.Index,
+                                ["entry"] = entry,
+                                ["entryreturned"] = he?.Index ?? -1,
                                 ["suits"] = sl == null ? null : JToken.FromObject(sl, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
                                 ["weapons"] = wp == null ? null : JToken.FromObject(wp, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
                                 ["loadouts"] = lo == null ? null : JToken.FromObject(lo, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
 
                             };
+
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
                             zmqconnection.Send(reply);
                         }
                         break;
+
                     case "carrier":
                         {
                             var cr = hl.Carrier;
@@ -549,6 +561,7 @@ namespace EDDiscovery.UserControls
                             zmqconnection.Send(reply);
                         }
                         break;
+
                     case "ledger":
                         {
                             var cr = hl.CashLedger;
@@ -649,14 +662,16 @@ namespace EDDiscovery.UserControls
 
                     case "mcmr":       // commods/mats/mrs
                         {
-                            HistoryEntry he = GetHE(json["entry"].Int());
+                            int entry = json["entry"].Int();
+                            HistoryEntry he = GetHEByIndex(entry);
 
-                            var cr = hl.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity);
+                            var cr = he!=null ? hl.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity) : null;
 
                             JObject reply = new JObject
                             {
                                 ["responsetype"] = request,
-                                ["entry"] = he.Index,
+                                ["entry"] = entry,
+                                ["entryreturned"] = he?.Index ?? -1,
                                 ["mcmr"] = cr == null ? null : JToken.FromObject(cr, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
@@ -956,12 +971,12 @@ namespace EDDiscovery.UserControls
         }
 
 
-        HistoryEntry GetHE(int entry)
+        HistoryEntry GetHEByIndex(int entry)
         {
             HistoryList hl = DiscoveryForm.History;
             if (entry < 0 || entry >= hl.Count)
                 entry = hl.Count - 1;
-            return hl[entry];
+            return hl.Count>0 ? hl[entry] : null;
         }
         #endregion
 
