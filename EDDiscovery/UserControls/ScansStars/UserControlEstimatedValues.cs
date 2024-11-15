@@ -157,28 +157,31 @@ namespace EDDiscovery.UserControls
 
                         string mappedstr = mappedvalue > 0 ? (mappedefficiently.ToString("N0") + " / " + mappedvalue.ToString("N0")) : "";
                         string firstmappedeffstr = firstmappedvalue > 0 ? (firstmappedefficiently.ToString("N0") + " / " + firstmappedvalue.ToString("N0")) : "";
-                        string fdmappedstr = firstdiscoveredmappedvalue > 0 ? (firstdiscoveredmappedefficiently + " / " + firstdiscoveredmappedvalue) : "";
+                        string fdmappedstr = firstdiscoveredmappedvalue > 0 ? (firstdiscoveredmappedefficiently.ToString("N0") + " / " + firstdiscoveredmappedvalue.ToString("N0")) : "";
 
                         // System.Diagnostics.Debug.WriteLine($"EV was map {bodies.ScanData.IsPreviouslyMapped} was dis {bodies.ScanData.IsPreviouslyDiscovered} we map {bodies.ScanData.Mapped}");
 
                         int estimatedvalue = bodies.ScanData.EstimatedValue;
 
-                        dataGridViewEstimatedValues.Rows.Add(new object[] {
-                                        GetBodySimpleName(bodies.ScanData.BodyDesignationOrName, last_he.System.Name),
-                                        spclass,
-                                        bodies.ScanData.DataSourceName,
-                                        (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : nullimg),
-                                        (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : nullimg),
-                                        bodies.ScanData.PR31State ? Icons.Controls.Scan_NotDiscoveredButMapped : bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : nullimg,
-                                        basevalue.ToString("N0"),
-                                        mappedstr,
-                                        firstmappedeffstr,
-                                        fdmappedstr ,
-                                        estimatedvalue>0 ? estimatedvalue.ToString("N0") : "" });
+                        if (checkBoxShowZeros.Checked || basevalue > 0)
+                        {
+                            dataGridViewEstimatedValues.Rows.Add(new object[] {
+                                            GetBodySimpleName(bodies.ScanData.BodyDesignationOrName, last_he.System.Name),
+                                            spclass,
+                                            bodies.ScanData.DataSourceName,
+                                            (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : nullimg),
+                                            (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : nullimg),
+                                            bodies.ScanData.PR31State ? Icons.Controls.Scan_NotDiscoveredButMapped : bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : nullimg,
+                                            basevalue.ToString("N0"),
+                                            mappedstr,
+                                            firstmappedeffstr,
+                                            fdmappedstr ,
+                                            estimatedvalue>0 ? estimatedvalue.ToString("N0") : "" });
 
-                        // column 0 is sorted by tag and has the full name in it.
-                        dataGridViewEstimatedValues.Rows[dataGridViewEstimatedValues.RowCount - 1].Cells[0].Tag = bodies.ScanData.BodyDesignationOrName;
-                        totalvalue += estimatedvalue;
+                            // column 0 is sorted by tag and has the full name in it.
+                            dataGridViewEstimatedValues.Rows[dataGridViewEstimatedValues.RowCount - 1].Cells[0].Tag = bodies.ScanData.BodyDesignationOrName;
+                            totalvalue += estimatedvalue;
+                        }
                     }
                 }
 

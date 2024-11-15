@@ -279,7 +279,7 @@ namespace EDDiscovery.UserControls
                     {
                         int? onHand = mcl.Where(m => m.Details.FDName == mat.Key).FirstOrDefault()?.Count;
                         MaterialCommodityMicroResourceType md = GetByFDName(mat.Key);
-                        int max = md.MaterialLimit().Value;
+                        int max = md.MaterialLimitOrNull() ?? 250;      // protect against a rouge material creeping in
                         if (!hidePlanetMatsWithNoCapacity || (onHand.HasValue ? onHand.Value : 0) < max)
                         {
                             wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLowerInvariant()),
