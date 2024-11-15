@@ -126,7 +126,17 @@ namespace EDDiscovery.UserControls
         #endregion
 
         #region Closedown
-        // Call to close down panel.
+
+        // call to request a close by the panel itself. Only for pop out windows
+        public void RequestClose()
+        {
+            if (this.Parent is UserControlForm)
+                ((UserControlForm)(this.Parent)).Close();
+            else
+                System.Diagnostics.Debug.WriteLine($"*** Can't request close this panel type {this.GetType()}");
+        }
+
+        // Call to indicate that the panel is closing, called by Form or Tab Control/Splitter to tell panel its closing down. Calls Closing() which the panel intercepts
         public void CloseDown()
         {
             IsClosed = true;

@@ -438,8 +438,6 @@ namespace EDDiscovery
 
             //----------------------------------------------------------------- Do translations before any thing else gets added to these toolbars
 
-            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);      // only user panels
-
             var enumlistcms = new Enum[] { EDTx.EDDiscoveryForm_addTabToolStripMenuItem, EDTx.EDDiscoveryForm_removeTabToolStripMenuItem, EDTx.EDDiscoveryForm_renameTabToolStripMenuItem, EDTx.EDDiscoveryForm_popOutPanelToolStripMenuItem, EDTx.EDDiscoveryForm_helpTabToolStripMenuItem };
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripTabs, enumlistcms, this);        // need to translate BEFORE we add in extra items
 

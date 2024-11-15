@@ -151,8 +151,6 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine("Closing splitter " + displaynumber);
 
-            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(TabListSortAlpha);
-
             SplitContainer sc = (SplitContainer)panelPlayfield.Controls[0];
 
             string state = ControlHelpersStaticFunc.SplitterTreeState(sc, "",
@@ -198,10 +196,12 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.TabStrip tabstrip = c as ExtendedControls.TabStrip;
                 if (tabstrip != null)       // reset the tab strip list. This will affect the order of SelectedIndex, but won't cause a change in panel type.
                 {
-                    tabstrip.ImageList = PanelInformation.GetUserSelectablePanelImages(TabListSortAlpha);
-                    tabstrip.TextList = PanelInformation.GetUserSelectablePanelDescriptions(TabListSortAlpha);
-                    tabstrip.TagList = PanelInformation.GetUserSelectablePanelIDs(TabListSortAlpha).Cast<Object>().ToArray();
-                    tabstrip.ListSelectionItemSeparators = PanelInformation.GetUserSelectableSeperatorIndex(TabListSortAlpha);
+                    var list = PanelInformation.GetUserSelectablePanelInfo(TabListSortAlpha, true);
+
+                    tabstrip.ImageList = list.Select(x => x.TabIcon).ToArray();
+                    tabstrip.TextList = list.Select(x => x.Description).ToArray();
+                    tabstrip.TagList = list.Select(x => (object)x.PopoutID).ToArray();
+                    tabstrip.ListSelectionItemSeparators = PanelInformation.GetUserSelectableSeperatorIndex(TabListSortAlpha, true);
                 }
             });
         }
@@ -251,10 +251,12 @@ namespace EDDiscovery.UserControls
             else                        // positive ones are tab strip with the panel id selected, if valid..
             {
                 ExtendedControls.TabStrip tabstrip = new ExtendedControls.TabStrip();
-                tabstrip.ImageList = PanelInformation.GetUserSelectablePanelImages(TabListSortAlpha);
-                tabstrip.TextList = PanelInformation.GetUserSelectablePanelDescriptions(TabListSortAlpha);
-                tabstrip.TagList = PanelInformation.GetUserSelectablePanelIDs(TabListSortAlpha).Cast<Object>().ToArray();
-                tabstrip.ListSelectionItemSeparators = PanelInformation.GetUserSelectableSeperatorIndex(TabListSortAlpha);
+
+                var list = PanelInformation.GetUserSelectablePanelInfo(TabListSortAlpha, true);
+                tabstrip.ImageList = list.Select(x => x.TabIcon).ToArray();
+                tabstrip.TextList = list.Select(x => x.Description).ToArray(); 
+                tabstrip.TagList = list.Select(x => (object)x.PopoutID).ToArray();
+                tabstrip.ListSelectionItemSeparators = PanelInformation.GetUserSelectableSeperatorIndex(TabListSortAlpha,true);
 
                 tabstrip.Dock = DockStyle.Fill;
                 tabstrip.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
@@ -317,7 +319,7 @@ namespace EDDiscovery.UserControls
 
                 tabstrip.OnPopOut += (tab, i) => { DiscoveryForm.PopOuts.PopOut((PanelInformation.PanelIDs)tabstrip.TagList[i]); };
 
-                PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(TabListSortAlpha); // sort order v.important.. we need the right index, dep
+                var pids = PanelInformation.GetUserSelectablePanelInfo(TabListSortAlpha, true).Select(x=>x.PopoutID).ToArray();
 
                 int indexofentry = Array.FindIndex(pids, x => x == (PanelInformation.PanelIDs)panelid);      // find ID in array..  -1 if not valid ID, it copes with -1
 

@@ -137,6 +137,8 @@ namespace EDDiscovery.Actions
                     string iconname = sp.NextQuotedWordComma();
                     string path = sp.NextQuotedWord();
                     string iconpath = null;
+                    bool? popoutonly = sp.IsCharMoveOn(',') ? sp.NextBool() : false;
+
                     if (path.HasChars())
                     {
                         path = System.IO.Path.Combine(EDDOptions.Instance.AppDataDirectory, path);
@@ -145,7 +147,7 @@ namespace EDDiscovery.Actions
 
                     Type ptype = type.HasChars() ? Type.GetType(type) : null;
 
-                    if (ptype != null && id.HasChars() && wintitle.HasChars() && refname.HasChars() && description.HasChars() && path.HasChars() && System.IO.File.Exists(iconpath))
+                    if (ptype != null && id.HasChars() && wintitle.HasChars() && refname.HasChars() && description.HasChars() && path.HasChars() && System.IO.File.Exists(iconpath) && popoutonly.HasValue)
                     {
                         try
                         {
@@ -157,7 +159,7 @@ namespace EDDiscovery.Actions
                             DiscoveryForm.AddPanel(panelid,
                                                 ptype,       // driver panel containing the UC to draw into, responsible for running action scripts/talking to the plugin
                                                 path,
-                                                wintitle, refname, description, image);
+                                                wintitle, refname, description, image, popoutonly.Value);
                         }
                         catch( Exception ex)
                         {

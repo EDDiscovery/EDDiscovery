@@ -385,13 +385,16 @@ namespace EDDiscovery.UserControls
         {
             popoutdropdown = new ExtendedControls.ExtListBoxForm("", true);
 
-            popoutdropdown.Items = PanelInformation.GetUserSelectablePanelDescriptions(EDDConfig.Instance.SortPanelsByName).ToList();
-            popoutdropdown.ImageItems = PanelInformation.GetUserSelectablePanelImages(EDDConfig.Instance.SortPanelsByName).ToList();
-            popoutdropdown.ItemSeperators = PanelInformation.GetUserSelectableSeperatorIndex(EDDConfig.Instance.SortPanelsByName);
-            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
+            var list = PanelInformation.GetUserSelectablePanelInfo(EDDConfig.Instance.SortPanelsByName, true);
+            popoutdropdown.ImageItems = list.Select(x => x.TabIcon).ToList();
+            popoutdropdown.Items = list.Select(x => x.Description).ToList();
+            popoutdropdown.ItemSeperators = PanelInformation.GetUserSelectableSeperatorIndex(EDDConfig.Instance.SortPanelsByName, true);
             popoutdropdown.FlatStyle = FlatStyle.Popup;
             popoutdropdown.PositionBelow(buttonExtPopOut);
             popoutdropdown.FitImagesToItemHeight = true;
+
+            PanelInformation.PanelIDs[] pids = list.Select(x => x.PopoutID).ToArray();
+
             popoutdropdown.SelectedIndexChanged += (s, ea, key) =>
             {
                 UserControlCommonBase uccb = PanelInformation.Create(pids[popoutdropdown.SelectedIndex]);

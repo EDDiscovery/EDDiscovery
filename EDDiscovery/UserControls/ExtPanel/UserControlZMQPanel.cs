@@ -32,6 +32,7 @@ namespace EDDiscovery.UserControls
         private JToken config;
         private bool panelgood;
         private int pluginapiversion;
+        private bool hiddeneddui;
 
         const int APIVERSION = 1;
 
@@ -64,6 +65,8 @@ namespace EDDiscovery.UserControls
             panelgood = config != null;
             if (!panelgood)
                 config = new JToken();
+
+            hiddeneddui = config["Panel"].I("Hidden").Bool(false);      // set if we want the EDD UI to be hidden, which may be if we are operating a python UI
         }
 
         public override void Init()
@@ -83,7 +86,7 @@ namespace EDDiscovery.UserControls
                 DiscoveryForm.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
                 DiscoveryForm.OnNewTarget += Discoveryform_OnNewTarget;
 
-                actioncontroller = DiscoveryForm.MakeAC(this.FindForm(), pluginfolder, null, null, null, Log);     // action files are in this folder, don't allow management
+                actioncontroller = DiscoveryForm.MakeAC(this.FindForm(), pluginfolder, null, null, null, (s)=> Log(s));     // action files are in this folder, don't allow management
             }
             else
                 Log("Missing panel config.json file");
@@ -371,6 +374,9 @@ namespace EDDiscovery.UserControls
                             zmqconnection.Send(reply);
                             Log($"Connected with version {json["version"].Str()} at API {pluginapiversion}");
                             SelectView(true);
+
+                            if (hiddeneddui)
+                                FindForm()?.Hide();
                             break;
                         }
 
@@ -378,15 +384,23 @@ namespace EDDiscovery.UserControls
                         {
                             string reason = json["reason"].Str();
                             if (reason.HasChars())
-                                Log("Panel requested termination due to " + reason);
+                                Log("Panel requested termination due to " + reason,false);  // don't force visibility
+
                             string config = json["config"].Str();
                             if (config.HasChars())
                             {
                                 PutSetting("Config", config);
-                                //Log($"ZMQ config {config}");
                                 System.Diagnostics.Debug.WriteLine($"ZMQ config {config}");
                             }
+
                             exitreceived = true;
+
+                            bool closewindow = json["close"].Bool(false);
+
+                            if (closewindow)        // if asked to close, close it
+                                RequestClose();
+                            else if (hiddeneddui)       // else make panel visible 
+                                FindForm()?.Show();
                         }
                         break;
                     
@@ -1176,13 +1190,19 @@ namespace EDDiscovery.UserControls
             {
                 panelLog.Visible = !dialog;
                 configurableUC.Visible = dialog;
+                System.Diagnostics.Debug.WriteLine($"ZMQ Swap to dialog view {dialog}");
             }
         }
 
-        public void Log(string logtext)
+        // print to log file, and force visibility normally
+        public void Log(string logtext, bool showlog = true)
         {
+            System.Diagnostics.Debug.WriteLine($"ZMQ Log: {showlog} : {logtext}");
             extRichTextBoxErrorLog.AppendText(logtext + Environment.NewLine);
-            SelectView(false);
+            if (showlog)
+            {
+                SelectView(false);
+            }
         }
 
         private void extButtonViewDialog_Click(object sender, EventArgs e)

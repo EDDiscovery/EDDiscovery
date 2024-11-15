@@ -135,15 +135,15 @@ namespace EDDiscovery
         {
             addTabToolStripMenuItem.DropDownItems.Clear();
 
-            foreach (PanelInformation.PanelIDs pid in PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName))
+            foreach (PanelInformation.PanelInfo pi in PanelInformation.GetUserSelectablePanelInfo(EDDConfig.Instance.SortPanelsByName))
             {
-                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(pid,
+                ToolStripMenuItem tsmi = PanelInformation.MakeToolStripMenuItem(pi.PopoutID,
                     (s, e) => tabControlMain.AddTab((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag), tabControlMain.LastTabClicked));
 
                 if (tsmi != null)
                     addTabToolStripMenuItem.DropDownItems.Add(tsmi);
 
-                ToolStripMenuItem tsmi2 = PanelInformation.MakeToolStripMenuItem(pid,
+                ToolStripMenuItem tsmi2 = PanelInformation.MakeToolStripMenuItem(pi.PopoutID,
                     (s, e) => PopOuts.PopOut((PanelInformation.PanelIDs)((s as ToolStripMenuItem).Tag)));
 
                 if (tsmi2 != null)

@@ -109,7 +109,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Materials, typeof(UserControlMaterials) , "Materials", "Materials", "Materials count" ) },
             { new PanelInfo( PanelIDs.Commodities, typeof(UserControlCommodities), "Commodities", "Commodities", "Commodity count") },
             { new PanelInfo( PanelIDs.MicroResources, typeof(UserControlMicroResources), "Micro Resources", "MicroResources", "Micro resource count") },
-            { new PanelInfo( PanelIDs.Resources, typeof(UserControlAllResources), "Resources", "AllResources", "All Materials, Commodity, MicroResources") },
+            { new PanelInfo( PanelIDs.Resources, typeof(UserControlAllResources), "Resources", "AllResources", "Resources: All Materials, Commodity, MicroResources") },
             { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", "Ledger of cash related entries") },
             { new PanelInfo( PanelIDs.Missions, typeof(UserControlMissions), "Missions", "Missions", "Mission list") },
             { new PanelInfo( PanelIDs.Factions, typeof(UserControlFactions), "Factions", "Factions", "Faction rewards and trading tally") },
@@ -193,7 +193,6 @@ namespace EDDiscovery
 
         static private List<PanelInfo> displayablepanels;   // filled by Init - all panels that can be displayed
         static private List<PanelInfo> userselectablepanellist;   // filled by Init - all panels that the user can select directly
-        static private int[] userselectablepanelseperatorlistgroup;    // filled by Init - the seperator group index into userselectablepanellist
 
         public static IReadOnlyDictionary<PanelIDs, Image> PanelTypeIcons { get; private set; } = new BaseUtils.Icons.IconGroup<PanelIDs>("Panels");
 
@@ -226,21 +225,21 @@ namespace EDDiscovery
                 }
             }
 
-            userselectablepanelseperatorlistgroup = separs.ToArray();
             displayablepanels = (from x in paneldefinition where x.PopoutID != PanelIDs.GroupMarker select x).ToList(); //remove groups..
             userselectablepanellist = (from x in displayablepanels where x.Description.Length>0 select x).ToList(); //remove non selectables..
         }
 
         // add panel, indicate if its fresh
-        public static PanelInfo AddPanel(int id, Type uccbtype, Object tag, string wintitle, string refname, string description, Image image)
+        public static PanelInfo AddPanel(int id, Type uccbtype, Object tag, string wintitle, string refname, string description, Image image, bool popoutonly)
         {
             PanelIDs pid = (PanelIDs)id;
 
             if (GetPanelInfoByPanelID(pid) == null)     // don't double add
             {
-                PanelInfo p = new PanelInfo(pid, uccbtype, wintitle, refname, description, image, tag);
+                PanelInfo p = new PanelInfo(pid, uccbtype, wintitle, refname, description, image, tag, popoutonly);
                 displayablepanels.Add(p);
-                userselectablepanellist.Add(p);
+                if ( description.Length>0)          // description = nothing means not user selectable
+                    userselectablepanellist.Add(p);
                 return p;
             }
             else
@@ -271,8 +270,9 @@ namespace EDDiscovery
             public Image TabIcon;
             public string Description;          // must be non zero length to be user selectable.  Translated
             public Object Tag;                  // any other info
+            public bool PopOutOnly;
 
-            public PanelInfo(PanelIDs p, Type t, string wintitle, string refname, string description, Image icon = null, Object tag = null)
+            public PanelInfo(PanelIDs p, Type t, string wintitle, string refname, string description, Image icon = null, Object tag = null, bool popoutonly = false)
             {
                 PopoutID = p;
                 PopoutType = t;
@@ -281,6 +281,7 @@ namespace EDDiscovery
                 Description = description;
                 TabIcon = icon;
                 Tag = tag;
+                PopOutOnly = popoutonly;
             }
 
             public PanelInfo(string s)
@@ -291,45 +292,28 @@ namespace EDDiscovery
             }
         }
 
-        static public PanelInfo[] GetUserSelectablePanelInfo(bool sortbyname)       // only user selected
+        // only user selected, and optionally ignore pop out only panels
+        static public PanelInfo[] GetUserSelectablePanelInfo(bool sortbyname, bool ignorepopoutonly = false)       
         {
+            var list = userselectablepanellist.Where(x => x.PopOutOnly == false || ignorepopoutonly == false);
             if (sortbyname)
-                return (from x in userselectablepanellist orderby x.WindowTitle select x).ToArray();        // sort by window title.
+                return list.OrderBy(x=>x.Description).ToArray();        // sort by window title.
             else
-                return userselectablepanellist.ToArray();
+                return list.ToArray();
         }
-
-        static public string[] GetUserSelectablePanelDescriptions(bool sortbyname)       // only user selected
+         
+        // only user selected, and optionally ignore pop out only panels, return separator list of positions where a seperator should be placed
+        static public int[] GetUserSelectableSeperatorIndex(bool sortbyname, bool ignorepopoutonly = false)                
         {
-            return GetUserSelectablePanelInfo(sortbyname).Select(x => x.Description).ToArray();
-        }
-
-        static public Image[] GetUserSelectablePanelImages(bool sortbyname)                // only user selected
-        {
-            return GetUserSelectablePanelInfo(sortbyname).Select(x => x.TabIcon).ToArray();
-        }
-
-        static public PanelIDs[] GetUserSelectablePanelIDs(bool sortbyname)                // only user selected
-        {
-            return GetUserSelectablePanelInfo(sortbyname).Select(x => x.PopoutID).ToArray();
-        }
-
-        static public int[] GetUserSelectableSeperatorIndex(bool sortbyname)                // only user selected
-        {
-            if (sortbyname)
+            PanelInfo[] pilist = GetUserSelectablePanelInfo(sortbyname, ignorepopoutonly);
+            List<int> separs = new List<int>();
+            for(int o = 1; o < pilist.Length; o++)
             {
-                PanelInfo[] pilist = GetUserSelectablePanelInfo(true);
-                List<int> separs = new List<int>();
-                for(int o = 1; o < pilist.Length; o++)
-                {
-                    if (pilist[o - 1].Description[0] != pilist[o].Description[0])
-                        separs.Add(o);
-                }
-
-                return separs.ToArray();
+                if (pilist[o - 1].Description[0] != pilist[o].Description[0])
+                    separs.Add(o);
             }
-            else
-                return userselectablepanelseperatorlistgroup;
+
+            return separs.ToArray();
         }
 
         static public PanelIDs? GetPanelIDByWindowsRefName(string name) // null if not found

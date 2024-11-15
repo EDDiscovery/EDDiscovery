@@ -87,24 +87,22 @@ namespace EDDiscovery.UserControls
                 panelVScroll.Controls.Add(cb);
             }
 
-            PanelInformation.PanelIDs[] pids = PanelInformation.GetUserSelectablePanelIDs(EDDConfig.Instance.SortPanelsByName);
-
-            for (int i = 0; i < pids.Length; i++)
+            foreach( var pi in PanelInformation.GetUserSelectablePanelInfo(EDDConfig.Instance.SortPanelsByName))
             {
-                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(pids[i]);
-
                 //System.Diagnostics.Debug.WriteLine($"Panel {pi.WindowTitle} {pi.TabIcon.Width} x {pi.TabIcon.Height}");
 
                 CompositeAutoScaleButton cb = CompositeAutoScaleButton.QuickInit(
                             selback,
                             pi.WindowTitle,
                             new Image[] { pi.TabIcon },
-                            new Image[] { EDDiscovery.Icons.Controls.Popout, EDDiscovery.Icons.Controls.Addtab48 },
-                            ButtonPress);
+                            pi.PopOutOnly ? new Image[] { EDDiscovery.Icons.Controls.Popout } : new Image[] { EDDiscovery.Icons.Controls.Popout, EDDiscovery.Icons.Controls.Addtab48 },
+                            ButtonPress,
+                            2);
 
                 cb.Tag = pi.PopoutID;
                 toolTip.SetToolTip(cb.Buttons[0], "Pop out in a new window".T(EDTx.UserControlPanelSelector_PP1));
-                toolTip.SetToolTip(cb.Buttons[1], "Open as a new menu tab".T(EDTx.UserControlPanelSelector_MT1));
+                if ( cb.Buttons.Length>1)
+                    toolTip.SetToolTip(cb.Buttons[1], "Open as a new menu tab".T(EDTx.UserControlPanelSelector_MT1));
                 toolTip.SetToolTip(cb.Decals[0], pi.Description);
 
                 panelVScroll.Controls.Add(cb);

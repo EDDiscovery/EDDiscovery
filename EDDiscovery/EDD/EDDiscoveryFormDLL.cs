@@ -61,7 +61,7 @@ namespace EDDiscovery
 
                 if (typeof(EDDDLLInterfaces.EDDDLLIF.IEDDPanelExtension).IsAssignableFrom(paneltype))
                 {
-                    AddPanel(panelid, typeof(UserControls.UserControlExtPanel), paneltype, wintitle, refname, description, image);
+                    AddPanel(panelid, typeof(UserControls.UserControlExtPanel), paneltype, wintitle, refname, description, image,false);
                 }
                 else
                 {

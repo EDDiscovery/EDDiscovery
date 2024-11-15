@@ -225,9 +225,9 @@ namespace EDDiscovery
 
         #region Handling panels
 
-        public void AddPanel(int id, Type uccbtype, Object tag, string wintitle, string refname, string description, Image image)
+        public void AddPanel(int id, Type uccbtype, Object tag, string wintitle, string refname, string description, Image image, bool popoutonly)
         {
-            PanelInformation.PanelInfo p = PanelInformation.AddPanel(id, uccbtype, tag, wintitle, refname, description, image);
+            PanelInformation.PanelInfo p = PanelInformation.AddPanel(id, uccbtype, tag, wintitle, refname, description, image, popoutonly);
             if (p != null)
             {
                 System.Diagnostics.Trace.WriteLine($"Added panel {id} {uccbtype.Name} {wintitle} {refname} {description} {p.PopoutID}");

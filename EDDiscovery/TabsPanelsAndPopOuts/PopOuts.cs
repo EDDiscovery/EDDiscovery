@@ -61,33 +61,33 @@ namespace EDDiscovery
 
         public void SaveCurrentPopouts()
         {
-            PanelInformation.PanelIDs[] userselectablepanels = PanelInformation.GetUserSelectablePanelIDs(false);        // get list of panels in system
+            PanelInformation.PanelInfo[] userselectablepanels = PanelInformation.GetUserSelectablePanelInfo(false);        // get list of panels in system
 
-            foreach (var p in userselectablepanels)
+            foreach (var pi in userselectablepanels)
             {
-                int numopened = usercontrolsforms.CountOf(p);
+                int numopened = usercontrolsforms.CountOf(pi.PopoutID);
                 //System.Diagnostics.Debug.WriteLine($"Popout {PopOutSaveID(p)} = {numopened}");
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(PopOutSaveID(p), numopened);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(PopOutSaveID(pi.PopoutID), numopened);
             }
         }
 
         public void LoadSavedPopouts()
         {
-            PanelInformation.PanelIDs[] userselectablepanels = PanelInformation.GetUserSelectablePanelIDs(false);        // get list of panels in system
+            PanelInformation.PanelInfo[] userselectablepanels = PanelInformation.GetUserSelectablePanelInfo(false);        // get list of panels in system
 
-            foreach( var p in userselectablepanels)
+            foreach( var pi in userselectablepanels)
             {
-                int numtoopen = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(PopOutSaveID(p), 0);          // get number, from id
+                int numtoopen = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(PopOutSaveID(pi.PopoutID), 0);          // get number, from id
 
                 if (numtoopen > 0) 
                 {
-                    System.Diagnostics.Debug.WriteLine($"Popout load {p} number {numtoopen}");
+                    System.Diagnostics.Debug.WriteLine($"Popout load {pi} number {numtoopen}");
 
-                    int numopened = usercontrolsforms.CountOf(p);                                                       // see how many we already have..
+                    int numopened = usercontrolsforms.CountOf(pi.PopoutID);                                                       // see how many we already have..
                     if (numopened < numtoopen)
                     {
                         for (int i = numopened + 1; i <= numtoopen; i++)
-                            PopOut(p);
+                            PopOut(pi.PopoutID);
                     }
                 }
             }
