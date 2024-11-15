@@ -237,7 +237,7 @@ namespace EDDiscovery.UserControls
 
             if ( customtimerangesetting!=null)
             {
-                var customrange = ConvertTimeRangeFromJson(customtimerangesetting);   // may be null if bad
+                var customrange = ConvertTimeRangeFromJson(customtimerangesetting);   // may be null if bad. Returns in UTC
                 if (customrange != null)
                 {
                     for( int i = 0; i < customrange.Item1.Count; i++)
@@ -285,12 +285,12 @@ namespace EDDiscovery.UserControls
             int addvpos = vpos;                         // record where these fields start from
             int controlnumber = 0;                      // a unique ID which always incremements
 
-            var customrange = ConvertTimeRangeFromJson(settings);   // may be null
+            var customrange = ConvertTimeRangeFromJson(settings);   // may be null, all times in UTC
             if (customrange != null)
             {
                 for (int i = 0; i < customrange.Item1.Count ; i++)
                 {
-                    AddDT(frm, customrange.Item1[i], customrange.Item2[i], vpos, controlnumber++);
+                    AddDT(frm, customrange.Item1[i], customrange.Item2[i], vpos, controlnumber++);  // converts to local and presents local
                     vpos += spacing;
                 }
             }
@@ -305,7 +305,7 @@ namespace EDDiscovery.UserControls
                     int numcontrols = frm.GetByStartingName("dates:").Length;     // get number up there
                     int pos = addvpos + numcontrols * spacing;           // work out where next should be
                     frm.MoveControls(pos - 10, spacing);                     // move anything after this (less a bit for safety) to space
-                    AddDT(frm, DateTime.UtcNow.StartOfMinute(), DateTime.UtcNow.StartOfMinute(), pos, controlnumber++);
+                    AddDT(frm, DateTime.UtcNow.StartOfMinute(), DateTime.UtcNow.StartOfMinute(), pos, controlnumber++);     // give current UTC time, it will be converted local by AddDT
                     frm.UpdateDisplayAfterAddNewControls();
                 }
                 else if (control.StartsWith("del:"))
@@ -322,11 +322,11 @@ namespace EDDiscovery.UserControls
 
             if (frm.ShowDialogCentred(form, form.Icon, "Times", closeicon: true) == DialogResult.OK)
             {
-                DateTime[] startt = frm.GetByStartingName<DateTime>("dates:");
-                DateTime[] endt = frm.GetByStartingName<DateTime>("datee:");
+                DateTime[] startt = frm.GetByStartingName<DateTime>("dates:");  // local time
+                DateTime[] endt = frm.GetByStartingName<DateTime>("datee:");    // local time
                 JObject jo = new JObject { ["start"] = new JArray(), ["end"] = new JArray() };
-                jo["start"].AddRange(startt);
-                jo["end"].AddRange(endt);
+                jo["start"].AddRange(startt.Select(x => EDDConfig.Instance.ConvertTimeToUTCFromPicker(x)));     // store, but convert back to UTC before storing
+                jo["end"].AddRange(endt.Select(x => EDDConfig.Instance.ConvertTimeToUTCFromPicker(x)));
                 return jo.ToString();
             }
 
@@ -334,6 +334,7 @@ namespace EDDiscovery.UserControls
         }
 
         // JSON string->DateTimes
+        // JSON string keeps it in UTC so all times returned are UTC
         public static Tuple<List<DateTime>, List<DateTime>> ConvertTimeRangeFromJson(string settings)
         {
             try
@@ -349,10 +350,11 @@ namespace EDDiscovery.UserControls
             return null;
         }
 
-        private static void AddDT(ConfigurableForm frm, DateTime s, DateTime e, int vpos, int controlnumber)
+        // taking the UTC times, produce a local entry
+        private static void AddDT(ConfigurableForm frm, DateTime starttimeutc, DateTime endtimeutc, int vpos, int controlnumber)
         {
-            frm.Add(new ConfigurableEntryList.Entry("dates:" + controlnumber, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(s), new Point(8, vpos), new Size(200, 24), null) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
-            frm.Add(new ConfigurableEntryList.Entry("datee:" + controlnumber, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(e), new Point(250, vpos), new Size(200, 24), null) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
+            frm.Add(new ConfigurableEntryList.Entry("dates:" + controlnumber, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(starttimeutc), new Point(8, vpos), new Size(200, 24), null) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
+            frm.Add(new ConfigurableEntryList.Entry("datee:" + controlnumber, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(endtimeutc), new Point(250, vpos), new Size(200, 24), null) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
             frm.Add(new ConfigurableEntryList.Entry("del:" + controlnumber, typeof(ExtButton), "X", new Point(470, vpos), new Size(24, 24), null));
         }
     }
