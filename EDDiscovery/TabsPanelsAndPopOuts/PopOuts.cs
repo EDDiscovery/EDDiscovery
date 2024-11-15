@@ -65,9 +65,9 @@ namespace EDDiscovery
 
             foreach (var pi in userselectablepanels)
             {
-                int numopened = usercontrolsforms.CountOf(pi.PopoutID);
-                //System.Diagnostics.Debug.WriteLine($"Popout {PopOutSaveID(p)} = {numopened}");
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(PopOutSaveID(pi.PopoutID), numopened);
+                // new method saves the pop out number list
+                var list = usercontrolsforms.PopOutNumberList(pi.PopoutID);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(PopOutSaveID(pi.PopoutID), list.ToString(","));
             }
         }
 
@@ -75,25 +75,43 @@ namespace EDDiscovery
         {
             PanelInformation.PanelInfo[] userselectablepanels = PanelInformation.GetUserSelectablePanelInfo(false);        // get list of panels in system
 
-            foreach( var pi in userselectablepanels)
+            foreach (var pi in userselectablepanels)
             {
+                // lets try the old method, which is the number..
                 int numtoopen = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(PopOutSaveID(pi.PopoutID), 0);          // get number, from id
 
-                if (numtoopen > 0) 
-                {
-                    System.Diagnostics.Debug.WriteLine($"Popout load {pi} number {numtoopen}");
+                for (int i = 0; usercontrolsforms.CountOf(pi.PopoutID) < numtoopen; i++)
+                    PopOut(pi.PopoutID);
 
-                    int numopened = usercontrolsforms.CountOf(pi.PopoutID);                                                       // see how many we already have..
-                    if (numopened < numtoopen)
+                // new method (nov 24) saves a list of pop out instances and puts them up. Don't say I don't every do things for you!
+
+                string newlist = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(PopOutSaveID(pi.PopoutID), "");     // get list
+                if ( newlist.HasChars())
+                {
+                    var popoutlist = newlist.RestoreIntListFromString();
+                    foreach( int x in popoutlist)
                     {
-                        for (int i = numopened + 1; i <= numtoopen; i++)
-                            PopOut(pi.PopoutID);
+                        if (usercontrolsforms.Find(pi.PopoutID, x) == null)
+                            PopOut(pi.PopoutID, x);
                     }
                 }
             }
         }
 
+        // pop out the next free instance number of this pop out
         public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected)
+        {
+            for( int i =0; i < UserControlCommonBase.DisplayNumberStartExtraTabs-1; i++ )       //0..98 (= DisplayNumbers 1 to 99, this is the limit defined)
+            {
+                if (usercontrolsforms.Find(selected,i)==null)      // if popout i is not there
+                    return PopOut(selected, i);
+            }
+
+            return PopOut(selected, 0); // unlikely but a backup
+        }
+
+        // open panel instance N of selected. N = 0 onwards
+        public UserControlCommonBase PopOut(PanelInformation.PanelIDs selected, int number)
         {
             // tcf holds the panel
 
@@ -110,25 +128,25 @@ namespace EDDiscovery
                     return RequestPanelOperation.Invoke(s, o);
                 };
 
-                PanelInformation.PanelInfo poi = PanelInformation.GetPanelInfoByPanelID(selected);
+                PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(selected);
 
                 // we make up the title and refname based on how many previously opened of this type
-                int numopened = usercontrolsforms.CountOf(selected) + 1;
-                string windowtitle = poi.WindowTitle + ((numopened > 1) ? $" {numopened}" : "");
-                string refname = poi.WindowRefName + numopened.ToString();
+                string windowtitle = pi.WindowTitle + ((number > 0) ? $" {number+1}" : "");
+                string refname = pi.WindowRefName + (number+1).ToString();      // +1 is historical
 
-                System.Diagnostics.Trace.WriteLine($"Popout Init UCF `{windowtitle}` rn {refname}");
+                System.Diagnostics.Trace.WriteLine($"Popout Init UCF {pi.WindowTitle} instance {number} title `{windowtitle}` refnumber {refname}");
 
                 ucf.Init(uccb, windowtitle, ExtendedControls.Theme.Current.WindowsFrame, refname, discoveryform.TopMost,
                              ExtendedControls.Theme.Current.LabelColor, ExtendedControls.Theme.Current.SPanelColor, ExtendedControls.Theme.Current.TransparentColorKey);
 
-                uccb.Init(discoveryform, UserControls.UserControlCommonBase.DisplayNumberPopOuts + numopened - 1);
+                uccb.Init(discoveryform, UserControlCommonBase.DisplayNumberPopOuts + number);
 
+                System.Diagnostics.Debug.WriteLine($"UCCB Display number {ucf.PopOutNumber}");
                 ExtendedControls.Theme.Current.ApplyStd(ucf);  // apply theming/scaling to form before shown, so that it restored back to correct position (done in UCF::onLoad)
 
                 ucf.Show();                                                     // this ends up, via Form Shown, calls LoadLayout in the UCCB.
 
-                discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp,  new BaseUtils.Variables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", numopened.ToString()} ));
+                discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp,  new BaseUtils.Variables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", number.ToString()} ));
             }
 
             return uccb;

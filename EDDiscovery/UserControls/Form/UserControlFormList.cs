@@ -25,7 +25,16 @@ namespace EDDiscovery.UserControls
     public class UserControlFormList
     {
         public int Count { get { return forms.Count; } }
+        public int CountOf(PanelInformation.PanelIDs p)
+        {
+            return forms.Where(x => x.PanelID == p).Count();
+        }
         public UserControlForm this[int i] { get { return forms[i]; } }
+        public UserControlForm Find(PanelInformation.PanelIDs p, int num)
+        {
+            int index = forms.FindIndex(x => x.PanelID == p && x.PopOutNumber == num);
+            return index >= 0 ? forms[index] : null;
+        }
 
         public UserControlFormList(EDDiscoveryForm ed)
         {
@@ -76,18 +85,19 @@ namespace EDDiscovery.UserControls
             discoveryform.ActionRun(Actions.ActionEventEDList.onPopDown, new BaseUtils.Variables(new string[] { "PopOutName", tcf.DBRefName.Substring(9), "PopOutTitle", tcf.WinTitle }));
         }
 
-        public int CountOf(PanelInformation.PanelIDs p)
-        {
-            int count = 0;
 
+        public List<int> PopOutNumberList(PanelInformation.PanelIDs p)
+        {
+            List<int> list = new List<int>();
             foreach (UserControlForm tcf in forms)
             {
                 if (tcf.PanelID == p)
-                    count++;
+                    list.Add(tcf.PopOutNumber);
             }
-
-            return count;
+            list.Sort();    // may not be in order
+            return list;
         }
+
 
         public void ShowAllInTaskBar()
         {

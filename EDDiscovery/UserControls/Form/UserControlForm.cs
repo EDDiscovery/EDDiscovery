@@ -35,6 +35,8 @@ namespace EDDiscovery.UserControls
         public string DBRefName { get; private set; }
         public string WinTitle { get; private set; }
 
+        public int PopOutNumber {  get { return UserControl.DisplayNumber - UserControlCommonBase.DisplayNumberPopOuts; } }     // 0, 1, 2 etc
+
         public bool IsTransparencySupported { get { return !TransparencyColorKey.IsFullyTransparent(); } }
 
         public PanelInformation.PanelIDs PanelID { get { return UserControl?.PanelID ?? PanelInformation.PanelIDs.GroupMarker; } }  // May not be open, if so, return an impossible
@@ -328,7 +330,7 @@ namespace EDDiscovery.UserControls
 
 #endregion
 
-#region Clicks
+        #region Clicks
 
         private void button_close_Click(object sender, EventArgs e)
         {
