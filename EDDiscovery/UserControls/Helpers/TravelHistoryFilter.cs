@@ -220,19 +220,19 @@ namespace EDDiscovery.UserControls
 
             List<TravelHistoryFilter> el = new List<TravelHistoryFilter>()
             {
-                TravelHistoryFilter.NoFilter,
-                TravelHistoryFilter.FromHours(6),
-                TravelHistoryFilter.FromHours(12),
-                TravelHistoryFilter.FromHours(24),
-                TravelHistoryFilter.FromDays(3),
-                TravelHistoryFilter.FromWeeks(1),
-                TravelHistoryFilter.FromWeeks(2),
-                TravelHistoryFilter.LastMonth(),
-                TravelHistoryFilter.LastQuarter(),
-                TravelHistoryFilter.LastHalfYear(),
-                TravelHistoryFilter.LastYear(),
-                TravelHistoryFilter.LastTwoYears(),
-                TravelHistoryFilter.LastThreeYears(),
+                NoFilter,
+                FromHours(6),
+                FromHours(12),
+                FromHours(24),
+                FromDays(3),
+                FromWeeks(1),
+                FromWeeks(2),
+                LastMonth(),
+                LastQuarter(),
+                LastHalfYear(),
+                LastYear(),
+                LastTwoYears(),
+                LastThreeYears(),
             };
 
             if ( customtimerangesetting!=null)
@@ -247,19 +247,19 @@ namespace EDDiscovery.UserControls
 
             if (inclnumberlimit)
             {
-                el.Add(TravelHistoryFilter.Last(10));
-                el.Add(TravelHistoryFilter.Last(20));
-                el.Add(TravelHistoryFilter.Last(100));
-                el.Add(TravelHistoryFilter.Last(500));
+                el.Add(Last(10));
+                el.Add(Last(20));
+                el.Add(Last(100));
+                el.Add(Last(500));
             };
 
             if (incldock)
             {
-                el.Add(TravelHistoryFilter.LastDock());
+                el.Add(LastDock());
             }
             if (inclstartend)
             {
-                el.Add(TravelHistoryFilter.StartEnd());
+                el.Add(StartEnd());
             }
 
             cc.DataSource = el;
