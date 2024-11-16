@@ -158,6 +158,9 @@ namespace EDDiscovery.UserControls
 
         private void HistoryChanged()
         {
+            // rebuild in case local time changed
+            TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), true, true, true, GetSetting(dbTimeDates, ""));
+
             Display(DiscoveryForm.History, false);
         }
 

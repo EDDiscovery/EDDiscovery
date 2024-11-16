@@ -209,6 +209,9 @@ namespace EDDiscovery.UserControls
 
         public void HistoryChanged()           // on History change
         {
+            // rebuild in case local time has changed
+            TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), true, true, true, GetSetting(dbTimeDates, ""));
+
             Display(DiscoveryForm.History, false);
 
             // quick marks are commander dependent
