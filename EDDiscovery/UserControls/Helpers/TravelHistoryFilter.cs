@@ -306,7 +306,7 @@ namespace EDDiscovery.UserControls
                     int pos = addvpos + numcontrols * spacing;           // work out where next should be
                     frm.MoveControls(pos - 10, spacing);                     // move anything after this (less a bit for safety) to space
                     AddDT(frm, DateTime.UtcNow.StartOfMinute(), DateTime.UtcNow.StartOfMinute(), pos, controlnumber++);     // give current UTC time, it will be converted local by AddDT
-                    frm.UpdateDisplayAfterAddNewControls();
+                    frm.UpdateEntries(); 
                 }
                 else if (control.StartsWith("del:"))
                 {
