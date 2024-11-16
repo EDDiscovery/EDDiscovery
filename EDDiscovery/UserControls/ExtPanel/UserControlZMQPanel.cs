@@ -30,14 +30,17 @@ namespace EDDiscovery.UserControls
         
         private string pluginfolder;
         private JToken config;
-        private bool panelgood;
+        private bool configgood;
         private int pluginapiversion;
         private bool hiddeneddui;
+        private bool exitreceived = false;
+        private bool initreceived = false;
 
         const int APIVERSION = 1;
 
         private System.Diagnostics.Process exeprocess;
         private NetMQUtils.NetMQJsonServer zmqconnection;
+        private bool Running => (zmqconnection?.Running??false) && initreceived && !exitreceived;
 
         public UserControlZMQPanel()
         {
@@ -62,8 +65,8 @@ namespace EDDiscovery.UserControls
             string configfilepath = Path.Combine(pluginfolder, "config.json");
             string configfilecontents =  BaseUtils.FileHelpers.TryReadAllTextFromFile(configfilepath);
             config = configfilecontents != null ? JToken.Parse(configfilecontents, JToken.ParseOptions.CheckEOL | JToken.ParseOptions.AllowTrailingCommas) : null;
-            panelgood = config != null;
-            if (!panelgood)
+            configgood = config != null;
+            if (!configgood)
                 config = new JToken();
 
             hiddeneddui = config["Panel"].I("Hidden").Bool(false);      // set if we want the EDD UI to be hidden, which may be if we are operating a python UI
@@ -77,7 +80,7 @@ namespace EDDiscovery.UserControls
             configurableUC.Dock = DockStyle.Fill;
             panelLog.Dock = DockStyle.Fill;
 
-            if (panelgood)
+            if (configgood)
             {
                 DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
                 DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
@@ -90,6 +93,7 @@ namespace EDDiscovery.UserControls
             }
             else
                 Log("Missing panel config.json file");
+
         }
 
         public override bool SupportTransparency { get { return config["Panel"].I("SupportTransparency").Bool(false); } } 
@@ -109,7 +113,7 @@ namespace EDDiscovery.UserControls
         // the UC sizes and themes itself
         public override void LoadLayout()
         {
-            if (!panelgood)     // abort in bad state
+            if (!configgood)     // abort in bad state
                 return; 
 
             configurableUC.Init("UC", "");
@@ -153,7 +157,7 @@ namespace EDDiscovery.UserControls
         // On Initial display, start up the python system
         public override void InitialDisplay()
         {
-            if (!panelgood) // abort in bad situation
+            if (!configgood) // abort in bad situation
                 return;
 
             bool good = false;
@@ -291,17 +295,20 @@ namespace EDDiscovery.UserControls
 
         public override bool AllowClose() 
         { 
-            if ( zmqconnection?.Running ?? false )     // protect against close before server running
+            if ( Running)     // protect against close before server running, only if we have initialised
             {
-                System.Diagnostics.Debug.WriteLine("ZMQ {DBBaseName} Send terminate");
+                System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} Send terminate");
                 SendTerminate();
                 MSTicks ms = new MSTicks(1000);
+
+                System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} wait for exit received back for a while");
 
                 while ( !exitreceived && zmqconnection.Running && !ms.TimedOut)        // we horribly just sit here waiting for the exit received to be sent..
                 {
                     Application.DoEvents();
                     System.Threading.Thread.Sleep(20);
                 }
+
                 System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} received exit {exitreceived}");
             }
 
@@ -310,9 +317,9 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
-            System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} panel Closing ");
+            System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} Closing ");
 
-            if (!panelgood)
+            if (!configgood)
                 return;
 
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -322,6 +329,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
             DiscoveryForm.OnNewTarget -= Discoveryform_OnNewTarget;
 
+            System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} close zmq ");
             zmqconnection?.Close();
 
             if (exeprocess != null && !exeprocess.HasExited)
@@ -329,14 +337,15 @@ namespace EDDiscovery.UserControls
                 exeprocess.Kill();
             }
 
+            System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} close action controller");
             actioncontroller.CloseDown();       // with persistent vars if required
+            System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} finish close");
         }
 
         #endregion
 
         #region From client
 
-        private bool exitreceived = false;
 
         // Message received from plugin, in UI thread due to thunk above
         private async void HandleClientMessages(List<JToken> list)
@@ -371,6 +380,8 @@ namespace EDDiscovery.UserControls
                                 ["commander"] = commander,
                                 ["config"] = GetSetting("Config", ""),
                             };
+
+                            initreceived = true;
                             zmqconnection.Send(reply);
                             Log($"Connected with version {json["version"].Str()} at API {pluginapiversion}");
                             SelectView(true);
@@ -1041,7 +1052,7 @@ namespace EDDiscovery.UserControls
         #region Events
         private void SendTerminate()
         {
-            JObject reply = new JObject
+            JObject reply = new JObject     // already triaged we are running
             {
                 ["responsetype"] = "terminate",
             };
@@ -1051,7 +1062,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange()
         {
-            if (zmqconnection != null)
+            if (Running)
             {
                 JObject reply = new JObject
                 {
@@ -1067,7 +1078,7 @@ namespace EDDiscovery.UserControls
         // travel history changed cursor
         public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
-            if (zmqconnection != null)
+            if (Running)
             {
                 JObject reply = new JObject
                 {
@@ -1082,7 +1093,7 @@ namespace EDDiscovery.UserControls
         // new unfiltered journal entry
         private void DiscoveryForm_OnNewJournalEntryUnfiltered(EliteDangerousCore.JournalEntry obj)
         {
-            if (zmqconnection != null)
+            if (Running)
             {
                 JToken jo = JToken.FromObject(obj, true, new Type[] { typeof(Bitmap), typeof(Image) }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
 
@@ -1100,7 +1111,7 @@ namespace EDDiscovery.UserControls
         // new history list entry
         private void Discoveryform_OnNewEntry(EliteDangerousCore.HistoryEntry he)
         {
-            if (zmqconnection != null)
+            if (Running)
             {
 
                 JObject reply = new JObject
@@ -1125,7 +1136,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewUIEvent(EliteDangerousCore.UIEvent uievent)
         {
-            if (zmqconnection != null)
+            if (Running)
             {
                 QuickJSON.JToken t = QuickJSON.JToken.FromObject(uievent, ignoreunserialisable: true,
                                                             ignored: new Type[] { typeof(Bitmap), typeof(Image) },
@@ -1144,7 +1155,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_ScreenShotCaptured(string file, Size size)
         {
-            if (zmqconnection != null)
+            if (Running)
             {
                 JObject reply = new JObject
                 {
@@ -1160,7 +1171,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewTarget(object obj)
         {
-            if (zmqconnection != null)
+            if (Running)
             {
                 var hastarget = EliteDangerousCore.DB.TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
 
@@ -1197,11 +1208,14 @@ namespace EDDiscovery.UserControls
         // print to log file, and force visibility normally
         public void Log(string logtext, bool showlog = true)
         {
-            System.Diagnostics.Debug.WriteLine($"ZMQ Log: {showlog} : {logtext}");
-            extRichTextBoxErrorLog.AppendText(logtext + Environment.NewLine);
-            if (showlog)
+            if (!IsClosed)
             {
-                SelectView(false);
+                System.Diagnostics.Debug.WriteLine($"ZMQ Log: {showlog} : {logtext}");
+                extRichTextBoxErrorLog.AppendText(logtext + Environment.NewLine);
+                if (showlog)
+                {
+                    SelectView(false);
+                }
             }
         }
 
