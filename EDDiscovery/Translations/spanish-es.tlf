@@ -18,17 +18,17 @@ Unknown: "Unknown" => "Desconocido"
 Information: "Information" => "Información"
 NoPos: "No Pos" => "No pos"
 RemoveAll: "Remove All" => "Eliminar Todo"
-Hostile: "Hostile" @
-Unfriendly: "Unfriendly" @
-Neutral: "Neutral" @
-Cordial: "Cordial" @
-Friendly: "Friendly" @
-Allied: "Allied" @
-Disabled: "Disabled" @
+Hostile: "Hostile" => "Hostil"
+Unfriendly: "Unfriendly" => "Enemistado"
+Neutral: "Neutral" => "Neutral"
+Cordial: "Cordial" => "Cordial"
+Friendly: "Friendly" => "Amistoso"
+Allied: "Allied" => "Aliado"
+Disabled: "Disabled" => "Deshabilitado"
 
 SECTION StartUp
 
-.DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "Whoo there, Bessie. Your sure?"
+.DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "EDDiscovery ya se encuentra en marcha. ¿Lanzar de todos modos?"
 
 SECTION DataGridView
 
@@ -137,7 +137,7 @@ SECTION PopOutInfo
 .Grid.Title: "Grid" => "Cuadrícula"
 .SplitterControl.Description: "Splitter (allows other panels to be placed in it)" => "Divisor (permite colocar otros paneles en el mismo)"
 .SplitterControl.Title: "Splitter" => "Divisor"
-.PanelSelector.Description: "" => "Descripción"
+.PanelSelector.Description: "" @
 .PanelSelector.Title: "+" => "+"
 .Search.Title: "Search" => "Búsqueda"
 .Search.Description: "Search" = PopOutInfo.Search.Title
@@ -204,7 +204,7 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem: "Force reload logs" => "Forzar la recarga de registros"
 .adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "Re-scan all journal files" => "Vuelva a analizar todos los archivos de diario"
 .adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "Eliminar entradas de salto del MDD duplicadas"
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" => "Enviar revistas no sincronizadas a EDSM"
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" => "Enviar diarios no sincronizadas a EDSM"
 .adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" => "Reconstruir índices de base de datos del sistema"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Sincronizar con EDSM"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Enviar a Inara datos históricos (Naves anteriores, módulos almacenados)"
@@ -286,7 +286,7 @@ SECTION EDDiscoveryController
 .RTH: "Reading travel history" => "Leer el historial de viajes"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Continúe ejecutando ED Discovery hasta que se complete la actualización"
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "La descarga de Star Data está inhabilitada. Usa el panel de Configuración para volver a habilitar"
-.EDSMU: "Systems update complete with {0:N0} systems" => "Actualización de los sistemas EDSM completa con {0:N0} sistemas"
+.EDSMU: "Systems update complete with {0:N0} systems" => "Actualización de los sistemas completada con {0:N0} sistemas"
 .PLF: "Processing log file {0}" => "Procesando archivo de registro {0}"
 .RD: "Refresh Displays" => "Actualizar pantallas"
 .HRC: "History refresh complete." => "Se completó la actualización del historial"
@@ -334,7 +334,7 @@ ImportExportForm: "Export data" => "Exportar Datos"
 .labelPaste: "Click Paste or drag text or files to input box" => "Haz clic en Pegar o arrastra texto o archivos a la casilla de entrada"
 .extRadioButtonTab: "Tab" @
 .extCheckBoxExcludeHeader: "Exclude Header Row" => "Excluir fila de encabezado"
-.labelSaveImport: "Save Import As" @
+.labelSaveImport: "Save Import As" => "Guardar importación como"
 
 SECTION GalaxySectorSelect
 
@@ -355,8 +355,8 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Seleccionar Sector Galáctico"
 .Select: "Select: " => "Seleccione: "
 .GALSELEN: "Select the data set" => "Seleccione el conjunto de datos"
 .PresstoAccept: "Press to Accept" => "Presione para aceptar"
-.GALSELTitle: "Select Galaxy Data" => "Seleccione EDSM Galaxy Data"
-.Area: "Area:" @
+.GALSELTitle: "Select Galaxy Data" => "Seleccione datos de la galaxia"
+.Area: "Area:" => "Área"
 
 SECTION MoveToCommander
 
