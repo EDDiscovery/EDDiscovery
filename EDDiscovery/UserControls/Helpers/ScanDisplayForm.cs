@@ -51,15 +51,18 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                StarScan.SystemNode nodedata = null;
                 EliteDangerousCore.DB.UserDatabaseSettingsSaver db = new EliteDangerousCore.DB.UserDatabaseSettingsSaver(EliteDangerousCore.DB.UserDatabase.Instance, "ScanDisplayFormCommon_");
-                EDSMSpanshButton edsmSpanshButton = new EDSMSpanshButton();
+
                 ScanDisplayBodyFiltersButton filterbut = new ScanDisplayBodyFiltersButton();
                 ScanDisplayConfigureButton configbut = new ScanDisplayConfigureButton();
+                EDSMSpanshButton edsmSpanshButton = null;
                 ScanDisplayUserControl sd = new ScanDisplayUserControl();
+
+                StarScan.SystemNode nodedata = null;
 
                 if (forcedlookup == null)   // if we not forced into the mode
                 {
+                    edsmSpanshButton = new EDSMSpanshButton();
                     edsmSpanshButton.Init(db, "EDSMSpansh", "");
                     edsmSpanshButton.ValueChanged += (s, e) =>
                     {
