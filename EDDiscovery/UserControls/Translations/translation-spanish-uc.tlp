@@ -424,7 +424,7 @@ SECTION UserControlSurveyor
 .Systemscancomplete: "System scan complete" => "Análisis del sistema completo"
 .bodiesdetected: " bodies detected." => " cuerpos detectados."
 .bodiesfound: " bodies found." => " cuerpos encontrados."
-.ShowSignalMismatch: " Cluster and NonBody counts differ by " => " recuento de Clúster and NoCuerpo difieren en "
+.ShowSignalMismatch: " Cluster and NonBody counts differ by " => " recuento de Clúster y NoCuerpo difieren en "
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" => "Alinear Izquierda"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" => "Alinear Centro"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Alignment Right" => "Alinear Derecha"
