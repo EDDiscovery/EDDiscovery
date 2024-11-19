@@ -450,6 +450,29 @@ namespace EDDiscovery.UserControls
 
                         break;
 
+                    case "journal":
+                        {
+                            int last = json["last"].Int();
+                            int cmdrid = DiscoveryForm.History.CommanderId;
+                            var tlulist = EliteDangerousCore.DB.TravelLogUnit.GetCommander(cmdrid);
+                            int tlunumber = tlulist.Count - last - 1;
+                            JArray output = null;
+                            if (tlunumber > 0 && tlunumber < tlulist.Count)
+                            {
+                                var tabledata = JournalEntry.GetTableData(new System.Threading.CancellationToken(), cmdrid, tluid: tlulist[tlunumber].ID);
+                                output = (JArray)JToken.FromObject(tabledata.Select(x=>x.Json), true);
+                            }
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["last"] = last,
+                                ["journal"] = output,
+                            };
+                            zmqconnection.Send(reply);
+                        }
+
+                        break;
                     case "historyjid":
                         {
                             long jid = json["jid"].Long();
@@ -510,7 +533,7 @@ namespace EDDiscovery.UserControls
                                 }
                             }
 
-                            System.Diagnostics.Debug.WriteLine($"Mission response {reply.ToString(true)}");
+                            //System.Diagnostics.Debug.WriteLine($"Mission response {reply.ToString(true)}");
 
                             zmqconnection.Send(reply);
                         }
@@ -528,7 +551,7 @@ namespace EDDiscovery.UserControls
                                 ["entryreturned"] = he?.Index ?? -1,
                                 ["ship"] = he == null ? null : JToken.FromObject(he.ShipInformation, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
                             };
-                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            //System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
                             zmqconnection.Send(reply);
                         }
                         break;
@@ -541,7 +564,7 @@ namespace EDDiscovery.UserControls
                                 ["responsetype"] = request,
                                 ["shiplist"] = sl == null ? null : JToken.FromObject(sl, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
                             };
-                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            //System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
                             zmqconnection.Send(reply);
                         }
                         break;
@@ -567,7 +590,7 @@ namespace EDDiscovery.UserControls
 
                             };
 
-                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            //System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
                             zmqconnection.Send(reply);
                         }
                         break;
@@ -582,7 +605,7 @@ namespace EDDiscovery.UserControls
                                 ["carrier"] = cr == null ? null : JToken.FromObject(cr, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
 
                             };
-                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            //System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
                             zmqconnection.Send(reply);
                         }
                         break;
@@ -597,6 +620,22 @@ namespace EDDiscovery.UserControls
                                 ["ledger"] = cr == null ? null : JToken.FromObject(cr, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
 
                             };
+                            //System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            zmqconnection.Send(reply);
+                        }
+                        break;
+
+                    case "shipyardoutfitting":
+                        {
+                            string yard = json["yard"].StrNull();
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["yard"] = yard,
+//tbd
+                                ["shipyard"] = null,
+                                ["outfitting"] = null,
+                            };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
                             zmqconnection.Send(reply);
                         }
@@ -604,7 +643,7 @@ namespace EDDiscovery.UserControls
 
                     case "shipyards":
                         {
-                            var cr = hl.Shipyards;
+                            var cr = hl.Shipyards.GetFilteredList(true);        // filter the list, latests first, without repeats
 
                             JObject reply = new JObject
                             {
@@ -619,7 +658,7 @@ namespace EDDiscovery.UserControls
 
                     case "outfitting":
                         {
-                            var cr = hl.Outfitting;
+                            var cr = hl.Outfitting.GetFilteredList(true);
 
                             JObject reply = new JObject
                             {

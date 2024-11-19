@@ -90,7 +90,7 @@ namespace EDDiscovery.Actions
                         }
                     }
 
-                    jidindex = hl.GetIndex(jid.Value);
+                    jidindex = hl.GetIndexOfJID(jid.Value);
 
                     if ( jidindex == -1 )
                     {
