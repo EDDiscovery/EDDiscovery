@@ -60,7 +60,7 @@ namespace EDDiscovery
                                 InvokeAsyncOnUiThread(() =>
                                 {
                                     Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-                                    NewFilteredJournalEntryFromScanner(entry, null);                // then push it thru. this will cause another set of calls to NewEntry First/Second
+                                    NewJournalEntryFromScanner(entry, null);                // then push it thru. this will cause another set of calls to NewEntry First/Second
                                                                                             // EDDN handler will pick up EDDCommodityPrices and send it.
                                 });
 
@@ -104,7 +104,7 @@ namespace EDDiscovery
 
                                     InvokeAsyncOnUiThread(() =>
                                     {
-                                        NewFilteredJournalEntryFromScanner(outfitting,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
+                                        NewJournalEntryFromScanner(outfitting,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
                                     });
                                 }
 
@@ -120,7 +120,7 @@ namespace EDDiscovery
 
                                     InvokeAsyncOnUiThread(() =>
                                     {
-                                        NewFilteredJournalEntryFromScanner(shipyardevent,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
+                                        NewJournalEntryFromScanner(shipyardevent,null);                // then push it thru. this will cause another set of calls to NewEntry First/Second, then EDDN will send it
                                     });
                                 }
 

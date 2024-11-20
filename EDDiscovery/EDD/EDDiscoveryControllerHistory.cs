@@ -211,11 +211,11 @@ namespace EDDiscovery
                     var cmdr = EDCommander.GetCommander(args.CurrentCommander);
                     newhistory = new HistoryList();
 
-                    var essentialitemslist = (EDDConfig.Instance.EssentialEventTypes == nameof(JournalEssentialEvents.JumpScanEssentialEvents)) ? JournalEssentialEvents.JumpScanEssentialEvents :
-                               (EDDConfig.Instance.EssentialEventTypes == nameof(JournalEssentialEvents.JumpEssentialEvents)) ? JournalEssentialEvents.JumpEssentialEvents :
-                               (EDDConfig.Instance.EssentialEventTypes == nameof(JournalEssentialEvents.NoEssentialEvents)) ? JournalEssentialEvents.NoEssentialEvents :
-                               (EDDConfig.Instance.EssentialEventTypes == nameof(JournalEssentialEvents.FullStatsEssentialEvents)) ? JournalEssentialEvents.FullStatsEssentialEvents :
-                                JournalEssentialEvents.EssentialEvents;
+                    var essentialitemslist = (EDDConfig.Instance.EssentialEventTypes == nameof(JournalEventsManagement.JumpScanEssentialEvents)) ? JournalEventsManagement.JumpScanEssentialEvents :
+                               (EDDConfig.Instance.EssentialEventTypes == nameof(JournalEventsManagement.JumpEssentialEvents)) ? JournalEventsManagement.JumpEssentialEvents :
+                               (EDDConfig.Instance.EssentialEventTypes == nameof(JournalEventsManagement.NoEssentialEvents)) ? JournalEventsManagement.NoEssentialEvents :
+                               (EDDConfig.Instance.EssentialEventTypes == nameof(JournalEventsManagement.FullStatsEssentialEvents)) ? JournalEventsManagement.FullStatsEssentialEvents :
+                                JournalEventsManagement.EssentialEvents;
 
                     int linkedcmdrid = cmdr.LinkedCommanderID;
 

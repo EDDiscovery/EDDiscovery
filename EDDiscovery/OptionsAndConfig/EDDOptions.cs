@@ -68,7 +68,8 @@ namespace EDDiscovery
         public bool ResetLanguage { get; set; }
         public string SelectLanguage { get; private set; }
         public bool SafeMode { get; private set; }
-        public bool DisableMerge { get; private set; }
+        public bool DisableJournalMerge { get; private set; }
+        public bool DisableJournalRemoval { get; private set; }
         public string NotificationFolderOverride { get; private set; }      // normally null..
         public float FontSize { get; private set; }                           // override font size, 0 if not
         public string Font { get; private set; }                           // override font, null if not
@@ -503,7 +504,8 @@ namespace EDDiscovery
                     case "checkgithub": CheckGithubFiles = true; break;
                     case "nocheckrelease": CheckRelease = false; break;
                     case "nocheckgithub": CheckGithubFiles = false; break;
-                    case "disablemerge": DisableMerge = true; break;
+                    case "disablemerge": DisableJournalMerge = true; break;
+                    case "disableremoval": DisableJournalRemoval = true; break;
                     case "disablebetacheck":
                         DisableBetaCommanderCheck = true;
                         break;

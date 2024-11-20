@@ -142,10 +142,14 @@ namespace EDDiscovery.UserControls
             comboBoxCustomHistoryLoadTime.SelectedIndex = ix >= 0 ? ix : 0;
             comboBoxCustomHistoryLoadTime.SelectedIndexChanged += ComboBoxCustomHistoryLoadTime_SelectedIndexChanged;
 
-            var eetn = new string[] { nameof(JournalEssentialEvents.EssentialEvents), nameof(JournalEssentialEvents.FullStatsEssentialEvents), nameof(JournalEssentialEvents.JumpScanEssentialEvents), nameof(JournalEssentialEvents.JumpEssentialEvents), nameof(JournalEssentialEvents.NoEssentialEvents) };
-            comboBoxCustomEssentialEntries.Items = new string[] { "Scans,Cargo,Missions,State,Jumps etc".T(EDTx.UserControlSettings_ESM), "All entries for Statistics".T(EDTx.UserControlSettings_FS),
-                                        "Jumps and Scans".T(EDTx.UserControlSettings_EJS),
-                                        "Jumps".T(EDTx.UserControlSettings_EJ), "Nothing".T(EDTx.UserControlSettings_EN) };
+            var eetn = new string[] { nameof(JournalEventsManagement.EssentialEvents), nameof(JournalEventsManagement.FullStatsEssentialEvents), 
+                                      nameof(JournalEventsManagement.JumpScanEssentialEvents), nameof(JournalEventsManagement.JumpEssentialEvents), 
+                                      nameof(JournalEventsManagement.NoEssentialEvents) };
+            comboBoxCustomEssentialEntries.Items = new string[] {   "Scans,Cargo,Missions,State,Jumps etc".T(EDTx.UserControlSettings_ESM), 
+                                                                    "All entries for Statistics".T(EDTx.UserControlSettings_FS),
+                                                                    "Jumps and Scans".T(EDTx.UserControlSettings_EJS),
+                                                                    "Jumps".T(EDTx.UserControlSettings_EJ), 
+                                                                    "Nothing".T(EDTx.UserControlSettings_EN) };
 
             comboBoxCustomEssentialEntries.Tag = eetn;
             ix = Array.FindIndex(eetn, x => x == EDDConfig.Instance.EssentialEventTypes);

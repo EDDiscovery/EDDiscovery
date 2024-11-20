@@ -1132,9 +1132,11 @@ namespace EDDiscovery.UserControls
         // new unfiltered journal entry
         private void DiscoveryForm_OnNewJournalEntryUnfiltered(EliteDangerousCore.JournalEntry obj)
         {
+            JToken jo = JToken.FromObject(obj, true, new Type[] { typeof(Bitmap), typeof(Image) }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+
+            System.Diagnostics.Debug.WriteLine($"ZMQ Received NewJournalEntryUnfiltered {jo.ToString()}");
             if (Running)
             {
-                JToken jo = JToken.FromObject(obj, true, new Type[] { typeof(Bitmap), typeof(Image) }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
 
                 JObject reply = new JObject
                 {

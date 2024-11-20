@@ -27,17 +27,10 @@ namespace EDDiscovery
         // It is made in Init(), and the controllerhistory.cs stars and stops the scanner
         // the scanner three callbacks as hooked into this EDDiscoveryController.
 
-        // on UI thread. hooked into journal monitor and receives all new entries with no DB filtering
-        public void NewRawJournalEntryFromScanner(JournalEntry je, StatusReader sr)
-        {
-            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-            //System.Diagnostics.Debug.WriteLine($"Raw JE {je.GetJson().ToString()}");
-        }
-
         // on UI thread. hooked into journal monitor and receives new entries post DB filtering..
         // Also call if you programatically add an entry
         // sr may be null if programatically made, not read from logs. Only a few events are made this way, check the references.
-        public void NewFilteredJournalEntryFromScanner(JournalEntry je, StatusReader sr)
+        public void NewJournalEntryFromScanner(JournalEntry je, StatusReader sr)
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
@@ -58,7 +51,7 @@ namespace EDDiscovery
                 System.Diagnostics.Debug.WriteLine($"Journal Codex set body name to {jce.EDDBodyName} due to status record");
             }
 
-            int playdelay = HistoryList.MergeTypeDelayForJournalEntries(je); // see if there is a delay needed..
+            int playdelay = JournalEventsManagement.MergeTypeDelayForJournalEntries(je); // see if there is a delay needed..
 
             if (playdelay > 0)  // if delaying to see if a companion event occurs. add it to list. Set timer so we pick it up
             {
@@ -101,10 +94,13 @@ namespace EDDiscovery
                 if (current.CommanderId != History.CommanderId)         // remove non relevant jes
                     continue;
 
-                OnNewJournalEntryUnfiltered?.Invoke(current);         // Called before any removal or merging, so this is the raw journal list
+                OnNewJournalEntryUnfiltered?.Invoke(current);         // Called before any removal or merging, so this is the raw journal entry
 
                 HistoryEntry historyentry = History.MakeHistoryEntry(current);
-                OnNewHistoryEntryUnfiltered?.Invoke(historyentry);     // this is post merge
+                OnNewHistoryEntryUnfiltered?.Invoke(historyentry);     // this is our raw unfiltered history entry
+
+                if (JournalEventsManagement.DiscardDynamicJournalRecordsFromHistory(current))   // we may want to discard this dynamic record
+                    continue;
 
                 while (journalqueue.Count > 0)                      // go thru the list and find merge candidates
                 {
@@ -114,7 +110,7 @@ namespace EDDiscovery
                     {
                         journalqueue.Dequeue();                     // remove it
                     }
-                    else if (HistoryList.MergeJournalEntries(current, peek))  // if the peeked is merged into current
+                    else if (JournalEventsManagement.MergeJournalRecordsFromHistory(current, peek))  // if the peeked is merged into current
                     {
                         OnNewJournalEntryUnfiltered?.Invoke(peek);         // send the peeked, unmodified
                         OnNewHistoryEntryUnfiltered?.Invoke(History.MakeHistoryEntry(peek));

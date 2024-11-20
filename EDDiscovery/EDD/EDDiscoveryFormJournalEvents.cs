@@ -99,7 +99,7 @@ namespace EDDiscovery
 
         public void NewEntry(JournalEntry e)       // programatically do a new entry
         {
-            Controller.NewFilteredJournalEntryFromScanner(e, null);                 // push it thru as if the monitor watcher saw it
+            Controller.NewJournalEntryFromScanner(e, null);                 // push it thru as if the monitor watcher saw it
         }
 
         // Called by controller before any HL removal reorder. The raw HE stream.  The MCMR etc databases have been updated
