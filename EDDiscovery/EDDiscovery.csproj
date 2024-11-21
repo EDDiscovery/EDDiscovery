@@ -1055,6 +1055,7 @@
     <None Include="Resources\Credits.txt" />
     <None Include="Resources\EDCD.PNG" />
     <None Include="Resources\EDD Licence Mono.txt" />
+    <Content Include="UserControls\ExtPanel\ZMQInterface.txt" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcp100.dll" />
     <Content Include="x86\Microsoft.VC100.CRT\msvcr100.dll" />
     <EmbeddedResource Include="UserControls\ScansStars\UserControl2DMap.resx">

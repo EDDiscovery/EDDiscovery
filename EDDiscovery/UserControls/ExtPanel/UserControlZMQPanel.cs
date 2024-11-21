@@ -12,6 +12,10 @@
  * governing permissions and limitations under the License.
  */
 
+/*
+ * 
+*/
+
 using BaseUtils;
 using EliteDangerousCore;
 using QuickJSON;
@@ -254,7 +258,7 @@ namespace EDDiscovery.UserControls
                             {
                                 bool createnowindow = pythonconfig["CreateNoWindow"].Bool(false);
 
-                                exeprocess = (System.Diagnostics.Process)BaseUtils.PythonLaunch.PyExeLaunch(startpyfile, socketnumber.ToStringInvariant(), pluginfolder, null, false, createnowindow);
+                                exeprocess = (System.Diagnostics.Process)BaseUtils.PythonLaunch.PyExeLaunch(startpyfile, $"{socketnumber.ToStringInvariant()} {DisplayNumber}", pluginfolder, null, false, createnowindow);
 
                                 if (exeprocess == null)
                                 {
@@ -294,22 +298,31 @@ namespace EDDiscovery.UserControls
         }
 
         public override bool AllowClose() 
-        { 
-            if ( Running)     // protect against close before server running, only if we have initialised
+        {
+            if ( Running )     // protect against close before server running, only if we have initialised
             {
-                System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} Send terminate");
+                //userclosing = true;     // user wanted close, note. exit will ask for another close, and with exitreceived, it will accept
+
+                System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} AllowClose Send terminate");
+
                 SendTerminate();
+
                 MSTicks ms = new MSTicks(1000);
 
                 System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} wait for exit received back for a while");
 
-                while ( !exitreceived && zmqconnection.Running && !ms.TimedOut)        // we horribly just sit here waiting for the exit received to be sent..
+                // we horribly just sit here waiting for the plugin to respond with exit
+                // if we don't then the panel will close before the exit is received
+                // we can't pend the close as this gets called by the tabs/splitters as well and they can't be pended.
+
+                while (!exitreceived && zmqconnection.Running && !ms.TimedOut)        
                 {
                     Application.DoEvents();
-                    System.Threading.Thread.Sleep(20);
+                    System.Diagnostics.Debug.WriteLine("ZMQ waiting for timeout");
+                    System.Threading.Thread.Sleep(50);      // do not do  as we will end up double closing
                 }
 
-                System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} received exit {exitreceived}");
+                System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} did it received exit {exitreceived}");
             }
 
             return true;
@@ -317,6 +330,7 @@ namespace EDDiscovery.UserControls
 
         public override void Closing()
         {
+            //System.Diagnostics.Debug.WriteLine($"ZMQ Closing {Environment.StackTrace}");
             System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} Closing ");
 
             if (!configgood)
@@ -340,6 +354,8 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} close action controller");
             actioncontroller.CloseDown();       // with persistent vars if required
             System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} finish close");
+
+            configgood = false;
         }
 
         #endregion
@@ -381,6 +397,7 @@ namespace EDDiscovery.UserControls
                                 ["config"] = GetSetting("Config", ""),
                             };
 
+                            exitreceived = false;
                             initreceived = true;
                             zmqconnection.Send(reply);
                             Log($"Connected with version {json["version"].Str()} at API {pluginapiversion}");
@@ -409,7 +426,10 @@ namespace EDDiscovery.UserControls
                             bool closewindow = json["close"].Bool(false);
 
                             if (closewindow)        // if asked to close, close it
-                                RequestClose();
+                            {
+                                if ( !IsClosed)     // paranoia
+                                    RequestClose();
+                            }
                             else if (hiddeneddui)       // else make panel visible 
                                 FindForm()?.Show();
                         }
@@ -454,19 +474,28 @@ namespace EDDiscovery.UserControls
                         {
                             int last = json["last"].Int();
                             int cmdrid = DiscoveryForm.History.CommanderId;
-                            var tlulist = EliteDangerousCore.DB.TravelLogUnit.GetCommander(cmdrid);
-                            int tlunumber = tlulist.Count - last - 1;
+                            int jcount = 0;
                             JArray output = null;
-                            if (tlunumber > 0 && tlunumber < tlulist.Count)
+
+                            if ( DiscoveryForm.History.HistoryLoaded)
                             {
-                                var tabledata = JournalEntry.GetTableData(new System.Threading.CancellationToken(), cmdrid, tluid: tlulist[tlunumber].ID);
-                                output = (JArray)JToken.FromObject(tabledata.Select(x=>x.Json), true);
+                                var tlulist = EliteDangerousCore.DB.TravelLogUnit.GetCommander(cmdrid);
+                                jcount = tlulist.Count;
+                                int tlunumber = jcount - last - 1;
+
+                                if (tlunumber > 0 && tlunumber < jcount)
+                                {
+                                    var tabledata = JournalEntry.GetTableData(new System.Threading.CancellationToken(), cmdrid, tluid: tlulist[tlunumber].ID);
+                                    output = (JArray)JToken.FromObject(tabledata.Select(x => x.Json), true);
+                                }
                             }
 
                             JObject reply = new JObject
                             {
                                 ["responsetype"] = request,
                                 ["last"] = last,
+                                ["count"] = jcount,
+                                ["commander"] = commander,
                                 ["journal"] = output,
                             };
                             zmqconnection.Send(reply);

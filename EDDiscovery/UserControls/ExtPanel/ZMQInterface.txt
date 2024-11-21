@@ -1,0 +1,345 @@
+﻿Master version of description
+
+############################################################################################### REQUESTS FROM PYTHON
+
+client requesttype = "start"
+    			version = "x.y.z.b" - version of the plugin
+    			apiversion = N - what version you were written to
+       server responsetype = "start"
+              eddversion = "x.y.z.b"
+              apiversion = 1
+    			historylength = X number of history entries currently loaded, may be zero if history not loaded yet.
+    			commander = commander name, may be None is history not loaded loaded yet.
+    			config = config string (this code uses JSON) to configure tool with.
+    					If no config has been set (empty string) edd.py will set edd.Config to an empty dict()
+
+client requesttype = "exit"	: Sent by client either because it wants to exit, or the server asked for a termination
+    			reason = "string" : Reason for exit.  Empty string or reason for error
+    			config = config string (this code uses  JSON). EDD, if not empty will store the config string in the user panel data store of EDD
+              close = false/true : Close if possible. Only works on pop out windows
+
+client requesttype = "history"
+    			start = history entry start position (index)
+    			length = number of entries to send. Can be longer than whats available from start
+    	server responsetype = requesttype
+    			start = requested start address
+    			length = number of entries sent, 0 if start is out of range or no history
+    			commander = as per start
+    			rows[] containing an object of journal entries. May be zero length.
+
+client requesttype = "historyjid" : Request journal record by journalEntry.ID (not history index). History must be loaded, so wait for historyload or start event historylength > 0
+    			jid = journal Id to request 
+    	server responsetype = requesttype
+    			jid = requested Id
+    			entry = None if does not exist, or entry below.
+
+    For both history and historyjid, then each entry contains:
+    		Index is the number used to look it up in history,
+    		EntryNumber is 1.. based.
+    		Unfiltered index is the entry number without all the filtered out entries
+    		 {"EntryNumber":22036,"Index":22035,"UnfilteredIndex":24753,
+    		 .. Journal Entry itself
+    		 "journalEntry":{"Station":"Two","StationType":"Crater Outpost","FDStationType":"CraterOutpost","CarrierDockingAccess":null,"StarSystem":"Eowyg Auscs FG-Y d34","MarketID":3534247946,"Commodities":[],
+    			"Id":2269018,"TLUId":2757,"IsJournalSourced":true,"CommanderId":36,
+    			"EventTypeID":"Market","EventTypeStr":"Market","EventTimeUTC":"2024-10-06T13:52:39Z","EventTimeLocal":"2024-10-06T14:52:39Z",
+    			"IsBeta":false,"IsHorizons":true,"IsOdyssey":true,"GameVersion":"4.0.0.1808","Build":"r304197/r0 ",
+    			"FullPath":"c:\\code\\logs\\empty\\Journal.2024-10-06T015203.01.log",
+    			"SNC":null},
+    		 .. System records where we are for all records
+    		 "System":{"Source":"FromJournal","MainStarType":"A","Name":"Eowyg Auscs FG-Y d34","X":23091.96875,"Y":29.8125,"Z":19516.3125,"HasCoordinate":true,"SystemAddress":1183557095691,"EDSMID":null},
+    		 "EventSummary":"Market","isTravelling":false,"TravelledTimeSec":0,"TravelledDistance":0.0,"TravelledJumps":0,"TravelledMissingJumps":0,
+    		 "Status":{"OnFoot":false,"OnFootFleetCarrier":false,"IsDocked":true,"IsLandedInShipOrSRV":false,"IsInSupercruise":false,"IsInMultiCrew":false,"TravelState":"Docked","BodyName":"Eowyg Auscs FG-Y d34","BodyID":-1,"HasBodyID":false,"BodyType":"Star","StationName":"Two","StationType":"Crater Outpost","StationFaction":"The Dark Wheel","MarketID":35342479,"ShipID":2,"ShipType":"Asp Explorer","ShipTypeFD":"Asp","IsSRV":false,"IsFighter":false,"OnCrewWithCaptain":null,"IsOnCrewWithCaptain":false,"IsInMultiPlayer":false,"GameMode":"Solo","Group":"","Wanted":false,"BodyApproached":false,"BookedDropship":false,"BookedTaxi":false,"CurrentBoost":1.0,"FSDJumpNextSystemName":null,"FSDJumpNextSystemAddress":null,"FSDJumpSequence":false,"GameModeGroup":"Solo","GameModeGroupMulticrew":"Solo"},
+    		 "WhereAmI":"Two","Visits":0,"FullBodyID":null,"Credits":95042663,"Loan":0,"Assets":156034834,
+    		 .. Info always present, Detailed may be None/Null or more info
+    		 "Info":"Prices on 0 items at Two in Eowyg Auscs FG-Y d34","Detailed":null}
+
+client requesttype = "journal" : Request Journal JSON records. History must be loaded, so wait for historyload or start event historylength > 0
+    			last = journal number to request. 0 = latest, -1 = previous, etc
+    	server responsetype = requesttype
+    			last = requested number
+    			count = number of journals stored for this commander, 0 if not loaded
+    			commander = as per start
+    			journal = None if last is out of range, or history not loaded, else an array of strings containing JSON
+
+client requesttype = "missions" - request mission information at an historic point in time given by the journal entry
+    			entry = history entry for information to report on. If out of range, the latest history entry is used
+    	server responsetype = requesttype
+    			entry = entry requested
+    			entryreturned = entry returned, or -1 for no data.
+    			current = Array of mission data of currently active missions, or None if no information
+    			previous = Array of mission data of previous missions, or None if no information
+    			Each mission data entry contains data from https://github.com/EDDiscovery/EliteDangerousCore/blob/d94c3f775e714f97a42d38758734929a5ae3c24b/EliteDangerous/Stats/MissionList.cs
+    				e.Missions is the journal entry MissionAccepted
+    				e.Completed is the journal entry MissionCompleted, null if not complete
+    				e.Redirected is the journal entry MissionRedirected (may be null)
+    				e.CargoDepot is the journal entry CargoDepot (may be null)
+    				e.OriginatingSystem, e.MissionEndTime,
+    				e.State (InProgress,Completed,Abandoned,Failed,Died)
+
+client requesttype = "ship" - request ship information on current ship at this journal entry
+    			entry = history entry for information to report on. If out of range, the latest history entry is used
+    	server responsetype = requesttype
+    			entry = entry requested
+    			entryreturned = entry returned, or -1 for no data.
+    			ship= object containing information on ID, State, ShipType, ShipFD, etc, or None if no history
+    			See https://github.com/EDDiscovery/EliteDangerousCore/blob/d94c3f775e714f97a42d38758734929a5ae3c24b/EliteDangerous/Ships/Ship.cs
+
+client requesttype = "shiplist" - request ship list information at this point in time
+    	server responsetype = requesttype
+    			shiplist = shiplist or None if no information. It contains:
+    				CurrentShipID Key string
+    				Ships object contains ship data, keys by Key String
+    				StoredModules object containing StoredModules array of modules in store. Each module is an object
+    			See https://github.com/EDDiscovery/EliteDangerousCore/blob/d94c3f775e714f97a42d38758734929a5ae3c24b/EliteDangerous/Ships/ShipList.cs
+
+client requesttype = "suitsweapons" - request ship information on current ship at this journal entry
+    			entry = history entry for information to report on. If out of range, the latest history entry is used
+    	server responsetype = requesttype
+    			entry = entry requested
+    			entryreturned = entry returned, or -1 for no data.
+    			if no history, the following will each be None
+    				suits object containing keys of suit information at this point. https://github.com/EDDiscovery/EliteDangerousCore/blob/d94c3f775e714f97a42d38758734929a5ae3c24b/EliteDangerous/Suit/SuitInformation.cs
+    				weapons object containing keys of weapon information at this point. https://github.com/EDDiscovery/EliteDangerousCore/blob/d94c3f775e714f97a42d38758734929a5ae3c24b/EliteDangerous/Suit/SuitWeapons.cs
+    				loadouts oject containing keys of loadouts information at this point. https://github.com/EDDiscovery/EliteDangerousCore/blob/d94c3f775e714f97a42d38758734929a5ae3c24b/EliteDangerous/Suit/SuitLoadouts.cs
+
+client requesttype = "carrier" - request latest carrier data
+    	server responsetype = requesttype
+    			carrier = object containing lots of fields. See https://github.com/EDDiscovery/EliteDangerousCore/blob/63c95a00a8745860cf0bbb46566ad8b7c0349327/EliteDangerous/Stats/Carrier.cs
+
+client requesttype = "ledger" - request ledger.
+    	server responsetype = requesttype
+    			ledger = object containing Transactions and CashTotal, Assets, Load. See https://github.com/EDDiscovery/EliteDangerousCore/blob/63c95a00a8745860cf0bbb46566ad8b7c0349327/EliteDangerous/Stats/Ledger.cs
+
+client requesttype = "shipyards" - request all shipyards
+    	server responsetype = requesttype
+    			shipyards = object containing "ShipYards" array of yards, see https://github.com/EDDiscovery/EliteDangerousCore/blob/63c95a00a8745860cf0bbb46566ad8b7c0349327/EliteDangerous/Ships/ShipYard.cs
+    						And AllowCobraMkIV (true,false,None if unknown)
+
+client requesttype = "outfitting" - request all outfitting
+    	server responsetype = q
+    			outfitting = ship yard list, see https://github.com/EDDiscovery/EliteDangerousCore/blob/63c95a00a8745860cf0bbb46566ad8b7c0349327/EliteDangerous/Stats/Outfitting.cs
+
+client requesttype = "scandata" - request scan data about system
+    			system = system name
+    			systemid = 56 bit system id, may be None
+    			weblookup = Not present or None: use EDD data only, or EDSM, Spansh, SpanshThenEDSM, All
+    	server responsetype = requesttype
+    			system = system name
+    			systemid = 56 bit system id, may be None
+    			scan = scan data. See https://github.com/EDDiscovery/EliteDangerousCore/blob/master/EliteDangerous/StarScan/StarScanNode.cs
+
+client requesttype = "faction" - request information about faction
+    			faction = string of faction name
+    	server responsetype = requesttype
+    			faction = string of faction name
+    			data = Faction data or None if no known faction. See https://github.com/EDDiscovery/EliteDangerousCore/blob/master/EliteDangerous/Stats/Stats.cs
+
+client requesttype = "factions" - request information about faction
+    	server responsetype = requesttype
+    			data = object array of faction name keys vs faction data. See https://github.com/EDDiscovery/EliteDangerousCore/blob/master/EliteDangerous/Stats/Stats.cs
+
+client requesttype = "mcmr" - request information about materials, commodities, microresources at this point
+    			entry = history entry for information to report on. If out of range, the latest history entry is used
+    	server responsetype = requesttype
+    			entry = entry reported on
+    			mcmr = list of data
+
+############################################################################################### REQUESTS TO RUN ACTION PROGRAMS
+
+client requesttype = "runactionprogram"	- in the .act files of the plugin try and find program and run it.
+    			name = "program name"
+    			[variables] = JSON of variables to give to program.  Such as an object containing { "Fred"=10, "Jim"= "Jimmy", "Sheila" = [1,2,3], "George"=true}
+    					 these will appear in the action program.  Bools will appear with the postfix _BOOL (George_BOOL)
+    	server responsetype = "runactionprogram"
+    			name = "program name"
+    			status = "errorstring" - empty if program run successfully, or the reason why it did not
+    			[variables] = Variables given back by the action program.  The action program uses Action function ToJSON to convert from action vars to JSON.
+
+############################################################################################### DEBUG
+
+client requesttype = "showlog"	- show the log screen of the user control panel - debug
+    			no server response
+
+############################################################################################### PUSHES FROM EDD
+
+push server responsetype = "terminate"
+    			No parameters, please quit - client sends exit
+
+#!! push server responsetype = "historypush"		-latest entry just received
+    			firstrow = history entry number index
+    			length = 1
+    			commander = string, name of commander
+    			rows[] containing an a single object of history entry (with the journal entry as an object called journalEntry)
+
+#!! push server responsetype = "journalentry"		-unfiltered journal entry before filtering, it may be reported in historypush later
+    			commander = string, name of commander
+    			journalEntry as an journal object (as per JournalEntry in historypush)
+
+push server responsetype = "historyload"		-when history is refreshed
+    			historylength = X (number of history entries currently loaded, may be zero)
+    			commander = commander loaded (may be blank, none loaded yet)
+
+push server responsetype = "travelhistorymoved"	
+    			row = row selected by travel history
+
+push server responsetype = "edduievent"
+    			type = UI event type
+    			event = JSON of a EDD UI event.
+    			See EDD for UI events they consist of events from status.json and some journal events such as music/fsdtarget.
+    			Important one sent at startup is UIOverallStatus which gives you broad info on current state: {'responsetype': 'edduievent', 'type': 'UIOverallStatus', 'event': {'MajorMode': 'None', 'Mode': 'None', 'Flags': [], 'Focus': 'NoFocus', 'Pips': {'Valid': False, 'Systems': -1.7976931348623157e+308, 'Engines': -1.7976931348623157e+308, 'Weapons': -1.7976931348623157e+308}, 'Firegroup': -1, 'Fuel': -1.0, 'Reserve': -1.0, 'Cargo': -1, 'Pos': {'ValidPosition': False, 'Latitude': -999999.0, 'Longitude': -999999.0, 'ValidAltitude': False, 'Altitude': -999999.0, 'AltitudeFromAverageRadius': False}, 'ValidHeading': False, 'Heading': -999999.0, 'ValidRadius': False, 'PlanetRadius': -999999.0, 'LegalState': None, 'BodyName': None, 'Health': -1.0, 'LowHealth': False, 'Gravity': -1.0, 'Temperature': -1.0, 'TemperatureState': 'Normal', 'Oxygen': -1.0, 'LowOxygen': False, 'BreathableAtmosphere': False, 'FSDState': 'Normal', 'SelectedWeapon': None, 'SelectedWeapon_Localised': None, 'DestinationName': '', 'DestinationBodyID': 0, 'DestinationSystemAddress': 0, 'EventTimeUTC': '2024-09-08T15:00:58Z', 'EventTypeID': 'OverallStatus', 'EventTypeStr': 'OverallStatus', 'EventRefresh': False}}
+
+push server responsetype = "screenshot"
+    			outfile = file name
+    			width = width of image
+    			height = width of image
+
+push server responsetype = "newtarget"		- EDD target system has been changed by the user
+    			system = system name
+    			X = x coord
+    			Y = y coord
+    			Z = z coord
+
+
+############################################################################################### UI Interaction
+See Action Document DialogControl section and the commands in it, this mirrors those commands
+
+push responsetype = "uievent"
+    			control = control name that event occurred on
+    			event = [optional] event that occurred - some controls (buttons) have only 1 event, so this is not given
+    			data = [optional] string data associated with the event - some controls (buttons etc) dont have data
+    			value = [optional] JSON representation of data of event
+    			value2 = [optional] JSON representation of data2 of event
+
+    	See action doc for list of triggers (in Dialog section).  Event will be the text after the name
+    	DGV right click menu will return value=right click menu tag, value2 = row.  Data will be text representation of these both.
+    	A window sizing event is reported as {'responsetype': 'uievent', 'control': 'UC', 'event': 'Resize', 'data': '941,620', 'value': {'IsEmpty': False, 'Width': 941, 'Height': 620}}					
+
+client requesttype = "uisuspend" - suspend update to this control pending updates. Use resume to continue normal operation
+    			control = "control name"
+    			no server response
+
+client requesttype = "uiresume" - resume updates to this control after suspend
+    			control = "control name"
+    			no server response
+
+client requesttype = "uiget"
+    			control = "control name"
+       server responsetype = "uiget"
+    			control = "control name"
+    			value = Value, either a string or a number, or null if does not exist
+
+client requesttype = "uiset" or "uisetescape" - set value of control (second form expands escape sequences /r/n etc)
+    			control = "control name"
+    			value = "set value"
+    			no server response
+
+client requesttype = "uiaddtext" - add text to richtext box (escape sequences are expanded)
+    			control = "control name"
+    			value = "set value"
+    			no server response
+
+client requesttype = "uiadd" - Add a new controls
+    			controldefinitions = JArray of string of controls to add, see Action Documentation Control Definition for strings.
+    			no server response
+
+client requesttype = "uiremove" - Remove a control
+    			controllist = JArray of string names of controls to remove
+    			no server response
+
+client requesttype = "uiaddsetrows" - Add or change (set) rows on a DGV
+    			control = "control name"
+    			changelist = JArray of change definitions, each one is an object.
+    						 Object is: row:  Integer -1 to insert at start, -2 to append at end
+    									[headertext] : String, set the header text optionally to this text
+    						            [cellstart] : Integer, first cell number. 0 if not present.  Only if overwriting rows, new rows must start with cell 0
+    						            JArray cells, optional, each one an object containing:
+    										type : Always "text" at present (may be expanded later for different cell types)
+    						                [tooltip] optional tooltip to assign
+    						                [cell] optional cell number override, only for overrighting rows not for new rows, restart count at this value
+    						                value : value to set cell to. If its a number it will be converted using culture invariance to a string. Use your own string converters and pass the value as a string if you want it in a culture format
+    			no server response
+
+client requesttype = "uiinsertcolumns" - Insert columns into the DGV
+    			control = "control name"
+    			[position] = insert position, 0 to column count. Default 0
+    			columndefinitions = JArray of objects defining the columns:
+    									type : Always "text" at present (may be expanded later for different cell types)
+    									headertext : Header text								
+    									[fillsize] : integer % fill size, 100 is default
+    									[sortmode] : Sort mode of column, if not present Alpha. Types are defined in action document DGV Dialog paragraph
+
+    			no server response
+
+client requesttype = "uiremovecolumns" - Remove columns from the DGV
+    			control = "control name"
+    			[position] = insert position, 0 to column count. Default 0
+    			[count] = count, 1 is the default
+    			no server response
+
+client requesttype = "uirightclickmenu" - set right click menu for DGV
+    			control = "control name"
+    			tags = JArray of strings giving tags
+    			text = JArray of strings giving text
+    			no server response
+
+client requesttype = "uigetcolumnssetting" - get the columns setting
+    			control = "control name"
+       server responsetype = "uigetcolumnssetting"
+    			control = "control name"
+    			settings = JObject containing column settings
+    							
+client requesttype = "uisetcolumnssetting" - set the columns setting
+    			control = "control name"
+    			settings = JObject containing column settings
+    			no server response
+
+client requesttype = "uisetdgvsetting" - control what the user can do to the dgv via right clicks on header
+    			control = "control name"
+    			columnreorder = bool, allow columns to be reordered
+    			percolumnwordwrap = bool, allow columns to be word wrap controlled
+    			allowheadervisibility = bool, allow header column to be hidden
+    			singlerowselect = bool, right click selects whole row
+    			no server response
+
+client requesttype = "uisetwordwrap" - set word wrap state for all columns on DGV
+    			control = "control name"
+    			wordwrap = bool, on/off for entire grid
+    			no server response
+
+client requesttype = "uiclear" - Clear a DGV or Rich Text Box
+    			control = "control name"
+
+client requesttype = "uiremoverows" - Remove rows from the DGV
+    			control = "control name"
+    			rowstart = Row start number (+ is row number, - is rows from the end, so -1 is last row, -2 is row before last, etc)
+    			count = Row count (may be greater than rows remaining)
+
+client requesttype = "uienable" - Set enable state of a control
+    			control = "control name"
+    			state = bool, enable or disabled
+
+client requesttype = "uivisible" - Set visible state of a control
+    			control = "control name"
+    			state = bool, visible or invisible
+
+client requesttype = "uiposition" - Move control (in dialog units)
+    			control = "control name"
+    			x = x pos
+    			y = y pos
+
+client requesttype = "uisize" - Size a control (in dialog units)
+    			control = "control name"
+    			width = width
+    			height = height
+
+client requesttype = "uimessagebox" - Show a Message box
+    			caption = string caption
+    			message = string message
+    			buttons = string of OK | OKCancel | AbortRetryIgnore | YesNoCancel | YesNo | RetryCancel (case insensitive)
+    			icon = string of None | Hand | Stop | Error | Question | Exclamation | Warning | Asterisk | Information (case insensitive)
+       server responsetype = "uimessagebox"
+    			message = message given
+    			response = None | OK | Cancel | Abort | Retry | Ignore | Yes | No
+
+client requesttype = "uiclosedropdownbutton" - close any open drop down button
+
