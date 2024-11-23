@@ -742,6 +742,7 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
         {
+            //System.Diagnostics.Debug.WriteLine($"{dataGridViewTravel.HitType} {dataGridViewTravel.HitIndex} {dataGridViewTravel.HitButton}");
             rightclickhe = dataGridViewTravel.RightClickRowValid ? (HistoryEntry)dataGridViewTravel.Rows[dataGridViewTravel.RightClickRow].Tag : null;
             leftclickhe = dataGridViewTravel.LeftClickRowValid ? (HistoryEntry)dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow].Tag : null;
         }
@@ -882,6 +883,7 @@ namespace EDDiscovery.UserControls
             }
 
             toolStripMenuItemStartStop.Enabled = rightclickhe != null;
+            quickMarkToolStripMenuItem.Enabled = rightclickhe != null;
             quickMarkToolStripMenuItem.Checked = rightclickhe != null && quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
             mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
             viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
