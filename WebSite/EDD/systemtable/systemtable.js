@@ -47,9 +47,9 @@ export function FillSystemTable(jdata)
         asidetable.appendChild(TableRow2tdstring("Mode", s));
         asidetable.appendChild(TableRow2tdjson(jdata, "Star System:", "SystemData", "System"));
 
-        var list = [CreateAnchor("EDSM", "https://www.edsm.net/system?systemName=" + encodeURI(jdata.SystemData.System), true, "edsmetcbuttons"),
-            CreateAnchor("EDDB", "https://eddb.io/system/name/" + encodeURI(jdata.SystemData.System), true, "edsmetcbuttons"),
-            CreateAnchor("Inara", "https://inara.cz/galaxy-starsystem/?search=" + encodeURI(jdata.SystemData.System), true, "edsmetcbuttons"),
+        var list = [
+            CreateAnchor("EDSM", "https://www.edsm.net/system?systemName=" + encodeURI(jdata.SystemData.System), true, "edsmetcbuttons"),
+            CreateAnchor("Inara", "https://inara.cz/elite/starsystem/?search=" + encodeURI(jdata.SystemData.System), true, "edsmetcbuttons"),
             CreateAnchor("Spansh", "https://spansh.co.uk/system/" + jdata.SystemData.SystemAddress, true, "edsmetcbuttons")
         ];
 
@@ -61,8 +61,7 @@ export function FillSystemTable(jdata)
         asidetable.appendChild(TableRow2tdjson(jdata, "Body Name:", "Bodyname"));
         if (jdata.EDDB.MarketID != null)
         {
-            var list = [CreateAnchor("EDDB", "https://eddb.io/station/market-id/" + jdata.EDDB.MarketID, true, "edsmetcbuttons"),
-                CreateAnchor("Spansh", "https://spansh.co.uk/station/" + jdata.EDDB.MarketID, true, "edsmetcbuttons")];
+            var list = [CreateAnchor("Spansh", "https://spansh.co.uk/station/" + jdata.EDDB.MarketID, true, "edsmetcbuttons")];
 
             asidetable.appendChild(TableRow2tdtextitem("", list));
         }
