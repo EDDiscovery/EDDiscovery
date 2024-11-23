@@ -220,7 +220,7 @@ SECTION UserControlEngineers
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" => "Aumentar el tamaño de la cuadrícula de ingenieros y mostrar más detalles del ingeniero"
 .buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Cuando está en rojo, use los materiales en el cursor para estimar. cuando está en verde, use siempre los materiales más recientes"
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" => "Enviar artículos deseados al panel de recursos"
 
 SECTION UserControlEstimatedValues
 
@@ -307,7 +307,7 @@ SECTION UserControlJournalGrid
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Especifica un término de búsqueda para filtrar eventos según el contenido de las columnas. También puedes usar system:<sistema>, body:<cuerpo>, station:<estación> y stationfaction:<\"Facción en control\"> para filtrar eventos que ocurran con esas propiedades."
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Mueva automáticamente el cursor a la última entrada cuando llegue"
-.buttonField_ToolTip: "Filter out entries matching the field selection" @
+.buttonField_ToolTip: "Filter out entries matching the field selection" => "Filtra entradas que correspondan con el campo seleccionado"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtrar las entradas según el tipo de evento"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Eliminar ordenación de columnas"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Ir a la entrada"
@@ -344,7 +344,7 @@ SECTION UserControlLedger
 .buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
 .NOLG: "No Ledger available" => "No hay libro mayor disponible"
 .TotalProfit: "Total Profit" => "Total Ganancias"
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Mueve automáticamente el cursor a la última entrada cuando esta se genera"
 
 SECTION UserControlLog
 
@@ -392,13 +392,13 @@ SECTION UserControlMaterialCommodities
 .AllMats: "All Materials" => "Todos los Materiales"
 .AllCommods: "All Commodities" => "Todas las Mercancías"
 .AllMicroresources: "All Microresources" => "Todos los Microrecursos"
-.textBoxItems1.ToolTip: "Count of Items" @
+.textBoxItems1.ToolTip: "Count of Items" => "Recuento de elementos"
 .textBoxItems2.ToolTip: "Count of Items" => "Recuento de elementos"
 .buttonFilter.ToolTip: "Filter out items" => "Filtrar elementos"
 .buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = UserControlEngineering.extCheckBoxWordWrap.ToolTip
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "El verde mostrará los materiales con cero conteos, el rojo significa eliminarlos"
-.extCheckBoxMaterialView.ToolTip: "Switch Material Views" @
+.extCheckBoxMaterialView.ToolTip: "Switch Material Views" => "Cambiar la vista de los materiales"
 .extButtonFont.ToolTip: "Font for shopping list" => "Fuente para la lista de compras"
 .buttonExtImport.ToolTip: "Import materials list into panel" => "Importar lista de materiales al panel"
 .openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" => "Abrir Receta en Ventana"
@@ -406,7 +406,7 @@ SECTION UserControlMaterialCommodities
 .clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" => "Limpiar todos los elementos en la lista de compras"
 .displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" => "Mostrar todos los elementos no nulos en la lista de compras"
 .toolStripMenuItemSLClearAll: "Clear all display items in shopping list" = UserControlMaterialCommodities.clearAllDisplayItemsInShoppingListToolStripMenuItem
-.Progress: "Progress" @
+.Progress: "Progress" => "Progreso"
 
 SECTION UserControlMissionOverlay
 
@@ -424,7 +424,7 @@ SECTION UserControlSurveyor
 .Systemscancomplete: "System scan complete" => "Análisis del sistema completo"
 .bodiesdetected: " bodies detected." => " cuerpos detectados."
 .bodiesfound: " bodies found." => " cuerpos encontrados."
-.ShowSignalMismatch: " Cluster and NonBody counts differ by " @
+.ShowSignalMismatch: " Cluster and NonBody counts differ by " => " recuento de Clúster y NoCuerpo difieren en "
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" => "Alinear Izquierda"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" => "Alinear Centro"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Alignment Right" => "Alinear Derecha"
@@ -449,7 +449,7 @@ SECTION UserControlSurveyor
 .showAllStarsToolStripMenuItem: "Show All Stars" => "Mostrar todas las estrellas"
 .showBeltClustersToolStripMenuItem: "Show Belt Clusters" => "Mostrar grupos de cinturones"
 .showSignalsToolStripMenuItem: "Show signals" => "Mostrar señales"
-.showSignalMismatchToolStripMenuItem: "Show signal mismatch" @
+.showSignalMismatchToolStripMenuItem: "Show signal mismatch" => "Mostrar discordancia de señales"
 .showValuesToolStripMenuItem: "Show values" => "Mostrar valores"
 .showMoreInformationToolStripMenuItem: "Show more information" => "Mostrar más información"
 .showGravityToolStripMenuItem: "Show gravity of landables" => "Mostrar gravedad de cuerpos aterrizables"
@@ -508,14 +508,14 @@ SECTION UserControlModules
 .PriorityEnable: "P/E" => "Prioridad"
 .labelShip: "Ship" => "Nave"
 .labelVehicle: "Unknown" = Unknown
-.labelMass: "Mass:" @
-.labelCost: "Cost:" @
-.labelFSD: "FSD:" @
-.labelThrusters: "Thrust:" @
-.labelShields: "Shields:" @
-.labelArmour: "Armour:" @
+.labelMass: "Mass:" => "Masa:"
+.labelCost: "Cost:" => "Costo:"
+.labelFSD: "FSD:" => "MDD:"
+.labelThrusters: "Thrust:" => "Impulsores:"
+.labelShields: "Shields:" => "Escudos:"
+.labelArmour: "Armour:" => "Blindaje"
 .FullBluePrint: "Show full blueprint information" => "Mostrar información completa del plano"
-.EngineeredValues: "Show Engineered Values" @
+.EngineeredValues: "Show Engineered Values" => "Mostrar los valores modificados"
 .comboBoxShips.ToolTip: "Select ship to view" => "Seleccionar Nave a ver"
 .extButtonShowControl.ToolTip: "Display Settings" => "Mostrar Configuración"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = UserControlEngineering.extCheckBoxWordWrap.ToolTip
@@ -523,7 +523,7 @@ SECTION UserControlModules
 .buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "Enviar a ED Ship Yard"
 .buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Configurar datos adicionales que faltan en la salida del diario"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula a Excel"
-.extButtonLoadLoadout.ToolTip: "Import a ship definition for display" @
+.extButtonLoadLoadout.ToolTip: "Import a ship definition for display" => "Importa un equipamiento de nave para mostrar"
 .ForceSell: "Force Sell" => "Forzar venta"
 .ConfirmForceSell: "Confirm sell of ship" => "Confirmar venta de la nave"
 .StoredModules: "Stored Modules" => "Módulos almacenados"
@@ -548,17 +548,17 @@ SECTION UserControlModules
 .SC: "Ship Configure" => "Configurar Nave"
 .MI: "Module Information" => "Información del módulo"
 .NOSI: "No Ship Information available" => "No hay información de envío disponible"
-.labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" @
-.labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" @
-.labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" @
-.labelDataCost: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" @
-.labelDataFSD: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
-.labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
-.labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
-.labelWep: "Weapons:" @
-.extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" @
-.extButtonDeleteLoadout.ToolTip: "Delete loadout" @
-.SaveLoadout: "Enter loadout description to save ship with" @
+.labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" => "Neto {0.#} Kin {0.#|% =|0.#} Ter {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}"
+.labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" => "Neto {0.#} Sis {0.#|% =|0.#} Kin {0.#|% =|0.#} Ter {0.#|% =|0.#} Exp {0.#|% =|0.#}"
+.labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" => "Masa {0.##|t} Casco {0.##|t} Modulos {0.##|t} Sin carga {0.##|t} Carga {0|/|0|t} Advertencia al {0.#|%}"
+.labelDataCost: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" => "Costo casco {N0|cr} Módulos {N0|cr} Total {N0|cr} Recompra {N0|cr}"
+.labelDataFSD: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" => "Act {0.##|al} Rango {0.##|al} Cargado {0.##|al} Sin carga {0.##|al} Max {0.##|al} CombMax {0.##|t} Actual {0.#|/|0.#|t} Reserva {0.#|/|0.#|t} En tránsito a {} Almacenado en {}"
+.labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" => "Vel act {0.#} Pst {0.#} Cargado {0.#|/|0.#} Sin carga {0.#|/|0.#} Max {0.#|/|0.#} Postq act {0.#|s} Max {0.#|s}"
+.labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" => "Neto {0.#} Abs {0.#|%} Kin {0.#|%} Ter {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Mun {0.#|s} Act {0.#|%} Max {0.#|%}"
+.labelWep: "Weapons:" => "Armas"
+.extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" => "Guardar este equipamiento en la carpeta de equipamientos de EDD"
+.extButtonDeleteLoadout.ToolTip: "Delete loadout" => "Borrar equipamiento"
+.SaveLoadout: "Enter loadout description to save ship with" => "Introduce una descripción del equipamiento para guardar con la nave"
 
 SECTION UserControlNotePanel
 
@@ -659,8 +659,8 @@ SECTION UserControlRoute
 .buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "Abra este sistema de ruta de inicio en EDSM"
 .extButtonExpeditionSave.ToolTip: "Save as an expedition for use on expedition and surveyor panels" => "Guardar como expedición para usar en los paneles de expedición y agrimensor"
 .labelCargo: "Cargo" => "Bodega"
-.Confirm: "This will result in a large number ({0}) of jumps\r\nConfirm please" @
-.NoRoute: "No route set up, retry" @
+.Confirm: "This will result in a large number ({0}) of jumps\r\nConfirm please" => "Esto resultara en un gran número ({0}) de saltos\r\nPor favor confirmar"
+.NoRoute: "No route set up, retry" => "Ruta no establecida, reintentar"
 
 SECTION UserControlRouteTracker
 
@@ -687,8 +687,8 @@ SECTION UserControlRouteTracker
 
 SECTION UserControlScan
 
-.scanDisplayBodyFiltersButton.ToolTip: "Configure scan display body filters" @
-.scanDisplayConfigureButton.ToolTip: "Configure scan display" @
+.scanDisplayBodyFiltersButton.ToolTip: "Configure scan display body filters" => "Configurar filtro de cuerpos para escaneos mostrados"
+.scanDisplayConfigureButton.ToolTip: "Configure scan display" => "Configurar escaneos mostrados"
 .extCheckBoxStar.ToolTip: "Select another system to view" = UserControlWebBrowser.extCheckBoxStar.ToolTip
 .buttonSize.ToolTip: "Select image size" => "Seleccionar tamaño de imagen"
 .extButtonHighValue.ToolTip: "Set High Value Limit" => "Establecer límite de valor alto"
@@ -723,11 +723,11 @@ SECTION UserControlScanGrid
 .colClass: "Class" => "Clase"
 .colDistance: "Distance" = UserControlOutfitting.Distance
 .colBriefing: "Information" = Information
-.ColCurValue: "Current Value" @
-.ColMaxValue: "Max Value" @
-.ColOrganics: "Organics Value" @
+.ColCurValue: "Current Value" => "Valor actual"
+.ColMaxValue: "Max Value" => "Valor máximo"
+.ColOrganics: "Organics Value" => "Valor orgánicos"
 .extButtonShowControl.ToolTip: "Configure overall settings" => "Configurar ajustes generales"
-.extButtonHighValue_ToolTip: "Set High Value Limit" @
+.extButtonHighValue_ToolTip: "Set High Value Limit" => "Establecer límite de valor alto"
 .MainStar: "Main Star" => "Estrella principal"
 .Mass: "Mass" = UserControlModules.Mass
 .Radius: "Radius" => "Radio"
@@ -755,7 +755,7 @@ SECTION UserControlSettings
 .JournalDirCol: "Journal Folder" => "Carpeta de diario"
 .NotesCol: "Notes" = UserControlEngineering.NotesCol
 .btnDeleteCommander: "Delete" = Delete
-.extButtonUnDelete: "Undelete" @
+.extButtonUnDelete: "Undelete" => "Recuperar"
 .buttonEditCommander: "Edit" = UserControlCombatPanel.buttonExtEditCampaign
 .buttonAddCommander: "Add" => "Agregar"
 .groupBoxTheme: "Theme" => "Tema"
@@ -842,7 +842,7 @@ SECTION UserControlSettings
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Finalizado, cierre la ventana.\r\nSi ya tiene abierto el mapa 3d, los cambios no se reflejarán en ese mapa hasta el próximo inicio de EDD\r\n"
 .extButtonReloadStarDatabase: "Reload Star Database" => "Recargar Base de Datos Estelar"
 .RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" => "Esto eliminará la base de datos de sistemas.\r\n\r\nLuego puede volver a seleccionar la fuente de datos de la base de datos y el\r\nconjunto de estrellas requerido.\r\n\r\nEsto requerirá una descarga completa de la base de datos de estrellas desde el servidor.\r\nSolo use esto si está dispuesto a descargar el conjunto de datos nuevamente."
-.PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" @
+.PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" => "Deseas borrar permanentemente todos los datos del comandante (SI) incluyendo los datos de diario\r\y no solo marcar el comandante como oculto y nunca mas mostrarle (NO)"
 
 SECTION UserControlShipYards
 
@@ -1428,24 +1428,24 @@ SECTION UserControlFactions
 .colDataLinkPayeeFaction: "DL Payee Faction" => "Facción Beneficiaria LD"
 .colDataLinkPayeeValue: "DL Payee Value" => "Valor Beneficiario LD"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos de la cuadrícula a Excel"
-.colSystem: "System" @
-.colLastRep: "Last Known Reputation" @
-.colFactionState: "Last State" @
-.colFactionGov: "Government" @
-.colFactionAllegiance: "Allegiance" @
-.colFactionSystemInfluence: "System Influence" @
-.colFactionOtherSystemInfo: "Other System Info" @
-.colOrganicDataSold: "Organic Data Value" @
-.labelSearch: "Search" @
-.extCheckBoxShowHideSystemInfo.ToolTip: "Show/Hide System Info" @
-.extCheckBoxShowHideMission.ToolTip: "Show/Hide Mission" @
-.extCheckBoxShowHideCommodities.ToolTip: "Show/Hide Commodities" @
-.extCheckBoxShowHideMaterials.ToolTip: "Show/Hide Materials" @
-.extCheckBoxShowHideBounties.ToolTip: "Show/Hide Crimes/Bounties" @
-.extCheckBoxShowHideInterdictions.ToolTip: "Show/Hide Interdictions" @
-.extCheckBoxShowHideKillBonds.ToolTip: "Show/Hide Kill Bonds" @
-.extCheckBoxShowHideDataLink.ToolTip: "Show/Hide Datalink" @
-.extCheckBoxShowHideCartographic.ToolTip: "Show Hide Cartographic/Organic Sold" @
+.colSystem: "System" => "Sistema"
+.colLastRep: "Last Known Reputation" => "Última reputación conocida"
+.colFactionState: "Last State" => "Último estado"
+.colFactionGov: "Government" => "Gobierno"
+.colFactionAllegiance: "Allegiance" => "Lealtad"
+.colFactionSystemInfluence: "System Influence" => "Influencia del sistema"
+.colFactionOtherSystemInfo: "Other System Info" => "Otra información del sistema"
+.colOrganicDataSold: "Organic Data Value" => "Valor de datos orgánicos"
+.labelSearch: "Search" => "Buscar"
+.extCheckBoxShowHideSystemInfo.ToolTip: "Show/Hide System Info" => "Mostrar/Ocultar Info del sistema"
+.extCheckBoxShowHideMission.ToolTip: "Show/Hide Mission" => "Mostrar/Ocultar Misión"
+.extCheckBoxShowHideCommodities.ToolTip: "Show/Hide Commodities" => "Mostrar/Ocultar Mercancías"
+.extCheckBoxShowHideMaterials.ToolTip: "Show/Hide Materials" => "Mostrar/Ocultar Materiales"
+.extCheckBoxShowHideBounties.ToolTip: "Show/Hide Crimes/Bounties" => "Mostrar/Ocultar Crímenes/Recompensas"
+.extCheckBoxShowHideInterdictions.ToolTip: "Show/Hide Interdictions" => "Mostrar/Ocultar Interdicciones"
+.extCheckBoxShowHideKillBonds.ToolTip: "Show/Hide Kill Bonds" => "Mostrar/Ocultar Bonos de recompensa"
+.extCheckBoxShowHideDataLink.ToolTip: "Show/Hide Datalink" => "Mostrar/Ocultar Enlace de datos"
+.extCheckBoxShowHideCartographic.ToolTip: "Show Hide Cartographic/Organic Sold" => "Mostrar/Ocultar Cartografía/Orgánicos vendidos"
 
 SECTION UserControlOrganics
 
