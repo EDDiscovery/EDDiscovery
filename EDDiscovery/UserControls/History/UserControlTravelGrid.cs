@@ -882,23 +882,23 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            toolStripMenuItemStartStop.Enabled = rightclickhe != null;
-            quickMarkToolStripMenuItem.Enabled = rightclickhe != null;
+            toolStripMenuItemStartStop.Visible = rightclickhe != null;
+            quickMarkToolStripMenuItem.Visible = rightclickhe != null;
             quickMarkToolStripMenuItem.Checked = rightclickhe != null && quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
-            mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
-            viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
-            viewOnSpanshToolStripMenuItem.Enabled = (rightclickhe != null);
-            viewScanDisplayToolStripMenuItem.Enabled = (rightclickhe != null);
-            toolStripMenuItemStartStop.Enabled = (rightclickhe != null);
-            removeJournalEntryToolStripMenuItem.Enabled = (rightclickhe != null);
-            runActionsOnThisEntryToolStripMenuItem.Enabled = (rightclickhe != null);
-            setNoteToolStripMenuItem.Enabled = (rightclickhe != null);
-            writeEventInfoToLogDebugToolStripMenuItem.Enabled = (rightclickhe != null);
-            copyJournalEntryToClipboardToolStripMenuItem.Enabled = (rightclickhe != null);
-            createEditBookmarkToolStripMenuItem.Enabled = (rightclickhe != null);
-            gotoEntryNumberToolStripMenuItem.Enabled = dataGridViewTravel.Rows.Count > 0;
-            removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewTravel.SortedColumn != null;
-            gotoNextStartStopMarkerToolStripMenuItem.Enabled = (rightclickhe != null);
+            mapGotoStartoolStripMenuItem.Visible = (rightclickhe != null && rightclickhe.System.HasCoordinate);
+            viewOnEDSMToolStripMenuItem.Visible = (rightclickhe != null);
+            viewOnSpanshToolStripMenuItem.Visible = (rightclickhe != null);
+            viewScanDisplayToolStripMenuItem.Visible = (rightclickhe != null);
+            toolStripMenuItemStartStop.Visible = (rightclickhe != null);
+            removeJournalEntryToolStripMenuItem.Visible = (rightclickhe != null);
+            runActionsOnThisEntryToolStripMenuItem.Visible = (rightclickhe != null);
+            setNoteToolStripMenuItem.Visible = (rightclickhe != null);
+            writeEventInfoToLogDebugToolStripMenuItem.Visible = (rightclickhe != null);
+            copyJournalEntryToClipboardToolStripMenuItem.Visible = (rightclickhe != null);
+            createEditBookmarkToolStripMenuItem.Visible = (rightclickhe != null);
+            gotoEntryNumberToolStripMenuItem.Visible = dataGridViewTravel.Rows.Count > 0;
+            removeSortingOfColumnsToolStripMenuItem.Visible = dataGridViewTravel.SortedColumn != null;
+            gotoNextStartStopMarkerToolStripMenuItem.Visible = (rightclickhe != null);
         }
 
         private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
