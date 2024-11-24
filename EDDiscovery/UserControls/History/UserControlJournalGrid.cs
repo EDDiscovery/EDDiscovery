@@ -459,13 +459,13 @@ namespace EDDiscovery.UserControls
 
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
-            toolStripMenuItemStartStop.Enabled = rightclickhe != null;
-            mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
-            viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
-            viewOnSpanshToolStripMenuItem.Enabled = (rightclickhe != null);
-            viewScanDisplayToolStripMenuItem.Enabled = (rightclickhe != null);
-            removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewJournal.SortedColumn != null;
-            jumpToEntryToolStripMenuItem.Enabled = dataGridViewJournal.Rows.Count > 0;
+            toolStripMenuItemStartStop.Visible = rightclickhe != null;
+            mapGotoStartoolStripMenuItem.Visible = rightclickhe != null && rightclickhe.System.HasCoordinate;
+            viewOnEDSMToolStripMenuItem.Visible = rightclickhe != null;
+            viewOnSpanshToolStripMenuItem.Visible = rightclickhe != null;
+            viewScanDisplayToolStripMenuItem.Visible = rightclickhe != null;
+            removeSortingOfColumnsToolStripMenuItem.Visible = dataGridViewJournal.SortedColumn != null;
+            jumpToEntryToolStripMenuItem.Visible = dataGridViewJournal.Rows.Count > 0;
         }
 
         HistoryEntry rightclickhe = null;

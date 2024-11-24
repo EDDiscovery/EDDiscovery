@@ -44,9 +44,9 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustomDGV = new ExtendedControls.ExtScrollBar();
             this.dataGridViewEstimatedValues = new BaseUtils.DataGridViewColumnControl();
@@ -62,12 +62,12 @@ namespace EDDiscovery.UserControls
             this.FirstDiscMapped = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EstValue = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.flowLayoutPanelTop = new System.Windows.Forms.FlowLayoutPanel();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.checkBoxShowZeros = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxShowImpossible = new ExtendedControls.ExtCheckBox();
             this.labelControlText = new System.Windows.Forms.Label();
             this.extPanelRollUp = new ExtendedControls.ExtPanelRollUp();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewEstimatedValues)).BeginInit();
             this.flowLayoutPanelTop.SuspendLayout();
@@ -99,13 +99,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomDGV.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomDGV.HideScrollBar = true;
             this.vScrollBarCustomDGV.LargeChange = 0;
-            this.vScrollBarCustomDGV.Location = new System.Drawing.Point(1231, 0);
+            this.vScrollBarCustomDGV.Location = new System.Drawing.Point(1228, 0);
             this.vScrollBarCustomDGV.Maximum = -1;
             this.vScrollBarCustomDGV.Minimum = 0;
             this.vScrollBarCustomDGV.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustomDGV.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomDGV.Name = "vScrollBarCustomDGV";
-            this.vScrollBarCustomDGV.Size = new System.Drawing.Size(16, 542);
+            this.vScrollBarCustomDGV.Size = new System.Drawing.Size(19, 542);
             this.vScrollBarCustomDGV.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomDGV.SmallChange = 1;
             this.vScrollBarCustomDGV.TabIndex = 24;
@@ -146,7 +146,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewEstimatedValues.RowHeadersVisible = false;
             this.dataGridViewEstimatedValues.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewEstimatedValues.SingleRowSelect = true;
-            this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(1231, 542);
+            this.dataGridViewEstimatedValues.Size = new System.Drawing.Size(1228, 542);
             this.dataGridViewEstimatedValues.TabIndex = 23;
             this.dataGridViewEstimatedValues.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewEstimatedValues_SortCompare);
             // 
@@ -170,9 +170,9 @@ namespace EDDiscovery.UserControls
             // 
             // Mapped
             // 
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.NullValue = null;
-            this.Mapped.DefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.NullValue = null;
+            this.Mapped.DefaultCellStyle = dataGridViewCellStyle1;
             this.Mapped.FillWeight = 30F;
             this.Mapped.HeaderText = "Mapped";
             this.Mapped.Name = "Mapped";
@@ -181,9 +181,9 @@ namespace EDDiscovery.UserControls
             // 
             // WasMapped
             // 
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.NullValue = null;
-            this.WasMapped.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.NullValue = null;
+            this.WasMapped.DefaultCellStyle = dataGridViewCellStyle2;
             this.WasMapped.FillWeight = 30F;
             this.WasMapped.HeaderText = "Already Mapped";
             this.WasMapped.Name = "WasMapped";
@@ -191,9 +191,9 @@ namespace EDDiscovery.UserControls
             // 
             // WasDiscovered
             // 
-            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle9.NullValue = null;
-            this.WasDiscovered.DefaultCellStyle = dataGridViewCellStyle9;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.NullValue = null;
+            this.WasDiscovered.DefaultCellStyle = dataGridViewCellStyle3;
             this.WasDiscovered.FillWeight = 30F;
             this.WasDiscovered.HeaderText = "Already Discovered";
             this.WasDiscovered.Name = "WasDiscovered";
@@ -243,6 +243,17 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanelTop.Size = new System.Drawing.Size(1247, 30);
             this.flowLayoutPanelTop.TabIndex = 5;
             // 
+            // edsmSpanshButton
+            // 
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(8, 1);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 71;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
+            // 
             // checkBoxShowZeros
             // 
             this.checkBoxShowZeros.Appearance = System.Windows.Forms.Appearance.Button;
@@ -262,7 +273,8 @@ namespace EDDiscovery.UserControls
             this.checkBoxShowZeros.Size = new System.Drawing.Size(28, 28);
             this.checkBoxShowZeros.TabIndex = 5;
             this.checkBoxShowZeros.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxShowZeros, "Green will show materials with zero counts, red means remove them");
+            this.toolTip.SetToolTip(this.checkBoxShowZeros, "Green will show all bodies even with zero value, red will only show bodies with v" +
+        "alue");
             this.checkBoxShowZeros.UseVisualStyleBackColor = true;
             // 
             // extCheckBoxShowImpossible
@@ -321,17 +333,6 @@ namespace EDDiscovery.UserControls
             // toolTip
             // 
             this.toolTip.ShowAlways = true;
-            // 
-            // edsmSpanshButton
-            // 
-            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
-            this.edsmSpanshButton.Location = new System.Drawing.Point(8, 1);
-            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.edsmSpanshButton.Name = "edsmSpanshButton";
-            this.edsmSpanshButton.SettingsSplittingChar = ';';
-            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
-            this.edsmSpanshButton.TabIndex = 71;
-            this.edsmSpanshButton.UseVisualStyleBackColor = true;
             // 
             // UserControlEstimatedValues
             // 

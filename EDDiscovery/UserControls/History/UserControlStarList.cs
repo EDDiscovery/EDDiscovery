@@ -647,14 +647,23 @@ namespace EDDiscovery.UserControls
 
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
-            if (dataGridViewStarList.SelectedCells.Count == 0)      // need something selected  stops context menu opening on nothing..
-                e.Cancel = true;
+            bool atleastonethere = dataGridViewStarList.SortedColumn != null || rightclickhe != null;
 
-            mapGotoStartoolStripMenuItem.Enabled = (rightclickhe != null && rightclickhe.System.HasCoordinate);
-            viewOnEDSMToolStripMenuItem.Enabled = (rightclickhe != null);
-            viewScanDisplayToolStripMenuItem.Enabled = (rightclickhe != null);
-            viewOnSpanshToolStripMenuItem.Enabled = (rightclickhe != null);
-            removeSortingOfColumnsToolStripMenuItem.Enabled = dataGridViewStarList.SortedColumn != null;
+            // need something selected and at least option to show, stops context menu opening on nothing..
+            if (dataGridViewStarList.SelectedCells.Count == 0 || !atleastonethere) 
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                removeSortingOfColumnsToolStripMenuItem.Visible = dataGridViewStarList.SortedColumn != null;
+
+                mapGotoStartoolStripMenuItem.Visible = rightclickhe != null && rightclickhe.System.HasCoordinate;
+                viewOnEDSMToolStripMenuItem.Visible = rightclickhe != null;
+                viewScanDisplayToolStripMenuItem.Visible = rightclickhe != null;
+                viewOnSpanshToolStripMenuItem.Visible = rightclickhe != null;
+                setNoteToolStripMenuItem.Visible = rightclickhe != null;
+            }
         }
 
         private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
@@ -688,16 +697,13 @@ namespace EDDiscovery.UserControls
 
         private void setNoteToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclickhe != null)
+            using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclickhe))
             {
-                using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(rightclickhe))
+                if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
                 {
-                    if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
-                    {
-                        System.Diagnostics.Trace.Assert(noteform.NoteText != null && rightclickhe.System != null);
-                        rightclickhe.journalEntry.UpdateSystemNote(noteform.NoteText, rightclickhe.System.Name, EDCommander.Current.SyncToEdsm);
-                        DiscoveryForm.NoteChanged(this, rightclickhe);
-                    }
+                    System.Diagnostics.Trace.Assert(noteform.NoteText != null && rightclickhe.System != null);
+                    rightclickhe.journalEntry.UpdateSystemNote(noteform.NoteText, rightclickhe.System.Name, EDCommander.Current.SyncToEdsm);
+                    DiscoveryForm.NoteChanged(this, rightclickhe);
                 }
             }
         }
