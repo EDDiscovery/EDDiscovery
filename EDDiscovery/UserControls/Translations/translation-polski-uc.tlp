@@ -307,7 +307,7 @@ SECTION UserControlJournalGrid
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Wprowadź tekst, aby wyszukać we wszystkich polach"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Przekaż dane w tabeli do programu Excel"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Automatycznie przesuń kursor na najnowszy wpis gdy się pojawi"
-.buttonField_ToolTip: "Filter out entries matching the field selection" @
+.buttonField.ToolTip: "Filter out entries matching the field selection" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtruj wpisy na podstawie typu zdarzenia"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Wyczyść sortowanie kolumn"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Przejdź do Wpisu"

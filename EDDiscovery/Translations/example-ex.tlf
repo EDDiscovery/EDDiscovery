@@ -35,6 +35,7 @@ SECTION StartUp
 
 SECTION DataGridView
 
+.Header: "Header" @
 .WordWrap: "Word Wrap (Override)" @
 
 SECTION SafeModeForm
