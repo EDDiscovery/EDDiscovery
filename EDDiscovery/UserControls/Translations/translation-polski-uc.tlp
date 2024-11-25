@@ -235,7 +235,7 @@ SECTION UserControlEstimatedValues
 .FirstMappedEff: "First Mapped" @
 .FirstDiscMapped: "First Discovered Mapped" @
 .EstValue: "Current Value" => "Szac. Wartość"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" @
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
 .SV: "Estimated Scan Values for {0}" => "Szacowane Wartości Skanów dla {0}"
 
@@ -307,7 +307,7 @@ SECTION UserControlJournalGrid
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Wprowadź tekst, aby wyszukać we wszystkich polach"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Przekaż dane w tabeli do programu Excel"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Automatycznie przesuń kursor na najnowszy wpis gdy się pojawi"
-.buttonField_ToolTip: "Filter out entries matching the field selection" @
+.buttonField.ToolTip: "Filter out entries matching the field selection" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtruj wpisy na podstawie typu zdarzenia"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Wyczyść sortowanie kolumn"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Przejdź do Wpisu"
@@ -1140,6 +1140,7 @@ SECTION UserControlSysInfo
 .toolStripReset: "Reset" @
 .toolStripRemoveAll: "Remove All" => "Usuń Wszystko"
 .displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
+.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Przytrzymaj klawisz Ctrl i przeciągnij element lewym przyciskiem myszki aby zmienić jego pozycję. Dostępne 8 kolumn"
 .textBoxTargetDist.ToolTip: "Distance to target" => "Odległość do Celu"
 .textBoxTarget.ToolTip: "Sets the target" => "Ustawia Cel"

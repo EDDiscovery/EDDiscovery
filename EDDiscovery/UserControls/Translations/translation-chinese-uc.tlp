@@ -235,7 +235,7 @@ SECTION UserControlEstimatedValues
 .FirstMappedEff: "First Mapped" @
 .FirstDiscMapped: "First Discovered Mapped" @
 .EstValue: "Current Value" => "预计价值"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" @
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
 .SV: "Estimated Scan Values for {0}" => "{0}星系的预计价值"
 
@@ -307,7 +307,7 @@ SECTION UserControlJournalGrid
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "输入文本以搜索所有的域"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "选中后当事件更新时，使光标自动返回顶部。"
-.buttonField_ToolTip: "Filter out entries matching the field selection" @
+.buttonField.ToolTip: "Filter out entries matching the field selection" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "根据事件类型筛选条目"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "取消排序"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "跳至行"
@@ -1140,6 +1140,7 @@ SECTION UserControlSysInfo
 .toolStripReset: "Reset" => "重置"
 .toolStripRemoveAll: "Remove All" => "全部移除"
 .displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
+.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "按住Ctrl键然后拖动一个项目以重新定位，有8个列可用"
 .textBoxTargetDist.ToolTip: "Distance to target" => "距离目标距离"
 .textBoxTarget.ToolTip: "Sets the target" => "设定目标"

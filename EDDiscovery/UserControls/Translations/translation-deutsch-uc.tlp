@@ -235,7 +235,7 @@ SECTION UserControlEstimatedValues
 .FirstMappedEff: "First Mapped" => "Zuerst kartographiert"
 .FirstDiscMapped: "First Discovered Mapped" => "Zuerst entdeckt und kartographiert"
 .EstValue: "Current Value" => "Derzeitiger Wert"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "Grün zeigt alle Materialien, Rot entfernt Materialien mit Lagerstand Null"
+.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" => "Grün zeigt alle Materialien, Rot entfernt Materialien mit Lagerstand Null"
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" => "Zeige alle Wete, auch jene die unerreichbar sind."
 .SV: "Estimated Scan Values for {0}" => "Geschätzte Scanwerte für {0}"
 
@@ -307,7 +307,7 @@ SECTION UserControlJournalGrid
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" = UserControlDiscoveries.textBoxSearch.ToolTip
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Sende Daten im Gitter an Excel"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Zeiger automatisch zum neuesten Eintrag bewegen sobald dieser eintrifft"
-.buttonField_ToolTip: "Filter out entries matching the field selection" => "Mit der Feldauswahl übereinstimmende Einträge ausfiltern"
+.buttonField.ToolTip: "Filter out entries matching the field selection" => "Mit der Feldauswahl übereinstimmende Einträge ausfiltern"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Einträge auf Basis von Ereignisart ausfiltern"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Entferne Spaltensortierung"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Springe zu Eintrag"
@@ -344,7 +344,7 @@ SECTION UserControlLedger
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Sende Daten am Gitter an Excel"
 .NOLG: "No Ledger available" => "Kein Kassabuch verfügbar"
 .TotalProfit: "Total Profit" => "Gesamter Profit"
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Zeiger automatisch zum neuesten Eintrag bewegen sobald dieser eintrifft"
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" = UserControlJournalGrid.checkBoxCursorToTop.ToolTip
 
 SECTION UserControlLog
 
@@ -723,11 +723,11 @@ SECTION UserControlScanGrid
 .colClass: "Class" => "Klasse"
 .colDistance: "Distance" = UserControlOutfitting.Distance
 .colBriefing: "Information" = Information
-.ColCurValue: "Current Value" => "Derzeitiger Wert"
+.ColCurValue: "Current Value" = UserControlEstimatedValues.EstValue
 .ColMaxValue: "Max Value" => "Maximaler Wert"
 .ColOrganics: "Organics Value" => "Wert der Organismen"
 .extButtonShowControl.ToolTip: "Configure overall settings" => "Konfiguriere allgemeine Einstellungen"
-.extButtonHighValue_ToolTip: "Set High Value Limit" => "Setze Limit für 'hoher Wert'"
+.extButtonHighValue_ToolTip: "Set High Value Limit" = UserControlScan.extButtonHighValue.ToolTip
 .MainStar: "Main Star" => "Hauptstern"
 .Mass: "Mass" = UserControlModules.labelMass
 .Radius: "Radius" => "Radius"
@@ -918,7 +918,7 @@ SECTION UserControlSpanel
 .extButtonHabZones.ToolTip: "Configure hab zone information" => "Konfiguriere Informationen der habitablen Zone"
 .buttonFilter.ToolTip: "Select what journal events to show" => "Konfiguriere Ereignisfilter..."
 .buttonField.ToolTip: "Filter out events" => "Konfiguriere Feldfilter..."
-.extButtonScanShow.ToolTip: "Configure scan display" => "Konfiguriere Scananzeige"
+.extButtonScanShow.ToolTip: "Configure scan display" = UserControlScan.scanDisplayConfigureButton.ToolTip
 .extButtoScanPos.ToolTip: "Set position of scan display" => "Position der Scananzeige festlegen"
 .extButtonFont.ToolTip: "Font" = UserControlSurveyor.extButtonFont.ToolTip
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" = UserControlSurveyor.extCheckBoxWordWrap.ToolTip
@@ -989,7 +989,7 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank: "Rank" => "Rang"
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnAtStart: "At Start" => "Zu Beginn"
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxAtEnd: "At End" => "Am Schluss"
-.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" => "Fortschritt"
+.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" = UserControlMaterialCommodities.Progress
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnLastPromotionDate: "Last Promotion/Date" => "Letzte(s) Promotion/Datum"
 .tabControlCustomStats.tabPageLedger: "Ledger" => "Kassabuch"
 .tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnLedgerDate: "Date" = SearchMaterialsCommodities.ColumnDate
@@ -1140,6 +1140,7 @@ SECTION UserControlSysInfo
 .toolStripReset: "Reset" => "Zurücksetzen"
 .toolStripRemoveAll: "Remove All" = RemoveAll
 .displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" => "Zeige nächste gewählte Destination"
+.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Drücke die strg-Taste und ziehe dann mit der linken Maustaste um einen Eintrag umzupositionieren, 8 Spalten sind verfügbar."
 .textBoxTargetDist.ToolTip: "Distance to target" => "Entfernung zum Ziel"
 .textBoxTarget.ToolTip: "Sets the target" => "Setzt das Ziel"
@@ -1428,15 +1429,15 @@ SECTION UserControlFactions
 .colDataLinkPayeeFaction: "DL Payee Faction" => "DL auszahlende Fraktion"
 .colDataLinkPayeeValue: "DL Payee Value" => "DL Auszahlungswert"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Schicke Gitterdaten an Excel"
-.colSystem: "System" => "System"
+.colSystem: "System" = SearchScans.ColumnSystem
 .colLastRep: "Last Known Reputation" => "Letzter bekannter Ruf"
 .colFactionState: "Last State" => "Letzter Zustand"
-.colFactionGov: "Government" => "Regierung"
+.colFactionGov: "Government" = UserControlSysInfo.labelGov
 .colFactionAllegiance: "Allegiance" => "Gefolgschaft"
 .colFactionSystemInfluence: "System Influence" => "Systemeinfluss"
 .colFactionOtherSystemInfo: "Other System Info" => "Andere Systeminfos"
 .colOrganicDataSold: "Organic Data Value" => "Wert der organischen Daten"
-.labelSearch: "Search" => "Suche"
+.labelSearch: "Search" = UserControlBookmarks.labelSearch
 .extCheckBoxShowHideSystemInfo.ToolTip: "Show/Hide System Info" => "Zeige/Verstecke Systeminformationen"
 .extCheckBoxShowHideMission.ToolTip: "Show/Hide Mission" => "Zeige/Verstecke Missionen"
 .extCheckBoxShowHideCommodities.ToolTip: "Show/Hide Commodities" => "Zeige/Verstecke Handelswaren"

@@ -235,7 +235,7 @@ SECTION UserControlEstimatedValues
 .FirstMappedEff: "First Mapped" @
 .FirstDiscMapped: "First Discovered Mapped" @
 .EstValue: "Current Value" => "Vaore Stimato"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" @
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
 .SV: "Estimated Scan Values for {0}" => "Stima dei valori di scansione per {0}"
 
@@ -307,7 +307,7 @@ SECTION UserControlJournalGrid
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
-.buttonField_ToolTip: "Filter out entries matching the field selection" @
+.buttonField.ToolTip: "Filter out entries matching the field selection" @
 .buttonFilter.ToolTip: "Filter out entries based on event type" @
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Rimuovi ordinamento delle colonne"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Salta alla voce"
@@ -1140,6 +1140,7 @@ SECTION UserControlSysInfo
 .toolStripReset: "Reset" => "Reimposta"
 .toolStripRemoveAll: "Remove All" => "Rimuovi tutto"
 .displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
+.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Mantieni premuto il tasto Ctrl per trascinare e riposizionare, 8 colonne disponibili"
 .textBoxTargetDist.ToolTip: "Distance to target" => "Distanza al Destino"
 .textBoxTarget.ToolTip: "Sets the target" => "Seleziona il Destino"

@@ -235,7 +235,7 @@ SECTION UserControlEstimatedValues
 .FirstMappedEff: "First Mapped" => "Primeros mapeados"
 .FirstDiscMapped: "First Discovered Mapped" => "Primer mapeado descubierto"
 .EstValue: "Current Value" => "Valor estimado"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "Verde mostrará materiales con recuento cero, rojo significa eliminarlos"
+.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" => "Verde mostrará materiales con recuento cero, rojo significa eliminarlos"
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" => "Mostrar todos los valores, incluso aquellos que son imposibles de obtener"
 .SV: "Estimated Scan Values for {0}" => "Valores de exploración estimados para {0}"
 
@@ -307,7 +307,7 @@ SECTION UserControlJournalGrid
 .textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Especifica un término de búsqueda para filtrar eventos según el contenido de las columnas. También puedes usar system:<sistema>, body:<cuerpo>, station:<estación> y stationfaction:<\"Facción en control\"> para filtrar eventos que ocurran con esas propiedades."
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos en la cuadrícula para sobresalir"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Mueva automáticamente el cursor a la última entrada cuando llegue"
-.buttonField_ToolTip: "Filter out entries matching the field selection" => "Filtra entradas que correspondan con el campo seleccionado"
+.buttonField.ToolTip: "Filter out entries matching the field selection" => "Filtra entradas que correspondan con el campo seleccionado"
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtrar las entradas según el tipo de evento"
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Eliminar ordenación de columnas"
 .jumpToEntryToolStripMenuItem: "Jump to Entry" => "Ir a la entrada"
@@ -393,7 +393,7 @@ SECTION UserControlMaterialCommodities
 .AllCommods: "All Commodities" => "Todas las Mercancías"
 .AllMicroresources: "All Microresources" => "Todos los Microrecursos"
 .textBoxItems1.ToolTip: "Count of Items" => "Recuento de elementos"
-.textBoxItems2.ToolTip: "Count of Items" => "Recuento de elementos"
+.textBoxItems2.ToolTip: "Count of Items" = UserControlMaterialCommodities.textBoxItems1.ToolTip
 .buttonFilter.ToolTip: "Filter out items" => "Filtrar elementos"
 .buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = UserControlEngineering.extCheckBoxWordWrap.ToolTip
@@ -727,7 +727,7 @@ SECTION UserControlScanGrid
 .ColMaxValue: "Max Value" => "Valor máximo"
 .ColOrganics: "Organics Value" => "Valor orgánicos"
 .extButtonShowControl.ToolTip: "Configure overall settings" => "Configurar ajustes generales"
-.extButtonHighValue_ToolTip: "Set High Value Limit" => "Establecer límite de valor alto"
+.extButtonHighValue_ToolTip: "Set High Value Limit" = UserControlScan.extButtonHighValue.ToolTip
 .MainStar: "Main Star" => "Estrella principal"
 .Mass: "Mass" = UserControlModules.Mass
 .Radius: "Radius" => "Radio"
@@ -842,7 +842,7 @@ SECTION UserControlSettings
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Finalizado, cierre la ventana.\r\nSi ya tiene abierto el mapa 3d, los cambios no se reflejarán en ese mapa hasta el próximo inicio de EDD\r\n"
 .extButtonReloadStarDatabase: "Reload Star Database" => "Recargar Base de Datos Estelar"
 .RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" => "Esto eliminará la base de datos de sistemas.\r\n\r\nLuego puede volver a seleccionar la fuente de datos de la base de datos y el\r\nconjunto de estrellas requerido.\r\n\r\nEsto requerirá una descarga completa de la base de datos de estrellas desde el servidor.\r\nSolo use esto si está dispuesto a descargar el conjunto de datos nuevamente."
-.PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" => "Deseas borrar permanentemente todos los datos del comandante (SI) incluyendo los datos de diario\r\y no solo marcar el comandante como oculto y nunca mas mostrarle (NO)"
+.PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" => "Deseas borrar permanentemente todos los datos del comandante (SI) incluyendo los datos de diario\r\\y no solo marcar el comandante como oculto y nunca mas mostrarle (NO)"
 
 SECTION UserControlShipYards
 
@@ -989,7 +989,7 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank: "Rank" => "Rango"
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnAtStart: "At Start" => "Al Inicio"
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxAtEnd: "At End" => "Al Final"
-.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" => "Progreso"
+.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" = UserControlMaterialCommodities.Progress
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnLastPromotionDate: "Last Promotion/Date" => "Última Promoción/Fecha"
 .tabControlCustomStats.tabPageLedger: "Ledger" => "Libro Mayor"
 .tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnLedgerDate: "Date" = SearchMaterialsCommodities.ColumnDate
@@ -1140,6 +1140,7 @@ SECTION UserControlSysInfo
 .toolStripReset: "Reset" => "Reiniciar"
 .toolStripRemoveAll: "Remove All" => "Eliminar todo"
 .displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" => "Mostrar el siguiente destino seleccionado"
+.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Mantenga presionada la tecla Ctrl y luego arrastre hacia la izquierda un elemento para reposicionar, hay 8 columnas disponibles"
 .textBoxTargetDist.ToolTip: "Distance to target" => "Distancia al objetivo"
 .textBoxTarget.ToolTip: "Sets the target" => "Establece el objetivo"
@@ -1428,15 +1429,15 @@ SECTION UserControlFactions
 .colDataLinkPayeeFaction: "DL Payee Faction" => "Facción Beneficiaria LD"
 .colDataLinkPayeeValue: "DL Payee Value" => "Valor Beneficiario LD"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Enviar datos de la cuadrícula a Excel"
-.colSystem: "System" => "Sistema"
+.colSystem: "System" = SearchScans.ColumnSystem
 .colLastRep: "Last Known Reputation" => "Última reputación conocida"
 .colFactionState: "Last State" => "Último estado"
-.colFactionGov: "Government" => "Gobierno"
-.colFactionAllegiance: "Allegiance" => "Lealtad"
+.colFactionGov: "Government" = UserControlSysInfo.labelGov
+.colFactionAllegiance: "Allegiance" = UserControlSysInfo.labelAllegiance
 .colFactionSystemInfluence: "System Influence" => "Influencia del sistema"
 .colFactionOtherSystemInfo: "Other System Info" => "Otra información del sistema"
 .colOrganicDataSold: "Organic Data Value" => "Valor de datos orgánicos"
-.labelSearch: "Search" => "Buscar"
+.labelSearch: "Search" = SearchScans.labelSearch
 .extCheckBoxShowHideSystemInfo.ToolTip: "Show/Hide System Info" => "Mostrar/Ocultar Info del sistema"
 .extCheckBoxShowHideMission.ToolTip: "Show/Hide Mission" => "Mostrar/Ocultar Misión"
 .extCheckBoxShowHideCommodities.ToolTip: "Show/Hide Commodities" => "Mostrar/Ocultar Mercancías"
