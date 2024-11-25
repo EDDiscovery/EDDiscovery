@@ -235,7 +235,7 @@ SECTION UserControlEstimatedValues
 .FirstMappedEff: "First Mapped" @
 .FirstDiscMapped: "First Discovered Mapped" @
 .EstValue: "Current Value" => "预计价值"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" @
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
 .SV: "Estimated Scan Values for {0}" => "{0}星系的预计价值"
 
@@ -1140,6 +1140,7 @@ SECTION UserControlSysInfo
 .toolStripReset: "Reset" => "重置"
 .toolStripRemoveAll: "Remove All" => "全部移除"
 .displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
+.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "按住Ctrl键然后拖动一个项目以重新定位，有8个列可用"
 .textBoxTargetDist.ToolTip: "Distance to target" => "距离目标距离"
 .textBoxTarget.ToolTip: "Sets the target" => "设定目标"

@@ -235,7 +235,7 @@ SECTION UserControlEstimatedValues
 .FirstMappedEff: "First Mapped" @
 .FirstDiscMapped: "First Discovered Mapped" @
 .EstValue: "Current Value" => "Valeur est."
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" @
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
 .SV: "Estimated Scan Values for {0}" => "Valeur estimé du scan de {0}"
 
@@ -1140,6 +1140,7 @@ SECTION UserControlSysInfo
 .toolStripReset: "Reset" => "RAZ"
 .toolStripRemoveAll: "Remove All" => "Retirer tout"
 .displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
+.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Maintenir CTRL puis clic gauche pour faire glisser un élément à repositionner, 8 colonnes sont disponibles"
 .textBoxTargetDist.ToolTip: "Distance to target" => "Distance de la cible"
 .textBoxTarget.ToolTip: "Sets the target" => "Définit la cible"

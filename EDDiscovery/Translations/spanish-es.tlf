@@ -32,6 +32,7 @@ SECTION StartUp
 
 SECTION DataGridView
 
+.Header: "Header" @
 .WordWrap: "Word Wrap (Override)" => "Ajuste de línea (Anular)"
 
 SECTION SafeModeForm
@@ -300,7 +301,7 @@ SECTION AddOnManagerForm
 .Type: "Type" => "Tipo"
 .Name: "Name" => "Nombre"
 .Version: "Version" => "Versión"
-.Description: "Description" = PopOutInfo.PanelSelector.Description
+.Description: "Description" @
 .Status: "Status" => "Estado"
 .Action: "Action" => "Acción"
 .Delete: "Delete" = Delete
@@ -450,7 +451,7 @@ SECTION ExtPanelRollUp
 SECTION CommanderForm
 
 .CAPILoggingin: "Logging in" => "Iniciando sesión"
-.CAPIDisabled: "Disabled" => "Deshabilitado"
+.CAPIDisabled: "Disabled" = Disabled
 .CAPILogout: "Logout" => "Cerrar sesión"
 .CAPILoggedin: "Logged in" => "Conectado"
 .CAPILogin: "Login" => "Iniciar sesión"

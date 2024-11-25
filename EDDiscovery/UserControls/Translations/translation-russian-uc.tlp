@@ -235,7 +235,7 @@ SECTION UserControlEstimatedValues
 .FirstMappedEff: "First Mapped" @
 .FirstDiscMapped: "First Discovered Mapped" @
 .EstValue: "Current Value" => "Примерная стоимость"
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
+.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" @
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
 .SV: "Estimated Scan Values for {0}" => "Примерная стоимость данных сканирования для {0}"
 
@@ -1140,6 +1140,7 @@ SECTION UserControlSysInfo
 .toolStripReset: "Reset" => "Сброс"
 .toolStripRemoveAll: "Remove All" => "Удалить все"
 .displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
+.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Удерживая клавишу Ctrl, щелкните левой кнопкой мыши и перетащите, чтобы переместить элемент. Доступно 8 столбцов"
 .textBoxTargetDist.ToolTip: "Distance to target" => "Расстояние до цели"
 .textBoxTarget.ToolTip: "Sets the target" = UserControlExpedition.setTargetToolStripMenuItem

@@ -32,6 +32,7 @@ SECTION StartUp
 
 SECTION DataGridView
 
+.Header: "Header" @
 .WordWrap: "Word Wrap (Override)" => "Zeilenumbruch (Überschreiben)"
 
 SECTION SafeModeForm
@@ -450,7 +451,7 @@ SECTION ExtPanelRollUp
 SECTION CommanderForm
 
 .CAPILoggingin: "Logging in" => "Einloggen"
-.CAPIDisabled: "Disabled" => "Deaktiviert"
+.CAPIDisabled: "Disabled" = Disabled
 .CAPILogout: "Logout" => "Ausloggen"
 .CAPILoggedin: "Logged in" => "Eingeloggt"
 .CAPILogin: "Login" => "Login"
