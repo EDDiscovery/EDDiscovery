@@ -326,7 +326,7 @@ namespace EDDiscovery.UserControls
                     gpalgo = f.Get("algo");
 
                     // this may fail due to not having fsd info
-                    spanshjobname = sp.RequestGalaxyPlotter(textBox_From.Text, textBox_To.Text, gpcargo, gpsupercharged, gpusesupercharge, gpusefsdinjections, gpexcludesecondary, si, gpalgo.ToLower().Replace(" ", "_"));
+                    spanshjobname = sp.RequestGalaxyPlotter(textBox_From.Text, textBox_To.Text, gpcargo, gpsupercharged, gpusesupercharge, gpusefsdinjections, gpexcludesecondary, si, gpalgo.ToLowerInvariant().Replace(" ", "_"));
                     if (spanshjobname != null)
                     {
                         StartSpanshQueryOp(Spanshquerytype.GalaxyPlotter);
