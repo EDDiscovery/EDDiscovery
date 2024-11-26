@@ -459,8 +459,8 @@ namespace EDDiscovery.UserControls
                                 HistoryEntry he = hl[start++];
                                 JToken jo = JToken.FromObject(he, true, new Type[] { typeof(Bitmap), typeof(Image),
                                                         typeof(EliteDangerousCore.EDCommander) }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-                                jo["Info"] = he.GetInfo();
-                                jo["Detailed"] = he.GetDetailed();
+                                jo["InfoText"] = he.GetInfo();
+                                jo["DetailedText"] = he.GetDetailed();
                                 rows.Add(jo);
                                 //System.Diagnostics.Debug.WriteLine($"Return {jo.ToString(true)}");
                                 //System.Diagnostics.Debug.WriteLine($"Return {jo.ToString()}");
@@ -1190,15 +1190,16 @@ namespace EDDiscovery.UserControls
                     ["firstrow"] = he.Index,
                     ["length"] = 1,
                     ["commander"] = EliteDangerousCore.EDCommander.Current.Name,
-                    ["Rows"] = new JArray()
+                    ["rows"] = new JArray()
                 };
 
                 JToken jo = JToken.FromObject(he, true, new Type[] { typeof(Bitmap), typeof(Image),
                                                         typeof(EliteDangerousCore.EDCommander) }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-                reply["Rows"].Array().Add(jo);
 
-                jo["Info"] = he.GetInfo();      // add in these extra coded fields
-                jo["Detailed"] = he.GetDetailed();
+                jo["InfoText"] = he.GetInfo();      // add in these extra coded fields
+                jo["DetailedText"] = he.GetDetailed();
+
+                reply["rows"].Array().Add(jo);
 
                 zmqconnection.Send(reply);
             }

@@ -33,25 +33,35 @@ client requesttype = "historyjid" : Request journal record by journalEntry.ID (n
     			jid = requested Id
     			entry = None if does not exist, or entry below.
 
-    For both history and historyjid, then each entry contains:
-    		Index is the number used to look it up in history,
-    		EntryNumber is 1.. based.
-    		Unfiltered index is the entry number without all the filtered out entries
-    		 {"EntryNumber":22036,"Index":22035,"UnfilteredIndex":24753,
+For history, historyjid and historypush, the rows object contain an object containing:
+    		
+    		 {
+             .. Index is the number used to look it up in history, EntryNumber is 1.. based.  Unfiltered index is the entry number without all the filtered out entries
+             "EntryNumber":22036,"Index":22035,"UnfilteredIndex":24753,
+
     		 .. Journal Entry itself
     		 "journalEntry":{"Station":"Two","StationType":"Crater Outpost","FDStationType":"CraterOutpost","CarrierDockingAccess":null,"StarSystem":"Eowyg Auscs FG-Y d34","MarketID":3534247946,"Commodities":[],
     			"Id":2269018,"TLUId":2757,"IsJournalSourced":true,"CommanderId":36,
-    			"EventTypeID":"Market","EventTypeStr":"Market","EventTimeUTC":"2024-10-06T13:52:39Z","EventTimeLocal":"2024-10-06T14:52:39Z",
+    			"EventTypeID":"Market","EventTimeUTC":"2024-10-06T13:52:39Z","EventTimeLocal":"2024-10-06T14:52:39Z",
     			"IsBeta":false,"IsHorizons":true,"IsOdyssey":true,"GameVersion":"4.0.0.1808","Build":"r304197/r0 ",
     			"FullPath":"c:\\code\\logs\\empty\\Journal.2024-10-06T015203.01.log",
     			"SNC":null},
+
     		 .. System records where we are for all records
     		 "System":{"Source":"FromJournal","MainStarType":"A","Name":"Eowyg Auscs FG-Y d34","X":23091.96875,"Y":29.8125,"Z":19516.3125,"HasCoordinate":true,"SystemAddress":1183557095691,"EDSMID":null},
-    		 "EventSummary":"Market","isTravelling":false,"TravelledTimeSec":0,"TravelledDistance":0.0,"TravelledJumps":0,"TravelledMissingJumps":0,
+
+             .. If travelling as set by the user
+    		 "isTravelling":false,"TravelledTimeSec":0,"TravelledDistance":0.0,"TravelledJumps":0,"TravelledMissingJumps":0,
+
+             .. status record gives you info on the context of the HE
     		 "Status":{"OnFoot":false,"OnFootFleetCarrier":false,"IsDocked":true,"IsLandedInShipOrSRV":false,"IsInSupercruise":false,"IsInMultiCrew":false,"TravelState":"Docked","BodyName":"Eowyg Auscs FG-Y d34","BodyID":-1,"HasBodyID":false,"BodyType":"Star","StationName":"Two","StationType":"Crater Outpost","StationFaction":"The Dark Wheel","MarketID":35342479,"ShipID":2,"ShipType":"Asp Explorer","ShipTypeFD":"Asp","IsSRV":false,"IsFighter":false,"OnCrewWithCaptain":null,"IsOnCrewWithCaptain":false,"IsInMultiPlayer":false,"GameMode":"Solo","Group":"","Wanted":false,"BodyApproached":false,"BookedDropship":false,"BookedTaxi":false,"CurrentBoost":1.0,"FSDJumpNextSystemName":null,"FSDJumpNextSystemAddress":null,"FSDJumpSequence":false,"GameModeGroup":"Solo","GameModeGroupMulticrew":"Solo"},
+
+             .. other stats
     		 "WhereAmI":"Two","Visits":0,"FullBodyID":null,"Credits":95042663,"Loan":0,"Assets":156034834,
-    		 .. Info always present, Detailed may be None/Null or more info
-    		 "Info":"Prices on 0 items at Two in Eowyg Auscs FG-Y d34","Detailed":null}
+             
+             .. as presented in history grid, summary, info, detailed.  InfoText always present, DetailedText may be None/Null or more info
+             "EventSummary":"Market", "InfoText":"Prices on 0 items at Two in Eowyg Auscs FG-Y d34","DetailedText":null
+             }
 
 client requesttype = "journal" : Request Journal JSON records. History must be loaded, so wait for historyload or start event historylength > 0
     			last = journal number to request. 0 = latest, -1 = previous, etc
@@ -169,9 +179,9 @@ push server responsetype = "terminate"
     			firstrow = history entry number index
     			length = 1
     			commander = string, name of commander
-    			rows[] containing an a single object of history entry (with the journal entry as an object called journalEntry)
+    			rows[] containing an a single object of history entry as per history
 
-#!! push server responsetype = "journalentry"		-unfiltered journal entry before filtering, it may be reported in historypush later
+#!! push server responsetype = "journalpush"		-unfiltered journal entry before filtering, it may be reported in historypush later
     			commander = string, name of commander
     			journalEntry as an journal object (as per JournalEntry in historypush)
 
