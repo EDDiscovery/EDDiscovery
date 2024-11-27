@@ -609,7 +609,7 @@ namespace EDDiscovery.UserControls
                             // with a found system, see if we can get the body name so we know what body its on
                             if (ss != null && ss.NodesByID.TryGetValue(lastdestination.BodyID, out StarScan.ScanNode body))
                             {
-                                onbody = body.FullName.ReplaceIfStartsWith(he.System.Name).Trim();
+                                onbody = body.BodyDesignator.ReplaceIfStartsWith(he.System.Name).Trim();
 
                                 if (body.ScanData != null)
                                     distance = body.ScanData.DistanceFromArrivalLS.ToString("N0") + "ls";

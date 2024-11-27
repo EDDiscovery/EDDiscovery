@@ -225,7 +225,7 @@ namespace EDDiscovery.UserControls
                     var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                     var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
 
-                    string l = string.Format("At {0}".T(EDTx.UserControlOrganics_at), node.FullName);
+                    string l = string.Format("At {0}".T(EDTx.UserControlOrganics_at), node.BodyDesignator);
                     if (node.ScanData != null)
                     {
                         l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}".T(EDTx.UserControlOrganics_sysinfo), node.ScanData.PlanetTypeText, node.ScanData.RadiusText,
@@ -298,7 +298,7 @@ namespace EDDiscovery.UserControls
                                         {
                                                 time.ToStringYearFirst(),
                                                 syskvp.Key.ToString() + ": " + starkvp.Key.ToString(),
-                                                body.FullName,
+                                                body.BodyDesignator,
                                                 body.ScanData?.PlanetTypeText ?? "",
                                                 os.Item2.Genus_Localised??"",
                                                 os.Item2.Species_Localised_Short,

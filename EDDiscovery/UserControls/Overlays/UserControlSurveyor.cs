@@ -769,7 +769,7 @@ namespace EDDiscovery.UserControls
 
                         // compute if we want search results displayed
 
-                        searchresults.TryGetValue(sn.FullName, out List<HistoryListQueries.ResultEntry> searchresultfornode);     // will be null if not found
+                        searchresults.TryGetValue(sn.BodyDesignator, out List<HistoryListQueries.ResultEntry> searchresultfornode);     // will be null if not found
 
                         var surveyordisplay = searchresultfornode != null;      // if we have a search node, display
 
@@ -842,7 +842,7 @@ namespace EDDiscovery.UserControls
 
                         // if we had a search result, remove it from the list as we have considered it above.  Even if we decided not to print it!
                         if ( searchresultfornode != null )
-                            searchresults.Remove(sn.FullName);
+                            searchresults.Remove(sn.BodyDesignator);
 
                     }   // end for..
                 }       // end of system node look thru

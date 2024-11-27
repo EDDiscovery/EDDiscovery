@@ -232,7 +232,7 @@ namespace EDDiscovery.UserControls
                                 foreach (StarScan.ScanNode sn in landables)
                                 {
                                     sn.ScanData.Materials.TryGetValue(c.Item1.Details.FDName, out available);
-                                    allMats.Add(new Tuple<string, double>(sn.FullName.Replace(last_he.System.Name, "", StringComparison.InvariantCultureIgnoreCase).Trim(), available));
+                                    allMats.Add(new Tuple<string, double>(sn.BodyDesignator.Replace(last_he.System.Name, "", StringComparison.InvariantCultureIgnoreCase).Trim(), available));
                                 }
                                 allMats = allMats.OrderByDescending(m => m.Item2).ToList();
                                 int n = 1;

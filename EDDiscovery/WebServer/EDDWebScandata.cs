@@ -91,10 +91,10 @@ namespace EDDiscovery.WebServer
                         JObject jo = new JObject()
                         {
                             ["NodeType"] = body.NodeType.ToString(),
-                            ["FullName"] = body.FullName,
+                            ["FullName"] = body.BodyDesignator,
                             ["OwnName"] = body.OwnName,
-                            ["CustomName"] = body.CustomName,
-                            ["CustomNameOrOwnName"] = body.CustomNameOrOwnname,
+                            ["CustomName"] = body.BodyName,
+                            ["CustomNameOrOwnName"] = body.BodyNameOrOwnName,
                             ["Level"] = body.Level,
                             ["BodyID"] = body.BodyID,
                         };

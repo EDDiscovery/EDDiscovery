@@ -100,7 +100,7 @@ namespace EDDiscovery.Actions
                             var bn = sn.FindCustomNameOrFullname(bodyname);
                             ap[prefix + "BodyFound"] = bn != null ? "1" : "0";
                             if ( bn != null )
-                                DumpInfo(ap, bn.FullName, bn, prefix + "Body", "_Moons");
+                                DumpInfo(ap, bn.BodyDesignator, bn, prefix + "Body", "_Moons");
                         }
                         else
                         {
@@ -170,7 +170,7 @@ namespace EDDiscovery.Actions
             ap[storename] = keyname;
             ap[storename + "_type"] = scannode.NodeType.ToString();
             ap[storename + "_assignedname"] = scannode.OwnName;
-            ap[storename + "_assignedfullname"] = scannode.FullName;
+            ap[storename + "_assignedfullname"] = scannode.BodyDesignator;
             ap[storename + "_data"] = (sc != null) ? "1" : "0";
             ap[storename + "_signals"] = scannode.Signals != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.SignalListString(scannode.Signals, 0,false, true) : "";
             ap[storename + "_genuses"] = scannode.Genuses != null ? EliteDangerousCore.JournalEvents.JournalSAASignalsFound.GenusListString(scannode.Genuses, 0, false, true) : "";
