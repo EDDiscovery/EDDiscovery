@@ -86,7 +86,7 @@ namespace EDDiscovery.UserControls
             BodyName.Items.Clear();
 
             // lets present all, even if not landable, as you may want a whole planet bookmark
-            var bodies = lookup?.Bodies?.Where(c=>c.NodeType==StarScan.ScanNodeType.body).Select(b => b.FullName.ReplaceIfStartsWith(systemName) + (b.CustomName != null ? " " + b.CustomName : ""));
+            var bodies = lookup?.Bodies?.Where(c=>c.NodeType==StarScan.ScanNodeType.body).Select(b => b.BodyDesignator.ReplaceIfStartsWith(systemName) + (b.BodyName != null ? " " + b.BodyName : ""));
 
             foreach (string s in bodies.EmptyIfNull())
             {

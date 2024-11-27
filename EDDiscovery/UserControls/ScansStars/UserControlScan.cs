@@ -371,7 +371,7 @@ namespace EDDiscovery.UserControls
             if ( sysnode != null )
             {
                 foreach (StarScan.ScanNode starnode in sysnode.StarNodes.Values)
-                    StarScan.ScanNode.DumpTree(starnode, starnode.FullName, 0);
+                    StarScan.ScanNode.DumpTree(starnode, starnode.BodyDesignator, 0);
 
                 var nodes = sysnode?.OrderedSystemTree();
 

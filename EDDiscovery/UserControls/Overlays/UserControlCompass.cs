@@ -421,14 +421,14 @@ namespace EDDiscovery.UserControls
                     {
                         foreach( var bodies in sysnode.Bodies)
                         {
-                            System.Diagnostics.Debug.WriteLine($"..Compass no current body processing {bodies.FullName}");
+                            System.Diagnostics.Debug.WriteLine($"..Compass no current body processing {bodies.BodyDesignator}");
 
                             foreach (var sf in bodies.SurfaceFeatures.EmptyIfNull())
                             {
                                 if (sf.HasLatLong)  // only want positions
                                 {
                                     System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {sf.Name_Localised}");
-                                    comboBoxBookmarks.Items.Add($"{bodies.CustomNameOrOwnname}: {sf.Name_Localised} @ {sf.Latitude.Value:0.####}, {sf.Longitude.Value:0.####}");
+                                    comboBoxBookmarks.Items.Add($"{bodies.BodyNameOrOwnName}: {sf.Name_Localised} @ {sf.Latitude.Value:0.####}, {sf.Longitude.Value:0.####}");
                                     comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = sf.Latitude.Value, Longitude = sf.Longitude.Value });
                                 }
                             }

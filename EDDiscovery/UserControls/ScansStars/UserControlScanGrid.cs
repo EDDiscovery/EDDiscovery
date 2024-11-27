@@ -472,7 +472,7 @@ namespace EDDiscovery.UserControls
                         JournalSAASignalsFound.GenusList(bdDetails, sn.Genuses, 0, false, false);
                     }
 
-                    texttoadd = new string[] { sn.FullName, "", "", bdDetails.ToString() };
+                    texttoadd = new string[] { sn.BodyDesignator, "", "", bdDetails.ToString() };
                     pc.Add(new ExtPictureBox.ImageElement(new Rectangle(0, 0, imagesize.Width, imagesize.Height),
                             sn.NodeType == StarScan.ScanNodeType.star ? BodyToImages.GetStarImageNotScanned() :
                             sn.NodeType == StarScan.ScanNodeType.belt ? BodyToImages.GetBeltImage() :
