@@ -44,6 +44,8 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
 
+            // do at init, seems to cause problems on some PCs doing after
+
             var enumlist = new Enum[] { EDTx.UserControlRoute_SystemCol, EDTx.UserControlRoute_NoteCol, EDTx.UserControlRoute_DistanceCol, EDTx.UserControlRoute_StarClassCol, EDTx.UserControlRoute_WayPointDistCol,
                                         EDTx.UserControlRoute_DeviationCol,
                                         EDTx.UserControlRoute_checkBox_FsdBoost, EDTx.UserControlRoute_buttonExtTravelTo, EDTx.UserControlRoute_buttonExtTravelFrom,
@@ -74,15 +76,12 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlRoute_extButtonExpeditionSave_ToolTip,EDTx.UserControlRoute_extButtonExpeditionPush_ToolTip,
                                         };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, debugit: true);
-
-
         }
 
         public override void Init()
         {
             DBBaseName = "UCRoute";
 
-  
             EnableOutputButtons();
 
             fromupdatetimer = new System.Windows.Forms.Timer();
