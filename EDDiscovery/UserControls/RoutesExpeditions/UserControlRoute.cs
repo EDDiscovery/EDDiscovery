@@ -43,12 +43,46 @@ namespace EDDiscovery.UserControls
         public UserControlRoute()
         {
             InitializeComponent();
+
+            var enumlist = new Enum[] { EDTx.UserControlRoute_SystemCol, EDTx.UserControlRoute_NoteCol, EDTx.UserControlRoute_DistanceCol, EDTx.UserControlRoute_StarClassCol, EDTx.UserControlRoute_WayPointDistCol,
+                                        EDTx.UserControlRoute_DeviationCol,
+                                        EDTx.UserControlRoute_checkBox_FsdBoost, EDTx.UserControlRoute_buttonExtTravelTo, EDTx.UserControlRoute_buttonExtTravelFrom,
+                                        EDTx.UserControlRoute_buttonExtTargetTo,  EDTx.UserControlRoute_buttonTargetFrom, EDTx.UserControlRoute_labelEDSMBut,
+                                        EDTx.UserControlRoute_labelLy2, EDTx.UserControlRoute_labelLy1, EDTx.UserControlRoute_labelTo,
+                                        EDTx.UserControlRoute_labelMaxJump, EDTx.UserControlRoute_labelDistance, EDTx.UserControlRoute_labelMetric,
+                                        EDTx.UserControlRoute_extButtonRoute, EDTx.UserControlRoute_labelFrom,
+                                        EDTx.UserControlRoute_groupBoxSpansh, EDTx.UserControlRoute_extButtonSpanshRoadToRiches, EDTx.UserControlRoute_extButtonNeutronRouter,
+                                        EDTx.UserControlRoute_extButtonFleetCarrier,EDTx.UserControlRoute_extButtonSpanshGalaxyPlotter,EDTx.UserControlRoute_extButtonExoMastery,
+                                        EDTx.UserControlRoute_extButtonSpanshAmmoniaWorlds,EDTx.UserControlRoute_extButtonSpanshEarthLikes,EDTx.UserControlRoute_extButtonSpanshTradeRouter,
+                                        EDTx.UserControlRoute_groupBoxInternal,EDTx.UserControlRoute_groupBoxPara,
+                                        EDTx.UserControlRoute_extCheckBoxPermitSystems, EDTx.UserControlRoute_labelCargo };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
+            var enumlistcms = new Enum[] { EDTx.UserControlRoute_showInEDSMToolStripMenuItem, EDTx.UserControlRoute_copyToolStripMenuItem, EDTx.UserControlRoute_showScanToolStripMenuItem,
+                                            EDTx.UserControlRoute_viewOnSpanshToolStripMenuItem};
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
+
+            var enumlisttt = new Enum[] { EDTx.UserControlRoute_checkBox_FsdBoost_ToolTip, EDTx.UserControlRoute_buttonExtExcel_ToolTip, EDTx.UserControlRoute_textBox_ToName_ToolTip,
+                                        EDTx.UserControlRoute_textBox_FromName_ToolTip, EDTx.UserControlRoute_comboBoxRoutingMetric_ToolTip, EDTx.UserControlRoute_buttonExtTravelTo_ToolTip,
+                                        EDTx.UserControlRoute_buttonExtTravelFrom_ToolTip, EDTx.UserControlRoute_buttonExtTargetTo_ToolTip, EDTx.UserControlRoute_buttonToEDSM_ToolTip,
+                                        EDTx.UserControlRoute_buttonFromEDSM_ToolTip, EDTx.UserControlRoute_buttonTargetFrom_ToolTip,
+                                        EDTx.UserControlRoute_cmd3DMap_ToolTip, EDTx.UserControlRoute_textBox_From_ToolTip, EDTx.UserControlRoute_textBox_Range_ToolTip,
+                                        EDTx.UserControlRoute_textBox_To_ToolTip, EDTx.UserControlRoute_textBox_Distance_ToolTip, EDTx.UserControlRoute_textBox_ToZ_ToolTip,
+                                        EDTx.UserControlRoute_textBox_ToY_ToolTip, EDTx.UserControlRoute_textBox_ToX_ToolTip, EDTx.UserControlRoute_textBox_FromZ_ToolTip,
+                                        EDTx.UserControlRoute_extButtonRoute_ToolTip, EDTx.UserControlRoute_textBox_FromY_ToolTip, EDTx.UserControlRoute_textBox_FromX_ToolTip,
+                                        EDTx.UserControlRoute_extButtonExpeditionSave_ToolTip,EDTx.UserControlRoute_extButtonExpeditionPush_ToolTip,
+                                        };
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, debugit: true);
+
+
         }
 
         public override void Init()
         {
             DBBaseName = "UCRoute";
 
+  
             EnableOutputButtons();
 
             fromupdatetimer = new System.Windows.Forms.Timer();
@@ -101,37 +135,7 @@ namespace EDDiscovery.UserControls
 
             edsmSpanshButton.Init(this, "EDSMSpansh", "");
 
-            var enumlist = new Enum[] { EDTx.UserControlRoute_SystemCol, EDTx.UserControlRoute_NoteCol, EDTx.UserControlRoute_DistanceCol, EDTx.UserControlRoute_StarClassCol, EDTx.UserControlRoute_WayPointDistCol,
-                                        EDTx.UserControlRoute_DeviationCol,
-                                        EDTx.UserControlRoute_checkBox_FsdBoost, EDTx.UserControlRoute_buttonExtTravelTo, EDTx.UserControlRoute_buttonExtTravelFrom,
-                                        EDTx.UserControlRoute_buttonExtTargetTo,  EDTx.UserControlRoute_buttonTargetFrom, EDTx.UserControlRoute_labelEDSMBut,
-                                        EDTx.UserControlRoute_labelLy2, EDTx.UserControlRoute_labelLy1, EDTx.UserControlRoute_labelTo,
-                                        EDTx.UserControlRoute_labelMaxJump, EDTx.UserControlRoute_labelDistance, EDTx.UserControlRoute_labelMetric,
-                                        EDTx.UserControlRoute_extButtonRoute, EDTx.UserControlRoute_labelFrom,
-                                        EDTx.UserControlRoute_groupBoxSpansh, EDTx.UserControlRoute_extButtonSpanshRoadToRiches, EDTx.UserControlRoute_extButtonNeutronRouter,
-                                        EDTx.UserControlRoute_extButtonFleetCarrier,EDTx.UserControlRoute_extButtonSpanshGalaxyPlotter,EDTx.UserControlRoute_extButtonExoMastery,
-                                        EDTx.UserControlRoute_extButtonSpanshAmmoniaWorlds,EDTx.UserControlRoute_extButtonSpanshEarthLikes,EDTx.UserControlRoute_extButtonSpanshTradeRouter,
-                                        EDTx.UserControlRoute_groupBoxInternal,EDTx.UserControlRoute_groupBoxPara,
-                                        EDTx.UserControlRoute_extCheckBoxPermitSystems, EDTx.UserControlRoute_labelCargo };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-
-            var enumlistcms = new Enum[] { EDTx.UserControlRoute_showInEDSMToolStripMenuItem, EDTx.UserControlRoute_copyToolStripMenuItem, EDTx.UserControlRoute_showScanToolStripMenuItem,
-                                            EDTx.UserControlRoute_viewOnSpanshToolStripMenuItem};
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
-
-            var enumlisttt = new Enum[] { EDTx.UserControlRoute_checkBox_FsdBoost_ToolTip, EDTx.UserControlRoute_buttonExtExcel_ToolTip, EDTx.UserControlRoute_textBox_ToName_ToolTip,
-                                        EDTx.UserControlRoute_textBox_FromName_ToolTip, EDTx.UserControlRoute_comboBoxRoutingMetric_ToolTip, EDTx.UserControlRoute_buttonExtTravelTo_ToolTip,
-                                        EDTx.UserControlRoute_buttonExtTravelFrom_ToolTip, EDTx.UserControlRoute_buttonExtTargetTo_ToolTip, EDTx.UserControlRoute_buttonToEDSM_ToolTip,
-                                        EDTx.UserControlRoute_buttonFromEDSM_ToolTip, EDTx.UserControlRoute_buttonTargetFrom_ToolTip, 
-                                        EDTx.UserControlRoute_cmd3DMap_ToolTip, EDTx.UserControlRoute_textBox_From_ToolTip, EDTx.UserControlRoute_textBox_Range_ToolTip,
-                                        EDTx.UserControlRoute_textBox_To_ToolTip, EDTx.UserControlRoute_textBox_Distance_ToolTip, EDTx.UserControlRoute_textBox_ToZ_ToolTip,
-                                        EDTx.UserControlRoute_textBox_ToY_ToolTip, EDTx.UserControlRoute_textBox_ToX_ToolTip, EDTx.UserControlRoute_textBox_FromZ_ToolTip,
-                                        EDTx.UserControlRoute_extButtonRoute_ToolTip, EDTx.UserControlRoute_textBox_FromY_ToolTip, EDTx.UserControlRoute_textBox_FromX_ToolTip,
-                                        EDTx.UserControlRoute_extButtonExpeditionSave_ToolTip,EDTx.UserControlRoute_extButtonExpeditionPush_ToolTip,
-                                        };
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
-
+      
             waitforspanshresulttimer.Interval = 1000;
             waitforspanshresulttimer.Tick += Waitforspanshresulttimer_Tick;
 
