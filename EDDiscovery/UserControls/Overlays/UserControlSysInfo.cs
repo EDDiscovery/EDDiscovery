@@ -401,13 +401,13 @@ namespace EDDiscovery.UserControls
             {
                 SetControlText(he.System.Name);
 
-                HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.FSDJump, he);
-
                 textBoxSystem.Text = he.System.Name;
 #if DEBUG
                 textBoxSystem.Text += $" {he.System.SystemAddress}";
 #endif
-                panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
+                //HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.FSDJump, he);
+                //panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
+                panelFD.BackgroundImage = EDDiscovery.Icons.Controls.notfirstdiscover;      // TBD on new first discovery
 
                 textBoxBody.Text = he.WhereAmI + " (" + he.Status.BodyType + ")";
 

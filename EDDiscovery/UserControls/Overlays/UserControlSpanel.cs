@@ -307,11 +307,10 @@ namespace EDDiscovery.UserControls
                                 "", gov
                                 );
 
-
                             HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, last);
-                            bool firstdiscovery = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover);
 
-                            rowpos = rowmargin + AddColText(0, 0, rowpos, str, textcolour, backcolour, dfont, null, firstdiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if EDSM indicates your it's first discoverer").Location.Bottom;
+                            bool firstdiscovery = false; //tbd on new first discovery system
+                            rowpos = rowmargin + AddColText(0, 0, rowpos, str, textcolour, backcolour, dfont, null, firstdiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if elite says your it's first discoverer").Location.Bottom;
                         }
 
                         var zoneson = Config(Configuration.showHabInformation | Configuration.showMetalRichZone | Configuration.showWaterWrldZone |
