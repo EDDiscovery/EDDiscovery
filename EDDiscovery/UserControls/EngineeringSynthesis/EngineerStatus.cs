@@ -89,7 +89,7 @@ namespace EDDiscovery.UserControls
                             EDTx.UserControlEngineering_NotesCol, EDTx.UserControlEngineering_RecipeCol, EDTx.UserControlEngineering_EngineersCol,
                         };
 
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, "UserControlEngineering");    // share IDs with Engineering panel./
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, new string[] { "UserControlEngineering" });    // share IDs with Engineering panel./
 
             dataGridViewEngineering.LoadColumnSettings(colsetting, false,
                             (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),

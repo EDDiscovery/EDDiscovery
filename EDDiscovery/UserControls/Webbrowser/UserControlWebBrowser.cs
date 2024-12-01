@@ -60,8 +60,8 @@ namespace EDDiscovery.UserControls
             var enumlisttt = new Enum[] { EDTx.UserControlWebBrowser_extCheckBoxBack_ToolTip, EDTx.UserControlWebBrowser_extCheckBoxStar_ToolTip, EDTx.UserControlWebBrowser_checkBoxAutoTrack_ToolTip, EDTx.UserControlWebBrowser_extCheckBoxAllowedList_ToolTip };
 
             string thisname = typeof(UserControlWebBrowser).Name;
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, thisname);          // lookup using the base name, not the derived name, so we don't have repeats
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, thisname);
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, new string[] { thisname });          // lookup using the base name, not the derived name, so we don't have repeats
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, new string[] { thisname });
 
             rollUpPanelTop.SetToolTip(toolTip);
 

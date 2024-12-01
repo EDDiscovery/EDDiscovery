@@ -60,7 +60,7 @@ namespace EDDiscovery.UserControls
                                        EDTx.SearchScans_ColumnSearches,  EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent,
                                        EDTx.SearchScans_ColumnParentParent, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnStarStar,
                                         EDTx.SearchScans_labelTime , EDTx.SearchScans_labelSearch};
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, subname: "SearchScans");
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist,null, new string[] { "SearchScans" });
 
             var enumlisttt = new Enum[] { EDTx.UserControlDiscoveries_textBoxSearch_ToolTip, EDTx.UserControlDiscoveries_extButtonSearches_ToolTip,
                                 EDTx.UserControlDiscoveries_extCheckBoxWordWrap_ToolTip, EDTx.UserControlDiscoveries_buttonExtExcel_ToolTip };

@@ -1276,6 +1276,8 @@ SECTION UserControlTravelGrid
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" @
+.extButtonTimeRanges.ToolTip: "Define new time ranges for time selector" @
+.extComboBoxQuickMarks.ToolTip: "Go to a marked journal entry. Use right click to mark an entry" @
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 .StartStopHidden: "Next start/stop marker is hidden" @
 .StartStopNotFound: "No start/stop marker found below" @

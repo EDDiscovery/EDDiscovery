@@ -747,7 +747,9 @@ namespace EDDiscovery
         UserControlTravelGrid_checkBoxCursorToTop_ToolTip, // ToolTip 'Automatically move the cursor to the latest entry when it arrives'
         UserControlTravelGrid_extCheckBoxWordWrap_ToolTip, // ToolTip 'Enable or disable word wrap'
         UserControlTravelGrid_extCheckBoxOutlines_ToolTip, // ToolTip 'Control Outlining'
-
+        UserControlTravelGrid_extButtonTimeRanges_ToolTip, 
+        UserControlTravelGrid_extComboBoxQuickMarks_ToolTip,
+    
         UserControlTravelGrid_ColumnTime, // Column Header 'Time'
         UserControlTravelGrid_ColumnEvent, // Column Header 'Event'
         UserControlTravelGrid_ColumnDescription, // Column Header 'Description'

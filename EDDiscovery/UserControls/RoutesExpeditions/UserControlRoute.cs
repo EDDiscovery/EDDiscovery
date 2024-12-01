@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlRoute_extButtonRoute_ToolTip, EDTx.UserControlRoute_textBox_FromY_ToolTip, EDTx.UserControlRoute_textBox_FromX_ToolTip,
                                         EDTx.UserControlRoute_extButtonExpeditionSave_ToolTip,EDTx.UserControlRoute_extButtonExpeditionPush_ToolTip,
                                         };
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, debugit: true);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
         public override void Init()

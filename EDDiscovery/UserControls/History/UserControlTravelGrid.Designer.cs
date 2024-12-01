@@ -88,6 +88,8 @@ namespace EDDiscovery.UserControls
             this.travelGridInDebugModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
+            this.extButtonTimeRanges = new ExtendedControls.ExtButton();
+            this.extComboBoxQuickMarks = new ExtendedControls.ExtComboBox();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.panelOutlining = new ExtendedControls.ExtPanelDataGridViewScrollOutlining();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
@@ -105,8 +107,6 @@ namespace EDDiscovery.UserControls
             this.rollUpAfterFirstToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.rollUpAfter5ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
-            this.extButtonTimeRanges = new ExtendedControls.ExtButton();
-            this.extComboBoxQuickMarks = new ExtendedControls.ExtComboBox();
             this.extButtonDrawnHelp = new ExtendedControls.ExtButtonDrawn();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
@@ -586,6 +586,44 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
+            // extButtonTimeRanges
+            // 
+            this.extButtonTimeRanges.Image = global::EDDiscovery.Icons.Controls.Clock;
+            this.extButtonTimeRanges.Location = new System.Drawing.Point(146, 1);
+            this.extButtonTimeRanges.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonTimeRanges.Name = "extButtonTimeRanges";
+            this.extButtonTimeRanges.Size = new System.Drawing.Size(28, 28);
+            this.extButtonTimeRanges.TabIndex = 25;
+            this.toolTip.SetToolTip(this.extButtonTimeRanges, "Define new time ranges for time selector");
+            this.extButtonTimeRanges.UseVisualStyleBackColor = true;
+            this.extButtonTimeRanges.Click += new System.EventHandler(this.extButtonTimeRanges_Click);
+            // 
+            // extComboBoxQuickMarks
+            // 
+            this.extComboBoxQuickMarks.BorderColor = System.Drawing.Color.Red;
+            this.extComboBoxQuickMarks.ButtonColorScaling = 0.5F;
+            this.extComboBoxQuickMarks.DataSource = null;
+            this.extComboBoxQuickMarks.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxQuickMarks.DisplayMember = "";
+            this.extComboBoxQuickMarks.DropDownBackgroundColor = System.Drawing.Color.Gray;
+            this.extComboBoxQuickMarks.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxQuickMarks.Location = new System.Drawing.Point(387, 3);
+            this.extComboBoxQuickMarks.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
+            this.extComboBoxQuickMarks.MouseOverBackgroundColor = System.Drawing.Color.Silver;
+            this.extComboBoxQuickMarks.Name = "extComboBoxQuickMarks";
+            this.extComboBoxQuickMarks.ScrollBarButtonColor = System.Drawing.Color.LightGray;
+            this.extComboBoxQuickMarks.ScrollBarColor = System.Drawing.Color.LightGray;
+            this.extComboBoxQuickMarks.SelectedIndex = -1;
+            this.extComboBoxQuickMarks.SelectedItem = null;
+            this.extComboBoxQuickMarks.SelectedValue = null;
+            this.extComboBoxQuickMarks.Size = new System.Drawing.Size(139, 21);
+            this.extComboBoxQuickMarks.TabIndex = 0;
+            this.extComboBoxQuickMarks.Text = "Go to a marked entry";
+            this.extComboBoxQuickMarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.extComboBoxQuickMarks, "Go to a marked journal entry. Use right click to mark an entry");
+            this.extComboBoxQuickMarks.ValueMember = "";
+            this.extComboBoxQuickMarks.SelectedIndexChanged += new System.EventHandler(this.extComboBoxBookmark_SelectedIndexChanged);
+            // 
             // dataViewScrollerPanel
             // 
             this.dataViewScrollerPanel.Controls.Add(this.panelOutlining);
@@ -791,41 +829,6 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(859, 30);
             this.panelTop.TabIndex = 31;
-            // 
-            // extButtonTimeRanges
-            // 
-            this.extButtonTimeRanges.Image = global::EDDiscovery.Icons.Controls.Clock;
-            this.extButtonTimeRanges.Location = new System.Drawing.Point(146, 1);
-            this.extButtonTimeRanges.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extButtonTimeRanges.Name = "extButtonTimeRanges";
-            this.extButtonTimeRanges.Size = new System.Drawing.Size(28, 28);
-            this.extButtonTimeRanges.TabIndex = 25;
-            this.extButtonTimeRanges.UseVisualStyleBackColor = true;
-            this.extButtonTimeRanges.Click += new System.EventHandler(this.extButtonTimeRanges_Click);
-            // 
-            // extComboBoxQuickMarks
-            // 
-            this.extComboBoxQuickMarks.BorderColor = System.Drawing.Color.Red;
-            this.extComboBoxQuickMarks.ButtonColorScaling = 0.5F;
-            this.extComboBoxQuickMarks.DataSource = null;
-            this.extComboBoxQuickMarks.DisableBackgroundDisabledShadingGradient = false;
-            this.extComboBoxQuickMarks.DisplayMember = "";
-            this.extComboBoxQuickMarks.DropDownBackgroundColor = System.Drawing.Color.Gray;
-            this.extComboBoxQuickMarks.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.extComboBoxQuickMarks.Location = new System.Drawing.Point(387, 4);
-            this.extComboBoxQuickMarks.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
-            this.extComboBoxQuickMarks.MouseOverBackgroundColor = System.Drawing.Color.Silver;
-            this.extComboBoxQuickMarks.Name = "extComboBoxQuickMarks";
-            this.extComboBoxQuickMarks.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.extComboBoxQuickMarks.ScrollBarColor = System.Drawing.Color.LightGray;
-            this.extComboBoxQuickMarks.SelectedIndex = -1;
-            this.extComboBoxQuickMarks.SelectedItem = null;
-            this.extComboBoxQuickMarks.SelectedValue = null;
-            this.extComboBoxQuickMarks.Size = new System.Drawing.Size(139, 21);
-            this.extComboBoxQuickMarks.TabIndex = 0;
-            this.extComboBoxQuickMarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.extComboBoxQuickMarks.ValueMember = "";
-            this.extComboBoxQuickMarks.SelectedIndexChanged += new System.EventHandler(this.extComboBoxBookmark_SelectedIndexChanged);
             // 
             // extButtonDrawnHelp
             // 

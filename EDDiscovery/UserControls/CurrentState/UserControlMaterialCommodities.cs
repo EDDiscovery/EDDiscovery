@@ -82,7 +82,7 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlMaterialCommodities_ColWanted, EDTx.UserControlMaterialCommodities_ColNeed,
                                         };
 
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { dataGridViewMatView }, "UserControlMaterialCommodities");
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { dataGridViewMatView }, new string[] { "UserControlMaterialCommodities" });
             colMType.HeaderText = "Type".TxID(EDTx.UserControlMaterialCommodities_ColType);     // we exclude MatView, as its mostly non translated things, and just fix type
 
             var enumlisttt = new Enum[] { EDTx.UserControlMaterialCommodities_buttonFilter_ToolTip, EDTx.UserControlMaterialCommodities_textBoxItems1_ToolTip,
@@ -95,17 +95,17 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlMaterialCommodities_extCheckBoxMaterialView_ToolTip,
                                         };
 
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, "UserControlMaterialCommodities");
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, new string[] { "UserControlMaterialCommodities" });
 
             var enumlistcms = new Enum[] {EDTx.UserControlMaterialCommodities_openRecipeInWindowToolStripMenuItem,
                                         EDTx.UserControlMaterialCommodities_displayItemInShoppingListToolStripMenuItem,
                                         EDTx.UserControlMaterialCommodities_clearAllDisplayItemsInShoppingListToolStripMenuItem,
                                         EDTx.UserControlMaterialCommodities_displayAllInShoppingListToolStripMenuItem};
 
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, "UserControlMaterialCommodities");
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, new string[] { "UserControlMaterialCommodities" });
 
             var enumlistcmsSL = new Enum[] { EDTx.UserControlMaterialCommodities_toolStripMenuItemSLClearAll };
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripSL, enumlistcmsSL, "UserControlMaterialCommodities");
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripSL, enumlistcmsSL, new string[] { "UserControlMaterialCommodities" });
 
             // now configure grid, filter selector
 

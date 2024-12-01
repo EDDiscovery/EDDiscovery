@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
                             EDTx.UserControlSurveyor_extButtonFSS_ToolTip, EDTx.UserControlSurveyor_extButtonSetRoute_ToolTip, 
                             EDTx.UserControlSurveyor_extButtonControlRoute_ToolTip, EDTx.UserControlSurveyor_extButtonFont_ToolTip, EDTx.UserControlSurveyor_extCheckBoxWordWrap_ToolTip, 
                             EDTx.UserControlSurveyor_extButtonSearches_ToolTip };
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, thisname);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, new string[] { thisname });
             rollUpPanelTop.SetToolTip(toolTip);
 
             translatednavroutename = "Nav Route".T(EDTx.UserControlSurveyor_navroute);

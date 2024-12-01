@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
         private const string dbFieldFilter = "ControlFieldFilter";
         private const string dbUserGroups = "UserGroups";
         private const string dbTimeDates = "TimeDates";
-
+        private const string dbBookmarks = "Bookmarks";
 
         public delegate void PopOut();
         public PopOut OnPopOut;
@@ -63,9 +63,40 @@ namespace EDDiscovery.UserControls
 
         private int fdropdown;     // filter totals
 
+        private HashSet<long> quickMarkJIDs = new HashSet<long>();
+
         public UserControlJournalGrid()
         {
             InitializeComponent();
+
+            var tlnset = new string[] { "UserControlJournalGrid", "UserControlTravelGrid" };    // share top level name between them - new feature dec 24
+
+            var enumlist = new Enum[] { EDTx.UserControlJournalGrid_ColumnTime,
+                EDTx.UserControlJournalGrid_ColumnEvent, EDTx.UserControlJournalGrid_ColumnDescription,
+                EDTx.UserControlJournalGrid_ColumnInformation, EDTx.UserControlJournalGrid_labelTime,
+                EDTx.UserControlJournalGrid_labelSearch };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
+            var enumlistcms = new Enum[] { EDTx.UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlJournalGrid_jumpToEntryToolStripMenuItem,
+                EDTx.UserControlJournalGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlJournalGrid_viewOnEDSMToolStripMenuItem,
+                EDTx.UserControlJournalGrid_viewOnSpanshToolStripMenuItem,
+                EDTx.UserControlJournalGrid_viewScanDisplayToolStripMenuItem,
+                EDTx.UserControlJournalGrid_toolStripMenuItemStartStop,
+                EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem,
+                EDTx.UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem };
+
+            BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, tlnset);
+
+            var enumlisttt = new Enum[] { EDTx.UserControlJournalGrid_comboBoxTime_ToolTip, EDTx.UserControlJournalGrid_textBoxSearch_ToolTip,
+                EDTx.UserControlJournalGrid_buttonFilter_ToolTip, EDTx.UserControlJournalGrid_buttonExtExcel_ToolTip,
+                EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip, EDTx.UserControlJournalGrid_buttonField_ToolTip,
+                EDTx.UserControlTravelGrid_extButtonTimeRanges_ToolTip, EDTx.UserControlTravelGrid_extComboBoxQuickMarks_ToolTip,
+                };
+
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, 
+                                    toplevelnames: tlnset,      // we can use either set of definitions here
+                                    debugit:true);
         }
 
         public override void Init()
@@ -100,23 +131,6 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += HistoryChanged;
             DiscoveryForm.OnNewEntry += AddNewEntry;
 
-            var enumlist = new Enum[] { EDTx.UserControlJournalGrid_ColumnTime, EDTx.UserControlJournalGrid_ColumnEvent, EDTx.UserControlJournalGrid_ColumnDescription, 
-                EDTx.UserControlJournalGrid_ColumnInformation, EDTx.UserControlJournalGrid_labelTime, EDTx.UserControlJournalGrid_labelSearch };
-
-            var enumlistcms = new Enum[] { EDTx.UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlJournalGrid_jumpToEntryToolStripMenuItem, 
-                EDTx.UserControlJournalGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlJournalGrid_viewOnEDSMToolStripMenuItem,
-                EDTx.UserControlJournalGrid_viewOnSpanshToolStripMenuItem,
-                EDTx.UserControlJournalGrid_viewScanDisplayToolStripMenuItem,
-                EDTx.UserControlJournalGrid_toolStripMenuItemStartStop, 
-                EDTx.UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem };
-
-            var enumlisttt = new Enum[] { EDTx.UserControlJournalGrid_comboBoxTime_ToolTip, EDTx.UserControlJournalGrid_textBoxSearch_ToolTip, 
-                EDTx.UserControlJournalGrid_buttonFilter_ToolTip, EDTx.UserControlJournalGrid_buttonExtExcel_ToolTip, 
-                EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip, EDTx.UserControlJournalGrid_buttonField_ToolTip };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, this);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             // set up the combo box, and if we can't find the setting, reset the setting
             if ( TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), true,true,true, GetSetting(dbTimeDates, "")) == false)
@@ -148,13 +162,12 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Display
+        #region Hooks
 
         public override void InitialDisplay()
         {
             Display(DiscoveryForm.History, false);
         }
-
 
         private void HistoryChanged()
         {
@@ -163,6 +176,10 @@ namespace EDDiscovery.UserControls
 
             Display(DiscoveryForm.History, false);
         }
+
+        #endregion
+
+        #region Grid
 
         private void Display(HistoryList hl, bool disablesorting )
         {
@@ -247,7 +264,8 @@ namespace EDDiscovery.UserControls
             {
                 System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " JG TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
-                UpdateToolTipsForFilter();
+                string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlJournalGrid_TT1), dataGridViewJournal.Rows.Count, current_historylist?.Count ?? 0);
+                comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlJournalGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlJournalGrid_TTSelAge) + ms);
 
                 if (dataGridViewJournal.SelectAndMove(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();
@@ -257,6 +275,8 @@ namespace EDDiscovery.UserControls
                     dataGridViewJournal.Sort(dataGridViewJournal.Columns[sortcol], (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
                     dataGridViewJournal.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
                 }
+
+                UpdateQuickMarkComboBox();
 
                 this.dataGridViewJournal.Cursor = Cursors.Default;
                 buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = true;
@@ -330,8 +350,8 @@ namespace EDDiscovery.UserControls
             if (!hef.IsIncluded(he))
                 return null;
 
-            DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
-            string text = he.GetInfoDetailed();
+            string colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString();
+            string colDetailed = he.GetInfoDetailed();
 
             if (search.Enabled)
             {
@@ -339,14 +359,12 @@ namespace EDDiscovery.UserControls
 
                 if (search.Terms[0] != null)
                 {
-                    string timestr = time.ToString();
                     int rown = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
                     string entryrow = rown.ToStringInvariant();
-                    matched = timestr.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                    he.EventSummary.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                    text.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
-                                    entryrow.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0;
-
+                    matched = colTime.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                              he.EventSummary.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                              colDetailed.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                              entryrow.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0;
                 }
 
                 if (!matched && search.Terms[1] != null)       // system
@@ -362,11 +380,11 @@ namespace EDDiscovery.UserControls
                     return null;
             }
 
-            string cuttext = text.LineLimit(10, Environment.NewLine + "...");
+            string cuttext = colDetailed.LineLimit(10, Environment.NewLine + "...");
 
             var rw = dataGridViewJournal.RowTemplate.Clone() as DataGridViewRow;
-            rw.CreateCells(dataGridViewJournal, time, "", he.EventSummary, cuttext);
-            rw.Cells[ColumnInformation.Index].ToolTipText = text;
+            rw.CreateCells(dataGridViewJournal, colTime, "", he.EventSummary, cuttext);
+            rw.Cells[ColumnInformation.Index].ToolTipText = colDetailed;
 
             rw.Tag = he;
 
@@ -374,15 +392,89 @@ namespace EDDiscovery.UserControls
             return rw;
         }
 
-        private void UpdateToolTipsForFilter()
+
+        private void dataGridViewJournal_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlJournalGrid_TT1), dataGridViewJournal.Rows.Count, current_historylist?.Count ?? 0);
-            comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlJournalGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlJournalGrid_TTSelAge) + ms);
+            if (e.Column.Index == 0)
+            {
+                e.SortDataGridViewColumnDate();
+            }
         }
 
-	    #endregion
+        private void dataGridViewJournal_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        {
+            HistoryEntry he = (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Tag;
+            int rowno = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
+            PaintHelpers.PaintEventColumn(dataGridViewJournal, e, rowno, he, Columns.Event, false);
+        }
 
-        #region Buttons
+
+        public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        {
+            if (actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)
+            {
+                Display(current_historylist, false);
+                return PanelActionState.HandledContinue;
+            }
+            else if (actionobj is UserControlCommonBase.RequestTravelHistoryPos)
+            {
+                var he = CurrentHE();
+                //System.Diagnostics.Debug.WriteLine($"Travel Grid position request direct send to {sender}");
+                sender.PerformPanelOperation(this, he);         // direct send back to sender so we don't wake up lots of panels
+                return PanelActionState.Success;
+            }
+
+
+            return PanelActionState.NotHandled;
+        }
+
+        public bool GotoPosByJID(long jid)
+        {
+            int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
+            //System.Diagnostics.Debug.WriteLine($"Travel Grid move by jid {jid} {rowno}");
+
+            if (rowno >= 0)
+            {
+                dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(rowno);
+                dataGridViewJournal.DisplayRow(rowno, true);
+                dataGridViewJournal.Rows[rowno].Selected = true;
+                FireChangeSelection();
+                return true;
+            }
+            else
+                return false;
+        }
+
+        public void FireChangeSelection()
+        {
+            var he = CurrentHE();
+            if (he != null)
+            {
+                //System.Diagnostics.Trace.WriteLine($"Journal Grid Fire Change {he.EventTimeUTC} {he.EventSummary} {he.System.Name} {dataGridViewTravel.CurrentCell?.RowIndex}:{dataGridViewTravel.CurrentCell?.ColumnIndex}");
+                RequestPanelOperation?.Invoke(this, he);
+            }
+        }
+
+        private HistoryEntry CurrentHE()
+        {
+            if (dataGridViewJournal.CurrentCell != null)
+            {
+                int row = dataGridViewJournal.CurrentCell.RowIndex;
+                var he = dataGridViewJournal.Rows[row].Tag as HistoryEntry;
+                return he;
+            }
+            else if (current_historylist != null && current_historylist.Count > 0)
+            {
+                return current_historylist.GetLast;
+            }
+            else
+                return null;
+        }
+
+
+        #endregion
+
+        #region Toolbar
 
         private void buttonFilter_Click(object sender, EventArgs e)
         {
@@ -446,19 +538,55 @@ namespace EDDiscovery.UserControls
         }
 
 
-        #endregion
-
-        private void dataGridViewJournal_RowPostPaint(object sender, DataGridViewRowPostPaintEventArgs e)
+        private void quickMarkToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            HistoryEntry he = (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Tag;
-            int rowno = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
-            PaintHelpers.PaintEventColumn(dataGridViewJournal, e, rowno, he, Columns.Event, false);
+            if (quickMarkToolStripMenuItem.Checked)
+                quickMarkJIDs.Add(rightclickhe.journalEntry.Id);
+            else
+                quickMarkJIDs.Remove(rightclickhe.journalEntry.Id);
+
+            var str = quickMarkJIDs.Select(x => x.ToStringInvariant()).ToArray().Join(';');
+            PutSetting(dbBookmarks + ":" + DiscoveryForm.History.CommanderId.ToStringInvariant(), str);
+            UpdateQuickMarkComboBox();
         }
+
+        private void UpdateQuickMarkComboBox()
+        {
+            // quick marks are commander dependent
+            var str = GetSetting(dbBookmarks + ":" + DiscoveryForm.History.CommanderId.ToStringInvariant(), "").Split(';');
+            quickMarkJIDs = str.Select(x => x.InvariantParseLong(-1)).ToList().ToHashSet();
+
+            extComboBoxQuickMarks.Items.Clear();
+            List<long> jids = new List<long>();
+            foreach (var jid in quickMarkJIDs)
+            {
+                if (rowsbyjournalid.TryGetValue(jid, out DataGridViewRow row)) // if it parses and its in view, add it to combo box.
+                {
+                    extComboBoxQuickMarks.Items.Add((string)row.Cells[0].Value + ":" + (string)row.Cells[2].Value);
+                    jids.Add(jid);
+                }
+            }
+            extComboBoxQuickMarks.Tag = jids;
+            extComboBoxQuickMarks.Text = "Marked".TxID(EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem);      // only works for custom
+        }
+
+        private void extComboBoxQuickMarks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            List<long> jids = extComboBoxQuickMarks.Tag as List<long>;
+            long jid = jids[extComboBoxQuickMarks.SelectedIndex];
+            if (!GotoPosByJID(jid))
+                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry is filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+        }
+
+
+        #endregion
 
         #region Mouse Clicks
 
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
+            quickMarkToolStripMenuItem.Visible = rightclickhe != null;
+            quickMarkToolStripMenuItem.Checked = rightclickhe != null && quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
             toolStripMenuItemStartStop.Visible = rightclickhe != null;
             mapGotoStartoolStripMenuItem.Visible = rightclickhe != null && rightclickhe.System.HasCoordinate;
             viewOnEDSMToolStripMenuItem.Visible = rightclickhe != null;
@@ -564,23 +692,6 @@ namespace EDDiscovery.UserControls
             Display(current_historylist, true);
         }
 
-        #endregion
-
-        public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
-        {
-            if (actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)
-            {
-                Display(current_historylist, false);
-                return PanelActionState.HandledContinue;
-            }
-
-            return PanelActionState.NotHandled;
-        }
-
-        public void FireChangeSelection()       // keep for now
-        {
-        }
-
         private void jumpToEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.EntryNumber : (DiscoveryForm.History.Count - rightclickhe.EntryNumber + 1)) : 0;
@@ -598,17 +709,9 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void dataGridViewJournal_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
-        {
-            if (e.Column.Index == 0)
-            {
-                e.SortDataGridViewColumnDate();
-            }
-        }
-
+        #endregion
 
         #region Excel
-
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {
             Forms.ImportExportForm frm = new Forms.ImportExportForm();
@@ -690,6 +793,7 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
+
 
 
 
