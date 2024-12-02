@@ -40,6 +40,7 @@ namespace EDDiscovery.UserControls
         private string dbTimeSelector = "EDUIHistory";
         private string dbDisplayFilters = "DisplayFilters";
         private const string dbTimeDates = "TimeDates";
+        private const string dbBookmarks = "Bookmarks";
 
         private string[] displayfilters;        // display filters
 
@@ -61,9 +62,28 @@ namespace EDDiscovery.UserControls
         private Queue<Action> todo = new Queue<Action>();
         private Queue<HistoryEntry> queuedadds = new Queue<HistoryEntry>();
 
+        private HashSet<string> quickMarkSystemName = new HashSet<string>();
+
         public UserControlStarList()
         {
             InitializeComponent();
+
+            var tlnset = new string[] { "UserControlStarList", "UserControlTravelGrid" };    // share top level name between them - new feature dec 24
+
+            var enumlist = new Enum[] { EDTx.UserControlStarList_ColumnTime, EDTx.UserControlStarList_ColumnSystem, EDTx.UserControlStarList_ColumnVisits,
+                EDTx.UserControlStarList_ColumnInformation, EDTx.UserControlStarList_Value, EDTx.UserControlStarList_labelTime, EDTx.UserControlStarList_labelSearch };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
+            var enumlistcms = new Enum[] { EDTx.UserControlStarList_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlStarList_mapGotoStartoolStripMenuItem,
+                EDTx.UserControlStarList_viewOnEDSMToolStripMenuItem, EDTx.UserControlStarList_viewOnSpanshToolStripMenuItem, EDTx.UserControlStarList_setNoteToolStripMenuItem,
+                EDTx.UserControlStarList_viewScanDisplayToolStripMenuItem, EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem };
+            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, tlnset);
+
+            var enumlisttt = new Enum[] { EDTx.UserControlStarList_comboBoxTime_ToolTip,
+                EDTx.UserControlStarList_textBoxSearch_ToolTip, EDTx.UserControlStarList_buttonExtExcel_ToolTip, EDTx.UserControlStarList_checkBoxCursorToTop_ToolTip,
+                EDTx.UserControlTravelGrid_extComboBoxQuickMarks_ToolTip};
+
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, tlnset);
         }
 
         public override void Init()
@@ -91,18 +111,6 @@ namespace EDDiscovery.UserControls
             autoupdateedsm.Tick += Autoupdateedsm_Tick;
             todotimer = new Timer() { Interval = 20 };
             todotimer.Tick += Todotimer_Tick;
-
-            var enumlist = new Enum[] { EDTx.UserControlStarList_ColumnTime, EDTx.UserControlStarList_ColumnSystem, EDTx.UserControlStarList_ColumnVisits, 
-                EDTx.UserControlStarList_ColumnInformation, EDTx.UserControlStarList_Value, EDTx.UserControlStarList_labelTime, EDTx.UserControlStarList_labelSearch };
-            var enumlistcms = new Enum[] { EDTx.UserControlStarList_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlStarList_mapGotoStartoolStripMenuItem,
-                EDTx.UserControlStarList_viewOnEDSMToolStripMenuItem, EDTx.UserControlStarList_viewOnSpanshToolStripMenuItem, EDTx.UserControlStarList_setNoteToolStripMenuItem, 
-                EDTx.UserControlStarList_viewScanDisplayToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlStarList_comboBoxTime_ToolTip, 
-                EDTx.UserControlStarList_textBoxSearch_ToolTip, EDTx.UserControlStarList_buttonExtExcel_ToolTip, EDTx.UserControlStarList_checkBoxCursorToTop_ToolTip };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             // set up the combo box, and if we can't find the setting, reset the setting
             if ( TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), false, true, false, GetSetting(dbTimeDates, "")) == false)
@@ -323,6 +331,8 @@ namespace EDDiscovery.UserControls
                     dataGridViewStarList.Columns[sortcol].HeaderCell.SortGlyphDirection = sortorder;
                 }
 
+                UpdateQuickMarkComboBox();
+
                 autoupdaterowoffset = autoupdaterowstart = 0;
                 autoupdateedsm.Start();
 
@@ -342,7 +352,7 @@ namespace EDDiscovery.UserControls
         {
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
-            DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC);
+            string time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString();
             var node = DiscoveryForm.History.StarScan?.FindSystemSynchronous(he.System); // may be null
 
             string visits = DiscoveryForm.History.Visits(he.System.Name).ToString();
@@ -354,8 +364,7 @@ namespace EDDiscovery.UserControls
 
                 if (search.Terms[0] != null)
                 {
-                    string timestr = time.ToString();
-                    matched = timestr.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                    matched = time.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 he.System.Name.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 visits.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                                 info.IndexOf(search.Terms[0], StringComparison.InvariantCultureIgnoreCase) >= 0;
@@ -510,7 +519,7 @@ namespace EDDiscovery.UserControls
         public async void CheckWeb(DataGridViewRow row)
         {
             HistoryEntry he = row.Tag as HistoryEntry;
-            var node = await DiscoveryForm.History.StarScan?.FindSystemAsync(he.System, EliteDangerousCore.WebExternalDataLookup.All);  // try an EDSM lookup, cache data, then redisplay.
+            var node = await DiscoveryForm.History.StarScan?.FindSystemAsync(he.System, edsmSpanshButton.WebLookup);  
             row.Cells[Columns.OtherInformation].Value = Infoline(he.System,node);
             row.Cells[Columns.SystemValue].Value = node?.ScanValue(true).ToString("N0") ?? "";
         }
@@ -615,14 +624,6 @@ namespace EDDiscovery.UserControls
             Display(false);
         }
 
-
-        HistoryEntry rightclickhe = null;
-
-        private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
-        {
-            rightclickhe = dataGridViewStarList.RightClickRowValid ? (HistoryEntry)(dataGridViewStarList.Rows[dataGridViewStarList.RightClickRow].Tag as HistoryEntry) : null;
-        }
-
         private void extButtonTimeRanges_Click(object sender, EventArgs e)
         {
             string set = TravelHistoryFilter.EditUserDataTimeRange(this.FindForm(), GetSetting(dbTimeDates, ""));
@@ -637,13 +638,60 @@ namespace EDDiscovery.UserControls
                     Display(false);
                 }
             }
-
         }
 
+        private void quickMarkToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (quickMarkToolStripMenuItem.Checked)
+                quickMarkSystemName.Add(rightclickhe.System.Name);
+            else
+                quickMarkSystemName.Remove(rightclickhe.System.Name);
+
+            var str = quickMarkSystemName.ToArray().Join('\u2345');
+            PutSetting(dbBookmarks + ":" + DiscoveryForm.History.CommanderId.ToStringInvariant(), str);
+            UpdateQuickMarkComboBox();
+        }
+
+        private void UpdateQuickMarkComboBox()
+        {
+            // quick marks are commander dependent
+            var str = GetSetting(dbBookmarks + ":" + DiscoveryForm.History.CommanderId.ToStringInvariant(), "").SplitNoEmptyStartFinish('\u2345');
+            quickMarkSystemName = str.ToList().ToHashSet();
+
+            extComboBoxQuickMarks.Items.Clear();
+            foreach (var name in quickMarkSystemName)
+            {
+                extComboBoxQuickMarks.Items.Add(name);
+            }
+
+            extComboBoxQuickMarks.Text = "Marked".TxID(EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem);      // only works for custom
+        }
+
+        private void extComboBoxQuickMarks_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string system = (string)extComboBoxQuickMarks.SelectedItem;
+            int rowno = dataGridViewStarList.FindRowWithValue(ColumnSystem.Index, system);
+            if ( rowno >= 0 )
+            {
+                dataGridViewStarList.SetCurrentAndSelectAllCellsOnRow(rowno);
+                dataGridViewStarList.DisplayRow(rowno, true);
+                dataGridViewStarList.Rows[rowno].Selected = true;
+                FireChangeSelection();
+            }
+            else
+                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry is filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+        }
 
         #endregion
 
         #region TravelHistoryRightClick
+
+        HistoryEntry rightclickhe = null;
+        private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
+        {
+            rightclickhe = dataGridViewStarList.RightClickRowValid ? (HistoryEntry)(dataGridViewStarList.Rows[dataGridViewStarList.RightClickRow].Tag as HistoryEntry) : null;
+        }
+
 
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
@@ -658,6 +706,8 @@ namespace EDDiscovery.UserControls
             {
                 removeSortingOfColumnsToolStripMenuItem.Visible = dataGridViewStarList.SortedColumn != null;
 
+                quickMarkToolStripMenuItem.Visible = rightclickhe != null;
+                quickMarkToolStripMenuItem.Checked = rightclickhe != null && quickMarkSystemName.Contains(rightclickhe.System.Name);              // set the check 
                 mapGotoStartoolStripMenuItem.Visible = rightclickhe != null && rightclickhe.System.HasCoordinate;
                 viewOnEDSMToolStripMenuItem.Visible = rightclickhe != null;
                 viewScanDisplayToolStripMenuItem.Visible = rightclickhe != null;

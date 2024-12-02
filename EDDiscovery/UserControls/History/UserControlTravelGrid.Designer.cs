@@ -320,7 +320,7 @@ namespace EDDiscovery.UserControls
             this.showSystemVisitedForeColourToolStripMenuItem,
             this.travelGridInDebugModeToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 598);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 620);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // quickMarkToolStripMenuItem
