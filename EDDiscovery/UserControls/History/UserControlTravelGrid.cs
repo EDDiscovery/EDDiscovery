@@ -477,6 +477,7 @@ namespace EDDiscovery.UserControls
                                + $"b{he.journalEntry.IsBeta}/h{ he.journalEntry.IsHorizons}/o{ he.journalEntry.IsOdyssey}\r\n"
                                + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship} mp {he.Status.IsInMultiPlayer}\r\n"
                                + $"jcb{he.Status.CurrentBoost} fsds{he.Status.FSDJumpSequence} jm'{he.Status.FSDJumpNextSystemName??"NoJump"}' ad{he.Status.FSDJumpNextSystemAddress??-1}\r\n"
+                               + $"PP {he.Status.PowerPledged} / {he.Status.PowerPledgedThisLoadGame}\r\n"
                                + $"tv{he.isTravelling} dist {he.TravelledDistance} sec {he.TravelledSeconds} jmps {he.TravelledJumps}"
                                ;
 
