@@ -174,7 +174,7 @@ SECTION PopOutInfo
 .Organics.Title: "Organic Scans" @
 .Organics.Description: "Organic scans of current body and historic scans" @
 .Engineers.Title: "Engineers" @
-.Engineers.Description: "List of Engineers, status, recipes" @
+.Engineers.Description: "Engineers List, status, recipes" @
 .Discoveries.Title: "Discoveries" @
 .Discoveries.Description: "Discoveries Observer List" @
 .Carrier.Title: "Carrier" @

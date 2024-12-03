@@ -129,7 +129,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Engineering, typeof(UserControlEngineering), "Engineering", "Engineering", "Engineering planner") },
             { new PanelInfo( PanelIDs.ShoppingList, typeof(UserControlShoppingList), "Shopping List", "ShoppingList", "Shopping list planner combining synthesis and engineering") },
             { new PanelInfo( PanelIDs.MaterialTrader, typeof(UserControlMaterialTrader), "Material Trader", "MaterialTrader", "Material trader") },
-            { new PanelInfo( PanelIDs.Engineers, typeof(UserControlEngineers), "Engineers", "Engineers", "List of Engineers, status, recipes") },
+            { new PanelInfo( PanelIDs.Engineers, typeof(UserControlEngineers), "Engineers", "Engineers", "Engineers List, status, recipes") },
 
             { new PanelInfo( "Scans and Stars") },
             { new PanelInfo( PanelIDs.Scan, typeof(UserControlScan), "Scan", "Scan", "Scan data on system") },

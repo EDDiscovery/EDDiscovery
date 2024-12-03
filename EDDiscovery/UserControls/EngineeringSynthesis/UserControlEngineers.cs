@@ -104,6 +104,17 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        // travel history cursor moved, either by user or via RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());
+        public override void ReceiveHistoryEntry(HistoryEntry he)
+        {
+            if (isHistoric)
+            {
+                last_he = he;
+                UpdateDisplay();
+            }
+        }
+
+        // new entry
         private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
             if (!isHistoric)        // only track new items if not historic
@@ -116,14 +127,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void ReceiveHistoryEntry(HistoryEntry he)
-        {
-            if (isHistoric )
-            {
-                last_he = he;
-                UpdateDisplay();
-            }
-        }
 
         public void SetupDisplay()
         {
