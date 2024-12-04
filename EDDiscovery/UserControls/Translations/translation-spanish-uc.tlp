@@ -235,7 +235,7 @@ SECTION UserControlEstimatedValues
 .FirstMappedEff: "First Mapped" => "Primeros mapeados"
 .FirstDiscMapped: "First Discovered Mapped" => "Primer mapeado descubierto"
 .EstValue: "Current Value" => "Valor estimado"
-.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" => "Verde mostrará materiales con recuento cero, rojo significa eliminarlos"
+.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" => "Verde mostrará todos los cuerpos, incluso aquellos con valor cero, rojo mostrará solo cuerpos con valor"
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" => "Mostrar todos los valores, incluso aquellos que son imposibles de obtener"
 .SV: "Estimated Scan Values for {0}" => "Valores de exploración estimados para {0}"
 
@@ -1140,7 +1140,7 @@ SECTION UserControlSysInfo
 .toolStripReset: "Reset" => "Reiniciar"
 .toolStripRemoveAll: "Remove All" => "Eliminar todo"
 .displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" => "Mostrar el siguiente destino seleccionado"
-.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
+.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" => "Deshabilita copiar al portapapeles cuando se hace click en cuadros de texto"
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Mantenga presionada la tecla Ctrl y luego arrastre hacia la izquierda un elemento para reposicionar, hay 8 columnas disponibles"
 .textBoxTargetDist.ToolTip: "Distance to target" => "Distancia al objetivo"
 .textBoxTarget.ToolTip: "Sets the target" => "Establece el objetivo"
