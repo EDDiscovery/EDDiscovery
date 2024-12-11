@@ -332,9 +332,9 @@ namespace EDDiscovery.UserControls
                         }
 
                         // print the main atmospheric composition and pressure, if presents
-                        if (sn.ScanData.Atmosphere != "none")
+                        if (sn.ScanData.HasAtmosphere)
                         {
-                            bdDetails.AppendCR().Append(sn.ScanData.Atmosphere);
+                            bdDetails.AppendCR().Append(sn.ScanData.AtmosphereTranslated);
                             if (sn.ScanData.nSurfacePressure.HasValue)
                             {
                                 bdDetails.Append(", ").Append((sn.ScanData.nSurfacePressure.Value / BodyPhysicalConstants.oneAtmosphere_Pa).ToString("N3")).Append(" Pa.");

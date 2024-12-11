@@ -205,6 +205,7 @@ namespace EDDiscovery.Actions
                     ap[storename + "_typeid"] = sc.PlanetTypeID.ToNullSafeString();
                     ap[storename + "_landable"] = sc.IsLandable ? "Landable" : "Not Landable";
                     ap[storename + "_atmosphere"] = sc.Atmosphere.ToNullSafeString();
+                    ap[storename + "_translatedatmosphere"] = sc.AtmosphereTranslated.ToNullSafeString();
                     ap[storename + "_terraformstate"] = sc.TerraformState.ToNullSafeString();
                     ap[storename + "_volcanism"] = sc.Volcanism.ToNullSafeString();
                     ap[storename + "_gravity"] = sc.nSurfaceGravity.ToStringInvariantNAN("R");

@@ -229,7 +229,7 @@ namespace EDDiscovery.UserControls
                     if (node.ScanData != null)
                     {
                         l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}".T(EDTx.UserControlOrganics_sysinfo), node.ScanData.PlanetTypeText, node.ScanData.RadiusText,
-                                                (Math.Round(node.ScanData.nSurfaceGravityG.Value, 2, MidpointRounding.AwayFromZero).ToString() ?? "?") + " g", node.ScanData.Atmosphere, node.CountBioSignals.ToString(), ((node.Genuses != null && node.CountBioSignals > 0) ? ": " + String.Join(", ", node.Genuses?.Select(x => x.Genus_Localised).ToArray()) : ""));
+                                                (Math.Round(node.ScanData.nSurfaceGravityG.Value, 2, MidpointRounding.AwayFromZero).ToString() ?? "?") + " g", node.ScanData.AtmosphereTranslated, node.CountBioSignals.ToString(), ((node.Genuses != null && node.CountBioSignals > 0) ? ": " + String.Join(", ", node.Genuses?.Select(x => x.Genus_Localised).ToArray()) : ""));
                     }
 
                     string s = node.Organics != null ? JournalScanOrganic.OrganicListString(node.Organics, 0, false, Environment.NewLine) : "No organic scanned";
