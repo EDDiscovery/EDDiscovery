@@ -208,6 +208,7 @@ namespace EDDiscovery.Actions
                     ap[storename + "_translatedatmosphere"] = sc.AtmosphereTranslated.ToNullSafeString();
                     ap[storename + "_terraformstate"] = sc.TerraformState.ToNullSafeString();
                     ap[storename + "_volcanism"] = sc.Volcanism.ToNullSafeString();
+                    ap[storename + "_translatedvolcanism"] = sc.VolcanismTranslated.ToNullSafeString();
                     ap[storename + "_gravity"] = sc.nSurfaceGravity.ToStringInvariantNAN("R");
                     ap[storename + "_gravityg"] = sc.nSurfaceGravityG.ToStringInvariantNAN("R");
                     ap[storename + "_pressure"] = sc.nSurfacePressure.ToStringInvariantNAN("R");

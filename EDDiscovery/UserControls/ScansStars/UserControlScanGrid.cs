@@ -356,9 +356,9 @@ namespace EDDiscovery.UserControls
                         }
 
                         // tell us that there is some volcanic activity
-                        if (sn.ScanData.Volcanism.HasChars())
+                        if (sn.ScanData.HasMeaningfulVolcanism)
                         {
-                            bdDetails.AppendCR().Append("Geological activity".T(EDTx.UserControlScanGrid_Geologicalactivity)).AppendColonS().Append(sn.ScanData.Volcanism).Append(". ");
+                            bdDetails.AppendCR().Append("Geological activity".T(EDTx.UserControlScanGrid_Geologicalactivity)).AppendColonS().Append(sn.ScanData.VolcanismTranslated).Append(". ");
                         }
 
                         if (sn.ScanData.Mapped)
