@@ -405,6 +405,7 @@ namespace EDDiscovery
         UserControlSettings_RELOAD,
         UserControlSettings_DelCmdr, // delete commander
         UserControlSettings_PermDelCmdr, // delete commander
+        UserControlSettings_PermDelTLUs, // delete commander
         UserControlSettings_Font, // The font used by this theme is not available on your system.
         UserControlSettings_NoMap, // No map downloaded
         UserControlSettings_GalFini, // Finished, Please close the window.

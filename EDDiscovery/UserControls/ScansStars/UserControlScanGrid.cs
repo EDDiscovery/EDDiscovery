@@ -332,9 +332,9 @@ namespace EDDiscovery.UserControls
                         }
 
                         // print the main atmospheric composition and pressure, if presents
-                        if (sn.ScanData.Atmosphere != "none")
+                        if (sn.ScanData.HasAtmosphere)
                         {
-                            bdDetails.AppendCR().Append(sn.ScanData.Atmosphere);
+                            bdDetails.AppendCR().Append(sn.ScanData.AtmosphereTranslated);
                             if (sn.ScanData.nSurfacePressure.HasValue)
                             {
                                 bdDetails.Append(", ").Append((sn.ScanData.nSurfacePressure.Value / BodyPhysicalConstants.oneAtmosphere_Pa).ToString("N3")).Append(" Pa.");
@@ -356,9 +356,9 @@ namespace EDDiscovery.UserControls
                         }
 
                         // tell us that there is some volcanic activity
-                        if (sn.ScanData.Volcanism.HasChars())
+                        if (sn.ScanData.HasMeaningfulVolcanism)
                         {
-                            bdDetails.AppendCR().Append("Geological activity".T(EDTx.UserControlScanGrid_Geologicalactivity)).AppendColonS().Append(sn.ScanData.Volcanism).Append(". ");
+                            bdDetails.AppendCR().Append("Geological activity".T(EDTx.UserControlScanGrid_Geologicalactivity)).AppendColonS().Append(sn.ScanData.VolcanismTranslated).Append(". ");
                         }
 
                         if (sn.ScanData.Mapped)

@@ -383,12 +383,16 @@ namespace EDDiscovery.UserControls
 
                 if (result == DialogResult.Yes)
                 {
-                    var perm= ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)".T(EDTx.UserControlSettings_PermDelCmdr), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                    var perm = ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)".T(EDTx.UserControlSettings_PermDelCmdr), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Information);
                     int id = cmdr.Id;
 
                     EDCommander.Delete(id,perm==DialogResult.Yes);
                     if ( perm == DialogResult.Yes)
-                       JournalEntry.DeleteCommander(id);
+                    {
+                        var tlus = ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned".T(EDTx.UserControlSettings_PermDelTLUs), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                        JournalEntry.DeleteCommander(id,tlus == DialogResult.Yes);
+
+                    }
                     DiscoveryForm.UpdateCommandersListBox();
                     UpdateCommandersListBox();
                     DiscoveryForm.RefreshHistoryAsync();           // will do a new parse on commander list adding/removing scanners

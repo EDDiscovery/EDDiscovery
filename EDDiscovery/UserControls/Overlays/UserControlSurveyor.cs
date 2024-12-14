@@ -763,7 +763,7 @@ namespace EDDiscovery.UserControls
                             if (sd.nEccentricity >= eccentricityLimit) en.Add(TTEccentric);
                             if (sd.nRadius < lowRadiusLimit && sd.IsPlanet) en.Add(TTTiny);
                             if (sd.nRadius > largeRadiusLimit && sd.IsPlanet && sd.IsLandable) en.Add(TTHuge);
-                            if (sd.HasAtmosphericComposition) en.Add(TTAtmosphere + sd.Atmosphere);
+                            if (sd.HasAtmosphericComposition) en.Add(TTAtmosphere + sd.AtmosphereTranslated);
                             if (sd.IsPlanet && sd.nSurfaceGravityG >= 2) en.Add(TTHighGravity + sd.nSurfaceGravityG.Value.ToStringInvariant("#.##"));
                         }
 
