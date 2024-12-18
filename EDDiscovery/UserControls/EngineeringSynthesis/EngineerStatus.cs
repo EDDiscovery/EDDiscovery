@@ -252,6 +252,15 @@ namespace EDDiscovery.UserControls
 
                     var res = MaterialCommoditiesRecipe.HowManyLeft(r, wanted, mcllist, totals, NeededResources, reducetotals: false);    // recipes not chained not in order
 
+                    //row.SetValues(r.Name + ":" + row.Index, r.ModuleList, r.Level,        // no faster
+                    //    CraftedCol.HeaderText == "-" ? "" : craftcount.ToString(),
+                    //    res.Item1.ToString(),
+                    //    wanted.ToString(),
+                    //    res.Item5.ToString("N0"),
+                    //    res.Item4,
+                    //    r.IngredientsStringvsCurrent(mcllist)
+                    //    );
+
                     row.Cells[WantedCol.Index].Value = wanted.ToString();        // use current culture to fill in decimal
                     row.Cells[MaxCol.Index].Value = res.Item1.ToString();
                     row.Cells[CraftedCol.Index].Value = CraftedCol.HeaderText == "-" ? "" : craftcount.ToString();
