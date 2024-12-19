@@ -161,7 +161,7 @@ namespace EDDiscovery
             FileHelpers.DeleteFiles(logpath, "*.hlog", new TimeSpan(2, 0, 0, 0), 256);        // Remove hlogs faster
             FileHelpers.DeleteFiles(logpath, "*.log", new TimeSpan(10, 0, 0, 0), 256);
 
-            if (EDDOptions.Instance.ScanCachePath != null)                                    // clean out old scan jsons
+            if (EDDOptions.Instance.ScanCacheEnabled)                                          // clean out old scan jsons
             {
                 FileHelpers.CreateDirectoryNoError(EDDOptions.Instance.ScanCachePath);
                 FileHelpers.DeleteFiles(EDDOptions.Instance.ScanCachePath, "*.json", new TimeSpan(7, 0, 0, 0), 256);

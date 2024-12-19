@@ -43,6 +43,8 @@ namespace EDDiscovery
         public string UserDatabaseFilename { get; private set; } = "EDDUser.sqlite";
         public string SystemDatabasePath { get; private set; }
         public string ScanCachePath { get; private set; }
+        public bool ScanCacheEnabled => !ScanCachePath.EqualsIIC("DISABLED");
+
         public string SystemDatabaseFilename { get; private set; } = "EDDSystem.sqlite";
         public string IconsPath { get; private set; }
         public bool NoWindowReposition { get; set; }
@@ -297,7 +299,6 @@ namespace EDDiscovery
             {
                 ScanCachePath = Path.Combine(AppDataDirectory, "WebScans");
             }
-
             EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
         }
 
@@ -415,9 +416,7 @@ namespace EDDiscovery
             }
             else if (optname == "-scancachepath")
             {
-                ScanCachePath = toeol ? ca.Rest() : ca.NextEmpty();
-                if (ScanCachePath.Equals("Disabled", StringComparison.InvariantCultureIgnoreCase))
-                    ScanCachePath = null;
+                ScanCachePath = toeol ? ca.Rest() : ca.NextEmpty();     // use DISABLED c/i
             }
             else if (optname == "-systemsdbfilename" )
             {
