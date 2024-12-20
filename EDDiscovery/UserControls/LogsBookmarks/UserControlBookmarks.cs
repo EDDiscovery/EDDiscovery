@@ -59,16 +59,13 @@ namespace EDDiscovery.UserControls
                     EDTx.UserControlBookmarks_buttonExtImport_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
-            // Add new translations for the context menu
-            var enumlistcms = new Enum[] { EDTx.UserControlBookmarks_viewScanOfSystemToolStripMenuItem, EDTx.UserControlBookmarks_viewOnEDSMToolStripMenuItem,
-                                    EDTx.UserControlBookmarks_viewOnSpanshToolStripMenuItem,
-                                    EDTx.UserControlBookmarks_addToTrilaterationToolStripMenuItem, EDTx.UserControlBookmarks_addToExpeditionToolStripMenuItem };
-
             // manually pick these up from DataGridViewStarResults as the names don't match
             viewScanOfSystemToolStripMenuItem.Text = viewScanOfSystemToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Data);
             mapGotoStartoolStripMenuItem.Text = mapGotoStartoolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_3d);
             viewOnSpanshToolStripMenuItem.Text = viewOnSpanshToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Spansh);
             viewOnEDSMToolStripMenuItem.Text = viewOnEDSMToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_EDSM);
+            addToExpeditionToolStripMenuItem.Text = addToExpeditionToolStripMenuItem.Text.TxID(EDTx.UserControlStarDistance_addToExpeditionToolStripMenuItem);
+
 
             userControlSurfaceBookmarks.TagFilter = GetSetting(dbSurfaceTags, "All");
         }
