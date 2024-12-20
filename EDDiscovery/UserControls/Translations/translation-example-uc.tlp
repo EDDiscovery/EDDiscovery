@@ -19,6 +19,7 @@ SECTION UserControlBookmarks
 .ColTags: "Tags" @
 .buttonFilter.ToolTip: "Filter out entries based on tag" @
 .buttonTags.ToolTip: "Edit Tags" @
+.addToExpeditionToolStripMenuItem: "Add to Expedition" @
 
 SECTION UserControlCombatPanel
 
