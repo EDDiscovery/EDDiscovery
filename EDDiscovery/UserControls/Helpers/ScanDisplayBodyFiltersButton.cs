@@ -34,7 +34,7 @@ namespace EDDiscovery.UserControls
 
             var options = new List<ExtendedControls.CheckedIconUserControl.Item>();
             foreach (var x in Enum.GetValues(typeof(EDPlanet)))
-                options.Add(new ExtendedControls.CheckedIconUserControl.Item(x.ToString(), Planets.PlanetName((EDPlanet)x)));
+                options.Add(new ExtendedControls.CheckedIconUserControl.Item(x.ToString(), Planets.PlanetNameTranslated((EDPlanet)x)));
 
             foreach (var x in Enum.GetNames(typeof(EDStar)))
                 options.Add(new ExtendedControls.CheckedIconUserControl.Item(x.ToString(), Stars.StarName(x.ParseEnum<EDStar>())));
