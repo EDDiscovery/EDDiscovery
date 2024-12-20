@@ -850,14 +850,6 @@ namespace EDDiscovery
         UserControlBookmarks_CF, // Do you really want to delete the bookmark for {0}
         UserControlBookmarks_SysU, // System could not be found - has not been synched or EDSM is unavailable
 
-        // Add new translations for the context menu
-        UserControlBookmarks_viewScanOfSystemToolStripMenuItem,
-        UserControlBookmarks_viewOnEDSMToolStripMenuItem,
-        UserControlBookmarks_viewOnSpanshToolStripMenuItem,
-        UserControlBookmarks_addToTrilaterationToolStripMenuItem,
-        UserControlBookmarks_addToExpeditionToolStripMenuItem,
-        //
-
         UserControlCombatPanel_Time, // Column Header 'Time'
         UserControlCombatPanel_Event, // Column Header 'Event'
         UserControlCombatPanel_Description, // Column Header 'Description'
