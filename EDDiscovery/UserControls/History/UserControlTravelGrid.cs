@@ -907,7 +907,9 @@ namespace EDDiscovery.UserControls
             gotoEntryNumberToolStripMenuItem.Visible = dataGridViewTravel.Rows.Count > 0;
             removeSortingOfColumnsToolStripMenuItem.Visible = dataGridViewTravel.SortedColumn != null;
             gotoNextStartStopMarkerToolStripMenuItem.Visible = (rightclickhe != null);
+            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks && rightclickhe != null && EDDNClass.IsEDDNMessage(rightclickhe.EntryType);
         }
+
 
         private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
