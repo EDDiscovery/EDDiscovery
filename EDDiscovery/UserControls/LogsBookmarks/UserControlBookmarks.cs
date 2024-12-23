@@ -64,6 +64,8 @@ namespace EDDiscovery.UserControls
             mapGotoStartoolStripMenuItem.Text = mapGotoStartoolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_3d);
             viewOnSpanshToolStripMenuItem.Text = viewOnSpanshToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Spansh);
             viewOnEDSMToolStripMenuItem.Text = viewOnEDSMToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_EDSM);
+            addToExpeditionToolStripMenuItem.Text = addToExpeditionToolStripMenuItem.Text.TxID(EDTx.UserControlStarDistance_addToExpeditionToolStripMenuItem);
+
 
             userControlSurfaceBookmarks.TagFilter = GetSetting(dbSurfaceTags, "All");
         }
@@ -435,6 +437,41 @@ namespace EDDiscovery.UserControls
         #region Right clicks
 
         BookmarkClass rightclickbookmark = null;
+
+
+        private void addToExpeditionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddTo(UserControlCommonBase.PushStars.PushType.Expedition);
+        }
+
+
+        private void AddTo(UserControlCommonBase.PushStars.PushType pushtype)
+        {
+            IEnumerable<DataGridViewRow> selectedRows = dataGridView.SelectedCells.Cast<DataGridViewCell>()
+                                                                       .Select(cell => cell.OwningRow)
+                                                                       .Distinct()
+                                                                       .OrderBy(cell => cell.Index);
+            //add the addition of multiple systems in one action
+            List<ISystem> syslist = new List<ISystem>();
+
+            // Convert bookmarks to ISystem objects if valid
+            foreach (DataGridViewRow r in selectedRows)
+            {
+                BookmarkClass bm = r.Tag as BookmarkClass;
+
+                if (bm != null && !bm.IsRegion)
+                {
+                    ISystem system = new SystemClass(bm.StarName, null, bm.X, bm.Y, bm.Z);
+                    syslist.Add(system);
+                }
+            }
+
+            // Create a push request and forward it to the respective panel
+            PushStars req = new UserControlCommonBase.PushStars() { PushTo = pushtype, SystemList = syslist, MakeVisible = true };
+            RequestPanelOperationOpen(pushtype == PushStars.PushType.Expedition ? PanelInformation.PanelIDs.Expedition : PanelInformation.PanelIDs.Trilateration, req);
+        }
+
+
 
         private void dataGridViewBookMarks_MouseDown(object sender, MouseEventArgs e)
         {
