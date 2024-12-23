@@ -22,10 +22,10 @@
 
         #region Component Designer generated code
 
-        /// <summary> 
-        /// Required method for Designer support - do not modify 
-        /// the contents of this method with the code editor.
-        /// </summary>
+            /// <summary> 
+            /// Required method for Designer support - do not modify 
+            /// the contents of this method with the code editor.
+            /// </summary>
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
@@ -35,6 +35,7 @@
             this.mapGotoStartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnSpanshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addToExpeditionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.textBoxFilter = new ExtendedControls.ExtTextBox();
             this.buttonFilter = new ExtendedControls.ExtButton();
@@ -76,9 +77,10 @@
             this.viewScanOfSystemToolStripMenuItem,
             this.mapGotoStartoolStripMenuItem,
             this.viewOnSpanshToolStripMenuItem,
-            this.viewOnEDSMToolStripMenuItem});
+            this.viewOnEDSMToolStripMenuItem,
+            this.addToExpeditionToolStripMenuItem});
             this.contextMenuStripBookmarks.Name = "contextMenuStripBookmarks";
-            this.contextMenuStripBookmarks.Size = new System.Drawing.Size(187, 92);
+            this.contextMenuStripBookmarks.Size = new System.Drawing.Size(187, 114);
             this.contextMenuStripBookmarks.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripBookmarks_Opening);
             // 
             // viewScanOfSystemToolStripMenuItem
@@ -108,6 +110,13 @@
             this.viewOnEDSMToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
             this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.openInEDSMToolStripMenuItem_Click);
+            // 
+            // addToExpeditionToolStripMenuItem
+            // 
+            this.addToExpeditionToolStripMenuItem.Name = "addToExpeditionToolStripMenuItem";
+            this.addToExpeditionToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.addToExpeditionToolStripMenuItem.Text = "Add to Expedition";
+            this.addToExpeditionToolStripMenuItem.Click += new System.EventHandler(this.addToExpeditionToolStripMenuItem_Click);
             // 
             // toolTip
             // 
@@ -296,13 +305,13 @@
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(660, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(657, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 204);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(19, 204);
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 6;
@@ -338,7 +347,7 @@
             this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(660, 204);
+            this.dataGridView.Size = new System.Drawing.Size(657, 204);
             this.dataGridView.TabIndex = 4;
             this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellClick);
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellDoubleClick);
@@ -485,5 +494,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTags;
         private System.Windows.Forms.ToolStripMenuItem viewScanOfSystemToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addToExpeditionToolStripMenuItem;
     }
 }
