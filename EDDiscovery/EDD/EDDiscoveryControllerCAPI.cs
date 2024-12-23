@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2023 EDDiscovery development team
+ * Copyright 2015-2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -42,7 +42,7 @@ namespace EDDiscovery
 
                         if ( marketjson != null )
                         {
-                            //System.IO.File.WriteAllText(@"c:\code\market.json", marketjson);
+                            //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\capimarket.json", marketjson);
 
                             CAPI.Market mk = new CAPI.Market(marketjson);
                             if (mk.IsValid && station.Equals(mk.Name, StringComparison.InvariantCultureIgnoreCase))
@@ -84,8 +84,8 @@ namespace EDDiscovery
                         if (shipyardjson != null)
                         {
                             CAPI.Shipyard sh = new CAPI.Shipyard(shipyardjson);
-                            
-                            //System.IO.File.WriteAllText(@"c:\code\shipyard.json", shipyardjson);
+
+                            //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\capishipyard.json", shipyardjson);
 
                             if (sh.IsValid && station.Equals(sh.Name, StringComparison.InvariantCultureIgnoreCase))
                             {
@@ -108,11 +108,14 @@ namespace EDDiscovery
                                     });
                                 }
 
-                                var shipyard = sh.GetShips();
+                                var ships = sh.GetPurchasableShips();                       // if not there, both return empty lists now
+                                var unobtainableships = sh.GetUnobtainableShips();    
+                                ships.AddRange(unobtainableships);
 
-                                if ( shipyard?.Count > 0 && allowcobramkiv.HasValue)
+                                if ( ships.Count>0 && allowcobramkiv.HasValue)              // if we have ships.. and we know the state of the allowcobramk4 flag..
                                 {
-                                    var list = shipyard.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLowerInvariant(), x.BaseValue)).ToArray();
+                                    var list = ships.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLowerInvariant(), x.BaseValue)).ToArray();
+
                                     var shipyardevent = new EliteDangerousCore.JournalEvents.JournalShipyard(servertime, station, system, sh.ID, list, EDCommander.CurrentCmdrID, allowcobramkiv.Value);
 
                                     var jo = shipyardevent.ToJSON();        // get json of it, and add it to the db
