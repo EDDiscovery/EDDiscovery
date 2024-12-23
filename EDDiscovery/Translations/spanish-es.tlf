@@ -32,7 +32,7 @@ SECTION StartUp
 
 SECTION DataGridView
 
-.Header: "Header" @
+.Header: "Header" => "Encabezado"
 .WordWrap: "Word Wrap (Override)" => "Ajuste de línea (Anular)"
 
 SECTION SafeModeForm
@@ -301,7 +301,7 @@ SECTION AddOnManagerForm
 .Type: "Type" => "Tipo"
 .Name: "Name" => "Nombre"
 .Version: "Version" => "Versión"
-.Description: "Description" @
+.Description: "Description" => "Descripción"
 .Status: "Status" => "Estado"
 .Action: "Action" => "Acción"
 .Delete: "Delete" = Delete
