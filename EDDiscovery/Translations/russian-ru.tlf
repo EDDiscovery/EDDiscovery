@@ -17,18 +17,18 @@ Off: "Off" => "Выкл"
 Unknown: "Unknown" => "Неизвестно"
 Information: "Information" => "Информация"
 NoPos: "No Pos" => "Нет положения"
-RemoveAll: "Remove All" @
-Hostile: "Hostile" @
-Unfriendly: "Unfriendly" @
-Neutral: "Neutral" @
-Cordial: "Cordial" @
-Friendly: "Friendly" @
-Allied: "Allied" @
-Disabled: "Disabled" @
+RemoveAll: "Remove All" => "Удалить всё"
+Hostile: "Hostile" => "Враждебный"
+Unfriendly: "Unfriendly" => "Недружественный"
+Neutral: "Neutral" => "Нейтральный"
+Cordial: "Cordial" => "Приветливый"
+Friendly: "Friendly" => "Дружественный"
+Allied: "Allied" => "Союзный"
+Disabled: "Disabled" => "Отключено"
 
 SECTION StartUp
 
-.DUPLOAD: "EDDiscovery is already running. Launch anyway?" @
+.DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "EDDiscovery уже запущена. Всё равно запустить?"
 
 SECTION DataGridView
 
@@ -40,14 +40,14 @@ SECTION SafeModeForm
 SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery. Безопасный режим"
 .buttonCancel: "Cancel" = Cancel
 .buttonRun: "Run" => "Запуск"
-.buttonRemoveJournals: "Remove Journals" @
+.buttonRemoveJournals: "Remove Journals" => "Удалить журналы"
 .buttonRemoveJournalsCommanders: "Remove Journal Entries && Commanders" @
-.buttonDeleteUserDB: "Delete/Rebuild User DB" @
+.buttonDeleteUserDB: "Delete/Rebuild User DB" => "Удалить/перестроить базу данных пользователя"
 .buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Удалить/перестроить базу данных систем"
-.buttonResetDBLoc: "Reset DB Location" @
-.buttonBackup: "Backup Database" @
+.buttonResetDBLoc: "Reset DB Location" => "Сбросить расположение базы данных"
+.buttonBackup: "Backup Database" => "Резервная копия базы данных"
 .buttonDbs: "Move Databases" => "Переместить базу данных"
-.buttonLang: "Reset Language to English" => "Сбросить язык"
+.buttonLang: "Reset Language to English" => "Сбросить язык на английский"
 .buttonActionPacks: "Remove all Action Packs" => "Удалить все Action Packs"
 .buttonRemoveDLLs: "Remove all Extension DLLs" => "Удалить все dll дополнений"
 .buttonResetTabs: "Reset Tabs, Remove PopOuts" => "Сбросить вкладки, удалить отдельные окна"
@@ -65,8 +65,8 @@ SECTION PopOutInfo
 .Journal.Description: "Journal grid" => "Журнал (таблицей)"
 .Journal.Title: "Journal" => "Журнал"
 .TravelGrid.Description: "History grid" => "История (таблицей)"
-.TravelGrid.Title: "History" => "История полетов"
-.StarList.Description: "Visited Star list" => "Список посещенных систем"
+.TravelGrid.Title: "History" => "История полётов"
+.StarList.Description: "Visited Star list" => "Список посещённых систем"
 .StarList.Title: "Visited Stars" => "Список систем"
 .Materials.Description: "Materials count" => "Список материалов"
 .Materials.Title: "Materials" => "Материалы"
@@ -91,7 +91,7 @@ SECTION PopOutInfo
 .Engineering.Description: "Engineering planner" => "Планировщик модификаций"
 .Engineering.Title: "Engineering" => "Модификации"
 .ShoppingList.Description: "Shopping list planner combining synthesis and engineering" => "Планировщик «покупок» (объединяющий синтез и модификации)"
-.ShoppingList.Title: "Shopping List" => "«План покупок»"
+.ShoppingList.Title: "Shopping List" => "План покупок"
 .Scan.Description: "Scan data on system" => "Данные сканирования систем"
 .Scan.Title: "Scan" => "Сканы"
 .ScanGrid.Description: "Scan data on system in a grid" => "Имеющиеся данные сканирования систем (таблицей)"
@@ -100,11 +100,11 @@ SECTION PopOutInfo
 .StarDistance.Title: "Nearest Stars" => "Ближайшие системы"
 .EstimatedValues.Description: "Estimated Scan values of bodies in system" => "Примерная стоимость данных сканирования систем"
 .EstimatedValues.Title: "Estimated Values" => "Стоимость сканов"
-.Map2D.Title: "2D Map" @
-.Map2D.Description: "2D Map of galaxy" @
-.MiningOverlay.Title: "Mining Overlay" @
-.MiningOverlay.Description: "Mining overlay" @
-.LocalMap.Description: "3D Map of systems in range" => "3D-карта систем в определенном радиусе"
+.Map2D.Title: "2D Map" => "2D-карта"
+.Map2D.Description: "2D Map of galaxy" => "2D-карта галактики"
+.MiningOverlay.Title: "Mining Overlay" => "Закладка старателя"
+.MiningOverlay.Description: "Mining overlay" => "Закладка для старателя с данными, необходимыми при разработке астероидов"
+.LocalMap.Description: "3D Map of systems in range" => "3D-карта систем в определённом радиусе"
 .LocalMap.Title: "Local Map" => "3D-карта"
 .Plot.Description: "2D Plot of systems in range" => "2D-карта систем в определенном радиусе"
 .Plot.Title: "2D Plot" => "2D-карта"
@@ -148,51 +148,51 @@ SECTION PopOutInfo
 .Surveyor.Description: "Surveyor - Exploration and route overlay" => "Помощь по картам поверхности"
 .MissionOverlay.Title: "Mission Overlay" => "Миссии (оверлей)"
 .MissionOverlay.Description: "Mission List overlay" => "Список миссий (оверлей)"
-.MaterialTrader.Title: "Material Trader" @
-.MaterialTrader.Description: "Material trader" @
+.MaterialTrader.Title: "Material Trader" => "Торговец материалами"
+.MaterialTrader.Description: "Material trader" => "Торговец материалами"
 .EDSM.Title: "EDSM" @
-.EDSM.Description: "EDSM - Automatic web view of system" @
+.EDSM.Description: "EDSM - Automatic web view of system" => "EDSM - автоматический вэб-просмотр системы"
 .Inara.Title: "Inara" @
-.Inara.Description: "Inara - Automatic web view of system" @
-.Factions.Title: "Factions" @
-.Factions.Description: "Faction rewards and trading tally" @
+.Inara.Description: "Inara - Automatic web view of system" => "Inara - автоматический вэб-просмотр системы"
+.Factions.Title: "Factions" => "Фракции"
+.Factions.Description: "Faction rewards and trading tally" => "Награды фракций и подсчёт торговых операций"
 .Spansh.Title: "Spansh" @
-.Spansh.Description: "Spansh - Automatic web view of system" @
+.Spansh.Description: "Spansh - Automatic web view of system" => "Spansh - автоматический вэб-просмотр системы"
 .EDDB.Title: "EDDB" @
-.EDDB.Description: "EDDB - Automatic web view of system" @
-.MicroResources.Title: "Micro Resources" @
-.MicroResources.Description: "Micro resource count" @
-.SuitsWeapons.Title: "Suits & Weapons" @
-.SuitsWeapons.Description: "Suits, Loadouts, Weapons" @
-.Map3D.Title: "3D Map" @
-.Map3D.Description: "3D Map of galaxy" @
-.LocalMap3D.Title: "Local 3D Map" @
-.LocalMap3D.Description: "Local 3D Map of systems near you" @
-.Organics.Title: "Organic Scans" @
-.Organics.Description: "Organic scans of current body and historic scans" @
-.Engineers.Title: "Engineers" @
-.Engineers.Description: "List of Engineers, status, recipes" @
-.Discoveries.Title: "Discoveries" @
-.Discoveries.Description: "Discoveries Observer List" @
-.Carrier.Title: "Carrier" @
-.Carrier.Description: "Data about your fleet carrier" @
-.Resources.Title: "Resources" @
-.Resources.Description: "All Materials, Commodity, MicroResources" @
-.SpanshStations.Title: "Spansh Stations" @
-.SpanshStations.Description: "Stations in the system from spansh web data" @
+.EDDB.Description: "EDDB - Automatic web view of system" => "EDDB - автоматический вэб-просмотр системы"
+.MicroResources.Title: "Micro Resources" => "Микроресурсы"
+.MicroResources.Description: "Micro resource count" => "Подсчёт микроресурсов"
+.SuitsWeapons.Title: "Suits & Weapons" => "Комбинезоны и оружие"
+.SuitsWeapons.Description: "Suits, Loadouts, Weapons" => "Комбинезоны, снаряжение и оружие"
+.Map3D.Title: "3D Map" => "3D-карта"
+.Map3D.Description: "3D Map of galaxy" => "3D-карта галактики"
+.LocalMap3D.Title: "Local 3D Map" => "Локальная 3D-карта"
+.LocalMap3D.Description: "Local 3D Map of systems near you" => "Локальная 3D-карта системы рядом с вашим положением"
+.Organics.Title: "Organic Scans" => "Сканы органики"
+.Organics.Description: "Organic scans of current body and historic scans" => "Сканированная органика (экзобиологических образцов) текущего тела и история сканирования"
+.Engineers.Title: "Engineers" => "Инженеры"
+.Engineers.Description: "List of Engineers, status, recipes" => "Перечень инженеров, статус, чертежи"
+.Discoveries.Title: "Discoveries" => "Открытия"
+.Discoveries.Description: "Discoveries Observer List" => "Перечень открытий"
+.Carrier.Title: "Carrier" => "Корабль-носитель"
+.Carrier.Description: "Data about your fleet carrier" => "Данные вашего корабля-носителя"
+.Resources.Title: "Resources" => "Ресурсы"
+.Resources.Description: "All Materials, Commodity, MicroResources" => "Все материалы, товары, микроресурсы"
+.SpanshStations.Title: "Spansh Stations" => "Станции со Spansh"
+.SpanshStations.Description: "Stations in the system from spansh web data" => "Данные с веб-сайта Spansh о станциях в системе"
 
 SECTION EDDiscoveryForm
 
 .ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "У этого командира отключена синхронизация с EDSM. Вы действительно хотите отправить несинхронизированные события в EDSM?"
 .ConfirmSyncToEDSMCaption: "Confirm EDSM sync" => "Подтвердить синхронизацию с EDSM"
 .SendEDSMCaption: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
-.SendEDSMAll: "Send All to EDSM" @
+.SendEDSMAll: "Send All to EDSM" => "Отправить всё на EDSM"
 .SendEDSM24: "Send Last 24 Hours of entries to EDSM" @
 .SendEDSMFrom: "Send From" @
 .SendEDSMNone: "EDSM is up to date - send Nothing more" @
 .SendEDSMCancel: "I'll decide later, do nothing" @
 .SendEDSMTitle: "Sending a large number of EDSM Entries" @
-.toolsToolStripMenuItem: "&Tools" => "Инструменты"
+.toolsToolStripMenuItem: "&Tools" => "&Инструменты"
 .toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" = PopOutInfo.Settings.Title
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "Отдельные окна"
 .toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "Показать все в панели задач"
@@ -206,7 +206,7 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "Re-scan all journal files" => "Перезагрузить все файлы журнала"
 .adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "Удалить дубликаты записей FSD-прыжков"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" @
-.adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" @
+.adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" => "Перестроить систему индексации базы данных"
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Синхронизация с EDSM"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Отправить записи истории (предыдущие корабли, модули в хранилище) в Inara"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
@@ -215,17 +215,17 @@ SECTION EDDiscoveryForm
 .addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "Изменить Action Files дополнения"
 .addOnsToolStripMenuItem.editLastActionPackToolStripMenuItem: "Edit Last Action Pack" => "Изменить последний Action Pack"
 .addOnsToolStripMenuItem.stopCurrentlyRunningActionProgramToolStripMenuItem: "&Stop currently running Action Program" => "Остановить текущую Action Program"
-.helpTabToolStripMenuItem: "Help" @
-.helpToolStripMenuItem: "&Help" => "Помощь"
-.helpToolStripMenuItem.aboutToolStripMenuItem: "&About" => "О программе"
-.helpToolStripMenuItem.wikiHelpToolStripMenuItem: "&View Help" @
-.helpToolStripMenuItem.viewHelpVideosToolStripMenuItem: "View Help Videos" @
+.helpTabToolStripMenuItem: "Help" => "Помощь"
+.helpToolStripMenuItem: "&Help" => "&Помощь"
+.helpToolStripMenuItem.aboutToolStripMenuItem: "&About" => "&О программе"
+.helpToolStripMenuItem.wikiHelpToolStripMenuItem: "&View Help" => "&Посмотреть справку"
+.helpToolStripMenuItem.viewHelpVideosToolStripMenuItem: "View Help Videos" => "Посмотреть вспомогательное видео"
 .helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" @
 .helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "Тема на Frontier Forum"
 .helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "Страница проекта (GitHub)"
 .helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "Сообщить о проблеме / идее"
 .helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "Проверить обновления"
-.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" @
+.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" => "Список назначенных клавиш"
 .tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Правая кнопка мыши — добавить/удалить вкладку, перетаскивание с зажатой левой кнопкой — сортировка"
 .comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Выберите новый профиль или измените настройки профиля"
 .comboBoxCommander.ToolTip: "Select the commander to view" => "Выбрать командира для просмотра"
@@ -241,8 +241,8 @@ SECTION EDDiscoveryForm
 .RTABT: "Rename Tab" = EDDiscoveryForm.renameTabToolStripMenuItem
 .RTABTT: "Enter a new name for the tab" => "Новое имя вкладки"
 .DLLW: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Найдены следующие dll дополнений\r\nВы хотите их использовать?\r\n{0} \r\nЕсли нет, удалите dll из папки DLL программы\r\\или удалите соответствующие action pack,\r\\или удерживайте клавишу shift при запуске программы и выберите опцию «Удалить все dll дополнений»"
-.DLLL: "DLLs loaded: {0}" => "Загруженные dll: {0}"
-.DLLF: "DLLs failed to load: {0}" => "Не удалось загрузить dll: {0}"
+.DLLL: "DLLs loaded: {0}" => "Загруженные библиотеки (.dll): {0}"
+.DLLF: "DLLs failed to load: {0}" => "Не удалось загрузить библиотеки (.dll): {0}"
 .IndexW: "Are you sure to Rebuild Indexes? It may take a long time." @
 .FillPos: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
 .PROFL: "Profile {0} Loaded" => "Профиль {0} загружен"
@@ -257,7 +257,7 @@ SECTION EDDiscoveryForm
 .ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Вы действительно хотите сбросить все записи истории для текущего командира?"
 .NoRel: "No new release found" => "Новая версия программы не найдена"
 .RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Вы действительно хотите удалить все дубликаты FSD записей для текущего командира?"
-.FSDRem: "Removed {0} FSD entries" => " Количество удаленных FSD записей: {0}"
+.FSDRem: "Removed {0} FSD entries" => " Количество удалённых FSD записей: {0}"
 .InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "Загрузка на Inara отключена на 1 час, чтобы предотвратить перегрузку сервера"
 .RH: "Refresh History." => "Обновить историю."
 .NoEDSMAPI: "No EDSM API key set" => "Убедитесь, что выбран командир и установлен EDSM API key"
@@ -265,27 +265,27 @@ SECTION EDDiscoveryForm
 .PL: "Profile {0} Loaded" = EDDiscoveryForm.PROFL
 .popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Создать отдельное окно..."
 .CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery обновляет базы данных EDSM и EDDB.\r\nНажмите «ОК», чтобы выйти прямо сейчас, или нажмите «Отмена», чтобы дождаться завершения обновления."
-.notifyIconMenu_Open: "&Open EDDiscovery" => "Открыть EDDiscovery"
-.notifyIconMenu_Hide: "&Hide Tray Icon" => "Скрыть значок в трее"
+.notifyIconMenu_Open: "&Open EDDiscovery" => "&Открыть EDDiscovery"
+.notifyIconMenu_Hide: "&Hide Tray Icon" => "&Скрыть значок в трее"
 .notifyIconMenu_Exit: "E&xit" = EDDiscoveryForm.toolsToolStripMenuItem.exitToolStripMenuItem
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Еще раз получить логи"
-.adminToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Еще раз получить данные о системах"
-.adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
-.adminToolStripMenuItem.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem: "Update systems with unknown co-ordinates" @
-.WSE: "Web server enabled" @
-.WSF: "Web server failed to start" @
-.WSERR: "Web server disabled due to incorrect folder or missing zip file" @
-.WSD: "*** Web server is disabled ***" @
-.DLLDIS: "DLLs disabled: {0}" @
+.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Повторно получить логи"
+.adminToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Повторно получить данные о системах"
+.adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" => "Перестроить индексацию базы данных пользователя"
+.adminToolStripMenuItem.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem: "Update systems with unknown co-ordinates" => "Обновить системы с неизвестными координатами"
+.WSE: "Web server enabled" => "Веб-сервер включён"
+.WSF: "Web server failed to start" => "При запуске веб-сервера произошла ошибка"
+.WSERR: "Web server disabled due to incorrect folder or missing zip file" => "Веб-сервер отключён из-за неправильно указанной папки назначения или отсутствия zip-файла"
+.WSD: "*** Web server is disabled ***" => "***Веб-сервер отключён***"
+.DLLDIS: "DLLs disabled: {0}" => "Отключённые библиотеки (.dll): {0}"
 
 SECTION EDDiscoveryController
 
 .CD: "Closing down, please wait.." = EDDiscoveryForm.Closing
 .EDSM: "Get galactic mapping from EDSM." => "Получаю карту Галактики с EDSM"
-.GEC: "Get galactic mapping from GEC." @
+.GEC: "Get galactic mapping from GEC." => "Получаю карту Галактики с GEC."
 .LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Загружаю примечания, закладки и карту Галактики"
-.RTH: "Reading travel history" => "Читаю историю полетов"
-.SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Пожалуйста, не останавливайте ED Discovery до завершения обновления"
+.RTH: "Reading travel history" => "Читаю историю полётов"
+.SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Пожалуйста, не завершайте работу ED Discovery до завершения обновления."
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "Синхронизация с EDSM и EDDB отключена в настройках"
 .EDSMU: "Systems update complete with {0:N0} systems" => "Количество систем, загруженных при обновлении EDSM: {0:N0}"
 .PLF: "Processing log file {0}" => "Обрабатываю файл журнала {0}"
@@ -323,8 +323,8 @@ SECTION ImportExportForm
 
 ImportExportForm: "Export data" => "Экспорт"
 .buttonExport: "Export" = ImportExportForm
-.ImportTitle: "Import data" @
-.ImportButton: "Import" @
+.ImportTitle: "Import data" => "Импортировать данные"
+.ImportButton: "Import" => "Импорт"
 .labelCVSSep: "CSV Separator" => "Разделитель CSV"
 .radioButtonComma: "Comma" => "Запятая"
 .radioButtonSemiColon: "Semicolon" => "Точка с запятой"
@@ -370,7 +370,7 @@ SECTION NewReleaseForm
 NewReleaseForm: "EDDiscovery Release" => "Версия EDDiscovery"
 .labelName: "Name" = EDDiscoveryForm.RTABL
 .btnClose: "&Close" => "Закрыть"
-.labelURL: "GitHub URL" @
+.labelURL: "GitHub URL" => "Ссылка на GitHub"
 .labelDownload: "Download" => "Скачать"
 .buttonPortablezip: "&Portable Zip" @
 .buttonUrlOpen: "&Open" => "Открыть"
@@ -387,7 +387,7 @@ ProfileEditor: "ProfileEditor" @
 .TrigEdit: "Edit Profile {0} Trigger" => "Настроить триггер для профиля {0}"
 .BackEdit: "Edit Profile {0} Back Trigger" => "Настроить обратный триггер для профиля {0}"
 .DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Вы действительно хотите удалить профиль {0}?\r\nЭто удалит всю информацию профиля и \r\nотменить это действие НЕЛЬЗЯ!"
-.Default: "Default" @
+.Default: "Default" => "По умолчанию"
 
 SECTION SetNoteForm
 
@@ -408,8 +408,8 @@ SECTION MessageBoxTheme
 .OK: "OK" @
 .No: "No" => "Нет"
 .Yes: "Yes" => "Да"
-.Add: "Add" @
-.Set: "Set" @
+.Add: "Add" => "Добавить"
+.Set: "Set" => "Выбрать"
 
 SECTION DataGridViewDialogs
 
