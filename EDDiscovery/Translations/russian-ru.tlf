@@ -107,7 +107,7 @@ SECTION PopOutInfo
 .LocalMap.Description: "3D Map of systems in range" => "3D-карта систем в определённом радиусе"
 .LocalMap.Title: "Local Map" => "3D-карта"
 .Plot.Description: "2D Plot of systems in range" => "2D-карта систем в определенном радиусе"
-.Plot.Title: "2D Plot" => "2D-карта"
+.Plot.Title: "2D Plot" = PopOutInfo.Map2D.Title
 .Trilateration.Description: "Trilateration of stars with unknown positions" => "Трилатерация систем с неизвестным положением"
 .Trilateration.Title: "Trilateration" => "Трилатерация "
 .BookmarkManager.Description: "Bookmarks on systems and planets" => "Редактирование закладок для систем и планет"
@@ -149,7 +149,7 @@ SECTION PopOutInfo
 .MissionOverlay.Title: "Mission Overlay" => "Миссии (оверлей)"
 .MissionOverlay.Description: "Mission List overlay" => "Список миссий (оверлей)"
 .MaterialTrader.Title: "Material Trader" => "Торговец материалами"
-.MaterialTrader.Description: "Material trader" => "Торговец материалами"
+.MaterialTrader.Description: "Material trader" = PopOutInfo.MaterialTrader.Title
 .EDSM.Title: "EDSM" @
 .EDSM.Description: "EDSM - Automatic web view of system" => "EDSM - автоматический вэб-просмотр системы"
 .Inara.Title: "Inara" @
@@ -164,7 +164,7 @@ SECTION PopOutInfo
 .MicroResources.Description: "Micro resource count" => "Подсчёт микроресурсов"
 .SuitsWeapons.Title: "Suits & Weapons" => "Комбинезоны и оружие"
 .SuitsWeapons.Description: "Suits, Loadouts, Weapons" => "Комбинезоны, снаряжение и оружие"
-.Map3D.Title: "3D Map" => "3D-карта"
+.Map3D.Title: "3D Map" = PopOutInfo.LocalMap.Title
 .Map3D.Description: "3D Map of galaxy" => "3D-карта галактики"
 .LocalMap3D.Title: "Local 3D Map" => "Локальная 3D-карта"
 .LocalMap3D.Description: "Local 3D Map of systems near you" => "Локальная 3D-карта системы рядом с вашим положением"
@@ -409,7 +409,7 @@ SECTION MessageBoxTheme
 .No: "No" => "Нет"
 .Yes: "Yes" => "Да"
 .Add: "Add" => "Добавить"
-.Set: "Set" => "Выбрать"
+.Set: "Set" = GalaxySectorSelect.buttonExtSet
 
 SECTION DataGridViewDialogs
 

@@ -540,7 +540,7 @@ ActionProgramEditForm: "Action Program" @
 .buttonExtLoad: "Load" => "Cargar"
 .buttonExtSave: "Save" => "Guardar"
 .buttonExtEdit: "Text Edit" => "Editar Texto"
-.extButtonHeader: "Header" => "Encabezado"
+.extButtonHeader: "Header" = DataGridView.Header
 
 SECTION ActionPackEditForm
 

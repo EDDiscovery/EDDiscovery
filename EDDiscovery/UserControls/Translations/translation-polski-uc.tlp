@@ -19,6 +19,7 @@ SECTION UserControlBookmarks
 .ColTags: "Tags" @
 .buttonFilter.ToolTip: "Filter out entries based on tag" @
 .buttonTags.ToolTip: "Edit Tags" @
+.addToExpeditionToolStripMenuItem: "Add to Expedition" @
 
 SECTION UserControlCombatPanel
 
@@ -746,6 +747,7 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" => "Pasy Asteroid"
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Pierścienie"
 .materialsToolStripMenuItem: "Show materials" => "Meteriały"
+.extButtonHighValue.ToolTip: "Set High Value Limit" @
 
 SECTION UserControlSettings
 
@@ -843,6 +845,7 @@ SECTION UserControlSettings
 .extButtonReloadStarDatabase: "Reload Star Database" @
 .RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" @
 .PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" @
+.PermDelTLUs: "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned" @
 
 SECTION UserControlShipYards
 
