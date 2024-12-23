@@ -1140,7 +1140,7 @@ SECTION UserControlSysInfo
 .toolStripReset: "Reset" => "Zurücksetzen"
 .toolStripRemoveAll: "Remove All" = RemoveAll
 .displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" => "Zeige nächste gewählte Destination"
-.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
+.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" => "Deaktiviere das Kopieren in die Zwischenablage bei einem Klick auf Textboxen"
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Drücke die strg-Taste und ziehe dann mit der linken Maustaste um einen Eintrag umzupositionieren, 8 Spalten sind verfügbar."
 .textBoxTargetDist.ToolTip: "Distance to target" => "Entfernung zum Ziel"
 .textBoxTarget.ToolTip: "Sets the target" => "Setzt das Ziel"
