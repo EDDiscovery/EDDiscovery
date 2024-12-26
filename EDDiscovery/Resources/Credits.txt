@@ -2,10 +2,7 @@ Development, Release, Videos by:
 Cmdr Robby
 
 Developers for this release series:
-Eahlstan, Jugom
-
-Test Support
-Eahlstan
+Eahlstan, Jugom, Flynn
 
 Images Captured by:
 Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC

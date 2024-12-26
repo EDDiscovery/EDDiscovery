@@ -19,6 +19,7 @@ SECTION UserControlBookmarks
 .ColTags: "Tags" => "Etiquetas"
 .buttonFilter.ToolTip: "Filter out entries based on tag" => "Filtrar entradas en base a etiqueta"
 .buttonTags.ToolTip: "Edit Tags" => "Editar Etiquetas"
+.addToExpeditionToolStripMenuItem: "Add to Expedition" => "Añadir a Expedición"
 
 SECTION UserControlCombatPanel
 
@@ -235,7 +236,7 @@ SECTION UserControlEstimatedValues
 .FirstMappedEff: "First Mapped" => "Primeros mapeados"
 .FirstDiscMapped: "First Discovered Mapped" => "Primer mapeado descubierto"
 .EstValue: "Current Value" => "Valor estimado"
-.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" => "Verde mostrará materiales con recuento cero, rojo significa eliminarlos"
+.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" => "Verde mostrará todos los cuerpos, incluso aquellos con valor cero, rojo mostrará solo cuerpos con valor"
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" => "Mostrar todos los valores, incluso aquellos que son imposibles de obtener"
 .SV: "Estimated Scan Values for {0}" => "Valores de exploración estimados para {0}"
 
@@ -746,6 +747,7 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" => "Cinturones"
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Anillos"
 .materialsToolStripMenuItem: "Show materials" = UserControlMaterialCommodities.Mats
+.extButtonHighValue.ToolTip: "Set High Value Limit" => "Establecer Valor de Límite Elevado"
 
 SECTION UserControlSettings
 
@@ -843,6 +845,7 @@ SECTION UserControlSettings
 .extButtonReloadStarDatabase: "Reload Star Database" => "Recargar Base de Datos Estelar"
 .RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" => "Esto eliminará la base de datos de sistemas.\r\n\r\nLuego puede volver a seleccionar la fuente de datos de la base de datos y el\r\nconjunto de estrellas requerido.\r\n\r\nEsto requerirá una descarga completa de la base de datos de estrellas desde el servidor.\r\nSolo use esto si está dispuesto a descargar el conjunto de datos nuevamente."
 .PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" => "Deseas borrar permanentemente todos los datos del comandante (SI) incluyendo los datos de diario\r\\y no solo marcar el comandante como oculto y nunca mas mostrarle (NO)"
+.PermDelTLUs: "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned" => "Desea borrar permanentemente los registros de archivos de diario del comandante (SI),\r\nDecir que SI, significa que los archivos del diario del comandante seran re-escaneados si aún se encuentran presente\r\nDecir que NO significa que no serán re-escaneados"
 
 SECTION UserControlShipYards
 
@@ -1140,7 +1143,7 @@ SECTION UserControlSysInfo
 .toolStripReset: "Reset" => "Reiniciar"
 .toolStripRemoveAll: "Remove All" => "Eliminar todo"
 .displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" => "Mostrar el siguiente destino seleccionado"
-.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
+.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" => "Deshabilita copiar al portapapeles cuando se hace click en cuadros de texto"
 .ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Mantenga presionada la tecla Ctrl y luego arrastre hacia la izquierda un elemento para reposicionar, hay 8 columnas disponibles"
 .textBoxTargetDist.ToolTip: "Distance to target" => "Distancia al objetivo"
 .textBoxTarget.ToolTip: "Sets the target" => "Establece el objetivo"
