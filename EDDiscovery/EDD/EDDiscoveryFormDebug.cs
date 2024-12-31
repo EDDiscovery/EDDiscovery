@@ -116,6 +116,10 @@ namespace EDDiscovery
             //    EliteDangerousCore.JournalTest.CheckAllJournalsGetInfoDescription(@"c:\code\logs\atlasgaming", "journal*.log", @"c:\code\out.log");
 
             //JournalEntry.WriteJournals(new DateTime(2021, 1, 10), new DateTime(2021, 1, 12), @"c:\code\dump.json");
+
+            // JournalEntry.WriteJournals(35,new DateTime(2014, 1, 1), new DateTime(2099, 1, 1), @"c:\code\logs\lens larque");
+
+
         }
 
         public void PostHistoryLoadDebug()  // on UI thread
