@@ -731,6 +731,7 @@ SECTION UserControlScan
 .StarAge: "Show age of stars" @
 .Expired: "Expired:" @
 .StarsOnDiffLines: "Show bodyless stars on separate lines" @
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
 
 SECTION UserControlScanGrid
 
@@ -762,6 +763,7 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" @
 .materialsToolStripMenuItem: "Show materials" @
 .extButtonHighValue.ToolTip: "Set High Value Limit" @
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
 
 SECTION UserControlSettings
 
