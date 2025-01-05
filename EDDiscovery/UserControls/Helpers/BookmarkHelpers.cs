@@ -98,5 +98,27 @@ namespace EDDiscovery.UserControls
 
             return false;
         }
+
+        // The SendToBookmarkForm method ensures consistent behavior for opening 
+        // the bookmark form, prefilled with the current system if available.
+        public static void SendToBookmarkForm(Form parentForm, EDDiscoveryForm discoveryForm, EliteDangerousCore.ISystem system)
+        {
+            if (system != null)
+            {
+                BookmarkHelpers.ShowBookmarkForm(parentForm, discoveryForm, system, null);
+            }
+            else
+            {
+                ExtendedControls.MessageBoxTheme.Show(
+                    parentForm,
+                    "No system is currently selected.",
+                    "No System",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                );
+            }
+        }
     }
+
+
 }
