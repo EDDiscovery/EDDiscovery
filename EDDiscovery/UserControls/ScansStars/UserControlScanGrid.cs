@@ -55,7 +55,7 @@ namespace EDDiscovery.UserControls
             EDTx.UserControlScanGrid_ColCurValue, EDTx.UserControlScanGrid_ColMaxValue, EDTx.UserControlScanGrid_ColOrganics };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
-            var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHighValue_ToolTip };
+            var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHighValue_ToolTip, EDTx.UserControlScanGrid_extButtonNewBookmark_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             rollUpPanelTop.SetToolTip(toolTip);
@@ -671,6 +671,11 @@ namespace EDDiscovery.UserControls
                 PutSetting(dbValueLimit, v);
                 DrawSystem(last_he,true);
             }
+        }
+
+        private void extButtonNewBookmark_Click(object sender, EventArgs e)
+        {
+            BookmarkHelpers.SendToBookmarkForm(this.FindForm(), DiscoveryForm, last_he?.System);
         }
 
 
