@@ -412,11 +412,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void toolTip_Popup(object sender, PopupEventArgs e)
-        {
-
-        }
-
         #endregion
 
 #if PLAYTHRU
