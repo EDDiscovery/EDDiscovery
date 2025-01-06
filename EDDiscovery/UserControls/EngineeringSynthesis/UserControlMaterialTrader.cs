@@ -192,7 +192,7 @@ namespace EDDiscovery.UserControls
                 var matgroup = (MaterialCommodityMicroResourceType.MaterialGroupType)t;
                 bool ok = (sel == 0 && matgroup >= MaterialCommodityMicroResourceType.MaterialGroupType.RawCategory1 && matgroup <= MaterialCommodityMicroResourceType.MaterialGroupType.RawCategory7);
                 ok |= (sel == 1 && matgroup >= MaterialCommodityMicroResourceType.MaterialGroupType.EncodedEmissionData && matgroup <= MaterialCommodityMicroResourceType.MaterialGroupType.EncodedFirmware);
-                ok |= (sel == 2 && matgroup >= MaterialCommodityMicroResourceType.MaterialGroupType.ManufacturedChemical);
+                ok |= (sel == 2 && matgroup >= MaterialCommodityMicroResourceType.MaterialGroupType.ManufacturedChemical && matgroup <= MaterialCommodityMicroResourceType.MaterialGroupType.ManufacturedAlloys);
                 if ( ok )
                 {
                     var list = MaterialCommodityMicroResourceType.Get(x => x.MaterialGroup == matgroup);
