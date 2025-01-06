@@ -111,8 +111,8 @@ namespace EDDiscovery.UserControls
             {
                 ExtendedControls.MessageBoxTheme.Show(
                     parentForm,
-                    "No system is currently selected.",
-                    "No System",
+                    "Cannot find system.".T(EDTx.FindSystemsUserControl_Cannotfindsystem),
+                    "Warning".T(EDTx.Warning),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information
                 );
