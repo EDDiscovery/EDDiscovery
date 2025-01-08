@@ -1259,6 +1259,7 @@ namespace EDDiscovery
         UserControlScan_buttonSize_ToolTip, // ToolTip 'Select image size'
         UserControlScan_extButtonHighValue_ToolTip, // ToolTip 'Set High Value Limit'
         UserControlScan_buttonExtExcel_ToolTip, // ToolTip 'Export'
+        UserControlScan_extButtonNewBookmark_ToolTip,
         UserControlScan_System, // System:
         UserControlScan_EnterSys, // Show System
         UserControlScan_VLMT, // Set Valuable Minimum
@@ -1504,6 +1505,7 @@ namespace EDDiscovery
         UserControlScanGrid_ColOrganics,
         UserControlScanGrid_extButtonShowControl_ToolTip, // ToolTip 'Configure overall settings'
         UserControlScanGrid_extButtonHighValue_ToolTip,
+        UserControlScanGrid_extButtonNewBookmark_ToolTip,
         UserControlScanGrid_MainStar, // Main Star
         UserControlScanGrid_Mass, // Mass
         UserControlScanGrid_Radius, // Radius

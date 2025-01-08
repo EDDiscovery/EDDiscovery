@@ -48,6 +48,7 @@ namespace EDDiscovery.UserControls
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extButtonShowControl = new ExtendedControls.ExtButton();
             this.extButtonHighValue = new ExtendedControls.ExtButton();
+            this.extButtonNewBookmark = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel2 = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
             this.colImage = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -104,15 +105,25 @@ namespace EDDiscovery.UserControls
             this.extButtonHighValue.UseVisualStyleBackColor = false;
             this.extButtonHighValue.Click += new System.EventHandler(this.extButtonHighValue_Click);
             // 
+            // extButtonNewBookmark
+            // 
+            this.extButtonNewBookmark.Image = global::EDDiscovery.Icons.Controls.Bookmarks;
+            this.extButtonNewBookmark.Location = new System.Drawing.Point(111, 3);
+            this.extButtonNewBookmark.Name = "extButtonNewBookmark";
+            this.extButtonNewBookmark.Size = new System.Drawing.Size(28, 28);
+            this.extButtonNewBookmark.TabIndex = 38;
+            this.toolTip.SetToolTip(this.extButtonNewBookmark, "Create a new bookmark for the current system");
+            this.extButtonNewBookmark.Click += new System.EventHandler(this.extButtonNewBookmark_Click);
+            // 
             // dataViewScrollerPanel2
             // 
             this.dataViewScrollerPanel2.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel2.Controls.Add(this.vScrollBarCustom2);
             this.dataViewScrollerPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 30);
+            this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 34);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
-            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(1007, 519);
+            this.dataViewScrollerPanel2.Size = new System.Drawing.Size(1007, 515);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
             // 
@@ -155,7 +166,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.RowTemplate.ReadOnly = true;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(988, 519);
+            this.dataGridView.Size = new System.Drawing.Size(988, 515);
             this.dataGridView.TabIndex = 23;
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
@@ -242,7 +253,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(19, 519);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(19, 515);
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
@@ -270,7 +281,7 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop.RollUpDelay = 1000;
             this.rollUpPanelTop.SecondHiddenMarkerWidth = 0;
             this.rollUpPanelTop.ShowHiddenMarker = true;
-            this.rollUpPanelTop.Size = new System.Drawing.Size(1007, 30);
+            this.rollUpPanelTop.Size = new System.Drawing.Size(1007, 34);
             this.rollUpPanelTop.TabIndex = 25;
             this.rollUpPanelTop.UnrollHoverDelay = 1000;
             // 
@@ -282,10 +293,11 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.extButtonShowControl);
             this.panelControls.Controls.Add(this.extButtonHighValue);
             this.panelControls.Controls.Add(this.edsmSpanshButton);
+            this.panelControls.Controls.Add(this.extButtonNewBookmark);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(1007, 30);
+            this.panelControls.Size = new System.Drawing.Size(1007, 34);
             this.panelControls.TabIndex = 32;
             // 
             // edsmSpanshButton
@@ -348,6 +360,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+        private ExtendedControls.ExtButton extButtonNewBookmark;
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanel2;
         private ExtendedControls.ExtScrollBar vScrollBarCustom2;
         private BaseUtils.DataGridViewColumnControl dataGridView;

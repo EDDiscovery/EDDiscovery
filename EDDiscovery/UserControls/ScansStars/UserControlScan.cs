@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls
 
             var enumlisttt = new Enum[] { EDTx.UserControlScan_extCheckBoxStar_ToolTip, EDTx.UserControlScan_scanDisplayConfigureButton_ToolTip, 
                     EDTx.UserControlScan_scanDisplayBodyFiltersButton_ToolTip, EDTx.UserControlScan_buttonSize_ToolTip, 
-                    EDTx.UserControlScan_extButtonHighValue_ToolTip, EDTx.UserControlScan_buttonExtExcel_ToolTip };
+                    EDTx.UserControlScan_extButtonHighValue_ToolTip, EDTx.UserControlScan_buttonExtExcel_ToolTip,EDTx.UserControlScan_extButtonNewBookmark_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             rollUpPanelTop.SetToolTip(toolTip);     // set after translater
@@ -333,6 +333,12 @@ namespace EDDiscovery.UserControls
             ExtendedControls.Theme.Current.ApplyStd(dropdown,true);
 
             dropdown.Show(this.FindForm());
+        }
+
+        private void extButtonNewBookmark_Click(object sender, EventArgs e)
+        {
+            BookmarkHelpers.SendToBookmarkForm(this.FindForm(), DiscoveryForm, last_he?.System);
+
         }
 
         private void SetSizeImage(int size)

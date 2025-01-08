@@ -48,6 +48,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxStar = new ExtendedControls.ExtCheckBox();
             this.buttonSize = new ExtendedControls.ExtButton();
             this.extButtonHighValue = new ExtendedControls.ExtButton();
+            this.extButtonNewBookmark = new ExtendedControls.ExtButton();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.scanDisplayBodyFiltersButton = new EDDiscovery.UserControls.ScanDisplayBodyFiltersButton();
@@ -119,6 +120,16 @@ namespace EDDiscovery.UserControls
             this.extButtonHighValue.UseVisualStyleBackColor = false;
             this.extButtonHighValue.Click += new System.EventHandler(this.extButtonHighValue_Click);
             // 
+            // extButtonNewBookmark
+            // 
+            this.extButtonNewBookmark.Image = global::EDDiscovery.Icons.Controls.Bookmarks;
+            this.extButtonNewBookmark.Location = new System.Drawing.Point(111, 3);
+            this.extButtonNewBookmark.Name = "extButtonNewBookmark";
+            this.extButtonNewBookmark.Size = new System.Drawing.Size(28, 28);
+            this.extButtonNewBookmark.TabIndex = 38;
+            this.toolTip.SetToolTip(this.extButtonNewBookmark, "Create a new bookmark for the current system");
+            this.extButtonNewBookmark.Click += new System.EventHandler(this.extButtonNewBookmark_Click);
+            // 
             // buttonExtExcel
             // 
             this.buttonExtExcel.BackColor = System.Drawing.SystemColors.Control;
@@ -182,7 +193,7 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop.RollUpDelay = 1000;
             this.rollUpPanelTop.SecondHiddenMarkerWidth = 0;
             this.rollUpPanelTop.ShowHiddenMarker = true;
-            this.rollUpPanelTop.Size = new System.Drawing.Size(748, 30);
+            this.rollUpPanelTop.Size = new System.Drawing.Size(748, 34);
             this.rollUpPanelTop.TabIndex = 4;
             this.rollUpPanelTop.UnrollHoverDelay = 1000;
             // 
@@ -197,10 +208,11 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.extButtonHighValue);
             this.panelControls.Controls.Add(this.buttonExtExcel);
             this.panelControls.Controls.Add(this.edsmSpanshButton);
+            this.panelControls.Controls.Add(this.extButtonNewBookmark);
             this.panelControls.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelControls.Location = new System.Drawing.Point(0, 0);
             this.panelControls.Name = "panelControls";
-            this.panelControls.Size = new System.Drawing.Size(748, 30);
+            this.panelControls.Size = new System.Drawing.Size(748, 34);
             this.panelControls.TabIndex = 32;
             // 
             // edsmSpanshButton
@@ -217,9 +229,9 @@ namespace EDDiscovery.UserControls
             // panelStars
             // 
             this.panelStars.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelStars.Location = new System.Drawing.Point(0, 30);
+            this.panelStars.Location = new System.Drawing.Point(0, 34);
             this.panelStars.Name = "panelStars";
-            this.panelStars.Size = new System.Drawing.Size(748, 652);
+            this.panelStars.Size = new System.Drawing.Size(748, 648);
             systemDisplay1.BackColor = System.Drawing.Color.Black;
             systemDisplay1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
             systemDisplay1.FontUnderlined = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline);
@@ -262,6 +274,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+        private ExtendedControls.ExtButton extButtonNewBookmark;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonExtExcel;
         private ExtendedControls.ExtPanelRollUp rollUpPanelTop;
