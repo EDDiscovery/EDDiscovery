@@ -184,8 +184,8 @@ namespace EDDiscovery
         }
 
         // Note ASYNC so we must use data return method
-        // tbd edsm only - will need to do a spansh one..
-        private async void DLLRequestScanData(object requesttag, object usertag, string systemname, bool edsmlookup)           
+        // 14/1/25 bool means spansh then edsm
+        private async void DLLRequestScanData(object requesttag, object usertag, string systemname, bool spanshthenedsmlookup)           
         {
             var dll = DLLManager.FindCSharpCallerByStackTrace();    // need to find who called - use the stack to trace the culprit
 
@@ -198,7 +198,8 @@ namespace EDDiscovery
                 if (syslookup.HasChars())
                 {
                     var sc = History.StarScan;
-                    var snode = await sc.FindSystemAsync(new SystemClass(syslookup), edsmlookup ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);       // async lookup
+                    // async lookup
+                    var snode = await sc.FindSystemAsync(new SystemClass(syslookup), spanshthenedsmlookup ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : EliteDangerousCore.WebExternalDataLookup.None);       
                     if (snode != null)
                         json = JToken.FromObject(snode, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
                 }
