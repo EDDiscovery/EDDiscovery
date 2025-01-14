@@ -126,6 +126,12 @@ namespace EDDiscovery
         {
         }
 
+        //var sys = SystemCache.FindSystem(new SystemClass("Pyranu QO-Z d13-28", 977516105979), WebExternalDataLookup.Spansh);
+        //var sys = History.StarScan.FindSystemSynchronous(new SystemClass("Pyranu QO-Z d13-28", 977516105979), WebExternalDataLookup.Spansh);
+        //var sy2s = History.StarScan.FindSystemSynchronous(new SystemClass("Pyranu QO-Z d13-28", 977516105979), WebExternalDataLookup.Spansh);
+
+        // var sp = new EliteDangerousCore.Spansh.SpanshClass();
+        //var blist = sp.GetBodies(new SystemClass("Pyranu QO-Z d13-28", 977516105979), out int? bodycount);
 
         //    foreach (StationDefinitions.StationServices en in Enum.GetValues(typeof(StationDefinitions.StationServices)))
         //    {
