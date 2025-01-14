@@ -14,6 +14,7 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using EliteDangerousCore.GMO;
 using QuickJSON;
 using System;
 using System.Linq;
@@ -38,7 +39,7 @@ namespace EDDiscovery
 
             DLLManager = new EliteDangerousCore.DLL.EDDDLLManager();
             DLLCallBacks = new EDDDLLInterfaces.EDDDLLIF.EDDCallBacks();
-            DLLCallBacks.ver = 3;       // explicitly,this is what we do
+            DLLCallBacks.ver = 4;       // explicitly,this is what we do
             System.Diagnostics.Debug.Assert(DLLCallBacks.ver == EDDDLLInterfaces.EDDDLLIF.DLLCallBackVersion, "***** Updated EDD DLL IF but not updated callbacks");
             DLLCallBacks.RequestHistory = DLLRequestHistory;
             DLLCallBacks.RunAction = DLLRunAction;
@@ -52,6 +53,7 @@ namespace EDDiscovery
             DLLCallBacks.GetShipyards = DLLGetShipyards;
             DLLCallBacks.GetOutfitting = DLLGetOutfitting;
             DLLCallBacks.GetTarget = DLLGetTarget;
+            DLLCallBacks.GetGMOs = DLLGetGMOs;
             DLLCallBacks.AddPanel = (id, paneltype, wintitle, refname, description, image) =>
             {
                 // registered panels, search the stored list, see if there, then it gets the index, else its added to the list
@@ -185,7 +187,7 @@ namespace EDDiscovery
 
         // Note ASYNC so we must use data return method
         // 14/1/25 bool means spansh then edsm
-        private async void DLLRequestScanData(object requesttag, object usertag, string systemname, bool spanshthenedsmlookup)           
+        private async void DLLRequestScanData(object requesttag, object usertag, string systemname, bool spanshthenedsmlookup)
         {
             var dll = DLLManager.FindCSharpCallerByStackTrace();    // need to find who called - use the stack to trace the culprit
 
@@ -199,7 +201,7 @@ namespace EDDiscovery
                 {
                     var sc = History.StarScan;
                     // async lookup
-                    var snode = await sc.FindSystemAsync(new SystemClass(syslookup), spanshthenedsmlookup ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : EliteDangerousCore.WebExternalDataLookup.None);       
+                    var snode = await sc.FindSystemAsync(new SystemClass(syslookup), spanshthenedsmlookup ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : EliteDangerousCore.WebExternalDataLookup.None);
                     if (snode != null)
                         json = JToken.FromObject(snode, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
                 }
@@ -208,6 +210,31 @@ namespace EDDiscovery
                 dll.DataResult(requesttag, usertag, json.ToString());
             }
 
+        }
+
+        private string DLLGetGMOs(string ctrlstring)
+        {
+            JToken jt = null;
+            if (ctrlstring.EqualsIIC("all"))
+            {
+                jt = JToken.FromObject(GalacticMapping.AllObjects, true);
+            }
+            else if (ctrlstring.EqualsIIC("visible"))
+            {
+                jt = JToken.FromObject(GalacticMapping.VisibleMapObjects, true);
+            }
+            else if (ctrlstring.StartsWithIIC("name="))
+            {
+                jt = JToken.FromObject(GalacticMapping.FindDescriptiveNames(ctrlstring.Substring(5),true,false), true);
+            }
+            else if (ctrlstring.StartsWithIIC("systemname="))
+            {
+                jt = JToken.FromObject(GalacticMapping.FindSystems(ctrlstring.Substring(11)), true);
+            }
+
+            string output = jt?.ToString(true) ?? "ERROR";
+
+            return output;
         }
 
 
