@@ -195,18 +195,25 @@ namespace EDDiscovery
             {
                 var syslookup = systemname.IsEmpty() ? History.CurrentSystem()?.Name : systemname;      // get a name
 
-                JToken json = new JObject();     // default return
+                JToken json = null;
 
                 if (syslookup.HasChars())
                 {
                     var sc = History.StarScan;
+
                     // async lookup
                     var snode = await sc.FindSystemAsync(new SystemClass(syslookup), spanshthenedsmlookup ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : EliteDangerousCore.WebExternalDataLookup.None);
+
                     if (snode != null)
+                    {
                         json = JToken.FromObject(snode, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                    }
                 }
 
-                //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllscan.json", json.ToString(true));
+                if ( json == null )
+                    json = new JObject();   // default return
+
+                BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllscan.json", json.ToString(true));
                 dll.DataResult(requesttag, usertag, json.ToString());
             }
 
