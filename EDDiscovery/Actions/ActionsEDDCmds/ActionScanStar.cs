@@ -84,14 +84,18 @@ namespace EDDiscovery.Actions
 
                     StarScan scan = (ap.ActionController as ActionController).HistoryList.StarScan;
 
-                    StarScan.SystemNode sn = scan.FindSystemSynchronous(new SystemClass(cmdname), lookup);
+                    long? systemaddr = cmdname.InvariantParseLongNull();    // if it converts to long, then its a system address.
+
+                    var system = systemaddr > 0 ? new SystemClass(systemaddr.Value) : new SystemClass(cmdname);      // by name or by system address
+
+                    StarScan.SystemNode sn = scan.FindSystemSynchronous(system, lookup);
 
                     System.Globalization.CultureInfo ct = System.Globalization.CultureInfo.InvariantCulture;
 
-                    ap[prefix + "EDSMLookup"] = EliteDangerousCore.EDSM.EDSMClass.HasBodyLookupOccurred(cmdname).ToStringIntValue();
-                    ap[prefix + "EDSMNoData"] = EliteDangerousCore.EDSM.EDSMClass.HasNoDataBeenStoredOnBody(cmdname).ToStringIntValue();
-                    ap[prefix + "SpanshLookup"] = EliteDangerousCore.Spansh.SpanshClass.HasBodyLookupOccurred(cmdname).ToStringIntValue();
-                    ap[prefix + "SpanshNoData"] = EliteDangerousCore.Spansh.SpanshClass.HasNoDataBeenStoredOnBody(cmdname).ToStringIntValue();
+                    ap[prefix + "EDSMLookup"] = EliteDangerousCore.EDSM.EDSMClass.HasBodyLookupOccurred(system).ToStringIntValue();
+                    ap[prefix + "EDSMNoData"] = EliteDangerousCore.EDSM.EDSMClass.HasNoDataBeenStoredOnBody(system).ToStringIntValue();
+                    ap[prefix + "SpanshLookup"] = EliteDangerousCore.Spansh.SpanshClass.HasBodyLookupOccurred(system).ToStringIntValue();
+                    ap[prefix + "SpanshNoData"] = EliteDangerousCore.Spansh.SpanshClass.HasNoDataBeenStoredOnBody(system).ToStringIntValue();
 
                     if ( sn != null )
                     {

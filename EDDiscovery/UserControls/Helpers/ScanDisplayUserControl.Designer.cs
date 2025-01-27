@@ -50,15 +50,18 @@ namespace EDDiscovery.UserControls
             this.imagebox = new ExtendedControls.ExtPictureBox();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.contextMenuStripBodies = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.bookmarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelStars.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imagebox)).BeginInit();
+            this.contextMenuStripBodies.SuspendLayout();
             this.SuspendLayout();
             // 
             // panelStars
             // 
+            this.panelStars.Controls.Add(this.vScrollBarCustom);
             this.panelStars.Controls.Add(this.rtbNodeInfo);
             this.panelStars.Controls.Add(this.imagebox);
-            this.panelStars.Controls.Add(this.vScrollBarCustom);
             this.panelStars.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelStars.FlowControlsLeftToRight = false;
             this.panelStars.Location = new System.Drawing.Point(0, 0);
@@ -72,12 +75,14 @@ namespace EDDiscovery.UserControls
             // 
             this.rtbNodeInfo.BorderColor = System.Drawing.Color.Transparent;
             this.rtbNodeInfo.BorderColorScaling = 0.5F;
+            this.rtbNodeInfo.DetectUrls = true;
             this.rtbNodeInfo.HideScrollBar = true;
             this.rtbNodeInfo.Location = new System.Drawing.Point(472, 6);
             this.rtbNodeInfo.Name = "rtbNodeInfo";
             this.rtbNodeInfo.ReadOnly = false;
-            this.rtbNodeInfo.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 Microsoft S" +
-    "ans Serif;}}\r\n\\viewkind4\\uc1\\pard\\f0\\fs17\\par\r\n}\r\n";
+            this.rtbNodeInfo.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "d\\f0\\fs17\\par\r\n}\r\n";
             this.rtbNodeInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
             this.rtbNodeInfo.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
             this.rtbNodeInfo.ScrollBarBackColor = System.Drawing.SystemColors.Control;
@@ -97,6 +102,8 @@ namespace EDDiscovery.UserControls
             // 
             // imagebox
             // 
+            this.imagebox.FillColor = System.Drawing.Color.Transparent;
+            this.imagebox.FreezeTracking = false;
             this.imagebox.Location = new System.Drawing.Point(0, 0);
             this.imagebox.Name = "imagebox";
             this.imagebox.Size = new System.Drawing.Size(466, 554);
@@ -105,6 +112,7 @@ namespace EDDiscovery.UserControls
             // 
             // vScrollBarCustom
             // 
+            this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
             this.vScrollBarCustom.ArrowColorScaling = 0.5F;
@@ -114,13 +122,13 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 20;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(732, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(729, 0);
             this.vScrollBarCustom.Maximum = -109;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 682);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(19, 682);
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 2;
@@ -137,6 +145,19 @@ namespace EDDiscovery.UserControls
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
             // 
+            // contextMenuStripBodies
+            // 
+            this.contextMenuStripBodies.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.bookmarkToolStripMenuItem});
+            this.contextMenuStripBodies.Name = "contextMenuStripBodies";
+            this.contextMenuStripBodies.Size = new System.Drawing.Size(181, 48);
+            // 
+            // bookmarkToolStripMenuItem
+            // 
+            this.bookmarkToolStripMenuItem.Name = "bookmarkToolStripMenuItem";
+            this.bookmarkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.bookmarkToolStripMenuItem.Text = "Bookmark";
+            // 
             // ScanDisplayUserControl
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -147,6 +168,7 @@ namespace EDDiscovery.UserControls
             this.Resize += new System.EventHandler(this.UserControlScan_Resize);
             this.panelStars.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imagebox)).EndInit();
+            this.contextMenuStripBodies.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -157,5 +179,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtScrollBar vScrollBarCustom;
         private ExtendedControls.ExtRichTextBox rtbNodeInfo;
         private ExtendedControls.ExtPictureBox imagebox;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripBodies;
+        private System.Windows.Forms.ToolStripMenuItem bookmarkToolStripMenuItem;
     }
 }

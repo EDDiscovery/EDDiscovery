@@ -447,7 +447,7 @@ namespace EDDiscovery.UserControls
                     texttoadd = new string[] { sn.ScanData.BodyDesignationOrName, bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() };
 
                     sd.DrawNode(pc, sn, null, null, BodyToImages.GetPlanetImageNotScanned(), new Point(imagesize.Width, imagesize.Height), true, false, out Rectangle _, out int _, imagesize,
-                        SystemDisplay.DrawLevel.NoText, new Random());
+                        SystemDisplay.DrawLevel.NoText, new Random(), null,null);
                 }
                 else if (!sn.WebCreatedNode)             // rejected above, due no scan data or its EDSM and not EDSM selected.. present what we have if its ours
                 {

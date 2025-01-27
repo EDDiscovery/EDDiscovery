@@ -47,6 +47,7 @@ namespace EDDiscovery
             DLLCallBacks.WriteToLog = (s) => LogLine(s);
             DLLCallBacks.WriteToLogHighlight = (s) => LogLineHighlight(s);
             DLLCallBacks.RequestScanData = DLLRequestScanData;
+            DLLCallBacks.RequestScanDataExt = DLLRequestScanDataExt;
             DLLCallBacks.GetSuitsWeaponsLoadouts = DLLGetSuitWeaponsLoadout;
             DLLCallBacks.GetCarrierData = DLLGetCarrierData;
             DLLCallBacks.GetVisitedList = DLLGetVisitedList;
@@ -201,8 +202,14 @@ namespace EDDiscovery
                 {
                     var sc = History.StarScan;
 
+                    var sysclass = new SystemClass(syslookup);
+
+                    WebExternalDataLookup wlu = spanshthenedsmlookup ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : EliteDangerousCore.WebExternalDataLookup.None;
+
+                   //wlu = WebExternalDataLookup.EDSM; //debug
+
                     // async lookup
-                    var snode = await sc.FindSystemAsync(new SystemClass(syslookup), spanshthenedsmlookup ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : EliteDangerousCore.WebExternalDataLookup.None);
+                    var snode = await sc.FindSystemAsync(sysclass, wlu);
 
                     if (snode != null)
                     {
@@ -218,6 +225,44 @@ namespace EDDiscovery
             }
 
         }
+
+        private async void DLLRequestScanDataExt(object requesttag, object usertag, string systemname, long systemaddress, int weblookup, string _)
+        {
+            var dll = DLLManager.FindCSharpCallerByStackTrace();    // need to find who called - use the stack to trace the culprit
+
+            if (dll != null)
+            {
+                //systemaddress = 10477373803; weblookup = 1; // debug
+
+                ISystem sysc = systemname.IsEmpty() && systemaddress == 0 ? History.CurrentSystem() :
+                                        new SystemClass(systemname, systemaddress > 0 ? systemaddress : default(long?));
+
+                JToken json = null;
+
+                if (sysc != null)
+                {
+                    var sc = History.StarScan;
+
+                    WebExternalDataLookup wlu = weblookup == 3 ? WebExternalDataLookup.SpanshThenEDSM : weblookup == 2 ? WebExternalDataLookup.Spansh :
+                                                    weblookup == 1 ? WebExternalDataLookup.EDSM : WebExternalDataLookup.None;
+                    // async lookup
+                    var snode = await sc.FindSystemAsync(sysc, wlu);
+
+                    if (snode != null)
+                    {
+                        json = JToken.FromObject(snode, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                    }
+                }
+
+                if (json == null)
+                    json = new JObject();   // default return
+
+                BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllscan.json", json.ToString(true));
+                dll.DataResult(requesttag, usertag, json.ToString());
+            }
+
+        }
+
 
         private string DLLGetGMOs(string ctrlstring)
         {

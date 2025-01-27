@@ -550,7 +550,7 @@ namespace EDDiscovery.UserControls
 
                     HistoryEntry he = rw.Tag as HistoryEntry;
                         
-                    if (!EDSMClass.HasBodyLookupOccurred(he.System.Name))       // this tells us if a body lookup has occurred
+                    if (!EDSMClass.HasBodyLookupOccurred(he.System))       // this tells us if a body lookup has occurred
                     {
                         System.Diagnostics.Debug.WriteLine("StarList EDSM Update row" + row);
                         CheckWeb(rw);

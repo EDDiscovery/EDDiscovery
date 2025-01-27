@@ -38,6 +38,7 @@ namespace EDDiscovery.UserControls
             SystemDisplay.Font = ExtendedControls.Theme.Current?.GetDialogFont ?? Font;
             SystemDisplay.FontUnderlined = ExtendedControls.Theme.Current?.GetDialogScaledFont(1f, FontStyle.Underline) ?? Font;
             SystemDisplay.LargerFont = ExtendedControls.Theme.Current?.GetFont ?? Font;
+            SystemDisplay.ContextMenuStripStars = contextMenuStripBodies;
         }
 
         #endregion
