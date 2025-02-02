@@ -213,7 +213,7 @@ namespace EDDiscovery
 
                     if (snode != null)
                     {
-                        json = JToken.FromObject(snode, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                        json = JToken.FromObject(snode, true, new Type[] { typeof(System.Drawing.Image) }, 24, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
                     }
                 }
 
@@ -250,7 +250,7 @@ namespace EDDiscovery
 
                     if (snode != null)
                     {
-                        json = JToken.FromObject(snode, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                        json = JToken.FromObject(snode, true, new Type[] { typeof(System.Drawing.Image) }, 24, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
                     }
                 }
 
