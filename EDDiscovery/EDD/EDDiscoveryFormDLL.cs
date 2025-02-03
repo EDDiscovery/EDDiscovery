@@ -145,19 +145,26 @@ namespace EDDiscovery
 
         public bool DLLRunAction(string eventname, string paras)
         {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
             System.Diagnostics.Debug.WriteLine("Run " + eventname + "(" + paras + ")");
             actioncontroller.ActionRun(Actions.ActionEventEDList.DLLEvent(eventname), new BaseUtils.Variables(paras, BaseUtils.Variables.FromMode.MultiEntryComma));
             return true;
         }
 
+        // callback
         private bool DLLRequestHistory(long index, bool isjid, out EDDDLLInterfaces.EDDDLLIF.JournalEntry f)
         {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
             HistoryEntry he = isjid ? History.GetByJID(index) : History.GetByEntryNo((int)index);
             f = EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(History, he);
             return he != null;
         }
         private string DLLGetShipLoadout(string name)
         {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
             if ( name.EqualsIIC("All"))
             {
                 JObject ships = new JObject();
@@ -181,6 +188,8 @@ namespace EDDiscovery
 
         private string DLLGetTarget()
         {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
             var hastarget = EliteDangerousCore.DB.TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
             JObject jo = hastarget ? new JObject() { ["Name"] = name, ["X"] = x, ["Y"] = y, ["Z"] = z } : new JObject();
             return jo.ToString();
@@ -190,6 +199,8 @@ namespace EDDiscovery
         // 14/1/25 bool means spansh then edsm
         private async void DLLRequestScanData(object requesttag, object usertag, string systemname, bool spanshthenedsmlookup)
         {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
             var dll = DLLManager.FindCSharpCallerByStackTrace();    // need to find who called - use the stack to trace the culprit
 
             if (dll != null)
@@ -228,6 +239,8 @@ namespace EDDiscovery
 
         private async void DLLRequestScanDataExt(object requesttag, object usertag, string systemname, long systemaddress, int weblookup, string _)
         {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
             var dll = DLLManager.FindCSharpCallerByStackTrace();    // need to find who called - use the stack to trace the culprit
 
             if (dll != null)
@@ -266,6 +279,8 @@ namespace EDDiscovery
 
         private string DLLGetGMOs(string ctrlstring)
         {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
             JToken jt = null;
             if (ctrlstring.EqualsIIC("all"))
             {
@@ -292,6 +307,8 @@ namespace EDDiscovery
 
         private string DLLGetSuitWeaponsLoadout()
         {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
             var wlist = JToken.FromObject(History.WeaponList.weapons.Get(History.GetLast?.Weapons ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             var slist = JToken.FromObject(History.SuitList.Suits(History.GetLast?.Suits ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             var sloadoutlist = JToken.FromObject(History.SuitLoadoutList.Loadouts(History.GetLast?.Loadouts ?? 0), true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
@@ -306,6 +323,8 @@ namespace EDDiscovery
 
         private string DLLGetCarrierData()
         {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
             var carrier = JToken.FromObject(History.Carrier, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllcarrier.json", carrier.ToString(true));
             return carrier.ToString();
@@ -321,6 +340,8 @@ namespace EDDiscovery
 
         private string DLLGetVisitedList(int howmany)
         {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
             var list = History.Visited.Values;
             int toskip = howmany > list.Count || howmany < 0 ? list.Count : list.Count-howmany;
             var vlist = list.Skip(toskip).Select(x => new VisitedSystem(x.System.Name,x.System.SystemAddress??-1,x.System.X,x.System.Y,x.System.Z)).ToList();
@@ -331,12 +352,16 @@ namespace EDDiscovery
         }
         private string DLLGetShipyards()
         {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
             var shipyards = JToken.FromObject(History.Shipyards, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllshipyards.json", shipyards.ToString(true));
             return shipyards.ToString();
         }
         private string DLLGetOutfitting()
         {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
             var outfitting = JToken.FromObject(History.Outfitting, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dlloutfitting.json", outfitting.ToString(true));
             return outfitting.ToString();

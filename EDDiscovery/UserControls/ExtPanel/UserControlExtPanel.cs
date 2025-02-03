@@ -50,27 +50,29 @@ namespace EDDiscovery.UserControls
 
             var callbacks = new EDDPanelCallbacks();
             callbacks.ver = PanelCallBackVersion;
-            callbacks.SaveString = (s, d) => PutSetting(s, d);
-            callbacks.GetString = (s, d) => GetSetting(s, d);
-            callbacks.SaveDouble = (s, d) => PutSetting(s, d);
-            callbacks.GetDouble = (s, d) => GetSetting(s, d);
-            callbacks.SaveLong = (s, d) => PutSetting(s, d);
-            callbacks.GetLong = (s, d) => GetSetting(s, d);
-            callbacks.LoadGridLayout = (s, d) => DGVLoadColumnLayout((DataGridView)s, d);
-            callbacks.SaveGridLayout = (s, d) => DGVSaveColumnLayout((DataGridView)s, d);
-            callbacks.SetControlText = (s) => SetControlText(s);
-            callbacks.HasControlTextArea = () => HasControlTextArea();
-            callbacks.IsControlTextVisible = () => IsControlTextVisible();
-            callbacks.IsTransparentModeOn = () => IsTransparentModeOn;
-            callbacks.IsFloatingWindow = () => IsFloatingWindow;
+            callbacks.SaveString = (s, d) => { PutSetting(s, d); };
+            callbacks.GetString = (s, d) => {  return GetSetting(s, d); };
+            callbacks.SaveDouble = (s, d) => { PutSetting(s, d); };
+            callbacks.GetDouble = (s, d) => { return GetSetting(s, d); };
+            callbacks.SaveLong = (s, d) => { PutSetting(s, d); };
+            callbacks.GetLong = (s, d) => { return GetSetting(s, d); };
+            callbacks.LoadGridLayout = (s, d) => { System.Diagnostics.Trace.Assert(Application.MessageLoop); DGVLoadColumnLayout((DataGridView)s, d); };
+            callbacks.SaveGridLayout = (s, d) => { System.Diagnostics.Trace.Assert(Application.MessageLoop); DGVSaveColumnLayout((DataGridView)s, d); };
+            callbacks.SetControlText = (s) => { System.Diagnostics.Trace.Assert(Application.MessageLoop); SetControlText(s); };
+            callbacks.HasControlTextArea = () => { return HasControlTextArea(); };
+            callbacks.IsControlTextVisible = () => { return IsControlTextVisible(); };
+            callbacks.IsTransparentModeOn = () => { return IsTransparentModeOn; };
+            callbacks.IsFloatingWindow = () => {  return IsFloatingWindow; };
             callbacks.IsClosed = () => IsClosed;
-            callbacks.DGVTransparent = (g, t, c) => DGVTransparent((DataGridView)g, t, c);
+            callbacks.DGVTransparent = (g, t, c) => { System.Diagnostics.Trace.Assert(Application.MessageLoop); DGVTransparent((DataGridView)g, t, c); };
             callbacks.RequestTravelGridPosition = () => 
-            { 
+            {
+                System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
                 return (RequestPanelOperation?.Invoke(this, new RequestTravelHistoryPos()) ?? PanelActionState.NotHandled) == PanelActionState.Success; 
             };
             callbacks.PushStars = (name,list) => 
             {
+                System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
                 PushStars.PushType pt = name.EqualsIIC("triwanted") ? PushStars.PushType.TriWanted :
                                         name.EqualsIIC("trisystems") ? PushStars.PushType.TriSystems :
                                         PushStars.PushType.Expedition;
@@ -79,6 +81,7 @@ namespace EDDiscovery.UserControls
             };
             callbacks.PushCSVToExpedition = (file) =>
             {
+                System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
                 return (RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PanelAction() { Action = PanelAction.ImportCSV, Data = file }) ?? PanelActionState.NotHandled) == PanelActionState.Success;
             };
 
