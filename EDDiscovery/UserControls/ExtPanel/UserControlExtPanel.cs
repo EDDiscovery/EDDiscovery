@@ -88,7 +88,9 @@ namespace EDDiscovery.UserControls
             var th = ExtendedControls.Theme.Current;
             var jo = JObject.FromObject(th, true, maxrecursiondepth: 5, membersearchflags: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
 
-            panel.Initialise(callbacks, DisplayNumber, jo.ToString(),"");     // initialise, pass in callbacks and unused config string
+            string jostring = jo.ToString();
+
+            panel.Initialise(callbacks, DisplayNumber, jostring,"");     // initialise, pass in callbacks and unused config string
 
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
@@ -157,7 +159,8 @@ namespace EDDiscovery.UserControls
         private void Discoveryform_OnHistoryChange()
         {
             var cmdr = EliteDangerousCore.EDCommander.GetCommander(DiscoveryForm.History.CommanderId);
-            panel.HistoryChange(DiscoveryForm.History.Count, cmdr.Name, cmdr.NameIsBeta, cmdr.LegacyCommander);
+            if ( cmdr!=null)    // if may be null if in -noload
+                panel.HistoryChange(DiscoveryForm.History.Count, cmdr.Name, cmdr.NameIsBeta, cmdr.LegacyCommander);
         }
 
         private void Discoveryform_OnNewHistoryEntryUnfiltered(EliteDangerousCore.HistoryEntry he)

@@ -190,7 +190,6 @@ namespace EDDiscovery
             this.tabControlMain.TabMouseOverColor = System.Drawing.Color.White;
             this.tabControlMain.TabNotSelectedBorderColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
-            this.tabControlMain.TabOpaque = 100F;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
             this.tabControlMain.TabStyle = tabStyleSquare1;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;

@@ -227,7 +227,6 @@
             this.extTabControl.TabMouseOverColor = System.Drawing.Color.White;
             this.extTabControl.TabNotSelectedBorderColor = System.Drawing.Color.Gray;
             this.extTabControl.TabNotSelectedColor = System.Drawing.Color.Gray;
-            this.extTabControl.TabOpaque = 100F;
             this.extTabControl.TabSelectedColor = System.Drawing.Color.LightGray;
             this.extTabControl.TabStyle = tabStyleSquare1;
             this.extTabControl.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;

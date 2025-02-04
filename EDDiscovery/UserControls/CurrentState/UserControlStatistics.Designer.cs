@@ -268,7 +268,6 @@ namespace EDDiscovery.UserControls
             this.tabControlCustomStats.TabMouseOverColor = System.Drawing.Color.White;
             this.tabControlCustomStats.TabNotSelectedBorderColor = System.Drawing.Color.Gray;
             this.tabControlCustomStats.TabNotSelectedColor = System.Drawing.Color.Gray;
-            this.tabControlCustomStats.TabOpaque = 100F;
             this.tabControlCustomStats.TabSelectedColor = System.Drawing.Color.LightGray;
             this.tabControlCustomStats.TabStyle = tabStyleSquare1;
             this.tabControlCustomStats.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;

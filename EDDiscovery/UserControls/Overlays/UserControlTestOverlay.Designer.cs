@@ -78,7 +78,6 @@ namespace EDDiscovery.UserControls
             this.extTabControl1.TabMouseOverColor = System.Drawing.Color.White;
             this.extTabControl1.TabNotSelectedBorderColor = System.Drawing.Color.Gray;
             this.extTabControl1.TabNotSelectedColor = System.Drawing.Color.Gray;
-            this.extTabControl1.TabOpaque = 100F;
             this.extTabControl1.TabSelectedColor = System.Drawing.Color.LightGray;
             this.extTabControl1.TabStyle = tabStyleSquare1;
             this.extTabControl1.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
