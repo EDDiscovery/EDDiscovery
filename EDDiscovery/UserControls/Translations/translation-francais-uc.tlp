@@ -1,4 +1,4 @@
-
+﻿
 SECTION UserControlBookmarks
 
 .ColType: "Bookmark Type" => "Type de marque-page"
@@ -270,7 +270,7 @@ SECTION UserControlExpedition
 .ColumnDistStart: "Dist Start" => "Dist. départ"
 .ColumnDistanceRemaining: "Dist Remaining" => "Dist. restante"
 .ColumnHistoryNote: "History Note" => "Note d'historique"
-.labelCml: "Cml Distance:" @
+.labelCml: "Cml Distance:" => "Distance cumulée :"
 .labelP2P: "P2P Distance:" @
 .labelEndDate: "End Date:" => "Date de fin :"
 .labelDateStart: "Start Date:" => "Date de début :"
@@ -549,13 +549,13 @@ SECTION UserControlModules
 .SC: "Ship Configure" => "Configuration de vaisseau"
 .MI: "Module Information" => "Information de module"
 .NOSI: "No Ship Information available" => "Aucune information disponible pour le vaisseau"
-.labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" @
-.labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" @
-.labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" @
-.labelDataCost: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" @
-.labelDataFSD: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
-.labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
-.labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
+.labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" => "Brut {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}"
+.labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" => "Brut {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}"
+.labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" => "Mass {0.##|t} Coque {0.##|t} Modules {0.##|t} Vide {0.##|t} Cargo {0|/|0|t} Alerte à {0.#|%}"
+.labelDataCost: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" => "Valeur Coque {N0|cr} Modules {N0|cr} Total {N0|cr} Rachat {N0|cr}"
+.labelDataFSD: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" => "Actu {0.##|ly} Porté {0.##|ly} Plein {0.##|ly} Vide {0.##|ly} Max {0.##|ly} Max Carbu {0.##|t} Actu {0.#|/|0.#|t} Réserve {0.#|/|0.#|t} En transfert vers {} Stocké à {}"
+.labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" => "Vit actu {0.#} Boost {0.#} Plein {0.#|/|0.#} Vide {0.#|/|0.#} Max {0.#|/|0.#} Boost Actu {0.#|s} Max {0.#|s}"
+.labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" => "Brut {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Munitions {0.#|s} Actu {0.#|%} Max {0.#|%}"
 .labelWep: "Weapons:" => "Armes :"
 .extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" => "Sauvegarder cette configuration dans le dossier des configurations de EDD"
 .extButtonDeleteLoadout.ToolTip: "Delete loadout" => "Supprimer la configuration"
