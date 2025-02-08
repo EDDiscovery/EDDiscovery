@@ -1,4 +1,4 @@
-﻿
+
 SECTION UserControlBookmarks
 
 .ColType: "Bookmark Type" => "Type de marque-page"
@@ -101,7 +101,7 @@ SECTION UserControlWebBrowser
 .checkBoxAutoTrack.ToolTip: "Track system in history panel" @
 .extCheckBoxAllowedList.ToolTip: "URLs" @
 .extCheckBoxStar.ToolTip: "Select another system to view" => "Sélectionner un autre système à afficher"
-.System: "System: " => "Système: "
+.System: "System: " => "Système : "
 .EnterSys: "Show System" => "Afficher système"
 
 SECTION UserControlSearch
@@ -134,8 +134,8 @@ SECTION SearchMaterialsCommodities
 SECTION SearchScans
 
 .Select: "Select" => "Sélectionner"
-.Name: "Name: " => "Nom: "
-.SN: "Enter Search Name: " => "Entrer le nom de la recherche: "
+.Name: "Name: " => "Nom : "
+.SN: "Enter Search Name: " => "Entrer le nom de la recherche : "
 .DEL: "Confirm deletion of" => "Confirmer la suppression de"
 .DELNO: "Cannot delete this entry" => "Impossible de supprimer l'entrée"
 .CNV: "Condition is not valid" => "Condition invalide"
@@ -165,7 +165,7 @@ SECTION SearchScans
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
 .Export: "Export user searches" => "Exporter les conditions de recherches"
 .Import: "Import user searches" => "Importer les conditions de recherches"
-.scanSortControl.labelSort: "Sort:" => "Tri:"
+.scanSortControl.labelSort: "Sort:" => "Tri :"
 .TooMany: "Too many results to display, truncating to the first {0}" => "Trop de résultats à afficher, tronque aux {0} premiers"
 
 SECTION UserControlDiscoveries
@@ -272,9 +272,9 @@ SECTION UserControlExpedition
 .ColumnHistoryNote: "History Note" => "Note d'historique"
 .labelCml: "Cml Distance:" @
 .labelP2P: "P2P Distance:" @
-.labelEndDate: "End Date:" => "Date de fin: "
-.labelDateStart: "Start Date:" => "Date de début: "
-.labelRouteName: "Route Name:" => "Nom de l'itinéraire: "
+.labelEndDate: "End Date:" => "Date de fin :"
+.labelDateStart: "Start Date:" => "Date de début :"
+.labelRouteName: "Route Name:" => "Nom de l'itinéraire :"
 .viewSystemToolStripMenuItem: "View System" => "Voir le système"
 .viewOnSpanshToolStripMenuItem: "View on Spansh" = DataGridViewStarResults.Spansh
 .viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
@@ -292,7 +292,7 @@ SECTION UserControlExpedition
 .Unsaved: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "Il y a des changements non sauvegardés pour l'itinéraire en cours.\r\nVoulez-vous sauvegarder l'itinéraire en cours avant de continuer ?"
 .Specify: "Please specify a name for the route." => "Indiquer un nom pour l'itinéraire"
 .Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "Le nom de l'itinéraire en cours est le même qu'une expédition connue.\r\nChoississez un autre nom pour sauvegarder les changements"
-.Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "Attention: l'itinéraire existe déjà. Voulez-vous l'écraser ?"
+.Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "Attention : l'itinéraire existe déjà. Voulez-vous l'écraser ?"
 .EDSMUnk: "System not known" => "Système inconnu d'EDSM"
 .NoScanInfo: "No local scan info" => "Aucune information locale de scan"
 
@@ -322,7 +322,7 @@ SECTION UserControlJournalGrid
 .TT1: " showing {0} original {1}" => " montre {0} original {1}"
 .TTFilt1: "Filtered {0}" => "Filtré {0}"
 .TTSelAge: "Select the entries by age, " => "Sélection des entrées par âge, "
-.JHF: "Journal: Filter out fields" => "Journal: Filtrer les champs"
+.JHF: "Journal: Filter out fields" => "Journal : Filtrer les champs"
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
 
 SECTION UserControlLedger
@@ -425,7 +425,7 @@ SECTION UserControlSurveyor
 .Systemscancomplete: "System scan complete" => "Scan du système terminé"
 .bodiesdetected: " bodies detected." => " corps détectés."
 .bodiesfound: " bodies found." => " corps trouvés."
-.ShowSignalMismatch: " Cluster and NonBody counts differ by " => " Ceintures d'astéroïdes et autres corps non célestes: "
+.ShowSignalMismatch: " Cluster and NonBody counts differ by " => " Ceintures d'astéroïdes et autres corps non célestes : "
 .textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" => "Gauche"
 .textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" => "Centre"
 .textAlignToolStripMenuItem.rightToolStripMenuItem: "Alignment Right" => "Droite"
@@ -475,7 +475,7 @@ SECTION UserControlSurveyor
 .extButtonControlRoute.ToolTip: "Route Settings" => "Paramètres d'itinéraire"
 .extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" => "Sélectionner les découvertes à rechercher, prises depuis les recherches du panneau de recherche de scans"
 .navroute: "Nav Route" @
-.fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => "Moy {0:N1}al Fume {1:N1}al Portée {2:N1}al"
+.fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => ", Moy : {0:N1} al, Max : {1:N1} al, Portée : {2:N1} al"
 .fsssignals: "List signals to display, semicolon seperated" => "Liste des signaux à afficher, séparés par des points-virgules"
 
 SECTION MissionListUserControl
@@ -497,9 +497,9 @@ SECTION UserControlMissions
 .MPlural: " Missions" @
 .MSingular: " Mission" @
 .Name: "Name" = UserControlCombatPanel.Name
-.Value: "Value (cr):\n{0:N0}" => "Valeur (cr):\n{0:N0}"
+.Value: "Value (cr):\n{0:N0}" => "Valeur (cr) :\n{0:N0}"
 .ValueN: "Value (cr)" => "Valeur (cr)"
-.ValueC: "Value: " => "Valeur: "
+.ValueC: "Value: " => "Valeur : "
 
 SECTION UserControlModules
 
@@ -509,12 +509,12 @@ SECTION UserControlModules
 .PriorityEnable: "P/E" => "P/A"
 .labelShip: "Ship" => "Vaisseau"
 .labelVehicle: "Unknown" = Unknown
-.labelMass: "Mass:" => "Masse:"
-.labelCost: "Cost:" => "Coût:"
+.labelMass: "Mass:" => "Masse :"
+.labelCost: "Cost:" => "Coût :"
 .labelFSD: "FSD:" @
-.labelThrusters: "Thrust:" => "Poussée:"
-.labelShields: "Shields:" => "Boucliers:"
-.labelArmour: "Armour:" => "Armure:"
+.labelThrusters: "Thrust:" => "Poussée :"
+.labelShields: "Shields:" => "Boucliers :"
+.labelArmour: "Armour:" => "Armure :"
 .FullBluePrint: "Show full blueprint information" => "Afficher les informations complètes du plan"
 .EngineeredValues: "Show Engineered Values" => "Afficher les valeurs ingenieurisées"
 .comboBoxShips.ToolTip: "Select ship to view" => "Sélectionner un vaisseau à visualiser"
@@ -541,7 +541,7 @@ SECTION UserControlModules
 .InTransit: "In Transit" => "En transit"
 .EDSURL: "Enter ED Shipyard URL" => "Entrer l'URL ED Shipyard"
 .CURL: "Enter Coriolis URL" => "Entrer l'URL Coriolis"
-.FW: "Fuel Warning: " => "Alerte carburant: "
+.FW: "Fuel Warning: " => "Alerte carburant : "
 .TTF: "Enter fuel warning level in % (0 = off, 1-100%)" => "Définir un niveau d'alerte carburant en % (0 = pas d'alerte, 1-100%)"
 .PresstoAccept: "Press to Accept" = UserControlCombatPanel.C5
 .PresstoCancel: "Press to Cancel" = UserControlCombatPanel.C6
@@ -556,7 +556,7 @@ SECTION UserControlModules
 .labelDataFSD: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
 .labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
 .labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
-.labelWep: "Weapons:" => "Armes:"
+.labelWep: "Weapons:" => "Armes :"
 .extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" => "Sauvegarder cette configuration dans le dossier des configurations de EDD"
 .extButtonDeleteLoadout.ToolTip: "Delete loadout" => "Supprimer la configuration"
 .SaveLoadout: "Enter loadout description to save ship with" => "Entrez la description à sauvegarder pour la configuration du vaisseau"
@@ -678,10 +678,10 @@ SECTION UserControlRouteTracker
 .TF: "To First WP " => "Jusqu'au prochain PP"
 .JS: "jumps" => "sauts"
 .FL: "From Last WP " => "Depuis le dernier PP "
-.LF: ", Left {0:N1}ly" => ", reste {0:N1}al"
+.LF: ", Left {0:N1}ly" => ", reste {0:N1} al"
 .ToWP: "(WP {0})" => "(PP {0})"
 .NoFSD: " No Ship FSD Information" => " Pas d'information FSD du vaisseau"
-.Dev: ", Dev {0:N1}ly" => ", Dev {0:N1}al"
+.Dev: ", Dev {0:N1}ly" => ", Dev : {0:N1} al"
 .NoWay: "Route contains no waypoints" => "L'itinéraire ne contient pas de point de passage"
 .NoCo: "No systems in route have known co-ords" => "Aucun système de l'itinéraire n'a de coordonnées connues"
 .Note: "Note: {0}" @
@@ -715,7 +715,7 @@ SECTION UserControlScan
 .PlanetMass: "Show mass of planets" => "Afficher la masse des planètes"
 .StarMass: "Show mass of stars" => "Afficher la masse des étoiles"
 .StarAge: "Show age of stars" => "Afficher l'age des étoiles"
-.Expired: "Expired:" => "Expiré:"
+.Expired: "Expired:" => "Expiré :"
 .StarsOnDiffLines: "Show bodyless stars on separate lines" => "Afficher les étoiles sans corps sur des lignes séparées"
 
 SECTION UserControlScanGrid
@@ -738,12 +738,12 @@ SECTION UserControlScanGrid
 .Landable: "Landable" => "Atterrissable"
 .Geologicalactivity: "Geological activity" => "Activité géologique"
 .Surfacemapped: "Surface mapped" => "Surface cartographiée"
-.BC: "This body contains: " => "Ce corps contient: "
-.Ring: "Ring: " => "Anneau: "
-.Belt: "Belt: " => "Ceinture: "
+.BC: "This body contains: " => "Ce corps contient : "
+.Ring: "Ring: " => "Anneau : "
+.Belt: "Belt: " => "Ceinture : "
 .GS: "This is a green system, as it has all existing jumponium materials available!" => "Ceci est un système écologique, tous les matériaux existants pour le Jumponium sont disponibles !"
 .JS: " jumponium materials found in system." => " matériaux pour le Jumponium trouvés dans le système."
-.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Résumé de scan de {0}: {1} étoiles; {2} planètes ({3} telluriques, {4} géantes gazeuses), {5} lunes"
+.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Résumé de scan de {0} : {1} étoiles; {2} planètes ({3} telluriques, {4} géantes gazeuses), {5} lunes"
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" => "Ceintures"
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Anneaux"
 .materialsToolStripMenuItem: "Show materials" = UserControlMaterialCommodities.Mats
@@ -773,8 +773,8 @@ SECTION UserControlSettings
 .groupBoxInteraction: "Interaction" @
 .labelTKey: "Key to activate transparent windows" => "Touche pour activer les fenêtres transparentes"
 .groupBoxMemory: "Memory" => "Mémoire"
-.labelHistoryEssItems: "Essential entries:" => "Entrées essentielles: "
-.labelHistorySel: "Entries to read:" => "Entrées à lire: "
+.labelHistoryEssItems: "Essential entries:" => "Entrées essentielles : "
+.labelHistorySel: "Entries to read:" => "Entrées à lire : "
 .groupBoxCustomScreenShots: "Screenshots conversion" => "Conversion de capture d'écran"
 .buttonExtScreenshot: "Configure" => "Configurer"
 .checkBoxCustomEnableScreenshots: "Enable" = UserControlSettings.extCheckBoxWebServerEnable
@@ -872,7 +872,7 @@ SECTION UserControlShoppingList
 .useEDSMDataInSystemAvailabilityToolStripMenuItem: "Use EDSM data in System Availability" => "Utiliser les données EDSM pour la disponibilité dans le système"
 .useHistoricMaterialCountsToolStripMenuItem: "Use Historic Material Counts" => "Utiliser les comptages de matériaux historiques"
 .NM: "Needed Mats" => "Matériaux recherchés"
-.FS: "Filling Shopping List would exceed capacity for: " => "Remplir la liste de course dépasserait la capacité de stockage de: "
+.FS: "Filling Shopping List would exceed capacity for: " => "Remplir la liste de course dépasserait la capacité de stockage de : "
 .NoMat: "No materials currently required." => "Aucuns matériaux recherchés pour le moment"
 .FSD: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" => "Injections FSD max\r\n   {0} Basique\r\n   {1} Standard\r\n   {2} Premium"
 .MO: "Materials on {0}" => "Matériaux sur {0}"
@@ -1036,13 +1036,13 @@ SECTION UserControlStats
 .InterdictedNPCSucceeded: "Interdicted NPC Succeeded" => "Interdictions réussies par des PNJ"
 .InterdictedNPCFailed: "Interdicted NPC Failed" => "Interdictions échouées par des PNJ"
 .PVPKills: "PVP Kills" => "JcJ 'kills'"
-.TotalNoofjumps: "Total No of jumps" => "Nb total de sauts: "
+.TotalNoofjumps: "Total No of jumps" => "Nb total de sauts : "
 .FSDjumps: "FSD jumps" => "Sauts FSD"
 .JumpHistory: "FSD Jump History" => "Historique de sauts"
-.24hc: "24 Hours: " => "24 heures: "
-.OneWeek: ", One Week: " => ", une semaine: "
-.30Days: ", 30 Days: " => ", 30 jours: "
-.OneYear: ", One Year: " => ", 1 an: "
+.24hc: "24 Hours: " => "24 heures : "
+.OneWeek: ", One Week: " => ", une semaine : "
+.30Days: ", 30 Days: " => ", 30 jours : "
+.OneYear: ", One Year: " => ", 1 an : "
 .MostNorth: "Most North" => "Le plus au nord"
 .MostSouth: "Most South" => "Le plus au sud"
 .MostEast: "Most East" => "Le plus à l'est"
@@ -1281,8 +1281,8 @@ SECTION CaptainsLogEntries
 .DTF: "Bad/Out of Range Date Time format" => "Format incorrect de la date (ou hors période)"
 .Note: "Note: " @
 .EnterNote: "Enter Note" = UserControlTravelGrid.setNoteToolStripMenuItem
-.CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" => "Voulez-vous vraiment supprimer {0} notes?\r\nConfirmer ou Annuler"
-.CF: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" => "Voulez-vous vraiment supprimer la note pour {0}\r\nConfirmer ou Annuler"
+.CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" => "Voulez-vous vraiment supprimer {0} notes ?\r\nConfirmer ou Annuler"
+.CF: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" => "Voulez-vous vraiment supprimer la note pour {0} ?\r\nConfirmer ou Annuler"
 .SetTags: "Set Tags" => "Définir les tags"
 .SysU: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
 .ColTime: "Time" = UserControlLedger.TimeCol
@@ -1317,8 +1317,8 @@ SECTION UserControlTrilateration
 .pasteToolStripMenuItem: "Paste" = UserControlExpedition.pasteToolStripMenuItem
 .toolStripButtonSubmitDistances: "&Submit Distances" => "&Soumettre les distances"
 .toolStripButtonNew: "Start New" => "Démarrer &nouveau"
-.toolStripLabelSystem: "From System:" => "Système d'origine: "
-.toolStripLabel1: "Visited without coordinates:" => "Visité sans coordonnées: "
+.toolStripLabelSystem: "From System:" => "Système d'origine : "
+.toolStripLabel1: "Visited without coordinates:" => "Visité sans coordonnées : "
 .toolStripAddFromHistory: "Add 20 oldest" => "Ajouter les 20 plus anciens"
 .toolStripAddRecentHistory: "Add 20 newest" => "Ajouter les 20 plus récents"
 .ToolStripText: "Press Start New" => "Appuyer sur Démarrer nouveau"
@@ -1422,9 +1422,9 @@ SECTION UserControlFactions
 .showMissionsForFactionToolStripMenuItem: "Show missions for faction" => "Afficher les missions pour la faction"
 .showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" => "Afficher les échanges de marchandises/matériaux pour la faction"
 .showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" => "Afficher les primes et récompenses de combat pour la faction"
-.MissionsInProgress: "Missions In Progress: " => "Missions en cours: "
-.CapShipVictims: "Capital ship Victims: " => "Victimes de vaisseau capital: "
-.CapShipAward: "Capital ship Award: " => "Récompenses de vaisseau capital: "
+.MissionsInProgress: "Missions In Progress: " => "Missions en cours : "
+.CapShipVictims: "Capital ship Victims: " => "Victimes de vaisseau capital : "
+.CapShipAward: "Capital ship Award: " => "Récompenses de vaisseau capital : "
 .colRedeemVoucher: "Redeem Voucher" => "Valeur des primes réclamées"
 .colFines: "Pay Fines" => "Valeur des amendes"
 .colBountyValue: "Pay Bounty Value" @
@@ -1458,7 +1458,7 @@ SECTION UserControlOrganics
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" => "Retour à la ligne"
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" => "Afficher les scans incomplets"
 .at: "At {0}" => "À {0}"
-.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" => ", {0}, Rayon {1}, {2}, {3}, Signaux bio: {4}{5}"
+.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" => ", {0}, Rayon {1}, {2}, {3}, Signaux bio : {4}{5}"
 .extButtonAlignment.ToolTip: "Alignment" => "Alignement"
 .ColDate: "Date" @
 .ColStarSystem: "Star System" = UserControlModules.System
@@ -1551,19 +1551,19 @@ SECTION UserControlCarrier
 .DecommissionedOn: "Decommissioning on" => "Mise hors service le"
 .Cargo: "Cargo: ; t;N0" @
 .Services: "Services: ; t;N0" @
-.Shippacks: "Ship packs: ; t;N0" => "Pack de vaisseaux: ; t;N0"
-.Modulepacks: "Module Packs: ; t;N0" => "Pack de modules: ; t;N0"
-.Reservedspace: "Reserved Space: ; t;N0" => "Espace réservé: ; t;N0"
-.Freespace: "Free Space: ; t;N0" => "Espace libre: ; t;N0"
-.Jumprange: "Jump Range: ; ly;N0" => "Portée de saut: ; al;N0"
-.Maxjump: "Max Jump: ; ly;N0" => "Saut max: ; al;N0"
-.Fuel: "Fuel: ; t;N0" => "Carburant: ; t;N0"
-.DockingAccess: "Docking Access: " => "Accès appontage: "
-.Notorious: "Notorious: " => "Notoriété: "
-.Balance: "Balance: ; cr;N0" => "Solde: ; cr;N0"
-.Reserve: "Reserve: ; cr;N0" => "Allocation hebdomadaire: ; cr;N0"
-.Available: "Available: ; cr;N0" => "Disponible: ; cr;N0"
-.Reservepercent: "Reserve: ; %;N0" => "Réserve: ; %;N0"
+.Shippacks: "Ship packs: ; t;N0" => "Pack de vaisseaux : ; t;N0"
+.Modulepacks: "Module Packs: ; t;N0" => "Pack de modules : ; t;N0"
+.Reservedspace: "Reserved Space: ; t;N0" => "Espace réservé : ; t;N0"
+.Freespace: "Free Space: ; t;N0" => "Espace libre : ; t;N0"
+.Jumprange: "Jump Range: ; ly;N0" => "Portée de saut : ; al;N0"
+.Maxjump: "Max Jump: ; ly;N0" => "Saut max : ; al;N0"
+.Fuel: "Fuel: ; t;N0" => "Carburant : ; t;N0"
+.DockingAccess: "Docking Access: " => "Accès appontage : "
+.Notorious: "Notorious: " => "Notoriété : "
+.Balance: "Balance: ; cr;N0" => "Solde : ; cr;N0"
+.Reserve: "Reserve: ; cr;N0" => "Allocation hebdomadaire : ; cr;N0"
+.Available: "Available: ; cr;N0" => "Disponible : ; cr;N0"
+.Reservepercent: "Reserve: ; %;N0" => "Réserve : ; %;N0"
 .PioneerTax: "Pioneer Tax" => "Taxes Pioneer Supplies"
 .ShipyardTax: "Shipyard Tax" => "Taxes chantier naval"
 .RearmTax: "Rearm Tax" => "Taxes armurerie"
@@ -1571,20 +1571,20 @@ SECTION UserControlCarrier
 .RefuelTax: "Refuel Tax" => "Taxes ravitaillement en carburant"
 .RepairTax: "Repair Tax" => "Taxes réparation"
 .Taxpercentage: ": ; %;N0" @
-.CoreCost: "Core Cost: ; cr;N0" => "Coût de base: ; cr;N0"
-.ServicesCost: "Services Cost: ; cr;N0" => "Coût des services: ; cr;N0"
+.CoreCost: "Core Cost: ; cr;N0" => "Coût de base : ; cr;N0"
+.ServicesCost: "Services Cost: ; cr;N0" => "Coût des services : ; cr;N0"
 .NoCarrier: "No Carrier" => "Pas de porte-vaisseaux"
-.InstallCost: "Install cost: ; cr;N0" => "Coût d'installation: ; cr;N0"
-.CapacityAllocated: "Capacity Allocated: ; Units;N0" => "Capacité allouée: ; unités;N0"
-.Upkeepcost: "Upkeep cost: ; cr;N0" => "Coût d'entretien: ; cr;N0"
-.Suspendedupkeepcost: "Suspended upkeep cost: ; cr;N0" => "Coût d'entretien suspendu: ; cr;N0"
-.CrewName: "Crew Name: " => "Nom de l'équipage: "
+.InstallCost: "Install cost: ; cr;N0" => "Coût d'installation : ; cr;N0"
+.CapacityAllocated: "Capacity Allocated: ; Units;N0" => "Capacité allouée : ; unités;N0"
+.Upkeepcost: "Upkeep cost: ; cr;N0" => "Coût d'entretien : ; cr;N0"
+.Suspendedupkeepcost: "Suspended upkeep cost: ; cr;N0" => "Coût d'entretien suspendu : ; cr;N0"
+.CrewName: "Crew Name: " => "Nom de l'équipage : "
 .ServiceActive: "This Service is Active" => "Ce service est actif"
 .ServiceSuspended: "This service is suspended" => "Ce service est suspendu"
 .ServiceNotInstalled: "This Service is Not Installed" => "Ce service n'est pas installé"
 .NoPacks: "No Module or Ship packs installed" => "Pas de pack de modules ou de vaisseaux installé"
 .Tier: "Tier " @
-.Cost: "Cost: ; cr;N0" => "Coût: ; cr;N0"
+.Cost: "Cost: ; cr;N0" => "Coût : ; cr;N0"
 .Jumping: "Jumping" => "Saut en cours"
 .NetworkFailure: "No CAPI data from frontier, due to either or server/network failure" => "Pas de données CAPI de la part de Frontier, à cause d'une erreur serveur ou réseau"
 .NotLoggedIn: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." => "Vous n'êtes pas connecté à CAPI.\r\nAllez dans la page des paramètres puis ouvrez la configuration du commandant, et connectez-vous à CAPI."

@@ -276,7 +276,7 @@ SECTION EDDiscoveryForm
 .WSF: "Web server failed to start" => "Echec du démarrage du serveur Web"
 .WSERR: "Web server disabled due to incorrect folder or missing zip file" => "Serveur web désactivé, car le répertoire est incorrect ou le fichier zip est manquant"
 .WSD: "*** Web server is disabled ***" => "*** Serveur Web désactivé***"
-.DLLDIS: "DLLs disabled: {0}" => "DLLs désactivées: {0}"
+.DLLDIS: "DLLs disabled: {0}" => "DLLs désactivées : {0}"
 
 SECTION EDDiscoveryController
 
@@ -357,7 +357,7 @@ GalaxySectorSelect: "Galaxy Sector Select" => "Sélecteur de secteurs galactique
 .GALSELEN: "Select the data set" => "Choisissez le jeu de données"
 .PresstoAccept: "Press to Accept" => "Cliquer pour accepter"
 .GALSELTitle: "Select Galaxy Data" => "Sélectionner les données galactiques EDSM"
-.Area: "Area:" => "Zone:"
+.Area: "Area:" => "Zone :"
 
 SECTION MoveToCommander
 
@@ -386,7 +386,7 @@ ProfileEditor: "ProfileEditor" => "Editeur de profil"
 .Back: "Back" => "Retour"
 .TrigEdit: "Edit Profile {0} Trigger" => "Editer le déclencheur de profil {0}"
 .BackEdit: "Edit Profile {0} Back Trigger" => "Editer le retro déclencheur de profil {0}"
-.DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Voulez-vous supprimer le profil {0}\r\nCeci détruira toutes les informations du profil et c'est irréversible"
+.DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Voulez-vous supprimer le profil {0} ?\r\nCeci détruira toutes les informations du profil et c'est irréversible"
 .Default: "Default" => "Défaut"
 
 SECTION SetNoteForm
