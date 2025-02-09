@@ -271,7 +271,7 @@ SECTION UserControlExpedition
 .ColumnDistanceRemaining: "Dist Remaining" => "Dist. restante"
 .ColumnHistoryNote: "History Note" => "Note d'historique"
 .labelCml: "Cml Distance:" => "Distance cumulée :"
-.labelP2P: "P2P Distance:" @
+.labelP2P: "P2P Distance:" => "P2P Distance :"
 .labelEndDate: "End Date:" => "Date de fin :"
 .labelDateStart: "Start Date:" => "Date de début :"
 .labelRouteName: "Route Name:" => "Nom de l'itinéraire :"
@@ -511,7 +511,7 @@ SECTION UserControlModules
 .labelVehicle: "Unknown" = Unknown
 .labelMass: "Mass:" => "Masse :"
 .labelCost: "Cost:" => "Coût :"
-.labelFSD: "FSD:" @
+.labelFSD: "FSD:" => "FSD :"
 .labelThrusters: "Thrust:" => "Poussée :"
 .labelShields: "Shields:" => "Boucliers :"
 .labelArmour: "Armour:" => "Armure :"
@@ -1279,7 +1279,7 @@ SECTION CaptainsLogDiary
 SECTION CaptainsLogEntries
 
 .DTF: "Bad/Out of Range Date Time format" => "Format incorrect de la date (ou hors période)"
-.Note: "Note: " @
+.Note: "Note: " => "Note : "
 .EnterNote: "Enter Note" = UserControlTravelGrid.setNoteToolStripMenuItem
 .CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" => "Voulez-vous vraiment supprimer {0} notes ?\r\nConfirmer ou Annuler"
 .CF: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" => "Voulez-vous vraiment supprimer la note pour {0} ?\r\nConfirmer ou Annuler"
