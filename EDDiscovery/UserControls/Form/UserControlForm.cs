@@ -179,8 +179,8 @@ namespace EDDiscovery.UserControls
         public void OnThemeChanged()
         {
             Font = Theme.Current.GetFont;
-            UpdateTransparency();
             ExtendedControls.Theme.Current.ApplyStd(UserControl);
+            UpdateTransparency();
         }
 
 
