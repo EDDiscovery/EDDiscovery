@@ -85,11 +85,9 @@ namespace EDDiscovery.UserControls
                 return (RequestPanelOperation?.Invoke(this, new UserControlCommonBase.PanelAction() { Action = PanelAction.ImportCSV, Data = file }) ?? PanelActionState.NotHandled) == PanelActionState.Success;
             };
 
-            var th = ExtendedControls.Theme.Current;
-            var jo = JObject.FromObject(th, true, maxrecursiondepth: 5, membersearchflags: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-
-            string jostring = jo.ToString();
-
+            // we pump out same names as the theme save
+            var jo = ExtendedControls.Theme.Current.ToJSON(true);
+            string jostring = jo.ToString(true);
             panel.Initialise(callbacks, DisplayNumber, jostring,"");     // initialise, pass in callbacks and unused config string
 
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -183,9 +181,9 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnThemeChanged()
         {
-            var th = ExtendedControls.Theme.Current;
-            var jo = JObject.FromObject(th, true, maxrecursiondepth: 5, membersearchflags: System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
-            panel.ThemeChanged(jo.ToString());
+            var jo = ExtendedControls.Theme.Current.ToJSON(true);
+            string jostring = jo.ToString(true);
+            panel.ThemeChanged(jostring);
         }
 
         private void Discoveryform_ScreenShotCaptured(string file, Size size)

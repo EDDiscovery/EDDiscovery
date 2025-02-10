@@ -48,12 +48,15 @@ namespace EDDiscovery.UserControls
             this.extTabControl1 = new ExtendedControls.ExtTabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.extCheckBox1 = new ExtendedControls.ExtCheckBox();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.extTabControl1.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // extButton1
             // 
-            this.extButton1.Location = new System.Drawing.Point(18, 17);
+            this.extButton1.Location = new System.Drawing.Point(18, 3);
             this.extButton1.Name = "extButton1";
             this.extButton1.Size = new System.Drawing.Size(75, 23);
             this.extButton1.TabIndex = 1;
@@ -63,13 +66,15 @@ namespace EDDiscovery.UserControls
             // extTabControl1
             // 
             this.extTabControl1.AllowDragReorder = false;
+            this.extTabControl1.AutoForceUpdate = true;
             this.extTabControl1.Controls.Add(this.tabPage1);
             this.extTabControl1.Controls.Add(this.tabPage2);
             this.extTabControl1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.extTabControl1.Location = new System.Drawing.Point(20, 73);
+            this.extTabControl1.Location = new System.Drawing.Point(18, 41);
             this.extTabControl1.Name = "extTabControl1";
             this.extTabControl1.SelectedIndex = 0;
             this.extTabControl1.Size = new System.Drawing.Size(200, 100);
+            this.extTabControl1.TabBackgroundColor = System.Drawing.Color.Transparent;
             this.extTabControl1.TabColorScaling = 0.5F;
             this.extTabControl1.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.extTabControl1.TabControlBorderColor = System.Drawing.Color.DarkGray;
@@ -103,15 +108,48 @@ namespace EDDiscovery.UserControls
             this.tabPage2.Text = "tabPage2";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // extCheckBox1
+            // 
+            this.extCheckBox1.AutoSize = true;
+            this.extCheckBox1.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBox1.CheckBoxDisabledScaling = 0.5F;
+            this.extCheckBox1.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBox1.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBox1.ImageButtonDisabledScaling = 0.5F;
+            this.extCheckBox1.ImageIndeterminate = null;
+            this.extCheckBox1.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBox1.ImageUnchecked = null;
+            this.extCheckBox1.Location = new System.Drawing.Point(18, 164);
+            this.extCheckBox1.MouseOverColor = System.Drawing.Color.CornflowerBlue;
+            this.extCheckBox1.Name = "extCheckBox1";
+            this.extCheckBox1.Size = new System.Drawing.Size(95, 17);
+            this.extCheckBox1.TabIndex = 3;
+            this.extCheckBox1.Text = "extCheckBox1";
+            this.extCheckBox1.TickBoxReductionRatio = 0.75F;
+            this.extCheckBox1.UseVisualStyleBackColor = true;
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.extButton1);
+            this.panel1.Controls.Add(this.extCheckBox1);
+            this.panel1.Controls.Add(this.extTabControl1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(496, 383);
+            this.panel1.TabIndex = 4;
+            // 
             // UserControlTestOverlay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.extTabControl1);
-            this.Controls.Add(this.extButton1);
+            this.Controls.Add(this.panel1);
             this.Name = "UserControlTestOverlay";
-            this.Size = new System.Drawing.Size(496, 224);
+            this.Size = new System.Drawing.Size(496, 383);
             this.extTabControl1.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -121,5 +159,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtTabControl extTabControl1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.TabPage tabPage2;
+        private ExtendedControls.ExtCheckBox extCheckBox1;
+        private System.Windows.Forms.Panel panel1;
     }
 }

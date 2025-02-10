@@ -59,8 +59,10 @@ namespace EDDiscovery.UserControls
             this.labelControlText = new System.Windows.Forms.Label();
             this.extPanelResizerTop = new ExtendedControls.ExtPanelResizer();
             this.panelTitleControlText = new System.Windows.Forms.Panel();
+            this.panelTopArea = new System.Windows.Forms.Panel();
             this.panelControls.SuspendLayout();
             this.panelTitleControlText.SuspendLayout();
+            this.panelTopArea.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
@@ -72,6 +74,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnShowTitle.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnShowTitle.AutoEllipsis = false;
             this.extButtonDrawnShowTitle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnShowTitle.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnShowTitle.BorderWidth = 1;
             this.extButtonDrawnShowTitle.Image = null;
             this.extButtonDrawnShowTitle.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Captioned;
             this.extButtonDrawnShowTitle.Location = new System.Drawing.Point(31, -2);
@@ -94,6 +98,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnMinimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnMinimize.AutoEllipsis = false;
             this.extButtonDrawnMinimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnMinimize.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnMinimize.BorderWidth = 1;
             this.extButtonDrawnMinimize.Image = null;
             this.extButtonDrawnMinimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.extButtonDrawnMinimize.Location = new System.Drawing.Point(127, -2);
@@ -117,6 +123,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnOnTop.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnOnTop.AutoEllipsis = false;
             this.extButtonDrawnOnTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnOnTop.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnOnTop.BorderWidth = 1;
             this.extButtonDrawnOnTop.Image = null;
             this.extButtonDrawnOnTop.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Floating;
             this.extButtonDrawnOnTop.Location = new System.Drawing.Point(79, -2);
@@ -139,6 +147,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnTaskBarIcon.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnTaskBarIcon.AutoEllipsis = false;
             this.extButtonDrawnTaskBarIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnTaskBarIcon.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnTaskBarIcon.BorderWidth = 1;
             this.extButtonDrawnTaskBarIcon.Image = null;
             this.extButtonDrawnTaskBarIcon.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar;
             this.extButtonDrawnTaskBarIcon.Location = new System.Drawing.Point(55, -2);
@@ -161,6 +171,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnTransparentMode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnTransparentMode.AutoEllipsis = false;
             this.extButtonDrawnTransparentMode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnTransparentMode.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnTransparentMode.BorderWidth = 1;
             this.extButtonDrawnTransparentMode.Image = null;
             this.extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
             this.extButtonDrawnTransparentMode.Location = new System.Drawing.Point(7, -2);
@@ -183,6 +195,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnClose.AutoEllipsis = false;
             this.extButtonDrawnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnClose.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnClose.BorderWidth = 1;
             this.extButtonDrawnClose.Image = null;
             this.extButtonDrawnClose.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.extButtonDrawnClose.Location = new System.Drawing.Point(151, -2);
@@ -203,9 +217,9 @@ namespace EDDiscovery.UserControls
             // 
             // statusStripBottom
             // 
-            this.statusStripBottom.Location = new System.Drawing.Point(0, 652);
+            this.statusStripBottom.Location = new System.Drawing.Point(0, 145);
             this.statusStripBottom.Name = "statusStripBottom";
-            this.statusStripBottom.Size = new System.Drawing.Size(812, 22);
+            this.statusStripBottom.Size = new System.Drawing.Size(1655, 22);
             this.statusStripBottom.TabIndex = 26;
             // 
             // panelControls
@@ -218,7 +232,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.extButtonDrawnHelp);
             this.panelControls.Controls.Add(this.extButtonDrawnTransparentMode);
             this.panelControls.Controls.Add(this.extButtonDrawnClose);
-            this.panelControls.Location = new System.Drawing.Point(637, 3);
+            this.panelControls.Location = new System.Drawing.Point(1477, 0);
             this.panelControls.Name = "panelControls";
             this.panelControls.Size = new System.Drawing.Size(175, 22);
             this.panelControls.TabIndex = 27;
@@ -230,6 +244,8 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelp.AutoEllipsis = false;
             this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelp.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelp.BorderWidth = 1;
             this.extButtonDrawnHelp.Image = null;
             this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelp.Location = new System.Drawing.Point(103, -2);
@@ -276,35 +292,45 @@ namespace EDDiscovery.UserControls
             this.extPanelResizerTop.Location = new System.Drawing.Point(0, 0);
             this.extPanelResizerTop.Movement = System.Windows.Forms.DockStyle.Top;
             this.extPanelResizerTop.Name = "extPanelResizerTop";
-            this.extPanelResizerTop.Size = new System.Drawing.Size(812, 3);
+            this.extPanelResizerTop.Size = new System.Drawing.Size(1655, 3);
             this.extPanelResizerTop.TabIndex = 28;
             // 
             // panelTitleControlText
             // 
             this.panelTitleControlText.Controls.Add(this.labelControlText);
             this.panelTitleControlText.Controls.Add(this.label_title);
-            this.panelTitleControlText.Location = new System.Drawing.Point(0, 3);
+            this.panelTitleControlText.Location = new System.Drawing.Point(0, 0);
             this.panelTitleControlText.Name = "panelTitleControlText";
-            this.panelTitleControlText.Size = new System.Drawing.Size(569, 22);
+            this.panelTitleControlText.Size = new System.Drawing.Size(1386, 22);
             this.panelTitleControlText.TabIndex = 29;
             this.panelTitleControlText.MouseDown += new System.Windows.Forms.MouseEventHandler(this.panel_MouseDown);
             this.panelTitleControlText.MouseUp += new System.Windows.Forms.MouseEventHandler(this.panel_MouseUp);
+            // 
+            // panelTopArea
+            // 
+            this.panelTopArea.AutoSize = true;
+            this.panelTopArea.Controls.Add(this.panelControls);
+            this.panelTopArea.Controls.Add(this.panelTitleControlText);
+            this.panelTopArea.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTopArea.Location = new System.Drawing.Point(0, 3);
+            this.panelTopArea.Name = "panelTopArea";
+            this.panelTopArea.Size = new System.Drawing.Size(1655, 25);
+            this.panelTopArea.TabIndex = 30;
             // 
             // UserControlForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(812, 674);
+            this.ClientSize = new System.Drawing.Size(1655, 167);
+            this.Controls.Add(this.panelTopArea);
             this.Controls.Add(this.statusStripBottom);
-            this.Controls.Add(this.panelControls);
-            this.Controls.Add(this.panelTitleControlText);
             this.Controls.Add(this.extPanelResizerTop);
             this.Name = "UserControlForm";
             this.Shown += new System.EventHandler(this.UserControlForm_Shown);
-            this.Layout += new System.Windows.Forms.LayoutEventHandler(this.UserControlForm_Layout);
             this.panelControls.ResumeLayout(false);
             this.panelTitleControlText.ResumeLayout(false);
             this.panelTitleControlText.PerformLayout();
+            this.panelTopArea.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -326,5 +352,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelResizer extPanelResizerTop;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelp;
         private System.Windows.Forms.Panel panelTitleControlText;
+        private System.Windows.Forms.Panel panelTopArea;
     }
 }

@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
             toolTip.ShowAlways = true;
             imagebox.ClickElement += ClickElement;
             SystemDisplay.Font = ExtendedControls.Theme.Current?.GetDialogFont ?? Font;
-            SystemDisplay.FontUnderlined = ExtendedControls.Theme.Current?.GetDialogScaledFont(1f, FontStyle.Underline) ?? Font;
+            SystemDisplay.FontUnderlined = ExtendedControls.Theme.Current?.GetScaledFont(1f, underline:true) ?? Font;
             SystemDisplay.LargerFont = ExtendedControls.Theme.Current?.GetFont ?? Font;
             SystemDisplay.ContextMenuStripStars = contextMenuStripBodies;
         }

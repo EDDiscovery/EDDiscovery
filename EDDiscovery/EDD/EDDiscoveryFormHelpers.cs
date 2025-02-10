@@ -15,12 +15,14 @@
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
+using ExtendedControls;
 using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace EDDiscovery
@@ -389,7 +391,9 @@ namespace EDDiscovery
 
             statusStripEDD.Font = contextMenuStripTabs.Font = this.Font;
 
-            OnThemeChanged?.Invoke();
+            PopOuts.OnThemeChanged();           // tell the pop out forms that theme has changed
+
+            OnThemeChanged?.Invoke();           // and tell anyone else which is interested
 
             if (panelrefreshaswell)
                 Controller.RefreshDisplays(); // needed to cause them to cope with theme change
@@ -495,40 +499,71 @@ namespace EDDiscovery
 
         private ExtendedControls.Theme GetThemeFromDB()
         {
-            if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ThemeNameOf"))           // 
+            if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ThemeNameOf"))           // old db save method
             {
-                // we convert into JSON and then let the JSON reader do the job, of course, if we were doing this again, the JSON would just be in the DB
+                // windows default with name given
+                Theme newtheme = new Theme(UserDatabase.Instance.GetSettingString("ThemeNameOf", "Custom"));
 
                 JObject jo = new JObject();
-                string name = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ThemeNameOf", "Custom");
 
-                jo["windowsframe"] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ThemeWindowsFrame", true);
-                jo["formopacity"] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble("ThemeFormOpacity", 100);
-                jo["fontname"] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ThemeFont", ExtendedControls.Theme.DefaultFont);
-                jo["fontsize"] = (float)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble("ThemeFontSize", ExtendedControls.Theme.DefaultFontSize);
-                jo["buttonstyle"] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ButtonStyle", ExtendedControls.Theme.ButtonstyleSystem);
-                jo["textboxborderstyle"] = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("TextBoxBorderStyle", ExtendedControls.Theme.TextboxborderstyleFixed3D);
+                // we use FromJSON info in 2.6 of QuickJSON to read the JSON attributes under AltFmt to get the old names (clever huh!)
+                var dict = QuickJSON.JToken.GetMemberAttributeSettings(typeof(Theme), "AltFmt", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 
-                // pick a default, based on the name. This is useful when new names are introduced, as if we are using a default theme, we will pick the new colour from the theme
-                var defaulttheme = ThemeList.FindTheme(name) ?? ThemeList.FindTheme("Windows Default");
-
-                foreach (ExtendedControls.Theme.CI ci in Enum.GetValues(typeof(ExtendedControls.Theme.CI)))
+                foreach (var ai in dict)
                 {
-                    var cname = "ThemeColor" + ci.ToString();
-                    int d = defaulttheme.GetColor(ci).ToArgb();
-                    int dbv = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(cname, d);
-                    jo[ci.ToString()] = dbv;
+                    var pi = (PropertyInfo)ai.Value.MemberInfo;
+
+                    if (pi.PropertyType.Name.Contains("Color"))
+                    {
+                        var cname = "ThemeColor" + ai.Value.Name;
+                        int dbv = UserDatabase.Instance.GetSettingInt(cname, -1);
+                        if (dbv != -1)
+                        {
+                            Color p = Color.FromArgb(dbv);
+                            jo[ai.Value.Name] = System.Drawing.ColorTranslator.ToHtml(p);
+                        }
+                    }
                 }
 
-                ExtendedControls.Theme theme = new ExtendedControls.Theme();
-                return theme.FromJSON(jo, name, defaulttheme) ? theme : null;
+                jo["windowsframe"] = UserDatabase.Instance.GetSettingBool("ThemeWindowsFrame", true);
+                jo["formopacity"] = UserDatabase.Instance.GetSettingDouble("ThemeFormOpacity", 100);
+                jo["fontname"] = UserDatabase.Instance.GetSettingString("ThemeFont", newtheme.FontName);
+                jo["fontsize"] = (float)UserDatabase.Instance.GetSettingDouble("ThemeFontSize", newtheme.FontSize);
+                jo["buttonstyle"] = UserDatabase.Instance.GetSettingString("ButtonStyle", newtheme.ButtonStyle);
+                jo["textboxborderstyle"] = UserDatabase.Instance.GetSettingString("TextBoxBorderStyle", newtheme.TextBoxBorderStyle);
+
+                //jo.WriteJSONFile(@"c:\code\eddtheme.json", true);
+
+                if (newtheme.FromJSON(jo))      // overwrite any variables with ones accumulated
+                {
+                    UserDatabase.Instance.DeleteKey("Theme%");  // remove all theme keys
+                    UserDatabase.Instance.DeleteKey("ButtonStyle"); 
+                    UserDatabase.Instance.DeleteKey("TextBoxBorderStyle");
+                    UserDatabase.Instance.PutSettingString("ThemeSelected", newtheme.ToJSON().ToString(true));    // write back immediately in case we crash
+                    return newtheme;
+                }
             }
-            else
-                return null;
+            else if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ThemeSelected"))           // new db save method
+            {
+                Theme newtheme = new Theme(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ThemeNameOf", "Custom"));
+
+                string json = UserDatabase.Instance.GetSettingString("ThemeSelected","");
+                JToken jo = JToken.Parse(json);
+                if ( jo != null )
+                {
+                    if (newtheme.FromJSON(jo))      // overwrite any variables with ones accumulated
+                        return newtheme;
+                }
+            }
+
+            return null;
         }
 
         private void SaveThemeToDB(ExtendedControls.Theme theme)
         {
+#if true
+            UserDatabase.Instance.PutSettingString("ThemeSelected", theme.ToJSON().ToString(true));
+#else
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ThemeNameOf", theme.Name);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ThemeWindowsFrame", theme.WindowsFrame);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("ThemeFormOpacity", theme.Opacity);
@@ -537,15 +572,24 @@ namespace EDDiscovery
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ButtonStyle", theme.ButtonStyle);
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("TextBoxBorderStyle", theme.TextBoxBorderStyle);
 
-            foreach (ExtendedControls.Theme.CI ci in Enum.GetValues(typeof(ExtendedControls.Theme.CI)))
+            var dict = QuickJSON.JToken.GetMemberAttributeSettings(typeof(Theme), "AltFmt", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+
+            foreach (var ai in dict)
             {
-                var cname = "ThemeColor" + ci.ToString();
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(cname, theme.GetColor(ci).ToArgb());
+                var pi = (PropertyInfo)ai.Value.MemberInfo;
+
+                if (pi.PropertyType.Name.Contains("Color"))
+                {
+                    var cname = "ThemeColor" + ai.Value.Name;
+                    Color p = (Color)pi.GetValue(theme);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(cname, p.ToArgb());
+                }
             }
+#endif        
         }
 
 
-        #endregion
+#endregion
 
         #region AC
 

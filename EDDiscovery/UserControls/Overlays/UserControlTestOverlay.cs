@@ -14,6 +14,7 @@
 
 using System;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
@@ -36,12 +37,17 @@ namespace EDDiscovery.UserControls
         {
         }
 
-        public override bool SupportTransparency { get { return true; } }       // turn it on
+        public override bool SupportTransparency => true;
         public override void SetTransparency(bool on, Color curcol)
         {
+            this.BackColor = curcol;
+            this.panel1.BackColor = curcol;
+            extTabControl1.ResetInvalidate();       // need to do this to resample the background
             tabPage1.BackColor = curcol;
             tabPage2.BackColor = curcol;
-            //System.Diagnostics.Debug.WriteLine($"Surveyor set transparency {on} {curcol}");
+            extCheckBox1.BackColor = curcol;        // note if in groupbox, you'd use the groupbox colour when on
+            //System.Diagnostics.Debug.WriteLine($"TestOverlay set transparency {on} {curcol}");
+            foreach (Control c in Controls) System.Diagnostics.Debug.WriteLine($"TO Control {c.Name} {c.Bounds}");
         }
     }
 }

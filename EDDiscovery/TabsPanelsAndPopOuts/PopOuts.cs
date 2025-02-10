@@ -136,8 +136,7 @@ namespace EDDiscovery
 
                 System.Diagnostics.Trace.WriteLine($"Popout Init UCF {pi.WindowTitle} instance {number} title `{windowtitle}` refnumber {refname}");
 
-                ucf.Init(uccb, windowtitle, ExtendedControls.Theme.Current.WindowsFrame, refname, discoveryform.TopMost,
-                             ExtendedControls.Theme.Current.LabelColor, ExtendedControls.Theme.Current.SPanelColor, ExtendedControls.Theme.Current.TransparentColorKey);
+                ucf.Init(uccb, windowtitle, ExtendedControls.Theme.Current.WindowsFrame, refname, discoveryform.TopMost);
 
                 uccb.Init(discoveryform, UserControlCommonBase.DisplayNumberPopOuts + number);
 
@@ -150,6 +149,12 @@ namespace EDDiscovery
             }
 
             return uccb;
+        }
+
+        public void OnThemeChanged()        // called when themes have changed
+        {
+            for( int i = 0; i < usercontrolsforms.Count; i++ )
+                usercontrolsforms[i].OnThemeChanged();
         }
 
         public UserControlCommonBase.PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
