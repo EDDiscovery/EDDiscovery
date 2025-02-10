@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2023 EDDiscovery development team
+ * Copyright © 2016 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -86,23 +86,11 @@ namespace EDDiscovery.UserControls
                 idk = DirectInputDevices.InputDeviceKeyboard.CreateKeyboard();
             }
 
-            UpdateTransparency();
-
-            Invalidate();
-
             var enumlisttt = new Enum[] {
                         EDTx.UserControlForm_extButtonDrawnShowTitle_ToolTip, EDTx.UserControlForm_extButtonDrawnMinimize_ToolTip, EDTx.UserControlForm_extButtonDrawnOnTop_ToolTip,
                         EDTx.UserControlForm_extButtonDrawnTaskBarIcon_ToolTip, EDTx.UserControlForm_extButtonDrawnTransparentMode_ToolTip,
                         EDTx.UserControlForm_extButtonDrawnClose_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
-        }
-
-        // Called by pop out forms when theme has changed, to give us a chance to retheme
-        public void OnThemeChanged()
-        {
-            Font = Theme.Current.GetFont;
-            UpdateTransparency();
-            ExtendedControls.Theme.Current.ApplyStd(UserControl);  
         }
 
         // call to update the control text in the title area
@@ -187,82 +175,27 @@ namespace EDDiscovery.UserControls
 
         #region View Implementation
 
-        public void UpdateTransparency()
+        // Called by pop out forms when theme has changed, to give us a chance to retheme
+        public void OnThemeChanged()
         {
-            bool wantawindowsborder = Theme.Current.WindowsFrame;
-            bool istransparent = IsTransparentModeOn && !inpanelshow;    // do we want to be transparent.. mode is on and not in panel show
-            bool showwindowsborder = wantawindowsborder && !istransparent;
-            bool showcontrols = inpanelshow && !wantawindowsborder;
-            bool showourtitle = DisplayTitle || showcontrols;
-            bool showstatusbar = !wantawindowsborder && inpanelshow;
-
-            //System.Diagnostics.Debug.WriteLine($"UCF UpdateTranparency wb:{wantawindowsborder} istr:{istransparent} showwb:{showwindowsborder} showc:{showcontrols} showtitle:{showourtitle} showsb:{showstatusbar}");
-
-            FormBorderStyle = showwindowsborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
-
-            panelTopArea.Visible = showcontrols || showourtitle;            // we vanish this if both are off
-            panelControls.Visible = showcontrols;            
-            panelTitleControlText.Visible = showourtitle;
-
-            statusStripBottom.Visible = showstatusbar;
-
-            this.TransparencyKey = Theme.Current.TransparentColorKey;
-            Color curbackground = (istransparent) ? TransparencyKey : Theme.Current.Form;
-
-            //System.Diagnostics.Debug.WriteLine($".. bc:{curbackground}");
-
-            this.BackColor = curbackground;
-            statusStripBottom.BackColor = curbackground;
-            extButtonDrawnTaskBarIcon.BackColor = extButtonDrawnTransparentMode.BackColor = extButtonDrawnClose.BackColor =
-                    extButtonDrawnMinimize.BackColor = extButtonDrawnOnTop.BackColor = extButtonDrawnShowTitle.BackColor = extButtonDrawnHelp.BackColor =
-                    panelControls.BackColor = panelTitleControlText.BackColor = panelTopArea.BackColor=curbackground;
-
-            label_title.ForeColor = labelControlText.ForeColor = istransparent ? Theme.Current.SPanelColor : Theme.Current.LabelColor;
-
-            if (TransparentMode == TransparencyMode.On)
-                extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
-            else if (TransparentMode == TransparencyMode.OnClickThru)
-                extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.TransparentClickThru;
-            else if (TransparentMode == TransparencyMode.OnFullyTransparent)
-                extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.FullyTransparent;
-            else
-                extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.NotTransparent;
-
-            extButtonDrawnTaskBarIcon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar : ExtendedControls.ExtButtonDrawn.ImageType.WindowNotInTaskBar;
-            extButtonDrawnShowTitle.ImageSelected = DisplayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
-            extButtonDrawnOnTop.ImageSelected = TopMost ? ExtendedControls.ExtButtonDrawn.ImageType.OnTop : ExtendedControls.ExtButtonDrawn.ImageType.Floating;
-
-            UserControl.SetTransparency(istransparent, curbackground);     // tell the UCCB about the current state
-
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                // if in transparent click thru, we set transparent style.. else clear it.
-                BaseUtils.Win32.UnsafeNativeMethods.ChangeWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle,
-                                    BaseUtils.Win32Constants.WS_EX.TRANSPARENT,
-                                    istransparent && TransparentMode == TransparencyMode.OnFullyTransparent ? BaseUtils.Win32Constants.WS_EX.TRANSPARENT : 0);
-            }
-
-            // if we don't have a windows border, or we do but transparent mode is on (meaning the border will disappear when mouse is away)
-            if (!showwindowsborder || IsTransparentModeOn)
-            {
-                //System.Diagnostics.Debug.WriteLine("UCF Timer on");
-                checkmousepositiontimer.Start();
-            }
-            else
-            {
-                //checkmousepositiontimer.Stop();
-               // System.Diagnostics.Debug.WriteLine("UCF Timer off");
-            }
-
-           // foreach (Control c in Controls) System.Diagnostics.Debug.WriteLine($"UCF Control {c.Name} {c.Bounds} {c.BackColor}");
+            Font = Theme.Current.GetFont;
+            UpdateTransparency();
+            ExtendedControls.Theme.Current.ApplyStd(UserControl);
         }
 
-        const int UCPaddingWidth = 3;
 
-        private void UserControlForm_Shown(object sender, EventArgs e)          // as launched, it may not be in front (as its launched from a control).. bring to front
+        protected override void OnLoad(EventArgs e)
         {
+            base.OnLoad(e);
+            UpdateTransparency();
+        }
+
+        protected override void OnShown(EventArgs e)
+        {
+            base.OnShown(e);
             //System.Diagnostics.Debug.WriteLine($"UCF {Name} Shown");
 
+            // as launched, it may not be in front (as its launched from a control).. bring to front
             this.BringToFront();
 
             if (IsTransparencySupported)
@@ -306,8 +239,81 @@ namespace EDDiscovery.UserControls
             base.OnFormClosing(e);
         }
 
+        #endregion
 
-#endregion
+        #region Transparency control
+
+        private void UpdateTransparency()
+        {
+            bool wantawindowsborder = Theme.Current.WindowsFrame;
+            bool istransparent = IsTransparentModeOn && !inpanelshow;    // do we want to be transparent.. mode is on and not in panel show
+            bool showwindowsborder = wantawindowsborder && !istransparent;
+            bool showcontrols = inpanelshow && !wantawindowsborder;
+            bool showourtitle = DisplayTitle || showcontrols;
+            bool showstatusbar = !wantawindowsborder && inpanelshow;
+
+            //System.Diagnostics.Debug.WriteLine($"UCF UpdateTranparency wb:{wantawindowsborder} istr:{istransparent} showwb:{showwindowsborder} showc:{showcontrols} showtitle:{showourtitle} showsb:{showstatusbar}");
+
+            FormBorderStyle = showwindowsborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
+
+            panelTopArea.Visible = showcontrols || showourtitle;            // we vanish this if both are off
+            panelControls.Visible = showcontrols;
+            panelTitleControlText.Visible = showourtitle;
+
+            statusStripBottom.Visible = showstatusbar;
+
+            this.TransparencyKey = Theme.Current.TransparentColorKey;
+            Color curbackground = (istransparent) ? TransparencyKey : Theme.Current.Form;
+
+            //System.Diagnostics.Debug.WriteLine($".. bc:{curbackground}");
+
+            this.BackColor = curbackground;
+            statusStripBottom.BackColor = curbackground;
+            extButtonDrawnTaskBarIcon.BackColor = extButtonDrawnTransparentMode.BackColor = extButtonDrawnClose.BackColor =
+                    extButtonDrawnMinimize.BackColor = extButtonDrawnOnTop.BackColor = extButtonDrawnShowTitle.BackColor = extButtonDrawnHelp.BackColor =
+                    panelControls.BackColor = panelTitleControlText.BackColor = panelTopArea.BackColor = curbackground;
+
+            label_title.ForeColor = labelControlText.ForeColor = istransparent ? Theme.Current.SPanelColor : Theme.Current.LabelColor;
+
+            if (TransparentMode == TransparencyMode.On)
+                extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
+            else if (TransparentMode == TransparencyMode.OnClickThru)
+                extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.TransparentClickThru;
+            else if (TransparentMode == TransparencyMode.OnFullyTransparent)
+                extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.FullyTransparent;
+            else
+                extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.NotTransparent;
+
+            extButtonDrawnTaskBarIcon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar : ExtendedControls.ExtButtonDrawn.ImageType.WindowNotInTaskBar;
+            extButtonDrawnShowTitle.ImageSelected = DisplayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
+            extButtonDrawnOnTop.ImageSelected = TopMost ? ExtendedControls.ExtButtonDrawn.ImageType.OnTop : ExtendedControls.ExtButtonDrawn.ImageType.Floating;
+
+            UserControl.SetTransparency(istransparent, curbackground);     // tell the UCCB about the current state
+
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                // if in transparent click thru, we set transparent style.. else clear it.
+                BaseUtils.Win32.UnsafeNativeMethods.ChangeWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle,
+                                    BaseUtils.Win32Constants.WS_EX.TRANSPARENT,
+                                    istransparent && TransparentMode == TransparencyMode.OnFullyTransparent ? BaseUtils.Win32Constants.WS_EX.TRANSPARENT : 0);
+            }
+
+            // if we don't have a windows border, or we do but transparent mode is on (meaning the border will disappear when mouse is away)
+            if (!showwindowsborder || IsTransparentModeOn)
+            {
+                //System.Diagnostics.Debug.WriteLine("UCF Timer on");
+                checkmousepositiontimer.Start();
+            }
+            else
+            {
+                //checkmousepositiontimer.Stop();
+                // System.Diagnostics.Debug.WriteLine("UCF Timer off");
+            }
+
+            // foreach (Control c in Controls) System.Diagnostics.Debug.WriteLine($"UCF Control {c.Name} {c.Bounds} {c.BackColor}");
+        }
+
+        #endregion
 
         #region Clicks
 
@@ -398,6 +404,7 @@ namespace EDDiscovery.UserControls
 
         #region Resizing
 
+        const int UCPaddingWidth = 3;
         public new void RequestTemporaryResize(Size w)                  // Size w is the Form UserControl area wanted inside the window (26/1/2018)
         {
             w.Width += UCPaddingWidth * 2 + 2;  //2 is a kludge     We need to add on area used by Form controls..

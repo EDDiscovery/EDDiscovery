@@ -326,7 +326,6 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.statusStripBottom);
             this.Controls.Add(this.extPanelResizerTop);
             this.Name = "UserControlForm";
-            this.Shown += new System.EventHandler(this.UserControlForm_Shown);
             this.panelControls.ResumeLayout(false);
             this.panelTitleControlText.ResumeLayout(false);
             this.panelTitleControlText.PerformLayout();

@@ -389,13 +389,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        // force transparency update/set transparent function
-        public void UpdateTransparency()
-        {
-            if (this.Parent is UserControlForm)
-                ((UserControlForm)(this.Parent)).UpdateTransparency();
-        }
-
         // find a UCCB of type T - this simple case just compares, overriden in splitter/grid to find sub parts
         public virtual UserControlCommonBase Find( PanelInformation.PanelIDs p)      
         {

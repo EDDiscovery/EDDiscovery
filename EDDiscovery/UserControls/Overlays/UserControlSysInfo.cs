@@ -963,7 +963,6 @@ namespace EDDiscovery.UserControls
         private void whenTransparentUseSkinnyLookToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToggleSelection(sender, ControlBits.BitSelSkinny);
-            UpdateTransparency();
         }
 
         private void disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem_Click(object sender, EventArgs e)
