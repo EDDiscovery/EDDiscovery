@@ -16,6 +16,7 @@ using CAPI;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -628,9 +629,9 @@ namespace EDDiscovery.UserControls
             EDDConfig.Instance.KeepOnTop = frm.TopMost = checkBoxKeepOnTop.Checked;
         }
 
-        private void ParentForm_TopMostChanged(object sender, EventArgs e)
+        private void ParentForm_TopMostChanged(SmartSysMenuForm sys)
         {
-            checkBoxKeepOnTop.Checked = (sender as Form).TopMost;
+            checkBoxKeepOnTop.Checked = sys.TopMost;
         }
 
         private void checkBoxPanelSortOrder_CheckedChanged(object sender, EventArgs e)

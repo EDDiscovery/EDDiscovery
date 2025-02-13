@@ -22,6 +22,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace EDDiscovery
@@ -215,7 +216,9 @@ namespace EDDiscovery
             GlobalBookMarkList.LoadBookmarks();
             GlobalCaptainsLogList.LoadLog();
 
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load Icons");
             msg.Invoke("Loading Icons");
+
             EDDiscovery.Icons.ForceInclusion.Include();      // Force the assembly into the project by a empty call
             BaseUtils.Icons.IconSet.CreateSingleton();
             System.Reflection.Assembly iconasm = BaseUtils.ResourceHelpers.GetAssemblyByName("EDDiscovery.Icons");
@@ -225,15 +228,16 @@ namespace EDDiscovery
             BaseUtils.Icons.IconSet.Instance.AddAlias("speaker", "Legacy.speaker");
             BaseUtils.Icons.IconSet.Instance.AddAlias("Default", "Legacy.star");        // MUST be present
 
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load Configuration");
             msg.Invoke("Loading Configuration");
+
             EDDConfig.Instance.Update();
             EDDProfiles.Instance.LoadProfiles(EDDOptions.Instance.Profile);
 
             string path = EDDOptions.Instance.IconsPath ?? System.IO.Path.Combine(EDDOptions.Instance.IconsAppDirectory(), "*.zip");
             BaseUtils.Icons.IconSet.Instance.LoadIconPack(path, EDDOptions.Instance.AppDataDirectory, EDDOptions.ExeDirectory());
 
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF init");        // STAGE 1
-
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load Translations");
             msg.Invoke("Loading Translations");
 
             if (EDDOptions.Instance.ResetLanguage)
@@ -268,15 +272,20 @@ namespace EDDiscovery
                 typeof(ExtendedControls.ExtTextBoxAutoComplete),typeof(ExtendedControls.ExtDateTimePicker),typeof(ExtendedControls.ExtNumericUpDown),
                 typeof(ExtendedControls.MultiPipControl)});
 
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Initialise Item Data and components");
+
             MaterialCommodityMicroResourceType.Initialise();     // lets statically fill the table way before anyone wants to access it
             ItemData.Initialise();                              // let the item data initialise
+            Stars.Prepopulate();                                // we do it this way instead of statically because we don't want them autofilled
+            Planets.Prepopulate();
+
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Initialise Controller");
 
             Controller.Init();
             PanelInformation.Init();
 
             // Some components require the controller to be initialized
             InitializeComponent();
-
 
             ScreenshotConverter = new EliteDangerousCore.ScreenShots.ScreenShotConverter();
             PopOuts = new PopOutControl(this);
@@ -285,11 +294,12 @@ namespace EDDiscovery
 
             // load saved commanders
 
+            System.Diagnostics.Debug.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load Commanders");
             EDCommander.LoadCommanders();
 
             // STAGE 2 themeing the main interface (not the tab pages)
 
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load popouts, themes, init controls");        
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load popouts, themes, init controls");
             msg.Invoke("Applying Themes");
 
             comboBoxCommander.AutoSize = comboBoxCustomProfiles.AutoSize = true;
@@ -304,7 +314,6 @@ namespace EDDiscovery
             ThemeList = new ExtendedControls.ThemeList();
             ThemeList.LoadBaseThemes();                                         // default themes and ones on disk loaded
             ThemeList.Load(EDDOptions.Instance.ThemeAppDirectory(), "*.eddtheme"); // load any file stored themes
-
 
             if (!EDDOptions.Instance.NoTheme)
             {
@@ -324,12 +333,15 @@ namespace EDDiscovery
             if (EDDOptions.Instance.Font.HasChars())
                 ExtendedControls.Theme.Current.FontName = EDDOptions.Instance.Font;
 
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Apply theme");
             ApplyTheme();                       // we apply and scale (because its being applied to Form) before any tabs parts are setup.
 
             this.TopMost = EDDConfig.Instance.KeepOnTop;
             notifyIconEDD.Visible = EDDConfig.Instance.UseNotifyIcon;
 
             // create audio system, now done in here not in action controller
+
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load audio");
 
 #if !NO_SYSTEM_SPEECH
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
@@ -366,6 +378,9 @@ namespace EDDiscovery
             //System.Diagnostics.Debug.WriteLine("Bindings" + frontierbindings.ListBindings());
             //System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames("{","}"));
 
+
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load action controller");
+
             // install extra functions
 
             Functions.GetCFH = ConditionEDDFunctions.DefaultGetCFH;
@@ -381,6 +396,8 @@ namespace EDDiscovery
             msg.Invoke("Loading Action Packs");         // STAGE 4 Action packs
 
             // ---------------------------------------------------------------- Finish up any installing/deleting which failed during the upgrade process because the files were in use
+
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Install/remove previous files");
 
             {
                 List<string> alloweddllslist = EDDConfig.Instance.DLLPermissions.Split(",").ToList();
@@ -447,12 +464,13 @@ namespace EDDiscovery
             // ---------------------------------------------------------------- DLL Load
 
             msg.Invoke("Loading Extension DLLs");
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF DLL setup");
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF DLL setup");
 
             DLLStart();
 
             //----------------------------------------------------------------- Action controller (moved here oct 24 to have panels created before load)
 
+            // this takes a long time too
             actioncontroller.ReLoad();          // load the action system up here, with the UI running
             actioncontroller.CreatePanelsFromActionFiles();    // create any panels related to plugins
 
@@ -462,6 +480,13 @@ namespace EDDiscovery
 
             //----------------------------------------------------------------- GMO etc load
 
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load GMO");
+
+            GalacticMapping = new EliteDangerousCore.GMO.GalacticMapping();         // empty in case someone needs them
+            EliteRegions = new EliteDangerousCore.GMO.GalacticMapping();
+
+            // this takes a long time.. we should later experiment with async population.
+            //Task.Factory.StartNew(() =>
             {
                 // normally updated by DownloadEDSMGEC in ControllerHelpers, but first time run, we want them now, before we continue
 
@@ -483,39 +508,39 @@ namespace EDDiscovery
                         SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
                 }
 
-                GalacticMapping = new EliteDangerousCore.GMO.GalacticMapping(); 
 
                 // in priority order..
 
                 if (File.Exists(gecfile))
-                    GalacticMapping.ParseGMPFile(gecfile,int.MaxValue/2);                    // at this point, gal map data has been uploaded - get it into memory
+                    GalacticMapping.ParseGMPFile(gecfile, int.MaxValue / 2);                    // at this point, gal map data has been uploaded - get it into memory
 
                 if (File.Exists(edsmgmofile))
-                    GalacticMapping.ParseGMPFile(edsmgmofile,0);                            // at this point, gal map data has been uploaded - get it into memory
+                    GalacticMapping.ParseGMPFile(edsmgmofile, 0);                            // at this point, gal map data has been uploaded - get it into memory
 
-
-                GalacticMapping.LoadCSV(EDDiscovery.Properties.Resources.TouristBeacons, "GECTB","","Community Sourced Tourist Beacon");
+                GalacticMapping.LoadCSV(EDDiscovery.Properties.Resources.TouristBeacons, "GECTB", "", "Community Sourced Tourist Beacon");
 
                 GalacticMapping.LoadCSV(EDDiscovery.Properties.Resources.Marx_Nebula_List_26_10_21, "MarxNebula", " Nebula", "Marx sourced nebula");
 
-               // GalacticMapping.Dump();
+                // GalacticMapping.Dump();
+
+                {
+                    var text = System.Text.Encoding.UTF8.GetString(Properties.Resources.EliteGalacticRegions);
+                    EliteRegions.ParseGMPJson(text, int.MaxValue / 2 + 100000);                            // at this point, gal map data has been uploaded - get it into memory
+                }
+
+                SystemCache.AddToAutoCompleteList(GalacticMapping.GetGMPNames());
             }
 
-            {
-                EliteRegions = new EliteDangerousCore.GMO.GalacticMapping();
-                var text = System.Text.Encoding.UTF8.GetString(Properties.Resources.EliteGalacticRegions);
-                EliteRegions.ParseGMPJson(text,int.MaxValue/2 + 100000);                            // at this point, gal map data has been uploaded - get it into memory
-            }
+            //-------------------------------------------------------------------- Profile
 
-            SystemCache.AddToAutoCompleteList(GalacticMapping.GetGMPNames());
-
-            Stars.Prepopulate();            // we do it this way instead of statically because we don't want them autofilled
-            Planets.Prepopulate();
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load Profile");
 
             UpdateProfileComboBox();
             comboBoxCustomProfiles.SelectedIndexChanged += ComboBoxCustomProfiles_SelectedIndexChanged;
 
             //---------------------------------------------------------------------- Tool tips
+
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Translate UI");
 
             var enumlistcms3 = new Enum[] { EDTx.EDDiscoveryForm_toolsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_settingsToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_showAllInTaskBarToolStripMenuItem, 
@@ -560,7 +585,7 @@ namespace EDDiscovery
             // ---------------------------------------------------------------- open all the major tabs except the built in ones
 
             msg.Invoke("Loading Tabs");
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Creating major tabs Now");        // STAGE 3 Tabs
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Creating major tabs Now");        // STAGE 3 Tabs
 
             if (EDDOptions.Instance.TabsReset)
             {
@@ -604,7 +629,7 @@ namespace EDDiscovery
 
             helpTabToolStripMenuItem.Click += (s, e) => { tabControlMain.HelpOn(this, contextMenuStripTabs.PointToScreen(new Point(0, 0)), tabControlMain.LastTabClicked); };
 
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Finish ED Init");
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Finish ED Init");
 
             PostInitDebug();        // call any debug we want at this point
 
@@ -614,7 +639,7 @@ namespace EDDiscovery
 
         private void EDDiscoveryForm_Load(object sender, EventArgs e)
         {
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load");
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load");
 
             // here we install the new may'24 important message hook, now the window has been created. Any *** messages get pumped out
             TraceLog.ImportantMessage += ex => { LogLineColor(ex, Color.FromArgb(255,255,40,40)); };
@@ -632,14 +657,14 @@ namespace EDDiscovery
                 }
             }
 
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Load Complete");
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load Complete");
         }
 
 
         // OnShown is called once
         private void EDDiscoveryForm_Shown(object sender, EventArgs e)
         {
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF shown");
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF shown");
 
             if (SystemsDatabase.Instance.GetGridIDs() == "Not Set")        // initial state.. this holds up the shown and postinit_shown stopping any background worker action
             {
@@ -684,7 +709,7 @@ namespace EDDiscovery
                 ScreenShotCaptured?.Invoke(outfile, imagesize);         // tell others screen shot is captured
             };
 
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Web");
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Web");
 
             WebServerControl(EDDConfig.Instance.WebServerEnable, EDDConfig.Instance.WebServerPort);
 
@@ -704,7 +729,7 @@ namespace EDDiscovery
             LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
 
             // Bindings
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Bindings");
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Bindings");
 
             if (actioncontroller.FrontierBindings.FileLoaded != null)
             {
@@ -718,7 +743,7 @@ namespace EDDiscovery
             else
                 LogLine("Frontier bindings did not load");
 
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Notifications");
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Notifications");
 
             // Notifications, only check github when directed and we are not debugging it using a folder override
 
@@ -782,7 +807,7 @@ namespace EDDiscovery
 
             // Now the installer
 
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF Installer");
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Installer");
 
             if (EDDOptions.Instance.CheckRelease )
             {
@@ -839,7 +864,7 @@ namespace EDDiscovery
 
             DLLManager.Shown();     // tell the DLLs form has shown
 
-            System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDF End shown");
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF End shown");
 
             PostShownDebug();
         }

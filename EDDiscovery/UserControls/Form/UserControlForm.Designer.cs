@@ -272,6 +272,7 @@ namespace EDDiscovery.UserControls
             this.label_title.TabIndex = 23;
             this.label_title.Text = "<code title>";
             this.label_title.UseMnemonic = false;
+            this.label_title.Click += new System.EventHandler(this.label_title_Click);
             this.label_title.MouseDown += new System.Windows.Forms.MouseEventHandler(this.label_title_MouseDown);
             // 
             // labelControlText

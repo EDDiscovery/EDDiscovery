@@ -43,8 +43,6 @@ namespace EDDiscovery.UserControls
 
         public UserControlForm()
         {
-            AdditionalSysMenus = new List<string>() { "&Transparent", "Show icon in Task&Bar for window" , "Show Title Bar" };
-            AdditionalSysMenuSelected += SystemMenu;        // DO this first, enable extra system menu options for SmartSysMenuForm
             TopMostChanged += SaveTopMost;
 
             InitializeComponent();
@@ -55,6 +53,7 @@ namespace EDDiscovery.UserControls
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
                 extButtonDrawnHelp.Text = "";
         }
+
 
         #region Public Interface
 
@@ -141,7 +140,7 @@ namespace EDDiscovery.UserControls
             UpdateTransparency();   // need to reestablish correct transparency again
         }
 
-        private void SaveTopMost(object sender, EventArgs e)
+        private void SaveTopMost(SmartSysMenuForm sys)
         {
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "TopMost", TopMost);
         }
@@ -188,6 +187,35 @@ namespace EDDiscovery.UserControls
         {
             base.OnLoad(e);
             UpdateTransparency();
+
+        }
+
+        // we need to do this in OnHandleCreate as toggle show title bar causes the window to be recreated, losing the sys menu
+        protected override void OnHandleCreated(EventArgs e)
+        {
+            base.OnHandleCreated(e);
+            var sysMenus = new List<SystemMenuItem>()
+            {
+                    new SystemMenuItem(),
+                    new SystemMenuItem("Show icon in Task&Bar for window", x=>{ x.SetCheck(this.ShowInTaskbar); },x=>{ button_taskbaricon_Click(extButtonDrawnTaskBarIcon, EventArgs.Empty); }),
+                    new SystemMenuItem("Show Title Bar", x=>{ x.SetCheck(DisplayTitle); },x=>{ button_showtitle_Click(extButtonDrawnShowTitle, EventArgs.Empty);; }),
+            };
+
+            if (IsTransparencySupported)
+            {
+                sysMenus.AddRange(new List<SystemMenuItem>
+                        {
+                        new SystemMenuItem("Transparency",
+                                new List<SystemMenuItem>() {
+                                        new SystemMenuItem("Off", x=>{ x.SetCheck(TransparentMode == TransparencyMode.Off); },x => { TransparentMode = TransparencyMode.Off; SetTransparency(TransparentMode); }),
+                                        new SystemMenuItem("On", x=>{ x.SetCheck(TransparentMode == TransparencyMode.On);},x => { TransparentMode = TransparencyMode.On; SetTransparency(TransparentMode); }),
+                                        new SystemMenuItem("On, Click to activate", x=>{ x.SetCheck(TransparentMode == TransparencyMode.OnClickThru);},x => { TransparentMode = TransparencyMode.OnClickThru; SetTransparency(TransparentMode); }),
+                                        new SystemMenuItem("On, Click to activate, Fully Transparent", x=>{ x.SetCheck(TransparentMode == TransparencyMode.OnFullyTransparent);},x => { TransparentMode = TransparencyMode.OnFullyTransparent; SetTransparency(TransparentMode); })
+                                        })
+                        });
+            }
+
+            InstallSystemMenuItems(sysMenus);
         }
 
         protected override void OnShown(EventArgs e)
@@ -359,6 +387,13 @@ namespace EDDiscovery.UserControls
             SetShowTitleInTransparency(!DisplayTitle);
         }
 
+        private void label_title_Click(object sender, EventArgs e)
+        {
+            ShowSystemMenu(label_title.PointToScreen(new Point(0, label_title.Height)));
+
+        }
+
+
         // best way of knowing your inside the client.. using mouseleave/enter with transparency does not work..
         private void CheckMouse(object sender, EventArgs e)     
         {
@@ -431,26 +466,8 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region System menu for border windows - added in in Init for smartsysmenu
+        #region Others
 
-        void SystemMenu(int v)      // index into array
-        {
-            if (v == 0)
-            {
-                if (IsTransparencySupported)
-                    button_transparency_Click(extButtonDrawnTransparentMode, EventArgs.Empty);
-                else
-                    ExtendedControls.MessageBoxTheme.Show(this, "This panel does not support transparency");
-            }
-            else if ( v==2)
-            {
-                button_showtitle_Click(extButtonDrawnShowTitle,EventArgs.Empty);
-            }
-            else
-            {
-                button_taskbaricon_Click(extButtonDrawnTaskBarIcon, EventArgs.Empty);
-            }
-        }
 
         private void extButtonDrawnHelp_Click(object sender, EventArgs e)
         {
@@ -486,5 +503,6 @@ namespace EDDiscovery.UserControls
         private bool lasttransparentmodereported;
 
         private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
+
     }
 }
