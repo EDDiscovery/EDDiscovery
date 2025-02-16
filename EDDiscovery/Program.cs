@@ -36,8 +36,9 @@ namespace EDDiscovery
                         Application.Run(new EDDApplicationContext());
                     }
                 }
-                catch (TimeoutException)
+                catch (TimeoutException te)
                 {
+                    System.Diagnostics.Trace.WriteLine($"EDD Program Timeout exception {te} {Environment.StackTrace}");
                     BaseUtils.Translator tx = new BaseUtils.Translator();
                     tx.LoadTranslation("Auto", CultureInfo.CurrentUICulture, new string[] { System.IO.Path.GetDirectoryName(Application.ExecutablePath) }, 0, System.IO.Path.GetTempPath());
 
@@ -46,14 +47,15 @@ namespace EDDiscovery
                         Application.Run(new EDDApplicationContext());
                     }
                 }
-                catch (ThreadAbortException)
+                catch (ThreadAbortException tae)
                 {
+                    System.Diagnostics.Trace.WriteLine($"EDD Program Thread Abort exception {tae} {Environment.StackTrace}");
                     if (EDDApplicationContext.RestartOptions != null)
                     {
                         System.Diagnostics.Process.Start(Application.ExecutablePath, EDDApplicationContext.RestartOptions);
                     }
                 }
-                finally
+                finally 
                 {
                     EliteDangerousCore.DB.UserDatabase.Instance.Stop();     // need everything closed before we can shut down the DBs threads
                     EliteDangerousCore.DB.SystemsDatabase.Instance.Stop();

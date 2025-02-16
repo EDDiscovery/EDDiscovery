@@ -668,7 +668,7 @@ namespace EDDiscovery
 
             if (SystemsDatabase.Instance.GetGridIDs() == "Not Set")        // initial state.. this holds up the shown and postinit_shown stopping any background worker action
             {
-                var ressel = Forms.GalaxySectorSelect.SelectGalaxyMenu(this);
+                var ressel = Forms.GalaxySectorSelect.SelectGalaxyMenu(this, EDDOptions.Instance.SystemDatabasePath);
                 SystemsDatabase.Instance.SetDBSource(ressel.Item1);
                 SystemsDatabase.Instance.SetGridIDs(ressel.Item3);
                 EDDConfig.Instance.SystemDBDownload = ressel.Item3 != "None";

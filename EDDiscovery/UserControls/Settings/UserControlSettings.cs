@@ -668,18 +668,8 @@ namespace EDDiscovery.UserControls
                     "This will require a full download of the star database from the server" + Environment.NewLine +
                     "Only use this if you are happy to download the dataset again").T(EDTx.UserControlSettings_RELOAD), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                bool force = EDDApplicationContext.RestartOptions != null;
-                EDDApplicationContext.RestartOptions = $"-deletesystemdb -systemsdbpath {EDDOptions.Instance.SystemDatabasePath}";
-
-                if (!force)
-                {
-                    Application.Exit();
-                }
-                else
-                {
-                    System.Threading.Thread.CurrentThread.Abort();
-                }
-
+                EDDApplicationContext.RestartOptions = $"-deletesystemdb -systemsdbpath {EDDOptions.Instance.SystemDatabasePath} -appfolder {EDDOptions.Instance.AppDataDirectory}";
+                Application.Exit();
             }
         }
 

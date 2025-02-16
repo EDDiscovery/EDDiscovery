@@ -227,7 +227,7 @@ namespace EDDiscovery.Forms
 
         // Present a menu to ask how much data to download..
 
-        public static Tuple<string,string,string> SelectGalaxyMenu(Form parent)
+        public static Tuple<string,string,string> SelectGalaxyMenu(Form parent, string path)
         {
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
 
@@ -235,11 +235,15 @@ namespace EDDiscovery.Forms
 
             int width = 500;
             string text = "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD.".T(EDTx.GalaxySectorSelect_GALSELEX);
+            text += Environment.NewLine + path;
+
             f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), text,  new Point(10, 30), new Size(width-50, 100), ""));
+            
             f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Select:".T(EDTx.GalaxySectorSelect_Select), new Point(10, 130), new Size(130, 24), ""));
             f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Source", "EDSM",
                         new Point(140, 130), new Size(width - 140 - 100, 24),
                         "Select the data source".T(EDTx.GalaxySectorSelect_GALSELEN), new List<string> { "EDSM", "SPANSH" }));
+
             f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Area:".T(EDTx.GalaxySectorSelect_Area), new Point(10, 200), new Size(130, 24), ""));
             f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Entry", DefaultGalaxyOptions[2].Item1,
                         new Point(140, 200), new Size(width - 140 - 100, 24),
