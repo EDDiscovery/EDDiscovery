@@ -227,7 +227,7 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" @
 .BodyType: "Body Type" @
-.EDSM: "EDSM" @
+.EDSM: "Source" @
 .Mapped: "Mapped" @
 .WasMapped: "Already Mapped" @
 .WasDiscovered: "Already Discovered" @

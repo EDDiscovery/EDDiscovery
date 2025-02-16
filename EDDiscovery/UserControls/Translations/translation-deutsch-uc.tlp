@@ -227,7 +227,7 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Körpername"
 .BodyType: "Body Type" => "Körperart"
-.EDSM: "EDSM" => "EDSM"
+.EDSM: "EDSM" => "Quelle"
 .Mapped: "Mapped" => "Kartographiert"
 .WasMapped: "Already Mapped" => "Bereits kartographiert"
 .WasDiscovered: "Already Discovered" => "Bereits entdeckt"
