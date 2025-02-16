@@ -166,7 +166,7 @@ namespace EDDiscovery.UserControls
 
             int currentcmdr = EDCommander.CurrentCmdrID;
 
-            displayedlist = (from systems in systemlist where systems.EventTimeUTC.ToLocalTime() > start && systems.EventTimeUTC.ToLocalTime() < endDate && systems.IsLocOrJump orderby systems.EventTimeUTC select systems).ToList();
+            displayedlist = (from systems in systemlist where systems.EventTimeUTC.ToLocalTime() > start && systems.EventTimeUTC.ToLocalTime() < endDate && systems.IsFSDLocationCarrierJump orderby systems.EventTimeUTC select systems).ToList();
 
             //foreach (var j in displayedlist)  System.Diagnostics.Debug.WriteLine("Jump {0} {1},{2},{3}", j.System.Name, j.System.X, j.System.Y, j.System.Z);
 

@@ -52,7 +52,7 @@ namespace EDDiscovery.UserControls
                     noicons++;
 
                 BookmarkClass bk = null;
-                if (he.IsLocOrJump)
+                if (he.IsFSDLocationCarrierJump)
                 {
                     bk = GlobalBookMarkList.Instance.FindBookmarkOnSystem(he.System.Name);
                     if (bk != null)

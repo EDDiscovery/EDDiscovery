@@ -226,7 +226,7 @@ namespace EDDiscovery.UserControls
             is_latest = Object.ReferenceEquals(DiscoveryForm.History.GetLast, he);
 
             // set if we have completed a jump
-            bool jumpover = he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.CarrierJump;
+            bool jumpover = he.IsFSDLocationCarrierJump;
 
             System.Diagnostics.Debug.WriteLine($"Surveyor HE {he.EventTimeUTC} {he.EventSummary} state latest {is_latest} jumpover {jumpover}");
 
