@@ -485,8 +485,7 @@ namespace EDDiscovery
             GalacticMapping = new EliteDangerousCore.GMO.GalacticMapping();         // empty in case someone needs them
             EliteRegions = new EliteDangerousCore.GMO.GalacticMapping();
 
-            // this takes a long time.. we should later experiment with async population.
-            //Task.Factory.StartNew(() =>
+            Task.Factory.StartNew(() =>
             {
                 // normally updated by DownloadEDSMGEC in ControllerHelpers, but first time run, we want them now, before we continue
 
@@ -529,7 +528,7 @@ namespace EDDiscovery
                 }
 
                 SystemCache.AddToAutoCompleteList(GalacticMapping.GetGMPNames());
-            }
+            });
 
             //-------------------------------------------------------------------- Profile
 

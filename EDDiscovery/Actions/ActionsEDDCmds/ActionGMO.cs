@@ -67,8 +67,9 @@ namespace EDDiscovery.Actions
                     {
                         string text = sp.NextQuotedWord() ?? "*";
 
+                        var gmos = discoveryform.GalacticMapping.AllObjects;
                         int count = 1;
-                        foreach( var gmo in discoveryform.GalacticMapping.GalacticMapObjects)
+                        foreach( var gmo in gmos)
                         {
                             if (gmo.IsDescriptiveName(text,true))     // wildcard match
                             {
@@ -78,7 +79,7 @@ namespace EDDiscovery.Actions
                         }
 
                         ap[prefix + "MatchCount"] = (count - 1).ToStringInvariant();
-                        ap[prefix + "TotalCount"] = discoveryform.GalacticMapping.GalacticMapObjects.Count.ToStringInvariant();
+                        ap[prefix + "TotalCount"] = gmos.Length.ToStringInvariant();
 
                     }
                     else

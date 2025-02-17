@@ -714,7 +714,7 @@ namespace EDDiscovery.UserControls.Map3D
                     System.Diagnostics.Debug.WriteLine($"Autocomplete look up EDSM systems on {s}");
                     EliteDangerousCore.SystemCache.ReturnSystemAutoCompleteList(s, obj, set);      // perform the system cache autocomplete
 
-                    foreach( var gmo in galacticmapping.GalacticMapObjects)
+                    foreach( var gmo in galacticmapping.AllObjects)
                     {
                         foreach( var name in gmo.DescriptiveNames)
                         {

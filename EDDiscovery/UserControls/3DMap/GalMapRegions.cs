@@ -61,7 +61,7 @@ namespace EDDiscovery.UserControls.Map3D
 
             int cindex = 0;
 
-            foreach (GalacticMapObject gmo in galmap.GalacticMapObjects)
+            foreach (GalacticMapObject gmo in galmap.AllObjects)
             {
                 if (gmo.GalMapTypes[0].Group == GalMapType.GroupType.Regions)
                 {
