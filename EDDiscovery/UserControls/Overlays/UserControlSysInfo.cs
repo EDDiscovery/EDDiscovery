@@ -15,6 +15,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using EliteDangerousCore.GMO;
+using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -364,6 +365,7 @@ namespace EDDiscovery.UserControls
             bool duetoship = false;
             bool duetoother = false;
             bool duetomissions = false;
+            bool duetoscan = false;
             bool duetoidentifiers = Identifiers.Generation != lastprocessedidgen;  // global history kick if Ids changed, not on he, but if its changed, a new he would be coming in
 
             if (he.Status.FSDJumpSequence == false && pendingtarget != null )      // if we reached the end of the fsd sequence, but we have a pend, free
@@ -377,14 +379,21 @@ namespace EDDiscovery.UserControls
             if (last_he!=null)       // last_he must be non null for these tests
             {
                 duetosystem |= last_he.System.Name != he.System.Name;       // add on sys name changes to this
-                duetostatus = last_he.Status != he.Status;
-                duetocomms = last_he.MaterialCommodity != he.MaterialCommodity;
-                duetoship = last_he.ShipInformation != he.ShipInformation;
-                duetoother = last_he.Credits != he.Credits || last_he.Suits != he.Suits || last_he.Loadouts != he.Loadouts;
-                duetomissions = last_he.MissionList != he.MissionList;
+                duetostatus |= last_he.Status != he.Status;
+                duetocomms |= last_he.MaterialCommodity != he.MaterialCommodity;
+                duetoship |= last_he.ShipInformation != he.ShipInformation;
+                duetoother |= last_he.Credits != he.Credits || last_he.Suits != he.Suits || last_he.Loadouts != he.Loadouts;
+                duetomissions |= last_he.MissionList != he.MissionList;
             }
 
-            if (duetosystem || duetostatus || duetocomms || duetoship || duetoother || duetomissions || duetoidentifiers)
+            if (he.journalEntry.EventTypeID == JournalTypeEnum.Scan)        // scans of stars could change was discovered flag on primary star
+            {
+                JournalScan js = (JournalScan)he.journalEntry;
+                if ( js.IsStar)
+                    duetoscan = true;
+            }
+
+            if (duetosystem || duetostatus || duetocomms || duetoship || duetoother || duetomissions || duetoidentifiers || duetoscan)
             {
                 //System.Diagnostics.Debug.WriteLine($"SysInfo - {he.journalEntry.EventTypeStr} got: sys {duetosystem} st {duetostatus} comds {duetocomms} ship {duetoship} missions {duetomissions} other {duetoother}");
                 Display(he);
@@ -405,9 +414,20 @@ namespace EDDiscovery.UserControls
 #if DEBUG
                 textBoxSystem.Text += $" {he.System.SystemAddress}";
 #endif
-                //HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.FSDJump, he);
-                //panelFD.BackgroundImage = (lastfsd != null && (lastfsd.journalEntry as EliteDangerousCore.JournalEvents.JournalFSDJump).EDSMFirstDiscover) ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
-                panelFD.BackgroundImage = EDDiscovery.Icons.Controls.notfirstdiscover;      // TBD on new first discovery
+                bool wasdiscovered = true;
+
+                var ss = DiscoveryForm.History.StarScan.FindSystemSynchronous(he.System);       // find system no web lookup 
+                if ( ss != null )
+                {
+                    var mainstar = ss.StarNodes.FirstOrDefault();       // first star
+                    if (mainstar.Key != null && mainstar.Value.ScanData != null)        // if we have a name, and we have scan data, we can determine
+                    {
+                        System.Diagnostics.Debug.WriteLine($"SystemInformation determine FD on {mainstar.Value.BodyName} {mainstar.Value.OwnName} {mainstar.Value.BodyDesignator}");
+                        wasdiscovered = mainstar.Value.ScanData.WasDiscovered ?? true;          // only if its there and false will it provoke a false
+                    }
+                }
+
+                panelFD.BackgroundImage = !wasdiscovered ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
 
                 textBoxBody.Text = he.WhereAmI + " (" + he.Status.BodyType + ")";
 
@@ -602,9 +622,7 @@ namespace EDDiscovery.UserControls
 
                             //System.Diagnostics.Debug.WriteLine($"Sysinfo destination {lastdestination.Name} -> {destname}");
 
-                            var ss = await DiscoveryForm.History.StarScan.FindSystemAsync(DiscoveryForm.History.GetLast.System);
-                            if (IsClosed)       //ASYNC! warning! may have closed.
-                                return;
+                            ss = DiscoveryForm.History.StarScan.FindSystemSynchronous(DiscoveryForm.History.GetLast.System);
 
                             // with a found system, see if we can get the body name so we know what body its on
                             if (ss != null && ss.NodesByID.TryGetValue(lastdestination.BodyID, out StarScan.ScanNode body))
