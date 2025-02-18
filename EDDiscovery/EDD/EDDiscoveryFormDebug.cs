@@ -15,6 +15,7 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using EliteDangerousCore.Spansh;
 using System;
 using System.IO;
 using System.Text.RegularExpressions;
@@ -101,7 +102,8 @@ namespace EDDiscovery
                 File.WriteAllText(fn, s);
             }
 
-                //FactionDefinitions.IDSTx();
+            //FactionDefinitions.IDSTx();
+
         }
 
         public void PostShownDebug()
@@ -126,8 +128,14 @@ namespace EDDiscovery
         {
         }
 
-        //var sys = SystemCache.FindSystem(new SystemClass("Pyranu QO-Z d13-28", 977516105979), WebExternalDataLookup.Spansh);
+
         //var sys = History.StarScan.FindSystemSynchronous(new SystemClass("Pyranu QO-Z d13-28", 977516105979), WebExternalDataLookup.Spansh);
+        //var sys2 = History.StarScan.FindSystemSynchronous(new SystemClass("Pyranu QO-Z d13-28", 977516105979), WebExternalDataLookup.Spansh);
+
+        //var sys3 = SpanshClass.GetSpanshDump(new SystemClass("Pyranu QO-Z d13-28", 977516105979), true, false);
+        //var sys4 = SpanshClass.GetSpanshDump(new SystemClass("Pyranu QO-Z d13-28", 977516105979), false, true);
+        //var sys = SystemCache.FindSystem(new SystemClass("Pyranu QO-Z d13-28", 977516105979), WebExternalDataLookup.Spansh);
+        //
         //var sy2s = History.StarScan.FindSystemSynchronous(new SystemClass("Pyranu QO-Z d13-28", 977516105979), WebExternalDataLookup.Spansh);
 
         // var sp = new EliteDangerousCore.Spansh.SpanshClass();

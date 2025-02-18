@@ -15,6 +15,7 @@
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.GMO;
+using EliteDangerousCore.Spansh;
 using QuickJSON;
 using System;
 using System.Linq;
@@ -48,6 +49,7 @@ namespace EDDiscovery
             DLLCallBacks.WriteToLogHighlight = (s) => LogLineHighlight(s);
             DLLCallBacks.RequestScanData = DLLRequestScanData;
             DLLCallBacks.RequestScanDataExt = DLLRequestScanDataExt;
+            DLLCallBacks.RequestSpanshDump = DLLRequestSpanshDump;
             DLLCallBacks.GetSuitsWeaponsLoadouts = DLLGetSuitWeaponsLoadout;
             DLLCallBacks.GetCarrierData = DLLGetCarrierData;
             DLLCallBacks.GetVisitedList = DLLGetVisitedList;
@@ -271,6 +273,35 @@ namespace EDDiscovery
                     json = new JObject();   // default return
 
                 BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllscan.json", json.ToString(true));
+                dll.DataResult(requesttag, usertag, json.ToString());
+            }
+
+        }
+
+        private async void DLLRequestSpanshDump(object requesttag, object usertag, string systemname, long systemaddress, bool weblookup, bool cachelookup, string _)
+        {
+            System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
+
+            var dll = DLLManager.FindCSharpCallerByStackTrace();    // need to find who called - use the stack to trace the culprit
+
+            if (dll != null)
+            {
+                //systemaddress = 10477373803; weblookup = 1; // debug
+
+                ISystem sysc = systemname.IsEmpty() && systemaddress == 0 ? History.CurrentSystem() :
+                                        new SystemClass(systemname, systemaddress > 0 ? systemaddress : default(long?));
+
+                JToken json = null;
+
+                if (sysc != null)
+                {
+                    json = await SpanshClass.GetSpanshDumpAsync(sysc, weblookup, cachelookup);
+                }
+
+                if (json == null)
+                    json = new JObject();   // default return
+
+                BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\spanshdump.json", json.ToString(true));
                 dll.DataResult(requesttag, usertag, json.ToString());
             }
 
