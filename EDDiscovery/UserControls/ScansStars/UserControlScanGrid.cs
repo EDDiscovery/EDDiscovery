@@ -375,8 +375,8 @@ namespace EDDiscovery.UserControls
                         {
                             bdDetails.AppendCR();
                             JournalScanOrganic.OrganicList(bdDetails, sn.Organics, 0, false);
-                            foreach (var os in sn.Organics)
-                                organicssystemvalue += os.Value;
+                            foreach (var os in sn.Organics.Where(x => x.EstimatedValue.HasValue))
+                                organicssystemvalue += os.EstimatedValue.Value;
                         }
                         if (sn.Signals != null)
                         {
