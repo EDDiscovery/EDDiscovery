@@ -28,10 +28,17 @@ namespace EDDiscovery.Actions
         public HistoryList HistoryList { get { return DiscoveryForm.History; } }
         public EDDiscoveryForm DiscoveryForm { get; }
 
+        // see ActionFileList for meaning
         public ActionFile Get(string name, StringComparison c = StringComparison.InvariantCultureIgnoreCase) { return actionfiles.Get(name, c); }     // get or return null
-        public ActionFile[] Get(string[] name, StringComparison c = StringComparison.InvariantCultureIgnoreCase) { return actionfiles.Get(name, c); }
-        public ActionFile[] Get(string[] name, bool enabledstate, StringComparison c = StringComparison.InvariantCultureIgnoreCase) { return actionfiles.Get(name, enabledstate, c); }
-
+        public ActionFile[] Get(string[] names, bool? enablestate, StringComparison c = StringComparison.InvariantCultureIgnoreCase) { return actionfiles.Get(names, enablestate, c); }
+        public bool IsOlderEnabled(string name, string version, StringComparison c = StringComparison.InvariantCultureIgnoreCase) 
+        {
+            var pack = Get(name);
+            int[] v = version.VersionFromString();
+            int[] pv = pack?.Version;
+            // pack must be there, enabled, version must parse, and pack version must parse
+            return (pack?.Enabled == true && v != null && pv != null) ? pack.Version.CompareVersion(v) < 0 : false;
+        }
         public override AudioExtensions.AudioQueue AudioQueueWave { get;  }
         public override AudioExtensions.AudioQueue AudioQueueSpeech { get;  }
         public override AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get; }

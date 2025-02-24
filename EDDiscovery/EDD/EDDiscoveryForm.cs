@@ -747,9 +747,10 @@ namespace EDDiscovery
             // Notifications, only check github when directed and we are not debugging it using a folder override
 
             Notifications.CheckForNewNotifications(EDDOptions.Instance.CheckGithubFiles && EDDOptions.Instance.NotificationFolderOverride == null, 
-                                                   "Notifications",
+                                                   "Notifications", // github folder name
                                                    EDDOptions.Instance.NotificationsAppDirectory(),
-                                                   EDDiscovery.Properties.Resources.URLGithubDataDownload,
+                                                   EDDiscovery.Properties.Resources.URLGithubDataDownload,  // github url
+                                                   "NotificationsV2",       // xml notification section. Previous version had a flaw where it always showed stuff unless a recognised condition was present. Did not allow for future expansion. 
             (notelist) =>
             {
                 this.BeginInvoke(new Action(() =>
@@ -767,35 +768,40 @@ namespace EDDiscovery
                         Version vmax = n.VersionMax != null ? new Version(n.VersionMax) : null;
                         Version vmin = n.VersionMin != null ? new Version(n.VersionMin) : null;
 
+                        // if basic checked for time/date and version pass
                         if (p != null && DateTime.UtcNow >= n.StartUTC && DateTime.UtcNow <= n.EndUTC &&
-                                (vmax == null || curver <= vmax) && (vmin == null || curver >= vmin) &&
-                                (n.actionpackpresent == null || actioncontroller.Get(n.actionpackpresent).Length > 0) &&
-                                (n.actionpackpresentenabled == null || actioncontroller.Get(n.actionpackpresentenabled, true).Length > 0) &&
-                                (n.actionpackpresentdisabled == null || actioncontroller.Get(n.actionpackpresentdisabled, false).Length > 0) &&
-                                (n.actionpacknotpresent == null || actioncontroller.Get(n.actionpacknotpresent).Length == 0)
-                                )
+                                (vmax == null || curver <= vmax) && (vmin == null || curver >= vmin))
                         {
-                            if (n.EntryType == "Popup")
+                            // one of these must pass
+                            if ( n.AlwaysShow == true ||
+                                 (n.Conditions.TryGetValue("ConditionActionPackPresent", out string[] pp) && actioncontroller.Get(pp, null).Length > 0) ||
+                                 (n.Conditions.TryGetValue("ConditionActionPackNotPresent", out string[] np) && actioncontroller.Get(np, null).Length == 0) ||
+                                 (n.Conditions.TryGetValue("ConditionActionPackPresentEnabled", out string[] ep) && actioncontroller.Get(ep, true).Length > 0) ||
+                                 (n.Conditions.TryGetValue("ConditionActionPackPresentDisabled", out string[] dp) && actioncontroller.Get(dp, false).Length > 0) ||
+                                 (n.Conditions.TryGetValue("ConditionActionPackPresentEnabledOldVersion", out string[] ov) && ov.Length == 2 && actioncontroller.IsOlderEnabled(ov[0], ov[1]))
+                                 )
                             {
-                                if (!acklist.Contains(n.StartUTC.ToStringZulu()))
-                                    popupnotificationlist.Add(n);
-                            }
-                            else if (n.EntryType == "Log")
-                            {
-                                if (n.HighLight)
-                                    LogLineHighlight(p.Text);
-                                else
-                                    LogLine(p.Text);
-                            }
-                            else if (n.EntryType == "New")
-                            {
-                                extButtonNewFeature.Tag = n;
-                                bool read = UserDatabase.Instance.GetSettingString("NotificationLastNewFeature", "") == n.StartUTC.ToStringZulu();
-                                extButtonNewFeature.Image = read ? EDDiscovery.Icons.Controls.NewFeatureGreen : EDDiscovery.Icons.Controls.NewFeature;
-                                panelToolBar.SetVisibility(extButtonNewFeature, true);         // use the panel tool bar interface to set it visible, as the TB controls visibility itself
+                                if (n.EntryType == "Popup")
+                                {
+                                    if (!acklist.Contains(n.StartUTC.ToStringZulu()))
+                                        popupnotificationlist.Add(n);
+                                }
+                                else if (n.EntryType == "Log")
+                                {
+                                    if (n.HighLight)
+                                        LogLineHighlight(p.Text);
+                                    else
+                                        LogLine(p.Text);
+                                }
+                                else if (n.EntryType == "New")
+                                {
+                                    extButtonNewFeature.Tag = n;
+                                    bool read = UserDatabase.Instance.GetSettingString("NotificationLastNewFeature", "") == n.StartUTC.ToStringZulu();
+                                    extButtonNewFeature.Image = read ? EDDiscovery.Icons.Controls.NewFeatureGreen : EDDiscovery.Icons.Controls.NewFeature;
+                                    panelToolBar.SetVisibility(extButtonNewFeature, true);         // use the panel tool bar interface to set it visible, as the TB controls visibility itself
+                                }
                             }
                         }
-
                     }
 
                     ShowNotification(popupnotificationlist);
