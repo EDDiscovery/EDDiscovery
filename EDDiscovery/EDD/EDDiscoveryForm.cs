@@ -255,16 +255,18 @@ namespace EDDiscovery
             }
 #endif
 
-            bool found = BaseUtils.Translator.Instance.LoadTranslation(lang, 
-                    CultureInfo.CurrentUICulture, 
+            bool found = BaseUtils.Translator.Instance.LoadTranslation(lang,
+                    CultureInfo.CurrentUICulture,
                     EDDOptions.Instance.TranslatorFolders(),
-                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth, EDDOptions.Instance.AppDataDirectory, 
-                    loadorgenglish:debugtranslation,
-                    loadfile:debugtranslation,
-                    debugout:debugtranslation);
+                    EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth,
+                    debugtranslation ? EDDOptions.Instance.AppDataDirectory : null,
+                    debugtranslation
+                    );
 
             if (!found && !lang.Contains("Default", StringComparison.InvariantCultureIgnoreCase) && !lang.Contains("Auto", StringComparison.InvariantCultureIgnoreCase))
                 ExtendedControls.MessageBoxTheme.Show("Translation file disappeared - check your debugger -translationfolder settings!","Translation file");
+
+            //BaseUtils.Translator.Instance.WriteToFile(Path.Combine(@"c:\code", lang + ".tlx")); BaseUtils.Translator.Instance.ReadFromFile(Path.Combine(@"c:\code", lang + ".tlx"));
 
             BaseUtils.Translator.Instance.AddExcludedControls(new Type[]
             {   typeof(ExtendedControls.ExtComboBox), typeof(ExtendedControls.NumberBoxDouble),typeof(ExtendedControls.NumberBoxFloat),typeof(ExtendedControls.NumberBoxLong),
@@ -273,6 +275,7 @@ namespace EDDiscovery
                 typeof(ExtendedControls.MultiPipControl)});
 
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Initialise Item Data and components");
+            msg.Invoke("Loading Items");
 
             MaterialCommodityMicroResourceType.Initialise();     // lets statically fill the table way before anyone wants to access it
             ItemData.Initialise();                              // let the item data initialise
