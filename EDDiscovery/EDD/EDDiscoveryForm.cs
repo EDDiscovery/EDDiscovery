@@ -783,7 +783,8 @@ namespace EDDiscovery
                             {
                                 if (n.EntryType == "Popup")
                                 {
-                                    if (!acklist.Contains(n.StartUTC.ToStringZulu()))
+                                    string key = n.Key;
+                                    if (!acklist.Contains(key))
                                         popupnotificationlist.Add(n);
                                 }
                                 else if (n.EntryType == "Log")

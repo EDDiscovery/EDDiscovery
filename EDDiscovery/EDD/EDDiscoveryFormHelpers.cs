@@ -356,15 +356,15 @@ namespace EDDiscovery
                 {
                     Action<object> act = new Action<object>((o) =>      // on ack, update list of ack entries
                     {
-                        DateTime ackdate = (DateTime)o;
-                        System.Diagnostics.Debug.WriteLine("Ack to " + ackdate.ToStringZulu());
-                        EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("NotificationLastAckTime", EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime", "") + ackdate.ToStringZulu());
+                        string key = (string)o;
+                        System.Diagnostics.Debug.WriteLine($"Notifications User Ack to {key}");
+                        EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("NotificationLastAckTime", EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime", "") + "," + key);
                     });
 
                     ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
                     infoform.Info(p.Caption, this.Icon, p.Text, pointsize: popupnotificationlist[0].PointSize,
                             acknowledgeaction: act,
-                            acknowledgedata: popupnotificationlist[0].StartUTC, enableurls: true);
+                            acknowledgedata: popupnotificationlist[0].Key, enableurls: true);
                     infoform.LinkClicked += (e) => { BaseUtils.BrowserInfo.LaunchBrowser(e.LinkText); };
                     infoform.FormClosed += (s, e1) => { ShowNotification(popupnotificationlist); };     // chain to next, one at a time..
                     infoform.StartPosition = FormStartPosition.CenterParent;
