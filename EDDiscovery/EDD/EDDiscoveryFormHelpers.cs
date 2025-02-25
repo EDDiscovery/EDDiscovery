@@ -352,23 +352,31 @@ namespace EDDiscovery
             {
                 BaseUtils.Notifications.NotificationParas p = popupnotificationlist[0].Select(EDDConfig.Instance.Language);
 
-                Action<object> act = new Action<object>((o) =>      // on ack, update list of ack entries
+                if (p != null)      // make sure, double check, we have something
                 {
-                    DateTime ackdate = (DateTime)o;
-                    System.Diagnostics.Debug.WriteLine("Ack to " + ackdate.ToStringZulu());
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("NotificationLastAckTime", EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime", "") + ackdate.ToStringZulu());
-                });
+                    Action<object> act = new Action<object>((o) =>      // on ack, update list of ack entries
+                    {
+                        DateTime ackdate = (DateTime)o;
+                        System.Diagnostics.Debug.WriteLine("Ack to " + ackdate.ToStringZulu());
+                        EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("NotificationLastAckTime", EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime", "") + ackdate.ToStringZulu());
+                    });
 
-                ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
-                infoform.Info(p.Caption, this.Icon, p.Text, pointsize: popupnotificationlist[0].PointSize,
-                        acknowledgeaction: act,
-                        acknowledgedata: popupnotificationlist[0].StartUTC,enableurls:true);
-                infoform.LinkClicked += (e) => { BaseUtils.BrowserInfo.LaunchBrowser(e.LinkText); };
-                infoform.FormClosed += (s, e1) => { ShowNotification(popupnotificationlist); };     // chain to next, one at a time..
-                infoform.StartPosition = FormStartPosition.CenterParent;
+                    ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
+                    infoform.Info(p.Caption, this.Icon, p.Text, pointsize: popupnotificationlist[0].PointSize,
+                            acknowledgeaction: act,
+                            acknowledgedata: popupnotificationlist[0].StartUTC, enableurls: true);
+                    infoform.LinkClicked += (e) => { BaseUtils.BrowserInfo.LaunchBrowser(e.LinkText); };
+                    infoform.FormClosed += (s, e1) => { ShowNotification(popupnotificationlist); };     // chain to next, one at a time..
+                    infoform.StartPosition = FormStartPosition.CenterParent;
 
-                popupnotificationlist.RemoveAt(0);      // remove this one so it does not appear.
-                infoform.Show(this);
+                    popupnotificationlist.RemoveAt(0);      // remove this one so it does not appear again
+                    infoform.Show(this);
+                }
+                else
+                {
+                    popupnotificationlist.RemoveAt(0);          // remove this one so it does not appear again
+                    ShowNotification(popupnotificationlist);        // try next
+                }
             }
         }
 
