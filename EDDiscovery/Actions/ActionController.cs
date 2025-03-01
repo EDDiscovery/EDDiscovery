@@ -14,6 +14,7 @@
 
 using ActionLanguage;
 using BaseUtils;
+using BaseUtils.Win32Constants;
 using EliteDangerousCore;
 using QuickJSON;
 using System;
@@ -472,13 +473,17 @@ namespace EDDiscovery.Actions
                 var edversion = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionValues();
                 System.Diagnostics.Debug.Assert(edversion != null);
 
-                dmf.Init("EDDiscovery", manage, this.Icon, edversion,
-                                            approotfolder,
-                                            actfolder,
-                                            manage ? otherinstalledfilesfolder : null,      // only on manage!
-                                            EDDOptions.Instance.TempDirectory(),
-                                            EDDOptions.Instance.TempMoveDirectory(), Properties.Resources.URLGithubDataDownload,
-                                            EDDOptions.Instance.CheckGithubFiles);
+                Dictionary<string, string> installdeinstall = GetInstallDeinstallSettings(false);
+
+                dmf.Init("EDDiscovery", 
+                            manage, EDDOptions.Instance.CheckGithubFiles,
+                            this.Icon, edversion,
+                            approotfolder,
+                            actfolder,
+                            manage ? otherinstalledfilesfolder : null,      // only on manage!
+                            EDDOptions.Instance.TempDirectory(),
+                            Properties.Resources.URLGithubDataDownload,
+                            installdeinstall);
 
                 dmf.EditActionFile += Dmf_OnEditActionFile;     // only used when manage = false
                 dmf.EditGlobals += Dmf_OnEditGlobals;
@@ -495,7 +500,9 @@ namespace EDDiscovery.Actions
 
                 dmf.ShowDialog(DiscoveryForm);
 
-                if (dmf.ChangeList.Count > 0)
+                SetInstallDeinstallSettings(dmf.InstallDeinstallAtStartupList);
+
+                if (dmf.InstalledDeinstallNow.Count > 0)
                 {
                     actionrun?.TerminateAll();
                     AudioQueueSpeech?.StopAll();
@@ -505,26 +512,7 @@ namespace EDDiscovery.Actions
                     CreatePanelsFromActionFiles();
                     CheckWarn();
 
-                    string changes = "", updates="", removes="";
-                    foreach (KeyValuePair<string, string> kv in dmf.ChangeList)
-                    {
-                        if (kv.Value.Contains("+"))
-                        {
-                            changes += kv.Key + ";";
-                            if (kv.Value.Contains("++"))
-                                updates += kv.Key + ";";
-                        }
-
-                        if (kv.Value.Equals("-"))
-                        {
-                            DiscoveryForm.RemoveMenuItemsFromAddOns(kv.Key);
-                            removes += kv.Key + ";";
-                        }
-                    }
-
-                    ActionRun(ActionEventEDList.onInstall, null, new Variables(new string[] { "InstallList", changes, "UpdateList", updates, "RemoveList",removes }));
-
-                    ActionConfigureKeys();
+                    GenerateInstallDeinstallEvents(dmf.InstalledDeinstallNow);
 
                     changed = true;
                 }
@@ -533,10 +521,49 @@ namespace EDDiscovery.Actions
             return changed;
         }
 
+        // generate events related to install/deinstall of pack
+        public void GenerateInstallDeinstallEvents(Dictionary<string, string> dmf)
+        {
+            string changes = "", updates = "", removes = "";
+            foreach (KeyValuePair<string, string> kv in dmf)
+            {
+                if (kv.Value.Contains("+"))
+                {
+                    changes += kv.Key + ";";
+                    if (kv.Value.Contains("++"))
+                        updates += kv.Key + ";";
+                }
+
+                if (kv.Value.Equals("-"))
+                {
+                    DiscoveryForm.RemoveMenuItemsFromAddOns(kv.Key);
+                    removes += kv.Key + ";";
+                }
+            }
+
+            ActionRun(ActionEventEDList.onInstall, null, new Variables(new string[] { "InstallList", changes, "UpdateList", updates, "RemoveList", removes }));
+            ActionConfigureKeys();
+        }
+
         private bool Dmf_checkActionLoaded(string name)
         {
             ActionFile f = actionfiles.Get(name);
             return f != null;
+        }
+
+        public static Dictionary<string, string> GetInstallDeinstallSettings(bool clearit)
+        {
+            var ret = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ActionInstallDeinstall", "")
+                                         .SplitNoEmptyStartFinish(';').ToDictionary(key => key.Substring(0, key.IndexOf('=')), value => value.Substring(value.IndexOf('=') + 1));
+            if (clearit)
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ActionInstallDeinstall", "");
+
+            return ret;
+        }
+        private static void SetInstallDeinstallSettings(Dictionary<string, string> var)
+        {
+            string id = string.Join(";", var.Select(x => x.Key + "=" + x.Value).ToArray());
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ActionInstallDeinstall", id);
         }
 
         #endregion

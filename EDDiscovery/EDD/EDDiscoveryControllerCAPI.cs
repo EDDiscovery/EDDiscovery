@@ -108,11 +108,14 @@ namespace EDDiscovery
                                     });
                                 }
 
-                                var ships = sh.GetPurchasableShips();                       // if not there, both return empty lists now
-                                var unobtainableships = sh.GetUnobtainableShips();    
-                                ships.AddRange(unobtainableships);
+                                var ships = sh.GetPurchasableShips();                       // if not there, may be null
+                                var unobtainableships = sh.GetUnobtainableShips();          // if not there, may be null
+                                if (ships == null)
+                                    ships = unobtainableships;
+                                else if (unobtainableships != null)
+                                    ships.AddRange(unobtainableships);
 
-                                if ( ships.Count>0 && allowcobramkiv.HasValue)              // if we have ships.. and we know the state of the allowcobramk4 flag..
+                                if (ships?.Count > 0 && allowcobramkiv.HasValue)              // if we have ships.. and we know the state of the allowcobramk4 flag..
                                 {
                                     var list = ships.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLowerInvariant(), x.BaseValue)).ToArray();
 

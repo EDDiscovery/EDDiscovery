@@ -133,7 +133,6 @@ namespace EDDiscovery
         public string HelpDirectory() { return SubAppDirectory("Help"); }
         public string CAPIDirectory() { return SubAppDirectory("CAPI"); }
         public string TempDirectory() { return SubAppDirectory("Temp"); }
-        public string TempMoveDirectory() { return SubAppDirectory("MoveFolder"); }
         public string WebView2ProfileDirectory() { return SubAppDirectory("WebView2"); }
         public string TranslatorDirectory() { return translationfolder; }
         public int TranslatorDirectoryIncludeSearchUpDepth { get; private set; }

@@ -12,6 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
+using ActionLanguage.Manager;
 using EDDiscovery.Forms;
 using ExtendedControls;
 using System;
@@ -68,9 +69,9 @@ namespace EDDiscovery.UserControls
             Bitmap selback = (Bitmap)(brigthness < 0.3 ? EDDiscovery.Icons.Controls.Selector : EDDiscovery.Icons.Controls.Selector2);
 
             {
-                ActionLanguage.Manager.VersioningManager mgr = ActionLanguage.Manager.AddOnManagerForm.CreateVersionManager(EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.ActionsAppDirectory(), null, false);
-
-                int i = mgr.DownloadItems.Count;
+                GitActionFiles gh = new GitActionFiles(EDDOptions.Instance.AppDataDirectory);
+                gh.ReadLocalFolder(EDDOptions.Instance.ActionsAppDirectory(), gh.ActionFileWildCard,"ActionFiles");
+                int i = gh.VersioningManager.DownloadItems.Count;
 
                 CompositeAutoScaleButton cb = CompositeAutoScaleButton.QuickInit(
                             selback,

@@ -12,6 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
+using ActionLanguage.Manager;
 using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
@@ -114,6 +115,8 @@ namespace EDDiscovery
         private AudioExtensions.SpeechSynthesizer speechsynth;
 
         private BindingsFile frontierbindings;
+
+        private Dictionary<string, string> installdeinstallsettings;       
 
         #endregion
 
@@ -400,41 +403,37 @@ namespace EDDiscovery
 
             // ---------------------------------------------------------------- Finish up any installing/deleting which failed during the upgrade process because the files were in use
 
-            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Install/remove previous files");
+            installdeinstallsettings = EDDiscovery.Actions.ActionController.GetInstallDeinstallSettings(true);
 
+            if ( installdeinstallsettings.Count> 0 )
             {
-                List<string> alloweddllslist = EDDConfig.Instance.DLLPermissions.Split(",").ToList();
+                // we need to make up the same structures as used in add on manager so we know what to do
+                GitActionFiles gaf = new GitActionFiles(EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.TempDirectory());
+                gaf.ReadLocalFolder(EDDOptions.Instance.ActionsAppDirectory(), gaf.ActionFileWildCard, "Action Files");
+                gaf.ReadDownloadedFolder(Properties.Resources.URLGithubDataDownload, System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionValues(), "EDDiscovery");
 
-                FileInfo[] allFiles = Directory.EnumerateFiles(EDDOptions.Instance.TempMoveDirectory(), "*.txt", SearchOption.TopDirectoryOnly).Select(f => new FileInfo(f)).OrderBy(p => p.Name).ToArray();
-
-                foreach (FileInfo f in allFiles)
+                foreach (var install in installdeinstallsettings)
                 {
-                    string cmd = BaseUtils.FileHelpers.TryReadAllTextFromFile(f.FullName);
-                    if ( cmd != null )
+                    DownloadItem di = gaf.VersioningManager.Find(install.Key);
+                    if (di != null)
                     {
-                        if (cmd.StartsWith("Delete:"))
+                        if (install.Value == "-")
                         {
-                            string d = cmd.Substring(7);
-                            int i = alloweddllslist.ContainsIn(d, StringComparison.InvariantCultureIgnoreCase);
-                            if (i >= 0)
-                                alloweddllslist.RemoveAt(i);
-                            EDDConfig.Instance.DLLPermissions = String.Join(",", alloweddllslist);
-                            BaseUtils.FileHelpers.DeleteFileNoError(d);
+                            msg.Invoke("Removing Action Pack " + di.ItemName);
+                            di.DeleteInstall(this, EDDOptions.Instance.AppDataDirectory);
                         }
-                        else if (cmd.StartsWith("Copy:"))
+                        else
                         {
-                            string s = cmd.Substring(5, cmd.IndexOf(":To:",5) - 5);
-                            string d = cmd.Substring(cmd.IndexOf(":To:") + 4);
-                            if (!BaseUtils.FileHelpers.TryCopy(s, d, true))
-                                System.Diagnostics.Debug.WriteLine("Can't copy over on startup" + d);
-                            BaseUtils.FileHelpers.DeleteFileNoError(s);
+                            msg.Invoke("Installing Action Pack " + di.ItemName);
+                            di.DeleteLocalInstallRemote(this, new System.Threading.CancellationToken(), Properties.Resources.URLGithubDataDownload, EDDOptions.Instance.AppDataDirectory);
                         }
-                        BaseUtils.FileHelpers.DeleteFileNoError(f.FullName);
                     }
+                    else
+                        System.Diagnostics.Trace.WriteLine($"Install error - can't find asked install package {install.Key}");
                 }
             }
 
-            // ---------------------------------------------------------------- Event hook
+             // ---------------------------------------------------------------- Event hook
 
             EliteDangerousCore.EDSM.EDSMJournalSync.SentEvents = (count,list) =>              // Sync thread finishing, transfers to this thread, then runs the callback and the action..
             {
@@ -680,6 +679,8 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.NoWindowReposition == false)
                 PopOuts.LoadSavedPopouts();  //moved from initial load so we don't open these before we can draw them properly
+
+            actioncontroller.GenerateInstallDeinstallEvents(installdeinstallsettings);      // generate any install/deinstall events first, before starting
 
             actioncontroller.onStartup();
 
