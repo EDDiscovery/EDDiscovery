@@ -747,7 +747,7 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" = UserControlScan.Belt
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Ringe"
 .materialsToolStripMenuItem: "Show materials" => "Materialien"
-.extButtonHighValue.ToolTip: "Set High Value Limit" => "Setze Limit für 'hoher Wert'"
+.extButtonHighValue.ToolTip: "Set High Value Limit" = UserControlScan.extButtonHighValue.ToolTip
 
 SECTION UserControlSettings
 
