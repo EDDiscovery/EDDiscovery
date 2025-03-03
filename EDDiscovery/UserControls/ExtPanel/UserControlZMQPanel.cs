@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2022-2022 EDDiscovery development team
+ * Copyright © 2024-2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -11,10 +11,6 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
-
-/*
- * 
-*/
 
 using BaseUtils;
 using EliteDangerousCore;
@@ -168,6 +164,7 @@ namespace EDDiscovery.UserControls
 
             JObject pythonconfig = config["Python"].Object();       // are we running a python program
             string startpyfile = pythonconfig?["Start"].StrNull();
+            string pythonversion = pythonconfig["Version"].StrNull();     // see if forced version, may be null which means no force
 
             if (pythonconfig != null )      // if its a python launch
             {
@@ -199,7 +196,7 @@ namespace EDDiscovery.UserControls
 
                                 File.WriteAllText(modulecheckfile, script);
 
-                                var output = (Tuple<string, string>)BaseUtils.PythonLaunch.PyExeLaunch(modulecheckfile, "", pluginfolder, null, true);
+                                var output = (Tuple<string, string>)BaseUtils.PythonLaunch.PyExeLaunch(modulecheckfile, "", pluginfolder, null, true, false, pythonversion);
 
                                 if (output != null)
                                 {
@@ -258,7 +255,7 @@ namespace EDDiscovery.UserControls
                             {
                                 bool createnowindow = pythonconfig["CreateNoWindow"].Bool(false);
 
-                                exeprocess = (System.Diagnostics.Process)BaseUtils.PythonLaunch.PyExeLaunch(startpyfile, $"{socketnumber.ToStringInvariant()} {DisplayNumber}", pluginfolder, null, false, createnowindow);
+                                exeprocess = (System.Diagnostics.Process)BaseUtils.PythonLaunch.PyExeLaunch(startpyfile, $"{socketnumber.ToStringInvariant()} {DisplayNumber}", pluginfolder, null, false, createnowindow, pythonversion);
 
                                 if (exeprocess == null)
                                 {
@@ -268,7 +265,7 @@ namespace EDDiscovery.UserControls
                                 else
                                 {
                                     EDDOptions.Instance.ZMQPort++;      // python launched, next window gets another port number
-                                    Log("Running plugin, awaiting connection");
+                                    Log($"Running plugin on port {socketnumber}, awaiting connection");
                                 }
                             }
                             else
@@ -1304,9 +1301,11 @@ namespace EDDiscovery.UserControls
             {
                 string modulecheckfile = Path.Combine(pluginfolder, pythonconfig["ModulesCheck"].Str());
 
+                string version = pythonconfig["Version"].StrNull();     // see if forced version, may be null which means no force
+
                 // launch the check file.. this also checked py.exe is available
 
-                var output = (Tuple<string, string>)BaseUtils.PythonLaunch.PyExeLaunch(modulecheckfile, "", pluginfolder, null, true, true);
+                var output = (Tuple<string, string>)BaseUtils.PythonLaunch.PyExeLaunch(modulecheckfile, "", pluginfolder, null, true, true, version);
 
                 if (output == null)
                 {

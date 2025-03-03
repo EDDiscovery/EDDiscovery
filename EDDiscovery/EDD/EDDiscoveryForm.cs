@@ -420,12 +420,12 @@ namespace EDDiscovery
                         if (install.Value == "-")
                         {
                             msg.Invoke("Removing Action Pack " + di.ItemName);
-                            di.DeleteInstall(this, EDDOptions.Instance.AppDataDirectory);
+                            di.Remove(this, EDDOptions.Instance.AppDataDirectory);
                         }
                         else
                         {
                             msg.Invoke("Installing Action Pack " + di.ItemName);
-                            di.DeleteLocalInstallRemote(this, new System.Threading.CancellationToken(), Properties.Resources.URLGithubDataDownload, EDDOptions.Instance.AppDataDirectory);
+                            di.Install(this, new System.Threading.CancellationToken(), Properties.Resources.URLGithubDataDownload, EDDOptions.Instance.AppDataDirectory);
                         }
                     }
                     else
@@ -467,7 +467,7 @@ namespace EDDiscovery
 
             msg.Invoke("Loading Extension DLLs");
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF DLL setup");
-
+            
             DLLStart();
 
             //----------------------------------------------------------------- Action controller (moved here oct 24 to have panels created before load)
