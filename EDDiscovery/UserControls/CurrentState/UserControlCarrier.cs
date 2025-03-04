@@ -721,7 +721,15 @@ namespace EDDiscovery.UserControls
                 int hpos = hspacing + (int)BaseUtils.BitMapHelpers.MeasureStringInBitmap(cs.CurrentPositionText, bigfont).Width + hspacing;
 
                 var timetogo = cs.TimeTillJump;
-                string jumptext = cs.NextDestinationText + " " + (timetogo.TotalSeconds > 0 ? timetogo.ToString(@"mm\:ss") : "Jumping".TxID(EDTx.UserControlCarrier_Jumping));
+                string jumptext = cs.NextDestinationText + " ";
+                if (timetogo.TotalSeconds > 0)
+                {
+                    var mins = timetogo.TotalMinutes;       // a double
+                    var second = ((int)(mins * 60)) % 60;
+                    jumptext += ((int)mins).ToString() + ":" + second.ToString("00");
+                }
+                else
+                    jumptext += "Jumping".TxID(EDTx.UserControlCarrier_Jumping);
 
                 imageControlOverall.DrawImage(global::EDDiscovery.Icons.Controls.ArrowsRight, new Rectangle(hpos, vpos, 48, 24), bitmap:1);
                 hpos += 48;
