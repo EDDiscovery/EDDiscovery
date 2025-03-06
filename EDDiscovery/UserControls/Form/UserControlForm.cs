@@ -134,10 +134,13 @@ namespace EDDiscovery.UserControls
 
         public void SetTopMost(bool t)
         {
-            TopMost = t;        // this calls Win32.SetWindowPos, which then plays with the actual topmost bit in windows extended style
-                                // and loses the transparency bit!  So therefore
+            if ( TopMost != t )
+            { 
+                TopMost = t;        // this calls Win32.SetWindowPos, which then plays with the actual topmost bit in windows extended style
+                                    // and loses the transparency bit!  So therefore
+                UpdateTransparency();   // need to reestablish correct transparency again
+            }
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "TopMost", TopMost);
-            UpdateTransparency();   // need to reestablish correct transparency again
         }
 
         private void SaveTopMost(SmartSysMenuForm sys)
@@ -312,6 +315,7 @@ namespace EDDiscovery.UserControls
             else
                 extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.NotTransparent;
 
+            extButtonDrawnTransparentMode.Visible = IsTransparencySupported;
             extButtonDrawnTaskBarIcon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar : ExtendedControls.ExtButtonDrawn.ImageType.WindowNotInTaskBar;
             extButtonDrawnShowTitle.ImageSelected = DisplayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
             extButtonDrawnOnTop.ImageSelected = TopMost ? ExtendedControls.ExtButtonDrawn.ImageType.OnTop : ExtendedControls.ExtButtonDrawn.ImageType.Floating;

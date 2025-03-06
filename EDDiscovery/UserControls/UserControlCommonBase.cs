@@ -59,6 +59,12 @@ namespace EDDiscovery.UserControls
         // this means the transparent mode is on, not that its currently transparent. SetTransparency tells you that.
         public bool IsTransparentModeOn => (this.Parent is UserControlForm) ? ((UserControlForm)(this.Parent)).IsTransparentModeOn : false;
 
+        // this gives you the transparent mode
+        public UserControlForm.TransparencyMode TransparentMode => (this.Parent is UserControlForm) ? ((UserControlForm)(this.Parent)).TransparentMode : UserControlForm.TransparencyMode.Off;
+
+        // this gives you the transparent key colour
+        public Color TransparentKey => (this.Parent is UserControlForm) ? ((UserControlForm)(this.Parent)).TransparencyKey : Color.Transparent;
+
         public virtual string HelpKeyOrAddress() { return PanelID.ToString(); }     // default help key is panel id as a string - override to specialise
 
         #endregion
@@ -96,7 +102,7 @@ namespace EDDiscovery.UserControls
         // everytime the transparency changes (due to user hovering etc) SetTransparency is called
         public virtual void SetTransparency(bool ison, Color curcol) { }
 
-        // TransparentModeChange is called on startup, and only then if the user changes the transparent major mode on/off
+        // For popout forms, on init, TransparentModeChange is called. Then called only then if the user changes the transparent major mode on/off
         public virtual void TransparencyModeChanged(bool on) { }
 
         // then LoadLayout, InitialDisplay is called

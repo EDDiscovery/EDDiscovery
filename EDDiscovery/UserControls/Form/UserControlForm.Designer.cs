@@ -219,7 +219,7 @@ namespace EDDiscovery.UserControls
             // 
             this.statusStripBottom.Location = new System.Drawing.Point(0, 145);
             this.statusStripBottom.Name = "statusStripBottom";
-            this.statusStripBottom.Size = new System.Drawing.Size(1655, 22);
+            this.statusStripBottom.Size = new System.Drawing.Size(1226, 22);
             this.statusStripBottom.TabIndex = 26;
             // 
             // panelControls
@@ -232,7 +232,7 @@ namespace EDDiscovery.UserControls
             this.panelControls.Controls.Add(this.extButtonDrawnHelp);
             this.panelControls.Controls.Add(this.extButtonDrawnTransparentMode);
             this.panelControls.Controls.Add(this.extButtonDrawnClose);
-            this.panelControls.Location = new System.Drawing.Point(1477, 0);
+            this.panelControls.Location = new System.Drawing.Point(1048, 0);
             this.panelControls.Name = "panelControls";
             this.panelControls.Size = new System.Drawing.Size(175, 22);
             this.panelControls.TabIndex = 27;
@@ -293,7 +293,7 @@ namespace EDDiscovery.UserControls
             this.extPanelResizerTop.Location = new System.Drawing.Point(0, 0);
             this.extPanelResizerTop.Movement = System.Windows.Forms.DockStyle.Top;
             this.extPanelResizerTop.Name = "extPanelResizerTop";
-            this.extPanelResizerTop.Size = new System.Drawing.Size(1655, 3);
+            this.extPanelResizerTop.Size = new System.Drawing.Size(1226, 3);
             this.extPanelResizerTop.TabIndex = 28;
             // 
             // panelTitleControlText
@@ -315,14 +315,14 @@ namespace EDDiscovery.UserControls
             this.panelTopArea.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTopArea.Location = new System.Drawing.Point(0, 3);
             this.panelTopArea.Name = "panelTopArea";
-            this.panelTopArea.Size = new System.Drawing.Size(1655, 25);
+            this.panelTopArea.Size = new System.Drawing.Size(1226, 25);
             this.panelTopArea.TabIndex = 30;
             // 
             // UserControlForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1655, 167);
+            this.ClientSize = new System.Drawing.Size(1226, 167);
             this.Controls.Add(this.panelTopArea);
             this.Controls.Add(this.statusStripBottom);
             this.Controls.Add(this.extPanelResizerTop);

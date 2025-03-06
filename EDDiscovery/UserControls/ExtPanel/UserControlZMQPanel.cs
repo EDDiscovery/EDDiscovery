@@ -102,12 +102,14 @@ namespace EDDiscovery.UserControls
         // gets called before load layout, will need to keep track for initial display
         public override void SetTransparency(bool ison, Color curcol)
         {
+            System.Diagnostics.Debug.WriteLine($"ZMQ Panel transparency changed {ison} {curcol}");
         }
-        
+
         // When the user changes mode
         public override void TransparencyModeChanged(bool on) 
-        { 
-        }  
+        {
+            System.Diagnostics.Debug.WriteLine($"ZMQ Panel transparency mode changed {on}");
+        }
 
         // Action UI layout is done AFTER init as themeing is done between init and SetTransparency/LoadLayout
         // the UC sizes and themes itself
@@ -154,7 +156,7 @@ namespace EDDiscovery.UserControls
             configurableUC.Themed();                // this completes theming
         }
 
-        // On Initial display, start up the python system
+        // On Initial display, start up the ZMQ system
         public override void InitialDisplay()
         {
             if (!configgood) // abort in bad situation
