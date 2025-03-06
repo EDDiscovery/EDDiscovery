@@ -96,21 +96,10 @@ namespace EDDiscovery.UserControls
 
         }
 
+        // from config file
         public override bool SupportTransparency { get { return config["Panel"].I("SupportTransparency").Bool(false); } } 
         public override bool DefaultTransparent { get { return config["Panel"].I("DefaultTransparent").Bool(false);} }
         
-        // gets called before load layout, will need to keep track for initial display
-        public override void SetTransparency(bool ison, Color curcol)
-        {
-            System.Diagnostics.Debug.WriteLine($"ZMQ Panel transparency changed {ison} {curcol}");
-        }
-
-        // When the user changes mode
-        public override void TransparencyModeChanged(bool on) 
-        {
-            System.Diagnostics.Debug.WriteLine($"ZMQ Panel transparency mode changed {on}");
-        }
-
         // Action UI layout is done AFTER init as themeing is done between init and SetTransparency/LoadLayout
         // the UC sizes and themes itself
         public override void LoadLayout()
@@ -357,6 +346,43 @@ namespace EDDiscovery.UserControls
             configgood = false;
         }
 
+        // gets called before load layout, so ignore until running, called when moves from transparent or back
+        public override void SetTransparency(bool ison, Color curcol)
+        {
+            if (Running)
+            {
+                JObject reply = new JObject
+                {
+                    ["responsetype"] = "settransparency",
+                    ["transparencymode"] = TransparentMode.ToString(),
+                    ["istransparent"] = ison,
+                    ["currentbackground"] = System.Drawing.ColorTranslator.ToHtml(curcol)
+                };
+
+                System.Diagnostics.Debug.WriteLine($"ZMQ Panel transparency changed {ison} {curcol}");
+
+                zmqconnection.Send(reply);
+            }
+        }
+
+        // gets called before load layout, so ignore until running, called when user changes mode from on->off->on
+        public override void TransparencyModeChanged(bool on)
+        {
+            if (Running)
+            {
+                JObject reply = new JObject
+                {
+                    ["responsetype"] = "transparencymodechanged",
+                    ["transparencymode"] = TransparentMode.ToString(),
+                    ["istransparent"] = on,
+                };
+
+                System.Diagnostics.Debug.WriteLine($"ZMQ Panel transparency mode changed {on}");
+                zmqconnection.Send(reply);
+            }
+        }
+
+
         #endregion
 
         #region From client
@@ -394,6 +420,9 @@ namespace EDDiscovery.UserControls
                                 ["historylength"] = DiscoveryForm.History.Count,
                                 ["commander"] = commander,
                                 ["config"] = GetSetting("Config", ""),
+                                ["transparencymode"] = TransparentMode.ToString(),
+                                ["istransparent"] = IsCurrentlyTransparent,
+                                ["transparencycolorkey"] = System.Drawing.ColorTranslator.ToHtml(TransparentKey)
                             };
 
                             exitreceived = false;
@@ -653,16 +682,17 @@ namespace EDDiscovery.UserControls
                         }
                         break;
 
-                    case "shipyardoutfitting":
+                    case "stationshipyardoutfitting":
                         {
-                            string yard = json["yard"].StrNull();
+                            string station = json["station"].StrNull();
+                            var sy = station != null ? hl.Shipyards.Get(station) : null;
+                            var of = station != null ? hl.Outfitting.Get(station) : null;
                             JObject reply = new JObject
                             {
                                 ["responsetype"] = request,
-                                ["yard"] = yard,
-//tbd
-                                ["shipyard"] = null,
-                                ["outfitting"] = null,
+                                ["station"] = station,
+                                ["shipyard"] = sy == null ? null : JToken.FromObject(sy, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+                                ["outfitting"] = of == null ? null : JToken.FromObject(of, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
                             zmqconnection.Send(reply);

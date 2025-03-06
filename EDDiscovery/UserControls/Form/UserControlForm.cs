@@ -27,9 +27,10 @@ namespace EDDiscovery.UserControls
 
         public enum TransparencyMode { Off, On, OnClickThru, OnFullyTransparent };
 
+        public bool IsCurrentlyTransparent {  get { return IsTransparentModeOn && !inpanelshow; } }
+
         public bool IsTransparencySupported { get { return UserControl?.SupportTransparency ?? false; } }
         public TransparencyMode TransparentMode { get; private set; } = TransparencyMode.Off;
-        //public Color TransparencyColorKey { get; private set; }  = Color.Transparent;     // if required, the control could modify this during its Init
         public bool IsTransparentModeOn { get { return TransparentMode != TransparencyMode.Off; } }
         public bool IsClickThruOn { get { return TransparentMode == TransparencyMode.OnClickThru || TransparentMode == TransparencyMode.OnFullyTransparent; } }
 
@@ -109,7 +110,7 @@ namespace EDDiscovery.UserControls
                 TransparentMode = t;
                 EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DBRefName + "Transparent", (int)TransparentMode);
 
-                UpdateTransparency();
+                UpdateTransparencyControls();
 
                 if (lasttransparentmodereported != IsTransparentModeOn)     // if we changed major mode, inform the panel so it can redraw 
                 {
@@ -123,7 +124,7 @@ namespace EDDiscovery.UserControls
         {
             DisplayTitle = t;
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "ShowTitle", DisplayTitle);
-            UpdateTransparency();
+            UpdateTransparencyControls();
             UserControl.onControlTextVisibilityChanged(DisplayTitle);            
         }
 
@@ -138,7 +139,7 @@ namespace EDDiscovery.UserControls
             { 
                 TopMost = t;        // this calls Win32.SetWindowPos, which then plays with the actual topmost bit in windows extended style
                                     // and loses the transparency bit!  So therefore
-                UpdateTransparency();   // need to reestablish correct transparency again
+                UpdateTransparencyControls();   // need to reestablish correct transparency again
             }
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "TopMost", TopMost);
         }
@@ -152,7 +153,7 @@ namespace EDDiscovery.UserControls
         {
             this.ShowInTaskbar = t;
             EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "Taskbar", t);
-            UpdateTransparency();   // redraw
+            UpdateTransparencyControls();   // redraw
         }
 
         public UserControlCommonBase FindUserControl(Type c)
@@ -182,14 +183,14 @@ namespace EDDiscovery.UserControls
         {
             Font = Theme.Current.GetFont;
             ExtendedControls.Theme.Current.ApplyStd(UserControl);
-            UpdateTransparency();
+            UpdateTransparencyControls();
         }
 
 
         protected override void OnLoad(EventArgs e)
         {
             base.OnLoad(e);
-            UpdateTransparency();
+            UpdateTransparencyControls();
 
         }
 
@@ -274,16 +275,15 @@ namespace EDDiscovery.UserControls
 
         #region Transparency control
 
-        private void UpdateTransparency()
+        private void UpdateTransparencyControls()
         {
             bool wantawindowsborder = Theme.Current.WindowsFrame;
-            bool istransparent = IsTransparentModeOn && !inpanelshow;    // do we want to be transparent.. mode is on and not in panel show
-            bool showwindowsborder = wantawindowsborder && !istransparent;
+            bool showwindowsborder = wantawindowsborder && !IsCurrentlyTransparent;
             bool showcontrols = inpanelshow && !wantawindowsborder;
             bool showourtitle = DisplayTitle || showcontrols;
             bool showstatusbar = !wantawindowsborder && inpanelshow;
 
-            //System.Diagnostics.Debug.WriteLine($"UCF UpdateTranparency wb:{wantawindowsborder} istr:{istransparent} showwb:{showwindowsborder} showc:{showcontrols} showtitle:{showourtitle} showsb:{showstatusbar}");
+            System.Diagnostics.Debug.WriteLine($"UCF UpdateTranparency wb:{wantawindowsborder} istr:{IsCurrentlyTransparent} showwb:{showwindowsborder} showc:{showcontrols} showtitle:{showourtitle} showsb:{showstatusbar}");
 
             FormBorderStyle = showwindowsborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
 
@@ -294,7 +294,7 @@ namespace EDDiscovery.UserControls
             statusStripBottom.Visible = showstatusbar;
 
             this.TransparencyKey = Theme.Current.TransparentColorKey;
-            Color curbackground = (istransparent) ? TransparencyKey : Theme.Current.Form;
+            Color curbackground = IsCurrentlyTransparent ? TransparencyKey : Theme.Current.Form;
 
             //System.Diagnostics.Debug.WriteLine($".. bc:{curbackground}");
 
@@ -304,7 +304,7 @@ namespace EDDiscovery.UserControls
                     extButtonDrawnMinimize.BackColor = extButtonDrawnOnTop.BackColor = extButtonDrawnShowTitle.BackColor = extButtonDrawnHelp.BackColor =
                     panelControls.BackColor = panelTitleControlText.BackColor = panelTopArea.BackColor = curbackground;
 
-            label_title.ForeColor = labelControlText.ForeColor = istransparent ? Theme.Current.SPanelColor : Theme.Current.LabelColor;
+            label_title.ForeColor = labelControlText.ForeColor = IsCurrentlyTransparent ? Theme.Current.SPanelColor : Theme.Current.LabelColor;
 
             if (TransparentMode == TransparencyMode.On)
                 extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
@@ -314,20 +314,24 @@ namespace EDDiscovery.UserControls
                 extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.FullyTransparent;
             else
                 extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.NotTransparent;
-
+            
             extButtonDrawnTransparentMode.Visible = IsTransparencySupported;
             extButtonDrawnTaskBarIcon.ImageSelected = this.ShowInTaskbar ? ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar : ExtendedControls.ExtButtonDrawn.ImageType.WindowNotInTaskBar;
             extButtonDrawnShowTitle.ImageSelected = DisplayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
             extButtonDrawnOnTop.ImageSelected = TopMost ? ExtendedControls.ExtButtonDrawn.ImageType.OnTop : ExtendedControls.ExtButtonDrawn.ImageType.Floating;
 
-            UserControl.SetTransparency(istransparent, curbackground);     // tell the UCCB about the current state
+            if (lasttransparentstatereported != IsCurrentlyTransparent)                  // only bother the UCCB if we actually changed stuff
+            {
+                UserControl?.SetTransparency(IsCurrentlyTransparent, curbackground);     // tell the UCCB about the current state
+                lasttransparentstatereported = IsCurrentlyTransparent;
+            }
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
                 // if in transparent click thru, we set transparent style.. else clear it.
                 BaseUtils.Win32.UnsafeNativeMethods.ChangeWindowLong(this.Handle, BaseUtils.Win32.UnsafeNativeMethods.GWL.ExStyle,
                                     BaseUtils.Win32Constants.WS_EX.TRANSPARENT,
-                                    istransparent && TransparentMode == TransparencyMode.OnFullyTransparent ? BaseUtils.Win32Constants.WS_EX.TRANSPARENT : 0);
+                                    IsCurrentlyTransparent && TransparentMode == TransparencyMode.OnFullyTransparent ? BaseUtils.Win32Constants.WS_EX.TRANSPARENT : 0);
             }
 
             // if we don't have a windows border, or we do but transparent mode is on (meaning the border will disappear when mouse is away)
@@ -420,8 +424,8 @@ namespace EDDiscovery.UserControls
                         else
                             inpanelshow = true;
 
-                        if (inpanelshow)
-                            UpdateTransparency();
+                        if ( inpanelshow)     // if in panel show now, and was transparent, change its mode
+                            UpdateTransparencyControls();
                     }
 
                 }
@@ -432,7 +436,7 @@ namespace EDDiscovery.UserControls
                     if (inpanelshow)
                     {
                         inpanelshow = false;
-                        UpdateTransparency();
+                        UpdateTransparencyControls();
                     }
                 }
             }
@@ -501,10 +505,11 @@ namespace EDDiscovery.UserControls
         }
 
         private bool inpanelshow = false;       // if we are in a panel show when we were transparent
+        private bool? lasttransparentstatereported = null;    // we reported this via SetTransparency
+        private bool lasttransparentmodereported;   // what we have reported for the mode change to minimise TransparencyModeChanged
 
         private Timer checkmousepositiontimer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms
         private bool deftopmost;
-        private bool lasttransparentmodereported;
 
         private DirectInputDevices.InputDeviceKeyboard idk;     // used to sniff in transparency mode
 

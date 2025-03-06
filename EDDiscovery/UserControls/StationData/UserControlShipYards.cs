@@ -94,7 +94,7 @@ namespace EDDiscovery.UserControls
             comboBoxYards.Items.Clear();
             comboBoxYards.Items.Add(the);
 
-            comboBoxYards.Items.AddRange(shm.ShipList());
+            comboBoxYards.Items.AddRange(shm.ShipListDistinctSorted());
 
             var list = (from ShipYard x in shm.GetFilteredList() select x.Ident()).ToList();        // yard list repeats allowed within timescale
             comboBoxYards.Items.AddRange(list);

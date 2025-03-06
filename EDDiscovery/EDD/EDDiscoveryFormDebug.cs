@@ -29,6 +29,8 @@ namespace EDDiscovery
         {
             EngineeringUnitTest.UnitTest();
             //EngineeringUnitTest.ScanLoadouts();
+
+            System.Drawing.Color s = "#22202324".ColorFromNameOrValues();
         }
 
         public void PostInitDebug()

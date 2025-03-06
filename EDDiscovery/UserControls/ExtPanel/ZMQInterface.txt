@@ -6,12 +6,14 @@ client requesttype = "start"
     			version = "x.y.z.b" - version of the plugin
     			apiversion = N - what version you were written to
        server responsetype = "start"
-              eddversion = "x.y.z.b"
-              apiversion = 1
+                eddversion = "x.y.z.b"
+                apiversion = 1
     			historylength = X number of history entries currently loaded, may be zero if history not loaded yet.
     			commander = commander name, may be None is history not loaded loaded yet.
     			config = config string (this code uses JSON) to configure tool with.
     					If no config has been set (empty string) edd.py will set edd.Config to an empty dict()
+                transparencymode = Off, On, OnClickThru, OnFullyTransparent
+                transparencycolorkey = HTML color key of transparent background color
 
 client requesttype = "exit"	: Sent by client either because it wants to exit, or the server asked for a termination
     			reason = "string" : Reason for exit.  Empty string or reason for error
@@ -126,8 +128,15 @@ client requesttype = "shipyards" - request all shipyards
     						And AllowCobraMkIV (true,false,None if unknown)
 
 client requesttype = "outfitting" - request all outfitting
-    	server responsetype = q
+    	server responsetype = requesttype
     			outfitting = ship yard list, see https://github.com/EDDiscovery/EliteDangerousCore/blob/63c95a00a8745860cf0bbb46566ad8b7c0349327/EliteDangerous/Stats/Outfitting.cs
+
+client requesttype = "stationshipyardoutfitting" - request all shipyard/outfitting about a station
+    	        station = station name, case insensitive
+    	server responsetype = requesttype
+                station = as above
+                yard = json of yard, see https://github.com/EDDiscovery/EliteDangerousCore/blob/63c95a00a8745860cf0bbb46566ad8b7c0349327/EliteDangerous/Ships/ShipYard.cs
+                outfitting = json of outfitting, see https://github.com/EDDiscovery/EliteDangerousCore/blob/63c95a00a8745860cf0bbb46566ad8b7c0349327/EliteDangerous/Stats/Outfitting.cs
 
 client requesttype = "scandata" - request scan data about system
     			system = system name
@@ -171,6 +180,15 @@ client requesttype = "showlog"	- show the log screen of the user control panel -
     			no server response
 
 ############################################################################################### PUSHES FROM EDD
+
+push server responsetype = "settransparency"		- EDD transparency has changed, apply
+    			transparencymode = see Start
+                istransparent = true/false
+                currentbackground = background to set color to, HTML #FFFFFF format
+
+push server responsetype = "transparencymodechanged"		- User has changed transparency mode, maybe repaint
+    			transparencymode = see Start
+                istransparent = true/false
 
 push server responsetype = "terminate"
     			No parameters, please quit - client sends exit
