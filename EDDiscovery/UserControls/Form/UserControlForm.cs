@@ -25,13 +25,15 @@ namespace EDDiscovery.UserControls
         public UserControlCommonBase UserControl { get; private set; }
         public bool IsLoaded { get; private set; } = false;         // After shown, but before closing
 
+        public bool IsTransparencySupported { get { return UserControl?.SupportTransparency ?? false; } }
+
         public enum TransparencyMode { Off, On, OnClickThru, OnFullyTransparent };
+        public TransparencyMode TransparentMode { get; private set; } = TransparencyMode.Off;
+
+        public bool IsTransparentModeOn { get { return TransparentMode != TransparencyMode.Off; } }
 
         public bool IsCurrentlyTransparent {  get { return IsTransparentModeOn && !inpanelshow; } }
 
-        public bool IsTransparencySupported { get { return UserControl?.SupportTransparency ?? false; } }
-        public TransparencyMode TransparentMode { get; private set; } = TransparencyMode.Off;
-        public bool IsTransparentModeOn { get { return TransparentMode != TransparencyMode.Off; } }
         public bool IsClickThruOn { get { return TransparentMode == TransparencyMode.OnClickThru || TransparentMode == TransparencyMode.OnFullyTransparent; } }
 
         public bool DisplayTitle { get; private set; }  = true;            // we are displaying the title
@@ -91,6 +93,14 @@ namespace EDDiscovery.UserControls
                         EDTx.UserControlForm_extButtonDrawnTaskBarIcon_ToolTip, EDTx.UserControlForm_extButtonDrawnTransparentMode_ToolTip,
                         EDTx.UserControlForm_extButtonDrawnClose_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+
+            if (IsTransparencySupported)
+                TransparentMode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBRefName + "Transparent", UserControl.DefaultTransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
+
+            lasttransparentmodereported = IsTransparentModeOn;      // record what we started with
+
+            bool wantedTopMost = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRefName + "TopMost", deftopmost);
+            TopMost = wantedTopMost;
         }
 
         // call to update the control text in the title area
@@ -174,9 +184,6 @@ namespace EDDiscovery.UserControls
             return retval;
         }
 
-        #endregion
-
-        #region View Implementation
 
         // Called by pop out forms when theme has changed, to give us a chance to retheme
         public void OnThemeChanged()
@@ -186,13 +193,9 @@ namespace EDDiscovery.UserControls
             UpdateTransparencyControls();
         }
 
+        #endregion
 
-        protected override void OnLoad(EventArgs e)
-        {
-            base.OnLoad(e);
-            UpdateTransparencyControls();
-
-        }
+        #region View Implementation
 
         // we need to do this in OnHandleCreate as toggle show title bar causes the window to be recreated, losing the sys menu
         protected override void OnHandleCreated(EventArgs e)
@@ -222,6 +225,12 @@ namespace EDDiscovery.UserControls
             InstallSystemMenuItems(sysMenus);
         }
 
+        protected override void OnLoad(EventArgs e)
+        {
+            base.OnLoad(e);
+            UpdateTransparencyControls();
+        }
+
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
@@ -230,21 +239,10 @@ namespace EDDiscovery.UserControls
             // as launched, it may not be in front (as its launched from a control).. bring to front
             this.BringToFront();
 
-            if (IsTransparencySupported)
-                TransparentMode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBRefName + "Transparent", UserControl.DefaultTransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
-
-            bool wantedTopMost = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRefName + "TopMost", deftopmost);
-
-            //kludge 
-            SetTopMost(wantedTopMost);
-            SetTopMost(!wantedTopMost);
-            SetTopMost(wantedTopMost); // this also establishes transparency
-
-            lasttransparentmodereported = IsTransparentModeOn;      // record what we started with
-
+            // tell UC of events in UCCB order
             if (UserControl != null)
             {
-                UserControl.TransparencyModeChanged(IsTransparentModeOn);       // new, call to tell the panel the transparency mode is set
+                UserControl.TransparencyModeChanged(IsTransparentModeOn);       
                 UserControl.LoadLayout();
                 UserControl.InitialDisplay();
             }
@@ -259,6 +257,8 @@ namespace EDDiscovery.UserControls
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
+            checkmousepositiontimer.Stop();
+
             if (UserControl?.AllowClose() ?? true)          // does the UCCB allow close?
             {
                 IsLoaded = false;
@@ -320,11 +320,7 @@ namespace EDDiscovery.UserControls
             extButtonDrawnShowTitle.ImageSelected = DisplayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
             extButtonDrawnOnTop.ImageSelected = TopMost ? ExtendedControls.ExtButtonDrawn.ImageType.OnTop : ExtendedControls.ExtButtonDrawn.ImageType.Floating;
 
-            if (lasttransparentstatereported != IsCurrentlyTransparent)                  // only bother the UCCB if we actually changed stuff
-            {
-                UserControl?.SetTransparency(IsCurrentlyTransparent, curbackground);     // tell the UCCB about the current state
-                lasttransparentstatereported = IsCurrentlyTransparent;
-            }
+            UserControl?.SetTransparency(IsCurrentlyTransparent, curbackground);     // tell the UCCB about the current state
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
@@ -342,7 +338,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                //checkmousepositiontimer.Stop();
+                checkmousepositiontimer.Stop();
                 // System.Diagnostics.Debug.WriteLine("UCF Timer off");
             }
 
@@ -505,7 +501,6 @@ namespace EDDiscovery.UserControls
         }
 
         private bool inpanelshow = false;       // if we are in a panel show when we were transparent
-        private bool? lasttransparentstatereported = null;    // we reported this via SetTransparency
         private bool lasttransparentmodereported;   // what we have reported for the mode change to minimise TransparencyModeChanged
 
         private Timer checkmousepositiontimer = new Timer();      // timer to monitor for entry into form when transparent.. only sane way in forms

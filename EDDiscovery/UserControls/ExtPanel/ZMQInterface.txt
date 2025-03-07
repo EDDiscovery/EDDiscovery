@@ -140,12 +140,22 @@ client requesttype = "stationshipyardoutfitting" - request all shipyard/outfitti
 
 client requesttype = "scandata" - request scan data about system
     			system = system name
-    			systemid = 56 bit system id, may be None
+    			systemid = 56 bit system id, may be None (null)
     			weblookup = Not present or None: use EDD data only, or EDSM, Spansh, SpanshThenEDSM, All
     	server responsetype = requesttype
     			system = system name
     			systemid = 56 bit system id, may be None
     			scan = scan data. See https://github.com/EDDiscovery/EliteDangerousCore/blob/master/EliteDangerous/StarScan/StarScanNode.cs
+
+client requesttype = "spanshdump" - request spansh dump about system
+    			system = system name
+    			systemid = 56 bit system id, may be None (null)
+    			cachelookup = True lookup from file cache (always checked first)
+    			weblookup = True lookup from spansh
+    	server responsetype = requesttype
+    			system = system name
+    			systemid = 56 bit system id, may be None
+                dump = null or spansh JSON dump 
 
 client requesttype = "faction" - request information about faction
     			faction = string of faction name

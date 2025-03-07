@@ -169,7 +169,7 @@ namespace EDDiscovery
                             he.Status.IsInMultiPlayer == false)
                     {
                         var dockevt = he.journalEntry as EliteDangerousCore.JournalEvents.JournalDocked;
-                        DoCAPI(dockevt.StationName, he.System.Name, History.Shipyards.AllowCobraMkIV);
+                        DoCAPI(dockevt.StationName, dockevt.StarSystem, History.Shipyards.AllowCobraMkIV);
                     }
 
                     var t3 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");

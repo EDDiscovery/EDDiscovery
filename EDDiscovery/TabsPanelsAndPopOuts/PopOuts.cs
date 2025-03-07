@@ -141,9 +141,9 @@ namespace EDDiscovery
                 uccb.Init(discoveryform, UserControlCommonBase.DisplayNumberPopOuts + number);
 
                 System.Diagnostics.Debug.WriteLine($"UCCB Display number {ucf.PopOutNumber}");
-                ExtendedControls.Theme.Current.ApplyStd(ucf);  // apply theming/scaling to form before shown, so that it restored back to correct position (done in UCF::onLoad)
+                ExtendedControls.Theme.Current.ApplyStd(ucf);   // apply theming/scaling to form before shown, so that it restored back to correct position (done in UCF::onLoad)
 
-                ucf.Show();                                                     // this ends up, via Form Shown, calls LoadLayout in the UCCB.
+                ucf.Show();                                     // this ends up, via Form Shown, calls LoadLayout in the UCCB.
 
                 discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp,  new BaseUtils.Variables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", number.ToString()} ));
             }

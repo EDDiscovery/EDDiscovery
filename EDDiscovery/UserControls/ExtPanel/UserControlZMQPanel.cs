@@ -14,6 +14,7 @@
 
 using BaseUtils;
 using EliteDangerousCore;
+using EliteDangerousCore.Spansh;
 using QuickJSON;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using static EliteDangerousCore.StarScan;
 
 namespace EDDiscovery.UserControls
 {
@@ -746,6 +748,29 @@ namespace EDDiscovery.UserControls
                                 ["systemid"] = systemid,
                                 ["scan"] = node == null ? null : JToken.FromObject(node, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
 
+                            };
+                            System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            zmqconnection.Send(reply);
+                        }
+                        break;
+
+                    case "spanshdump":
+                        {
+                            string system = json["system"].Str();
+                            long? systemid = json["systemid"].LongNull();
+                            bool weblookup = json["weblookup"].Bool();
+                            bool cachelookup = json["cachelookup"].Bool();
+                            var sys = new SystemClass(system, systemid > 0 ? systemid : default(long?));
+                            var dump = await SpanshClass.GetSpanshDumpAsync(sys, weblookup, cachelookup);
+                            if (IsClosed)
+                                return;
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["system"] = system,
+                                ["systemid"] = systemid,
+                                ["dump"] = dump,
                             };
                             System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
                             zmqconnection.Send(reply);
