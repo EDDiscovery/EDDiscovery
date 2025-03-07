@@ -257,12 +257,11 @@ namespace EDDiscovery.UserControls
 
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
-            checkmousepositiontimer.Stop();
 
             if (UserControl?.AllowClose() ?? true)          // does the UCCB allow close?
             {
                 IsLoaded = false;
-
+                checkmousepositiontimer.Stop();
                 UserControl?.CloseDown();                   // it may be null
             }
             else
