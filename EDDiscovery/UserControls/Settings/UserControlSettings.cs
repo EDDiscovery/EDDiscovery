@@ -16,6 +16,7 @@ using CAPI;
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using EliteDangerousCore.DLL;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
@@ -849,15 +850,12 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDLLPerms_Click(object sender, EventArgs e)
         {
-            string n = EliteDangerousCore.DLL.EDDDLLManager.DLLPermissionManager(this.FindForm(), this.FindForm().Icon, EDDConfig.Instance.DLLPermissions);
-            if (n != null)
-                EDDConfig.Instance.DLLPermissions = n;
+            DiscoveryForm.DLLManager.DLLPermissionManager(this.FindForm(), this.FindForm().Icon);
         }
 
         private void extButtonDLLConfigure_Click(object sender, EventArgs e)
         {
-            DiscoveryForm.DLLManager.DLLConfigure(this.FindForm(), this.FindForm().Icon,
-                (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
+            DiscoveryForm.DLLManager.DLLConfigure(this.FindForm(), this.FindForm().Icon);
         }
 
     }

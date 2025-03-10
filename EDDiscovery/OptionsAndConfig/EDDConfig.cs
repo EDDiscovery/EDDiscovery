@@ -63,7 +63,6 @@ namespace EDDiscovery
         private string spanshsystemsurl = "";
         private int webserverport = 6502;
         private bool webserverenable = false;
-        private string dllpermissions = "";
         private string dlluserpanelsregisteredlist = "";
         Dictionary<string, string> captainslogtaglist;
         Dictionary<string, string> bookmarkstaglist;
@@ -570,22 +569,6 @@ namespace EDDiscovery
             }
         }
 
-        public string DLLPermissions
-        {
-            get
-            {
-                return dllpermissions;
-            }
-            set
-            {
-                if (dllpermissions != value)
-                {
-                    dllpermissions = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLAllowed", value);
-                }
-            }
-        }
-
         private const string UserPanelSplitStr = "\u2737";
 
         public string DLLUserPanelsRegisteredList
@@ -650,10 +633,9 @@ namespace EDDiscovery
 
                 CaptainsLogTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("CaptainsLogPanelTagNames", "Expedition=Journal.FSDJump" + TagSplitStringCL + "Died=Journal.Died");
                 BookmarkTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("BookmarkTagNames", "Expedition=Journal.FSDJump" + TagSplitStringBK + "Died=Journal.Died");
-                
+
                 webserverport = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("WebServerPort", 6502);
                 webserverenable = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("WebServerEnable", false);
-                dllpermissions = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLAllowed", "");
 
                 dlluserpanelsregisteredlist = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLUserPanelsRegisteredList", "");
             }

@@ -18,6 +18,7 @@ using EliteDangerousCore.GMO;
 using EliteDangerousCore.Spansh;
 using QuickJSON;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -27,7 +28,6 @@ namespace EDDiscovery
     {
         private EDDDLLInterfaces.EDDDLLIF.EDDCallBacks DLLCallBacks;
         private Tuple<string, string, string, string> dllresults;   // hold results between load and shown
-        private string dllsalloweddisallowed; // holds DLL allowed between load and shown
 
         // called on Load
         public void DLLStart()
@@ -74,8 +74,6 @@ namespace EDDiscovery
                 }
             };
 
-            dllsalloweddisallowed = EDDConfig.Instance.DLLPermissions;
-
             dllresults = DLLLoad();       // we run it, and keep the results for processing in Shown
         }
 
@@ -94,8 +92,10 @@ namespace EDDiscovery
 
             string[] dllpaths = new string[] { EDDOptions.Instance.DLLAppDirectory(), EDDOptions.Instance.DLLExeDirectory() };
             bool[] autodisallow = new bool[] { false, true };
-            return DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks, ref dllsalloweddisallowed,
+
+            var results = DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks,
                                                              (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
+            return results;
         }
 
 
@@ -105,7 +105,7 @@ namespace EDDiscovery
         {
             if (dllresults.Item3.HasChars())       // new DLLs
             {
-                string[] list = dllresults.Item3.Split(',');
+                string[] list = dllresults.Item3.Split(',');        // item 3 are new DLLs
                 bool changed = false;
                 foreach (var dll in list)
                 {
@@ -117,12 +117,12 @@ namespace EDDiscovery
                                     "Warning".T(EDTx.Warning),
                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     {
-                        dllsalloweddisallowed = dllsalloweddisallowed.AppendPrePad("+" + dll, ",");
+                        DLLManager.SetDLLPermission(dll, true);
                         changed = true;
                     }
                     else
                     {
-                        dllsalloweddisallowed = dllsalloweddisallowed.AppendPrePad("-" + dll, ",");
+                        DLLManager.SetDLLPermission(dll, false);
                     }
                 }
 
@@ -133,8 +133,6 @@ namespace EDDiscovery
                     dllresults = DLLLoad();
                 }
             }
-
-            EDDConfig.Instance.DLLPermissions = dllsalloweddisallowed;        // write back the permission string
 
             if (dllresults.Item1.HasChars())   // ok
                 LogLine(string.Format("DLLs loaded: {0}".T(EDTx.EDDiscoveryForm_DLLL), dllresults.Item1));
