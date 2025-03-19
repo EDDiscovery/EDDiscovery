@@ -970,6 +970,7 @@ SECTION UserControlStarList
 .ColumnSystem: "System" @
 .ColumnVisits: "Visits" @
 .ColumnInformation: "Information" @
+.ColumnBodycount: "Body count" @
 .labelSearch: "Search" @
 .labelTime: "Time" @
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" @

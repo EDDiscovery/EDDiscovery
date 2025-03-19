@@ -68,15 +68,16 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridViewStarList = new BaseUtils.DataGridViewColumnControl();
+            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.extButtonTimeRanges = new ExtendedControls.ExtButton();
+            this.extButtonDisplayFilters = new ExtendedControls.ExtButton();
+            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.ColumnTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnSystem = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnVisits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColumnInformation = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.extButtonTimeRanges = new ExtendedControls.ExtButton();
-            this.extButtonDisplayFilters = new ExtendedControls.ExtButton();
-            this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
+            this.ColumnBodycount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewStarList)).BeginInit();
@@ -214,7 +215,7 @@ namespace EDDiscovery.UserControls
             this.viewOnEDSMToolStripMenuItem,
             this.setNoteToolStripMenuItem});
             this.contextMenuStrip.Name = "historyContextMenu";
-            this.contextMenuStrip.Size = new System.Drawing.Size(221, 180);
+            this.contextMenuStrip.Size = new System.Drawing.Size(221, 158);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // quickMarkToolStripMenuItem
@@ -366,7 +367,8 @@ namespace EDDiscovery.UserControls
             this.ColumnSystem,
             this.ColumnVisits,
             this.ColumnInformation,
-            this.Value});
+            this.Value,
+            this.ColumnBodycount});
             this.dataGridViewStarList.ContextMenuStrip = this.contextMenuStrip;
             dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.TopLeft;
             dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Window;
@@ -401,45 +403,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewStarList.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.dataGridViewTravel_KeyPress);
             this.dataGridViewStarList.KeyUp += new System.Windows.Forms.KeyEventHandler(this.dataGridViewTravel_KeyUp);
             this.dataGridViewStarList.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewTravel_MouseDown);
-            // 
-            // ColumnTime
-            // 
-            this.ColumnTime.FillWeight = 80F;
-            this.ColumnTime.HeaderText = "Last Visit";
-            this.ColumnTime.MinimumWidth = 50;
-            this.ColumnTime.Name = "ColumnTime";
-            this.ColumnTime.ReadOnly = true;
-            // 
-            // ColumnSystem
-            // 
-            this.ColumnSystem.HeaderText = "System";
-            this.ColumnSystem.MinimumWidth = 50;
-            this.ColumnSystem.Name = "ColumnSystem";
-            this.ColumnSystem.ReadOnly = true;
-            // 
-            // ColumnVisits
-            // 
-            dataGridViewCellStyle2.NullValue = null;
-            this.ColumnVisits.DefaultCellStyle = dataGridViewCellStyle2;
-            this.ColumnVisits.FillWeight = 40F;
-            this.ColumnVisits.HeaderText = "Visits";
-            this.ColumnVisits.MinimumWidth = 50;
-            this.ColumnVisits.Name = "ColumnVisits";
-            this.ColumnVisits.ReadOnly = true;
-            this.ColumnVisits.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            // 
-            // ColumnInformation
-            // 
-            this.ColumnInformation.FillWeight = 200F;
-            this.ColumnInformation.HeaderText = "Information";
-            this.ColumnInformation.MinimumWidth = 50;
-            this.ColumnInformation.Name = "ColumnInformation";
-            this.ColumnInformation.ReadOnly = true;
-            // 
-            // Value
-            // 
-            this.Value.HeaderText = "Scan Value";
-            this.Value.Name = "Value";
             // 
             // topPanel
             // 
@@ -495,6 +458,50 @@ namespace EDDiscovery.UserControls
             this.edsmSpanshButton.TabIndex = 32;
             this.edsmSpanshButton.UseVisualStyleBackColor = true;
             // 
+            // ColumnTime
+            // 
+            this.ColumnTime.FillWeight = 80F;
+            this.ColumnTime.HeaderText = "Last Visit";
+            this.ColumnTime.MinimumWidth = 50;
+            this.ColumnTime.Name = "ColumnTime";
+            this.ColumnTime.ReadOnly = true;
+            // 
+            // ColumnSystem
+            // 
+            this.ColumnSystem.HeaderText = "System";
+            this.ColumnSystem.MinimumWidth = 50;
+            this.ColumnSystem.Name = "ColumnSystem";
+            this.ColumnSystem.ReadOnly = true;
+            // 
+            // ColumnVisits
+            // 
+            dataGridViewCellStyle2.NullValue = null;
+            this.ColumnVisits.DefaultCellStyle = dataGridViewCellStyle2;
+            this.ColumnVisits.FillWeight = 40F;
+            this.ColumnVisits.HeaderText = "Visits";
+            this.ColumnVisits.MinimumWidth = 50;
+            this.ColumnVisits.Name = "ColumnVisits";
+            this.ColumnVisits.ReadOnly = true;
+            this.ColumnVisits.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            // 
+            // ColumnInformation
+            // 
+            this.ColumnInformation.FillWeight = 200F;
+            this.ColumnInformation.HeaderText = "Information";
+            this.ColumnInformation.MinimumWidth = 50;
+            this.ColumnInformation.Name = "ColumnInformation";
+            this.ColumnInformation.ReadOnly = true;
+            // 
+            // Value
+            // 
+            this.Value.HeaderText = "Scan Value";
+            this.Value.Name = "Value";
+            // 
+            // ColumnBodycount
+            // 
+            this.ColumnBodycount.HeaderText = "Body Count";
+            this.ColumnBodycount.Name = "ColumnBodycount";
+            // 
             // UserControlStarList
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -527,14 +534,9 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonExtExcel;
         private System.Windows.Forms.ToolStripMenuItem setNoteToolStripMenuItem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnVisits;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
         private System.Windows.Forms.ToolStripMenuItem removeSortingOfColumnsToolStripMenuItem;
         private ExtendedControls.ExtCheckBox checkBoxCursorToTop;
         private System.Windows.Forms.FlowLayoutPanel topPanel;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
         private System.Windows.Forms.ToolStripMenuItem viewScanDisplayToolStripMenuItem;
         private ExtendedControls.ExtButton extButtonDisplayFilters;
         private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
@@ -542,5 +544,11 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton extButtonTimeRanges;
         internal ExtendedControls.ExtComboBox extComboBoxQuickMarks;
         private System.Windows.Forms.ToolStripMenuItem quickMarkToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnTime;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnSystem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnVisits;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnInformation;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColumnBodycount;
     }
 }

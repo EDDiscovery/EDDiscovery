@@ -779,6 +779,7 @@ namespace EDDiscovery
         UserControlStarList_ColumnSystem, // Column Header 'System'
         UserControlStarList_ColumnVisits, // Column Header 'Visits'
         UserControlStarList_ColumnInformation, // Column Header 'Information'
+        UserControlStarList_ColumnBodycount, // Column Header 'Body Count'
         UserControlStarList_Value, // Column Header 'Scan Value'
         UserControlStarList_labelTime, // Control 'Time'
         UserControlStarList_labelSearch, // Control 'Search'
