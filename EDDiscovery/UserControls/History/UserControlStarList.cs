@@ -241,6 +241,7 @@ namespace EDDiscovery.UserControls
                         string info = Infoline(rowhe.System, node);  // lookup node, using star name, no EDSM lookup.
                         rowpresent.Cells[3].Value = info;   // update info
                         rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "0"; // update scan value
+                        rowpresent.Cells[5].Value = node?.FSSTotalBodies != null ? node.FSSTotalBodies.ToString() : node?.StarPlanetsWithData(false).ToString() ?? "?";
                     }
                 }
             }
