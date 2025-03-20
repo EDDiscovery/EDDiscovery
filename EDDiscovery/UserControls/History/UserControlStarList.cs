@@ -71,7 +71,7 @@ namespace EDDiscovery.UserControls
             var tlnset = new string[] { "UserControlStarList", "UserControlTravelGrid" };    // share top level name between them - new feature dec 24
 
             var enumlist = new Enum[] { EDTx.UserControlStarList_ColumnTime, EDTx.UserControlStarList_ColumnSystem, EDTx.UserControlStarList_ColumnVisits,
-                EDTx.UserControlStarList_ColumnInformation, EDTx.UserControlStarList_Value, EDTx.UserControlStarList_labelTime, EDTx.UserControlStarList_labelSearch };
+                EDTx.UserControlStarList_ColumnInformation, EDTx.UserControlStarList_ColumnBodycount, EDTx.UserControlStarList_Value, EDTx.UserControlStarList_labelTime, EDTx.UserControlStarList_labelSearch };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             var enumlistcms = new Enum[] { EDTx.UserControlStarList_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlStarList_mapGotoStartoolStripMenuItem,
@@ -357,6 +357,7 @@ namespace EDDiscovery.UserControls
 
             string visits = DiscoveryForm.History.Visits(he.System.Name).ToString();
             string info = Infoline(he.System, node);  // lookup node, using star name, no EDSM lookup.
+            string bodycount = node?.FSSTotalBodies != null ? node.FSSTotalBodies.ToString() : node?.StarPlanetsWithData(false).ToString() ?? "?";
 
             if (search.Enabled)
             {
@@ -384,7 +385,7 @@ namespace EDDiscovery.UserControls
             }
 
             var rw = dataGridViewStarList.RowTemplate.Clone() as DataGridViewRow;
-            rw.CreateCells(dataGridViewStarList, time, he.System.Name, visits, info, node?.ScanValue(true).ToString("N0") ?? "0");
+            rw.CreateCells(dataGridViewStarList, time, he.System.Name, visits, info, node?.ScanValue(true).ToString("N0") ?? "0", bodycount);
 
             rowsbyjournalid[he.Journalid] = rw;      
             rw.Tag = he;
@@ -409,11 +410,6 @@ namespace EDDiscovery.UserControls
                 if (total > stars)
                 {
                     infostr += " " + string.Format("{0} Other bodies".T(EDTx.UserControlStarList_OB), (total - stars).ToString());
-                }
-
-                if (sysnode.FSSTotalBodies.HasValue && total < sysnode.FSSTotalBodies.Value)        // only show if you've not got them all
-                {
-                    infostr += ", " + "Total".T(EDTx.UserControlStarList_Total) + " " + sysnode.FSSTotalBodies.Value.ToString();
                 }
 
                 bool showcodex = displayfilters.Contains("codex");
@@ -820,7 +816,7 @@ namespace EDDiscovery.UserControls
         {
             if ( e.Column.Index == 0 )
                 e.SortDataGridViewColumnDate();
-            else if (e.Column.Index == 2 || e.Column.Index == 4)
+            else if (e.Column.Index == 2 || e.Column.Index == 4 || e.Column.Index == 5)
                 e.SortDataGridViewColumnNumeric();
         }
 
@@ -837,8 +833,8 @@ namespace EDDiscovery.UserControls
             {
                 if (frm.SelectedIndex == 0)
                 {
-                    // 0        1       2           3            4               5           6           7             8              9              10              11              12          
-                    string[] colh = { "Time", "System", "Visits", "Other Info", "Scan Value", "Unused", "Body", "Ship", "Description", "Detailed Info", "Travel Dist", "Travel Time", "Travel Jumps", "Travelled MisJumps" };
+                    //                  0        1         2           3            4             5        6       7          8              9              10              11              12                  13              14          
+                    string[] colh = { "Time", "System", "Visits", "Other Info", "Scan Value", "Unused", "Body", "Ship", "Description", "Detailed Info", "Travel Dist", "Travel Time", "Travel Jumps", "Travelled MisJumps", "Body Count" };
 
                     BaseUtils.CSVWriteGrid grd = new BaseUtils.CSVWriteGrid(frm.Delimiter);
 
@@ -876,6 +872,7 @@ namespace EDDiscovery.UserControls
                             he.isTravelling ? he.TravelledTimeSpan().ToString("d'd 'h'h 'm'm 's's'",grd.FormatCulture) : "",
                             he.isTravelling ? he.TravelledJumps.ToString("N0",grd.FormatCulture) : "",
                             he.isTravelling ? he.TravelledMissingJumps.ToString("N0",grd.FormatCulture) : "",
+                            rw.Cells[5].Value ,
                             };
                     };
 
