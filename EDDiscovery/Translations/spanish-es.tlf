@@ -451,7 +451,7 @@ SECTION ExtPanelRollUp
 SECTION CommanderForm
 
 .CAPILoggingin: "Logging in" => "Iniciando sesión"
-.CAPIDisabled: "Disabled" = Inhabilitado
+.CAPIDisabled: "Disabled" = Disabled
 .CAPILogout: "Logout" => "Cerrar sesión"
 .CAPILoggedin: "Logged in" => "Conectado"
 .CAPILogin: "Login" => "Iniciar sesión"
