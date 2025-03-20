@@ -411,7 +411,7 @@ SECTION UserControlMaterialCommodities
 
 SECTION UserControlMissionOverlay
 
-.IL: " Left " => " Izquierda "
+.IL: " Left " => " Restante "
 .missionNameToolStripMenuItem: "Mission Name" => "Nombre de la misión"
 .missionDescriptionToolStripMenuItem: "Mission Description" => "Descripción de la misión"
 .startDateToolStripMenuItem: "Start Date" => "Fecha de inicio"
@@ -459,7 +459,7 @@ SECTION UserControlSurveyor
 .showVolcanismToolStripMenuItem: "Show volcanism" => "Mostrar vulcanismo"
 .autoHideToolStripMenuItem: "Auto Hide" => "Auto-ocultar"
 .dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" => "No ocultar en el modo ECS"
-.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Ocultar cuerpos ya asignados"
+.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Ocultar cuerpos ya mapeados"
 .showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show system info always" => "Mostrar información del sistema siempre"
 .showScanSummaryOnScreenWhenInTransparentModeToolStripMenuItem: "Show scan summary always" => "Mostrar resumen del escaneo siempre"
 .showstarclassToolStripMenuItem: "Show star class in system info" => "Mostrar clase de estrella en información del sistema"
@@ -666,7 +666,7 @@ SECTION UserControlRoute
 SECTION UserControlRouteTracker
 
 .showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" => "Mostrar notas de marcadores"
-.showJumpsToolStripMenuItem: "Show Jumps To Go" => "Mostrar saltos para llevar"
+.showJumpsToolStripMenuItem: "Show Jumps To Go" => "Mostrar saltos restantes"
 .showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" => "Mostrar coordenadas de Marcador"
 .showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" => "Mostrar desviación de la ruta"
 .autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "Copia automática de Marcador"
@@ -678,12 +678,12 @@ SECTION UserControlRouteTracker
 .TF: "To First WP " => "Al primer WP "
 .JS: "jumps" => "saltos"
 .FL: "From Last WP " => "Desde el último WP "
-.LF: ", Left {0:N1}ly" => ", Izquierda {0:N1} al"
+.LF: ", Left {0:N1}ly" => ", Restan {0:N1} al"
 .ToWP: "(WP {0})" => "(WP {0})"
-.NoFSD: " No Ship FSD Information" => " Información de FSD sin envío"
+.NoFSD: " No Ship FSD Information" => " Sin Información del MDD de la nave"
 .Dev: ", Dev {0:N1}ly" => ", Dev {0:N1} al"
 .NoWay: "Route contains no waypoints" => "La ruta no contiene Marcadores"
-.NoCo: "No systems in route have known co-ords" => "Ningún sistema en ruta tiene códigos conocidos"
+.NoCo: "No systems in route have known co-ords" => "Ningún sistema en ruta tiene coordenadas conocidas"
 .Note: "Note: {0}" => "Nota: {0}"
 
 SECTION UserControlScan
@@ -1165,7 +1165,7 @@ SECTION UserControlSysInfo
 .labelVisits: "Visits" = UserControlExpedition.Visits
 .labelMR: "MR" @
 .labelData: "Data" = UserControlMaterialCommodities.Data
-.labelFuel: "Fuel" => "Combustible"
+.labelFuel: "Fuel" => "Combust."
 .labelBodyName: "Body" = SearchScans.ColumnBody
 .labelPosition: "Pos" => "Pos"
 .labelMissions: "Missions" => "Misiones"
@@ -1344,10 +1344,10 @@ SECTION UserControlTrilateration
 
 SECTION UserControlMaterialTrader
 
-.UpgradeCol: "From" = UserControlRoute.labelFrom
+.UpgradeCol: "From" => "De"
 .LevelCol: "Use" => "Usar"
 .WantedCol: "Left" => "Restante"
-.ModuleCol: "To" => "Para"
+.ModuleCol: "To" => "A"
 .MaxCol: "Get" => "Obtener"
 .AvailableCol: "Total" = UserControlMaterialCommodities.Total
 .buttonClear: "Clear" = Delete
@@ -1355,7 +1355,7 @@ SECTION UserControlMaterialTrader
 .buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
 .Offer: "Offer" => "Oferta"
 .Receive: "Receive" => "Recibir"
-.clearTradeToolStripMenuItem: "Clear Trade" => "Comercio claro"
+.clearTradeToolStripMenuItem: "Clear Trade" => "Borrar Transacción"
 .Raw: "Raw" => "Elemento"
 .Encoded: "Encoded" => "Datos Codificados"
 .Manufactured: "Manufactured" => "Manufacturado"
@@ -1407,7 +1407,7 @@ SECTION UserControlFactions
 .KillBondsValue: "Kill Bonds Value" => "Valor de bonos de combate"
 .CartoValue: "Cartographic Value" => "Valor cartográfico"
 .colInfo: "Other Info" => "Otra información"
-.labelTo: "to" => "para"
+.labelTo: "to" => "a"
 .startDateTimePicker.ToolTip: "Include from" => "Incluir de"
 .endDateTimePicker.ToolTip: "Include to" => "Incluir en"
 .FactionsPlural: "Factions" => "Facciones"
