@@ -179,7 +179,7 @@ namespace EDDiscovery.UserControls
         { 
             bool scan = he.journalEntry is IStarScan;                           // is this a scan node
 
-            if (he.IsFSDCarrierJump || scan)                                      // jumped or scan
+            if (he.IsFSDLocationCarrierJump || scan)                                      // jumped or scan
             {
                 DataGridViewRow rowpresent = null;
                 HistoryEntry rowhe = null;
@@ -195,7 +195,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                if (he.IsFSDCarrierJump)                                      // jumped
+                if (he.IsFSDLocationCarrierJump)                                      // jumped
                 {
                     bool added = false;                                         // this means row 0 is visible and added
 
