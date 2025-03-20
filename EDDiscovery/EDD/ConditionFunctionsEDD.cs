@@ -212,7 +212,7 @@ namespace EDDiscovery
         protected override bool VerifyFileAction(string action, string file)
         {
             string folder = Path.GetDirectoryName(file);
-            string actionfolderperms = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ActionFolderPerms", "");
+            string actionfolderperms = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ActionFolderPerms", "");
 
             if (!actionfolderperms.Contains(folder + ";"))
             {
@@ -226,7 +226,7 @@ namespace EDDiscovery
 
                 if (ok)
                 {
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ActionFolderPerms", actionfolderperms + folder + ";");
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ActionFolderPerms", actionfolderperms + folder + ";");
                     return true;
                 }
                 else
@@ -238,7 +238,7 @@ namespace EDDiscovery
 
         protected override bool VerifyProcessAllowed(string proc, string cmdline)
         {
-            string actionprocessperms = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ActionProcessPerms", "");
+            string actionprocessperms = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ActionProcessPerms", "");
 
             if (!actionprocessperms.Contains("!" + proc + ";"))
             {
@@ -251,7 +251,7 @@ namespace EDDiscovery
 
                 if (ok)
                 {
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ActionProcessPerms", actionprocessperms + "!" + proc + ";");
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ActionProcessPerms", actionprocessperms + "!" + proc + ";");
                     return true;
                 }
                 else

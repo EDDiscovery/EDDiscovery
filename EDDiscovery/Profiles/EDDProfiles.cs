@@ -101,12 +101,12 @@ namespace EDDiscovery
 
         public void LoadProfiles(string selectprofile)
         {
-            string profiles = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ProfileIDs", "0");
+            string profiles = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ProfileIDs", "0");
             List<int> profileints = profiles.RestoreIntListFromString(1,0); // default is length 1, value 0
 
             foreach (int profileid in profileints)
             {
-                StringParser sp = new StringParser(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(ProfilePrefix(profileid) + "Settings", ""));
+                StringParser sp = new StringParser(EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(ProfilePrefix(profileid) + "Settings", ""));
 
                 string name = sp.NextQuotedWordComma();
                 string tripcondition = sp.NextQuotedWordComma();
@@ -125,7 +125,7 @@ namespace EDDiscovery
                 ProfileList.Add(new Profile(DefaultId, "Default", "Condition AlwaysFalse", "Condition AlwaysFalse"));
             }
 
-            int curid = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ProfilePowerOnID", DefaultId);
+            int curid = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ProfilePowerOnID", DefaultId);
 
             if ( selectprofile != null )
             {
@@ -144,14 +144,14 @@ namespace EDDiscovery
             foreach (Profile p in ProfileList)
             {
                 string idstr = p.Id.ToStringInvariant();
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(ProfilePrefix(p.Id) + "Settings",
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(ProfilePrefix(p.Id) + "Settings",
                             p.Name.QuoteString(comma: true) + "," +
                             p.TripCondition.ToString().QuoteString(comma: true) + "," + p.BackCondition.ToString().QuoteString(comma: true)
                             );
                 ids = ids.AppendPrePad(idstr, ",");
             }
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ProfileIDs", ids);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ProfileIDs", ids);
         }
 
         public bool UpdateProfiles(List<Profile> newset, int poweronindex )        // true reload - Current is invalid if true, must reload to new profile
@@ -204,7 +204,7 @@ namespace EDDiscovery
             }
 
             poweronindex = poweronindex >= 0 ? poweronindex : 0;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ProfilePowerOnID", ProfileList[poweronindex].Id);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ProfilePowerOnID", ProfileList[poweronindex].Id);
             PowerOn = ProfileList[poweronindex];
 
             SaveProfiles();

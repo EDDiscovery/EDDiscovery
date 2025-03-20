@@ -15,11 +15,13 @@
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
+using EliteDangerousCore.UIEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using System.Reflection;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
@@ -660,7 +662,7 @@ namespace EDDiscovery.UserControls
 
                 var searchresults = new Dictionary<string, List<HistoryListQueries.ResultEntry>>();
 
-                if (searchesactive.Length > 0)       // if any searches
+                if (searchesactivetext.Length > 0 || searchesactivevoice.Length>0)       // if any searches
                 {
                     DiscoveryForm.History.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when required in this panel)
 
@@ -674,8 +676,11 @@ namespace EDDiscovery.UserControls
                         var defaultvars = new BaseUtils.Variables();
                         defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10, ensuredoublerep: true);
 
-                        System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} ... Surveyor runs {searchesactive.Length} searches");
-                        foreach (var searchname in searchesactive)
+                        System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} ... Surveyor runs {searchesactivetext.Length} searches");
+
+                        var allsearches = searchesactivetext.Union(searchesactivevoice).ToArray();
+
+                        foreach (var searchname in allsearches)
                         {
                             // await is horrible, anything can happen, even closing
                             await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan, false); // execute the searches
@@ -699,6 +704,13 @@ namespace EDDiscovery.UserControls
                 StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);       
                 if (IsClosed)   // may close during await..
                     return;
+
+                bool producebodytriggers = is_latest && eventsseen > 0;     // produce triggers only if we have seen events, so don't produce them on startup
+                bool producesearchtriggers = producebodytriggers;       // two of them exist for debugging
+
+// tbd
+  producebodytriggers = true;
+producesearchtriggers = false;
 
                 if (systemnode != null)     // if we have a node (should do of course since july 22 due to AddLocation in scan node)
                 {
@@ -738,9 +750,7 @@ namespace EDDiscovery.UserControls
                         // we only send trigger actions when we are tracking the latest travel history, not when we are back in the history
                         // and we have had new events come in (showing we are not just started up cold)
 
-                        bool producetriggers = is_latest && eventsseen > 0;
-
-                        if (producetriggers)
+                        if (producebodytriggers)
                         {
                             // test
                             //en.Add(TTThargoidSignals); en.Add(TTMiningSignals); en.Add(TTHighGravity + sd.nSurfaceGravityG.Value.ToStringInvariant("#.##")); en.Add(TTHuge);
@@ -813,7 +823,7 @@ namespace EDDiscovery.UserControls
                                     matchedguardiansignals || (hasguardiansignals && IsSet(CtrlList.showsignals)),
                                     matchedhumansignals || (hashumansignals && IsSet(CtrlList.showsignals)),
                                     matchedothersignals || (hasothersignals && IsSet(CtrlList.showsignals)),
-                                    false,      // so this is the surveyor, we don't want to bother with showing if its got organics, since you have to scan them
+                                    false,      // so this is the surveyor, we don't want to bompsamther with showing if its got organics, since you have to scan them
                                     IsSet(CtrlList.volcanism) || matchedlandablevolcanism || matchedvolcanism, // any of these causes a show
                                     IsSet(CtrlList.showValues),        // show values
                                     IsSet(CtrlList.moreinfo),   // show extra info such as mass/radius
@@ -823,16 +833,21 @@ namespace EDDiscovery.UserControls
                                     IsSet(CtrlList.showRinged),          // show rings
                                     lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
 
-                            if (searchresultfornode != null) // if search results are set for this body, add text
+                            if (searchresultfornode != null) // if search results are set for this body, add text and produce triggers
                             {
-                                if (producetriggers)
+                                string searchpasslist = "";
+
+                                foreach ( HistoryListQueries.ResultEntry hrentry in searchresultfornode)
                                 {
-                                    foreach (var x in searchresultfornode)      // add on the filters passed here
-                                        en.Add(TTDiscovery + x.FilterPassed);
+                                    if (searchesactivetext.Contains(hrentry.FilterPassed))   // if its a text entry
+                                        searchpasslist = searchpasslist.AppendPrePad(hrentry.FilterPassed, ", ");
+
+                                    if (producesearchtriggers && searchesactivevoice.Contains(hrentry.FilterPassed))   // if its a text entry
+                                        en.Add(TTDiscovery + hrentry.FilterPassed);       // add a trigger
                                 }
 
-                                string info = string.Join(", ", searchresultfornode.Select(x=>x.FilterPassed).Distinct());
-                                silstring += " : " + info;
+                                if ( searchpasslist.HasChars())
+                                    silstring += " : " + searchpasslist;
                             }
 
                             ldrawsystemtext[sd.BodyName] = silstring;
@@ -848,12 +863,25 @@ namespace EDDiscovery.UserControls
                 }       // end of system node look thru
 
                 // Any searches left print - they may have been triggered outside of a scan node
+                // so we need to consider them
 
                 foreach (var kvp in searchresults.EmptyIfNull())            // by bodyname
                 {
-                    string info = string.Join(", ", kvp.Value.Select(x=>x.FilterPassed).Distinct());
-                    string bodyname = kvp.Key;
-                    ldrawsystemtext[bodyname] = $"{bodyname.ReplaceIfStartsWith(sys.Name)}: {info}";
+                    string searchpasslist = "";
+
+                    foreach(HistoryListQueries.ResultEntry hrentry in kvp.Value)
+                    {
+                        if (searchesactivetext.Contains(hrentry.FilterPassed))   // if its a text entry
+                            searchpasslist = searchpasslist.AppendPrePad(hrentry.FilterPassed, ", ");
+
+                        if (producesearchtriggers && searchesactivevoice.Contains(hrentry.FilterPassed))   // if its a text entry
+                            triggers[kvp.Key].Add(TTDiscovery + hrentry.FilterPassed);       // add a trigger
+                    }
+
+                    if ( searchpasslist.HasChars())
+                    {
+                        ldrawsystemtext[kvp.Key] = $"{kvp.Key.ReplaceIfStartsWith(sys.Name)}: {searchpasslist}";
+                    }
                 }
 
                 // any FSS items, if we have system node
@@ -903,18 +931,22 @@ namespace EDDiscovery.UserControls
                     {
                         if (!cursystriggered.TryGetValue(kvp.Key, out HashSet<string> hs))      // if cursys triggered does not have this body, add
                             hs = cursystriggered[kvp.Key] = new HashSet<string>();
-
-                        if (!hs.Contains(str))     // if a new trigger
+// tbd
+                        if (true || !hs.Contains(str))     // if a new trigger
                         {
                             hs.Add(str);
-                            v["EventName" + index.ToStringInvariant()] = str.Substring(0, str.IndexOfOrLength(":"));
-                            v["Value" + index.ToStringInvariant()] = str.Contains(":") ? str.Substring(str.IndexOf(':') + 1) : "";
+                            string name = str.Substring(0, str.IndexOfOrLength(":"));
+                            string data = str.Contains(":") ? str.Substring(str.IndexOf(':') + 1) : "";
+                            v["EventName" + index.ToStringInvariant()] = name;
+                            v["Value" + index.ToStringInvariant()] = data;
+                            //System.Diagnostics.Debug.WriteLine($"Surveyor Trigger {name} : {data}");
                             index++;
                         }
                     }
 
                     if ( v.Count>0 )
                     {
+                        v["System"] = sys.Name;
                         v["Body"] = kvp.Key;
                         v["BodyShortName"] = kvp.Key.ReplaceIfStartsWith(sys.Name).Trim();
                         System.Diagnostics.Debug.WriteLine($"Surveryor Run Action on Body {kvp.Key} Trigger {v.ToString()}");
@@ -1065,14 +1097,17 @@ namespace EDDiscovery.UserControls
             return ctrlset[(int)v];
         }
 
-        private string[] searchesactive;
+        private string[] searchesactivetext;
+        private string[] searchesactivevoice;
 
         // from DB, set up ctrlset, and set the defaults
         private void PopulateCtrlList()
         {
             ctrlset = GetSettingAsCtrlSet<CtrlList>(DefaultSetting);
             alignment = ctrlset[(int)CtrlList.alignright] ? StringAlignment.Far : ctrlset[(int)CtrlList.aligncenter] ? StringAlignment.Center : StringAlignment.Near;
-            searchesactive = GetSetting("Searches", "").SplitNoEmptyStartFinish('\u2188');
+            string sat = GetSetting(dbSearchesText, HistoryListQueries.Instance.DefaultSearches(SettingsSplittingChar),true);
+            searchesactivetext = sat.SplitNoEmptyStartFinish('\u2188');
+            searchesactivevoice = GetSetting(dbSearchesVoice, sat, true).SplitNoEmptyStartFinish('\u2188');
         }
 
         protected virtual bool DefaultSetting(CtrlList e)
@@ -1116,15 +1151,32 @@ namespace EDDiscovery.UserControls
         private void extButtonSearches_Click(object sender, EventArgs e)
         {
             ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
-            displayfilter.UC.AddAllNone();
-            displayfilter.UC.AddGroupItem(HistoryListQueries.Instance.DefaultSearches(SettingsSplittingChar), "Default".T(EDTx.ProfileEditor_Default));
+            displayfilter.UC.AddAllNone(3);
+            displayfilter.UC.AddGroupItem(HistoryListQueries.Instance.DefaultSearches(SettingsSplittingChar), "Default".T(EDTx.ProfileEditor_Default),checkmap:3);
             displayfilter.UC.SettingsSplittingChar = '\u2188';     // pick a crazy one soe
 
             var searches = HistoryListQueries.Instance.Searches.Where(x => x.UserOrBuiltIn).ToList();
             foreach (var s in searches)
-                displayfilter.UC.Add(s.Name, s.Name);
+                displayfilter.UC.Add(s.Name, s.Name,checkmap:3, checkbuttontooltiptext:new string[] { "Text Output","Voice Output"});
 
-            CommonCtrl(displayfilter, extButtonSearches, "Searches");
+            var under = extButtonSearches;
+
+            displayfilter.CloseBoundaryRegion = new Size(32, under.Height);
+            displayfilter.AllOrNoneBack = false;
+            displayfilter.UC.ImageSize = new Size(24, 24);
+            displayfilter.UC.ScreenMargin = new Size(0, 0);
+            displayfilter.UC.MultiColumnSlide = true;
+
+            displayfilter.SaveSettings = (s, o) =>
+            {
+                PutSetting(dbSearchesText, displayfilter.GetChecked(0));
+                PutSetting(dbSearchesVoice, displayfilter.GetChecked(1));
+                PopulateCtrlList();
+                DrawAll(cur_sys);
+            };
+
+            string primarysetting = GetSetting(dbSearchesText, "");
+            displayfilter.Show(new string[] { primarysetting, GetSetting(dbSearchesVoice, primarysetting) }, under, this.FindForm());
         }
 
         private void extButtonStars_Click(object sender, EventArgs e)
@@ -1466,6 +1518,9 @@ namespace EDDiscovery.UserControls
         public const string TTWaterWorld = "WaterWorld";
         public const string TTAmmoniaWorld = "AmmoniaWorld";
 
+
+        public const string dbSearchesText = "Searches";
+        public const string dbSearchesVoice = "SearchesVoice";
         #endregion
 
     }

@@ -79,7 +79,7 @@ namespace EDDiscovery
             set
             {
                 useNotifyIcon = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("UseNotifyIcon", value);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("UseNotifyIcon", value);
             }
         }
 
@@ -92,7 +92,7 @@ namespace EDDiscovery
             set
             {
                 orderrowsinverted = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("OrderRowsInverted", value);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("OrderRowsInverted", value);
             }
         }
 
@@ -110,7 +110,7 @@ namespace EDDiscovery
             set
             {
                 minimizeToNotifyIcon = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("MinimizeToNotifyIcon", value);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("MinimizeToNotifyIcon", value);
             }
         }
 
@@ -123,7 +123,7 @@ namespace EDDiscovery
             set
             {
                 keepOnTop = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("KeepOnTop", value);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("KeepOnTop", value);
             }
         }
 
@@ -242,7 +242,7 @@ namespace EDDiscovery
                 if (displayTimeFormat != value)
                 {
                     displayTimeFormat = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("DisplayUTC", value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("DisplayUTC", value);
                 }
             }
         }
@@ -258,7 +258,7 @@ namespace EDDiscovery
                 if (defaultwavedevice != value)
                 {
                     defaultwavedevice = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("WaveAudioDevice", value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("WaveAudioDevice", value);
                 }
             }
         }
@@ -274,7 +274,7 @@ namespace EDDiscovery
                 if (defaultvoicedevice != null)
                 {
                     defaultvoicedevice = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("VoiceAudioDevice", value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("VoiceAudioDevice", value);
                 }
             }
         }
@@ -290,7 +290,7 @@ namespace EDDiscovery
                 if (clickthrukey != value)
                 {
                     clickthrukey = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("ClickThruKey", (int)value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ClickThruKey", (int)value);
                 }
             }
         }
@@ -306,7 +306,7 @@ namespace EDDiscovery
                 if (systemdbdownload != value )
                 {
                     systemdbdownload = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("EDSMEDDBDownloadData", value); 
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("EDSMEDDBDownloadData", value); 
                 }
             }
         }
@@ -323,7 +323,7 @@ namespace EDDiscovery
                 if (fullhistoryloaddaylimit != value)
                 {
                     fullhistoryloaddaylimit = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("FullHistoryLoadDayLimit", value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("FullHistoryLoadDayLimit", value);
                 }
             }
         }
@@ -339,7 +339,7 @@ namespace EDDiscovery
                 if (essentialeventtype != value)
                 {
                     essentialeventtype = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("EssentialEventType", value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("EssentialEventType", value);
                 }
             }
         }
@@ -355,7 +355,7 @@ namespace EDDiscovery
                 if (coriolisURL != value)
                 {
                     coriolisURL = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("CorolisURL", value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("CorolisURL", value);
                 }
             }
         }
@@ -371,7 +371,7 @@ namespace EDDiscovery
                 if (eddshipyardURL != value)
                 {
                     eddshipyardURL = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("EDDShipyardURL", value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("EDDShipyardURL", value);
                 }
             }
         }
@@ -387,7 +387,7 @@ namespace EDDiscovery
                 if (language != value)
                 {
                     language = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DefaultLanguage", value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("DefaultLanguage", value);
                 }
             }
         }
@@ -403,7 +403,7 @@ namespace EDDiscovery
                 if (drawduringresize != value)
                 {
                     drawduringresize = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("DrawDuringResizeWindow", value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("DrawDuringResizeWindow", value);
                 }
             }
         }
@@ -419,7 +419,7 @@ namespace EDDiscovery
                 if (sortpanelsalpha != value)
                 {
                     sortpanelsalpha = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("PanelsSortedByName", value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("PanelsSortedByName", value);
                 }
             }
         }
@@ -438,7 +438,7 @@ namespace EDDiscovery
                 if (edsmfullsystemsurl != value)
                 {
                     edsmfullsystemsurl = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("EDSMFullSystemsURL", value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("EDSMFullSystemsURL", value);
                 }
             }
         }
@@ -457,7 +457,7 @@ namespace EDDiscovery
                 if (spanshsystemsurl != value)
                 {
                     spanshsystemsurl = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("SpanshSystemsURL", value);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("SpanshSystemsURL", value);
                 }
             }
         }
@@ -490,7 +490,7 @@ namespace EDDiscovery
                 captainslogtaglist = value;
                 string[] list = (from x in captainslogtaglist select (x.Key + "=" + x.Value)).ToArray();
                 string setting = string.Join(TagSplitStringCL, list) + TagSplitStringCL;        // nice to match with the terminator like the edit form does
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("CaptainsLogPanelTagNames", setting);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("CaptainsLogPanelTagNames", setting);
             }
         }
 
@@ -528,7 +528,7 @@ namespace EDDiscovery
                 bookmarkstaglist = value;
                 string[] list = (from x in bookmarkstaglist select (x.Key + "=" + x.Value)).ToArray();
                 string setting = string.Join(TagSplitStringBK, list) + TagSplitStringBK;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("BookmarkTagNames", setting);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("BookmarkTagNames", setting);
             }
         }
 
@@ -548,7 +548,7 @@ namespace EDDiscovery
                 if (webserverport != value)
                 {
                     webserverport = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt("WebServerPort", webserverport);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("WebServerPort", webserverport);
                 }
             }
         }
@@ -564,7 +564,7 @@ namespace EDDiscovery
                 if (webserverenable != value)
                 {
                     webserverenable = value;
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("WebServerEnable", webserverenable);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("WebServerEnable", webserverenable);
                 }
             }
         }
@@ -580,7 +580,7 @@ namespace EDDiscovery
             set
             {
                 dlluserpanelsregisteredlist = value;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("DLLUserPanelsRegisteredList", value);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("DLLUserPanelsRegisteredList", value);
             }
         }
 
@@ -609,35 +609,35 @@ namespace EDDiscovery
         {
             try
             {
-                useNotifyIcon = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("UseNotifyIcon", false);
-                orderrowsinverted = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("OrderRowsInverted", false);
-                minimizeToNotifyIcon = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("MinimizeToNotifyIcon", false);
-                keepOnTop = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("KeepOnTop", false);
-                displayTimeFormat = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("DisplayUTC", 0);
-                defaultvoicedevice = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("VoiceAudioDevice", "Default");
-                defaultwavedevice = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("WaveAudioDevice", "Default");
-                clickthrukey = (System.Windows.Forms.Keys)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey);
-                systemdbdownload = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("EDSMEDDBDownloadData", true);    // this goes with the USER on purpose, so its kept over a system db delete
-                fullhistoryloaddaylimit = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("FullHistoryLoadDayLimit", 0);
-                language = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DefaultLanguage", "Auto");
-                drawduringresize = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("DrawDuringResizeWindow", true);
-                sortpanelsalpha = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("PanelsSortedByName", true);
-                essentialeventtype = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("EssentialEventType", "Default");
-                coriolisURL = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("CorolisURL", Properties.Resources.URLCoriolis);
-                eddshipyardURL = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("EDDShipyardURL", Properties.Resources.URLEDShipyard);
+                useNotifyIcon = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("UseNotifyIcon", false);
+                orderrowsinverted = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("OrderRowsInverted", false);
+                minimizeToNotifyIcon = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("MinimizeToNotifyIcon", false);
+                keepOnTop = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("KeepOnTop", false);
+                displayTimeFormat = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("DisplayUTC", 0);
+                defaultvoicedevice = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("VoiceAudioDevice", "Default");
+                defaultwavedevice = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("WaveAudioDevice", "Default");
+                clickthrukey = (System.Windows.Forms.Keys)EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ClickThruKey", (int)System.Windows.Forms.Keys.ShiftKey);
+                systemdbdownload = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("EDSMEDDBDownloadData", true);    // this goes with the USER on purpose, so its kept over a system db delete
+                fullhistoryloaddaylimit = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("FullHistoryLoadDayLimit", 0);
+                language = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("DefaultLanguage", "Auto");
+                drawduringresize = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("DrawDuringResizeWindow", true);
+                sortpanelsalpha = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("PanelsSortedByName", true);
+                essentialeventtype = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("EssentialEventType", "Default");
+                coriolisURL = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("CorolisURL", Properties.Resources.URLCoriolis);
+                eddshipyardURL = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("EDDShipyardURL", Properties.Resources.URLEDShipyard);
                 if (eddshipyardURL == "http://www.edshipyard.com/")     // 30/jul/19 changed address
                     EDDShipyardURL = "http://edsy.org/";
 
-                edsmfullsystemsurl = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("EDSMFullSystemsURL", "Default");
-                spanshsystemsurl = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("SpanshSystemsURL", "Default");
+                edsmfullsystemsurl = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("EDSMFullSystemsURL", "Default");
+                spanshsystemsurl = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("SpanshSystemsURL", "Default");
 
-                CaptainsLogTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("CaptainsLogPanelTagNames", "Expedition=Journal.FSDJump" + TagSplitStringCL + "Died=Journal.Died");
-                BookmarkTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("BookmarkTagNames", "Expedition=Journal.FSDJump" + TagSplitStringBK + "Died=Journal.Died");
+                CaptainsLogTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("CaptainsLogPanelTagNames", "Expedition=Journal.FSDJump" + TagSplitStringCL + "Died=Journal.Died");
+                BookmarkTags = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("BookmarkTagNames", "Expedition=Journal.FSDJump" + TagSplitStringBK + "Died=Journal.Died");
 
-                webserverport = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt("WebServerPort", 6502);
-                webserverenable = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("WebServerEnable", false);
+                webserverport = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("WebServerPort", 6502);
+                webserverenable = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("WebServerEnable", false);
 
-                dlluserpanelsregisteredlist = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("DLLUserPanelsRegisteredList", "");
+                dlluserpanelsregisteredlist = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("DLLUserPanelsRegisteredList", "");
             }
             catch (Exception ex)
             {
@@ -669,7 +669,7 @@ namespace EDDiscovery
             // write back what is correct. Incorrect icons will be removed.
             string[] list = (from x in dict select (x.Key + "=" + x.Value)).ToArray();
             string setting = string.Join(separ, list) + separ;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(settingname, setting);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(settingname, setting);
         }
 
         #endregion

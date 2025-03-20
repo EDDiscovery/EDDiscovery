@@ -216,7 +216,7 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.CheckGithubFiles)      // not normal in debug, due to git hub choking
             {
-                DateTime lastdownloadtime = UserDatabase.Instance.GetSettingDate("DownloadFilesLastTime", DateTime.MinValue);
+                DateTime lastdownloadtime = UserDatabase.Instance.GetSetting("DownloadFilesLastTime", DateTime.MinValue);
                 
                 if (DateTime.UtcNow - lastdownloadtime >= new TimeSpan(24, 0, 0))       // only update once per day
                 {
@@ -226,7 +226,7 @@ namespace EDDiscovery
                     // and Help files
                     DownloadHelp(PendingClose.Token);
 
-                    UserDatabase.Instance.PutSettingDate("DownloadFilesLastTime", DateTime.UtcNow);
+                    UserDatabase.Instance.PutSetting("DownloadFilesLastTime", DateTime.UtcNow);
                 }
             }
 

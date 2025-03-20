@@ -88,7 +88,7 @@ namespace EDDiscovery.Actions
             if ( globalvars != null)
                 LoadPeristentVariables(new Variables(globalvars, Variables.FromMode.MultiEntryComma));
 
-            lasteditedpack = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ActionPackLastFile", "");
+            lasteditedpack = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ActionPackLastFile", "");
 
             ActionBase.AddCommand("Bookmarks", typeof(ActionBookmarks), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Captainslog", typeof(ActionCaptainsLog), ActionBase.ActionType.Cmd);
@@ -244,19 +244,19 @@ namespace EDDiscovery.Actions
 
             if (f != null)
             {
-                string collapsestate = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ActionEditorCollapseState_" + name, "");  // get any collapsed state info for this pack
+                string collapsestate = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ActionEditorCollapseState_" + name, "");  // get any collapsed state info for this pack
 
                 frm.Init("Edit pack " + name, this.Icon, this, actfolder, f, ActionEventEDList.EventList(excludejournaluitranslatedevents:true), collapsestate);
 
                 frm.ShowDialog(DiscoveryForm); // don't care about the result, the form does all the saving
 
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ActionEditorCollapseState_" + name, frm.CollapsedState());  // get any collapsed state info for this pack
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ActionEditorCollapseState_" + name, frm.CollapsedState());  // get any collapsed state info for this pack
 
                 ActionConfigureKeys();  // kick it to load in case its changed
                 VoiceLoadEvents();      
 
                 lasteditedpack = name;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ActionPackLastFile", lasteditedpack);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ActionPackLastFile", lasteditedpack);
                 return true;
             }
             else
@@ -553,17 +553,17 @@ namespace EDDiscovery.Actions
 
         public static Dictionary<string, string> GetInstallDeinstallSettings(bool clearit)
         {
-            var ret = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ActionInstallDeinstall", "")
+            var ret = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ActionInstallDeinstall", "")
                                          .SplitNoEmptyStartFinish(';').ToDictionary(key => key.Substring(0, key.IndexOf('=')), value => value.Substring(value.IndexOf('=') + 1));
             if (clearit)
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ActionInstallDeinstall", "");
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ActionInstallDeinstall", "");
 
             return ret;
         }
         private static void SetInstallDeinstallSettings(Dictionary<string, string> var)
         {
             string id = string.Join(";", var.Select(x => x.Key + "=" + x.Value).ToArray());
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ActionInstallDeinstall", id);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ActionInstallDeinstall", id);
         }
 
         #endregion

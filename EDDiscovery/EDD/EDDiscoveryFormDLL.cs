@@ -94,7 +94,7 @@ namespace EDDiscovery
             bool[] autodisallow = new bool[] { false, true };
 
             var results = DLLManager.Load(dllpaths, autodisallow, verstring, options, DLLCallBacks,
-                                                             (name) => UserDatabase.Instance.GetSettingString("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSettingString("DLLConfig_" + name, set));
+                                                             (name) => UserDatabase.Instance.GetSetting("DLLConfig_" + name, ""), (name, set) => UserDatabase.Instance.PutSetting("DLLConfig_" + name, set));
             return results;
         }
 

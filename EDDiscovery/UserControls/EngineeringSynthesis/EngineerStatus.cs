@@ -42,15 +42,15 @@ namespace EDDiscovery.UserControls
         public void SaveDGV(string root)
         {
             dataGridViewEngineering.SaveColumnSettings(root,
-                            (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
-                            (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
+                            (a, b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(a, b),
+                            (c, d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(c, d));
         }
         public void LoadDGV(string root)
         {
             inchange = true;
             dataGridViewEngineering.LoadColumnSettings(root, false,
-                            (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
-                            (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
+                            (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(a, int.MinValue),
+                            (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(b, double.MinValue));
             inchange = false;
         }
 
@@ -92,8 +92,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, new string[] { "UserControlEngineering" });    // share IDs with Engineering panel./
 
             dataGridViewEngineering.LoadColumnSettings(colsetting, false,
-                            (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
-                            (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
+                            (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(a, int.MinValue),
+                            (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(b, double.MinValue));
 
             labelEngineerName.Text = name;
             labelEngineerStatus.Text = "";

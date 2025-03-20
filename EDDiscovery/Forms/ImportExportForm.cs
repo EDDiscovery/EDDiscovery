@@ -38,8 +38,8 @@ namespace EDDiscovery.Forms
             base.Init(import, selectionlistp, showflagsp, outputextp, suggestedfilenamesp,
                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EliteDangerousCore.EliteReleaseDates.GameRelease),
                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow.EndOfDay()),
-                           EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ExportFormIncludeHeader", true),
-                           EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ExportFormOpenExcel", true),
+                           EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ExportFormIncludeHeader", true),
+                           EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ExportFormOpenExcel", true),
                            Properties.Resources.edlogo_3mo_icon
                    );
         }
@@ -48,8 +48,8 @@ namespace EDDiscovery.Forms
         {
             if (DialogResult == System.Windows.Forms.DialogResult.OK)
             {
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ExportFormIncludeHeader", IncludeHeader);
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ExportFormOpenExcel", AutoOpen);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ExportFormIncludeHeader", IncludeHeader);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ExportFormOpenExcel", AutoOpen);
             }
         }
     }

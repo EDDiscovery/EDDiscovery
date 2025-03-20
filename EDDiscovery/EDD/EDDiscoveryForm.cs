@@ -311,7 +311,7 @@ namespace EDDiscovery
             comboBoxCommander.AutoSize = comboBoxCustomProfiles.AutoSize = true;
             panelToolBar.HiddenMarkerWidth = 200;
             panelToolBar.SecondHiddenMarkerWidth = 60;
-            panelToolBar.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool("ToolBarPanelPinState", true);
+            panelToolBar.PinState = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ToolBarPanelPinState", true);
 
             labelGameDateTime.Text = "";
             labelInfoBoxTop.Text = "";
@@ -393,7 +393,7 @@ namespace EDDiscovery
 
             // create the action controller and install commands before we execute tabs, since some tabs need these set up
 
-            string eddiscoveryglobalvars = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("UserGlobalActionVars", "");
+            string eddiscoveryglobalvars = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("UserGlobalActionVars", "");
             actioncontroller = MakeAC(this,
                         EDDOptions.Instance.ActionsAppDirectory(), EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.OtherInstallFilesDirectory(), 
                         eddiscoveryglobalvars,
@@ -759,7 +759,7 @@ namespace EDDiscovery
             {
                 this.BeginInvoke(new Action(() =>
                 {
-                    string acklist = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime", "");
+                    string acklist = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("NotificationLastAckTime", "");
                     Version curver = new Version(System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionString());
 
                     List<BaseUtils.Notifications.Notification> popupnotificationlist = new List<BaseUtils.Notifications.Notification>();
@@ -801,7 +801,7 @@ namespace EDDiscovery
                                 else if (n.EntryType == "New")
                                 {
                                     extButtonNewFeature.Tag = n;
-                                    bool read = UserDatabase.Instance.GetSettingString("NotificationLastNewFeature", "") == n.StartUTC.ToStringZulu();
+                                    bool read = UserDatabase.Instance.GetSetting("NotificationLastNewFeature", "") == n.StartUTC.ToStringZulu();
                                     extButtonNewFeature.Image = read ? EDDiscovery.Icons.Controls.NewFeatureGreen : EDDiscovery.Icons.Controls.NewFeature;
                                     panelToolBar.SetVisibility(extButtonNewFeature, true);         // use the panel tool bar interface to set it visible, as the TB controls visibility itself
                                 }
@@ -861,13 +861,13 @@ namespace EDDiscovery
             // About box automatic open to prompt them to acknowledge program
 
             {
-                var lastaboutversion = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("AboutBoxLastVersionPresented", "0.0.0.0").VersionFromString();
+                var lastaboutversion = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("AboutBoxLastVersionPresented", "0.0.0.0").VersionFromString();
                 var eddversion = EDDApplicationContext.AppVersion.VersionFromString();
                 lastaboutversion[3] = eddversion[3] = 0;        // ignore the last dot
                 lastaboutversion[2] = eddversion[2] = 0;        // ignore the second one
                 if (lastaboutversion.CompareVersion(eddversion) < 0)
                 {
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("AboutBoxLastVersionPresented", EDDApplicationContext.AppVersion);
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("AboutBoxLastVersionPresented", EDDApplicationContext.AppVersion);
                     AboutBox();
                 }
             }
@@ -952,7 +952,7 @@ namespace EDDiscovery
             ScreenshotConverter.SaveSettings();
             ScreenshotConverter.Stop();
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ToolBarPanelPinState", panelToolBar.PinState);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ToolBarPanelPinState", panelToolBar.PinState);
 
             SaveThemeToDB(ExtendedControls.Theme.Current);
 
@@ -964,7 +964,7 @@ namespace EDDiscovery
             notifyIconEDD.Dispose();
 
             string persistentvars = actioncontroller.CloseDown();
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("UserGlobalActionVars", persistentvars);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("UserGlobalActionVars", persistentvars);
 
             DLLManager.UnLoad();
 
@@ -1060,12 +1060,12 @@ namespace EDDiscovery
                 if (cmdr != null)
                 {
                     FolderBrowserDialog dirdlg = new FolderBrowserDialog();
-                    dirdlg.SelectedPath = UserDatabase.Instance.GetSettingString("Folder21Import", @"c:\");
+                    dirdlg.SelectedPath = UserDatabase.Instance.GetSetting("Folder21Import", @"c:\");
                     DialogResult dlgResult = dirdlg.ShowDialog(this);
 
                     if (dlgResult == DialogResult.OK)
                     {
-                        UserDatabase.Instance.PutSettingString("Folder21Import", dirdlg.SelectedPath);
+                        UserDatabase.Instance.PutSetting("Folder21Import", dirdlg.SelectedPath);
                         string logpath = dirdlg.SelectedPath;
 
                         Controller.RefreshHistoryAsync(netlogpath: logpath, forcenetlogreload: force, currentcmdr: cmdr.Id);
@@ -1111,12 +1111,12 @@ namespace EDDiscovery
         }
         private void sendHistoricDataToInaraToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DateTime lasttime = UserDatabase.Instance.GetSettingDate("InaraLastHistoricUpload", DateTime.MinValue);
+            DateTime lasttime = UserDatabase.Instance.GetSetting("InaraLastHistoricUpload", DateTime.MinValue);
 
             if (DateTime.UtcNow.Subtract(lasttime).TotalHours >= 1)  // every hours, allowed to do this..
             {
                 EliteDangerousCore.Inara.InaraSync.HistoricData(LogLine, History, EDCommander.Current);
-                UserDatabase.Instance.PutSettingDate("InaraLastHistoricUpload", DateTime.UtcNow);
+                UserDatabase.Instance.PutSetting("InaraLastHistoricUpload", DateTime.UtcNow);
             }
             else
                 ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".T(EDTx.EDDiscoveryForm_InaraW), "Warning".T(EDTx.Warning));
@@ -1245,7 +1245,7 @@ namespace EDDiscovery
             infoform.LinkClicked += (ef) => { BaseUtils.BrowserInfo.LaunchBrowser(ef.LinkText); };
             infoform.StartPosition = FormStartPosition.CenterParent;
             infoform.Show(this);
-            UserDatabase.Instance.PutSettingString("NotificationLastNewFeature", n.StartUTC.ToStringZulu());
+            UserDatabase.Instance.PutSetting("NotificationLastNewFeature", n.StartUTC.ToStringZulu());
             extButtonNewFeature.Image = EDDiscovery.Icons.Controls.NewFeatureGreen;
         }
 

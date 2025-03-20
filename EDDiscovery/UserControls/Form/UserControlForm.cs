@@ -79,9 +79,9 @@ namespace EDDiscovery.UserControls
 
             labelControlText.Text = "";                                 // always starts blank..
 
-            this.ShowInTaskbar = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRefName + "Taskbar", true);
+            this.ShowInTaskbar = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(DBRefName + "Taskbar", true);
 
-            DisplayTitle = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRefName + "ShowTitle", true);
+            DisplayTitle = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(DBRefName + "ShowTitle", true);
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {
@@ -95,11 +95,11 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             if (IsTransparencySupported)
-                TransparentMode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(DBRefName + "Transparent", UserControl.DefaultTransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
+                TransparentMode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(DBRefName + "Transparent", UserControl.DefaultTransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);
 
             lasttransparentmodereported = IsTransparentModeOn;      // record what we started with
 
-            bool wantedTopMost = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingBool(DBRefName + "TopMost", deftopmost);
+            bool wantedTopMost = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(DBRefName + "TopMost", deftopmost);
             TopMost = wantedTopMost;
         }
 
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
             if (IsTransparencySupported)
             {
                 TransparentMode = t;
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(DBRefName + "Transparent", (int)TransparentMode);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(DBRefName + "Transparent", (int)TransparentMode);
 
                 UpdateTransparencyControls();
 
@@ -133,7 +133,7 @@ namespace EDDiscovery.UserControls
         public void SetShowTitleInTransparency(bool t)
         {
             DisplayTitle = t;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "ShowTitle", DisplayTitle);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(DBRefName + "ShowTitle", DisplayTitle);
             UpdateTransparencyControls();
             UserControl.onControlTextVisibilityChanged(DisplayTitle);            
         }
@@ -151,18 +151,18 @@ namespace EDDiscovery.UserControls
                                     // and loses the transparency bit!  So therefore
                 UpdateTransparencyControls();   // need to reestablish correct transparency again
             }
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "TopMost", TopMost);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(DBRefName + "TopMost", TopMost);
         }
 
         private void SaveTopMost(SmartSysMenuForm sys)
         {
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "TopMost", TopMost);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(DBRefName + "TopMost", TopMost);
         }
 
         public void SetShowInTaskBar(bool t)
         {
             this.ShowInTaskbar = t;
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool(DBRefName + "Taskbar", t);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(DBRefName + "Taskbar", t);
             UpdateTransparencyControls();   // redraw
         }
 

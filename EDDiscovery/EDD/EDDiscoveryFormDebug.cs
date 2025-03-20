@@ -14,6 +14,7 @@
 
 
 using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using EliteDangerousCore.Spansh;
 using System;
@@ -105,7 +106,6 @@ namespace EDDiscovery
             }
 
             //FactionDefinitions.IDSTx();
-
         }
 
         public void PostShownDebug()

@@ -499,12 +499,13 @@ namespace EDDiscovery.UserControls
 
         // get/put a setting - type needs to be bool, int, double, long, DateTime, string
 
-        public T GetSetting<T>(string itemname, T defaultvalue)
+        public T GetSetting<T>(string itemname, T defaultvalue, bool writebackifdefault = false)
         {
             System.Diagnostics.Debug.Assert(DBBaseName != null);
             //string name = global ? itemname : DBName(DisplayNumber, DBBaseName, itemname);
             string name = DBName(DisplayNumber, DBBaseName, itemname);
-            var res = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(name, defaultvalue);
+
+            var res = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(name, defaultvalue, writebackifdefault);
 
             //  System.Diagnostics.Debug.WriteLine("Get DB Name " + defaultvalue.GetType().Name + ": " + name + ": " + res);
             return res;
@@ -583,8 +584,8 @@ namespace EDDiscovery.UserControls
             string root = DBName(DisplayNumber, DBBaseName + auxname, "DGVCol");
             //System.Diagnostics.Debug.WriteLine($"DGV Layout Load {root} {auxname}");
             return dgv.LoadColumnSettings(root, rowheaderselection, 
-                                        (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(a, int.MinValue),
-                                        (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSettingDouble(b, double.MinValue));
+                                        (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(a, int.MinValue),
+                                        (b) => EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(b, double.MinValue));
         }
 
         public void DGVSaveColumnLayout(DataGridView dgv, string auxname = "")
@@ -592,8 +593,8 @@ namespace EDDiscovery.UserControls
             string root = DBName(DisplayNumber, DBBaseName + auxname, "DGVCol");
             //System.Diagnostics.Debug.WriteLine($"DGV Layout Save {root} {auxname}");
             dgv.SaveColumnSettings(root, 
-                                        (a,b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(a, b),
-                                        (c,d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble(c, d));
+                                        (a,b) => EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(a, b),
+                                        (c,d) => EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(c, d));
         }
 
         public void DGVTransparent(DataGridView dgv, bool on, Color curcol)

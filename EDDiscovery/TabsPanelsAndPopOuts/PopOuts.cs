@@ -67,7 +67,7 @@ namespace EDDiscovery
             {
                 // new method saves the pop out number list
                 var list = usercontrolsforms.PopOutNumberList(pi.PopoutID);
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(PopOutSaveID(pi.PopoutID), list.ToString(","));
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(PopOutSaveID(pi.PopoutID), list.ToString(","));
             }
         }
 
@@ -78,14 +78,14 @@ namespace EDDiscovery
             foreach (var pi in userselectablepanels)
             {
                 // lets try the old method, which is the number..
-                int numtoopen = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingInt(PopOutSaveID(pi.PopoutID), 0);          // get number, from id
+                int numtoopen = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(PopOutSaveID(pi.PopoutID), 0);          // get number, from id
 
                 for (int i = 0; usercontrolsforms.CountOf(pi.PopoutID) < numtoopen; i++)
                     PopOut(pi.PopoutID);
 
                 // new method (nov 24) saves a list of pop out instances and puts them up. Don't say I don't every do things for you!
 
-                string newlist = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(PopOutSaveID(pi.PopoutID), "");     // get list
+                string newlist = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(PopOutSaveID(pi.PopoutID), "");     // get list
                 if ( newlist.HasChars())
                 {
                     var popoutlist = newlist.RestoreIntListFromString();

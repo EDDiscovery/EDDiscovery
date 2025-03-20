@@ -585,7 +585,7 @@ namespace EDDiscovery.UserControls
         {
             string primarycontrolname = EDDProfiles.Instance.UserControlsPrefix + "SplitterControlWindows";                   // primary name for first splitter
 
-            string splitctrl = EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString(primarycontrolname, "");
+            string splitctrl = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(primarycontrolname, "");
 
             if (splitctrl == "" || !splitctrl.Contains("'0,1006'") || reset)   // never set, or wiped, or does not have TG in it or reset
             {
@@ -593,7 +593,7 @@ namespace EDDiscovery.UserControls
                                 "H(0.5, U'2,16', " +
                                 "H(0.25,U'3,1',U'4,0')) )";
 
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString(primarycontrolname, ctrl);
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(primarycontrolname, ctrl);
             }
         }
 

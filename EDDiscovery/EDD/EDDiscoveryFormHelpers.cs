@@ -358,7 +358,7 @@ namespace EDDiscovery
                     {
                         string key = (string)o;
                         System.Diagnostics.Debug.WriteLine($"Notifications User Ack to {key}");
-                        EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("NotificationLastAckTime", EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("NotificationLastAckTime", "") + "," + key);
+                        EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("NotificationLastAckTime", EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("NotificationLastAckTime", "") + "," + key);
                     });
 
                     ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
@@ -510,7 +510,7 @@ namespace EDDiscovery
             if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ThemeNameOf"))           // old db save method
             {
                 // windows default with name given
-                Theme newtheme = new Theme(UserDatabase.Instance.GetSettingString("ThemeNameOf", "Custom"));
+                Theme newtheme = new Theme(UserDatabase.Instance.GetSetting("ThemeNameOf", "Custom"));
 
                 JObject jo = new JObject();
 
@@ -524,7 +524,7 @@ namespace EDDiscovery
                     if (pi.PropertyType.Name.Contains("Color"))
                     {
                         var cname = "ThemeColor" + ai.Value.Name;
-                        int dbv = UserDatabase.Instance.GetSettingInt(cname, -1);
+                        int dbv = UserDatabase.Instance.GetSetting(cname, -1);
                         if (dbv != -1)
                         {
                             Color p = Color.FromArgb(dbv);
@@ -533,12 +533,12 @@ namespace EDDiscovery
                     }
                 }
 
-                jo["windowsframe"] = UserDatabase.Instance.GetSettingBool("ThemeWindowsFrame", true);
-                jo["formopacity"] = UserDatabase.Instance.GetSettingDouble("ThemeFormOpacity", 100);
-                jo["fontname"] = UserDatabase.Instance.GetSettingString("ThemeFont", newtheme.FontName);
-                jo["fontsize"] = (float)UserDatabase.Instance.GetSettingDouble("ThemeFontSize", newtheme.FontSize);
-                jo["buttonstyle"] = UserDatabase.Instance.GetSettingString("ButtonStyle", newtheme.ButtonStyle);
-                jo["textboxborderstyle"] = UserDatabase.Instance.GetSettingString("TextBoxBorderStyle", newtheme.TextBoxBorderStyle);
+                jo["windowsframe"] = UserDatabase.Instance.GetSetting("ThemeWindowsFrame", true);
+                jo["formopacity"] = UserDatabase.Instance.GetSetting("ThemeFormOpacity", 100.0f);
+                jo["fontname"] = UserDatabase.Instance.GetSetting("ThemeFont", newtheme.FontName);
+                jo["fontsize"] = (float)UserDatabase.Instance.GetSetting("ThemeFontSize", newtheme.FontSize);
+                jo["buttonstyle"] = UserDatabase.Instance.GetSetting("ButtonStyle", newtheme.ButtonStyle);
+                jo["textboxborderstyle"] = UserDatabase.Instance.GetSetting("TextBoxBorderStyle", newtheme.TextBoxBorderStyle);
 
                 //jo.WriteJSONFile(@"c:\code\eddtheme.json", true);
 
@@ -547,15 +547,15 @@ namespace EDDiscovery
                     UserDatabase.Instance.DeleteKey("Theme%");  // remove all theme keys
                     UserDatabase.Instance.DeleteKey("ButtonStyle"); 
                     UserDatabase.Instance.DeleteKey("TextBoxBorderStyle");
-                    UserDatabase.Instance.PutSettingString("ThemeSelected", newtheme.ToJSON().ToString(true));    // write back immediately in case we crash
+                    UserDatabase.Instance.PutSetting("ThemeSelected", newtheme.ToJSON().ToString(true));    // write back immediately in case we crash
                     return newtheme;
                 }
             }
             else if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ThemeSelected"))           // new db save method
             {
-                Theme newtheme = new Theme(EliteDangerousCore.DB.UserDatabase.Instance.GetSettingString("ThemeNameOf", "Custom"));
+                Theme newtheme = new Theme(EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ThemeNameOf", "Custom"));
 
-                string json = UserDatabase.Instance.GetSettingString("ThemeSelected","");
+                string json = UserDatabase.Instance.GetSetting("ThemeSelected","");
                 JToken jo = JToken.Parse(json);
                 if ( jo != null )
                 {
@@ -570,15 +570,15 @@ namespace EDDiscovery
         private void SaveThemeToDB(ExtendedControls.Theme theme)
         {
 #if true
-            UserDatabase.Instance.PutSettingString("ThemeSelected", theme.ToJSON().ToString(true));
+            UserDatabase.Instance.PutSetting("ThemeSelected", theme.ToJSON().ToString(true));
 #else
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ThemeNameOf", theme.Name);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingBool("ThemeWindowsFrame", theme.WindowsFrame);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("ThemeFormOpacity", theme.Opacity);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ThemeFont", theme.FontName);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingDouble("ThemeFontSize", theme.FontSize);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("ButtonStyle", theme.ButtonStyle);
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSettingString("TextBoxBorderStyle", theme.TextBoxBorderStyle);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ThemeNameOf", theme.Name);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ThemeWindowsFrame", theme.WindowsFrame);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ThemeFormOpacity", theme.Opacity);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ThemeFont", theme.FontName);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ThemeFontSize", theme.FontSize);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("ButtonStyle", theme.ButtonStyle);
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("TextBoxBorderStyle", theme.TextBoxBorderStyle);
 
             var dict = QuickJSON.JToken.GetMemberAttributeSettings(typeof(Theme), "AltFmt", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
 
@@ -590,7 +590,7 @@ namespace EDDiscovery
                 {
                     var cname = "ThemeColor" + ai.Value.Name;
                     Color p = (Color)pi.GetValue(theme);
-                    EliteDangerousCore.DB.UserDatabase.Instance.PutSettingInt(cname, p.ToArgb());
+                    EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(cname, p.ToArgb());
                 }
             }
 #endif        
