@@ -52,7 +52,7 @@ namespace EDDiscovery
                                 servertime = servertime.Year < 2020 ? DateTime.UtcNow : servertime;     // it may be MinDate if frontier changes something, protect
 
                                 var entry = new EliteDangerousCore.JournalEvents.JournalEDDCommodityPrices(servertime,
-                                                mk.ID, mk.Name, system, EDCommander.CurrentCmdrID, mk.Commodities);
+                                                mk.ID, mk.Name, mk.Name, system, EDCommander.CurrentCmdrID, mk.Commodities);
 
                                 var jo = entry.ToJSON();        // get json of it, and add it to the db
                                 entry.Add(jo);

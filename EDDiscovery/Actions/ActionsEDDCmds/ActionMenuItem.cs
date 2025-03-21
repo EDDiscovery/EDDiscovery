@@ -57,7 +57,7 @@ namespace EDDiscovery.Actions
                     }
                     else
                     {
-                        if (!(ap.ActionController as ActionController).DiscoveryForm.AddNewMenuItemToAddOns(exp[1], exp[2], (exp.Count >= 4) ? exp[3] : "None", exp[0], ap.ActionFile.Name))
+                        if (!(ap.ActionController as ActionController).DiscoveryForm.AddNewMenuItemToAddOns(exp[1], exp[2], (exp.Count >= 4) ? exp[3] : "Legacy.Star", exp[0], ap.ActionFile.Name))
                             ap.ReportError("MenuItem cannot add to menu, check menu");
                     }
                 }
