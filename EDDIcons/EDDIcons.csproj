@@ -476,6 +476,7 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\CarrierLocation.png" />
     <EmbeddedResource Include="GalMap\InhabitedSystem.png" />
     <EmbeddedResource Include="Controls\Clock.png" />
     <EmbeddedResource Include="Journal\ShipyardRedeem.png" />
