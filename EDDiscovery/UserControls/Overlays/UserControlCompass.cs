@@ -375,8 +375,19 @@ namespace EDDiscovery.UserControls
                     {
                         string planetname = current_body.ReplaceIfStartsWith(current_sys.Name, "");
                         System.Diagnostics.Debug.WriteLine($"..Compass Combobox check for planet '{planetname}'");
-                        if ( planetname.HasChars() )
-                            planetMarks = planetMarks?.Where(p => p.Name.EqualsIIC(planetname))?.ToList();
+                        if ( planetname.HasChars() && planetMarks != null )
+                        {
+                            // display all, but prioritise upwards ones on the same planet
+                            planetMarks.Sort(delegate (PlanetMarks.Planet left, PlanetMarks.Planet right) 
+                            {
+                                if (left.Name == planetname && right.Name != planetname)
+                                    return -1;
+                                else if (right.Name == planetname)
+                                    return 1;
+                                else
+                                    return left.Name.CompareAlphaInt(right.Name);
+                             });
+                        }
                     }
 
                     if (planetMarks != null)
