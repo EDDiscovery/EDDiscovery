@@ -476,6 +476,12 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\RequestPowerMicroResources.png" />
+    <EmbeddedResource Include="Journal\PowerplayMerits.png" />
+    <EmbeddedResource Include="Journal\PowerplayRank.png" />
+    <EmbeddedResource Include="Journal\HoloscreenHacked.png" />
+    <EmbeddedResource Include="Journal\DeliverPowerMicroResources.png" />
+    <EmbeddedResource Include="Journal\CarrierLocation.png" />
     <EmbeddedResource Include="GalMap\InhabitedSystem.png" />
     <EmbeddedResource Include="Controls\Clock.png" />
     <EmbeddedResource Include="Journal\ShipyardRedeem.png" />
