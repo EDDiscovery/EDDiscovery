@@ -47,7 +47,8 @@ namespace EDDiscovery.UserControls
             }
 
             Forms.ImportExportForm frm = new Forms.ImportExportForm();
-            frm.Export(new string[] { "All" }, new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude });
+            frm.Export(new string[] { "All" }, new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude },
+                suggestedfilenamesp: new string[] {"route.csv"} );
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
@@ -64,15 +65,18 @@ namespace EDDiscovery.UserControls
                 grd.GetLine += delegate (int r)
                 {
                     DataGridViewRow rw = dataGridViewRoute.Rows[r];
+                    ISystem sys = rw.Tag as ISystem;
 
                     return new Object[] { rw.Cells[0].Value,rw.Cells[1].Value,
                                           rw.Cells[2].Value,rw.Cells[3].Value,rw.Cells[4].Value,
-                                          rw.Cells[5].Value,rw.Cells[6].Value };
+                                          rw.Cells[5].Value,rw.Cells[6].Value ,rw.Cells[7].Value ,rw.Cells[8].Value ,
+                                            sys?.SystemAddress ?? 0 };
                 };
 
                 grd.GetHeader += delegate (int c)
                 {
-                    return (c < dataGridViewRoute.Columns.Count) ? dataGridViewRoute.Columns[c].HeaderText : null;
+                    return c < dataGridViewRoute.Columns.Count ? dataGridViewRoute.Columns[c].HeaderText : 
+                        c == dataGridViewRoute.Columns.Count ? "System Address" : null;
                 };
 
                 grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());

@@ -419,7 +419,7 @@ namespace EDDiscovery.UserControls
             DrawTextIntoBox(extPictureBoxTitle, text);
         }
 
-        // draw route, direct, no async
+        // draw route, direct, no async. Sys is current system
         private void DrawRoute(ISystem sys)
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor draw route {sys?.Name}");
@@ -503,8 +503,16 @@ namespace EDDiscovery.UserControls
                                 lastroutetext += Environment.NewLine + String.Format("Note: {0}".T(EDTx.UserControlRouteTracker_Note), bookmark.Note);
                         }
 
-                        if (IsSet(RouteControl.shownotetext) && closest.waypointnote.HasChars())
-                            lastroutetext = lastroutetext.AppendPrePad(closest.waypointnote, Environment.NewLine);
+                        if (IsSet(RouteControl.shownotetext) && closest.nextsystemwaypointnote.HasChars())
+                        {
+                            if ( sys.Name == closest.lastsystem.Name)
+                            {
+                                lastroutetext = lastroutetext.AppendPrePad(closest.lastsystem.Name + ": " + closest.lastsystemwaypointnote, Environment.NewLine);
+                                lastroutetext = lastroutetext.AppendPrePad(closest.nextsystem.Name + ": " + closest.nextsystemwaypointnote, Environment.NewLine);
+                            }
+                            else
+                                lastroutetext = lastroutetext.AppendPrePad(closest.nextsystemwaypointnote, Environment.NewLine);
+                        }
 
                         string closestsystem = closest.nextsystem.Name;
 

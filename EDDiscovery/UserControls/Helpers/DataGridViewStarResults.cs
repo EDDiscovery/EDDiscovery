@@ -203,7 +203,8 @@ namespace EDDiscovery.UserControls.Search
             }
 
             Forms.ImportExportForm frm = new Forms.ImportExportForm();
-            frm.Export( new string[] { "Export Current View" }, new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude });
+            frm.Export( new string[] { "Export Current View" }, new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.ShowCSVOpenInclude },
+                suggestedfilenamesp: new string [] { "stargrid.csv" });
 
             if (frm.ShowDialog(FindForm()) == DialogResult.OK)
             {
@@ -224,7 +225,7 @@ namespace EDDiscovery.UserControls.Search
                     List<string> colh = new List<string>();
                     for (int i = 0; i < columnsout; i++)
                         colh.Add(Columns[i].HeaderText);
-                    colh.AddRange(new string[] { "X", "Y", "Z" });
+                    colh.AddRange(new string[] { "X", "Y", "Z" , "System Address"});
 
                     grd.GetHeader += delegate (int c)
                     {
@@ -250,6 +251,7 @@ namespace EDDiscovery.UserControls.Search
                             data.Add(sys.X);
                             data.Add(sys.Y);
                             data.Add(sys.Z);
+                            data.Add(sys.SystemAddress ?? 0);
                         }
 
                         return data.ToArray();
