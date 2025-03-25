@@ -227,7 +227,7 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Körpername"
 .BodyType: "Body Type" => "Körperart"
-.EDSM: "EDSM" => "Quelle"
+.EDSM: "Source" => "Quelle"
 .Mapped: "Mapped" => "Kartographiert"
 .WasMapped: "Already Mapped" => "Bereits kartographiert"
 .WasDiscovered: "Already Discovered" => "Bereits entdeckt"
@@ -347,6 +347,7 @@ SECTION UserControlLedger
 .TotalProfit: "Total Profit" => "Gesamter Profit"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" = UserControlJournalGrid.checkBoxCursorToTop.ToolTip
 
+
 SECTION UserControlLog
 
 .toolStripMenuItemCopy: "Copy" = UserControlExpedition.copyToolStripMenuItem
@@ -390,24 +391,29 @@ SECTION UserControlMaterialCommodities
 .ColRecipes: "Recipes" => "Rezepte"
 .ColWanted: "Want" => "Gewollt"
 .ColNeed: "Need" => "Benötigt"
+
 .AllMats: "All Materials" => "Alle Materialien"
 .AllCommods: "All Commodities" => "Alle Handelswaren"
 .AllMicroresources: "All Microresources" => "Alle Mikroressourcen"
+
 .textBoxItems1.ToolTip: "Count of Items" = UserControlMaterialCommodities.ColNumber
 .textBoxItems2.ToolTip: "Count of Items" = UserControlMaterialCommodities.ColNumber
 .buttonFilter.ToolTip: "Filter out items" => "Einträge ausfiltern"
+
 .buttonClear.ToolTip: "Set all wanted values to zero" => "Setze alle 'Gewollt'-Werte auf Null"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "Grün zeigt Einträge auf Null, Rot filtert diese"
 .extCheckBoxMaterialView.ToolTip: "Switch Material Views" => "Wechsle Materialansicht"
 .extButtonFont.ToolTip: "Font for shopping list" => "Schrift für Einkaufsliste"
 .buttonExtImport.ToolTip: "Import materials list into panel" => "Importiere Materialienliste in Panel"
+
 .openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" => "Öffne Rezept in Fenster"
 .displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" => "Zeige Element in Enkaufsliste"
 .clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" => "Lösche alle angezeigten Elemente in Einkaufsliste"
 .displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" => "Zeige alle 'Nicht Null'-Elemente in Einkaufsliste"
 .toolStripMenuItemSLClearAll: "Clear all display items in shopping list" = UserControlMaterialCommodities.clearAllDisplayItemsInShoppingListToolStripMenuItem
 .Progress: "Progress" => "Fortschritt"
+
 
 SECTION UserControlMissionOverlay
 
@@ -515,8 +521,11 @@ SECTION UserControlModules
 .labelThrusters: "Thrust:" => "Schub:"
 .labelShields: "Shields:" => "Schilde:"
 .labelArmour: "Armour:" => "Panzerung:"
+
+
 .FullBluePrint: "Show full blueprint information" => "Zeige vollständige Blaupauseninformationen"
 .EngineeredValues: "Show Engineered Values" => "Zeige verbesserte Werte"
+
 .comboBoxShips.ToolTip: "Select ship to view" => "Wähle anzuzeigendes Schiff"
 .extButtonShowControl.ToolTip: "Display Settings" => "Anzeigeoptionen"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
@@ -525,6 +534,7 @@ SECTION UserControlModules
 .buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Konfiguriere Extradaten, die im Elite-Journal nicht ausgegeben werden"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
 .extButtonLoadLoadout.ToolTip: "Import a ship definition for display" => "Schiffsdefinition zum Anzeigen importieren"
+
 .ForceSell: "Force Sell" => "Verkaufen erzwingen"
 .ConfirmForceSell: "Confirm sell of ship" => "Bestätige Verkauf von Schiff"
 .StoredModules: "Stored Modules" => "Gelagerte Module"
@@ -538,6 +548,7 @@ SECTION UserControlModules
 .Stored: "Stored" => "Gelagert"
 .AllModules: "All Modules" => "Alle Module"
 .Mass: "Mass" = UserControlModules.labelMass
+
 .InTransit: "In Transit" => "Im Transit"
 .EDSURL: "Enter ED Shipyard URL" => "ED Shipyard URL eingeben"
 .CURL: "Enter Coriolis URL" => "Coriolis URL eingeben"
@@ -549,6 +560,7 @@ SECTION UserControlModules
 .SC: "Ship Configure" => "Schiffskonfiguration"
 .MI: "Module Information" => "Modulinformation"
 .NOSI: "No Ship Information available" => "Keine Schiffsinformationen verfügbar"
+
 .labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" => "Roh {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Ätz {0.#|% =|0.#}"
 .labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" => "Roh {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}"
 .labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" => "Masse {0.##|t} Hülle {0.##|t} Module {0.##|t} Unbeladen {0.##|t} Fracht {0|/|0|t} Warnung bei {0.#|%}"
@@ -557,8 +569,10 @@ SECTION UserControlModules
 .labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" => "Dzt Gsw {0.#} Bst {0.#} Beladen {0.#|/|0.#} Unbeladen {0.#|/|0.#} Max {0.#|/|0.#} Nachbrenner Dzt {0.#|s} Max {0.#|s}"
 .labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" => "Roh {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dau {0.#|s} DauMax {0.#|s} Ammo {0.#|s} Dzt {0.#|%} Max {0.#|%}"
 .labelWep: "Weapons:" => "Waffen"
+
 .extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" => "Speichere diese Konfiguration im EDD-Loadout-Ordner"
 .extButtonDeleteLoadout.ToolTip: "Delete loadout" => "Konfiguration löschen"
+
 .SaveLoadout: "Enter loadout description to save ship with" => "Konfigurationsbeschreibung unter der das Schiff gespeichert wird eingeben"
 
 SECTION UserControlNotePanel
@@ -717,6 +731,7 @@ SECTION UserControlScan
 .StarAge: "Show age of stars" => "Zeige Sternenalter"
 .Expired: "Expired:" => "Abgelaufen:"
 .StarsOnDiffLines: "Show bodyless stars on separate lines" => "Zeige körperlose Sterne auf separater Linie"
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
 
 SECTION UserControlScanGrid
 
@@ -747,7 +762,8 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" = UserControlScan.Belt
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Ringe"
 .materialsToolStripMenuItem: "Show materials" => "Materialien"
-.extButtonHighValue.ToolTip: "Set High Value Limit" => "Setze Limit für 'hoher Wert'"
+.extButtonHighValue.ToolTip: "Set High Value Limit" = UserControlScan.extButtonHighValue.ToolTip
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
 
 SECTION UserControlSettings
 
@@ -954,6 +970,7 @@ SECTION UserControlStarList
 .ColumnSystem: "System" = SearchScans.ColumnSystem
 .ColumnVisits: "Visits" = UserControlExpedition.Visits
 .ColumnInformation: "Information" = Information
+.ColumnBodycount: "Body count" @
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
 .labelTime: "Time" = UserControlCombatPanel.Time
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Entferne die Spaltensortierung"
@@ -1262,6 +1279,8 @@ SECTION UserControlTravelGrid
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" = UserControlJournalGrid.checkBoxCursorToTop.ToolTip
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Umrisskontrolle"
+.extButtonTimeRanges.ToolTip: "Define new time ranges for time selector" @
+.extComboBoxQuickMarks.ToolTip: "Go to a marked journal entry. Use right click to mark an entry" @
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 .StartStopHidden: "Next start/stop marker is hidden" => "Nächste Start/Stopp-Markierung ist versteckt"
 .StartStopNotFound: "No start/stop marker found below" => "Weiter unten keine Start/Stopp-Markierung gefunden"
@@ -1305,7 +1324,7 @@ SECTION UserControlTrilateration
 .ColumnDistance: "Distance" = UserControlOutfitting.Distance
 .ColumnCalculated: "Calculated" => "Berechnet"
 .ColumnStatus: "Status" => "Status"
-.Source: "Source" => "Quelle"
+.Source: "Source" = UserControlEstimatedValues.EDSM
 .dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" => "Gesuchtes System"
 .removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" => "Von gesuchten Systemen entfernen"
 .viewOnEDSMToolStripMenuItem1: "View on EDSM" = DataGridViewStarResults.EDSM
@@ -1432,6 +1451,7 @@ SECTION UserControlFactions
 .colDataLinkPayeeFaction: "DL Payee Faction" => "DL auszahlende Fraktion"
 .colDataLinkPayeeValue: "DL Payee Value" => "DL Auszahlungswert"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Schicke Gitterdaten an Excel"
+
 .colSystem: "System" = SearchScans.ColumnSystem
 .colLastRep: "Last Known Reputation" => "Letzter bekannter Ruf"
 .colFactionState: "Last State" => "Letzter Zustand"

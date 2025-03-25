@@ -17,6 +17,9 @@ Off: "Off" => "Aus"
 Unknown: "Unknown" => "Unbekannt"
 Information: "Information" => "Information"
 NoPos: "No Pos" => "Keine Position"
+
+// from EDC Core
+
 RemoveAll: "Remove All" => "Alle entfernen"
 Hostile: "Hostile" => "Feindlich"
 Unfriendly: "Unfriendly" => "Unbeliebt"
@@ -24,7 +27,17 @@ Neutral: "Neutral" => "Neutral"
 Cordial: "Cordial" => "Akzeptiert"
 Friendly: "Friendly" => "Befreundet"
 Allied: "Allied" => "Verbündet"
+
+// from extended controls
+
 Disabled: "Disabled" => "Deaktiviert"
+
+// from action programs
+
+ToBeDeleted: "To be deleted" @
+ToBeInstalled: "To be installed" @
+Removed: "Removed" @
+Incompatible: "Incompatible" @
 
 SECTION StartUp
 
@@ -171,7 +184,7 @@ SECTION PopOutInfo
 .Organics.Title: "Organic Scans" => "Organische Scans"
 .Organics.Description: "Organic scans of current body and historic scans" => "Informationen über organische Scans des aktuellen Planeten sowie Scanhistorie"
 .Engineers.Title: "Engineers" = PopOutInfo.Engineering.Title
-.Engineers.Description: "List of Engineers, status, recipes" => "Liste der Ingenieure, Status, Blaupausen"
+.Engineers.Description: "Engineers List, status, recipes" => "Liste der Ingenieure, Status, Blaupausen"
 .Discoveries.Title: "Discoveries" => "Entdeckungen"
 .Discoveries.Description: "Discoveries Observer List" => "Discoveries Observer-Liste"
 .Carrier.Title: "Carrier" => "Carrier"

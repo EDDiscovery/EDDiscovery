@@ -17,6 +17,9 @@ Off: "Off" => "Выкл"
 Unknown: "Unknown" => "Неизвестно"
 Information: "Information" => "Информация"
 NoPos: "No Pos" => "Нет положения"
+
+// from EDC Core
+
 RemoveAll: "Remove All" => "Удалить всё"
 Hostile: "Hostile" => "Враждебный"
 Unfriendly: "Unfriendly" => "Недружественный"
@@ -24,7 +27,17 @@ Neutral: "Neutral" => "Нейтральный"
 Cordial: "Cordial" => "Приветливый"
 Friendly: "Friendly" => "Дружественный"
 Allied: "Allied" => "Союзный"
+
+// from extended controls
+
 Disabled: "Disabled" => "Отключено"
+
+// from action programs
+
+ToBeDeleted: "To be deleted" @
+ToBeInstalled: "To be installed" @
+Removed: "Removed" @
+Incompatible: "Incompatible" @
 
 SECTION StartUp
 
@@ -171,7 +184,7 @@ SECTION PopOutInfo
 .Organics.Title: "Organic Scans" => "Сканы органики"
 .Organics.Description: "Organic scans of current body and historic scans" => "Сканированная органика (экзобиологических образцов) текущего тела и история сканирования"
 .Engineers.Title: "Engineers" => "Инженеры"
-.Engineers.Description: "List of Engineers, status, recipes" => "Перечень инженеров, статус, чертежи"
+.Engineers.Description: "Engineers List, status, recipes" => "Перечень инженеров, статус, чертежи"
 .Discoveries.Title: "Discoveries" => "Открытия"
 .Discoveries.Description: "Discoveries Observer List" => "Перечень открытий"
 .Carrier.Title: "Carrier" => "Корабль-носитель"

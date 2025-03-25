@@ -212,22 +212,22 @@ SECTION UserControlEngineering
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "Filtrer le tableau par type de module"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Lorsque rouge, utilise les matériaux à la position du curseur pour estimer. Lorsque vert, utilise toujours les derniers matériaux"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" = UserControlEngineering.extButtonPushResources.ToolTip
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlEngineers
 
 .buttonFilterEngineer.ToolTip: "Select which engineers are shown" => "Sélectionner quels ingénieurs afficher"
 .extCheckBoxWordWrap.ToolTip: "Turn on and off word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" => "Augmente la taille de la grille pour afficher plus de détails"
-.buttonClear.ToolTip: "Set all wanted values to zero" => "Remettre toutes les quantités souhaitées à 0"
-.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Lorsque rouge, utilise les matériaux à la position du curseur pour estimer. Lorsque vert, utilise toujours les derniers matériaux"
+.buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
+.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." = UserControlEngineering.chkNotHistoric.ToolTip
 .extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Nom du corps"
 .BodyType: "Body Type" => "Type du corps"
-.EDSM: "EDSM" @
+.EDSM: "Source" @
 .Mapped: "Mapped" => "Cartographié"
 .WasMapped: "Already Mapped" => "Déjà cartographié"
 .WasDiscovered: "Already Discovered" => "Déjà découvert"
@@ -305,7 +305,7 @@ SECTION UserControlJournalGrid
 .ColumnInformation: "Information" @
 .labelTime: "Time" = Time
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Saisir un texte pour rechercher dans tous les champs une correspondance. Vous pouvez aussi utiliser system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> pour filtrer les résultats ayant ces propriétés."
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" = UserControlDiscoveries.textBoxSearch.ToolTip
 .buttonExtExcel.ToolTip: "Send data on grid to excel" => "Exporter vers Excel"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Place le curseur automatiquement sur l'entrée la plus récente quand elle arrive"
 .buttonField.ToolTip: "Filter out entries matching the field selection" => "Filtrer les entrées correspondant au champ sélectionné"
@@ -346,6 +346,7 @@ SECTION UserControlLedger
 .NOLG: "No Ledger available" => "Aucune comptabilité disponible"
 .TotalProfit: "Total Profit" => "Profit total"
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Déplacer automatiquement le curseur sur la dernière entrée quand elle arrive"
+
 
 SECTION UserControlLog
 
@@ -388,26 +389,31 @@ SECTION UserControlMaterialCommodities
 .ColBackPack: "Backpack" => "Sac à dos"
 .ColPrice: "Avg. Price" => "Prix moyen"
 .ColRecipes: "Recipes" => "Recettes"
-.ColWanted: "Want" => "Souhaité"
+.ColWanted: "Want" = UserControlEngineering.WantedCol
 .ColNeed: "Need" => "Besoin"
+
 .AllMats: "All Materials" => "Tous les matériaux"
 .AllCommods: "All Commodities" => "Toutes les marchandises"
 .AllMicroresources: "All Microresources" => "Toutes les micro ressources"
+
 .textBoxItems1.ToolTip: "Count of Items" => "Qté de marchandise"
 .textBoxItems2.ToolTip: "Count of Items" = UserControlMaterialCommodities.textBoxItems1.ToolTip
 .buttonFilter.ToolTip: "Filter out items" => "Exclure des marchandises"
-.buttonClear.ToolTip: "Set all wanted values to zero" => "Remettre toutes les quantités souhaitées à 0"
+
+.buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" => "Lorsque vert, affiche les éléments avec 0. Lorsque rouge, ne les affiches pas."
 .extCheckBoxMaterialView.ToolTip: "Switch Material Views" => "Passer en vue matériaux"
 .extButtonFont.ToolTip: "Font for shopping list" => "Police de caractère pour la liste de courses"
 .buttonExtImport.ToolTip: "Import materials list into panel" => "Importer la liste des matériaux dans le panneau"
+
 .openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" => "Ouvre la fenêtre de recette"
 .displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" => "Affiche l'élément dans la liste de courses"
 .clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" => "Effacer tous les éléments affiché de la liste de courses"
 .displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" => "Afficher tous les éléments qui ne sont pas à 0 dans la liste de courses"
-.toolStripMenuItemSLClearAll: "Clear all display items in shopping list" => "Effacer tous les éléments affiché de la liste de courses"
+.toolStripMenuItemSLClearAll: "Clear all display items in shopping list" = UserControlMaterialCommodities.clearAllDisplayItemsInShoppingListToolStripMenuItem
 .Progress: "Progress" => "Progression"
+
 
 SECTION UserControlMissionOverlay
 
@@ -473,7 +479,7 @@ SECTION UserControlSurveyor
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" => "Retour à la ligne"
 .extButtonSetRoute.ToolTip: "Select route to follow" => "Sélectionner l'itinéraire à suivre"
 .extButtonControlRoute.ToolTip: "Route Settings" => "Paramètres d'itinéraire"
-.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" => "Sélectionner les découvertes à rechercher, prises depuis les recherches du panneau de recherche de scans"
+.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" = UserControlDiscoveries.extButtonSearches.ToolTip
 .navroute: "Nav Route" @
 .fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => ", Moy : {0:N1} al, Max : {1:N1} al, Portée : {2:N1} al"
 .fsssignals: "List signals to display, semicolon seperated" => "Liste des signaux à afficher, séparés par des points-virgules"
@@ -486,7 +492,7 @@ SECTION MissionListUserControl
 .pColOrigin: "Origin" => "Origine"
 .pColFromFaction: "Faction" @
 .pColDestSys: "Destination" @
-.pColTargetFaction: "Target Faction" => "Faction cible"
+.pColTargetFaction: "Target Faction" = UserControlCombatPanel.labelFaction.ToolTip
 .pColResult: "Result (cr)" => "Résultat (cr)"
 .pColInfo: "Info" @
 .labelTo: "to" => "à"
@@ -515,16 +521,20 @@ SECTION UserControlModules
 .labelThrusters: "Thrust:" => "Poussée :"
 .labelShields: "Shields:" => "Boucliers :"
 .labelArmour: "Armour:" => "Armure :"
+
+
 .FullBluePrint: "Show full blueprint information" => "Afficher les informations complètes du plan"
 .EngineeredValues: "Show Engineered Values" => "Afficher les valeurs ingenieurisées"
+
 .comboBoxShips.ToolTip: "Select ship to view" => "Sélectionner un vaisseau à visualiser"
-.extButtonShowControl.ToolTip: "Display Settings" => "Ouvre les paramètres"
+.extButtonShowControl.ToolTip: "Display Settings" = UserControlSurveyor.extButtonShowControl.ToolTip
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
 .buttonExtCoriolis.ToolTip: "Send to Coriolis" => "Envoyer vers Coriolis"
 .buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "Envoyer vers ED Shipyard"
 .buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Configurer des données manquantes du journal d'Elite"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
 .extButtonLoadLoadout.ToolTip: "Import a ship definition for display" => "Importer une définition de vaisseau à afficher"
+
 .ForceSell: "Force Sell" => "Forcer la vente"
 .ConfirmForceSell: "Confirm sell of ship" => "Confirmer la vente du vaisseau"
 .StoredModules: "Stored Modules" => "Modules stockés"
@@ -538,6 +548,7 @@ SECTION UserControlModules
 .Stored: "Stored" => "Stocké"
 .AllModules: "All Modules" => "Tous les modules"
 .Mass: "Mass" => "Masse"
+
 .InTransit: "In Transit" => "En transit"
 .EDSURL: "Enter ED Shipyard URL" => "Entrer l'URL ED Shipyard"
 .CURL: "Enter Coriolis URL" => "Entrer l'URL Coriolis"
@@ -549,6 +560,7 @@ SECTION UserControlModules
 .SC: "Ship Configure" => "Configuration de vaisseau"
 .MI: "Module Information" => "Information de module"
 .NOSI: "No Ship Information available" => "Aucune information disponible pour le vaisseau"
+
 .labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" => "Brut {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}"
 .labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" => "Brut {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}"
 .labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" => "Mass {0.##|t} Coque {0.##|t} Modules {0.##|t} Vide {0.##|t} Cargo {0|/|0|t} Alerte à {0.#|%}"
@@ -557,8 +569,10 @@ SECTION UserControlModules
 .labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" => "Vit actu {0.#} Boost {0.#} Plein {0.#|/|0.#} Vide {0.#|/|0.#} Max {0.#|/|0.#} Boost Actu {0.#|s} Max {0.#|s}"
 .labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" => "Brut {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Munitions {0.#|s} Actu {0.#|%} Max {0.#|%}"
 .labelWep: "Weapons:" => "Armes :"
+
 .extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" => "Sauvegarder cette configuration dans le dossier des configurations de EDD"
 .extButtonDeleteLoadout.ToolTip: "Delete loadout" => "Supprimer la configuration"
+
 .SaveLoadout: "Enter loadout description to save ship with" => "Entrez la description à sauvegarder pour la configuration du vaisseau"
 
 SECTION UserControlNotePanel
@@ -693,7 +707,7 @@ SECTION UserControlScan
 .extCheckBoxStar.ToolTip: "Select another system to view" => "Sélectionner un autre système à visualiser"
 .buttonSize.ToolTip: "Select image size" => "Sélectionner la taille d'image"
 .extButtonHighValue.ToolTip: "Set High Value Limit" => "Définir la limite haute de valeur"
-.buttonExtExcel.ToolTip: "Export" = UserControlModules.buttonExtExcel.ToolTip
+.buttonExtExcel.ToolTip: "Export" = UserControlJournalGrid.buttonExtExcel.ToolTip
 .System: "System:" = UserControlWebBrowser.System
 .EnterSys: "Show System" = UserControlWebBrowser.EnterSys
 .VLMT: "Set Valuable Minimum" => "Définir le seuil de valeur"
@@ -717,6 +731,7 @@ SECTION UserControlScan
 .StarAge: "Show age of stars" => "Afficher l'age des étoiles"
 .Expired: "Expired:" => "Expiré :"
 .StarsOnDiffLines: "Show bodyless stars on separate lines" => "Afficher les étoiles sans corps sur des lignes séparées"
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
 
 SECTION UserControlScanGrid
 
@@ -728,14 +743,14 @@ SECTION UserControlScanGrid
 .ColMaxValue: "Max Value" => "Valeur maximale"
 .ColOrganics: "Organics Value" => "Valeur scans organiques"
 .extButtonShowControl.ToolTip: "Configure overall settings" => "Paramètres généraux"
-.extButtonHighValue_ToolTip: "Set High Value Limit" => "Définir la limite haute de valeur"
+.extButtonHighValue_ToolTip: "Set High Value Limit" = UserControlScan.extButtonHighValue.ToolTip
 .MainStar: "Main Star" => "Étoile principale"
 .Mass: "Mass" = UserControlModules.Mass
 .Radius: "Radius" => "Rayon"
 .Temperature: "Temperature" => "Température"
 .Terraformable: "Terraformable" @
 .Moon: "Moon" => "Lune"
-.Landable: "Landable" => "Atterrissable"
+.Landable: "Landable" = UserControlSurveyor.bodyFeaturesToolStripMenuItem.landableToolStripMenuItem
 .Geologicalactivity: "Geological activity" => "Activité géologique"
 .Surfacemapped: "Surface mapped" => "Surface cartographiée"
 .BC: "This body contains: " => "Ce corps contient : "
@@ -747,7 +762,8 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" => "Ceintures"
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Anneaux"
 .materialsToolStripMenuItem: "Show materials" = UserControlMaterialCommodities.Mats
-.extButtonHighValue.ToolTip: "Set High Value Limit" => "Définir la limite haute de valeur"
+.extButtonHighValue.ToolTip: "Set High Value Limit" = UserControlScan.extButtonHighValue.ToolTip
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
 
 SECTION UserControlSettings
 
@@ -789,7 +805,7 @@ SECTION UserControlSettings
 .checkBoxUseNotifyIcon: "Show notification area icon" => "Afficher l'icône de la zone de notification"
 .extGroupBoxDLLPerms: "DLLs" @
 .extButtonDLLPerms: "Permissions" @
-.extButtonDLLConfigure: "Configure" => "Configurer"
+.extButtonDLLConfigure: "Configure" = UserControlSettings.buttonExtScreenshot
 .groupBoxCustomLanguage: "Language" => "Langue"
 .groupBoxCustomSafeMode: "Advanced" => "Avancé"
 .buttonExtSafeMode: "Restart in Safe Mode" => "Redémarrer en mode sans échec"
@@ -850,15 +866,15 @@ SECTION UserControlSettings
 SECTION UserControlShipYards
 
 .labelYard: "Unknown" = Unknown
-.labelYardSel: "Sel" => "Sélection"
+.labelYardSel: "Sel" = UserControlOutfitting.labelYardSel
 .comboBoxYards.ToolTip: "Select ship to view" = UserControlOutfitting.comboBoxYards.ToolTip
 .TravelHistoryEntry: "Travel History Entry" => "Entrée d'historique"
 .Date: "Date" @
-.Yard: "Yard" => "Chantier"
+.Yard: "Yard" = UserControlOutfitting.Yard
 .Distance: "Distance" @
 .Price: "Price" = UserControlOutfitting.Price
 .Ship: "Ship" = UserControlModules.labelShip
-.Manufacturer: "Manufacturer" = UserControlModules.Manufacturer
+.Manufacturer: "Manufacturer" @
 .MS: "Mass/Speed" => "Masse/Vitesse"
 
 SECTION UserControlShoppingList
@@ -895,8 +911,8 @@ SECTION UserControlSpanel
 .showCircumstellarZonesToolStripMenuItem: "Show Habitation Zone" => "Afficher les zones habitables"
 .showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Show Metal Rich Planet Zone" => "Planètes riches en métaux"
 .showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Show Water World Zone" => "Mondes aquatiques"
-.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Show Earth Like Zone" => "Mondes telluriques"
-.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Show Ammonia Worlds Zone" => "Mondes ammoniacs"
+.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Show Earth Like Zone" = UserControlRoute.extButtonSpanshEarthLikes
+.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Show Ammonia Worlds Zone" = UserControlRoute.extButtonSpanshAmmoniaWorlds
 .showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Show Icy Planets Zone" => "Planètes gelées"
 .OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" => "Défaut"
 .OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" => "Notes après XYZ"
@@ -913,25 +929,25 @@ SECTION UserControlSpanel
 .showInPositionToolStripMenuItem.scanOnTopMenuItem: "Scan on top" => "En haut"
 .dontShowInformationWhenToolStripMenuItem: "Don't show information when" => "Ne pas afficher les informations quand..."
 .dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" => "... apponté ou posé"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "when in a panel" => "... dans la carte galactique"
+.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "in a panel" => "... dans la carte galactique"
 .dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" => "Cacher le titre quand caché"
-.extButtonShowControl.ToolTip: "Configure overall settings" => "Paramètres généraux"
+.extButtonShowControl.ToolTip: "Configure overall settings" = UserControlScanGrid.extButtonShowControl.ToolTip
 .extButtonColumns.ToolTip: "Configure columns shown" => "Configurer l'affichage des colonnes"
 .extButtonColumnOrder.ToolTip: "Configure column order" => "Configurer l'ordre des colonnes"
 .extButtonHabZones.ToolTip: "Configure hab zone information" => "Paramètres de zone habitable"
 .buttonFilter.ToolTip: "Select what journal events to show" => "Configurer le filtre d'événement..."
 .buttonField.ToolTip: "Filter out events" => "Configurer le filtre de champs..."
-.extButtonScanShow.ToolTip: "Configure scan display" => "Configurer l'affichage du scan"
+.extButtonScanShow.ToolTip: "Configure scan display" = UserControlScan.scanDisplayConfigureButton.ToolTip
 .extButtoScanPos.ToolTip: "Set position of scan display" => "Configurer la position du scan"
-.extButtonFont.ToolTip: "Font" => "Police de caractère"
-.extCheckBoxWordWrap.ToolTip: "Word Wrap" => "Retour à la ligne"
+.extButtonFont.ToolTip: "Font" = UserControlSurveyor.extButtonFont.ToolTip
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" = UserControlSurveyor.extCheckBoxWordWrap.ToolTip
 .Target: "Target" = UserControlCombatPanel.labelTarget
 .TVE: "View system on EDSM" => "Afficher le système dans EDSM"
 .SPF: "Summary Panel: Filter out fields" => "Panneau de résumé : filtrer les champs"
 
 SECTION UserControlStarDistance
 
-.addToExpeditionToolStripMenuItem: "Add to Expedition" => "Ajouter à l'expédition"
+.addToExpeditionToolStripMenuItem: "Add to Expedition" = UserControlBookmarks.addToExpeditionToolStripMenuItem
 .colName: "Name" = UserControlCombatPanel.Name
 .colDistance: "Distance" @
 .colVisited: "Visited" => "Visite(s)"
@@ -945,7 +961,7 @@ SECTION UserControlStarDistance
 .textMaxRadius.ToolTip: "Maximum star distance in ly" => "Distance max de l'étoile en al"
 .From: "From {0}" => "Depuis {0}"
 .NoEDSMSys: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
-.viewSystemToolStripMenuItem: "View System" => "Voir le système"
+.viewSystemToolStripMenuItem: "View System" = UserControlExpedition.viewSystemToolStripMenuItem
 .viewOnSpanshToolStripMenuItem: "View on Spansh" = DataGridViewStarResults.Spansh
 
 SECTION UserControlStarList
@@ -954,6 +970,7 @@ SECTION UserControlStarList
 .ColumnSystem: "System" = SearchScans.ColumnSystem
 .ColumnVisits: "Visits" = UserControlExpedition.Visits
 .ColumnInformation: "Information" @
+.ColumnBodycount: "Body count" @
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
 .labelTime: "Time" = UserControlLedger.TimeCol
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" = UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem
@@ -961,12 +978,12 @@ SECTION UserControlStarList
 .viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
 .viewOnSpanshToolStripMenuItem: "View on Spansh" = DataGridViewStarResults.Spansh
 .setNoteToolStripMenuItem: "Set Note" = SetNoteForm
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Déplacer automatiquement le curseur sur la dernière entrée quand elle arrive"
+.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" = UserControlLedger.checkBoxCursorToTop.ToolTip
 .buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
 .comboBoxTime.ToolTip: "Select the entries by age" => "Trier les entrées par âge"
 .viewScanDisplayToolStripMenuItem: "View Scan Display" = DataGridViewStarResults.Data
 .Value: "Scan Value" => "Valeur de scan"
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Saisir un texte pour rechercher dans tous les champs une correspondance. Vous pouvez aussi utiliser system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> pour filtrer les résultats ayant ces propriétés."
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" = UserControlDiscoveries.textBoxSearch.ToolTip
 .Total: "Total" @
 .CS: "{0} Star(s) {1}" => "{0} étoile(s) {1}"
 .FSD: "This system has materials for FSD boost" => "Ce système contient les matériaux pour des boost FSD : "
@@ -992,7 +1009,7 @@ SECTION UserControlStats
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank: "Rank" => "Rang"
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnAtStart: "At Start" => "Au départ"
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxAtEnd: "At End" => "À la fin"
-.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" => "Progression"
+.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" = UserControlMaterialCommodities.Progress
 .tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnLastPromotionDate: "Last Promotion/Date" => "Date de dernière promotion"
 .tabControlCustomStats.tabPageLedger: "Ledger" => "Comptabilité"
 .tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnLedgerDate: "Date" @
@@ -1063,7 +1080,7 @@ SECTION UserControlStats
 .JetConeBoost: "Jet Cone Boost" => "Boost par jet de matière"
 .Scans: "Scans" @
 .OrganicScans: "Organic Scans Value" => "Valeur des scans organique"
-.Mapped: "Mapped" => "Cartographié"
+.Mapped: "Mapped" = UserControlEstimatedValues.Mapped
 .Scanvalue: "Scan value" = UserControlStarList.Value
 .Beltcluster: "Belt Cluster" => "Ceintures d'astéroïdes"
 .Lastdock: "Last dock" => "Dernier appontage"
@@ -1081,7 +1098,7 @@ SECTION UserControlStats
 .Crew: "Crew" => "Équipage"
 .Multi: "Multi-crew" => "Équipage multiple"
 .MaterialsTrader: "Materials Trader" => "Commerçants de matériaux"
-.FLEETCARRIER: "Fleetcarrier" => "Porte-vaisseaux"
+.FLEETCARRIER: "Fleetcarrier" = UserControlRoute.extButtonFleetCarrier
 .CQC: "CQC" @
 .Exobiology: "Exobiology" => "Exobiologie"
 .Thargoids: "Thargoids" => "Rencontres"
@@ -1108,8 +1125,8 @@ SECTION UserControlSynthesis
 .buttonRecipeFilter.ToolTip: "Filter the table by the synthesis type" => "Filtre des types de synthèses"
 .buttonFilterLevel.ToolTip: "Filter the table by the synthesis level" => "Filtre des niveaux de synthèses"
 .buttonMaterialFilter.ToolTip: "Filter the table by the material type" => "Filtre des types de matériaux"
-.buttonClear.ToolTip: "Set all wanted values to zero" => "Remettre toutes les quantités souhaitées à 0"
-.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Lorsque rouge, utilise les matériaux à la position du curseur pour estimer. Lorsque vert, utilise toujours les derniers matériaux"
+.buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
+.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." = UserControlEngineering.chkNotHistoric.ToolTip
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
 .extButtonPushResources.ToolTip: "Push items wanted to Resources panel" => "Envoyer les éléments souhaités dans le panneau des ressources"
 
@@ -1156,8 +1173,8 @@ SECTION UserControlSysInfo
 .labelGamemode: "Mode" @
 .labelTravel: "Travel" = UserControlStats.tabControlCustomStats.tabPageTravel
 .labelOpenShip: "Open" => "Ouvrir"
-.labelOpenStation: "Open" => "Ouvrir"
-.labelOpen: "Open" => "Ouvrir"
+.labelOpenStation: "Open" = UserControlSysInfo.labelOpenShip
+.labelOpen: "Open" = UserControlSysInfo.labelOpenShip
 .labelCargo: "Cargo" = UserControlMarketData.CargoCol
 .labelCredits: "Credits" = UserControlCombatPanel.labelCredits
 .labelShip: "Ship" = UserControlModules.labelShip
@@ -1210,7 +1227,7 @@ SECTION UserControlTravelGrid
 .THF: "History: Filter out fields" => "Historique : Filtrer les champs"
 .TT1: " showing {0} original {1}" => " affiche {0} original {1}"
 .TTFilt1: "Filtered {0}" => "Filtre {0}"
-.TTSelAge: "Select the entries by age, " => "Sélection des entrées par âge, "
+.TTSelAge: "Select the entries by age, " = UserControlJournalGrid.TTSelAge
 .CSTART: "Clear Start marker" => "Supprimer le marqueur de début"
 .CSTOP: "Clear Stop marker" => "Supprimer le marqueur de fin"
 .SETSTOPTC: "Set Stop marker for travel calculations" => "Définir le marqueur de fin pour le calcul d'itinéraire"
@@ -1218,7 +1235,7 @@ SECTION UserControlTravelGrid
 .NotSynced: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
 .Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Confirmer que vous voulez supprimer cette entrée\r\nElle peut réapparaitre si les logs sont de nouveaux scannés"
 .quickMarkToolStripMenuItem: "Marked" => "Marqué"
-.removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" = UserControlStarList.removeSortingOfColumnsToolStripMenuItem
+.removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" = UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem
 .gotoEntryNumberToolStripMenuItem: "Jump to Entry" = UserControlJournalGrid.jumpToEntryToolStripMenuItem
 .setNoteToolStripMenuItem: "Set Note" => "Saisir une note"
 .createEditBookmarkToolStripMenuItem: "Create/Edit Bookmark" => "Créer/Modifier un marque-page"
@@ -1251,17 +1268,19 @@ SECTION UserControlTravelGrid
 .outliningOnOffToolStripMenuItem: "Outlining On" => "Regroupement activé"
 .scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" => "Regrouper les événements de scan"
 .toolStripRollUpOlderOutlines: "Roll up older entries" => "Réduire les veilles entrées"
-.toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" => "Désactivé"
+.toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" = Disabled
 .toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" => "Après le premier"
 .toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" => "Après 5"
-.comboBoxTime.ToolTip: "Select the entries by age" => "Trier les entrées par âge"
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Saisir un texte pour rechercher dans tous les champs une correspondance. Vous pouvez aussi utiliser system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> pour filtrer les résultats ayant ces propriétés."
+.comboBoxTime.ToolTip: "Select the entries by age" = UserControlStarList.comboBoxTime.ToolTip
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" = UserControlDiscoveries.textBoxSearch.ToolTip
 .buttonFilter.ToolTip: "Filter out entries based on event type" => "Filtrer les entrées sur le type d'événement"
 .buttonField.ToolTip: "Filter out entries matching the field selection" => "Filtrer les entrées qui correspondent au champ sélectionné"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Déplace automatiquement le curseur sur la dernière entrée lorsqu'elle arrive"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Contrôle du regroupement"
+.extButtonTimeRanges.ToolTip: "Define new time ranges for time selector" @
+.extComboBoxQuickMarks.ToolTip: "Go to a marked journal entry. Use right click to mark an entry" @
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 .StartStopHidden: "Next start/stop marker is hidden" => "Le marqueur début/fin suivant est caché"
 .StartStopNotFound: "No start/stop marker found below" => "Pas de marqueur début/fin trouvé ci-dessous"
@@ -1292,7 +1311,7 @@ SECTION CaptainsLogEntries
 .ColTags: "Tags" @
 .labelEndDate: "End Date:" = UserControlExpedition.labelEndDate
 .labelDateStart: "Start Date:" = UserControlExpedition.labelDateStart
-.buttonTags.ToolTip: "Edit Tags" => "Modifier les tags"
+.buttonTags.ToolTip: "Edit Tags" = UserControlBookmarks.buttonTags.ToolTip
 .buttonDelete.ToolTip: "Delete selected entries" => "Supprimer les entrées sélectionnées"
 .buttonNew.ToolTip: "New Entry" => "Nouvelle entrée"
 .textBoxFilter.ToolTip: "Search for Log Entries" => "Rechercher dans les entrées de log"
@@ -1351,8 +1370,8 @@ SECTION UserControlMaterialTrader
 .MaxCol: "Get" => "Obtenir"
 .AvailableCol: "Total" @
 .buttonClear: "Clear" => "Vider"
-.checkBoxCursorToTop.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Lorsque rouge, utilise les matériaux à la position du curseur pour estimer. Lorsque vert, utilise toujours les derniers matériaux"
-.buttonClear.ToolTip: "Set all wanted values to zero" => "Remettre toutes les quantités souhaitées à 0"
+.checkBoxCursorToTop.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." = UserControlEngineering.chkNotHistoric.ToolTip
+.buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
 .Offer: "Offer" = UserControlMarketData.SupplyCol
 .Receive: "Receive" => "Reçoit"
 .clearTradeToolStripMenuItem: "Clear Trade" => "Vider la transaction"
@@ -1399,7 +1418,7 @@ SECTION UserControlFactions
 .CrimeCommitted: "Crimes Committed" => "Crimes commis"
 .BountyKills: "Bounty Kills" => "Tués pour primes"
 .BountyValue: "Bounty Rewards" => "Récompenses de prime"
-.BountyRewardsValue: "Bounty Rewards Value" => "Valeur des primes"
+.BountyRewardsValue: "Bounty Rewards Value" = UserControlStats.Bountyvalue
 .Interdicted: "Interdicted" => "Interdit"
 .Interdiction: "Interdiction" => "Interdiction"
 .KillBondVictim: "Kill Bonds Victim" => "Victimes de récompenses de combat"
@@ -1407,14 +1426,14 @@ SECTION UserControlFactions
 .KillBondsValue: "Kill Bonds Value" => "Valeur des récompenses de combat"
 .CartoValue: "Cartographic Value" => "Valeur des cartographies"
 .colInfo: "Other Info" => "Autre info"
-.labelTo: "to" => "à"
+.labelTo: "to" = MissionListUserControl.labelTo
 .startDateTimePicker.ToolTip: "Include from" => "Inclure de"
 .endDateTimePicker.ToolTip: "Include to" => "Inclure jusqu'à"
 .FactionsPlural: "Factions" @
 .MissionsFor: "Missions for " => "Missions pour "
 .BountyBond: "Bounty/Bond" => "Prime/Récompense de combat"
 .Target: "Target" = UserControlCombatPanel.labelTarget
-.TargetFaction: "Target Faction" => "Faction cible"
+.TargetFaction: "Target Faction" = UserControlCombatPanel.labelFaction.ToolTip
 .Reward: "Reward" = UserControlCombatPanel.Reward
 .BountiesBondsFor: "Bounties/Bonds for " => "Primes/Récompenses de combat pour "
 .Item: "Item" @
@@ -1432,11 +1451,12 @@ SECTION UserControlFactions
 .colDataLinkPayeeFaction: "DL Payee Faction" => "Récompenses liaison de données"
 .colDataLinkPayeeValue: "DL Payee Value" => "Valeur des récompenses liaison de données"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
-.colSystem: "System" => "Système"
+
+.colSystem: "System" = SearchScans.ColumnSystem
 .colLastRep: "Last Known Reputation" => "Dernière réputation connue"
 .colFactionState: "Last State" => "Dernier état"
 .colFactionGov: "Government" => "Gouvernement"
-.colFactionAllegiance: "Allegiance" => "Allégeance"
+.colFactionAllegiance: "Allegiance" = UserControlSysInfo.labelAllegiance
 .colFactionSystemInfluence: "System Influence" => "Influence dans le système"
 .colFactionOtherSystemInfo: "Other System Info" => "Autres infos du système"
 .colOrganicDataSold: "Organic Data Value" => "Valeur des scans organiques"
@@ -1453,16 +1473,16 @@ SECTION UserControlFactions
 
 SECTION UserControlOrganics
 
-.extButtonShowControl.ToolTip: "Display Settings" => "Ouvre les paramètres"
-.extButtonFont.ToolTip: "Font" => "Police de caractère"
-.extCheckBoxWordWrap.ToolTip: "Word Wrap" => "Retour à la ligne"
+.extButtonShowControl.ToolTip: "Display Settings" = UserControlSurveyor.extButtonShowControl.ToolTip
+.extButtonFont.ToolTip: "Font" = UserControlSurveyor.extButtonFont.ToolTip
+.extCheckBoxWordWrap.ToolTip: "Word Wrap" = UserControlSurveyor.extCheckBoxWordWrap.ToolTip
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" => "Afficher les scans incomplets"
 .at: "At {0}" => "À {0}"
 .sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" => ", {0}, Rayon {1}, {2}, {3}, Signaux bio : {4}{5}"
-.extButtonAlignment.ToolTip: "Alignment" => "Alignement"
+.extButtonAlignment.ToolTip: "Alignment" = UserControlSurveyor.extButtonAlignment.ToolTip
 .ColDate: "Date" @
-.ColStarSystem: "Star System" = UserControlModules.System
-.ColBodyName: "Body Name" => "Nom du corps"
+.ColStarSystem: "Star System" = SearchScans.ColumnSystem
+.ColBodyName: "Body Name" = UserControlEstimatedValues.BodyName
 .ColBodyType: "Body Type" => "Type de corps"
 .ColGenus: "Genus" => "Genre"
 .ColSpecies: "Species" => "Espèce"
@@ -1470,8 +1490,8 @@ SECTION UserControlOrganics
 .ColLastScanType: "Last Scan Type" => "Type du dernier scan"
 .ColValue: "Value" = UserControlModules.Value
 .labelTime: "Time" = Time
-.labelStart: "Start" => "Début"
-.labelEnd: "End" => "Fin"
+.labelStart: "Start" = UserControlCombatPanel.Start
+.labelEnd: "End" = UserControlCombatPanel.End
 .comboBoxTime.ToolTip: "Select the entries by age" => "Sélectionner les entrées par age"
 
 SECTION ScanDisplayForm
@@ -1495,13 +1515,13 @@ SECTION FilterSelector
 .Commodities: "Commodities" => "Marchandises"
 .Ledger: "Ledger" => "Livre de compte"
 .Ship: "Ship" = UserControlModules.labelShip
-.Mining: "Mining" => "Minage"
+.Mining: "Mining" = UserControlStats.Mining
 .MicroResources: "Micro Resources" => "Micro ressources"
 .Suits: "Suits" => "Combinaisons"
-.Carrier: "Carrier" => "Porte-vaisseaux"
+.Carrier: "Carrier" = UserControlRoute.extButtonFleetCarrier
 .NewGroup: "Create new group" => "Créer un nouveau groupe"
 .Newgroupname: "Enter name of new group" => "Entrer le nom du nouveau groupe"
-.Confirmremoval: "Confirm removal of" => "Confirmer la suppression de"
+.Confirmremoval: "Confirm removal of" = SearchScans.DEL
 
 SECTION UserControlCommonBase
 
@@ -1514,7 +1534,7 @@ SECTION CSV
 
 SECTION InfoForm
 
-.Copyingtextfailed: "Copying text to clipboard failed" => "Échec de la copie du texte vers le presse-papier"
+.Copyingtextfailed: "Copying text to clipboard failed" = UserControlCommonBase.Copyingtexttoclipboardfailed
 
 SECTION UserControlSuitsWeapons
 
@@ -1529,7 +1549,7 @@ SECTION UserControlSuitsWeapons
 .CWTime: "Time" = UserControlLedger.TimeCol
 .CWName: "Name" = UserControlCombatPanel.Name
 .CWClass: "Class" => "Qualité"
-.CWMods: "Mods" => "Modifications"
+.CWMods: "Mods" = UserControlSuitsWeapons.CSMods
 .CWPrice: "Price" = UserControlOutfitting.Price
 .CWPrimary: "Primary" => "Principal"
 .CWWType: "Weapon Type" => "Type d'arme"
@@ -1590,7 +1610,7 @@ SECTION UserControlCarrier
 .NotLoggedIn: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." => "Vous n'êtes pas connecté à CAPI.\r\nAllez dans la page des paramètres puis ouvrez la configuration du commandant, et connectez-vous à CAPI."
 .OptionalService: "Optional Service" => "Service optionnel"
 .CoreService: "Core Service" => "Service de base"
-.extTabControl.tabPageOverall: "Overall" => "Général"
+.extTabControl.tabPageOverall: "Overall" = UserControlStats.tabControlCustomStats.tabPageGeneral
 .extTabControl.tabPageItinerary: "Itinerary" => "Itinéraire"
 .extTabControl.tabPageItinerary.colItinDate: "Date" @
 .extTabControl.tabPageItinerary.colItinSystemAlphaInt: "System" = SearchScans.ColumnSystem
@@ -1604,7 +1624,7 @@ SECTION UserControlCarrier
 .extTabControl.tabPageFinances.colLedgerBodyAlphaInt: "Body" = SearchScans.ColumnBody
 .extTabControl.tabPageFinances.colLedgerEvent: "Event" = UserControlCombatPanel.Event
 .extTabControl.tabPageFinances.colLedgerCreditNumeric: "Credits" = UserControlCombatPanel.labelCredits
-.extTabControl.tabPageFinances.colLedgerDebitNumeric: "Debits" => "Débits"
+.extTabControl.tabPageFinances.colLedgerDebitNumeric: "Debits" = UserControlLedger.Debits
 .extTabControl.tabPageFinances.colLedgerBalanceNumeric: "Balance cr" => "Solde (cr)"
 .extTabControl.tabPageFinances.colLedgerNotes: "Notes" @
 .extTabControl.tabPageServices: "Services" @
@@ -1614,8 +1634,8 @@ SECTION UserControlCarrier
 .extTabControl.tabPageOrders.colOrdersCommodity: "Commodity" => "Marchandise"
 .extTabControl.tabPageOrders.colOrdersType: "Type" @
 .extTabControl.tabPageOrders.colOrdersGroup: "Group" => "Groupe"
-.extTabControl.tabPageOrders.colOrdersPurchaseNumeric: "Purchase" => "Achat"
-.extTabControl.tabPageOrders.colOrdersSaleNumeric: "Sale" => "Vente"
+.extTabControl.tabPageOrders.colOrdersPurchaseNumeric: "Purchase" = UserControlMarketData.BuyCol
+.extTabControl.tabPageOrders.colOrdersSaleNumeric: "Sale" = UserControlMarketData.SellCol
 .extTabControl.tabPageOrders.colOrdersPriceNumeric: "Price" = UserControlOutfitting.Price
 .extTabControl.tabPageOrders.colOrdersBlackmarket: "Blackmarket" => "Marché noir"
 .extTabControl.tabPageCAPI3: "CAPI Stats" @
@@ -1623,7 +1643,7 @@ SECTION UserControlCarrier
 .extTabControl.tabPageCAPI3.dataGridViewTextBoxColumnValue: "Value" = UserControlModules.Value
 .extTabControl.tabPageCAPI1: "CAPI Ships/Modules" => "CAPI Vaisseaux/Modules"
 .extTabControl.tabPageCAPI1.colCAPIShipsName: "Name" = UserControlCombatPanel.Name
-.extTabControl.tabPageCAPI1.colCAPIShipsManu: "Manufacturer" = UserControlModules.Manufacturer
+.extTabControl.tabPageCAPI1.colCAPIShipsManu: "Manufacturer" @
 .extTabControl.tabPageCAPI1.colCAPIShipsPriceNumeric: "Price" = UserControlOutfitting.Price
 .extTabControl.tabPageCAPI1.colCAPIShipsSpeedNumeric: "Speed" => "Vitesse"
 .extTabControl.tabPageCAPI1.colCAPIShipsBoostNumeric: "Boost" @
@@ -1633,19 +1653,19 @@ SECTION UserControlCarrier
 .extTabControl.tabPageCAPI1.colCAPIModulesCat: "Category" = UserControlMarketData.CategoryCol
 .extTabControl.tabPageCAPI1.colCAPIModulesMassNumeric: "Mass" = UserControlModules.Mass
 .extTabControl.tabPageCAPI1.colCAPIModulesPowerNumeric: "Power" => "Puissance"
-.extTabControl.tabPageCAPI1.colCAPIModulesCostNumeric: "Cost" => "Coût"
+.extTabControl.tabPageCAPI1.colCAPIModulesCostNumeric: "Cost" = UserControlModules.Cost
 .extTabControl.tabPageCAPI1.colCAPIModulesStockNumeric: "Stock" @
 .extTabControl.tabPageCAPI1.colCAPIModulesInfo: "Info" @
 .extTabControl.tabPageCAPI2: "CAPI Items" => "CAPI Éléments"
-.extTabControl.tabPageCAPI2.colCAPICargoCommodity: "Commodity" => "Marchandise"
+.extTabControl.tabPageCAPI2.colCAPICargoCommodity: "Commodity" = UserControlCarrier.extTabControl.tabPageOrders.colOrdersCommodity
 .extTabControl.tabPageCAPI2.colCAPICargoType: "Type" @
-.extTabControl.tabPageCAPI2.colCAPICargoGroup: "Group" => "Groupe"
+.extTabControl.tabPageCAPI2.colCAPICargoGroup: "Group" = UserControlCarrier.extTabControl.tabPageOrders.colOrdersGroup
 .extTabControl.tabPageCAPI2.colCAPICargoQuantityNumeric: "Quantity" => "Quantité"
 .extTabControl.tabPageCAPI2.colCAPICargoPriceNumeric: "Price" = UserControlOutfitting.Price
 .extTabControl.tabPageCAPI2.colCAPICargoStolen: "Stolen" => "Volé"
 .extTabControl.tabPageCAPI2.colCAPILockerName: "Microresource" => "Micro ressource"
 .extTabControl.tabPageCAPI2.colCAPILockerType: "Type" @
-.extTabControl.tabPageCAPI2.colCAPILockerQuantityNumeric: "Quantity" => "Quantité"
+.extTabControl.tabPageCAPI2.colCAPILockerQuantityNumeric: "Quantity" = UserControlCarrier.extTabControl.tabPageCAPI2.colCAPICargoQuantityNumeric
 
 SECTION BookmarkForm
 
@@ -1680,7 +1700,7 @@ SECTION SurfaceBookmarkUserControl
 .labelSurface: "Surface Bookmarks In System" => "Marque-pages de surface dans le système"
 .sendToCompassToolStripMenuItem: "Send to compass" => "Envoyer à la boussole"
 .deleteToolStripMenuItem: "Delete Row" => "Supprimer la ligne"
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" => "Ajouter manuellement une planète"
+.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" = SurfaceBookmarkUserControl.MAP
 .ColTags: "Tags" @
 .textBoxFilter.ToolTip: "Search for planetary locations" => "Recherche de lieu en surface"
 .buttonFilter.ToolTip: "Filter out entries based on tag" = UserControlBookmarks.buttonFilter.ToolTip

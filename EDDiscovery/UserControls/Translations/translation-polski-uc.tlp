@@ -227,7 +227,7 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Nazwa Ciała Niebieskiego"
 .BodyType: "Body Type" @
-.EDSM: "EDSM" @
+.EDSM: "Source" @
 .Mapped: "Mapped" @
 .WasMapped: "Already Mapped" @
 .WasDiscovered: "Already Discovered" @
@@ -347,6 +347,7 @@ SECTION UserControlLedger
 .TotalProfit: "Total Profit" @
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
 
+
 SECTION UserControlLog
 
 .toolStripMenuItemCopy: "Copy" = UserControlExpedition.copyToolStripMenuItem
@@ -390,24 +391,29 @@ SECTION UserControlMaterialCommodities
 .ColRecipes: "Recipes" @
 .ColWanted: "Want" @
 .ColNeed: "Need" @
+
 .AllMats: "All Materials" @
 .AllCommods: "All Commodities" @
 .AllMicroresources: "All Microresources" @
+
 .textBoxItems1.ToolTip: "Count of Items" @
 .textBoxItems2.ToolTip: "Count of Items" => "Ilość Przedmiotów"
 .buttonFilter.ToolTip: "Filter out items" => "Filtruj przedmioty"
+
 .buttonClear.ToolTip: "Set all wanted values to zero" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
 .extCheckBoxMaterialView.ToolTip: "Switch Material Views" @
 .extButtonFont.ToolTip: "Font for shopping list" @
 .buttonExtImport.ToolTip: "Import materials list into panel" @
+
 .openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" @
 .displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" @
 .clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" @
 .displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" @
 .toolStripMenuItemSLClearAll: "Clear all display items in shopping list" @
 .Progress: "Progress" @
+
 
 SECTION UserControlMissionOverlay
 
@@ -515,8 +521,11 @@ SECTION UserControlModules
 .labelThrusters: "Thrust:" @
 .labelShields: "Shields:" @
 .labelArmour: "Armour:" @
+
+
 .FullBluePrint: "Show full blueprint information" @
 .EngineeredValues: "Show Engineered Values" @
+
 .comboBoxShips.ToolTip: "Select ship to view" => "Wybierz statek do wyświetlenia"
 .extButtonShowControl.ToolTip: "Display Settings" @
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
@@ -525,6 +534,7 @@ SECTION UserControlModules
 .buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Konfiguruj dodatkowe dane brakujące w Dzienniku Elite"
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
 .extButtonLoadLoadout.ToolTip: "Import a ship definition for display" @
+
 .ForceSell: "Force Sell" @
 .ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" => "Przechowywane Moduły"
@@ -538,6 +548,7 @@ SECTION UserControlModules
 .Stored: "Stored" @
 .AllModules: "All Modules" @
 .Mass: "Mass" => "Masa"
+
 .InTransit: "In Transit" => "W Tranzycie"
 .EDSURL: "Enter ED Shipyard URL" => "Wprowadź URL ED Shipyard"
 .CURL: "Enter Coriolis URL" => "Wprowadź URL Coriolis"
@@ -549,6 +560,7 @@ SECTION UserControlModules
 .SC: "Ship Configure" => "Konfiguracja Statku"
 .MI: "Module Information" => "Informacje o Modułach"
 .NOSI: "No Ship Information available" @
+
 .labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" @
 .labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" @
 .labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" @
@@ -557,8 +569,10 @@ SECTION UserControlModules
 .labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
 .labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
 .labelWep: "Weapons:" @
+
 .extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" @
 .extButtonDeleteLoadout.ToolTip: "Delete loadout" @
+
 .SaveLoadout: "Enter loadout description to save ship with" @
 
 SECTION UserControlNotePanel
@@ -717,6 +731,7 @@ SECTION UserControlScan
 .StarAge: "Show age of stars" @
 .Expired: "Expired:" @
 .StarsOnDiffLines: "Show bodyless stars on separate lines" @
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
 
 SECTION UserControlScanGrid
 
@@ -748,6 +763,7 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Pierścienie"
 .materialsToolStripMenuItem: "Show materials" => "Meteriały"
 .extButtonHighValue.ToolTip: "Set High Value Limit" @
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
 
 SECTION UserControlSettings
 
@@ -954,6 +970,7 @@ SECTION UserControlStarList
 .ColumnSystem: "System" = UserControlModules.System
 .ColumnVisits: "Visits" = UserControlExpedition.Visits
 .ColumnInformation: "Information" = SearchScans.ColumnInformation
+.ColumnBodycount: "Body count" @
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
 .labelTime: "Time" = Time
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" = UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem
@@ -1262,6 +1279,8 @@ SECTION UserControlTravelGrid
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" = UserControlJournalGrid.checkBoxCursorToTop.ToolTip
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Kontrola Zwijania"
+.extButtonTimeRanges.ToolTip: "Define new time ranges for time selector" @
+.extComboBoxQuickMarks.ToolTip: "Go to a marked journal entry. Use right click to mark an entry" @
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 .StartStopHidden: "Next start/stop marker is hidden" @
 .StartStopNotFound: "No start/stop marker found below" @
@@ -1432,6 +1451,7 @@ SECTION UserControlFactions
 .colDataLinkPayeeFaction: "DL Payee Faction" @
 .colDataLinkPayeeValue: "DL Payee Value" @
 .buttonExtExcel.ToolTip: "Send data on grid to excel" @
+
 .colSystem: "System" @
 .colLastRep: "Last Known Reputation" @
 .colFactionState: "Last State" @

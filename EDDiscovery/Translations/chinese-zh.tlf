@@ -17,6 +17,9 @@ Off: "Off" => "关闭"
 Unknown: "Unknown" => "未知"
 Information: "Information" => "提示"
 NoPos: "No Pos" => "无坐标"
+
+// from EDC Core
+
 RemoveAll: "Remove All" @
 Hostile: "Hostile" @
 Unfriendly: "Unfriendly" @
@@ -24,7 +27,17 @@ Neutral: "Neutral" @
 Cordial: "Cordial" @
 Friendly: "Friendly" @
 Allied: "Allied" @
+
+// from extended controls
+
 Disabled: "Disabled" @
+
+// from action programs
+
+ToBeDeleted: "To be deleted" @
+ToBeInstalled: "To be installed" @
+Removed: "Removed" @
+Incompatible: "Incompatible" @
 
 SECTION StartUp
 
@@ -171,7 +184,7 @@ SECTION PopOutInfo
 .Organics.Title: "Organic Scans" @
 .Organics.Description: "Organic scans of current body and historic scans" @
 .Engineers.Title: "Engineers" @
-.Engineers.Description: "List of Engineers, status, recipes" @
+.Engineers.Description: "Engineers List, status, recipes" @
 .Discoveries.Title: "Discoveries" @
 .Discoveries.Description: "Discoveries Observer List" @
 .Carrier.Title: "Carrier" @

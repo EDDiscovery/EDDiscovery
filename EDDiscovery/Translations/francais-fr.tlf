@@ -17,6 +17,9 @@ Off: "Off" @
 Unknown: "Unknown" => "Inconnu"
 Information: "Information" @
 NoPos: "No Pos" => "Pas de position"
+
+// from EDC Core
+
 RemoveAll: "Remove All" => "Supprimer tout"
 Hostile: "Hostile" @
 Unfriendly: "Unfriendly" => "Non amicale"
@@ -24,7 +27,17 @@ Neutral: "Neutral" => "Neutre"
 Cordial: "Cordial" => "Cordiale"
 Friendly: "Friendly" => "Amicale"
 Allied: "Allied" => "Alliée"
+
+// from extended controls
+
 Disabled: "Disabled" => "Désactivé"
+
+// from action programs
+
+ToBeDeleted: "To be deleted" @
+ToBeInstalled: "To be installed" @
+Removed: "Removed" @
+Incompatible: "Incompatible" @
 
 SECTION StartUp
 
@@ -103,7 +116,7 @@ SECTION PopOutInfo
 .Map2D.Title: "2D Map" => "Carte 2D"
 .Map2D.Description: "2D Map of galaxy" => "Carte 2D de la galaxie"
 .MiningOverlay.Title: "Mining Overlay" => "Minage, superposé (overlay)"
-.MiningOverlay.Description: "Mining overlay" => "Minage, superposé (overlay)"
+.MiningOverlay.Description: "Mining overlay" = PopOutInfo.MiningOverlay.Title
 .LocalMap.Description: "3D Map of systems in range" => "Carte 3D des systèmes à portée"
 .LocalMap.Title: "Local Map" => "Carte Locale"
 .Plot.Description: "2D Plot of systems in range" => "Plan 2D des systèmes à portées"
@@ -171,7 +184,7 @@ SECTION PopOutInfo
 .Organics.Title: "Organic Scans" => "Scans organique"
 .Organics.Description: "Organic scans of current body and historic scans" => "Scans organique du corps actuel et historique des scans"
 .Engineers.Title: "Engineers" => "Ingénieurs"
-.Engineers.Description: "List of Engineers, status, recipes" => "Liste des ingénieurs, statuts, recettes"
+.Engineers.Description: "Engineers List, status, recipes" => "Liste des ingénieurs, statuts, recettes"
 .Discoveries.Title: "Discoveries" => "Découvertes"
 .Discoveries.Description: "Discoveries Observer List" => "Liste des découvertes"
 .Carrier.Title: "Carrier" => "Porte-vaisseaux"
@@ -368,7 +381,7 @@ MoveToCommander: "Move To Commander" => "Transferts vers commandant"
 SECTION NewReleaseForm
 
 NewReleaseForm: "EDDiscovery Release" @
-.labelName: "Name" => "Nom"
+.labelName: "Name" = AddOnManagerForm.Name
 .btnClose: "&Close" => "&Fermer"
 .labelURL: "GitHub URL" => "URL GitHub"
 .labelDownload: "Download" => "Téléchargement"
@@ -409,7 +422,7 @@ SECTION MessageBoxTheme
 .No: "No" => "Non"
 .Yes: "Yes" => "Oui"
 .Add: "Add" => "Ajouter"
-.Set: "Set" => "Définir"
+.Set: "Set" = GalaxySectorSelect.buttonExtSet
 
 SECTION DataGridViewDialogs
 
@@ -451,10 +464,10 @@ SECTION ExtPanelRollUp
 SECTION CommanderForm
 
 .CAPILoggingin: "Logging in" => "Connexion"
-.CAPIDisabled: "Disabled" => "Désactivé"
+.CAPIDisabled: "Disabled" = Disabled
 .CAPILogout: "Logout" => "Déconnexion"
 .CAPILoggedin: "Logged in" => "Déconnecté"
-.CAPILogin: "Login" => "Connexion"
+.CAPILogin: "Login" = CommanderForm.CAPILoggingin
 .CAPIAwaitLogin: "Await Log in" => "En attente de connexion"
 
 SECTION SpeechConfigure
@@ -483,7 +496,7 @@ WaveConfigureDialog: "Configure Wave" @
 .labelTitle: "Select Default device, volume and effects" @
 .buttonExtBrowse: "Browse" => "Parcourir"
 .checkBoxCustomComplete: "Wait until audio completes" => "Attendez la fin de l'audio"
-.buttonExtEffects: "Effects" => "Effets"
+.buttonExtEffects: "Effects" = SpeechConfigure.buttonExtEffects
 .buttonExtTest: "Test" @
 .checkBoxCustomV: "Override" @
 .labelVolume: "Volume" @
@@ -498,25 +511,25 @@ SoundEffectsDialog: "Sound Effects" => "Effets sonores"
 .checkBoxCustomNone: "No effects" => "Pas d'effets"
 .labelReverb: "Reverb" => "Réverbérations"
 .checkBoxP: "Enable" => "Activer"
-.checkBoxG: "Enable" => "Activer"
+.checkBoxG: "Enable" = SoundEffectsDialog.checkBoxP
 .labelDistortion: "Distortion" @
-.checkBoxD: "Enable" => "Activer"
+.checkBoxD: "Enable" = SoundEffectsDialog.checkBoxP
 .labelEchoFeedback: "Feedback" @
 .labelPitch: "Pitch" @
 .labelGargle: "Gargle" @
 .labelChorusMix: "Mix" @
-.labelEchoDelay: "Delay" => "Délai"
-.checkBoxR: "Enable" => "Activer"
+.labelEchoDelay: "Delay" = KeyForm.labelNextDelay
+.checkBoxR: "Enable" = SoundEffectsDialog.checkBoxP
 .labelReverbMix: "Mix" @
 .labelDistortionGain: "Gain" @
 .labelChorusFeedback: "Feedback" @
-.checkBoxC: "Enable" => "Activer"
+.checkBoxC: "Enable" = SoundEffectsDialog.checkBoxP
 .labelPitchOctave: "Octave" @
 .labelGargleFrequency: "Frequency" => "Fréquence"
-.checkBoxE: "Enable" => "Activer"
+.checkBoxE: "Enable" = SoundEffectsDialog.checkBoxP
 .labelReverbTime: "Time" => "Nombre"
 .labelDistortionEdge: "Edge" @
-.labelChorusDelay: "Delay" => "Délai"
+.labelChorusDelay: "Delay" = KeyForm.labelNextDelay
 .labelChorusDepth: "Depth" @
 .labelReverbHFRatio: "HF Ratio" @
 .labelDistortionCentreFreq: "Cent Freq" @
@@ -537,10 +550,10 @@ SECTION ActionProgramEditForm
 ActionProgramEditForm: "Action Program" @
 .labelName: "Name:" => "Nom :"
 .buttonExtDisk: "As File" @
-.buttonExtLoad: "Load" => "Ouvrir"
-.buttonExtSave: "Save" => "Sauvegarder"
+.buttonExtLoad: "Load" = ImportExportForm.checkBoxCustomAutoOpen
+.buttonExtSave: "Save" = SetNoteForm.buttonSave
 .buttonExtEdit: "Text Edit" => "Editer texte"
-.extButtonHeader: "Header" => "Entête"
+.extButtonHeader: "Header" = DataGridView.Header
 
 SECTION ActionPackEditForm
 

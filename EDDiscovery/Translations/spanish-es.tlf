@@ -17,6 +17,9 @@ Off: "Off" => "Apagado"
 Unknown: "Unknown" => "Desconocido"
 Information: "Information" => "Información"
 NoPos: "No Pos" => "No pos"
+
+// from EDC Core
+
 RemoveAll: "Remove All" => "Eliminar Todo"
 Hostile: "Hostile" => "Hostil"
 Unfriendly: "Unfriendly" => "Enemistado"
@@ -24,7 +27,17 @@ Neutral: "Neutral" => "Neutral"
 Cordial: "Cordial" => "Cordial"
 Friendly: "Friendly" => "Amistoso"
 Allied: "Allied" => "Aliado"
+
+// from extended controls
+
 Disabled: "Disabled" => "Deshabilitado"
+
+// from action programs
+
+ToBeDeleted: "To be deleted" @
+ToBeInstalled: "To be installed" @
+Removed: "Removed" @
+Incompatible: "Incompatible" @
 
 SECTION StartUp
 
@@ -171,7 +184,7 @@ SECTION PopOutInfo
 .Organics.Title: "Organic Scans" => "Escaneos Orgánicos"
 .Organics.Description: "Organic scans of current body and historic scans" => "Escaneos orgánicos del cuerpo actual y escaneos históricos"
 .Engineers.Title: "Engineers" => "Ingenieros"
-.Engineers.Description: "List of Engineers, status, recipes" => "Lista de ingenieros, estado, recetas"
+.Engineers.Description: "Engineers List, status, recipes" => "Lista de ingenieros, estado, recetas"
 .Discoveries.Title: "Discoveries" => "Descubrimientos"
 .Discoveries.Description: "Discoveries Observer List" => "Lista de Descubrimientos Observados"
 .Carrier.Title: "Carrier" => "Portanaves"
