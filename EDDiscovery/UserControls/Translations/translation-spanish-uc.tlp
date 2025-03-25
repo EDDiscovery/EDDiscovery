@@ -227,7 +227,7 @@ SECTION UserControlEstimatedValues
 
 .BodyName: "Body Name" => "Nombre del cuerpo"
 .BodyType: "Body Type" => "Tipo de cuerpo"
-.EDSM: "Source" => "EDSM"
+.EDSM: "Source" => "Fuente"
 .Mapped: "Mapped" => "Asignado"
 .WasMapped: "Already Mapped" => "Ya asignado"
 .WasDiscovered: "Already Discovered" => "Ya descubierto"
@@ -731,7 +731,7 @@ SECTION UserControlScan
 .StarAge: "Show age of stars" => "Mostrar edad de las estrellas"
 .Expired: "Expired:" => "Caducado: "
 .StarsOnDiffLines: "Show bodyless stars on separate lines" => "Mostrar estrellas sin cuerpos en líneas separadas"
-.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" => "Crear un nuevo marcador para el sistema actual"
 
 SECTION UserControlScanGrid
 
@@ -763,7 +763,7 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Anillos"
 .materialsToolStripMenuItem: "Show materials" = UserControlMaterialCommodities.Mats
 .extButtonHighValue.ToolTip: "Set High Value Limit" => "Establecer Valor de Límite Elevado"
-.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" => "Crear un nuevo marcador para el sistema actual"
 
 SECTION UserControlSettings
 
@@ -970,7 +970,7 @@ SECTION UserControlStarList
 .ColumnSystem: "System" = SearchScans.ColumnSystem
 .ColumnVisits: "Visits" = UserControlExpedition.Visits
 .ColumnInformation: "Information" = Information
-.ColumnBodycount: "Body count" @
+.ColumnBodycount: "Body count" => "Recuento de cuerpos"
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
 .labelTime: "Time" = Time
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" = UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem
@@ -1279,8 +1279,8 @@ SECTION UserControlTravelGrid
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" = UserControlJournalGrid.checkBoxCursorToTop.ToolTip
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = UserControlEngineering.extCheckBoxWordWrap.ToolTip
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Esquema de control"
-.extButtonTimeRanges.ToolTip: "Define new time ranges for time selector" @
-.extComboBoxQuickMarks.ToolTip: "Go to a marked journal entry. Use right click to mark an entry" @
+.extButtonTimeRanges.ToolTip: "Define new time ranges for time selector" => "Definir nuevos rangos de tiempo para el selector de tiempo"
+.extComboBoxQuickMarks.ToolTip: "Go to a marked journal entry. Use right click to mark an entry" => "Ir a una entrada de diario marcada. Use clic derecho para marcar una entrada"
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 .StartStopHidden: "Next start/stop marker is hidden" => "El próximo marcador de inicio/parada está oculto"
 .StartStopNotFound: "No start/stop marker found below" => "No se encontró marcador de inicio/parada debajo"

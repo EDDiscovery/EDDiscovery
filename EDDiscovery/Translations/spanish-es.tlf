@@ -30,14 +30,14 @@ Allied: "Allied" => "Aliado"
 
 // from extended controls
 
-Disabled: "Disabled" => "Deshabilitado"
+Disabled: "Disabled" => "Inhabilitado"
 
 // from action programs
 
-ToBeDeleted: "To be deleted" @
-ToBeInstalled: "To be installed" @
-Removed: "Removed" @
-Incompatible: "Incompatible" @
+ToBeDeleted: "To be deleted" => "Será eliminado"
+ToBeInstalled: "To be installed" => "Será instalado"
+Removed: "Removed" => "Eliminado"
+Incompatible: "Incompatible" => "Incompatible"
 
 SECTION StartUp
 
@@ -184,7 +184,7 @@ SECTION PopOutInfo
 .Organics.Title: "Organic Scans" => "Escaneos Orgánicos"
 .Organics.Description: "Organic scans of current body and historic scans" => "Escaneos orgánicos del cuerpo actual y escaneos históricos"
 .Engineers.Title: "Engineers" => "Ingenieros"
-.Engineers.Description: "Engineers List, status, recipes" => "Lista de ingenieros, estado, recetas"
+.Engineers.Description: "Engineers List, status, recipes" => "Lista de ingenieros, estados, recetas"
 .Discoveries.Title: "Discoveries" => "Descubrimientos"
 .Discoveries.Description: "Discoveries Observer List" => "Lista de Descubrimientos Observados"
 .Carrier.Title: "Carrier" => "Portanaves"
