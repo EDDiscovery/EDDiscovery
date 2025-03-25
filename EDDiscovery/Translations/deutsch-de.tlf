@@ -34,10 +34,10 @@ Disabled: "Disabled" => "Deaktiviert"
 
 // from action programs
 
-ToBeDeleted: "To be deleted" @
-ToBeInstalled: "To be installed" @
-Removed: "Removed" @
-Incompatible: "Incompatible" @
+ToBeDeleted: "To be deleted" => "Wird gelöscht werden"
+ToBeInstalled: "To be installed" => "Wird installiert werden"
+Removed: "Removed" => "Entfernt"
+Incompatible: "Incompatible" => "Inkompatibel"
 
 SECTION StartUp
 

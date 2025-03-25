@@ -731,7 +731,7 @@ SECTION UserControlScan
 .StarAge: "Show age of stars" => "Zeige Sternenalter"
 .Expired: "Expired:" => "Abgelaufen:"
 .StarsOnDiffLines: "Show bodyless stars on separate lines" => "Zeige körperlose Sterne auf separater Linie"
-.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" => "Erstelle ein neue Lesezeichen für das aktuelle System"
 
 SECTION UserControlScanGrid
 
@@ -763,7 +763,7 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Ringe"
 .materialsToolStripMenuItem: "Show materials" => "Materialien"
 .extButtonHighValue.ToolTip: "Set High Value Limit" = UserControlScan.extButtonHighValue.ToolTip
-.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" => "Erstelle ein neue Lesezeichen für das aktuelle System"
 
 SECTION UserControlSettings
 
@@ -970,7 +970,7 @@ SECTION UserControlStarList
 .ColumnSystem: "System" = SearchScans.ColumnSystem
 .ColumnVisits: "Visits" = UserControlExpedition.Visits
 .ColumnInformation: "Information" = Information
-.ColumnBodycount: "Body count" @
+.ColumnBodycount: "Body count" => "Körperanzahl"
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
 .labelTime: "Time" = UserControlCombatPanel.Time
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Entferne die Spaltensortierung"
@@ -1279,8 +1279,8 @@ SECTION UserControlTravelGrid
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" = UserControlJournalGrid.checkBoxCursorToTop.ToolTip
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Umrisskontrolle"
-.extButtonTimeRanges.ToolTip: "Define new time ranges for time selector" @
-.extComboBoxQuickMarks.ToolTip: "Go to a marked journal entry. Use right click to mark an entry" @
+.extButtonTimeRanges.ToolTip: "Define new time ranges for time selector" => "Definiere neue Zeitspanne für den Zeitselektor"
+.extComboBoxQuickMarks.ToolTip: "Go to a marked journal entry. Use right click to mark an entry" => "Gehe zu einem markierten Journaleintrag. Klicke rechts um einen Eintrag zu markieren."
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 .StartStopHidden: "Next start/stop marker is hidden" => "Nächste Start/Stopp-Markierung ist versteckt"
 .StartStopNotFound: "No start/stop marker found below" => "Weiter unten keine Start/Stopp-Markierung gefunden"
