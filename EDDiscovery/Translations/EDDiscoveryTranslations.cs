@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017-2023 EDDiscovery development team
+ * Copyright 2017-2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -43,7 +43,23 @@ namespace EDDiscovery
         Information, // Information
         NoPos, // No Pos
 
-        // copy from Extended control used here
+        // EDC
+        RemoveAll, 
+        Hostile,
+        Unfriendly,
+        Neutral,
+        Cordial,
+        Friendly,
+        Allied,
+
+        // from action programs
+        ToBeDeleted,
+        ToBeInstalled,
+        Removed,
+        Incompatible,
+
+        // extended controls
+        Disabled,
         MessageBoxTheme_Cancel,
         MessageBoxTheme_No,
         MessageBoxTheme_Yes,

@@ -17,6 +17,9 @@ Off: "Off" @
 Unknown: "Unknown" @
 Information: "Information" @
 NoPos: "No Pos" @
+
+// from EDC Core
+
 RemoveAll: "Remove All" @
 Hostile: "Hostile" @
 Unfriendly: "Unfriendly" @
@@ -28,6 +31,13 @@ Allied: "Allied" @
 // from extended controls
 
 Disabled: "Disabled" @
+
+// from action programs
+
+ToBeDeleted: "To be deleted" @
+ToBeInstalled: "To be installed" @
+Removed: "Removed" @
+Incompatible: "Incompatible" @
 
 SECTION StartUp
 
