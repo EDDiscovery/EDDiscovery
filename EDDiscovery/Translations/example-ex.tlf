@@ -370,7 +370,7 @@ GalaxySectorSelect: "Galaxy Sector Select" @
 .GALSELEN: "Select the data set" @
 .PresstoAccept: "Press to Accept" @
 .GALSELTitle: "Select Galaxy Data" @
-.Area: "Area:"  @
+.Area: "Area:" @
 
 SECTION MoveToCommander
 
