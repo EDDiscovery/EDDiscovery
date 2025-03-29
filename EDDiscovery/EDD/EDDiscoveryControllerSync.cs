@@ -355,7 +355,7 @@ namespace EDDiscovery
 
                 long updated = loader3.ParseJSONString(json, cancel, ReportSyncProgress);
 
-                System.Diagnostics.Trace.WriteLine($"EDSM parital download updated {updated} to {loader3.LastDate}");
+                System.Diagnostics.Trace.WriteLine($"EDSM partial download updated {updated} to {loader3.LastDate}");
 
                 // if lastrecordtime did not change (=) or worse still, EDSM somehow moved the time back (unlikely)
                 if (loader3.LastDate <= prevrectime)
