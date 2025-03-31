@@ -57,11 +57,7 @@ namespace EDDiscovery.UserControls.Search
             this.extTextBoxSortCondition.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxSortCondition.ClearOnFirstChar = false;
             this.extTextBoxSortCondition.ControlBackground = System.Drawing.SystemColors.Control;
-            this.extTextBoxSortCondition.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.extTextBoxSortCondition.DropDownBorderColor = System.Drawing.Color.Green;
-            this.extTextBoxSortCondition.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
-            this.extTextBoxSortCondition.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.extTextBoxSortCondition.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.extTextBoxSortCondition.EndButtonEnable = true;
             this.extTextBoxSortCondition.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxSortCondition.EndButtonImage")));
             this.extTextBoxSortCondition.EndButtonVisible = true;

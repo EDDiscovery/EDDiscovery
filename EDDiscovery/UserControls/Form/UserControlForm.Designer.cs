@@ -84,7 +84,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnShowTitle.MouseSelectedColorEnable = true;
             this.extButtonDrawnShowTitle.Name = "extButtonDrawnShowTitle";
             this.extButtonDrawnShowTitle.Padding = new System.Windows.Forms.Padding(6);
-            this.extButtonDrawnShowTitle.PanelDisabledScaling = 0.25F;
             this.extButtonDrawnShowTitle.Selectable = true;
             this.extButtonDrawnShowTitle.Size = new System.Drawing.Size(24, 24);
             this.extButtonDrawnShowTitle.TabIndex = 26;
@@ -108,7 +107,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnMinimize.MouseSelectedColorEnable = true;
             this.extButtonDrawnMinimize.Name = "extButtonDrawnMinimize";
             this.extButtonDrawnMinimize.Padding = new System.Windows.Forms.Padding(6);
-            this.extButtonDrawnMinimize.PanelDisabledScaling = 0.25F;
             this.extButtonDrawnMinimize.Selectable = false;
             this.extButtonDrawnMinimize.Size = new System.Drawing.Size(24, 24);
             this.extButtonDrawnMinimize.TabIndex = 24;
@@ -133,7 +131,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnOnTop.MouseSelectedColorEnable = true;
             this.extButtonDrawnOnTop.Name = "extButtonDrawnOnTop";
             this.extButtonDrawnOnTop.Padding = new System.Windows.Forms.Padding(6);
-            this.extButtonDrawnOnTop.PanelDisabledScaling = 0.25F;
             this.extButtonDrawnOnTop.Selectable = true;
             this.extButtonDrawnOnTop.Size = new System.Drawing.Size(24, 24);
             this.extButtonDrawnOnTop.TabIndex = 24;
@@ -157,7 +154,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnTaskBarIcon.MouseSelectedColorEnable = true;
             this.extButtonDrawnTaskBarIcon.Name = "extButtonDrawnTaskBarIcon";
             this.extButtonDrawnTaskBarIcon.Padding = new System.Windows.Forms.Padding(6);
-            this.extButtonDrawnTaskBarIcon.PanelDisabledScaling = 0.25F;
             this.extButtonDrawnTaskBarIcon.Selectable = true;
             this.extButtonDrawnTaskBarIcon.Size = new System.Drawing.Size(24, 24);
             this.extButtonDrawnTaskBarIcon.TabIndex = 24;
@@ -181,7 +177,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnTransparentMode.MouseSelectedColorEnable = true;
             this.extButtonDrawnTransparentMode.Name = "extButtonDrawnTransparentMode";
             this.extButtonDrawnTransparentMode.Padding = new System.Windows.Forms.Padding(6);
-            this.extButtonDrawnTransparentMode.PanelDisabledScaling = 0.25F;
             this.extButtonDrawnTransparentMode.Selectable = true;
             this.extButtonDrawnTransparentMode.Size = new System.Drawing.Size(24, 24);
             this.extButtonDrawnTransparentMode.TabIndex = 24;
@@ -205,7 +200,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnClose.MouseSelectedColorEnable = true;
             this.extButtonDrawnClose.Name = "extButtonDrawnClose";
             this.extButtonDrawnClose.Padding = new System.Windows.Forms.Padding(6);
-            this.extButtonDrawnClose.PanelDisabledScaling = 0.25F;
             this.extButtonDrawnClose.Selectable = false;
             this.extButtonDrawnClose.Size = new System.Drawing.Size(24, 24);
             this.extButtonDrawnClose.TabIndex = 25;
@@ -254,7 +248,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
             this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";
             this.extButtonDrawnHelp.Padding = new System.Windows.Forms.Padding(6);
-            this.extButtonDrawnHelp.PanelDisabledScaling = 0.25F;
             this.extButtonDrawnHelp.Selectable = true;
             this.extButtonDrawnHelp.Size = new System.Drawing.Size(24, 24);
             this.extButtonDrawnHelp.TabIndex = 24;

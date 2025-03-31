@@ -97,8 +97,6 @@ namespace EDDiscovery.UserControls
             this.toolStripComboExpo.Margin = new System.Windows.Forms.Padding(3, 0, 2, 0);
             this.toolStripComboExpo.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.toolStripComboExpo.Name = "toolStripComboExpo";
-            this.toolStripComboExpo.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.toolStripComboExpo.ScrollBarColor = System.Drawing.Color.LightGray;
             this.toolStripComboExpo.SelectedIndex = -1;
             this.toolStripComboExpo.SelectedItem = null;
             this.toolStripComboExpo.Size = new System.Drawing.Size(150, 29);
@@ -121,8 +119,6 @@ namespace EDDiscovery.UserControls
             this.toolStripComboBoxTime.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.toolStripComboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.toolStripComboBoxTime.Name = "toolStripComboBoxTime";
-            this.toolStripComboBoxTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.toolStripComboBoxTime.ScrollBarColor = System.Drawing.Color.LightGray;
             this.toolStripComboBoxTime.SelectedIndex = -1;
             this.toolStripComboBoxTime.SelectedItem = null;
             this.toolStripComboBoxTime.Size = new System.Drawing.Size(200, 29);

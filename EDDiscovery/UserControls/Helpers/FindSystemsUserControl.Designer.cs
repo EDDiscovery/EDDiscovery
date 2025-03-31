@@ -390,11 +390,7 @@
             this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSystemName.ClearOnFirstChar = false;
             this.textBoxSystemName.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxSystemName.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBoxSystemName.DropDownBorderColor = System.Drawing.Color.Green;
-            this.textBoxSystemName.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
-            this.textBoxSystemName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.textBoxSystemName.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxSystemName.EndButtonEnable = false;
             this.textBoxSystemName.EndButtonSize16ths = 10;
             this.textBoxSystemName.EndButtonVisible = false;

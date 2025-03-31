@@ -419,14 +419,11 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.DataSource = null;
             this.comboBoxTime.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxTime.DisplayMember = "";
-            this.comboBoxTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTime.Location = new System.Drawing.Point(38, 1);
             this.comboBoxTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.comboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxTime.Name = "comboBoxTime";
-            this.comboBoxTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxTime.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxTime.SelectedIndex = -1;
             this.comboBoxTime.SelectedItem = null;
             this.comboBoxTime.SelectedValue = null;

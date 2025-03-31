@@ -356,13 +356,10 @@ namespace EDDiscovery.UserControls
             this.extComboBoxTraderType.DataSource = null;
             this.extComboBoxTraderType.DisableBackgroundDisabledShadingGradient = false;
             this.extComboBoxTraderType.DisplayMember = "";
-            this.extComboBoxTraderType.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.extComboBoxTraderType.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extComboBoxTraderType.Location = new System.Drawing.Point(3, 3);
             this.extComboBoxTraderType.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.extComboBoxTraderType.Name = "extComboBoxTraderType";
-            this.extComboBoxTraderType.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.extComboBoxTraderType.ScrollBarColor = System.Drawing.Color.LightGray;
             this.extComboBoxTraderType.SelectedIndex = -1;
             this.extComboBoxTraderType.SelectedItem = null;
             this.extComboBoxTraderType.SelectedValue = null;

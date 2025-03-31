@@ -143,14 +143,11 @@ namespace EDDiscovery.UserControls
             this.comboBoxBookmarks.DataSource = null;
             this.comboBoxBookmarks.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxBookmarks.DisplayMember = "";
-            this.comboBoxBookmarks.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxBookmarks.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxBookmarks.Location = new System.Drawing.Point(167, 6);
             this.comboBoxBookmarks.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
             this.comboBoxBookmarks.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxBookmarks.Name = "comboBoxBookmarks";
-            this.comboBoxBookmarks.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxBookmarks.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxBookmarks.SelectedIndex = -1;
             this.comboBoxBookmarks.SelectedItem = null;
             this.comboBoxBookmarks.SelectedValue = null;

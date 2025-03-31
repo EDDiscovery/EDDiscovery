@@ -204,14 +204,11 @@ namespace EDDiscovery
             this.comboBoxCommander.DataSource = null;
             this.comboBoxCommander.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCommander.DisplayMember = "";
-            this.comboBoxCommander.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCommander.Location = new System.Drawing.Point(1, 3);
             this.comboBoxCommander.Margin = new System.Windows.Forms.Padding(1, 3, 3, 1);
             this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCommander.Name = "comboBoxCommander";
-            this.comboBoxCommander.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCommander.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxCommander.SelectedIndex = -1;
             this.comboBoxCommander.SelectedItem = null;
             this.comboBoxCommander.SelectedValue = null;
@@ -230,14 +227,11 @@ namespace EDDiscovery
             this.comboBoxCustomProfiles.DataSource = null;
             this.comboBoxCustomProfiles.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomProfiles.DisplayMember = "";
-            this.comboBoxCustomProfiles.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomProfiles.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomProfiles.Location = new System.Drawing.Point(186, 3);
             this.comboBoxCustomProfiles.Margin = new System.Windows.Forms.Padding(1, 3, 3, 1);
             this.comboBoxCustomProfiles.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomProfiles.Name = "comboBoxCustomProfiles";
-            this.comboBoxCustomProfiles.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomProfiles.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxCustomProfiles.SelectedIndex = -1;
             this.comboBoxCustomProfiles.SelectedItem = null;
             this.comboBoxCustomProfiles.SelectedValue = null;
@@ -439,7 +433,6 @@ namespace EDDiscovery
             this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
             this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";
             this.extButtonDrawnHelp.Padding = new System.Windows.Forms.Padding(0);
-            this.extButtonDrawnHelp.PanelDisabledScaling = 0.25F;
             this.extButtonDrawnHelp.Selectable = true;
             this.extButtonDrawnHelp.Size = new System.Drawing.Size(28, 28);
             this.extButtonDrawnHelp.TabIndex = 25;
@@ -929,7 +922,6 @@ namespace EDDiscovery
             this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
             this.panel_close.Padding = new System.Windows.Forms.Padding(3);
-            this.panel_close.PanelDisabledScaling = 0.25F;
             this.panel_close.Selectable = false;
             this.panel_close.Size = new System.Drawing.Size(16, 16);
             this.panel_close.TabIndex = 20;
@@ -952,7 +944,6 @@ namespace EDDiscovery
             this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
             this.panel_minimize.Padding = new System.Windows.Forms.Padding(3);
-            this.panel_minimize.PanelDisabledScaling = 0.25F;
             this.panel_minimize.Selectable = false;
             this.panel_minimize.Size = new System.Drawing.Size(16, 16);
             this.panel_minimize.TabIndex = 20;

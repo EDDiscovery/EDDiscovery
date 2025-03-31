@@ -59,14 +59,11 @@ namespace EDDiscovery.UserControls
             this.comboBoxTimeMode.DataSource = null;
             this.comboBoxTimeMode.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxTimeMode.DisplayMember = "";
-            this.comboBoxTimeMode.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxTimeMode.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTimeMode.Location = new System.Drawing.Point(0, 4);
             this.comboBoxTimeMode.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
             this.comboBoxTimeMode.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxTimeMode.Name = "comboBoxTimeMode";
-            this.comboBoxTimeMode.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxTimeMode.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxTimeMode.SelectedIndex = -1;
             this.comboBoxTimeMode.SelectedItem = null;
             this.comboBoxTimeMode.SelectedValue = null;

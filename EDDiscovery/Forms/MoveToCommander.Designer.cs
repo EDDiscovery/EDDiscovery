@@ -100,13 +100,10 @@ namespace EDDiscovery.Forms
             this.comboBoxCommanders.DataSource = null;
             this.comboBoxCommanders.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCommanders.DisplayMember = "";
-            this.comboBoxCommanders.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCommanders.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCommanders.Location = new System.Drawing.Point(19, 58);
             this.comboBoxCommanders.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCommanders.Name = "comboBoxCommanders";
-            this.comboBoxCommanders.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCommanders.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxCommanders.SelectedIndex = -1;
             this.comboBoxCommanders.SelectedItem = null;
             this.comboBoxCommanders.SelectedValue = null;

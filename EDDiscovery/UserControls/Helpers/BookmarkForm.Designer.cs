@@ -379,11 +379,7 @@ namespace EDDiscovery.UserControls
             this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxName.ClearOnFirstChar = false;
             this.textBoxName.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxName.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.textBoxName.DropDownBorderColor = System.Drawing.Color.Green;
-            this.textBoxName.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
-            this.textBoxName.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.textBoxName.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.textBoxName.EndButtonEnable = false;
             this.textBoxName.EndButtonSize16ths = 10;
             this.textBoxName.EndButtonVisible = false;
@@ -539,7 +535,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnClose.MouseSelectedColorEnable = true;
             this.extButtonDrawnClose.Name = "extButtonDrawnClose";
             this.extButtonDrawnClose.Padding = new System.Windows.Forms.Padding(6);
-            this.extButtonDrawnClose.PanelDisabledScaling = 0.25F;
             this.extButtonDrawnClose.Selectable = false;
             this.extButtonDrawnClose.Size = new System.Drawing.Size(24, 24);
             this.extButtonDrawnClose.TabIndex = 26;

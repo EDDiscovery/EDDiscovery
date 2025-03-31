@@ -280,14 +280,11 @@ namespace EDDiscovery.UserControls
             this.comboBoxSearches.DataSource = null;
             this.comboBoxSearches.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxSearches.DisplayMember = "";
-            this.comboBoxSearches.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxSearches.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxSearches.Location = new System.Drawing.Point(0, 1);
             this.comboBoxSearches.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.comboBoxSearches.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxSearches.Name = "comboBoxSearches";
-            this.comboBoxSearches.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxSearches.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxSearches.SelectedIndex = -1;
             this.comboBoxSearches.SelectedItem = null;
             this.comboBoxSearches.SelectedValue = null;

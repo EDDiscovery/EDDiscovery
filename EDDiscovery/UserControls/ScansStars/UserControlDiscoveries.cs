@@ -12,9 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
-using EDDiscovery.Controls;
 using EliteDangerousCore;
-using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;

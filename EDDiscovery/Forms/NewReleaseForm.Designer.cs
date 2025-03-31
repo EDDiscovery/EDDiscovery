@@ -277,7 +277,6 @@ namespace EDDiscovery.Forms
             this.pnlClose.MouseSelectedColor = System.Drawing.Color.Green;
             this.pnlClose.MouseSelectedColorEnable = true;
             this.pnlClose.Name = "pnlClose";
-            this.pnlClose.PanelDisabledScaling = 0.25F;
             this.pnlClose.Selectable = false;
             this.pnlClose.Size = new System.Drawing.Size(24, 24);
             this.pnlClose.TabIndex = 1;

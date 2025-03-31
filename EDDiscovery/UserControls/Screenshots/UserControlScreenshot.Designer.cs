@@ -105,13 +105,10 @@ namespace EDDiscovery.UserControls
             this.extComboBoxImage.DataSource = null;
             this.extComboBoxImage.DisableBackgroundDisabledShadingGradient = false;
             this.extComboBoxImage.DisplayMember = "";
-            this.extComboBoxImage.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.extComboBoxImage.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extComboBoxImage.Location = new System.Drawing.Point(3, 3);
             this.extComboBoxImage.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.extComboBoxImage.Name = "extComboBoxImage";
-            this.extComboBoxImage.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.extComboBoxImage.ScrollBarColor = System.Drawing.Color.LightGray;
             this.extComboBoxImage.SelectedIndex = -1;
             this.extComboBoxImage.SelectedItem = null;
             this.extComboBoxImage.SelectedValue = null;

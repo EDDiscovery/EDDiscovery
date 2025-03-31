@@ -261,14 +261,11 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.DataSource = null;
             this.comboBoxTime.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxTime.DisplayMember = "";
-            this.comboBoxTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTime.Location = new System.Drawing.Point(38, 3);
             this.comboBoxTime.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
             this.comboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxTime.Name = "comboBoxTime";
-            this.comboBoxTime.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxTime.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxTime.SelectedIndex = -1;
             this.comboBoxTime.SelectedItem = null;
             this.comboBoxTime.SelectedValue = null;
@@ -605,14 +602,11 @@ namespace EDDiscovery.UserControls
             this.extComboBoxQuickMarks.DataSource = null;
             this.extComboBoxQuickMarks.DisableBackgroundDisabledShadingGradient = false;
             this.extComboBoxQuickMarks.DisplayMember = "";
-            this.extComboBoxQuickMarks.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.extComboBoxQuickMarks.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extComboBoxQuickMarks.Location = new System.Drawing.Point(387, 3);
             this.extComboBoxQuickMarks.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
             this.extComboBoxQuickMarks.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.extComboBoxQuickMarks.Name = "extComboBoxQuickMarks";
-            this.extComboBoxQuickMarks.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.extComboBoxQuickMarks.ScrollBarColor = System.Drawing.Color.LightGray;
             this.extComboBoxQuickMarks.SelectedIndex = -1;
             this.extComboBoxQuickMarks.SelectedItem = null;
             this.extComboBoxQuickMarks.SelectedValue = null;
@@ -845,7 +839,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
             this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";
             this.extButtonDrawnHelp.Padding = new System.Windows.Forms.Padding(6);
-            this.extButtonDrawnHelp.PanelDisabledScaling = 0.25F;
             this.extButtonDrawnHelp.Selectable = true;
             this.extButtonDrawnHelp.Size = new System.Drawing.Size(24, 24);
             this.extButtonDrawnHelp.TabIndex = 31;

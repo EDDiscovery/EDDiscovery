@@ -12,7 +12,6 @@
  * governing permissions and limitations under the License.
  */
 
-using EDDiscovery.Controls;
 using EDDiscovery.UserControls.Helpers;
 using EliteDangerousCore;
 using System;

@@ -105,14 +105,11 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips.DataSource = null;
             this.comboBoxShips.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxShips.DisplayMember = "";
-            this.comboBoxShips.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxShips.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxShips.Location = new System.Drawing.Point(36, 1);
             this.comboBoxShips.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.comboBoxShips.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxShips.Name = "comboBoxShips";
-            this.comboBoxShips.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxShips.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxShips.SelectedIndex = -1;
             this.comboBoxShips.SelectedItem = null;
             this.comboBoxShips.SelectedValue = null;
@@ -562,7 +559,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnResetPips.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnResetPips.MouseSelectedColorEnable = true;
             this.extButtonDrawnResetPips.Name = "extButtonDrawnResetPips";
-            this.extButtonDrawnResetPips.PanelDisabledScaling = 0.25F;
             this.extButtonDrawnResetPips.Selectable = true;
             this.extButtonDrawnResetPips.Size = new System.Drawing.Size(47, 22);
             this.extButtonDrawnResetPips.TabIndex = 5;

@@ -18,7 +18,6 @@ using System.Drawing;
 using System.Data;
 using System.Linq;
 using System.Windows.Forms;
-using EDDiscovery.Controls;
 using EliteDangerousCore;
 using System.Collections.Generic;
 using QuickJSON;

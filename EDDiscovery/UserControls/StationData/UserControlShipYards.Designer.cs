@@ -88,14 +88,11 @@ namespace EDDiscovery.UserControls
             this.comboBoxYards.DataSource = null;
             this.comboBoxYards.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxYards.DisplayMember = "";
-            this.comboBoxYards.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxYards.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxYards.Location = new System.Drawing.Point(30, 1);
             this.comboBoxYards.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
             this.comboBoxYards.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxYards.Name = "comboBoxYards";
-            this.comboBoxYards.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxYards.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxYards.SelectedIndex = -1;
             this.comboBoxYards.SelectedItem = null;
             this.comboBoxYards.SelectedValue = null;

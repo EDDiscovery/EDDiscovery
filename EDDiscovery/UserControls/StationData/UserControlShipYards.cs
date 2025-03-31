@@ -13,7 +13,6 @@
  * 
  * 
  */
-using EDDiscovery.Controls;
 using EliteDangerousCore;
 using System;
 using System.Collections.Generic;

@@ -150,13 +150,10 @@ namespace EDDiscovery.UserControls
             this.extComboBoxChartOptions.DataSource = null;
             this.extComboBoxChartOptions.DisableBackgroundDisabledShadingGradient = false;
             this.extComboBoxChartOptions.DisplayMember = "";
-            this.extComboBoxChartOptions.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.extComboBoxChartOptions.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extComboBoxChartOptions.Location = new System.Drawing.Point(4, 4);
             this.extComboBoxChartOptions.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.extComboBoxChartOptions.Name = "extComboBoxChartOptions";
-            this.extComboBoxChartOptions.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.extComboBoxChartOptions.ScrollBarColor = System.Drawing.Color.LightGray;
             this.extComboBoxChartOptions.SelectedIndex = -1;
             this.extComboBoxChartOptions.SelectedItem = null;
             this.extComboBoxChartOptions.SelectedValue = null;

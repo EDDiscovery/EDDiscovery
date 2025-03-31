@@ -223,14 +223,11 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomCampaign.DataSource = null;
             this.comboBoxCustomCampaign.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomCampaign.DisplayMember = "";
-            this.comboBoxCustomCampaign.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.comboBoxCustomCampaign.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomCampaign.Location = new System.Drawing.Point(0, 2);
             this.comboBoxCustomCampaign.Margin = new System.Windows.Forms.Padding(0, 2, 8, 1);
             this.comboBoxCustomCampaign.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomCampaign.Name = "comboBoxCustomCampaign";
-            this.comboBoxCustomCampaign.ScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.comboBoxCustomCampaign.ScrollBarColor = System.Drawing.Color.LightGray;
             this.comboBoxCustomCampaign.SelectedIndex = -1;
             this.comboBoxCustomCampaign.SelectedItem = null;
             this.comboBoxCustomCampaign.SelectedValue = null;

@@ -147,11 +147,7 @@ namespace EDDiscovery.UserControls.Helpers
             this.extTextBoxAutoCompleteSystem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxAutoCompleteSystem.ClearOnFirstChar = false;
             this.extTextBoxAutoCompleteSystem.ControlBackground = System.Drawing.SystemColors.Control;
-            this.extTextBoxAutoCompleteSystem.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.extTextBoxAutoCompleteSystem.DropDownBorderColor = System.Drawing.Color.Green;
-            this.extTextBoxAutoCompleteSystem.DropDownMouseOverBackgroundColor = System.Drawing.Color.Red;
-            this.extTextBoxAutoCompleteSystem.DropDownScrollBarButtonColor = System.Drawing.Color.LightGray;
-            this.extTextBoxAutoCompleteSystem.DropDownScrollBarColor = System.Drawing.Color.LightGray;
             this.extTextBoxAutoCompleteSystem.EndButtonEnable = false;
             this.extTextBoxAutoCompleteSystem.EndButtonSize16ths = 10;
             this.extTextBoxAutoCompleteSystem.EndButtonVisible = false;
