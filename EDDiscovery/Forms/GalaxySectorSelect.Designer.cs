@@ -91,7 +91,6 @@
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(991, 6);
-            this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
@@ -112,7 +111,6 @@
             this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(961, 6);
-            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
@@ -202,13 +200,11 @@
             // comboBoxSelections
             // 
             this.comboBoxSelections.BorderColor = System.Drawing.Color.White;
-            this.comboBoxSelections.ButtonColorScaling = 0.5F;
             this.comboBoxSelections.DataSource = null;
             this.comboBoxSelections.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxSelections.DisplayMember = "";
             this.comboBoxSelections.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxSelections.Location = new System.Drawing.Point(6, 6);
-            this.comboBoxSelections.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxSelections.Name = "comboBoxSelections";
             this.comboBoxSelections.SelectedIndex = -1;
             this.comboBoxSelections.SelectedItem = null;

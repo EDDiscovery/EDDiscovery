@@ -148,7 +148,7 @@ namespace EDDiscovery.UserControls
 
         public void LogText(string text)
         {
-            LogTextColor(text, ExtendedControls.Theme.Current.TextBlockColor);
+            LogTextColor(text, ExtendedControls.Theme.Current.TextBlockForeColor);
         }
         public void LogTextHighlight(string text)
         {

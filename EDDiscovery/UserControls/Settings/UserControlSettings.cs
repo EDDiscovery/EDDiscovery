@@ -529,11 +529,11 @@ namespace EDDiscovery.UserControls
 
         public void button_edittheme_Click(object sender, EventArgs e)
         {
-            var themeeditor = new ExtendedControls.ThemeEditor() { TopMost = FindForm().TopMost };
+            var themeeditor = new ThemeEditor() { TopMost = FindForm().TopMost };
 
-            var curtheme = ExtendedControls.Theme.Current;
+            var curtheme = Theme.Current;
 
-            themeeditor.ApplyChanges = (theme) => { ExtendedControls.Theme.Current = theme; DiscoveryForm.ApplyTheme(true); };
+            themeeditor.ApplyChanges = (theme) => { Theme.Current = theme; DiscoveryForm.ApplyTheme(true); };
 
             buttonSaveTheme.Enabled = comboBoxTheme.Enabled = button_edittheme.Enabled = false;
 
@@ -542,17 +542,20 @@ namespace EDDiscovery.UserControls
             {
                 buttonSaveTheme.Enabled = comboBoxTheme.Enabled = button_edittheme.Enabled = true;
 
-                if ( themeeditor.DialogResult == DialogResult.OK )
+                if (themeeditor.DialogResult == DialogResult.OK)
                 {
-                    ExtendedControls.Theme.Current = themeeditor.Theme;
+                    Theme.Current = themeeditor.Theme;
                 }
                 else
                 {
-                    ExtendedControls.Theme.Current = curtheme;
+                    if (curtheme != Theme.Current)
+                    {
+                        Theme.Current = curtheme;
+                        DiscoveryForm.ApplyTheme(true);
+                    }
                 }
 
                 ResetThemeList();
-                DiscoveryForm.ApplyTheme(true);
             };
 
             themeeditor.Show(FindForm());

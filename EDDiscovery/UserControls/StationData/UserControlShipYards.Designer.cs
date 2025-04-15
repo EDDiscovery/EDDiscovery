@@ -84,14 +84,12 @@ namespace EDDiscovery.UserControls
             // comboBoxYards
             // 
             this.comboBoxYards.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxYards.ButtonColorScaling = 0.5F;
             this.comboBoxYards.DataSource = null;
             this.comboBoxYards.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxYards.DisplayMember = "";
             this.comboBoxYards.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxYards.Location = new System.Drawing.Point(30, 1);
             this.comboBoxYards.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.comboBoxYards.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxYards.Name = "comboBoxYards";
             this.comboBoxYards.SelectedIndex = -1;
             this.comboBoxYards.SelectedItem = null;
@@ -172,7 +170,6 @@ namespace EDDiscovery.UserControls
             // 
             this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
@@ -191,7 +188,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.TabIndex = 0;
             this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
             this.vScrollBarCustom1.Value = -1;
             this.vScrollBarCustom1.ValueLimited = -1;

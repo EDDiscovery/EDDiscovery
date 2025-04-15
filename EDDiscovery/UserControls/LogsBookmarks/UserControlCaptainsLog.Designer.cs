@@ -35,7 +35,6 @@
             // tabStrip
             // 
             this.tabStrip.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabStrip.DropDownBorderColor = System.Drawing.Color.Green;
             this.tabStrip.EmptyColor = System.Drawing.Color.Empty;
             this.tabStrip.EmptyColorScaling = 0.5F;
             this.tabStrip.EmptyPanelIcon = ((System.Drawing.Image)(resources.GetObject("tabStrip.EmptyPanelIcon")));

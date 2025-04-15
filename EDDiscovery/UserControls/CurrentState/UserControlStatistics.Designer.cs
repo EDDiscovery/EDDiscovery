@@ -219,7 +219,6 @@ namespace EDDiscovery.UserControls
             // 
             this.vScrollBarGeneral.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarGeneral.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarGeneral.ArrowColorScaling = 0.5F;
             this.vScrollBarGeneral.ArrowDownDrawAngle = 270F;
             this.vScrollBarGeneral.ArrowUpDrawAngle = 90F;
             this.vScrollBarGeneral.BorderColor = System.Drawing.Color.White;
@@ -238,7 +237,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarGeneral.TabIndex = 8;
             this.vScrollBarGeneral.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarGeneral.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarGeneral.ThumbColorScaling = 0.5F;
             this.vScrollBarGeneral.ThumbDrawAngle = 0F;
             this.vScrollBarGeneral.Value = -1;
             this.vScrollBarGeneral.ValueLimited = -1;
@@ -260,8 +258,6 @@ namespace EDDiscovery.UserControls
             this.tabControlCustomStats.Name = "tabControlCustomStats";
             this.tabControlCustomStats.SelectedIndex = 0;
             this.tabControlCustomStats.Size = new System.Drawing.Size(1073, 537);
-            this.tabControlCustomStats.TabColorScaling = 0.5F;
-            this.tabControlCustomStats.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlCustomStats.TabControlBorderColor = System.Drawing.Color.DarkGray;
             this.tabControlCustomStats.TabDisabledScaling = 0.5F;
             this.tabControlCustomStats.TabIndex = 5;
@@ -400,7 +396,6 @@ namespace EDDiscovery.UserControls
             // 
             this.extScrollBarRanks.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarRanks.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarRanks.ArrowColorScaling = 0.5F;
             this.extScrollBarRanks.ArrowDownDrawAngle = 270F;
             this.extScrollBarRanks.ArrowUpDrawAngle = 90F;
             this.extScrollBarRanks.BorderColor = System.Drawing.Color.White;
@@ -419,7 +414,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarRanks.TabIndex = 8;
             this.extScrollBarRanks.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarRanks.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarRanks.ThumbColorScaling = 0.5F;
             this.extScrollBarRanks.ThumbDrawAngle = 0F;
             this.extScrollBarRanks.Value = -1;
             this.extScrollBarRanks.ValueLimited = -1;
@@ -508,7 +502,6 @@ namespace EDDiscovery.UserControls
             // 
             this.extScrollBarLedger.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarLedger.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarLedger.ArrowColorScaling = 0.5F;
             this.extScrollBarLedger.ArrowDownDrawAngle = 270F;
             this.extScrollBarLedger.ArrowUpDrawAngle = 90F;
             this.extScrollBarLedger.BorderColor = System.Drawing.Color.White;
@@ -527,7 +520,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarLedger.TabIndex = 8;
             this.extScrollBarLedger.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarLedger.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarLedger.ThumbColorScaling = 0.5F;
             this.extScrollBarLedger.ThumbDrawAngle = 0F;
             this.extScrollBarLedger.Value = -1;
             this.extScrollBarLedger.ValueLimited = -1;
@@ -574,7 +566,6 @@ namespace EDDiscovery.UserControls
             // 
             this.extScrollBarTravel.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarTravel.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarTravel.ArrowColorScaling = 0.5F;
             this.extScrollBarTravel.ArrowDownDrawAngle = 270F;
             this.extScrollBarTravel.ArrowUpDrawAngle = 90F;
             this.extScrollBarTravel.BorderColor = System.Drawing.Color.White;
@@ -593,7 +584,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarTravel.TabIndex = 4;
             this.extScrollBarTravel.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarTravel.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarTravel.ThumbColorScaling = 0.5F;
             this.extScrollBarTravel.ThumbDrawAngle = 0F;
             this.extScrollBarTravel.Value = -1;
             this.extScrollBarTravel.ValueLimited = -1;
@@ -695,7 +685,6 @@ namespace EDDiscovery.UserControls
             // 
             this.extScrollBarScan.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarScan.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarScan.ArrowColorScaling = 0.5F;
             this.extScrollBarScan.ArrowDownDrawAngle = 270F;
             this.extScrollBarScan.ArrowUpDrawAngle = 90F;
             this.extScrollBarScan.BorderColor = System.Drawing.Color.White;
@@ -714,7 +703,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarScan.TabIndex = 0;
             this.extScrollBarScan.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarScan.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarScan.ThumbColorScaling = 0.5F;
             this.extScrollBarScan.ThumbDrawAngle = 0F;
             this.extScrollBarScan.Value = -1;
             this.extScrollBarScan.ValueLimited = -1;
@@ -790,7 +778,6 @@ namespace EDDiscovery.UserControls
             // 
             this.extScrollBarCombatDGV.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCombatDGV.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarCombatDGV.ArrowColorScaling = 0.5F;
             this.extScrollBarCombatDGV.ArrowDownDrawAngle = 270F;
             this.extScrollBarCombatDGV.ArrowUpDrawAngle = 90F;
             this.extScrollBarCombatDGV.BorderColor = System.Drawing.Color.White;
@@ -810,7 +797,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarCombatDGV.Text = "extScrollBar1";
             this.extScrollBarCombatDGV.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCombatDGV.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarCombatDGV.ThumbColorScaling = 0.5F;
             this.extScrollBarCombatDGV.ThumbDrawAngle = 0F;
             this.extScrollBarCombatDGV.Value = -1;
             this.extScrollBarCombatDGV.ValueLimited = -1;
@@ -874,22 +860,10 @@ namespace EDDiscovery.UserControls
             // treeViewStats
             // 
             this.treeViewStats.BorderColor = System.Drawing.Color.Transparent;
-            this.treeViewStats.BorderColorScaling = 0.5F;
             this.treeViewStats.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewStats.HideScrollBar = true;
             this.treeViewStats.Location = new System.Drawing.Point(0, 0);
             this.treeViewStats.Name = "treeViewStats";
-            this.treeViewStats.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.treeViewStats.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.treeViewStats.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.treeViewStats.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.treeViewStats.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.treeViewStats.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.treeViewStats.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.treeViewStats.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.treeViewStats.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.treeViewStats.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.treeViewStats.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.treeViewStats.ShowLineCount = false;
             this.treeViewStats.ShowLines = true;
             this.treeViewStats.ShowPlusMinus = true;
@@ -964,7 +938,6 @@ namespace EDDiscovery.UserControls
             // 
             this.extScrollBarByShip.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarByShip.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarByShip.ArrowColorScaling = 0.5F;
             this.extScrollBarByShip.ArrowDownDrawAngle = 270F;
             this.extScrollBarByShip.ArrowUpDrawAngle = 90F;
             this.extScrollBarByShip.BorderColor = System.Drawing.Color.White;
@@ -983,7 +956,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarByShip.TabIndex = 0;
             this.extScrollBarByShip.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarByShip.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarByShip.ThumbColorScaling = 0.5F;
             this.extScrollBarByShip.ThumbDrawAngle = 0F;
             this.extScrollBarByShip.Value = -1;
             this.extScrollBarByShip.ValueLimited = -1;
@@ -1015,7 +987,6 @@ namespace EDDiscovery.UserControls
             // dateTimePickerStartDate
             // 
             this.dateTimePickerStartDate.BorderColor = System.Drawing.Color.Transparent;
-            this.dateTimePickerStartDate.BorderColorScaling = 0.5F;
             this.dateTimePickerStartDate.Checked = false;
             this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy HH:mm:ss";
             this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
@@ -1067,7 +1038,6 @@ namespace EDDiscovery.UserControls
             // dateTimePickerEndDate
             // 
             this.dateTimePickerEndDate.BorderColor = System.Drawing.Color.Transparent;
-            this.dateTimePickerEndDate.BorderColorScaling = 0.5F;
             this.dateTimePickerEndDate.Checked = false;
             this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy HH:mm:ss";
             this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;

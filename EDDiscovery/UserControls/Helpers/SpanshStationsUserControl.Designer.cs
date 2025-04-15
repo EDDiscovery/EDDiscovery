@@ -143,11 +143,9 @@ namespace EDDiscovery.UserControls.Helpers
             this.extTextBoxAutoCompleteSystem.AutoCompleteTimeout = 500;
             this.extTextBoxAutoCompleteSystem.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxAutoCompleteSystem.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxAutoCompleteSystem.BorderColorScaling = 0.5F;
             this.extTextBoxAutoCompleteSystem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxAutoCompleteSystem.ClearOnFirstChar = false;
             this.extTextBoxAutoCompleteSystem.ControlBackground = System.Drawing.SystemColors.Control;
-            this.extTextBoxAutoCompleteSystem.DropDownBorderColor = System.Drawing.Color.Green;
             this.extTextBoxAutoCompleteSystem.EndButtonEnable = false;
             this.extTextBoxAutoCompleteSystem.EndButtonSize16ths = 10;
             this.extTextBoxAutoCompleteSystem.EndButtonVisible = false;
@@ -263,7 +261,6 @@ namespace EDDiscovery.UserControls.Helpers
             this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
             this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
@@ -273,13 +270,11 @@ namespace EDDiscovery.UserControls.Helpers
             this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
-            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
             this.extCheckBoxWordWrap.Location = new System.Drawing.Point(508, 2);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
-            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 33;
@@ -316,7 +311,6 @@ namespace EDDiscovery.UserControls.Helpers
             this.valueBoxMaxLs.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.valueBoxMaxLs.BackErrorColor = System.Drawing.Color.Red;
             this.valueBoxMaxLs.BorderColor = System.Drawing.Color.Transparent;
-            this.valueBoxMaxLs.BorderColorScaling = 0.5F;
             this.valueBoxMaxLs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.valueBoxMaxLs.ClearOnFirstChar = false;
             this.valueBoxMaxLs.ControlBackground = System.Drawing.SystemColors.Control;
@@ -558,7 +552,6 @@ namespace EDDiscovery.UserControls.Helpers
             this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
@@ -578,7 +571,6 @@ namespace EDDiscovery.UserControls.Helpers
             this.vScrollBarCustom.TabIndex = 24;
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
             this.vScrollBarCustom.Value = -1;
             this.vScrollBarCustom.ValueLimited = -1;

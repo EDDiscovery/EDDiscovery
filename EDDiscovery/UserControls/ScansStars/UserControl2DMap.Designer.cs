@@ -89,13 +89,11 @@ namespace EDDiscovery.UserControls
             // toolStripComboExpo
             // 
             this.toolStripComboExpo.BorderColor = System.Drawing.Color.White;
-            this.toolStripComboExpo.ButtonColorScaling = 0.5F;
             this.toolStripComboExpo.DataSource = null;
             this.toolStripComboExpo.DisplayMember = "";
             this.toolStripComboExpo.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.toolStripComboExpo.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.toolStripComboExpo.Margin = new System.Windows.Forms.Padding(3, 0, 2, 0);
-            this.toolStripComboExpo.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.toolStripComboExpo.Name = "toolStripComboExpo";
             this.toolStripComboExpo.SelectedIndex = -1;
             this.toolStripComboExpo.SelectedItem = null;
@@ -111,13 +109,11 @@ namespace EDDiscovery.UserControls
             // toolStripComboBoxTime
             // 
             this.toolStripComboBoxTime.BorderColor = System.Drawing.Color.White;
-            this.toolStripComboBoxTime.ButtonColorScaling = 0.5F;
             this.toolStripComboBoxTime.DataSource = null;
             this.toolStripComboBoxTime.DisplayMember = "";
             this.toolStripComboBoxTime.DropDownBackgroundColor = System.Drawing.Color.Gray;
             this.toolStripComboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.toolStripComboBoxTime.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.toolStripComboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.toolStripComboBoxTime.Name = "toolStripComboBoxTime";
             this.toolStripComboBoxTime.SelectedIndex = -1;
             this.toolStripComboBoxTime.SelectedItem = null;

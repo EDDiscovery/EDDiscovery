@@ -198,16 +198,13 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxCustomGridOn.AutoSize = true;
             this.checkBoxCustomGridOn.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomGridOn.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxCustomGridOn.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomGridOn.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomGridOn.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomGridOn.ImageIndeterminate = null;
             this.checkBoxCustomGridOn.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCustomGridOn.ImageUnchecked = null;
             this.checkBoxCustomGridOn.Location = new System.Drawing.Point(324, 6);
             this.checkBoxCustomGridOn.Margin = new System.Windows.Forms.Padding(0, 6, 8, 1);
-            this.checkBoxCustomGridOn.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomGridOn.Name = "checkBoxCustomGridOn";
             this.checkBoxCustomGridOn.Size = new System.Drawing.Size(45, 17);
             this.checkBoxCustomGridOn.TabIndex = 3;
@@ -219,14 +216,12 @@ namespace EDDiscovery.UserControls
             // comboBoxCustomCampaign
             // 
             this.comboBoxCustomCampaign.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomCampaign.ButtonColorScaling = 0.5F;
             this.comboBoxCustomCampaign.DataSource = null;
             this.comboBoxCustomCampaign.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomCampaign.DisplayMember = "";
             this.comboBoxCustomCampaign.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomCampaign.Location = new System.Drawing.Point(0, 2);
             this.comboBoxCustomCampaign.Margin = new System.Windows.Forms.Padding(0, 2, 8, 1);
-            this.comboBoxCustomCampaign.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomCampaign.Name = "comboBoxCustomCampaign";
             this.comboBoxCustomCampaign.SelectedIndex = -1;
             this.comboBoxCustomCampaign.SelectedItem = null;
@@ -270,7 +265,6 @@ namespace EDDiscovery.UserControls
             // 
             this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
@@ -289,7 +283,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.TabIndex = 1;
             this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
             this.vScrollBarCustom1.Value = -1;
             this.vScrollBarCustom1.ValueLimited = -1;

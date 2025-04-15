@@ -79,7 +79,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnShowTitle.Image = null;
             this.extButtonDrawnShowTitle.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Captioned;
             this.extButtonDrawnShowTitle.Location = new System.Drawing.Point(31, -2);
-            this.extButtonDrawnShowTitle.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnShowTitle.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnShowTitle.MouseSelectedColorEnable = true;
             this.extButtonDrawnShowTitle.Name = "extButtonDrawnShowTitle";
@@ -102,7 +101,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnMinimize.Image = null;
             this.extButtonDrawnMinimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.extButtonDrawnMinimize.Location = new System.Drawing.Point(127, -2);
-            this.extButtonDrawnMinimize.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnMinimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnMinimize.MouseSelectedColorEnable = true;
             this.extButtonDrawnMinimize.Name = "extButtonDrawnMinimize";
@@ -126,7 +124,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnOnTop.Image = null;
             this.extButtonDrawnOnTop.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Floating;
             this.extButtonDrawnOnTop.Location = new System.Drawing.Point(79, -2);
-            this.extButtonDrawnOnTop.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnOnTop.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnOnTop.MouseSelectedColorEnable = true;
             this.extButtonDrawnOnTop.Name = "extButtonDrawnOnTop";
@@ -149,7 +146,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnTaskBarIcon.Image = null;
             this.extButtonDrawnTaskBarIcon.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar;
             this.extButtonDrawnTaskBarIcon.Location = new System.Drawing.Point(55, -2);
-            this.extButtonDrawnTaskBarIcon.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnTaskBarIcon.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnTaskBarIcon.MouseSelectedColorEnable = true;
             this.extButtonDrawnTaskBarIcon.Name = "extButtonDrawnTaskBarIcon";
@@ -172,7 +168,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnTransparentMode.Image = null;
             this.extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
             this.extButtonDrawnTransparentMode.Location = new System.Drawing.Point(7, -2);
-            this.extButtonDrawnTransparentMode.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnTransparentMode.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnTransparentMode.MouseSelectedColorEnable = true;
             this.extButtonDrawnTransparentMode.Name = "extButtonDrawnTransparentMode";
@@ -195,7 +190,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnClose.Image = null;
             this.extButtonDrawnClose.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.extButtonDrawnClose.Location = new System.Drawing.Point(151, -2);
-            this.extButtonDrawnClose.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnClose.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnClose.MouseSelectedColorEnable = true;
             this.extButtonDrawnClose.Name = "extButtonDrawnClose";
@@ -243,7 +237,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelp.Image = null;
             this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelp.Location = new System.Drawing.Point(103, -2);
-            this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
             this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";

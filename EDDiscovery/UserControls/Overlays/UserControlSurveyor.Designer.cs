@@ -125,7 +125,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
             this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
@@ -135,13 +134,11 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
-            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
             this.extCheckBoxWordWrap.Location = new System.Drawing.Point(408, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 34;
@@ -166,7 +163,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSystemDetails.AlwaysHideScrollBar = false;
             this.extScrollBarSystemDetails.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarSystemDetails.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarSystemDetails.ArrowColorScaling = 0.5F;
             this.extScrollBarSystemDetails.ArrowDownDrawAngle = 270F;
             this.extScrollBarSystemDetails.ArrowUpDrawAngle = 90F;
             this.extScrollBarSystemDetails.BorderColor = System.Drawing.Color.White;
@@ -186,7 +182,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSystemDetails.Text = "extScrollBar1";
             this.extScrollBarSystemDetails.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarSystemDetails.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarSystemDetails.ThumbColorScaling = 0.5F;
             this.extScrollBarSystemDetails.ThumbDrawAngle = 0F;
             this.extScrollBarSystemDetails.Value = 0;
             this.extScrollBarSystemDetails.ValueLimited = 0;

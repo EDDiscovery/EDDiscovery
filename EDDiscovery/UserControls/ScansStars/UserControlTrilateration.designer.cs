@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Copyright © 2015 - 2017 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
@@ -405,7 +405,6 @@ namespace EDDiscovery.UserControls
             // 
             this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
@@ -424,7 +423,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.TabIndex = 1;
             this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
             this.vScrollBarCustom1.Value = 0;
             this.vScrollBarCustom1.ValueLimited = 0;
@@ -485,7 +483,6 @@ namespace EDDiscovery.UserControls
             // richTextBox_History
             // 
             this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBox_History.BorderColorScaling = 0.5F;
             this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox_History.HideScrollBar = true;
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
@@ -494,17 +491,6 @@ namespace EDDiscovery.UserControls
             this.richTextBox_History.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
     "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
-            this.richTextBox_History.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.richTextBox_History.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.richTextBox_History.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.richTextBox_History.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.richTextBox_History.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.richTextBox_History.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBox_History.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.richTextBox_History.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.richTextBox_History.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.richTextBox_History.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.richTextBox_History.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBox_History.ShowLineCount = false;
             this.richTextBox_History.Size = new System.Drawing.Size(588, 141);
             this.richTextBox_History.TabIndex = 0;
@@ -527,7 +513,6 @@ namespace EDDiscovery.UserControls
             // 
             this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
@@ -546,7 +531,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.TabIndex = 14;
             this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
             this.vScrollBarCustom2.Value = -1;
             this.vScrollBarCustom2.ValueLimited = -1;

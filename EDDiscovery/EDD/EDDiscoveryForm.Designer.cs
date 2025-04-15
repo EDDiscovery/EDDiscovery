@@ -182,8 +182,6 @@ namespace EDDiscovery
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.SelectedIndex = 0;
             this.tabControlMain.Size = new System.Drawing.Size(984, 627);
-            this.tabControlMain.TabColorScaling = 0.5F;
-            this.tabControlMain.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
             this.tabControlMain.TabDisabledScaling = 0.5F;
             this.tabControlMain.TabIndex = 15;
@@ -200,14 +198,12 @@ namespace EDDiscovery
             // comboBoxCommander
             // 
             this.comboBoxCommander.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCommander.ButtonColorScaling = 0.5F;
             this.comboBoxCommander.DataSource = null;
             this.comboBoxCommander.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCommander.DisplayMember = "";
             this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCommander.Location = new System.Drawing.Point(1, 3);
             this.comboBoxCommander.Margin = new System.Windows.Forms.Padding(1, 3, 3, 1);
-            this.comboBoxCommander.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCommander.Name = "comboBoxCommander";
             this.comboBoxCommander.SelectedIndex = -1;
             this.comboBoxCommander.SelectedItem = null;
@@ -223,14 +219,12 @@ namespace EDDiscovery
             // comboBoxCustomProfiles
             // 
             this.comboBoxCustomProfiles.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomProfiles.ButtonColorScaling = 0.5F;
             this.comboBoxCustomProfiles.DataSource = null;
             this.comboBoxCustomProfiles.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomProfiles.DisplayMember = "";
             this.comboBoxCustomProfiles.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomProfiles.Location = new System.Drawing.Point(186, 3);
             this.comboBoxCustomProfiles.Margin = new System.Windows.Forms.Padding(1, 3, 3, 1);
-            this.comboBoxCustomProfiles.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomProfiles.Name = "comboBoxCustomProfiles";
             this.comboBoxCustomProfiles.SelectedIndex = -1;
             this.comboBoxCustomProfiles.SelectedItem = null;
@@ -428,7 +422,6 @@ namespace EDDiscovery
             this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelp.Location = new System.Drawing.Point(524, 1);
             this.extButtonDrawnHelp.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
-            this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
             this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";
@@ -917,7 +910,6 @@ namespace EDDiscovery
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(74, 2);
             this.panel_close.Margin = new System.Windows.Forms.Padding(0);
-            this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
@@ -939,7 +931,6 @@ namespace EDDiscovery
             this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(58, 0);
             this.panel_minimize.Margin = new System.Windows.Forms.Padding(0);
-            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";

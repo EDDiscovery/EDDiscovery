@@ -176,7 +176,6 @@
             // customDateTimePickerStart
             // 
             this.customDateTimePickerStart.BorderColor = System.Drawing.Color.Transparent;
-            this.customDateTimePickerStart.BorderColorScaling = 0.5F;
             this.customDateTimePickerStart.Checked = false;
             this.customDateTimePickerStart.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
             this.customDateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
@@ -205,7 +204,6 @@
             // customDateTimePickerEnd
             // 
             this.customDateTimePickerEnd.BorderColor = System.Drawing.Color.Transparent;
-            this.customDateTimePickerEnd.BorderColorScaling = 0.5F;
             this.customDateTimePickerEnd.Checked = false;
             this.customDateTimePickerEnd.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
             this.customDateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
@@ -237,7 +235,6 @@
             this.extTextBoxSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxSearch.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxSearch.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxSearch.BorderColorScaling = 0.5F;
             this.extTextBoxSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxSearch.ClearOnFirstChar = false;
             this.extTextBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
@@ -285,7 +282,6 @@
             this.extScrollBar1.AlwaysHideScrollBar = false;
             this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBar1.ArrowColorScaling = 0.5F;
             this.extScrollBar1.ArrowDownDrawAngle = 270F;
             this.extScrollBar1.ArrowUpDrawAngle = 90F;
             this.extScrollBar1.BorderColor = System.Drawing.Color.White;
@@ -305,7 +301,6 @@
             this.extScrollBar1.Text = "extScrollBar1";
             this.extScrollBar1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBar1.ThumbColorScaling = 0.5F;
             this.extScrollBar1.ThumbDrawAngle = 0F;
             this.extScrollBar1.Value = -1;
             this.extScrollBar1.ValueLimited = -1;

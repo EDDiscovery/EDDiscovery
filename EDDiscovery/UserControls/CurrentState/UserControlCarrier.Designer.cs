@@ -219,8 +219,6 @@
             this.extTabControl.Name = "extTabControl";
             this.extTabControl.SelectedIndex = 0;
             this.extTabControl.Size = new System.Drawing.Size(853, 572);
-            this.extTabControl.TabColorScaling = 0.5F;
-            this.extTabControl.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.extTabControl.TabControlBorderColor = System.Drawing.Color.DarkGray;
             this.extTabControl.TabDisabledScaling = 0.5F;
             this.extTabControl.TabIndex = 0;
@@ -289,7 +287,6 @@
             this.extScrollBarItinerary.AlwaysHideScrollBar = false;
             this.extScrollBarItinerary.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarItinerary.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarItinerary.ArrowColorScaling = 0.5F;
             this.extScrollBarItinerary.ArrowDownDrawAngle = 270F;
             this.extScrollBarItinerary.ArrowUpDrawAngle = 90F;
             this.extScrollBarItinerary.BorderColor = System.Drawing.Color.White;
@@ -310,7 +307,6 @@
             this.extScrollBarItinerary.Text = "extScrollBar1";
             this.extScrollBarItinerary.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarItinerary.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarItinerary.ThumbColorScaling = 0.5F;
             this.extScrollBarItinerary.ThumbDrawAngle = 0F;
             this.extScrollBarItinerary.Value = -1;
             this.extScrollBarItinerary.ValueLimited = -1;
@@ -467,7 +463,6 @@
             this.extScrollBarLedger.AlwaysHideScrollBar = false;
             this.extScrollBarLedger.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarLedger.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarLedger.ArrowColorScaling = 0.5F;
             this.extScrollBarLedger.ArrowDownDrawAngle = 270F;
             this.extScrollBarLedger.ArrowUpDrawAngle = 90F;
             this.extScrollBarLedger.BorderColor = System.Drawing.Color.White;
@@ -488,7 +483,6 @@
             this.extScrollBarLedger.Text = "extScrollBar1";
             this.extScrollBarLedger.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarLedger.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarLedger.ThumbColorScaling = 0.5F;
             this.extScrollBarLedger.ThumbDrawAngle = 0F;
             this.extScrollBarLedger.Value = -1;
             this.extScrollBarLedger.ValueLimited = -1;
@@ -766,7 +760,6 @@
             this.extScrollBarServices.AlwaysHideScrollBar = false;
             this.extScrollBarServices.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarServices.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarServices.ArrowColorScaling = 0.5F;
             this.extScrollBarServices.ArrowDownDrawAngle = 270F;
             this.extScrollBarServices.ArrowUpDrawAngle = 90F;
             this.extScrollBarServices.BorderColor = System.Drawing.Color.White;
@@ -786,7 +779,6 @@
             this.extScrollBarServices.Text = "extScrollBar1";
             this.extScrollBarServices.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarServices.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarServices.ThumbColorScaling = 0.5F;
             this.extScrollBarServices.ThumbDrawAngle = 0F;
             this.extScrollBarServices.Value = 0;
             this.extScrollBarServices.ValueLimited = 0;
@@ -834,7 +826,6 @@
             this.extScrollBarPacks.AlwaysHideScrollBar = false;
             this.extScrollBarPacks.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarPacks.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarPacks.ArrowColorScaling = 0.5F;
             this.extScrollBarPacks.ArrowDownDrawAngle = 270F;
             this.extScrollBarPacks.ArrowUpDrawAngle = 90F;
             this.extScrollBarPacks.BorderColor = System.Drawing.Color.White;
@@ -854,7 +845,6 @@
             this.extScrollBarPacks.Text = "extScrollBar2";
             this.extScrollBarPacks.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarPacks.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarPacks.ThumbColorScaling = 0.5F;
             this.extScrollBarPacks.ThumbDrawAngle = 0F;
             this.extScrollBarPacks.Value = 0;
             this.extScrollBarPacks.ValueLimited = 0;
@@ -888,7 +878,6 @@
             this.extScrollBarOrders.AlwaysHideScrollBar = false;
             this.extScrollBarOrders.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarOrders.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarOrders.ArrowColorScaling = 0.5F;
             this.extScrollBarOrders.ArrowDownDrawAngle = 270F;
             this.extScrollBarOrders.ArrowUpDrawAngle = 90F;
             this.extScrollBarOrders.BorderColor = System.Drawing.Color.White;
@@ -909,7 +898,6 @@
             this.extScrollBarOrders.Text = "extScrollBar1";
             this.extScrollBarOrders.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarOrders.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarOrders.ThumbColorScaling = 0.5F;
             this.extScrollBarOrders.ThumbDrawAngle = 0F;
             this.extScrollBarOrders.Value = -1;
             this.extScrollBarOrders.ValueLimited = -1;
@@ -1035,7 +1023,6 @@
             this.extScrollBarCAPIStats.AlwaysHideScrollBar = false;
             this.extScrollBarCAPIStats.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPIStats.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarCAPIStats.ArrowColorScaling = 0.5F;
             this.extScrollBarCAPIStats.ArrowDownDrawAngle = 270F;
             this.extScrollBarCAPIStats.ArrowUpDrawAngle = 90F;
             this.extScrollBarCAPIStats.BorderColor = System.Drawing.Color.White;
@@ -1056,7 +1043,6 @@
             this.extScrollBarCAPIStats.Text = "extScrollBar1";
             this.extScrollBarCAPIStats.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPIStats.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarCAPIStats.ThumbColorScaling = 0.5F;
             this.extScrollBarCAPIStats.ThumbDrawAngle = 0F;
             this.extScrollBarCAPIStats.Value = -1;
             this.extScrollBarCAPIStats.ValueLimited = -1;
@@ -1189,7 +1175,6 @@
             this.extScrollBarCAPIShips.AlwaysHideScrollBar = false;
             this.extScrollBarCAPIShips.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPIShips.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarCAPIShips.ArrowColorScaling = 0.5F;
             this.extScrollBarCAPIShips.ArrowDownDrawAngle = 270F;
             this.extScrollBarCAPIShips.ArrowUpDrawAngle = 90F;
             this.extScrollBarCAPIShips.BorderColor = System.Drawing.Color.White;
@@ -1210,7 +1195,6 @@
             this.extScrollBarCAPIShips.Text = "extScrollBar1";
             this.extScrollBarCAPIShips.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPIShips.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarCAPIShips.ThumbColorScaling = 0.5F;
             this.extScrollBarCAPIShips.ThumbDrawAngle = 0F;
             this.extScrollBarCAPIShips.Value = -1;
             this.extScrollBarCAPIShips.ValueLimited = -1;
@@ -1317,7 +1301,6 @@
             this.extScrollBarCAPIModules.AlwaysHideScrollBar = false;
             this.extScrollBarCAPIModules.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPIModules.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarCAPIModules.ArrowColorScaling = 0.5F;
             this.extScrollBarCAPIModules.ArrowDownDrawAngle = 270F;
             this.extScrollBarCAPIModules.ArrowUpDrawAngle = 90F;
             this.extScrollBarCAPIModules.BorderColor = System.Drawing.Color.White;
@@ -1338,7 +1321,6 @@
             this.extScrollBarCAPIModules.Text = "extScrollBar1";
             this.extScrollBarCAPIModules.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPIModules.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarCAPIModules.ThumbColorScaling = 0.5F;
             this.extScrollBarCAPIModules.ThumbDrawAngle = 0F;
             this.extScrollBarCAPIModules.Value = -1;
             this.extScrollBarCAPIModules.ValueLimited = -1;
@@ -1505,7 +1487,6 @@
             this.extScrollBarCAPICargo.AlwaysHideScrollBar = false;
             this.extScrollBarCAPICargo.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPICargo.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarCAPICargo.ArrowColorScaling = 0.5F;
             this.extScrollBarCAPICargo.ArrowDownDrawAngle = 270F;
             this.extScrollBarCAPICargo.ArrowUpDrawAngle = 90F;
             this.extScrollBarCAPICargo.BorderColor = System.Drawing.Color.White;
@@ -1526,7 +1507,6 @@
             this.extScrollBarCAPICargo.Text = "extScrollBar1";
             this.extScrollBarCAPICargo.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPICargo.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarCAPICargo.ThumbColorScaling = 0.5F;
             this.extScrollBarCAPICargo.ThumbDrawAngle = 0F;
             this.extScrollBarCAPICargo.Value = -1;
             this.extScrollBarCAPICargo.ValueLimited = -1;
@@ -1622,7 +1602,6 @@
             this.extScrollBarCAPILocker.AlwaysHideScrollBar = false;
             this.extScrollBarCAPILocker.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPILocker.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarCAPILocker.ArrowColorScaling = 0.5F;
             this.extScrollBarCAPILocker.ArrowDownDrawAngle = 270F;
             this.extScrollBarCAPILocker.ArrowUpDrawAngle = 90F;
             this.extScrollBarCAPILocker.BorderColor = System.Drawing.Color.White;
@@ -1643,7 +1622,6 @@
             this.extScrollBarCAPILocker.Text = "extScrollBar1";
             this.extScrollBarCAPILocker.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPILocker.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarCAPILocker.ThumbColorScaling = 0.5F;
             this.extScrollBarCAPILocker.ThumbDrawAngle = 0F;
             this.extScrollBarCAPILocker.Value = -1;
             this.extScrollBarCAPILocker.ValueLimited = -1;

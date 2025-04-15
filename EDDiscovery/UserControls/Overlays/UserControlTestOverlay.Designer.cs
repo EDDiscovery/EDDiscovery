@@ -75,8 +75,6 @@ namespace EDDiscovery.UserControls
             this.extTabControl1.SelectedIndex = 0;
             this.extTabControl1.Size = new System.Drawing.Size(200, 100);
             this.extTabControl1.TabBackgroundColor = System.Drawing.Color.Transparent;
-            this.extTabControl1.TabColorScaling = 0.5F;
-            this.extTabControl1.TabControlBorderBrightColor = System.Drawing.Color.LightGray;
             this.extTabControl1.TabControlBorderColor = System.Drawing.Color.DarkGray;
             this.extTabControl1.TabDisabledScaling = 0.5F;
             this.extTabControl1.TabIndex = 2;
@@ -112,15 +110,12 @@ namespace EDDiscovery.UserControls
             // 
             this.extCheckBox1.AutoSize = true;
             this.extCheckBox1.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBox1.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBox1.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBox1.CheckColor = System.Drawing.Color.DarkBlue;
-            this.extCheckBox1.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBox1.ImageIndeterminate = null;
             this.extCheckBox1.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBox1.ImageUnchecked = null;
             this.extCheckBox1.Location = new System.Drawing.Point(18, 164);
-            this.extCheckBox1.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBox1.Name = "extCheckBox1";
             this.extCheckBox1.Size = new System.Drawing.Size(95, 17);
             this.extCheckBox1.TabIndex = 3;

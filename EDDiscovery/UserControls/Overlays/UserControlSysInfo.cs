@@ -600,7 +600,7 @@ namespace EDDiscovery.UserControls
                     string starclass = "";
                     string distance = "";
                     string onbody = "";
-                    Color textdistcolor = ExtendedControls.Theme.Current.TextBlockColor;
+                    Color textdistcolor = ExtendedControls.Theme.Current.TextBlockForeColor;
 
                     //bool sysinfoincurrentsystem = he.System.Name == (discoveryform.history.LastOrDefault?.System.Name ?? "xx");
 
@@ -1446,7 +1446,7 @@ namespace EDDiscovery.UserControls
                 {
                     var bt = c as ExtendedControls.ExtButton;
                     if (on)
-                        bt.ButtonColorScaling = bt.ButtonDisabledScaling = 1.0f;
+                        bt.ButtonDisabledScaling = 1.0f;
                     bt.BackColor = curcol;
                 }
                 else

@@ -239,7 +239,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.AlwaysHideScrollBar = false;
             this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom2.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
@@ -259,7 +258,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.TabIndex = 24;
             this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom2.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
             this.vScrollBarCustom2.Value = -1;
             this.vScrollBarCustom2.ValueLimited = -1;

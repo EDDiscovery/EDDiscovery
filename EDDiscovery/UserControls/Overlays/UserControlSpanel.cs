@@ -773,7 +773,6 @@ namespace EDDiscovery.UserControls
                 {
                     ExtButton b = dividers[i - 1];
                     b.Location = new Point(scanpostextoffset.X + columnpos[i] - b.Width/2, pictureBox.Top + startingtextrowpos);
-                    b.ButtonColorScaling = 1.0F;
                     if (b.FlatStyle == FlatStyle.System)            // System can't do bitmaps.. we need standard.
                         b.FlatStyle = FlatStyle.Standard;
                     else if ( b.FlatStyle == FlatStyle.Popup )      // if in Popup (ours) we can adjust the look further.

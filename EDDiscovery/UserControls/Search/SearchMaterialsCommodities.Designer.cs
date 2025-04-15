@@ -82,7 +82,6 @@ namespace EDDiscovery.UserControls
             // 
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
@@ -101,7 +100,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.TabIndex = 7;
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
             this.vScrollBarCustom.Value = -1;
             this.vScrollBarCustom.ValueLimited = -1;
@@ -208,13 +206,11 @@ namespace EDDiscovery.UserControls
             // comboBoxCustomCMANDOR
             // 
             this.comboBoxCustomCMANDOR.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomCMANDOR.ButtonColorScaling = 0.5F;
             this.comboBoxCustomCMANDOR.DataSource = null;
             this.comboBoxCustomCMANDOR.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomCMANDOR.DisplayMember = "";
             this.comboBoxCustomCMANDOR.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomCMANDOR.Location = new System.Drawing.Point(386, 43);
-            this.comboBoxCustomCMANDOR.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomCMANDOR.Name = "comboBoxCustomCMANDOR";
             this.comboBoxCustomCMANDOR.SelectedIndex = -1;
             this.comboBoxCustomCMANDOR.SelectedItem = null;
@@ -228,13 +224,11 @@ namespace EDDiscovery.UserControls
             // comboBoxCustomCM2
             // 
             this.comboBoxCustomCM2.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomCM2.ButtonColorScaling = 0.5F;
             this.comboBoxCustomCM2.DataSource = null;
             this.comboBoxCustomCM2.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomCM2.DisplayMember = "";
             this.comboBoxCustomCM2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomCM2.Location = new System.Drawing.Point(91, 42);
-            this.comboBoxCustomCM2.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomCM2.Name = "comboBoxCustomCM2";
             this.comboBoxCustomCM2.SelectedIndex = -1;
             this.comboBoxCustomCM2.SelectedItem = null;
@@ -248,13 +242,11 @@ namespace EDDiscovery.UserControls
             // comboBoxCustomCM1
             // 
             this.comboBoxCustomCM1.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomCM1.ButtonColorScaling = 0.5F;
             this.comboBoxCustomCM1.DataSource = null;
             this.comboBoxCustomCM1.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomCM1.DisplayMember = "";
             this.comboBoxCustomCM1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomCM1.Location = new System.Drawing.Point(91, 14);
-            this.comboBoxCustomCM1.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomCM1.Name = "comboBoxCustomCM1";
             this.comboBoxCustomCM1.SelectedIndex = -1;
             this.comboBoxCustomCM1.SelectedItem = null;

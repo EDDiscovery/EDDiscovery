@@ -73,7 +73,6 @@ namespace EDDiscovery.Forms
             this.textBoxReleaseName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxReleaseName.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxReleaseName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxReleaseName.BorderColorScaling = 0.5F;
             this.textBoxReleaseName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxReleaseName.ClearOnFirstChar = false;
             this.textBoxReleaseName.ControlBackground = System.Drawing.SystemColors.Control;
@@ -119,7 +118,6 @@ namespace EDDiscovery.Forms
             this.textBoxGitHubURL.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxGitHubURL.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxGitHubURL.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxGitHubURL.BorderColorScaling = 0.5F;
             this.textBoxGitHubURL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxGitHubURL.ClearOnFirstChar = false;
             this.textBoxGitHubURL.ControlBackground = System.Drawing.SystemColors.Control;
@@ -156,7 +154,6 @@ namespace EDDiscovery.Forms
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBoxReleaseInfo.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBoxReleaseInfo.BorderColorScaling = 0.5F;
             this.richTextBoxReleaseInfo.HideScrollBar = true;
             this.richTextBoxReleaseInfo.Location = new System.Drawing.Point(146, 67);
             this.richTextBoxReleaseInfo.Name = "richTextBoxReleaseInfo";
@@ -164,17 +161,6 @@ namespace EDDiscovery.Forms
             this.richTextBoxReleaseInfo.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
     "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
-            this.richTextBoxReleaseInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.richTextBoxReleaseInfo.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.richTextBoxReleaseInfo.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.richTextBoxReleaseInfo.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.richTextBoxReleaseInfo.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.richTextBoxReleaseInfo.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBoxReleaseInfo.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.richTextBoxReleaseInfo.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.richTextBoxReleaseInfo.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.richTextBoxReleaseInfo.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.richTextBoxReleaseInfo.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBoxReleaseInfo.ShowLineCount = false;
             this.richTextBoxReleaseInfo.Size = new System.Drawing.Size(701, 300);
             this.richTextBoxReleaseInfo.TabIndex = 5;
@@ -273,7 +259,6 @@ namespace EDDiscovery.Forms
             this.pnlClose.Image = null;
             this.pnlClose.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.pnlClose.Location = new System.Drawing.Point(839, 0);
-            this.pnlClose.MouseOverColor = System.Drawing.Color.White;
             this.pnlClose.MouseSelectedColor = System.Drawing.Color.Green;
             this.pnlClose.MouseSelectedColorEnable = true;
             this.pnlClose.Name = "pnlClose";

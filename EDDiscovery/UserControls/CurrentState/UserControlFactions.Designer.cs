@@ -138,7 +138,6 @@
             // startDateTimePicker
             // 
             this.startDateTimePicker.BorderColor = System.Drawing.Color.Transparent;
-            this.startDateTimePicker.BorderColorScaling = 0.5F;
             this.startDateTimePicker.Checked = false;
             this.startDateTimePicker.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
             this.startDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
@@ -157,7 +156,6 @@
             // endDateTimePicker
             // 
             this.endDateTimePicker.BorderColor = System.Drawing.Color.Transparent;
-            this.endDateTimePicker.BorderColorScaling = 0.5F;
             this.endDateTimePicker.Checked = false;
             this.endDateTimePicker.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
             this.endDateTimePicker.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
@@ -177,17 +175,14 @@
             // 
             this.extCheckBoxShowHideSystemInfo.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxShowHideSystemInfo.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxShowHideSystemInfo.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxShowHideSystemInfo.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxShowHideSystemInfo.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxShowHideSystemInfo.Image = global::EDDiscovery.Icons.Controls.SearchStars;
-            this.extCheckBoxShowHideSystemInfo.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxShowHideSystemInfo.ImageIndeterminate = null;
             this.extCheckBoxShowHideSystemInfo.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowHideSystemInfo.ImageUnchecked = null;
             this.extCheckBoxShowHideSystemInfo.Location = new System.Drawing.Point(686, 2);
             this.extCheckBoxShowHideSystemInfo.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.extCheckBoxShowHideSystemInfo.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxShowHideSystemInfo.Name = "extCheckBoxShowHideSystemInfo";
             this.extCheckBoxShowHideSystemInfo.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxShowHideSystemInfo.TabIndex = 36;
@@ -200,17 +195,14 @@
             // 
             this.extCheckBoxShowHideMission.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxShowHideMission.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxShowHideMission.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxShowHideMission.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxShowHideMission.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxShowHideMission.Image = global::EDDiscovery.Icons.Controls.Missions;
-            this.extCheckBoxShowHideMission.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxShowHideMission.ImageIndeterminate = null;
             this.extCheckBoxShowHideMission.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowHideMission.ImageUnchecked = null;
             this.extCheckBoxShowHideMission.Location = new System.Drawing.Point(720, 2);
             this.extCheckBoxShowHideMission.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.extCheckBoxShowHideMission.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxShowHideMission.Name = "extCheckBoxShowHideMission";
             this.extCheckBoxShowHideMission.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxShowHideMission.TabIndex = 36;
@@ -223,17 +215,14 @@
             // 
             this.extCheckBoxShowHideCommodities.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxShowHideCommodities.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxShowHideCommodities.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxShowHideCommodities.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxShowHideCommodities.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxShowHideCommodities.Image = global::EDDiscovery.Icons.Controls.Commodity;
-            this.extCheckBoxShowHideCommodities.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxShowHideCommodities.ImageIndeterminate = null;
             this.extCheckBoxShowHideCommodities.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowHideCommodities.ImageUnchecked = null;
             this.extCheckBoxShowHideCommodities.Location = new System.Drawing.Point(754, 2);
             this.extCheckBoxShowHideCommodities.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.extCheckBoxShowHideCommodities.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxShowHideCommodities.Name = "extCheckBoxShowHideCommodities";
             this.extCheckBoxShowHideCommodities.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxShowHideCommodities.TabIndex = 36;
@@ -246,17 +235,14 @@
             // 
             this.extCheckBoxShowHideMaterials.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxShowHideMaterials.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxShowHideMaterials.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxShowHideMaterials.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxShowHideMaterials.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxShowHideMaterials.Image = global::EDDiscovery.Icons.Controls.Materials;
-            this.extCheckBoxShowHideMaterials.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxShowHideMaterials.ImageIndeterminate = null;
             this.extCheckBoxShowHideMaterials.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowHideMaterials.ImageUnchecked = null;
             this.extCheckBoxShowHideMaterials.Location = new System.Drawing.Point(788, 2);
             this.extCheckBoxShowHideMaterials.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.extCheckBoxShowHideMaterials.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxShowHideMaterials.Name = "extCheckBoxShowHideMaterials";
             this.extCheckBoxShowHideMaterials.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxShowHideMaterials.TabIndex = 36;
@@ -269,17 +255,14 @@
             // 
             this.extCheckBoxShowHideBounties.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxShowHideBounties.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxShowHideBounties.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxShowHideBounties.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxShowHideBounties.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxShowHideBounties.Image = global::EDDiscovery.Icons.Controls.Bounty;
-            this.extCheckBoxShowHideBounties.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxShowHideBounties.ImageIndeterminate = null;
             this.extCheckBoxShowHideBounties.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowHideBounties.ImageUnchecked = null;
             this.extCheckBoxShowHideBounties.Location = new System.Drawing.Point(822, 2);
             this.extCheckBoxShowHideBounties.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.extCheckBoxShowHideBounties.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxShowHideBounties.Name = "extCheckBoxShowHideBounties";
             this.extCheckBoxShowHideBounties.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxShowHideBounties.TabIndex = 36;
@@ -292,17 +275,14 @@
             // 
             this.extCheckBoxShowHideInterdictions.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxShowHideInterdictions.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxShowHideInterdictions.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxShowHideInterdictions.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxShowHideInterdictions.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxShowHideInterdictions.Image = global::EDDiscovery.Icons.Controls.Interdiction;
-            this.extCheckBoxShowHideInterdictions.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxShowHideInterdictions.ImageIndeterminate = null;
             this.extCheckBoxShowHideInterdictions.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowHideInterdictions.ImageUnchecked = null;
             this.extCheckBoxShowHideInterdictions.Location = new System.Drawing.Point(856, 2);
             this.extCheckBoxShowHideInterdictions.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.extCheckBoxShowHideInterdictions.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxShowHideInterdictions.Name = "extCheckBoxShowHideInterdictions";
             this.extCheckBoxShowHideInterdictions.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxShowHideInterdictions.TabIndex = 36;
@@ -315,17 +295,14 @@
             // 
             this.extCheckBoxShowHideKillBonds.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxShowHideKillBonds.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxShowHideKillBonds.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxShowHideKillBonds.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxShowHideKillBonds.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxShowHideKillBonds.Image = global::EDDiscovery.Icons.Controls.FactionKillBond;
-            this.extCheckBoxShowHideKillBonds.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxShowHideKillBonds.ImageIndeterminate = null;
             this.extCheckBoxShowHideKillBonds.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowHideKillBonds.ImageUnchecked = null;
             this.extCheckBoxShowHideKillBonds.Location = new System.Drawing.Point(890, 2);
             this.extCheckBoxShowHideKillBonds.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.extCheckBoxShowHideKillBonds.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxShowHideKillBonds.Name = "extCheckBoxShowHideKillBonds";
             this.extCheckBoxShowHideKillBonds.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxShowHideKillBonds.TabIndex = 36;
@@ -338,17 +315,14 @@
             // 
             this.extCheckBoxShowHideDataLink.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxShowHideDataLink.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxShowHideDataLink.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxShowHideDataLink.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxShowHideDataLink.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxShowHideDataLink.Image = global::EDDiscovery.Icons.Controls.DatalinkScan;
-            this.extCheckBoxShowHideDataLink.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxShowHideDataLink.ImageIndeterminate = null;
             this.extCheckBoxShowHideDataLink.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowHideDataLink.ImageUnchecked = null;
             this.extCheckBoxShowHideDataLink.Location = new System.Drawing.Point(924, 2);
             this.extCheckBoxShowHideDataLink.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.extCheckBoxShowHideDataLink.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxShowHideDataLink.Name = "extCheckBoxShowHideDataLink";
             this.extCheckBoxShowHideDataLink.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxShowHideDataLink.TabIndex = 36;
@@ -361,17 +335,14 @@
             // 
             this.extCheckBoxShowHideCartographic.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxShowHideCartographic.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxShowHideCartographic.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxShowHideCartographic.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxShowHideCartographic.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxShowHideCartographic.Image = global::EDDiscovery.Icons.Controls.SellExplorationData;
-            this.extCheckBoxShowHideCartographic.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxShowHideCartographic.ImageIndeterminate = null;
             this.extCheckBoxShowHideCartographic.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowHideCartographic.ImageUnchecked = null;
             this.extCheckBoxShowHideCartographic.Location = new System.Drawing.Point(958, 2);
             this.extCheckBoxShowHideCartographic.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.extCheckBoxShowHideCartographic.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxShowHideCartographic.Name = "extCheckBoxShowHideCartographic";
             this.extCheckBoxShowHideCartographic.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxShowHideCartographic.TabIndex = 36;
@@ -444,7 +415,6 @@
             this.textBoxSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxSearch.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxSearch.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSearch.BorderColorScaling = 0.5F;
             this.textBoxSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSearch.ClearOnFirstChar = false;
             this.textBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
@@ -496,7 +466,6 @@
             this.scrollBarFactions.AlwaysHideScrollBar = false;
             this.scrollBarFactions.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.scrollBarFactions.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.scrollBarFactions.ArrowColorScaling = 0.5F;
             this.scrollBarFactions.ArrowDownDrawAngle = 270F;
             this.scrollBarFactions.ArrowUpDrawAngle = 90F;
             this.scrollBarFactions.BorderColor = System.Drawing.Color.White;
@@ -517,7 +486,6 @@
             this.scrollBarFactions.Text = "extScrollBar1";
             this.scrollBarFactions.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.scrollBarFactions.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.scrollBarFactions.ThumbColorScaling = 0.5F;
             this.scrollBarFactions.ThumbDrawAngle = 0F;
             this.scrollBarFactions.Value = -1;
             this.scrollBarFactions.ValueLimited = -1;

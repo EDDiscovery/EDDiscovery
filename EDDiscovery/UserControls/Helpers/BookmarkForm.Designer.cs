@@ -112,7 +112,6 @@ namespace EDDiscovery.UserControls
             // textBoxBookmarkNotes
             // 
             this.textBoxBookmarkNotes.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBookmarkNotes.BorderColorScaling = 0.5F;
             this.textBoxBookmarkNotes.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxBookmarkNotes.DetectUrls = true;
             this.textBoxBookmarkNotes.HideScrollBar = true;
@@ -122,17 +121,6 @@ namespace EDDiscovery.UserControls
             this.textBoxBookmarkNotes.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
     "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
-            this.textBoxBookmarkNotes.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.textBoxBookmarkNotes.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.textBoxBookmarkNotes.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.textBoxBookmarkNotes.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.textBoxBookmarkNotes.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.textBoxBookmarkNotes.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.textBoxBookmarkNotes.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.textBoxBookmarkNotes.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.textBoxBookmarkNotes.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.textBoxBookmarkNotes.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.textBoxBookmarkNotes.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.textBoxBookmarkNotes.ShowLineCount = false;
             this.textBoxBookmarkNotes.Size = new System.Drawing.Size(726, 103);
             this.textBoxBookmarkNotes.TabIndex = 0;
@@ -145,7 +133,6 @@ namespace EDDiscovery.UserControls
             this.textBoxX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxX.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxX.BorderColorScaling = 0.5F;
             this.textBoxX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxX.ClearOnFirstChar = false;
             this.textBoxX.ControlBackground = System.Drawing.SystemColors.Control;
@@ -174,7 +161,6 @@ namespace EDDiscovery.UserControls
             this.textBoxY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxY.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxY.BorderColorScaling = 0.5F;
             this.textBoxY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxY.ClearOnFirstChar = false;
             this.textBoxY.ControlBackground = System.Drawing.SystemColors.Control;
@@ -203,7 +189,6 @@ namespace EDDiscovery.UserControls
             this.textBoxZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxZ.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxZ.BorderColorScaling = 0.5F;
             this.textBoxZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxZ.ClearOnFirstChar = false;
             this.textBoxZ.ControlBackground = System.Drawing.SystemColors.Control;
@@ -259,7 +244,6 @@ namespace EDDiscovery.UserControls
             this.textBoxTime.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxTime.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTime.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxTime.BorderColorScaling = 0.5F;
             this.textBoxTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTime.ClearOnFirstChar = false;
             this.textBoxTime.ControlBackground = System.Drawing.SystemColors.Control;
@@ -312,7 +296,6 @@ namespace EDDiscovery.UserControls
             // textBoxTravelNote
             // 
             this.textBoxTravelNote.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxTravelNote.BorderColorScaling = 0.5F;
             this.textBoxTravelNote.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTravelNote.DetectUrls = true;
             this.textBoxTravelNote.HideScrollBar = true;
@@ -322,17 +305,6 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelNote.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
     "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
-            this.textBoxTravelNote.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.textBoxTravelNote.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.textBoxTravelNote.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.textBoxTravelNote.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.textBoxTravelNote.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.textBoxTravelNote.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.textBoxTravelNote.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.textBoxTravelNote.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.textBoxTravelNote.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.textBoxTravelNote.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.textBoxTravelNote.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.textBoxTravelNote.ShowLineCount = false;
             this.textBoxTravelNote.Size = new System.Drawing.Size(726, 87);
             this.textBoxTravelNote.TabIndex = 8;
@@ -343,15 +315,12 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxTarget.AutoSize = true;
             this.checkBoxTarget.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxTarget.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxTarget.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxTarget.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxTarget.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxTarget.ImageIndeterminate = null;
             this.checkBoxTarget.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxTarget.ImageUnchecked = null;
             this.checkBoxTarget.Location = new System.Drawing.Point(694, 24);
-            this.checkBoxTarget.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxTarget.Name = "checkBoxTarget";
             this.checkBoxTarget.Size = new System.Drawing.Size(87, 17);
             this.checkBoxTarget.TabIndex = 10;
@@ -375,11 +344,9 @@ namespace EDDiscovery.UserControls
             this.textBoxName.AutoCompleteTimeout = 500;
             this.textBoxName.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxName.BorderColorScaling = 0.5F;
             this.textBoxName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxName.ClearOnFirstChar = false;
             this.textBoxName.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxName.DropDownBorderColor = System.Drawing.Color.Green;
             this.textBoxName.EndButtonEnable = false;
             this.textBoxName.EndButtonSize16ths = 10;
             this.textBoxName.EndButtonVisible = false;
@@ -445,7 +412,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.AlwaysHideScrollBar = false;
             this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBar1.ArrowColorScaling = 0.5F;
             this.extScrollBar1.ArrowDownDrawAngle = 270F;
             this.extScrollBar1.ArrowUpDrawAngle = 90F;
             this.extScrollBar1.BorderColor = System.Drawing.Color.White;
@@ -465,7 +431,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.Text = "extScrollBar1";
             this.extScrollBar1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBar1.ThumbColorScaling = 0.5F;
             this.extScrollBar1.ThumbDrawAngle = 0F;
             this.extScrollBar1.Value = -12;
             this.extScrollBar1.ValueLimited = -12;
@@ -530,7 +495,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnClose.Image = null;
             this.extButtonDrawnClose.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.extButtonDrawnClose.Location = new System.Drawing.Point(872, 2);
-            this.extButtonDrawnClose.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnClose.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnClose.MouseSelectedColorEnable = true;
             this.extButtonDrawnClose.Name = "extButtonDrawnClose";

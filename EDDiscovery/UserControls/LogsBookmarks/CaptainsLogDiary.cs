@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
                     {
                         daybuttons[i].Text = (i + 1).ToStringInvariant();
                         daybuttons[i].BackColor = noentries > 0 ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.ButtonBackColor;
-                        daybuttons[i].ForeColor = noentries > 0 ? ExtendedControls.Theme.Current.TextBackColor : ExtendedControls.Theme.Current.ButtonTextColor;
+                        daybuttons[i].ForeColor = noentries > 0 ? ExtendedControls.Theme.Current.TextBlockBackColor : ExtendedControls.Theme.Current.ButtonTextColor;
 
                         daybuttons[i].FlatAppearance.MouseOverBackColor = ExtendedControls.Theme.Current.SPanelColor.Multiply(1.1f);
                     }

@@ -113,15 +113,12 @@
             // 
             this.extCheckBoxExcludeVisitedSystems.AutoSize = true;
             this.extCheckBoxExcludeVisitedSystems.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxExcludeVisitedSystems.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxExcludeVisitedSystems.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxExcludeVisitedSystems.CheckColor = System.Drawing.Color.DarkBlue;
-            this.extCheckBoxExcludeVisitedSystems.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxExcludeVisitedSystems.ImageIndeterminate = null;
             this.extCheckBoxExcludeVisitedSystems.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxExcludeVisitedSystems.ImageUnchecked = null;
             this.extCheckBoxExcludeVisitedSystems.Location = new System.Drawing.Point(9, 163);
-            this.extCheckBoxExcludeVisitedSystems.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxExcludeVisitedSystems.Name = "extCheckBoxExcludeVisitedSystems";
             this.extCheckBoxExcludeVisitedSystems.Size = new System.Drawing.Size(140, 17);
             this.extCheckBoxExcludeVisitedSystems.TabIndex = 39;
@@ -133,15 +130,12 @@
             // 
             this.checkBoxCustomCube.AutoSize = true;
             this.checkBoxCustomCube.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomCube.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxCustomCube.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomCube.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomCube.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomCube.ImageIndeterminate = null;
             this.checkBoxCustomCube.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCustomCube.ImageUnchecked = null;
             this.checkBoxCustomCube.Location = new System.Drawing.Point(194, 163);
-            this.checkBoxCustomCube.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomCube.Name = "checkBoxCustomCube";
             this.checkBoxCustomCube.Size = new System.Drawing.Size(51, 17);
             this.checkBoxCustomCube.TabIndex = 39;
@@ -206,7 +200,6 @@
             this.numberBoxMaxRadius.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.numberBoxMaxRadius.BackErrorColor = System.Drawing.Color.Red;
             this.numberBoxMaxRadius.BorderColor = System.Drawing.Color.Transparent;
-            this.numberBoxMaxRadius.BorderColorScaling = 0.5F;
             this.numberBoxMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numberBoxMaxRadius.ClearOnFirstChar = false;
             this.numberBoxMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
@@ -241,7 +234,6 @@
             this.numberBoxDoubleZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.numberBoxDoubleZ.BackErrorColor = System.Drawing.Color.Red;
             this.numberBoxDoubleZ.BorderColor = System.Drawing.Color.Transparent;
-            this.numberBoxDoubleZ.BorderColorScaling = 0.5F;
             this.numberBoxDoubleZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numberBoxDoubleZ.ClearOnFirstChar = false;
             this.numberBoxDoubleZ.ControlBackground = System.Drawing.SystemColors.Control;
@@ -277,7 +269,6 @@
             this.numberBoxDoubleY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.numberBoxDoubleY.BackErrorColor = System.Drawing.Color.Red;
             this.numberBoxDoubleY.BorderColor = System.Drawing.Color.Transparent;
-            this.numberBoxDoubleY.BorderColorScaling = 0.5F;
             this.numberBoxDoubleY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numberBoxDoubleY.ClearOnFirstChar = false;
             this.numberBoxDoubleY.ControlBackground = System.Drawing.SystemColors.Control;
@@ -313,7 +304,6 @@
             this.numberBoxDoubleX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.numberBoxDoubleX.BackErrorColor = System.Drawing.Color.Red;
             this.numberBoxDoubleX.BorderColor = System.Drawing.Color.Transparent;
-            this.numberBoxDoubleX.BorderColorScaling = 0.5F;
             this.numberBoxDoubleX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numberBoxDoubleX.ClearOnFirstChar = false;
             this.numberBoxDoubleX.ControlBackground = System.Drawing.SystemColors.Control;
@@ -349,7 +339,6 @@
             this.numberBoxMinRadius.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.numberBoxMinRadius.BackErrorColor = System.Drawing.Color.Red;
             this.numberBoxMinRadius.BorderColor = System.Drawing.Color.Transparent;
-            this.numberBoxMinRadius.BorderColorScaling = 0.5F;
             this.numberBoxMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numberBoxMinRadius.ClearOnFirstChar = false;
             this.numberBoxMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
@@ -386,11 +375,9 @@
             this.textBoxSystemName.AutoCompleteTimeout = 500;
             this.textBoxSystemName.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxSystemName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSystemName.BorderColorScaling = 0.5F;
             this.textBoxSystemName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSystemName.ClearOnFirstChar = false;
             this.textBoxSystemName.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxSystemName.DropDownBorderColor = System.Drawing.Color.Green;
             this.textBoxSystemName.EndButtonEnable = false;
             this.textBoxSystemName.EndButtonSize16ths = 10;
             this.textBoxSystemName.EndButtonVisible = false;
