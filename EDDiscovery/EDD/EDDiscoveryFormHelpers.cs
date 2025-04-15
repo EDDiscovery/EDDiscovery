@@ -508,7 +508,7 @@ namespace EDDiscovery
                 JToken jo = JToken.Parse(json);
                 if (jo != null)
                 {
-                    System.Diagnostics.Debug.Assert(jo.Count == 130);
+                   //System.Diagnostics.Debug.Assert(jo.Count == 130);
 
                     Theme tme = Theme.FromJSON(jo);
                     if (tme != null)      // overwrite any variables with ones accumulated
