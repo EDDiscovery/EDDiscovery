@@ -67,11 +67,10 @@ namespace EDDiscovery
             this.popOutPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelToolBar = new ExtendedControls.ExtPanelRollUp();
-            this.extButtonNewFeature = new ExtendedControls.ExtButton();
-            this.flowToolBar = new System.Windows.Forms.FlowLayoutPanel();
-            this.buttonReloadActions = new ExtendedControls.ExtButton();
-            this.extButtonCAPI = new ExtendedControls.ExtButton();
             this.extButtonDrawnHelp = new ExtendedControls.ExtButtonDrawn();
+            this.extButtonCAPI = new ExtendedControls.ExtButton();
+            this.buttonReloadActions = new ExtendedControls.ExtButton();
+            this.extButtonNewFeature = new ExtendedControls.ExtButton();
             this.statusStripEDD = new ExtendedControls.ExtStatusStrip();
             this.toolStripProgressBarEDD = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStripStatusLabelEDD = new System.Windows.Forms.ToolStripStatusLabel();
@@ -129,7 +128,6 @@ namespace EDDiscovery
             this.notifyIconContextMenuStrip.SuspendLayout();
             this.contextMenuStripTabs.SuspendLayout();
             this.panelToolBar.SuspendLayout();
-            this.flowToolBar.SuspendLayout();
             this.statusStripEDD.SuspendLayout();
             this.tableLayoutPanelTop.SuspendLayout();
             this.menuFlowPanel.SuspendLayout();
@@ -180,12 +178,12 @@ namespace EDDiscovery
             this.tabControlMain.AutoForceUpdate = true;
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.tabControlMain.Location = new System.Drawing.Point(0, 62);
+            this.tabControlMain.Location = new System.Drawing.Point(0, 61);
             this.tabControlMain.Multiline = true;
             this.tabControlMain.Name = "tabControlMain";
             this.tabControlMain.PaintTransparentColor = System.Drawing.Color.Transparent;
             this.tabControlMain.SelectedIndex = 0;
-            this.tabControlMain.Size = new System.Drawing.Size(984, 627);
+            this.tabControlMain.Size = new System.Drawing.Size(984, 628);
             this.tabControlMain.TabBackgroundGradientDirection = 0F;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
             this.tabControlMain.TabControlBorderColor2 = System.Drawing.Color.DarkGray;
@@ -240,7 +238,7 @@ namespace EDDiscovery
             this.comboBoxCommander.DropDownTheme = dropDownTheme1;
             this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCommander.GradientDirection = 90F;
-            this.comboBoxCommander.Location = new System.Drawing.Point(1, 3);
+            this.comboBoxCommander.Location = new System.Drawing.Point(1, 6);
             this.comboBoxCommander.Margin = new System.Windows.Forms.Padding(1, 3, 3, 1);
             this.comboBoxCommander.MouseOverScalingColor = 1.3F;
             this.comboBoxCommander.Name = "comboBoxCommander";
@@ -284,7 +282,7 @@ namespace EDDiscovery
             this.comboBoxCustomProfiles.DropDownTheme = dropDownTheme2;
             this.comboBoxCustomProfiles.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomProfiles.GradientDirection = 90F;
-            this.comboBoxCustomProfiles.Location = new System.Drawing.Point(186, 3);
+            this.comboBoxCustomProfiles.Location = new System.Drawing.Point(282, 6);
             this.comboBoxCustomProfiles.Margin = new System.Windows.Forms.Padding(1, 3, 3, 1);
             this.comboBoxCustomProfiles.MouseOverScalingColor = 1.3F;
             this.comboBoxCustomProfiles.Name = "comboBoxCustomProfiles";
@@ -304,7 +302,7 @@ namespace EDDiscovery
             this.buttonExtRefresh.ButtonDisabledScaling = 0.5F;
             this.buttonExtRefresh.GradientDirection = 90F;
             this.buttonExtRefresh.Image = global::EDDiscovery.Icons.Controls.Refresh;
-            this.buttonExtRefresh.Location = new System.Drawing.Point(154, 1);
+            this.buttonExtRefresh.Location = new System.Drawing.Point(154, 2);
             this.buttonExtRefresh.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtRefresh.MouseOverScaling = 1.3F;
             this.buttonExtRefresh.MouseSelectedScaling = 1.3F;
@@ -322,7 +320,7 @@ namespace EDDiscovery
             this.buttonExtManageAddOns.ButtonDisabledScaling = 0.5F;
             this.buttonExtManageAddOns.GradientDirection = 90F;
             this.buttonExtManageAddOns.Image = global::EDDiscovery.Icons.Controls.ManageAddOns;
-            this.buttonExtManageAddOns.Location = new System.Drawing.Point(290, 1);
+            this.buttonExtManageAddOns.Location = new System.Drawing.Point(218, 2);
             this.buttonExtManageAddOns.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtManageAddOns.MouseOverScaling = 1.3F;
             this.buttonExtManageAddOns.MouseSelectedScaling = 1.3F;
@@ -340,7 +338,7 @@ namespace EDDiscovery
             this.buttonExtEditAddOns.ButtonDisabledScaling = 0.5F;
             this.buttonExtEditAddOns.GradientDirection = 90F;
             this.buttonExtEditAddOns.Image = global::EDDiscovery.Icons.Controls.EditAddons;
-            this.buttonExtEditAddOns.Location = new System.Drawing.Point(322, 1);
+            this.buttonExtEditAddOns.Location = new System.Drawing.Point(250, 2);
             this.buttonExtEditAddOns.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtEditAddOns.MouseOverScaling = 1.3F;
             this.buttonExtEditAddOns.MouseSelectedScaling = 1.3F;
@@ -358,7 +356,7 @@ namespace EDDiscovery
             this.buttonExtPopOut.ButtonDisabledScaling = 0.5F;
             this.buttonExtPopOut.GradientDirection = 90F;
             this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Popout;
-            this.buttonExtPopOut.Location = new System.Drawing.Point(354, 1);
+            this.buttonExtPopOut.Location = new System.Drawing.Point(186, 2);
             this.buttonExtPopOut.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.buttonExtPopOut.MouseOverScaling = 1.3F;
             this.buttonExtPopOut.MouseSelectedScaling = 1.3F;
@@ -419,9 +417,18 @@ namespace EDDiscovery
             this.panelToolBar.AutoWidth = false;
             this.panelToolBar.BackColor = System.Drawing.Color.Transparent;
             this.panelToolBar.ChildrenThemed = true;
+            this.panelToolBar.Controls.Add(this.comboBoxCommander);
+            this.panelToolBar.Controls.Add(this.buttonExtRefresh);
+            this.panelToolBar.Controls.Add(this.buttonExtPopOut);
+            this.panelToolBar.Controls.Add(this.buttonExtManageAddOns);
+            this.panelToolBar.Controls.Add(this.buttonExtEditAddOns);
+            this.panelToolBar.Controls.Add(this.comboBoxCustomProfiles);
+            this.panelToolBar.Controls.Add(this.buttonReloadActions);
+            this.panelToolBar.Controls.Add(this.extButtonCAPI);
+            this.panelToolBar.Controls.Add(this.extButtonDrawnHelp);
             this.panelToolBar.Controls.Add(this.extButtonNewFeature);
-            this.panelToolBar.Controls.Add(this.flowToolBar);
             this.panelToolBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelToolBar.FlowDirection = System.Windows.Forms.FlowDirection.LeftToRight;
             this.panelToolBar.GradientDirection = 0F;
             this.panelToolBar.HiddenMarkerWidth = 0;
             this.panelToolBar.Location = new System.Drawing.Point(0, 28);
@@ -434,7 +441,7 @@ namespace EDDiscovery
             this.panelToolBar.RollUpDelay = 1000;
             this.panelToolBar.SecondHiddenMarkerWidth = 0;
             this.panelToolBar.ShowHiddenMarker = true;
-            this.panelToolBar.Size = new System.Drawing.Size(984, 34);
+            this.panelToolBar.Size = new System.Drawing.Size(984, 33);
             this.panelToolBar.TabIndex = 1;
             this.panelToolBar.ThemeColors = new System.Drawing.Color[] {
         System.Drawing.SystemColors.Control,
@@ -443,81 +450,6 @@ namespace EDDiscovery
         System.Drawing.SystemColors.Control};
             this.panelToolBar.ThemeColorSet = 1;
             this.panelToolBar.UnrollHoverDelay = 1000;
-            // 
-            // extButtonNewFeature
-            // 
-            this.extButtonNewFeature.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.extButtonNewFeature.BackColor2 = System.Drawing.Color.Red;
-            this.extButtonNewFeature.ButtonDisabledScaling = 0.5F;
-            this.extButtonNewFeature.GradientDirection = 90F;
-            this.extButtonNewFeature.Image = global::EDDiscovery.Icons.Controls.NewFeature;
-            this.extButtonNewFeature.Location = new System.Drawing.Point(902, 3);
-            this.extButtonNewFeature.MouseOverScaling = 1.3F;
-            this.extButtonNewFeature.MouseSelectedScaling = 1.3F;
-            this.extButtonNewFeature.Name = "extButtonNewFeature";
-            this.extButtonNewFeature.Size = new System.Drawing.Size(48, 28);
-            this.extButtonNewFeature.TabIndex = 6;
-            this.extButtonNewFeature.UseVisualStyleBackColor = true;
-            this.extButtonNewFeature.Click += new System.EventHandler(this.extButtonNewFeature_Click);
-            // 
-            // flowToolBar
-            // 
-            this.flowToolBar.AutoSize = true;
-            this.flowToolBar.Controls.Add(this.comboBoxCommander);
-            this.flowToolBar.Controls.Add(this.buttonExtRefresh);
-            this.flowToolBar.Controls.Add(this.comboBoxCustomProfiles);
-            this.flowToolBar.Controls.Add(this.buttonExtManageAddOns);
-            this.flowToolBar.Controls.Add(this.buttonExtEditAddOns);
-            this.flowToolBar.Controls.Add(this.buttonExtPopOut);
-            this.flowToolBar.Controls.Add(this.buttonReloadActions);
-            this.flowToolBar.Controls.Add(this.extButtonCAPI);
-            this.flowToolBar.Controls.Add(this.extButtonDrawnHelp);
-            this.flowToolBar.Location = new System.Drawing.Point(0, 0);
-            this.flowToolBar.Margin = new System.Windows.Forms.Padding(0);
-            this.flowToolBar.Name = "flowToolBar";
-            this.flowToolBar.Size = new System.Drawing.Size(624, 34);
-            this.flowToolBar.TabIndex = 5;
-            this.flowToolBar.WrapContents = false;
-            // 
-            // buttonReloadActions
-            // 
-            this.buttonReloadActions.BackColor2 = System.Drawing.Color.Red;
-            this.buttonReloadActions.ButtonDisabledScaling = 0.5F;
-            this.buttonReloadActions.GradientDirection = 90F;
-            this.buttonReloadActions.Image = global::EDDiscovery.Icons.Controls.Refresh;
-            this.buttonReloadActions.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonReloadActions.Location = new System.Drawing.Point(386, 1);
-            this.buttonReloadActions.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
-            this.buttonReloadActions.MouseOverScaling = 1.3F;
-            this.buttonReloadActions.MouseSelectedScaling = 1.3F;
-            this.buttonReloadActions.Name = "buttonReloadActions";
-            this.buttonReloadActions.Size = new System.Drawing.Size(65, 28);
-            this.buttonReloadActions.TabIndex = 1;
-            this.buttonReloadActions.Text = "Actions";
-            this.buttonReloadActions.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonReloadActions.UseVisualStyleBackColor = true;
-            this.buttonReloadActions.Visible = false;
-            this.buttonReloadActions.Click += new System.EventHandler(this.buttonReloadActions_Click);
-            // 
-            // extButtonCAPI
-            // 
-            this.extButtonCAPI.BackColor2 = System.Drawing.Color.Red;
-            this.extButtonCAPI.ButtonDisabledScaling = 0.5F;
-            this.extButtonCAPI.GradientDirection = 90F;
-            this.extButtonCAPI.Image = global::EDDiscovery.Icons.Controls.Refresh;
-            this.extButtonCAPI.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.extButtonCAPI.Location = new System.Drawing.Point(455, 1);
-            this.extButtonCAPI.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
-            this.extButtonCAPI.MouseOverScaling = 1.3F;
-            this.extButtonCAPI.MouseSelectedScaling = 1.3F;
-            this.extButtonCAPI.Name = "extButtonCAPI";
-            this.extButtonCAPI.Size = new System.Drawing.Size(65, 28);
-            this.extButtonCAPI.TabIndex = 1;
-            this.extButtonCAPI.Text = "CAPI";
-            this.extButtonCAPI.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.extButtonCAPI.UseVisualStyleBackColor = true;
-            this.extButtonCAPI.Visible = false;
-            this.extButtonCAPI.Click += new System.EventHandler(this.extButtonCAPI_Click);
             // 
             // extButtonDrawnHelp
             // 
@@ -529,7 +461,7 @@ namespace EDDiscovery
             this.extButtonDrawnHelp.ButtonDisabledScaling = 0.25F;
             this.extButtonDrawnHelp.Image = null;
             this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
-            this.extButtonDrawnHelp.Location = new System.Drawing.Point(524, 1);
+            this.extButtonDrawnHelp.Location = new System.Drawing.Point(524, 2);
             this.extButtonDrawnHelp.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
             this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
@@ -543,6 +475,62 @@ namespace EDDiscovery
             this.extButtonDrawnHelp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.extButtonDrawnHelp.UseMnemonic = true;
             this.extButtonDrawnHelp.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
+            // 
+            // extButtonCAPI
+            // 
+            this.extButtonCAPI.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonCAPI.ButtonDisabledScaling = 0.5F;
+            this.extButtonCAPI.GradientDirection = 90F;
+            this.extButtonCAPI.Image = global::EDDiscovery.Icons.Controls.Refresh;
+            this.extButtonCAPI.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extButtonCAPI.Location = new System.Drawing.Point(455, 2);
+            this.extButtonCAPI.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.extButtonCAPI.MouseOverScaling = 1.3F;
+            this.extButtonCAPI.MouseSelectedScaling = 1.3F;
+            this.extButtonCAPI.Name = "extButtonCAPI";
+            this.extButtonCAPI.Size = new System.Drawing.Size(65, 28);
+            this.extButtonCAPI.TabIndex = 1;
+            this.extButtonCAPI.Text = "CAPI";
+            this.extButtonCAPI.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.extButtonCAPI.UseVisualStyleBackColor = true;
+            this.extButtonCAPI.Visible = false;
+            this.extButtonCAPI.Click += new System.EventHandler(this.extButtonCAPI_Click);
+            // 
+            // buttonReloadActions
+            // 
+            this.buttonReloadActions.BackColor2 = System.Drawing.Color.Red;
+            this.buttonReloadActions.ButtonDisabledScaling = 0.5F;
+            this.buttonReloadActions.GradientDirection = 90F;
+            this.buttonReloadActions.Image = global::EDDiscovery.Icons.Controls.Refresh;
+            this.buttonReloadActions.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonReloadActions.Location = new System.Drawing.Point(386, 2);
+            this.buttonReloadActions.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.buttonReloadActions.MouseOverScaling = 1.3F;
+            this.buttonReloadActions.MouseSelectedScaling = 1.3F;
+            this.buttonReloadActions.Name = "buttonReloadActions";
+            this.buttonReloadActions.Size = new System.Drawing.Size(65, 28);
+            this.buttonReloadActions.TabIndex = 1;
+            this.buttonReloadActions.Text = "Actions";
+            this.buttonReloadActions.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonReloadActions.UseVisualStyleBackColor = true;
+            this.buttonReloadActions.Visible = false;
+            this.buttonReloadActions.Click += new System.EventHandler(this.buttonReloadActions_Click);
+            // 
+            // extButtonNewFeature
+            // 
+            this.extButtonNewFeature.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonNewFeature.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonNewFeature.ButtonDisabledScaling = 0.5F;
+            this.extButtonNewFeature.GradientDirection = 90F;
+            this.extButtonNewFeature.Image = global::EDDiscovery.Icons.Controls.NewFeature;
+            this.extButtonNewFeature.Location = new System.Drawing.Point(558, 2);
+            this.extButtonNewFeature.MouseOverScaling = 1.3F;
+            this.extButtonNewFeature.MouseSelectedScaling = 1.3F;
+            this.extButtonNewFeature.Name = "extButtonNewFeature";
+            this.extButtonNewFeature.Size = new System.Drawing.Size(48, 28);
+            this.extButtonNewFeature.TabIndex = 6;
+            this.extButtonNewFeature.UseVisualStyleBackColor = true;
+            this.extButtonNewFeature.Click += new System.EventHandler(this.extButtonNewFeature_Click);
             // 
             // statusStripEDD
             // 
@@ -1116,8 +1104,6 @@ namespace EDDiscovery
             this.notifyIconContextMenuStrip.ResumeLayout(false);
             this.contextMenuStripTabs.ResumeLayout(false);
             this.panelToolBar.ResumeLayout(false);
-            this.panelToolBar.PerformLayout();
-            this.flowToolBar.ResumeLayout(false);
             this.statusStripEDD.ResumeLayout(false);
             this.statusStripEDD.PerformLayout();
             this.tableLayoutPanelTop.ResumeLayout(false);
@@ -1156,7 +1142,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem renameTabToolStripMenuItem;
         private ExtendedControls.ExtComboBox comboBoxCustomProfiles;
         private System.Windows.Forms.ToolStripMenuItem popOutPanelToolStripMenuItem;
-        private System.Windows.Forms.FlowLayoutPanel flowToolBar;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelTop;
         private System.Windows.Forms.FlowLayoutPanel menuFlowPanel;
         private System.Windows.Forms.MenuStrip mainMenu;
