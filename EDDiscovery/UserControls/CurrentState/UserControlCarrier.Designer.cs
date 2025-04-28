@@ -204,6 +204,7 @@
             // extTabControl
             // 
             this.extTabControl.AllowDragReorder = false;
+            this.extTabControl.AutoForceUpdate = true;
             this.extTabControl.Controls.Add(this.tabPageOverall);
             this.extTabControl.Controls.Add(this.tabPageItinerary);
             this.extTabControl.Controls.Add(this.tabPageFinances);
@@ -217,18 +218,31 @@
             this.extTabControl.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extTabControl.Location = new System.Drawing.Point(0, 0);
             this.extTabControl.Name = "extTabControl";
+            this.extTabControl.PaintTransparentColor = System.Drawing.Color.Transparent;
             this.extTabControl.SelectedIndex = 0;
             this.extTabControl.Size = new System.Drawing.Size(853, 572);
+            this.extTabControl.TabBackgroundGradientDirection = 0F;
             this.extTabControl.TabControlBorderColor = System.Drawing.Color.DarkGray;
+            this.extTabControl.TabControlBorderColor2 = System.Drawing.Color.DarkGray;
             this.extTabControl.TabDisabledScaling = 0.5F;
+            this.extTabControl.TabGradientDirection = 90F;
             this.extTabControl.TabIndex = 0;
             this.extTabControl.TabMouseOverColor = System.Drawing.Color.White;
+            this.extTabControl.TabMouseOverColor2 = System.Drawing.Color.White;
             this.extTabControl.TabNotSelectedBorderColor = System.Drawing.Color.Gray;
             this.extTabControl.TabNotSelectedColor = System.Drawing.Color.Gray;
+            this.extTabControl.TabNotSelectedColor2 = System.Drawing.Color.Gray;
             this.extTabControl.TabSelectedColor = System.Drawing.Color.LightGray;
+            this.extTabControl.TabSelectedColor2 = System.Drawing.Color.Gray;
             this.extTabControl.TabStyle = tabStyleSquare1;
             this.extTabControl.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.extTabControl.TextSelectedColor = System.Drawing.SystemColors.ControlText;
+            this.extTabControl.ThemeColors = new System.Drawing.Color[] {
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.extTabControl.ThemeColorSet = 0;
             // 
             // tabPageOverall
             // 
@@ -287,26 +301,32 @@
             this.extScrollBarItinerary.AlwaysHideScrollBar = false;
             this.extScrollBarItinerary.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarItinerary.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarItinerary.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.extScrollBarItinerary.ArrowDownDrawAngle = 270F;
             this.extScrollBarItinerary.ArrowUpDrawAngle = 90F;
             this.extScrollBarItinerary.BorderColor = System.Drawing.Color.White;
             this.extScrollBarItinerary.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarItinerary.HideScrollBar = false;
             this.extScrollBarItinerary.LargeChange = 0;
-            this.extScrollBarItinerary.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBarItinerary.Location = new System.Drawing.Point(820, 0);
             this.extScrollBarItinerary.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarItinerary.Maximum = -1;
             this.extScrollBarItinerary.Minimum = 0;
             this.extScrollBarItinerary.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarItinerary.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.extScrollBarItinerary.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarItinerary.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarItinerary.Name = "extScrollBarItinerary";
-            this.extScrollBarItinerary.Size = new System.Drawing.Size(16, 540);
+            this.extScrollBarItinerary.Size = new System.Drawing.Size(19, 540);
             this.extScrollBarItinerary.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarItinerary.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarItinerary.SliderDrawAngle = 90F;
             this.extScrollBarItinerary.SmallChange = 1;
             this.extScrollBarItinerary.TabIndex = 1;
             this.extScrollBarItinerary.Text = "extScrollBar1";
             this.extScrollBarItinerary.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarItinerary.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarItinerary.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBarItinerary.ThumbDrawAngle = 0F;
             this.extScrollBarItinerary.Value = -1;
             this.extScrollBarItinerary.ValueLimited = -1;
@@ -341,7 +361,7 @@
             this.dataGridViewItinerary.RowTemplate.Height = 28;
             this.dataGridViewItinerary.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewItinerary.SingleRowSelect = true;
-            this.dataGridViewItinerary.Size = new System.Drawing.Size(823, 540);
+            this.dataGridViewItinerary.Size = new System.Drawing.Size(820, 540);
             this.dataGridViewItinerary.TabIndex = 0;
             this.dataGridViewItinerary.WebLookup = EliteDangerousCore.WebExternalDataLookup.None;
             // 
@@ -463,26 +483,32 @@
             this.extScrollBarLedger.AlwaysHideScrollBar = false;
             this.extScrollBarLedger.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarLedger.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarLedger.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.extScrollBarLedger.ArrowDownDrawAngle = 270F;
             this.extScrollBarLedger.ArrowUpDrawAngle = 90F;
             this.extScrollBarLedger.BorderColor = System.Drawing.Color.White;
             this.extScrollBarLedger.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarLedger.HideScrollBar = false;
             this.extScrollBarLedger.LargeChange = 0;
-            this.extScrollBarLedger.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBarLedger.Location = new System.Drawing.Point(820, 0);
             this.extScrollBarLedger.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarLedger.Maximum = -1;
             this.extScrollBarLedger.Minimum = 0;
             this.extScrollBarLedger.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarLedger.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.extScrollBarLedger.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarLedger.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarLedger.Name = "extScrollBarLedger";
-            this.extScrollBarLedger.Size = new System.Drawing.Size(16, 220);
+            this.extScrollBarLedger.Size = new System.Drawing.Size(19, 220);
             this.extScrollBarLedger.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarLedger.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarLedger.SliderDrawAngle = 90F;
             this.extScrollBarLedger.SmallChange = 1;
             this.extScrollBarLedger.TabIndex = 1;
             this.extScrollBarLedger.Text = "extScrollBar1";
             this.extScrollBarLedger.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarLedger.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarLedger.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBarLedger.ThumbDrawAngle = 0F;
             this.extScrollBarLedger.Value = -1;
             this.extScrollBarLedger.ValueLimited = -1;
@@ -518,7 +544,7 @@
             this.dataGridViewLedger.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewLedger.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewLedger.SingleRowSelect = true;
-            this.dataGridViewLedger.Size = new System.Drawing.Size(823, 220);
+            this.dataGridViewLedger.Size = new System.Drawing.Size(820, 220);
             this.dataGridViewLedger.TabIndex = 0;
             this.dataGridViewLedger.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewLedger_CellClick);
             // 
@@ -578,6 +604,8 @@
             // 
             this.extChartLedger.AutoScaleYAddedPercent = 5D;
             this.extChartLedger.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extChartLedger.IsStartedFromZeroX = false;
+            this.extChartLedger.IsStartedFromZeroY = false;
             this.extChartLedger.LeftArrowEnable = true;
             this.extChartLedger.LeftArrowPosition = elementPosition1;
             this.extChartLedger.Location = new System.Drawing.Point(0, 0);
@@ -752,7 +780,7 @@
         false};
             this.imageControlServices.Location = new System.Drawing.Point(0, 0);
             this.imageControlServices.Name = "imageControlServices";
-            this.imageControlServices.Size = new System.Drawing.Size(823, 217);
+            this.imageControlServices.Size = new System.Drawing.Size(820, 217);
             this.imageControlServices.TabIndex = 1;
             // 
             // extScrollBarServices
@@ -760,25 +788,31 @@
             this.extScrollBarServices.AlwaysHideScrollBar = false;
             this.extScrollBarServices.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarServices.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarServices.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.extScrollBarServices.ArrowDownDrawAngle = 270F;
             this.extScrollBarServices.ArrowUpDrawAngle = 90F;
             this.extScrollBarServices.BorderColor = System.Drawing.Color.White;
             this.extScrollBarServices.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarServices.HideScrollBar = false;
             this.extScrollBarServices.LargeChange = 540;
-            this.extScrollBarServices.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBarServices.Location = new System.Drawing.Point(820, 0);
             this.extScrollBarServices.Maximum = 216;
             this.extScrollBarServices.Minimum = 0;
             this.extScrollBarServices.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarServices.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.extScrollBarServices.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarServices.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarServices.Name = "extScrollBarServices";
-            this.extScrollBarServices.Size = new System.Drawing.Size(16, 540);
+            this.extScrollBarServices.Size = new System.Drawing.Size(19, 540);
             this.extScrollBarServices.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarServices.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarServices.SliderDrawAngle = 90F;
             this.extScrollBarServices.SmallChange = 1;
             this.extScrollBarServices.TabIndex = 0;
             this.extScrollBarServices.Text = "extScrollBar1";
             this.extScrollBarServices.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarServices.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarServices.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBarServices.ThumbDrawAngle = 0F;
             this.extScrollBarServices.Value = 0;
             this.extScrollBarServices.ValueLimited = 0;
@@ -818,7 +852,7 @@
         false};
             this.imageControlPacks.Location = new System.Drawing.Point(0, 0);
             this.imageControlPacks.Name = "imageControlPacks";
-            this.imageControlPacks.Size = new System.Drawing.Size(823, 217);
+            this.imageControlPacks.Size = new System.Drawing.Size(820, 217);
             this.imageControlPacks.TabIndex = 1;
             // 
             // extScrollBarPacks
@@ -826,25 +860,31 @@
             this.extScrollBarPacks.AlwaysHideScrollBar = false;
             this.extScrollBarPacks.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarPacks.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarPacks.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.extScrollBarPacks.ArrowDownDrawAngle = 270F;
             this.extScrollBarPacks.ArrowUpDrawAngle = 90F;
             this.extScrollBarPacks.BorderColor = System.Drawing.Color.White;
             this.extScrollBarPacks.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarPacks.HideScrollBar = false;
             this.extScrollBarPacks.LargeChange = 540;
-            this.extScrollBarPacks.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBarPacks.Location = new System.Drawing.Point(820, 0);
             this.extScrollBarPacks.Maximum = 216;
             this.extScrollBarPacks.Minimum = 0;
             this.extScrollBarPacks.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarPacks.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.extScrollBarPacks.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarPacks.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarPacks.Name = "extScrollBarPacks";
-            this.extScrollBarPacks.Size = new System.Drawing.Size(16, 540);
+            this.extScrollBarPacks.Size = new System.Drawing.Size(19, 540);
             this.extScrollBarPacks.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarPacks.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarPacks.SliderDrawAngle = 90F;
             this.extScrollBarPacks.SmallChange = 1;
             this.extScrollBarPacks.TabIndex = 0;
             this.extScrollBarPacks.Text = "extScrollBar2";
             this.extScrollBarPacks.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarPacks.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarPacks.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBarPacks.ThumbDrawAngle = 0F;
             this.extScrollBarPacks.Value = 0;
             this.extScrollBarPacks.ValueLimited = 0;
@@ -878,26 +918,32 @@
             this.extScrollBarOrders.AlwaysHideScrollBar = false;
             this.extScrollBarOrders.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarOrders.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarOrders.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.extScrollBarOrders.ArrowDownDrawAngle = 270F;
             this.extScrollBarOrders.ArrowUpDrawAngle = 90F;
             this.extScrollBarOrders.BorderColor = System.Drawing.Color.White;
             this.extScrollBarOrders.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarOrders.HideScrollBar = false;
             this.extScrollBarOrders.LargeChange = 0;
-            this.extScrollBarOrders.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBarOrders.Location = new System.Drawing.Point(820, 0);
             this.extScrollBarOrders.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarOrders.Maximum = -1;
             this.extScrollBarOrders.Minimum = 0;
             this.extScrollBarOrders.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarOrders.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.extScrollBarOrders.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarOrders.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarOrders.Name = "extScrollBarOrders";
-            this.extScrollBarOrders.Size = new System.Drawing.Size(16, 540);
+            this.extScrollBarOrders.Size = new System.Drawing.Size(19, 540);
             this.extScrollBarOrders.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarOrders.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarOrders.SliderDrawAngle = 90F;
             this.extScrollBarOrders.SmallChange = 1;
             this.extScrollBarOrders.TabIndex = 1;
             this.extScrollBarOrders.Text = "extScrollBar1";
             this.extScrollBarOrders.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarOrders.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarOrders.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBarOrders.ThumbDrawAngle = 0F;
             this.extScrollBarOrders.Value = -1;
             this.extScrollBarOrders.ValueLimited = -1;
@@ -931,7 +977,7 @@
             this.dataGridViewOrders.RowTemplate.Height = 28;
             this.dataGridViewOrders.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewOrders.SingleRowSelect = true;
-            this.dataGridViewOrders.Size = new System.Drawing.Size(823, 540);
+            this.dataGridViewOrders.Size = new System.Drawing.Size(820, 540);
             this.dataGridViewOrders.TabIndex = 0;
             // 
             // colOrdersDate
@@ -1023,26 +1069,32 @@
             this.extScrollBarCAPIStats.AlwaysHideScrollBar = false;
             this.extScrollBarCAPIStats.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPIStats.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarCAPIStats.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.extScrollBarCAPIStats.ArrowDownDrawAngle = 270F;
             this.extScrollBarCAPIStats.ArrowUpDrawAngle = 90F;
             this.extScrollBarCAPIStats.BorderColor = System.Drawing.Color.White;
             this.extScrollBarCAPIStats.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarCAPIStats.HideScrollBar = false;
             this.extScrollBarCAPIStats.LargeChange = 0;
-            this.extScrollBarCAPIStats.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBarCAPIStats.Location = new System.Drawing.Point(820, 0);
             this.extScrollBarCAPIStats.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarCAPIStats.Maximum = -1;
             this.extScrollBarCAPIStats.Minimum = 0;
             this.extScrollBarCAPIStats.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarCAPIStats.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.extScrollBarCAPIStats.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarCAPIStats.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPIStats.Name = "extScrollBarCAPIStats";
-            this.extScrollBarCAPIStats.Size = new System.Drawing.Size(16, 508);
+            this.extScrollBarCAPIStats.Size = new System.Drawing.Size(19, 508);
             this.extScrollBarCAPIStats.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarCAPIStats.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarCAPIStats.SliderDrawAngle = 90F;
             this.extScrollBarCAPIStats.SmallChange = 1;
             this.extScrollBarCAPIStats.TabIndex = 1;
             this.extScrollBarCAPIStats.Text = "extScrollBar1";
             this.extScrollBarCAPIStats.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPIStats.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarCAPIStats.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPIStats.ThumbDrawAngle = 0F;
             this.extScrollBarCAPIStats.Value = -1;
             this.extScrollBarCAPIStats.ValueLimited = -1;
@@ -1070,7 +1122,7 @@
             this.dataGridViewCAPIStats.RowTemplate.Height = 28;
             this.dataGridViewCAPIStats.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCAPIStats.SingleRowSelect = true;
-            this.dataGridViewCAPIStats.Size = new System.Drawing.Size(823, 508);
+            this.dataGridViewCAPIStats.Size = new System.Drawing.Size(820, 508);
             this.dataGridViewCAPIStats.TabIndex = 0;
             // 
             // dataGridViewTextBoxColumn1
@@ -1119,8 +1171,13 @@
             // 
             // extButtonDoCAPI3
             // 
+            this.extButtonDoCAPI3.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonDoCAPI3.ButtonDisabledScaling = 0.5F;
+            this.extButtonDoCAPI3.GradientDirection = 90F;
             this.extButtonDoCAPI3.Image = global::EDDiscovery.Icons.Controls.Refresh;
             this.extButtonDoCAPI3.Location = new System.Drawing.Point(3, 3);
+            this.extButtonDoCAPI3.MouseOverScaling = 1.3F;
+            this.extButtonDoCAPI3.MouseSelectedScaling = 1.3F;
             this.extButtonDoCAPI3.Name = "extButtonDoCAPI3";
             this.extButtonDoCAPI3.Size = new System.Drawing.Size(24, 24);
             this.extButtonDoCAPI3.TabIndex = 0;
@@ -1175,26 +1232,32 @@
             this.extScrollBarCAPIShips.AlwaysHideScrollBar = false;
             this.extScrollBarCAPIShips.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPIShips.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarCAPIShips.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.extScrollBarCAPIShips.ArrowDownDrawAngle = 270F;
             this.extScrollBarCAPIShips.ArrowUpDrawAngle = 90F;
             this.extScrollBarCAPIShips.BorderColor = System.Drawing.Color.White;
             this.extScrollBarCAPIShips.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarCAPIShips.HideScrollBar = false;
             this.extScrollBarCAPIShips.LargeChange = 0;
-            this.extScrollBarCAPIShips.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBarCAPIShips.Location = new System.Drawing.Point(820, 0);
             this.extScrollBarCAPIShips.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarCAPIShips.Maximum = -1;
             this.extScrollBarCAPIShips.Minimum = 0;
             this.extScrollBarCAPIShips.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarCAPIShips.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.extScrollBarCAPIShips.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarCAPIShips.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPIShips.Name = "extScrollBarCAPIShips";
-            this.extScrollBarCAPIShips.Size = new System.Drawing.Size(16, 284);
+            this.extScrollBarCAPIShips.Size = new System.Drawing.Size(19, 284);
             this.extScrollBarCAPIShips.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarCAPIShips.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarCAPIShips.SliderDrawAngle = 90F;
             this.extScrollBarCAPIShips.SmallChange = 1;
             this.extScrollBarCAPIShips.TabIndex = 1;
             this.extScrollBarCAPIShips.Text = "extScrollBar1";
             this.extScrollBarCAPIShips.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPIShips.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarCAPIShips.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPIShips.ThumbDrawAngle = 0F;
             this.extScrollBarCAPIShips.Value = -1;
             this.extScrollBarCAPIShips.ValueLimited = -1;
@@ -1227,7 +1290,7 @@
             this.dataGridViewCAPIShips.RowTemplate.Height = 28;
             this.dataGridViewCAPIShips.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCAPIShips.SingleRowSelect = true;
-            this.dataGridViewCAPIShips.Size = new System.Drawing.Size(823, 284);
+            this.dataGridViewCAPIShips.Size = new System.Drawing.Size(820, 284);
             this.dataGridViewCAPIShips.TabIndex = 0;
             // 
             // colCAPIShipsName
@@ -1301,26 +1364,32 @@
             this.extScrollBarCAPIModules.AlwaysHideScrollBar = false;
             this.extScrollBarCAPIModules.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPIModules.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarCAPIModules.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.extScrollBarCAPIModules.ArrowDownDrawAngle = 270F;
             this.extScrollBarCAPIModules.ArrowUpDrawAngle = 90F;
             this.extScrollBarCAPIModules.BorderColor = System.Drawing.Color.White;
             this.extScrollBarCAPIModules.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarCAPIModules.HideScrollBar = false;
             this.extScrollBarCAPIModules.LargeChange = 0;
-            this.extScrollBarCAPIModules.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBarCAPIModules.Location = new System.Drawing.Point(820, 0);
             this.extScrollBarCAPIModules.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarCAPIModules.Maximum = -1;
             this.extScrollBarCAPIModules.Minimum = 0;
             this.extScrollBarCAPIModules.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarCAPIModules.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.extScrollBarCAPIModules.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarCAPIModules.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPIModules.Name = "extScrollBarCAPIModules";
-            this.extScrollBarCAPIModules.Size = new System.Drawing.Size(16, 220);
+            this.extScrollBarCAPIModules.Size = new System.Drawing.Size(19, 220);
             this.extScrollBarCAPIModules.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarCAPIModules.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarCAPIModules.SliderDrawAngle = 90F;
             this.extScrollBarCAPIModules.SmallChange = 1;
             this.extScrollBarCAPIModules.TabIndex = 1;
             this.extScrollBarCAPIModules.Text = "extScrollBar1";
             this.extScrollBarCAPIModules.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPIModules.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarCAPIModules.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPIModules.ThumbDrawAngle = 0F;
             this.extScrollBarCAPIModules.Value = -1;
             this.extScrollBarCAPIModules.ValueLimited = -1;
@@ -1353,7 +1422,7 @@
             this.dataGridViewCAPIModules.RowTemplate.Height = 28;
             this.dataGridViewCAPIModules.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCAPIModules.SingleRowSelect = true;
-            this.dataGridViewCAPIModules.Size = new System.Drawing.Size(823, 220);
+            this.dataGridViewCAPIModules.Size = new System.Drawing.Size(820, 220);
             this.dataGridViewCAPIModules.TabIndex = 0;
             // 
             // colCAPIModulesName
@@ -1431,8 +1500,13 @@
             // 
             // extButtonDoCAPI1
             // 
+            this.extButtonDoCAPI1.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonDoCAPI1.ButtonDisabledScaling = 0.5F;
+            this.extButtonDoCAPI1.GradientDirection = 90F;
             this.extButtonDoCAPI1.Image = global::EDDiscovery.Icons.Controls.Refresh;
             this.extButtonDoCAPI1.Location = new System.Drawing.Point(3, 3);
+            this.extButtonDoCAPI1.MouseOverScaling = 1.3F;
+            this.extButtonDoCAPI1.MouseSelectedScaling = 1.3F;
             this.extButtonDoCAPI1.Name = "extButtonDoCAPI1";
             this.extButtonDoCAPI1.Size = new System.Drawing.Size(24, 24);
             this.extButtonDoCAPI1.TabIndex = 0;
@@ -1487,26 +1561,32 @@
             this.extScrollBarCAPICargo.AlwaysHideScrollBar = false;
             this.extScrollBarCAPICargo.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPICargo.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarCAPICargo.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.extScrollBarCAPICargo.ArrowDownDrawAngle = 270F;
             this.extScrollBarCAPICargo.ArrowUpDrawAngle = 90F;
             this.extScrollBarCAPICargo.BorderColor = System.Drawing.Color.White;
             this.extScrollBarCAPICargo.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarCAPICargo.HideScrollBar = false;
             this.extScrollBarCAPICargo.LargeChange = 0;
-            this.extScrollBarCAPICargo.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBarCAPICargo.Location = new System.Drawing.Point(820, 0);
             this.extScrollBarCAPICargo.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarCAPICargo.Maximum = -1;
             this.extScrollBarCAPICargo.Minimum = 0;
             this.extScrollBarCAPICargo.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarCAPICargo.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.extScrollBarCAPICargo.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarCAPICargo.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPICargo.Name = "extScrollBarCAPICargo";
-            this.extScrollBarCAPICargo.Size = new System.Drawing.Size(16, 284);
+            this.extScrollBarCAPICargo.Size = new System.Drawing.Size(19, 284);
             this.extScrollBarCAPICargo.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarCAPICargo.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarCAPICargo.SliderDrawAngle = 90F;
             this.extScrollBarCAPICargo.SmallChange = 1;
             this.extScrollBarCAPICargo.TabIndex = 1;
             this.extScrollBarCAPICargo.Text = "extScrollBar1";
             this.extScrollBarCAPICargo.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPICargo.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarCAPICargo.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPICargo.ThumbDrawAngle = 0F;
             this.extScrollBarCAPICargo.Value = -1;
             this.extScrollBarCAPICargo.ValueLimited = -1;
@@ -1538,7 +1618,7 @@
             this.dataGridViewCAPICargo.RowTemplate.Height = 28;
             this.dataGridViewCAPICargo.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCAPICargo.SingleRowSelect = true;
-            this.dataGridViewCAPICargo.Size = new System.Drawing.Size(823, 284);
+            this.dataGridViewCAPICargo.Size = new System.Drawing.Size(820, 284);
             this.dataGridViewCAPICargo.TabIndex = 0;
             // 
             // colCAPICargoCommodity
@@ -1602,26 +1682,32 @@
             this.extScrollBarCAPILocker.AlwaysHideScrollBar = false;
             this.extScrollBarCAPILocker.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarCAPILocker.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarCAPILocker.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.extScrollBarCAPILocker.ArrowDownDrawAngle = 270F;
             this.extScrollBarCAPILocker.ArrowUpDrawAngle = 90F;
             this.extScrollBarCAPILocker.BorderColor = System.Drawing.Color.White;
             this.extScrollBarCAPILocker.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarCAPILocker.HideScrollBar = false;
             this.extScrollBarCAPILocker.LargeChange = 0;
-            this.extScrollBarCAPILocker.Location = new System.Drawing.Point(823, 0);
+            this.extScrollBarCAPILocker.Location = new System.Drawing.Point(820, 0);
             this.extScrollBarCAPILocker.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarCAPILocker.Maximum = -1;
             this.extScrollBarCAPILocker.Minimum = 0;
             this.extScrollBarCAPILocker.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarCAPILocker.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.extScrollBarCAPILocker.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarCAPILocker.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPILocker.Name = "extScrollBarCAPILocker";
-            this.extScrollBarCAPILocker.Size = new System.Drawing.Size(16, 220);
+            this.extScrollBarCAPILocker.Size = new System.Drawing.Size(19, 220);
             this.extScrollBarCAPILocker.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarCAPILocker.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarCAPILocker.SliderDrawAngle = 90F;
             this.extScrollBarCAPILocker.SmallChange = 1;
             this.extScrollBarCAPILocker.TabIndex = 1;
             this.extScrollBarCAPILocker.Text = "extScrollBar1";
             this.extScrollBarCAPILocker.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPILocker.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarCAPILocker.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPILocker.ThumbDrawAngle = 0F;
             this.extScrollBarCAPILocker.Value = -1;
             this.extScrollBarCAPILocker.ValueLimited = -1;
@@ -1650,7 +1736,7 @@
             this.dataGridViewCAPILocker.RowTemplate.Height = 28;
             this.dataGridViewCAPILocker.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCAPILocker.SingleRowSelect = true;
-            this.dataGridViewCAPILocker.Size = new System.Drawing.Size(823, 220);
+            this.dataGridViewCAPILocker.Size = new System.Drawing.Size(820, 220);
             this.dataGridViewCAPILocker.TabIndex = 0;
             // 
             // colCAPILockerName
@@ -1693,8 +1779,13 @@
             // 
             // extButtonDoCAPI2
             // 
+            this.extButtonDoCAPI2.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonDoCAPI2.ButtonDisabledScaling = 0.5F;
+            this.extButtonDoCAPI2.GradientDirection = 90F;
             this.extButtonDoCAPI2.Image = global::EDDiscovery.Icons.Controls.Refresh;
             this.extButtonDoCAPI2.Location = new System.Drawing.Point(3, 3);
+            this.extButtonDoCAPI2.MouseOverScaling = 1.3F;
+            this.extButtonDoCAPI2.MouseSelectedScaling = 1.3F;
             this.extButtonDoCAPI2.Name = "extButtonDoCAPI2";
             this.extButtonDoCAPI2.Size = new System.Drawing.Size(24, 24);
             this.extButtonDoCAPI2.TabIndex = 0;
