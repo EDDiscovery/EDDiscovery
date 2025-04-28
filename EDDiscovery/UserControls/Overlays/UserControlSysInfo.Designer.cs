@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange = new ExtendedControls.ExtTextBox();
             this.labelSecurity = new System.Windows.Forms.Label();
             this.labelJumpRange = new System.Windows.Forms.Label();
-            this.panelFD = new ExtendedControls.ExtPanelChildThemeControl();
+            this.panelFD = new ExtendedControls.ExtPanelNoChildThemed();
             this.labelTarget = new System.Windows.Forms.Label();
             this.labelSysName = new System.Windows.Forms.Label();
             this.labelGamemode = new System.Windows.Forms.Label();
@@ -2117,7 +2117,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelCredits;
         private System.Windows.Forms.ToolStripMenuItem toolStripCredits;
         private System.Windows.Forms.ToolStripMenuItem toolStripRemoveAll;
-        private ExtendedControls.ExtPanelChildThemeControl panelFD;
+        private ExtendedControls.ExtPanelNoChildThemed panelFD;
         private ExtendedControls.ExtRichTextBox richTextBoxScrollMissions;
         private System.Windows.Forms.Label labelMissions;
         private System.Windows.Forms.ToolStripMenuItem toolStripMissionList;

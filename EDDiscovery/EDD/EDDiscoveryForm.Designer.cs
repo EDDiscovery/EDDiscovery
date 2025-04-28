@@ -45,6 +45,8 @@ namespace EDDiscovery
         {
             this.components = new System.ComponentModel.Container();
             ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
+            ExtendedControls.DropDownTheme dropDownTheme1 = new ExtendedControls.DropDownTheme();
+            ExtendedControls.DropDownTheme dropDownTheme2 = new ExtendedControls.DropDownTheme();
             this.notifyIconEDD = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.notifyIconMenu_Open = new System.Windows.Forms.ToolStripMenuItem();
@@ -175,35 +177,72 @@ namespace EDDiscovery
             // tabControlMain
             // 
             this.tabControlMain.AllowDragReorder = true;
+            this.tabControlMain.AutoForceUpdate = true;
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControlMain.Location = new System.Drawing.Point(0, 62);
             this.tabControlMain.Multiline = true;
             this.tabControlMain.Name = "tabControlMain";
+            this.tabControlMain.PaintTransparentColor = System.Drawing.Color.Transparent;
             this.tabControlMain.SelectedIndex = 0;
             this.tabControlMain.Size = new System.Drawing.Size(984, 627);
+            this.tabControlMain.TabBackgroundGradientDirection = 0F;
             this.tabControlMain.TabControlBorderColor = System.Drawing.Color.DarkGray;
+            this.tabControlMain.TabControlBorderColor2 = System.Drawing.Color.DarkGray;
             this.tabControlMain.TabDisabledScaling = 0.5F;
+            this.tabControlMain.TabGradientDirection = 90F;
             this.tabControlMain.TabIndex = 15;
             this.tabControlMain.TabMouseOverColor = System.Drawing.Color.White;
+            this.tabControlMain.TabMouseOverColor2 = System.Drawing.Color.White;
             this.tabControlMain.TabNotSelectedBorderColor = System.Drawing.Color.Gray;
             this.tabControlMain.TabNotSelectedColor = System.Drawing.Color.Gray;
+            this.tabControlMain.TabNotSelectedColor2 = System.Drawing.Color.Gray;
             this.tabControlMain.TabSelectedColor = System.Drawing.Color.LightGray;
+            this.tabControlMain.TabSelectedColor2 = System.Drawing.Color.Gray;
             this.tabControlMain.TabStyle = tabStyleSquare1;
             this.tabControlMain.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
             this.tabControlMain.TextSelectedColor = System.Drawing.SystemColors.ControlText;
+            this.tabControlMain.ThemeColors = new System.Drawing.Color[] {
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.tabControlMain.ThemeColorSet = 0;
             this.toolTip.SetToolTip(this.tabControlMain, "Right click to add/remove tabs, Left click drag to reorder");
             this.tabControlMain.MouseClick += new System.Windows.Forms.MouseEventHandler(this.tabControlMain_MouseClick);
             // 
             // comboBoxCommander
             // 
+            this.comboBoxCommander.BackColor2 = System.Drawing.Color.Red;
             this.comboBoxCommander.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCommander.ControlBackground = System.Drawing.SystemColors.Control;
             this.comboBoxCommander.DataSource = null;
             this.comboBoxCommander.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxCommander.DisabledScaling = 0.5F;
             this.comboBoxCommander.DisplayMember = "";
+            dropDownTheme1.ListBoxGradientDirection = 0F;
+            dropDownTheme1.ListBoxSelectionBackgroundColor = System.Drawing.Color.Gray;
+            dropDownTheme1.ListBoxSelectionBackgroundColor2 = System.Drawing.Color.Gray;
+            dropDownTheme1.ListBoxSelectionColor = System.Drawing.Color.Green;
+            dropDownTheme1.MouseOverSliderButtonColor = System.Drawing.Color.Red;
+            dropDownTheme1.MouseOverSliderButtonColor2 = System.Drawing.Color.Red;
+            dropDownTheme1.PressedSliderButtonColor = System.Drawing.Color.DarkCyan;
+            dropDownTheme1.PressedSliderButtonColor2 = System.Drawing.Color.DarkCyan;
+            dropDownTheme1.SliderArrowBackColor = System.Drawing.Color.Cyan;
+            dropDownTheme1.SliderArrowBackColor2 = System.Drawing.Color.Cyan;
+            dropDownTheme1.SliderButtonArrowColor = System.Drawing.Color.White;
+            dropDownTheme1.SliderButtonBackColor = System.Drawing.Color.Blue;
+            dropDownTheme1.SliderButtonBackColor2 = System.Drawing.Color.Blue;
+            dropDownTheme1.SliderButtonGradientDirection = 90F;
+            dropDownTheme1.SliderColor = System.Drawing.Color.Green;
+            dropDownTheme1.SliderColor2 = System.Drawing.Color.Green;
+            dropDownTheme1.SliderGradientDirection = 90F;
+            this.comboBoxCommander.DropDownTheme = dropDownTheme1;
             this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCommander.GradientDirection = 90F;
             this.comboBoxCommander.Location = new System.Drawing.Point(1, 3);
             this.comboBoxCommander.Margin = new System.Windows.Forms.Padding(1, 3, 3, 1);
+            this.comboBoxCommander.MouseOverScalingColor = 1.3F;
             this.comboBoxCommander.Name = "comboBoxCommander";
             this.comboBoxCommander.SelectedIndex = -1;
             this.comboBoxCommander.SelectedItem = null;
@@ -218,13 +257,36 @@ namespace EDDiscovery
             // 
             // comboBoxCustomProfiles
             // 
+            this.comboBoxCustomProfiles.BackColor2 = System.Drawing.Color.Red;
             this.comboBoxCustomProfiles.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomProfiles.ControlBackground = System.Drawing.SystemColors.Control;
             this.comboBoxCustomProfiles.DataSource = null;
             this.comboBoxCustomProfiles.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxCustomProfiles.DisabledScaling = 0.5F;
             this.comboBoxCustomProfiles.DisplayMember = "";
+            dropDownTheme2.ListBoxGradientDirection = 0F;
+            dropDownTheme2.ListBoxSelectionBackgroundColor = System.Drawing.Color.Gray;
+            dropDownTheme2.ListBoxSelectionBackgroundColor2 = System.Drawing.Color.Gray;
+            dropDownTheme2.ListBoxSelectionColor = System.Drawing.Color.Green;
+            dropDownTheme2.MouseOverSliderButtonColor = System.Drawing.Color.Red;
+            dropDownTheme2.MouseOverSliderButtonColor2 = System.Drawing.Color.Red;
+            dropDownTheme2.PressedSliderButtonColor = System.Drawing.Color.DarkCyan;
+            dropDownTheme2.PressedSliderButtonColor2 = System.Drawing.Color.DarkCyan;
+            dropDownTheme2.SliderArrowBackColor = System.Drawing.Color.Cyan;
+            dropDownTheme2.SliderArrowBackColor2 = System.Drawing.Color.Cyan;
+            dropDownTheme2.SliderButtonArrowColor = System.Drawing.Color.White;
+            dropDownTheme2.SliderButtonBackColor = System.Drawing.Color.Blue;
+            dropDownTheme2.SliderButtonBackColor2 = System.Drawing.Color.Blue;
+            dropDownTheme2.SliderButtonGradientDirection = 90F;
+            dropDownTheme2.SliderColor = System.Drawing.Color.Green;
+            dropDownTheme2.SliderColor2 = System.Drawing.Color.Green;
+            dropDownTheme2.SliderGradientDirection = 90F;
+            this.comboBoxCustomProfiles.DropDownTheme = dropDownTheme2;
             this.comboBoxCustomProfiles.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCustomProfiles.GradientDirection = 90F;
             this.comboBoxCustomProfiles.Location = new System.Drawing.Point(186, 3);
             this.comboBoxCustomProfiles.Margin = new System.Windows.Forms.Padding(1, 3, 3, 1);
+            this.comboBoxCustomProfiles.MouseOverScalingColor = 1.3F;
             this.comboBoxCustomProfiles.Name = "comboBoxCustomProfiles";
             this.comboBoxCustomProfiles.SelectedIndex = -1;
             this.comboBoxCustomProfiles.SelectedItem = null;
@@ -238,9 +300,14 @@ namespace EDDiscovery
             // buttonExtRefresh
             // 
             this.buttonExtRefresh.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExtRefresh.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtRefresh.ButtonDisabledScaling = 0.5F;
+            this.buttonExtRefresh.GradientDirection = 90F;
             this.buttonExtRefresh.Image = global::EDDiscovery.Icons.Controls.Refresh;
             this.buttonExtRefresh.Location = new System.Drawing.Point(154, 1);
             this.buttonExtRefresh.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.buttonExtRefresh.MouseOverScaling = 1.3F;
+            this.buttonExtRefresh.MouseSelectedScaling = 1.3F;
             this.buttonExtRefresh.Name = "buttonExtRefresh";
             this.buttonExtRefresh.Size = new System.Drawing.Size(28, 28);
             this.buttonExtRefresh.TabIndex = 2;
@@ -251,9 +318,14 @@ namespace EDDiscovery
             // buttonExtManageAddOns
             // 
             this.buttonExtManageAddOns.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExtManageAddOns.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtManageAddOns.ButtonDisabledScaling = 0.5F;
+            this.buttonExtManageAddOns.GradientDirection = 90F;
             this.buttonExtManageAddOns.Image = global::EDDiscovery.Icons.Controls.ManageAddOns;
             this.buttonExtManageAddOns.Location = new System.Drawing.Point(290, 1);
             this.buttonExtManageAddOns.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.buttonExtManageAddOns.MouseOverScaling = 1.3F;
+            this.buttonExtManageAddOns.MouseSelectedScaling = 1.3F;
             this.buttonExtManageAddOns.Name = "buttonExtManageAddOns";
             this.buttonExtManageAddOns.Size = new System.Drawing.Size(28, 28);
             this.buttonExtManageAddOns.TabIndex = 2;
@@ -264,9 +336,14 @@ namespace EDDiscovery
             // buttonExtEditAddOns
             // 
             this.buttonExtEditAddOns.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExtEditAddOns.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtEditAddOns.ButtonDisabledScaling = 0.5F;
+            this.buttonExtEditAddOns.GradientDirection = 90F;
             this.buttonExtEditAddOns.Image = global::EDDiscovery.Icons.Controls.EditAddons;
             this.buttonExtEditAddOns.Location = new System.Drawing.Point(322, 1);
             this.buttonExtEditAddOns.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.buttonExtEditAddOns.MouseOverScaling = 1.3F;
+            this.buttonExtEditAddOns.MouseSelectedScaling = 1.3F;
             this.buttonExtEditAddOns.Name = "buttonExtEditAddOns";
             this.buttonExtEditAddOns.Size = new System.Drawing.Size(28, 28);
             this.buttonExtEditAddOns.TabIndex = 2;
@@ -277,9 +354,14 @@ namespace EDDiscovery
             // buttonExtPopOut
             // 
             this.buttonExtPopOut.BackColor = System.Drawing.Color.Transparent;
+            this.buttonExtPopOut.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtPopOut.ButtonDisabledScaling = 0.5F;
+            this.buttonExtPopOut.GradientDirection = 90F;
             this.buttonExtPopOut.Image = global::EDDiscovery.Icons.Controls.Popout;
             this.buttonExtPopOut.Location = new System.Drawing.Point(354, 1);
             this.buttonExtPopOut.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.buttonExtPopOut.MouseOverScaling = 1.3F;
+            this.buttonExtPopOut.MouseSelectedScaling = 1.3F;
             this.buttonExtPopOut.Name = "buttonExtPopOut";
             this.buttonExtPopOut.Size = new System.Drawing.Size(28, 28);
             this.buttonExtPopOut.TabIndex = 2;
@@ -336,13 +418,16 @@ namespace EDDiscovery
             this.panelToolBar.AutoSize = true;
             this.panelToolBar.AutoWidth = false;
             this.panelToolBar.BackColor = System.Drawing.Color.Transparent;
+            this.panelToolBar.ChildrenThemed = true;
             this.panelToolBar.Controls.Add(this.extButtonNewFeature);
             this.panelToolBar.Controls.Add(this.flowToolBar);
             this.panelToolBar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelToolBar.GradientDirection = 0F;
             this.panelToolBar.HiddenMarkerWidth = 0;
             this.panelToolBar.Location = new System.Drawing.Point(0, 28);
             this.panelToolBar.Margin = new System.Windows.Forms.Padding(0);
             this.panelToolBar.Name = "panelToolBar";
+            this.panelToolBar.PaintTransparentColor = System.Drawing.Color.Transparent;
             this.panelToolBar.PinState = true;
             this.panelToolBar.RolledUpHeight = 5;
             this.panelToolBar.RollUpAnimationTime = 500;
@@ -351,13 +436,24 @@ namespace EDDiscovery
             this.panelToolBar.ShowHiddenMarker = true;
             this.panelToolBar.Size = new System.Drawing.Size(984, 34);
             this.panelToolBar.TabIndex = 1;
+            this.panelToolBar.ThemeColors = new System.Drawing.Color[] {
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.panelToolBar.ThemeColorSet = 1;
             this.panelToolBar.UnrollHoverDelay = 1000;
             // 
             // extButtonNewFeature
             // 
             this.extButtonNewFeature.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonNewFeature.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonNewFeature.ButtonDisabledScaling = 0.5F;
+            this.extButtonNewFeature.GradientDirection = 90F;
             this.extButtonNewFeature.Image = global::EDDiscovery.Icons.Controls.NewFeature;
             this.extButtonNewFeature.Location = new System.Drawing.Point(902, 3);
+            this.extButtonNewFeature.MouseOverScaling = 1.3F;
+            this.extButtonNewFeature.MouseSelectedScaling = 1.3F;
             this.extButtonNewFeature.Name = "extButtonNewFeature";
             this.extButtonNewFeature.Size = new System.Drawing.Size(48, 28);
             this.extButtonNewFeature.TabIndex = 6;
@@ -385,10 +481,15 @@ namespace EDDiscovery
             // 
             // buttonReloadActions
             // 
+            this.buttonReloadActions.BackColor2 = System.Drawing.Color.Red;
+            this.buttonReloadActions.ButtonDisabledScaling = 0.5F;
+            this.buttonReloadActions.GradientDirection = 90F;
             this.buttonReloadActions.Image = global::EDDiscovery.Icons.Controls.Refresh;
             this.buttonReloadActions.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.buttonReloadActions.Location = new System.Drawing.Point(386, 1);
             this.buttonReloadActions.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.buttonReloadActions.MouseOverScaling = 1.3F;
+            this.buttonReloadActions.MouseSelectedScaling = 1.3F;
             this.buttonReloadActions.Name = "buttonReloadActions";
             this.buttonReloadActions.Size = new System.Drawing.Size(65, 28);
             this.buttonReloadActions.TabIndex = 1;
@@ -400,10 +501,15 @@ namespace EDDiscovery
             // 
             // extButtonCAPI
             // 
+            this.extButtonCAPI.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonCAPI.ButtonDisabledScaling = 0.5F;
+            this.extButtonCAPI.GradientDirection = 90F;
             this.extButtonCAPI.Image = global::EDDiscovery.Icons.Controls.Refresh;
             this.extButtonCAPI.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.extButtonCAPI.Location = new System.Drawing.Point(455, 1);
             this.extButtonCAPI.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.extButtonCAPI.MouseOverScaling = 1.3F;
+            this.extButtonCAPI.MouseSelectedScaling = 1.3F;
             this.extButtonCAPI.Name = "extButtonCAPI";
             this.extButtonCAPI.Size = new System.Drawing.Size(65, 28);
             this.extButtonCAPI.TabIndex = 1;
@@ -418,10 +524,14 @@ namespace EDDiscovery
             this.extButtonDrawnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.extButtonDrawnHelp.AutoEllipsis = false;
             this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelp.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelp.BorderWidth = 1;
+            this.extButtonDrawnHelp.ButtonDisabledScaling = 0.25F;
             this.extButtonDrawnHelp.Image = null;
             this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelp.Location = new System.Drawing.Point(524, 1);
             this.extButtonDrawnHelp.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
             this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";
@@ -906,10 +1016,14 @@ namespace EDDiscovery
             this.panel_close.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.panel_close.AutoEllipsis = false;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.BorderColor = System.Drawing.Color.Orange;
+            this.panel_close.BorderWidth = 1;
+            this.panel_close.ButtonDisabledScaling = 0.25F;
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(74, 2);
             this.panel_close.Margin = new System.Windows.Forms.Padding(0);
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
@@ -927,10 +1041,14 @@ namespace EDDiscovery
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.AutoEllipsis = false;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.BorderColor = System.Drawing.Color.Orange;
+            this.panel_minimize.BorderWidth = 1;
+            this.panel_minimize.ButtonDisabledScaling = 0.25F;
             this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(58, 0);
             this.panel_minimize.Margin = new System.Windows.Forms.Padding(0);
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
@@ -958,13 +1076,22 @@ namespace EDDiscovery
             // 
             // extPanelTopResizer
             // 
+            this.extPanelTopResizer.ChildrenThemed = true;
             this.extPanelTopResizer.Cursor = System.Windows.Forms.Cursors.SizeNS;
             this.extPanelTopResizer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.extPanelTopResizer.GradientDirection = 0F;
             this.extPanelTopResizer.Location = new System.Drawing.Point(0, 0);
             this.extPanelTopResizer.Movement = System.Windows.Forms.DockStyle.Top;
             this.extPanelTopResizer.Name = "extPanelTopResizer";
+            this.extPanelTopResizer.PaintTransparentColor = System.Drawing.Color.Transparent;
             this.extPanelTopResizer.Size = new System.Drawing.Size(984, 3);
             this.extPanelTopResizer.TabIndex = 22;
+            this.extPanelTopResizer.ThemeColors = new System.Drawing.Color[] {
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.extPanelTopResizer.ThemeColorSet = -1;
             // 
             // EDDiscoveryForm
             // 

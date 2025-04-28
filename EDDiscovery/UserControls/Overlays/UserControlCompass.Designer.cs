@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlCompass));
-            this.labelTargetLat = new ExtendedControls.ExtLabel();
+            this.labelTargetLat = new ExtendedControls.ExtLabelBitmap();
             this.numberBoxTargetLatitude = new ExtendedControls.NumberBoxDouble();
             this.numberBoxTargetLongitude = new ExtendedControls.NumberBoxDouble();
             this.comboBoxBookmarks = new ExtendedControls.ExtComboBox();
@@ -272,7 +272,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private ExtendedControls.ExtLabel labelTargetLat;
+        private ExtendedControls.ExtLabelBitmap labelTargetLat;
         private ExtendedControls.NumberBoxDouble numberBoxTargetLatitude;
         private ExtendedControls.NumberBoxDouble numberBoxTargetLongitude;
         private ExtendedControls.ExtComboBox comboBoxBookmarks;
