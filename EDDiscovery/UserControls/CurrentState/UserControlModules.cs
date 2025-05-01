@@ -45,12 +45,6 @@ namespace EDDiscovery.UserControls
         public UserControlModules()
         {
             InitializeComponent();
-        }
-
-        public override void Init()
-        {
-            DBBaseName = "ModulesGrid";
-
             var enumlist = new Enum[] { EDTx.UserControlModules_ItemLocalised, EDTx.UserControlModules_ItemCol, EDTx.UserControlModules_SlotCol, EDTx.UserControlModules_ItemInfo,
                                     EDTx.UserControlModules_Mass, EDTx.UserControlModules_BluePrint, EDTx.UserControlModules_Value, EDTx.UserControlModules_PriorityEnable,
                                     EDTx.UserControlModules_labelShip, EDTx.UserControlModules_labelVehicle ,
@@ -70,6 +64,12 @@ namespace EDDiscovery.UserControls
                 EDTx.UserControlModules_extButtonDeleteLoadout_ToolTip
             };
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+        }
+
+        public override void Init()
+        {
+            DBBaseName = "ModulesGrid";
+
 
             storedmoduletext = "Stored Modules".T(EDTx.UserControlModules_StoredModules);
             travelhistorytext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
