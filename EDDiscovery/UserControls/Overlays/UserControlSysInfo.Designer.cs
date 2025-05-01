@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange = new ExtendedControls.ExtTextBox();
             this.labelSecurity = new System.Windows.Forms.Label();
             this.labelJumpRange = new System.Windows.Forms.Label();
-            this.panelFD = new ExtendedControls.PanelNoTheme();
+            this.panelFD = new ExtendedControls.ExtPanelNoChildThemed();
             this.labelTarget = new System.Windows.Forms.Label();
             this.labelSysName = new System.Windows.Forms.Label();
             this.labelGamemode = new System.Windows.Forms.Label();
@@ -475,7 +475,6 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetDist.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxTargetDist.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTargetDist.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxTargetDist.BorderColorScaling = 0.5F;
             this.textBoxTargetDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTargetDist.ClearOnFirstChar = false;
             this.textBoxTargetDist.ControlBackground = System.Drawing.SystemColors.Control;
@@ -512,11 +511,9 @@ namespace EDDiscovery.UserControls
             this.textBoxTarget.AutoCompleteTimeout = 200;
             this.textBoxTarget.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTarget.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxTarget.BorderColorScaling = 0.5F;
             this.textBoxTarget.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTarget.ClearOnFirstChar = false;
             this.textBoxTarget.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBoxTarget.DropDownBorderColor = System.Drawing.Color.Green;
             this.textBoxTarget.EndButtonEnable = false;
             this.textBoxTarget.EndButtonSize16ths = 10;
             this.textBoxTarget.EndButtonVisible = true;
@@ -627,7 +624,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.AlwaysHideScrollBar = false;
             this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBar1.ArrowColorScaling = 0.5F;
             this.extScrollBar1.ArrowDownDrawAngle = 270F;
             this.extScrollBar1.ArrowUpDrawAngle = 90F;
             this.extScrollBar1.BorderColor = System.Drawing.Color.White;
@@ -646,7 +642,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.TabIndex = 49;
             this.extScrollBar1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBar1.ThumbColorScaling = 0.5F;
             this.extScrollBar1.ThumbDrawAngle = 0F;
             this.extScrollBar1.Value = -303;
             this.extScrollBar1.ValueLimited = -303;
@@ -657,7 +652,6 @@ namespace EDDiscovery.UserControls
             this.extTextBoxNextDestinationPosition.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxNextDestinationPosition.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxNextDestinationPosition.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxNextDestinationPosition.BorderColorScaling = 0.5F;
             this.extTextBoxNextDestinationPosition.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxNextDestinationPosition.ClearOnFirstChar = false;
             this.extTextBoxNextDestinationPosition.ControlBackground = System.Drawing.SystemColors.Control;
@@ -689,7 +683,6 @@ namespace EDDiscovery.UserControls
             this.extTextBoxNextDestinationDistance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxNextDestinationDistance.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxNextDestinationDistance.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxNextDestinationDistance.BorderColorScaling = 0.5F;
             this.extTextBoxNextDestinationDistance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxNextDestinationDistance.ClearOnFirstChar = false;
             this.extTextBoxNextDestinationDistance.ControlBackground = System.Drawing.SystemColors.Control;
@@ -721,7 +714,6 @@ namespace EDDiscovery.UserControls
             this.extTextBox1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBox1.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBox1.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBox1.BorderColorScaling = 0.5F;
             this.extTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBox1.ClearOnFirstChar = false;
             this.extTextBox1.ControlBackground = System.Drawing.SystemColors.Control;
@@ -753,7 +745,6 @@ namespace EDDiscovery.UserControls
             this.extTextBoxNextDestination.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxNextDestination.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxNextDestination.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxNextDestination.BorderColorScaling = 0.5F;
             this.extTextBoxNextDestination.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxNextDestination.ClearOnFirstChar = false;
             this.extTextBoxNextDestination.ControlBackground = System.Drawing.SystemColors.Control;
@@ -797,7 +788,6 @@ namespace EDDiscovery.UserControls
             this.extTextBoxStationFaction.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxStationFaction.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxStationFaction.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxStationFaction.BorderColorScaling = 0.5F;
             this.extTextBoxStationFaction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxStationFaction.ClearOnFirstChar = false;
             this.extTextBoxStationFaction.ControlBackground = System.Drawing.SystemColors.Control;
@@ -842,7 +832,6 @@ namespace EDDiscovery.UserControls
             this.textBoxSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxSystem.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxSystem.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSystem.BorderColorScaling = 0.5F;
             this.textBoxSystem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSystem.ClearOnFirstChar = false;
             this.textBoxSystem.ControlBackground = System.Drawing.SystemColors.Control;
@@ -878,7 +867,6 @@ namespace EDDiscovery.UserControls
             this.extButtonEDSMTarget.Image = null;
             this.extButtonEDSMTarget.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.InverseText;
             this.extButtonEDSMTarget.Location = new System.Drawing.Point(393, 327);
-            this.extButtonEDSMTarget.MouseOverColor = System.Drawing.Color.White;
             this.extButtonEDSMTarget.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonEDSMTarget.MouseSelectedColorEnable = true;
             this.extButtonEDSMTarget.Name = "extButtonEDSMTarget";
@@ -900,7 +888,6 @@ namespace EDDiscovery.UserControls
             this.extTextBoxSecurity.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxSecurity.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxSecurity.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxSecurity.BorderColorScaling = 0.5F;
             this.extTextBoxSecurity.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxSecurity.ClearOnFirstChar = false;
             this.extTextBoxSecurity.ControlBackground = System.Drawing.SystemColors.Control;
@@ -932,7 +919,6 @@ namespace EDDiscovery.UserControls
             this.textBoxJumpRange.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxJumpRange.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxJumpRange.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxJumpRange.BorderColorScaling = 0.5F;
             this.textBoxJumpRange.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxJumpRange.ClearOnFirstChar = false;
             this.textBoxJumpRange.ControlBackground = System.Drawing.SystemColors.Control;
@@ -987,6 +973,7 @@ namespace EDDiscovery.UserControls
             this.panelFD.BackgroundImage = global::EDDiscovery.Icons.Controls.firstdiscover;
             this.panelFD.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
             this.panelFD.Location = new System.Drawing.Point(430, 18);
+            this.panelFD.ChildrenThemed = false;
             this.panelFD.Name = "panelFD";
             this.panelFD.Size = new System.Drawing.Size(24, 24);
             this.panelFD.TabIndex = 9090;
@@ -1265,7 +1252,6 @@ namespace EDDiscovery.UserControls
             this.textBoxVisits.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxVisits.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxVisits.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxVisits.BorderColorScaling = 0.5F;
             this.textBoxVisits.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxVisits.ClearOnFirstChar = false;
             this.textBoxVisits.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1322,7 +1308,6 @@ namespace EDDiscovery.UserControls
             this.textBoxBody.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxBody.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxBody.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxBody.BorderColorScaling = 0.5F;
             this.textBoxBody.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxBody.ClearOnFirstChar = false;
             this.textBoxBody.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1352,7 +1337,6 @@ namespace EDDiscovery.UserControls
             // richTextBoxScrollMissions
             // 
             this.richTextBoxScrollMissions.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBoxScrollMissions.BorderColorScaling = 0.5F;
             this.richTextBoxScrollMissions.DetectUrls = true;
             this.richTextBoxScrollMissions.HideScrollBar = true;
             this.richTextBoxScrollMissions.Location = new System.Drawing.Point(549, 107);
@@ -1361,17 +1345,6 @@ namespace EDDiscovery.UserControls
             this.richTextBoxScrollMissions.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
     "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
-            this.richTextBoxScrollMissions.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.richTextBoxScrollMissions.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.richTextBoxScrollMissions.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.richTextBoxScrollMissions.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.richTextBoxScrollMissions.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.richTextBoxScrollMissions.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBoxScrollMissions.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.richTextBoxScrollMissions.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.richTextBoxScrollMissions.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.richTextBoxScrollMissions.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.richTextBoxScrollMissions.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBoxScrollMissions.ShowLineCount = false;
             this.richTextBoxScrollMissions.Size = new System.Drawing.Size(225, 50);
             this.richTextBoxScrollMissions.TabIndex = 0;
@@ -1400,7 +1373,6 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelJumps.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxTravelJumps.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTravelJumps.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxTravelJumps.BorderColorScaling = 0.5F;
             this.textBoxTravelJumps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTravelJumps.ClearOnFirstChar = false;
             this.textBoxTravelJumps.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1445,7 +1417,6 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelTime.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxTravelTime.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTravelTime.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxTravelTime.BorderColorScaling = 0.5F;
             this.textBoxTravelTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTravelTime.ClearOnFirstChar = false;
             this.textBoxTravelTime.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1478,7 +1449,6 @@ namespace EDDiscovery.UserControls
             this.textBoxEconomy.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxEconomy.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxEconomy.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxEconomy.BorderColorScaling = 0.5F;
             this.textBoxEconomy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxEconomy.ClearOnFirstChar = false;
             this.textBoxEconomy.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1511,7 +1481,6 @@ namespace EDDiscovery.UserControls
             this.textBoxFuel.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxFuel.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxFuel.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxFuel.BorderColorScaling = 0.5F;
             this.textBoxFuel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxFuel.ClearOnFirstChar = false;
             this.textBoxFuel.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1557,7 +1526,6 @@ namespace EDDiscovery.UserControls
             this.extTextBoxMR.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxMR.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxMR.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxMR.BorderColorScaling = 0.5F;
             this.extTextBoxMR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxMR.ClearOnFirstChar = false;
             this.extTextBoxMR.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1590,7 +1558,6 @@ namespace EDDiscovery.UserControls
             this.textBoxData.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxData.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxData.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxData.BorderColorScaling = 0.5F;
             this.textBoxData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxData.ClearOnFirstChar = false;
             this.textBoxData.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1623,7 +1590,6 @@ namespace EDDiscovery.UserControls
             this.textBoxGovernment.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxGovernment.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxGovernment.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxGovernment.BorderColorScaling = 0.5F;
             this.textBoxGovernment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxGovernment.ClearOnFirstChar = false;
             this.textBoxGovernment.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1656,7 +1622,6 @@ namespace EDDiscovery.UserControls
             this.textBoxMaterials.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxMaterials.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxMaterials.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxMaterials.BorderColorScaling = 0.5F;
             this.textBoxMaterials.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxMaterials.ClearOnFirstChar = false;
             this.textBoxMaterials.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1702,7 +1667,6 @@ namespace EDDiscovery.UserControls
             this.textBoxCredits.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxCredits.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxCredits.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCredits.BorderColorScaling = 0.5F;
             this.textBoxCredits.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxCredits.ClearOnFirstChar = false;
             this.textBoxCredits.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1735,7 +1699,6 @@ namespace EDDiscovery.UserControls
             this.textBoxAllegiance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxAllegiance.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxAllegiance.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxAllegiance.BorderColorScaling = 0.5F;
             this.textBoxAllegiance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxAllegiance.ClearOnFirstChar = false;
             this.textBoxAllegiance.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1768,7 +1731,6 @@ namespace EDDiscovery.UserControls
             this.textBoxCargo.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxCargo.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxCargo.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxCargo.BorderColorScaling = 0.5F;
             this.textBoxCargo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxCargo.ClearOnFirstChar = false;
             this.textBoxCargo.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1814,7 +1776,6 @@ namespace EDDiscovery.UserControls
             this.textBoxTravelDist.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxTravelDist.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTravelDist.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxTravelDist.BorderColorScaling = 0.5F;
             this.textBoxTravelDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTravelDist.ClearOnFirstChar = false;
             this.textBoxTravelDist.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1847,7 +1808,6 @@ namespace EDDiscovery.UserControls
             this.textBoxState.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxState.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxState.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxState.BorderColorScaling = 0.5F;
             this.textBoxState.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxState.ClearOnFirstChar = false;
             this.textBoxState.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1880,7 +1840,6 @@ namespace EDDiscovery.UserControls
             this.textBoxShip.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxShip.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxShip.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxShip.BorderColorScaling = 0.5F;
             this.textBoxShip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxShip.ClearOnFirstChar = false;
             this.textBoxShip.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1926,7 +1885,6 @@ namespace EDDiscovery.UserControls
             this.textBoxGameMode.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxGameMode.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxGameMode.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxGameMode.BorderColorScaling = 0.5F;
             this.textBoxGameMode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxGameMode.ClearOnFirstChar = false;
             this.textBoxGameMode.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1959,7 +1917,6 @@ namespace EDDiscovery.UserControls
             this.textBoxSolDist.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxSolDist.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxSolDist.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSolDist.BorderColorScaling = 0.5F;
             this.textBoxSolDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSolDist.ClearOnFirstChar = false;
             this.textBoxSolDist.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1992,7 +1949,6 @@ namespace EDDiscovery.UserControls
             this.textBoxPosition.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxPosition.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxPosition.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxPosition.BorderColorScaling = 0.5F;
             this.textBoxPosition.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxPosition.ClearOnFirstChar = false;
             this.textBoxPosition.ControlBackground = System.Drawing.SystemColors.Control;
@@ -2051,7 +2007,6 @@ namespace EDDiscovery.UserControls
             this.textBoxHomeDist.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxHomeDist.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxHomeDist.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxHomeDist.BorderColorScaling = 0.5F;
             this.textBoxHomeDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxHomeDist.ClearOnFirstChar = false;
             this.textBoxHomeDist.ControlBackground = System.Drawing.SystemColors.Control;
@@ -2162,7 +2117,7 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelCredits;
         private System.Windows.Forms.ToolStripMenuItem toolStripCredits;
         private System.Windows.Forms.ToolStripMenuItem toolStripRemoveAll;
-        private ExtendedControls.PanelNoTheme panelFD;
+        private ExtendedControls.ExtPanelNoChildThemed panelFD;
         private ExtendedControls.ExtRichTextBox richTextBoxScrollMissions;
         private System.Windows.Forms.Label labelMissions;
         private System.Windows.Forms.ToolStripMenuItem toolStripMissionList;

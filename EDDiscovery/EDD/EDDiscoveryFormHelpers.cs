@@ -382,35 +382,6 @@ namespace EDDiscovery
 
         #endregion
 
-        #region Themeing
-
-        public void ApplyTheme(bool panelrefreshaswell = false)     // set true if your changing the theme
-        {
-            panel_close.Visible = !ExtendedControls.Theme.Current.WindowsFrame;
-            panel_minimize.Visible = !ExtendedControls.Theme.Current.WindowsFrame;
-            label_version.Visible = !ExtendedControls.Theme.Current.WindowsFrame && !EDDOptions.Instance.DisableVersionDisplay;
-
-            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
-            this.Text = "EDDiscovery" + (EDDOptions.Instance.DisableVersionDisplay ? "" : " " + label_version.Text);
-
-            OnThemeChanging?.Invoke();
-
-            ExtendedControls.Theme.Current.ApplyStd(this);
-
-            statusStripEDD.Font = contextMenuStripTabs.Font = this.Font;
-
-            PopOuts.OnThemeChanged();           // tell the pop out forms that theme has changed
-
-            OnThemeChanged?.Invoke();           // and tell anyone else which is interested
-
-            if (panelrefreshaswell)
-                Controller.RefreshDisplays(); // needed to cause them to cope with theme change
-
-            this.Refresh();                                             // force thru refresh to make sure its repainted
-        }
-
-        #endregion
-
         #region DB Star Sync 
 
         public void ForceSystemDBFullRefresh()
@@ -425,7 +396,7 @@ namespace EDDiscovery
 
         public void LogLine(string text)
         {
-            LogLineColor(text, ExtendedControls.Theme.Current.TextBlockColor);
+            LogLineColor(text, ExtendedControls.Theme.Current.TextBlockForeColor);
         }
 
         public void LogLineHighlight(string text)
@@ -504,14 +475,50 @@ namespace EDDiscovery
         #endregion
 
         #region Theme
-
-        private ExtendedControls.Theme GetThemeFromDB()
+        public void ApplyTheme(bool panelrefreshaswell = false)     // set true if your changing the theme
         {
-            if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ThemeNameOf"))           // old db save method
-            {
-                // windows default with name given
-                Theme newtheme = new Theme(UserDatabase.Instance.GetSetting("ThemeNameOf", "Custom"));
+            panel_close.Visible = !ExtendedControls.Theme.Current.WindowsFrame;
+            panel_minimize.Visible = !ExtendedControls.Theme.Current.WindowsFrame;
+            label_version.Visible = !ExtendedControls.Theme.Current.WindowsFrame && !EDDOptions.Instance.DisableVersionDisplay;
 
+            // note in no border mode, this is not visible on the title bar but it is in the taskbar..
+            this.Text = "EDDiscovery" + (EDDOptions.Instance.DisableVersionDisplay ? "" : " " + label_version.Text);
+
+            OnThemeChanging?.Invoke();
+
+            ExtendedControls.Theme.Current.ApplyStd(this);
+
+            statusStripEDD.Font = contextMenuStripTabs.Font = this.Font;
+
+            PopOuts.OnThemeChanged();           // tell the pop out forms that theme has changed
+
+            OnThemeChanged?.Invoke();           // and tell anyone else which is interested
+
+            if (panelrefreshaswell)
+                Controller.RefreshDisplays(); // needed to cause them to cope with theme change
+
+            this.Refresh();                                             // force thru refresh to make sure its repainted
+        }
+
+        private Theme GetThemeFromDB()
+        {
+            if (UserDatabase.Instance.KeyExists("ThemeSelected"))           // new db save method
+            {
+                string json = UserDatabase.Instance.GetSetting("ThemeSelected", "");
+                JToken jo = JToken.Parse(json);
+                if (jo != null)
+                {
+                   //System.Diagnostics.Debug.Assert(jo.Count == 130);
+
+                    Theme tme = Theme.FromJSON(jo);
+                    if (tme != null)      // overwrite any variables with ones accumulated
+                    {
+                        return tme;
+                    }
+                }
+            }
+            else if (UserDatabase.Instance.KeyExists("ThemeNameOf"))           // old db save method
+            {
                 JObject jo = new JObject();
 
                 // we use FromJSON info in 2.6 of QuickJSON to read the JSON attributes under AltFmt to get the old names (clever huh!)
@@ -535,32 +542,22 @@ namespace EDDiscovery
 
                 jo["windowsframe"] = UserDatabase.Instance.GetSetting("ThemeWindowsFrame", true);
                 jo["formopacity"] = UserDatabase.Instance.GetSetting("ThemeFormOpacity", 100.0f);
-                jo["fontname"] = UserDatabase.Instance.GetSetting("ThemeFont", newtheme.FontName);
-                jo["fontsize"] = (float)UserDatabase.Instance.GetSetting("ThemeFontSize", newtheme.FontSize);
-                jo["buttonstyle"] = UserDatabase.Instance.GetSetting("ButtonStyle", newtheme.ButtonStyle);
-                jo["textboxborderstyle"] = UserDatabase.Instance.GetSetting("TextBoxBorderStyle", newtheme.TextBoxBorderStyle);
+                jo["fontname"] = UserDatabase.Instance.GetSetting("ThemeFont", "Arial");
+                jo["fontsize"] = (float)UserDatabase.Instance.GetSetting("ThemeFontSize", 12);
+                jo["buttonstyle"] = UserDatabase.Instance.GetSetting("ButtonStyle", Theme.ButtonstyleGradient);
+                jo["textboxborderstyle"] = UserDatabase.Instance.GetSetting("TextBoxBorderStyle", Theme.TextboxborderstyleColor);
 
-                //jo.WriteJSONFile(@"c:\code\eddtheme.json", true);
+                jo.WriteJSONFile(@"c:\code\eddtheme.json", true);
 
-                if (newtheme.FromJSON(jo))      // overwrite any variables with ones accumulated
+                Theme tme = Theme.FromJSON(jo);
+
+                if ( tme != null)      // overwrite any variables with ones accumulated
                 {
-                    UserDatabase.Instance.DeleteKey("Theme%");  // remove all theme keys
-                    UserDatabase.Instance.DeleteKey("ButtonStyle"); 
-                    UserDatabase.Instance.DeleteKey("TextBoxBorderStyle");
-                    UserDatabase.Instance.PutSetting("ThemeSelected", newtheme.ToJSON().ToString(true));    // write back immediately in case we crash
-                    return newtheme;
-                }
-            }
-            else if (EliteDangerousCore.DB.UserDatabase.Instance.KeyExists("ThemeSelected"))           // new db save method
-            {
-                Theme newtheme = new Theme(EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("ThemeNameOf", "Custom"));
-
-                string json = UserDatabase.Instance.GetSetting("ThemeSelected","");
-                JToken jo = JToken.Parse(json);
-                if ( jo != null )
-                {
-                    if (newtheme.FromJSON(jo))      // overwrite any variables with ones accumulated
-                        return newtheme;
+                    //UserDatabase.Instance.DeleteKey("Theme%");  // remove all theme keys
+                    //UserDatabase.Instance.DeleteKey("ButtonStyle"); 
+                    //UserDatabase.Instance.DeleteKey("TextBoxBorderStyle");
+                    //UserDatabase.Instance.PutSetting("ThemeSelected", tme.ToJSON().ToString(true));    // write back immediately in case we crash
+                    return tme;
                 }
             }
 

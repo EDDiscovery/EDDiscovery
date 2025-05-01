@@ -255,9 +255,7 @@
             // 
             // groupBoxInternal
             // 
-            this.groupBoxInternal.BackColorScaling = 0.5F;
             this.groupBoxInternal.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxInternal.BorderColorScaling = 0.5F;
             this.groupBoxInternal.Controls.Add(this.comboBoxRoutingMetric);
             this.groupBoxInternal.Controls.Add(this.labelMetric);
             this.groupBoxInternal.Controls.Add(this.extButtonRoute);
@@ -276,14 +274,12 @@
             // comboBoxRoutingMetric
             // 
             this.comboBoxRoutingMetric.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxRoutingMetric.ButtonColorScaling = 0.5F;
             this.comboBoxRoutingMetric.DataSource = null;
             this.comboBoxRoutingMetric.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxRoutingMetric.DisplayMember = "";
             this.comboBoxRoutingMetric.Enabled = false;
             this.comboBoxRoutingMetric.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxRoutingMetric.Location = new System.Drawing.Point(62, 19);
-            this.comboBoxRoutingMetric.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxRoutingMetric.Name = "comboBoxRoutingMetric";
             this.comboBoxRoutingMetric.SelectedIndex = -1;
             this.comboBoxRoutingMetric.SelectedItem = null;
@@ -318,15 +314,12 @@
             // extCheckBoxPermitSystems
             // 
             this.extCheckBoxPermitSystems.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxPermitSystems.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxPermitSystems.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxPermitSystems.CheckColor = System.Drawing.Color.DarkBlue;
-            this.extCheckBoxPermitSystems.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxPermitSystems.ImageIndeterminate = null;
             this.extCheckBoxPermitSystems.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxPermitSystems.ImageUnchecked = null;
             this.extCheckBoxPermitSystems.Location = new System.Drawing.Point(536, 19);
-            this.extCheckBoxPermitSystems.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxPermitSystems.Name = "extCheckBoxPermitSystems";
             this.extCheckBoxPermitSystems.Size = new System.Drawing.Size(135, 18);
             this.extCheckBoxPermitSystems.TabIndex = 32;
@@ -337,15 +330,12 @@
             // checkBox_FsdBoost
             // 
             this.checkBox_FsdBoost.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBox_FsdBoost.CheckBoxDisabledScaling = 0.5F;
             this.checkBox_FsdBoost.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBox_FsdBoost.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBox_FsdBoost.ImageButtonDisabledScaling = 0.5F;
             this.checkBox_FsdBoost.ImageIndeterminate = null;
             this.checkBox_FsdBoost.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBox_FsdBoost.ImageUnchecked = null;
             this.checkBox_FsdBoost.Location = new System.Drawing.Point(430, 19);
-            this.checkBox_FsdBoost.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBox_FsdBoost.Name = "checkBox_FsdBoost";
             this.checkBox_FsdBoost.Size = new System.Drawing.Size(135, 18);
             this.checkBox_FsdBoost.TabIndex = 32;
@@ -357,9 +347,7 @@
             // 
             // groupBoxPara
             // 
-            this.groupBoxPara.BackColorScaling = 0.5F;
             this.groupBoxPara.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxPara.BorderColorScaling = 0.5F;
             this.groupBoxPara.Controls.Add(this.numberBoxIntCargo);
             this.groupBoxPara.Controls.Add(this.textBox_From);
             this.groupBoxPara.Controls.Add(this.textBox_FromX);
@@ -408,7 +396,6 @@
             this.numberBoxIntCargo.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.numberBoxIntCargo.BackErrorColor = System.Drawing.Color.Red;
             this.numberBoxIntCargo.BorderColor = System.Drawing.Color.Transparent;
-            this.numberBoxIntCargo.BorderColorScaling = 0.5F;
             this.numberBoxIntCargo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numberBoxIntCargo.ClearOnFirstChar = false;
             this.numberBoxIntCargo.ControlBackground = System.Drawing.SystemColors.Control;
@@ -444,11 +431,9 @@
             this.textBox_From.AutoCompleteTimeout = 200;
             this.textBox_From.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_From.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_From.BorderColorScaling = 0.5F;
             this.textBox_From.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_From.ClearOnFirstChar = false;
             this.textBox_From.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_From.DropDownBorderColor = System.Drawing.Color.Green;
             this.textBox_From.EndButtonEnable = false;
             this.textBox_From.EndButtonSize16ths = 10;
             this.textBox_From.EndButtonVisible = false;
@@ -476,7 +461,6 @@
             this.textBox_FromX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_FromX.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_FromX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromX.BorderColorScaling = 0.5F;
             this.textBox_FromX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_FromX.ClearOnFirstChar = false;
             this.textBox_FromX.ControlBackground = System.Drawing.SystemColors.Control;
@@ -533,7 +517,6 @@
             this.textBox_FromY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_FromY.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_FromY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromY.BorderColorScaling = 0.5F;
             this.textBox_FromY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_FromY.ClearOnFirstChar = false;
             this.textBox_FromY.ControlBackground = System.Drawing.SystemColors.Control;
@@ -570,7 +553,6 @@
             this.textBox_ToName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_ToName.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_ToName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToName.BorderColorScaling = 0.5F;
             this.textBox_ToName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_ToName.ClearOnFirstChar = false;
             this.textBox_ToName.ControlBackground = System.Drawing.SystemColors.Control;
@@ -599,7 +581,6 @@
             this.textBox_FromZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_FromZ.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_FromZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromZ.BorderColorScaling = 0.5F;
             this.textBox_FromZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_FromZ.ClearOnFirstChar = false;
             this.textBox_FromZ.ControlBackground = System.Drawing.SystemColors.Control;
@@ -636,7 +617,6 @@
             this.textBox_Range.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBox_Range.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_Range.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_Range.BorderColorScaling = 0.5F;
             this.textBox_Range.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_Range.ClearOnFirstChar = false;
             this.textBox_Range.ControlBackground = System.Drawing.SystemColors.Control;
@@ -674,7 +654,6 @@
             this.textBox_FromName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_FromName.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_FromName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_FromName.BorderColorScaling = 0.5F;
             this.textBox_FromName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_FromName.ClearOnFirstChar = false;
             this.textBox_FromName.ControlBackground = System.Drawing.SystemColors.Control;
@@ -712,7 +691,6 @@
             this.textBox_ToX.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_ToX.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_ToX.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToX.BorderColorScaling = 0.5F;
             this.textBox_ToX.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_ToX.ClearOnFirstChar = false;
             this.textBox_ToX.ControlBackground = System.Drawing.SystemColors.Control;
@@ -767,7 +745,6 @@
             this.textBox_ToY.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_ToY.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_ToY.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToY.BorderColorScaling = 0.5F;
             this.textBox_ToY.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_ToY.ClearOnFirstChar = false;
             this.textBox_ToY.ControlBackground = System.Drawing.SystemColors.Control;
@@ -804,7 +781,6 @@
             this.textBox_Distance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_Distance.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_Distance.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_Distance.BorderColorScaling = 0.5F;
             this.textBox_Distance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_Distance.ClearOnFirstChar = false;
             this.textBox_Distance.ControlBackground = System.Drawing.SystemColors.Control;
@@ -882,7 +858,6 @@
             this.textBox_ToZ.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBox_ToZ.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_ToZ.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_ToZ.BorderColorScaling = 0.5F;
             this.textBox_ToZ.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_ToZ.ClearOnFirstChar = false;
             this.textBox_ToZ.ControlBackground = System.Drawing.SystemColors.Control;
@@ -952,11 +927,9 @@
             this.textBox_To.AutoCompleteTimeout = 200;
             this.textBox_To.BackErrorColor = System.Drawing.Color.Red;
             this.textBox_To.BorderColor = System.Drawing.Color.Transparent;
-            this.textBox_To.BorderColorScaling = 0.5F;
             this.textBox_To.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBox_To.ClearOnFirstChar = false;
             this.textBox_To.ControlBackground = System.Drawing.SystemColors.Control;
-            this.textBox_To.DropDownBorderColor = System.Drawing.Color.Green;
             this.textBox_To.EndButtonEnable = false;
             this.textBox_To.EndButtonSize16ths = 10;
             this.textBox_To.EndButtonVisible = false;
@@ -1090,7 +1063,6 @@
             this.vScrollBarCustom1.AlwaysHideScrollBar = false;
             this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
@@ -1109,7 +1081,6 @@
             this.vScrollBarCustom1.TabIndex = 4;
             this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
             this.vScrollBarCustom1.Value = -1;
             this.vScrollBarCustom1.ValueLimited = -1;
@@ -1246,9 +1217,7 @@
             // groupBoxSpansh
             // 
             this.groupBoxSpansh.AutoSize = true;
-            this.groupBoxSpansh.BackColorScaling = 0.5F;
             this.groupBoxSpansh.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxSpansh.BorderColorScaling = 0.5F;
             this.groupBoxSpansh.Controls.Add(this.flowLayoutPanel1);
             this.groupBoxSpansh.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBoxSpansh.Location = new System.Drawing.Point(0, 189);

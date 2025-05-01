@@ -105,7 +105,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
@@ -124,7 +123,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.TabIndex = 7;
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
             this.vScrollBarCustom.Value = -1;
             this.vScrollBarCustom.ValueLimited = -1;
@@ -276,14 +274,12 @@ namespace EDDiscovery.UserControls
             // comboBoxSearches
             // 
             this.comboBoxSearches.BorderColor = System.Drawing.Color.White;
-            this.comboBoxSearches.ButtonColorScaling = 0.5F;
             this.comboBoxSearches.DataSource = null;
             this.comboBoxSearches.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxSearches.DisplayMember = "";
             this.comboBoxSearches.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxSearches.Location = new System.Drawing.Point(0, 1);
             this.comboBoxSearches.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.comboBoxSearches.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxSearches.Name = "comboBoxSearches";
             this.comboBoxSearches.SelectedIndex = -1;
             this.comboBoxSearches.SelectedItem = null;
@@ -394,7 +390,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
             this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
@@ -404,13 +399,11 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
-            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
             this.extCheckBoxWordWrap.Location = new System.Drawing.Point(427, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 41;
@@ -437,7 +430,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxDebug.BackColor = System.Drawing.Color.Transparent;
             this.extCheckBoxDebug.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.extCheckBoxDebug.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxDebug.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxDebug.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxDebug.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxDebug.Cursor = System.Windows.Forms.Cursors.Default;
@@ -447,13 +439,11 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxDebug.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxDebug.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extCheckBoxDebug.Image = global::EDDiscovery.Icons.Controls.ConfigureAddOnActions;
-            this.extCheckBoxDebug.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxDebug.ImageIndeterminate = null;
             this.extCheckBoxDebug.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxDebug.ImageUnchecked = global::EDDiscovery.Icons.Controls.SafeModeHelp;
             this.extCheckBoxDebug.Location = new System.Drawing.Point(499, 1);
             this.extCheckBoxDebug.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extCheckBoxDebug.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxDebug.Name = "extCheckBoxDebug";
             this.extCheckBoxDebug.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxDebug.TabIndex = 41;

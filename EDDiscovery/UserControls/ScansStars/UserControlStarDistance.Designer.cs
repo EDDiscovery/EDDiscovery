@@ -153,7 +153,6 @@ namespace EDDiscovery.UserControls
             this.textMaxRadius.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textMaxRadius.BackErrorColor = System.Drawing.Color.Red;
             this.textMaxRadius.BorderColor = System.Drawing.Color.Transparent;
-            this.textMaxRadius.BorderColorScaling = 0.5F;
             this.textMaxRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMaxRadius.ClearOnFirstChar = false;
             this.textMaxRadius.ControlBackground = System.Drawing.SystemColors.Control;
@@ -190,7 +189,6 @@ namespace EDDiscovery.UserControls
             this.textMinRadius.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textMinRadius.BackErrorColor = System.Drawing.Color.Red;
             this.textMinRadius.BorderColor = System.Drawing.Color.Transparent;
-            this.textMinRadius.BorderColorScaling = 0.5F;
             this.textMinRadius.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textMinRadius.ClearOnFirstChar = false;
             this.textMinRadius.ControlBackground = System.Drawing.SystemColors.Control;
@@ -225,16 +223,13 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxCube.AutoSize = true;
             this.checkBoxCube.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCube.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxCube.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCube.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCube.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCube.ImageIndeterminate = null;
             this.checkBoxCube.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCube.ImageUnchecked = null;
             this.checkBoxCube.Location = new System.Drawing.Point(175, 4);
             this.checkBoxCube.Margin = new System.Windows.Forms.Padding(4, 4, 0, 0);
-            this.checkBoxCube.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCube.Name = "checkBoxCube";
             this.checkBoxCube.Size = new System.Drawing.Size(51, 17);
             this.checkBoxCube.TabIndex = 4;
@@ -289,7 +284,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
@@ -309,7 +303,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.TabIndex = 24;
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
             this.vScrollBarCustom.Value = -1;
             this.vScrollBarCustom.ValueLimited = -1;

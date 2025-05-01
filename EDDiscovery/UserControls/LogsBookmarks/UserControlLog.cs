@@ -29,7 +29,7 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             DiscoveryForm.OnNewLogEntry += AppendText;
-            AppendText(DiscoveryForm.LogText, ExtendedControls.Theme.Current.TextBlockColor);
+            AppendText(DiscoveryForm.LogText, ExtendedControls.Theme.Current.TextBlockForeColor);
             richTextBox_History.ScrollToCaret();
 
             var enumlistcms = new Enum[] { EDTx.UserControlLog_toolStripMenuItemCopy, EDTx.UserControlLog_clearLogToolStripMenuItem };

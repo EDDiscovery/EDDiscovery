@@ -67,7 +67,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxStar.BackColor = System.Drawing.SystemColors.Control;
             this.extCheckBoxStar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxStar.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxStar.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxStar.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxStar.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxStar.Cursor = System.Windows.Forms.Cursors.Default;
@@ -77,13 +76,11 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxStar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxStar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.extCheckBoxStar.Image = global::EDDiscovery.Icons.Controls.Scan_Star;
-            this.extCheckBoxStar.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxStar.ImageIndeterminate = null;
             this.extCheckBoxStar.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxStar.ImageUnchecked = null;
             this.extCheckBoxStar.Location = new System.Drawing.Point(4, 1);
             this.extCheckBoxStar.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
-            this.extCheckBoxStar.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxStar.Name = "extCheckBoxStar";
             this.extCheckBoxStar.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxStar.TabIndex = 2;

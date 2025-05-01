@@ -62,7 +62,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxStar.BackColor = System.Drawing.SystemColors.Control;
             this.extCheckBoxStar.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxStar.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxStar.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxStar.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxStar.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxStar.Cursor = System.Windows.Forms.Cursors.Default;
@@ -72,13 +71,11 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxStar.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxStar.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.extCheckBoxStar.Image = global::EDDiscovery.Icons.Controls.Scan_Star;
-            this.extCheckBoxStar.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxStar.ImageIndeterminate = null;
             this.extCheckBoxStar.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxStar.ImageUnchecked = null;
             this.extCheckBoxStar.Location = new System.Drawing.Point(32, 1);
             this.extCheckBoxStar.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
-            this.extCheckBoxStar.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxStar.Name = "extCheckBoxStar";
             this.extCheckBoxStar.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxStar.TabIndex = 2;
@@ -100,7 +97,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxAutoTrack.BackColor = System.Drawing.SystemColors.Control;
             this.checkBoxAutoTrack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxAutoTrack.CheckBoxColor = System.Drawing.Color.White;
-            this.checkBoxAutoTrack.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxAutoTrack.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxAutoTrack.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxAutoTrack.Cursor = System.Windows.Forms.Cursors.Default;
@@ -110,13 +106,11 @@ namespace EDDiscovery.UserControls
             this.checkBoxAutoTrack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxAutoTrack.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxAutoTrack.Image = global::EDDiscovery.Icons.Controls.ImportSphere;
-            this.checkBoxAutoTrack.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxAutoTrack.ImageIndeterminate = null;
             this.checkBoxAutoTrack.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxAutoTrack.ImageUnchecked = null;
             this.checkBoxAutoTrack.Location = new System.Drawing.Point(72, 1);
             this.checkBoxAutoTrack.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.checkBoxAutoTrack.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxAutoTrack.Name = "checkBoxAutoTrack";
             this.checkBoxAutoTrack.Size = new System.Drawing.Size(28, 28);
             this.checkBoxAutoTrack.TabIndex = 4;
@@ -130,7 +124,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxBack.BackColor = System.Drawing.SystemColors.Control;
             this.extCheckBoxBack.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxBack.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxBack.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxBack.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxBack.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxBack.Cursor = System.Windows.Forms.Cursors.Default;
@@ -140,13 +133,11 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxBack.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxBack.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
             this.extCheckBoxBack.Image = global::EDDiscovery.Icons.Controls.backbutton;
-            this.extCheckBoxBack.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxBack.ImageIndeterminate = null;
             this.extCheckBoxBack.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxBack.ImageUnchecked = null;
             this.extCheckBoxBack.Location = new System.Drawing.Point(0, 1);
             this.extCheckBoxBack.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
-            this.extCheckBoxBack.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxBack.Name = "extCheckBoxBack";
             this.extCheckBoxBack.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxBack.TabIndex = 2;
@@ -161,7 +152,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxAllowedList.BackColor = System.Drawing.SystemColors.Control;
             this.extCheckBoxAllowedList.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxAllowedList.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxAllowedList.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxAllowedList.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxAllowedList.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxAllowedList.Cursor = System.Windows.Forms.Cursors.Default;
@@ -171,13 +161,11 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxAllowedList.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxAllowedList.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extCheckBoxAllowedList.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.extCheckBoxAllowedList.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxAllowedList.ImageIndeterminate = null;
             this.extCheckBoxAllowedList.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxAllowedList.ImageUnchecked = null;
             this.extCheckBoxAllowedList.Location = new System.Drawing.Point(112, 1);
             this.extCheckBoxAllowedList.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extCheckBoxAllowedList.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxAllowedList.Name = "extCheckBoxAllowedList";
             this.extCheckBoxAllowedList.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxAllowedList.TabIndex = 4;

@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlCompass));
-            this.labelTargetLat = new ExtendedControls.ExtLabel();
+            this.labelTargetLat = new ExtendedControls.ExtLabelBitmap();
             this.numberBoxTargetLatitude = new ExtendedControls.NumberBoxDouble();
             this.numberBoxTargetLongitude = new ExtendedControls.NumberBoxDouble();
             this.comboBoxBookmarks = new ExtendedControls.ExtComboBox();
@@ -76,7 +76,6 @@ namespace EDDiscovery.UserControls
             this.numberBoxTargetLatitude.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.numberBoxTargetLatitude.BackErrorColor = System.Drawing.Color.Red;
             this.numberBoxTargetLatitude.BorderColor = System.Drawing.Color.Transparent;
-            this.numberBoxTargetLatitude.BorderColorScaling = 0.5F;
             this.numberBoxTargetLatitude.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numberBoxTargetLatitude.ClearOnFirstChar = false;
             this.numberBoxTargetLatitude.ControlBackground = System.Drawing.SystemColors.Control;
@@ -109,7 +108,6 @@ namespace EDDiscovery.UserControls
             this.numberBoxTargetLongitude.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.numberBoxTargetLongitude.BackErrorColor = System.Drawing.Color.Red;
             this.numberBoxTargetLongitude.BorderColor = System.Drawing.Color.Transparent;
-            this.numberBoxTargetLongitude.BorderColorScaling = 0.5F;
             this.numberBoxTargetLongitude.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numberBoxTargetLongitude.ClearOnFirstChar = false;
             this.numberBoxTargetLongitude.ControlBackground = System.Drawing.SystemColors.Control;
@@ -139,14 +137,12 @@ namespace EDDiscovery.UserControls
             // comboBoxBookmarks
             // 
             this.comboBoxBookmarks.BorderColor = System.Drawing.Color.White;
-            this.comboBoxBookmarks.ButtonColorScaling = 0.5F;
             this.comboBoxBookmarks.DataSource = null;
             this.comboBoxBookmarks.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxBookmarks.DisplayMember = "";
             this.comboBoxBookmarks.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxBookmarks.Location = new System.Drawing.Point(167, 6);
             this.comboBoxBookmarks.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
-            this.comboBoxBookmarks.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxBookmarks.Name = "comboBoxBookmarks";
             this.comboBoxBookmarks.SelectedIndex = -1;
             this.comboBoxBookmarks.SelectedItem = null;
@@ -276,7 +272,7 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-        private ExtendedControls.ExtLabel labelTargetLat;
+        private ExtendedControls.ExtLabelBitmap labelTargetLat;
         private ExtendedControls.NumberBoxDouble numberBoxTargetLatitude;
         private ExtendedControls.NumberBoxDouble numberBoxTargetLongitude;
         private ExtendedControls.ExtComboBox comboBoxBookmarks;

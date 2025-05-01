@@ -74,7 +74,6 @@ namespace EDDiscovery.UserControls
             // rtbNodeInfo
             // 
             this.rtbNodeInfo.BorderColor = System.Drawing.Color.Transparent;
-            this.rtbNodeInfo.BorderColorScaling = 0.5F;
             this.rtbNodeInfo.DetectUrls = true;
             this.rtbNodeInfo.HideScrollBar = true;
             this.rtbNodeInfo.Location = new System.Drawing.Point(472, 6);
@@ -83,17 +82,6 @@ namespace EDDiscovery.UserControls
             this.rtbNodeInfo.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
     "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
-            this.rtbNodeInfo.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.rtbNodeInfo.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.rtbNodeInfo.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.rtbNodeInfo.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.rtbNodeInfo.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.rtbNodeInfo.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.rtbNodeInfo.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.rtbNodeInfo.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.rtbNodeInfo.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.rtbNodeInfo.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.rtbNodeInfo.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.rtbNodeInfo.ShowLineCount = false;
             this.rtbNodeInfo.Size = new System.Drawing.Size(200, 100);
             this.rtbNodeInfo.TabIndex = 3;
@@ -115,7 +103,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
@@ -134,7 +121,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.TabIndex = 2;
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
             this.vScrollBarCustom.Value = -109;
             this.vScrollBarCustom.ValueLimited = -109;

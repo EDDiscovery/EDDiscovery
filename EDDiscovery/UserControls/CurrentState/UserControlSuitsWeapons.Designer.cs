@@ -276,7 +276,6 @@ namespace EDDiscovery.UserControls
             // 
             this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBar1.ArrowColorScaling = 0.5F;
             this.extScrollBar1.ArrowDownDrawAngle = 270F;
             this.extScrollBar1.ArrowUpDrawAngle = 90F;
             this.extScrollBar1.BorderColor = System.Drawing.Color.White;
@@ -296,7 +295,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.Text = "extScrollBar1";
             this.extScrollBar1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBar1.ThumbColorScaling = 0.5F;
             this.extScrollBar1.ThumbDrawAngle = 0F;
             this.extScrollBar1.Value = -1;
             this.extScrollBar1.ValueLimited = -1;
@@ -428,7 +426,6 @@ namespace EDDiscovery.UserControls
             // 
             this.extScrollBar2.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBar2.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBar2.ArrowColorScaling = 0.5F;
             this.extScrollBar2.ArrowDownDrawAngle = 270F;
             this.extScrollBar2.ArrowUpDrawAngle = 90F;
             this.extScrollBar2.BorderColor = System.Drawing.Color.White;
@@ -448,7 +445,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBar2.Text = "extScrollBar2";
             this.extScrollBar2.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBar2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBar2.ThumbColorScaling = 0.5F;
             this.extScrollBar2.ThumbDrawAngle = 0F;
             this.extScrollBar2.Value = -1;
             this.extScrollBar2.ValueLimited = -1;

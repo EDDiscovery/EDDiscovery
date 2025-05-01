@@ -48,16 +48,16 @@ namespace EDDiscovery.UserControls
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
             this.panelStatus = new System.Windows.Forms.Panel();
-            this.labelCredits = new ExtendedControls.ExtLabel();
-            this.labelTotalKills = new ExtendedControls.ExtLabel();
-            this.labelFactionKills = new ExtendedControls.ExtLabel();
-            this.labelBalance = new ExtendedControls.ExtLabel();
-            this.labelDied = new ExtendedControls.ExtLabel();
-            this.labelTotalCrimes = new ExtendedControls.ExtLabel();
-            this.labelTarget = new ExtendedControls.ExtLabel();
-            this.labelFaction = new ExtendedControls.ExtLabel();
-            this.labelTotalReward = new ExtendedControls.ExtLabel();
-            this.labelFactionReward = new ExtendedControls.ExtLabel();
+            this.labelCredits = new ExtendedControls.ExtLabelBitmap();
+            this.labelTotalKills = new ExtendedControls.ExtLabelBitmap();
+            this.labelFactionKills = new ExtendedControls.ExtLabelBitmap();
+            this.labelBalance = new ExtendedControls.ExtLabelBitmap();
+            this.labelDied = new ExtendedControls.ExtLabelBitmap();
+            this.labelTotalCrimes = new ExtendedControls.ExtLabelBitmap();
+            this.labelTarget = new ExtendedControls.ExtLabelBitmap();
+            this.labelFaction = new ExtendedControls.ExtLabelBitmap();
+            this.labelTotalReward = new ExtendedControls.ExtLabelBitmap();
+            this.labelFactionReward = new ExtendedControls.ExtLabelBitmap();
             this.checkBoxCustomGridOn = new ExtendedControls.ExtCheckBox();
             this.comboBoxCustomCampaign = new ExtendedControls.ExtComboBox();
             this.buttonExtEditCampaign = new ExtendedControls.ExtButton();
@@ -198,16 +198,13 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxCustomGridOn.AutoSize = true;
             this.checkBoxCustomGridOn.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxCustomGridOn.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxCustomGridOn.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCustomGridOn.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCustomGridOn.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCustomGridOn.ImageIndeterminate = null;
             this.checkBoxCustomGridOn.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCustomGridOn.ImageUnchecked = null;
             this.checkBoxCustomGridOn.Location = new System.Drawing.Point(324, 6);
             this.checkBoxCustomGridOn.Margin = new System.Windows.Forms.Padding(0, 6, 8, 1);
-            this.checkBoxCustomGridOn.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCustomGridOn.Name = "checkBoxCustomGridOn";
             this.checkBoxCustomGridOn.Size = new System.Drawing.Size(45, 17);
             this.checkBoxCustomGridOn.TabIndex = 3;
@@ -219,14 +216,12 @@ namespace EDDiscovery.UserControls
             // comboBoxCustomCampaign
             // 
             this.comboBoxCustomCampaign.BorderColor = System.Drawing.Color.White;
-            this.comboBoxCustomCampaign.ButtonColorScaling = 0.5F;
             this.comboBoxCustomCampaign.DataSource = null;
             this.comboBoxCustomCampaign.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomCampaign.DisplayMember = "";
             this.comboBoxCustomCampaign.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomCampaign.Location = new System.Drawing.Point(0, 2);
             this.comboBoxCustomCampaign.Margin = new System.Windows.Forms.Padding(0, 2, 8, 1);
-            this.comboBoxCustomCampaign.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxCustomCampaign.Name = "comboBoxCustomCampaign";
             this.comboBoxCustomCampaign.SelectedIndex = -1;
             this.comboBoxCustomCampaign.SelectedItem = null;
@@ -270,7 +265,6 @@ namespace EDDiscovery.UserControls
             // 
             this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom1.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
@@ -289,7 +283,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.TabIndex = 1;
             this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom1.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
             this.vScrollBarCustom1.Value = -1;
             this.vScrollBarCustom1.ValueLimited = -1;
@@ -424,24 +417,24 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelDataGridViewScroll dataViewScrollerPanelCombat;
         private ExtendedControls.ExtScrollBar vScrollBarCustom1;
         private BaseUtils.DataGridViewColumnControl dataGridViewCombat;
-        private ExtendedControls.ExtLabel labelTotalKills;
-        private ExtendedControls.ExtLabel labelFactionKills;
-        private ExtendedControls.ExtLabel labelTotalCrimes;
-        private ExtendedControls.ExtLabel labelTotalReward;
+        private ExtendedControls.ExtLabelBitmap labelTotalKills;
+        private ExtendedControls.ExtLabelBitmap labelFactionKills;
+        private ExtendedControls.ExtLabelBitmap labelTotalCrimes;
+        private ExtendedControls.ExtLabelBitmap labelTotalReward;
         private System.Windows.Forms.DataGridViewTextBoxColumn Time;
         private System.Windows.Forms.DataGridViewTextBoxColumn Event;
         private System.Windows.Forms.DataGridViewTextBoxColumn Description;
         private System.Windows.Forms.DataGridViewTextBoxColumn Reward;
-        private ExtendedControls.ExtLabel labelFaction;
-        private ExtendedControls.ExtLabel labelFactionReward;
-        private ExtendedControls.ExtLabel labelBalance;
+        private ExtendedControls.ExtLabelBitmap labelFaction;
+        private ExtendedControls.ExtLabelBitmap labelFactionReward;
+        private ExtendedControls.ExtLabelBitmap labelBalance;
         private System.Windows.Forms.Panel panelStatus;
-        private ExtendedControls.ExtLabel labelCredits;
+        private ExtendedControls.ExtLabelBitmap labelCredits;
         private ExtendedControls.ExtCheckBox checkBoxCustomGridOn;
         private System.Windows.Forms.ToolTip toolTip;
-        private ExtendedControls.ExtLabel labelTarget;
+        private ExtendedControls.ExtLabelBitmap labelTarget;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
-        private ExtendedControls.ExtLabel labelDied;
+        private ExtendedControls.ExtLabelBitmap labelDied;
         private ExtendedControls.ExtButton buttonFilter;
         private System.Windows.Forms.ToolTip toolTip1;
     }

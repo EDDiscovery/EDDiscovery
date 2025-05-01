@@ -54,23 +54,11 @@ namespace EDDiscovery.UserControls
             // richTextBox_History
             // 
             this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
-            this.richTextBox_History.BorderColorScaling = 0.5F;
             this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox_History.HideScrollBar = true;
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
             this.richTextBox_History.Name = "richTextBox_History";
             this.richTextBox_History.ReadOnly = false;
-            this.richTextBox_History.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.richTextBox_History.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.richTextBox_History.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.richTextBox_History.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.richTextBox_History.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.richTextBox_History.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.richTextBox_History.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.richTextBox_History.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.richTextBox_History.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.richTextBox_History.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.richTextBox_History.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.richTextBox_History.ShowLineCount = false;
             this.richTextBox_History.Size = new System.Drawing.Size(496, 224);
             this.richTextBox_History.TabIndex = 1;

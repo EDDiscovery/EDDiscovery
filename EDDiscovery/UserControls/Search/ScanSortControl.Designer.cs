@@ -53,11 +53,9 @@ namespace EDDiscovery.UserControls.Search
             this.extTextBoxSortCondition.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxSortCondition.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxSortCondition.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxSortCondition.BorderColorScaling = 0.5F;
             this.extTextBoxSortCondition.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxSortCondition.ClearOnFirstChar = false;
             this.extTextBoxSortCondition.ControlBackground = System.Drawing.SystemColors.Control;
-            this.extTextBoxSortCondition.DropDownBorderColor = System.Drawing.Color.Green;
             this.extTextBoxSortCondition.EndButtonEnable = true;
             this.extTextBoxSortCondition.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("extTextBoxSortCondition.EndButtonImage")));
             this.extTextBoxSortCondition.EndButtonVisible = true;
@@ -83,7 +81,6 @@ namespace EDDiscovery.UserControls.Search
             this.extCheckBoxAscending.BackColor = System.Drawing.Color.Transparent;
             this.extCheckBoxAscending.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.extCheckBoxAscending.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxAscending.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxAscending.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxAscending.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxAscending.Cursor = System.Windows.Forms.Cursors.Default;
@@ -93,13 +90,11 @@ namespace EDDiscovery.UserControls.Search
             this.extCheckBoxAscending.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxAscending.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extCheckBoxAscending.Image = global::EDDiscovery.Icons.Controls.RoundUp;
-            this.extCheckBoxAscending.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxAscending.ImageIndeterminate = null;
             this.extCheckBoxAscending.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxAscending.ImageUnchecked = global::EDDiscovery.Icons.Controls.RoundDown;
             this.extCheckBoxAscending.Location = new System.Drawing.Point(863, 0);
             this.extCheckBoxAscending.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extCheckBoxAscending.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxAscending.Name = "extCheckBoxAscending";
             this.extCheckBoxAscending.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxAscending.TabIndex = 31;

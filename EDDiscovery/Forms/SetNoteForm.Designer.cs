@@ -142,7 +142,6 @@
             // textBoxNote
             // 
             this.textBoxNote.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxNote.BorderColorScaling = 0.5F;
             this.textBoxNote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxNote.HideScrollBar = true;
             this.textBoxNote.Location = new System.Drawing.Point(0, 232);
@@ -151,17 +150,6 @@
             this.textBoxNote.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
     "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
-            this.textBoxNote.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.textBoxNote.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.textBoxNote.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.textBoxNote.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.textBoxNote.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.textBoxNote.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.textBoxNote.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.textBoxNote.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.textBoxNote.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.textBoxNote.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.textBoxNote.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.textBoxNote.ShowLineCount = false;
             this.textBoxNote.Size = new System.Drawing.Size(676, 218);
             this.textBoxNote.TabIndex = 1;
@@ -210,7 +198,6 @@
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(653, 0);
-            this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
@@ -231,7 +218,6 @@
             this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(623, 0);
-            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";

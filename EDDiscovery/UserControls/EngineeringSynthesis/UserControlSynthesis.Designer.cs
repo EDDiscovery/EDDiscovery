@@ -189,7 +189,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.AlwaysHideScrollBar = false;
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
             this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
@@ -208,7 +207,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.TabIndex = 0;
             this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustomMC.ThumbColorScaling = 0.5F;
             this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
             this.vScrollBarCustomMC.Value = -1;
             this.vScrollBarCustomMC.ValueLimited = -1;
@@ -274,17 +272,14 @@ namespace EDDiscovery.UserControls
             // 
             this.chkNotHistoric.Appearance = System.Windows.Forms.Appearance.Button;
             this.chkNotHistoric.CheckBoxColor = System.Drawing.Color.Gray;
-            this.chkNotHistoric.CheckBoxDisabledScaling = 0.5F;
             this.chkNotHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
             this.chkNotHistoric.CheckColor = System.Drawing.Color.DarkBlue;
             this.chkNotHistoric.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
-            this.chkNotHistoric.ImageButtonDisabledScaling = 0.5F;
             this.chkNotHistoric.ImageIndeterminate = null;
             this.chkNotHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.chkNotHistoric.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
             this.chkNotHistoric.Location = new System.Drawing.Point(204, 1);
             this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
-            this.chkNotHistoric.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.chkNotHistoric.Name = "chkNotHistoric";
             this.chkNotHistoric.Size = new System.Drawing.Size(28, 28);
             this.chkNotHistoric.TabIndex = 7;
@@ -299,7 +294,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
             this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
@@ -309,13 +303,11 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
-            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
             this.extCheckBoxWordWrap.Location = new System.Drawing.Point(244, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
-            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 32;

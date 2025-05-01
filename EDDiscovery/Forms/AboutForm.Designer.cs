@@ -116,7 +116,6 @@ namespace EDDiscovery.Forms
             // textBoxLicense
             // 
             this.textBoxLicense.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxLicense.BorderColorScaling = 0.5F;
             this.textBoxLicense.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxLicense.DetectUrls = true;
             this.textBoxLicense.Dock = System.Windows.Forms.DockStyle.Top;
@@ -127,17 +126,6 @@ namespace EDDiscovery.Forms
             this.textBoxLicense.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
     "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
-            this.textBoxLicense.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.textBoxLicense.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.textBoxLicense.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.textBoxLicense.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.textBoxLicense.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.textBoxLicense.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.textBoxLicense.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.textBoxLicense.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.textBoxLicense.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.textBoxLicense.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.textBoxLicense.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.textBoxLicense.ShowLineCount = false;
             this.textBoxLicense.Size = new System.Drawing.Size(682, 189);
             this.textBoxLicense.TabIndex = 1;
@@ -306,7 +294,6 @@ namespace EDDiscovery.Forms
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(955, 3);
-            this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
@@ -467,7 +454,6 @@ namespace EDDiscovery.Forms
             this.extTextBoxDevs.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxDevs.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxDevs.BorderColor = System.Drawing.Color.Transparent;
-            this.extTextBoxDevs.BorderColorScaling = 0.5F;
             this.extTextBoxDevs.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.extTextBoxDevs.ClearOnFirstChar = false;
             this.extTextBoxDevs.ControlBackground = System.Drawing.SystemColors.Control;

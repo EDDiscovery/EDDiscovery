@@ -66,7 +66,6 @@ namespace EDDiscovery.UserControls
             // extRichTextBoxErrorLog
             // 
             this.extRichTextBoxErrorLog.BorderColor = System.Drawing.Color.Transparent;
-            this.extRichTextBoxErrorLog.BorderColorScaling = 0.5F;
             this.extRichTextBoxErrorLog.DetectUrls = true;
             this.extRichTextBoxErrorLog.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extRichTextBoxErrorLog.HideScrollBar = true;
@@ -76,17 +75,6 @@ namespace EDDiscovery.UserControls
             this.extRichTextBoxErrorLog.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
     "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
-            this.extRichTextBoxErrorLog.ScrollBarArrowBorderColor = System.Drawing.Color.LightBlue;
-            this.extRichTextBoxErrorLog.ScrollBarArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extRichTextBoxErrorLog.ScrollBarBackColor = System.Drawing.SystemColors.Control;
-            this.extRichTextBoxErrorLog.ScrollBarBorderColor = System.Drawing.Color.White;
-            this.extRichTextBoxErrorLog.ScrollBarFlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.extRichTextBoxErrorLog.ScrollBarForeColor = System.Drawing.SystemColors.ControlText;
-            this.extRichTextBoxErrorLog.ScrollBarMouseOverButtonColor = System.Drawing.Color.Green;
-            this.extRichTextBoxErrorLog.ScrollBarMousePressedButtonColor = System.Drawing.Color.Red;
-            this.extRichTextBoxErrorLog.ScrollBarSliderColor = System.Drawing.Color.DarkGray;
-            this.extRichTextBoxErrorLog.ScrollBarThumbBorderColor = System.Drawing.Color.Yellow;
-            this.extRichTextBoxErrorLog.ScrollBarThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extRichTextBoxErrorLog.ShowLineCount = false;
             this.extRichTextBoxErrorLog.Size = new System.Drawing.Size(349, 188);
             this.extRichTextBoxErrorLog.TabIndex = 1;

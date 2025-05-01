@@ -199,7 +199,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.AlwaysHideScrollBar = false;
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustomMC.ArrowColorScaling = 0.5F;
             this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
@@ -218,7 +217,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.TabIndex = 0;
             this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustomMC.ThumbColorScaling = 0.5F;
             this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
             this.vScrollBarCustomMC.Value = -1;
             this.vScrollBarCustomMC.ValueLimited = -1;
@@ -227,16 +225,13 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxAutoSwap.AutoSize = true;
             this.checkBoxAutoSwap.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxAutoSwap.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxAutoSwap.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxAutoSwap.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxAutoSwap.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxAutoSwap.ImageIndeterminate = null;
             this.checkBoxAutoSwap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxAutoSwap.ImageUnchecked = null;
             this.checkBoxAutoSwap.Location = new System.Drawing.Point(369, 8);
             this.checkBoxAutoSwap.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
-            this.checkBoxAutoSwap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxAutoSwap.Name = "checkBoxAutoSwap";
             this.checkBoxAutoSwap.Size = new System.Drawing.Size(75, 17);
             this.checkBoxAutoSwap.TabIndex = 29;
@@ -248,16 +243,13 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxBuyOnly.AutoSize = true;
             this.checkBoxBuyOnly.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxBuyOnly.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxBuyOnly.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxBuyOnly.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxBuyOnly.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxBuyOnly.ImageIndeterminate = null;
             this.checkBoxBuyOnly.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxBuyOnly.ImageUnchecked = null;
             this.checkBoxBuyOnly.Location = new System.Drawing.Point(197, 8);
             this.checkBoxBuyOnly.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
-            this.checkBoxBuyOnly.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxBuyOnly.Name = "checkBoxBuyOnly";
             this.checkBoxBuyOnly.Size = new System.Drawing.Size(68, 17);
             this.checkBoxBuyOnly.TabIndex = 29;
@@ -294,16 +286,13 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxHasDemand.AutoSize = true;
             this.checkBoxHasDemand.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxHasDemand.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxHasDemand.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxHasDemand.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxHasDemand.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxHasDemand.ImageIndeterminate = null;
             this.checkBoxHasDemand.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxHasDemand.ImageUnchecked = null;
             this.checkBoxHasDemand.Location = new System.Drawing.Point(273, 8);
             this.checkBoxHasDemand.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
-            this.checkBoxHasDemand.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxHasDemand.Name = "checkBoxHasDemand";
             this.checkBoxHasDemand.Size = new System.Drawing.Size(88, 17);
             this.checkBoxHasDemand.TabIndex = 29;

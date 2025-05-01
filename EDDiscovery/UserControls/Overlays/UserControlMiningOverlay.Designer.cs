@@ -91,16 +91,13 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxChartBase.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxChartBase.BackColor = System.Drawing.SystemColors.Control;
             this.extCheckBoxChartBase.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxChartBase.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxChartBase.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxChartBase.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxChartBase.Image = global::EDDiscovery.Icons.Controls.AsteroidTotal;
-            this.extCheckBoxChartBase.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxChartBase.ImageIndeterminate = null;
             this.extCheckBoxChartBase.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxChartBase.ImageUnchecked = null;
             this.extCheckBoxChartBase.Location = new System.Drawing.Point(268, 3);
-            this.extCheckBoxChartBase.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxChartBase.Name = "extCheckBoxChartBase";
             this.extCheckBoxChartBase.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxChartBase.TabIndex = 62;
@@ -113,15 +110,12 @@ namespace EDDiscovery.UserControls
             // 
             this.extCheckBoxZeroRefined.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxZeroRefined.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxZeroRefined.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxZeroRefined.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxZeroRefined.CheckColor = System.Drawing.Color.DarkBlue;
-            this.extCheckBoxZeroRefined.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxZeroRefined.ImageIndeterminate = null;
             this.extCheckBoxZeroRefined.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxZeroRefined.ImageUnchecked = null;
             this.extCheckBoxZeroRefined.Location = new System.Drawing.Point(235, 3);
-            this.extCheckBoxZeroRefined.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxZeroRefined.Name = "extCheckBoxZeroRefined";
             this.extCheckBoxZeroRefined.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxZeroRefined.TabIndex = 61;
@@ -146,13 +140,11 @@ namespace EDDiscovery.UserControls
             // extComboBoxChartOptions
             // 
             this.extComboBoxChartOptions.BorderColor = System.Drawing.Color.White;
-            this.extComboBoxChartOptions.ButtonColorScaling = 0.5F;
             this.extComboBoxChartOptions.DataSource = null;
             this.extComboBoxChartOptions.DisableBackgroundDisabledShadingGradient = false;
             this.extComboBoxChartOptions.DisplayMember = "";
             this.extComboBoxChartOptions.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extComboBoxChartOptions.Location = new System.Drawing.Point(4, 4);
-            this.extComboBoxChartOptions.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.extComboBoxChartOptions.Name = "extComboBoxChartOptions";
             this.extComboBoxChartOptions.SelectedIndex = -1;
             this.extComboBoxChartOptions.SelectedItem = null;

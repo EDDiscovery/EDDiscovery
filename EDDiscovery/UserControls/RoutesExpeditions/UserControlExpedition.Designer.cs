@@ -141,7 +141,6 @@ namespace EDDiscovery.UserControls
             this.txtP2PDIstance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.txtP2PDIstance.BackErrorColor = System.Drawing.Color.Red;
             this.txtP2PDIstance.BorderColor = System.Drawing.Color.Transparent;
-            this.txtP2PDIstance.BorderColorScaling = 0.5F;
             this.txtP2PDIstance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtP2PDIstance.ClearOnFirstChar = false;
             this.txtP2PDIstance.ControlBackground = System.Drawing.SystemColors.Control;
@@ -170,7 +169,6 @@ namespace EDDiscovery.UserControls
             this.txtCmlDistance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.txtCmlDistance.BackErrorColor = System.Drawing.Color.Red;
             this.txtCmlDistance.BorderColor = System.Drawing.Color.Transparent;
-            this.txtCmlDistance.BorderColorScaling = 0.5F;
             this.txtCmlDistance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.txtCmlDistance.ClearOnFirstChar = false;
             this.txtCmlDistance.ControlBackground = System.Drawing.SystemColors.Control;
@@ -208,7 +206,6 @@ namespace EDDiscovery.UserControls
             // dateTimePickerEndTime
             // 
             this.dateTimePickerEndTime.BorderColor = System.Drawing.Color.Transparent;
-            this.dateTimePickerEndTime.BorderColorScaling = 0.5F;
             this.dateTimePickerEndTime.Checked = false;
             this.dateTimePickerEndTime.CustomFormat = "HH:mm:ss";
             this.dateTimePickerEndTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
@@ -226,7 +223,6 @@ namespace EDDiscovery.UserControls
             // dateTimePickerEndDate
             // 
             this.dateTimePickerEndDate.BorderColor = System.Drawing.Color.Transparent;
-            this.dateTimePickerEndDate.BorderColorScaling = 0.5F;
             this.dateTimePickerEndDate.Checked = false;
             this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
             this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
@@ -253,7 +249,6 @@ namespace EDDiscovery.UserControls
             // dateTimePickerStartTime
             // 
             this.dateTimePickerStartTime.BorderColor = System.Drawing.Color.Transparent;
-            this.dateTimePickerStartTime.BorderColorScaling = 0.5F;
             this.dateTimePickerStartTime.Checked = false;
             this.dateTimePickerStartTime.CustomFormat = "HH:mm:ss";
             this.dateTimePickerStartTime.Format = System.Windows.Forms.DateTimePickerFormat.Time;
@@ -271,7 +266,6 @@ namespace EDDiscovery.UserControls
             // dateTimePickerStartDate
             // 
             this.dateTimePickerStartDate.BorderColor = System.Drawing.Color.Transparent;
-            this.dateTimePickerStartDate.BorderColorScaling = 0.5F;
             this.dateTimePickerStartDate.Checked = false;
             this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
             this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
@@ -301,7 +295,6 @@ namespace EDDiscovery.UserControls
             this.textBoxRouteName.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxRouteName.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxRouteName.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxRouteName.BorderColorScaling = 0.5F;
             this.textBoxRouteName.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxRouteName.ClearOnFirstChar = false;
             this.textBoxRouteName.ControlBackground = System.Drawing.SystemColors.Control;
@@ -633,7 +626,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarDGV.AlwaysHideScrollBar = false;
             this.extScrollBarDGV.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarDGV.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.extScrollBarDGV.ArrowColorScaling = 0.5F;
             this.extScrollBarDGV.ArrowDownDrawAngle = 270F;
             this.extScrollBarDGV.ArrowUpDrawAngle = 90F;
             this.extScrollBarDGV.BorderColor = System.Drawing.Color.White;
@@ -652,7 +644,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarDGV.TabIndex = 14;
             this.extScrollBarDGV.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarDGV.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.extScrollBarDGV.ThumbColorScaling = 0.5F;
             this.extScrollBarDGV.ThumbDrawAngle = 0F;
             this.extScrollBarDGV.Value = 0;
             this.extScrollBarDGV.ValueLimited = 0;
@@ -887,7 +878,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
             this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
-            this.extCheckBoxWordWrap.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
@@ -897,13 +887,11 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.extCheckBoxWordWrap.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extCheckBoxWordWrap.Image = global::EDDiscovery.Icons.Controls.WordWrapOn;
-            this.extCheckBoxWordWrap.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
             this.extCheckBoxWordWrap.Location = new System.Drawing.Point(568, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
-            this.extCheckBoxWordWrap.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 42;

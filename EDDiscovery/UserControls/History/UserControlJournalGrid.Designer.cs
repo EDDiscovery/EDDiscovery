@@ -181,14 +181,12 @@ namespace EDDiscovery.UserControls
             // comboBoxTime
             // 
             this.comboBoxTime.BorderColor = System.Drawing.Color.Red;
-            this.comboBoxTime.ButtonColorScaling = 0.5F;
             this.comboBoxTime.DataSource = null;
             this.comboBoxTime.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxTime.DisplayMember = "";
             this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTime.Location = new System.Drawing.Point(38, 3);
             this.comboBoxTime.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
-            this.comboBoxTime.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.comboBoxTime.Name = "comboBoxTime";
             this.comboBoxTime.SelectedIndex = -1;
             this.comboBoxTime.SelectedItem = null;
@@ -218,7 +216,6 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxSearch.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxSearch.BorderColor = System.Drawing.Color.Transparent;
-            this.textBoxSearch.BorderColorScaling = 0.5F;
             this.textBoxSearch.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSearch.ClearOnFirstChar = false;
             this.textBoxSearch.ControlBackground = System.Drawing.SystemColors.Control;
@@ -246,14 +243,12 @@ namespace EDDiscovery.UserControls
             // extComboBoxQuickMarks
             // 
             this.extComboBoxQuickMarks.BorderColor = System.Drawing.Color.Red;
-            this.extComboBoxQuickMarks.ButtonColorScaling = 0.5F;
             this.extComboBoxQuickMarks.DataSource = null;
             this.extComboBoxQuickMarks.DisableBackgroundDisabledShadingGradient = false;
             this.extComboBoxQuickMarks.DisplayMember = "";
             this.extComboBoxQuickMarks.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extComboBoxQuickMarks.Location = new System.Drawing.Point(387, 3);
             this.extComboBoxQuickMarks.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
-            this.extComboBoxQuickMarks.MouseOverBackgroundColor = System.Drawing.Color.Silver;
             this.extComboBoxQuickMarks.Name = "extComboBoxQuickMarks";
             this.extComboBoxQuickMarks.SelectedIndex = -1;
             this.extComboBoxQuickMarks.SelectedItem = null;
@@ -308,7 +303,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxCursorToTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.checkBoxCursorToTop.CheckBoxColor = System.Drawing.Color.White;
-            this.checkBoxCursorToTop.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxCursorToTop.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCursorToTop.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxCursorToTop.Cursor = System.Windows.Forms.Cursors.Default;
@@ -318,13 +312,11 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
             this.checkBoxCursorToTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
-            this.checkBoxCursorToTop.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxCursorToTop.ImageIndeterminate = null;
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
             this.checkBoxCursorToTop.Location = new System.Drawing.Point(642, 1);
             this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.checkBoxCursorToTop.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxCursorToTop.Name = "checkBoxCursorToTop";
             this.checkBoxCursorToTop.Size = new System.Drawing.Size(28, 28);
             this.checkBoxCursorToTop.TabIndex = 30;
@@ -349,7 +341,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustom.ArrowColorScaling = 0.5F;
             this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
@@ -368,7 +359,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.TabIndex = 7;
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustom.ThumbColorScaling = 0.5F;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
             this.vScrollBarCustom.Value = -1;
             this.vScrollBarCustom.ValueLimited = -1;

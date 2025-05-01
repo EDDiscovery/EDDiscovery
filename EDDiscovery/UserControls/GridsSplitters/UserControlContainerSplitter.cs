@@ -261,6 +261,7 @@ namespace EDDiscovery.UserControls
                 tabstrip.Dock = DockStyle.Fill;
                 tabstrip.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
                 tabstrip.DropDownFitImagesToItemHeight = true;
+                tabstrip.ThemeColorSet = 0;     // use theme from tab strip
 
                 tabstrip.Tag = tagid;                         // Tag stores the ID index of this view
                 tabstrip.Name = Name + "." + tagid.ToStringInvariant();
@@ -566,7 +567,7 @@ namespace EDDiscovery.UserControls
             (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly..
             {
                 ExtendedControls.TabStrip ts = c as ExtendedControls.TabStrip;
-                ts.StripBackColor = curcol;     // make sure the strip gets the correct colour..
+                ts.PaintTransparentColor = on ? curcol : Color.Transparent;     // enable/disable transparency for tab strip top border
 
                 UserControlCommonBase uccb = (ts != null ? (ts.CurrentControl) : c) as UserControlCommonBase;
                 if (uccb != null)     // tab strip may not have a control set..

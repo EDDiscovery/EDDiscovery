@@ -91,7 +91,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomDGV.AlwaysHideScrollBar = false;
             this.vScrollBarCustomDGV.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustomDGV.ArrowButtonColor = System.Drawing.Color.LightGray;
-            this.vScrollBarCustomDGV.ArrowColorScaling = 0.5F;
             this.vScrollBarCustomDGV.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustomDGV.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustomDGV.BorderColor = System.Drawing.Color.White;
@@ -111,7 +110,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomDGV.TabIndex = 24;
             this.vScrollBarCustomDGV.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustomDGV.ThumbButtonColor = System.Drawing.Color.DarkBlue;
-            this.vScrollBarCustomDGV.ThumbColorScaling = 0.5F;
             this.vScrollBarCustomDGV.ThumbDrawAngle = 0F;
             this.vScrollBarCustomDGV.Value = -1;
             this.vScrollBarCustomDGV.ValueLimited = -1;
@@ -178,17 +176,14 @@ namespace EDDiscovery.UserControls
             // 
             this.checkBoxShowZeros.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxShowZeros.CheckBoxColor = System.Drawing.Color.Gray;
-            this.checkBoxShowZeros.CheckBoxDisabledScaling = 0.5F;
             this.checkBoxShowZeros.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxShowZeros.CheckColor = System.Drawing.Color.DarkBlue;
             this.checkBoxShowZeros.Image = global::EDDiscovery.Icons.Controls.greenzero;
-            this.checkBoxShowZeros.ImageButtonDisabledScaling = 0.5F;
             this.checkBoxShowZeros.ImageIndeterminate = null;
             this.checkBoxShowZeros.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxShowZeros.ImageUnchecked = global::EDDiscovery.Icons.Controls.redzero;
             this.checkBoxShowZeros.Location = new System.Drawing.Point(40, 1);
             this.checkBoxShowZeros.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.checkBoxShowZeros.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.checkBoxShowZeros.Name = "checkBoxShowZeros";
             this.checkBoxShowZeros.Size = new System.Drawing.Size(28, 28);
             this.checkBoxShowZeros.TabIndex = 5;
@@ -201,17 +196,14 @@ namespace EDDiscovery.UserControls
             // 
             this.extCheckBoxShowImpossible.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxShowImpossible.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxShowImpossible.CheckBoxDisabledScaling = 0.5F;
             this.extCheckBoxShowImpossible.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxShowImpossible.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxShowImpossible.Image = global::EDDiscovery.Icons.Controls.HighValueTick;
-            this.extCheckBoxShowImpossible.ImageButtonDisabledScaling = 0.5F;
             this.extCheckBoxShowImpossible.ImageIndeterminate = null;
             this.extCheckBoxShowImpossible.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowImpossible.ImageUnchecked = null;
             this.extCheckBoxShowImpossible.Location = new System.Drawing.Point(76, 1);
             this.extCheckBoxShowImpossible.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
-            this.extCheckBoxShowImpossible.MouseOverColor = System.Drawing.Color.CornflowerBlue;
             this.extCheckBoxShowImpossible.Name = "extCheckBoxShowImpossible";
             this.extCheckBoxShowImpossible.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxShowImpossible.TabIndex = 5;
