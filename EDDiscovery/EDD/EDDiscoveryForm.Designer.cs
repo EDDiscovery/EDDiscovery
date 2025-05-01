@@ -67,9 +67,9 @@ namespace EDDiscovery
             this.popOutPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelToolBar = new ExtendedControls.ExtPanelRollUp();
-            this.extButtonDrawnHelp = new ExtendedControls.ExtButtonDrawn();
-            this.extButtonCAPI = new ExtendedControls.ExtButton();
             this.buttonReloadActions = new ExtendedControls.ExtButton();
+            this.extButtonCAPI = new ExtendedControls.ExtButton();
+            this.extButtonDrawnHelp = new ExtendedControls.ExtButtonDrawn();
             this.extButtonNewFeature = new ExtendedControls.ExtButton();
             this.statusStripEDD = new ExtendedControls.ExtStatusStrip();
             this.toolStripProgressBarEDD = new System.Windows.Forms.ToolStripProgressBar();
@@ -451,30 +451,25 @@ namespace EDDiscovery
             this.panelToolBar.ThemeColorSet = 1;
             this.panelToolBar.UnrollHoverDelay = 1000;
             // 
-            // extButtonDrawnHelp
+            // buttonReloadActions
             // 
-            this.extButtonDrawnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.extButtonDrawnHelp.AutoEllipsis = false;
-            this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.extButtonDrawnHelp.BorderColor = System.Drawing.Color.Orange;
-            this.extButtonDrawnHelp.BorderWidth = 1;
-            this.extButtonDrawnHelp.ButtonDisabledScaling = 0.25F;
-            this.extButtonDrawnHelp.Image = null;
-            this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
-            this.extButtonDrawnHelp.Location = new System.Drawing.Point(524, 2);
-            this.extButtonDrawnHelp.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
-            this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
-            this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
-            this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
-            this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";
-            this.extButtonDrawnHelp.Padding = new System.Windows.Forms.Padding(0);
-            this.extButtonDrawnHelp.Selectable = true;
-            this.extButtonDrawnHelp.Size = new System.Drawing.Size(28, 28);
-            this.extButtonDrawnHelp.TabIndex = 25;
-            this.extButtonDrawnHelp.Text = "?";
-            this.extButtonDrawnHelp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.extButtonDrawnHelp.UseMnemonic = true;
-            this.extButtonDrawnHelp.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
+            this.buttonReloadActions.BackColor2 = System.Drawing.Color.Red;
+            this.buttonReloadActions.ButtonDisabledScaling = 0.5F;
+            this.buttonReloadActions.GradientDirection = 90F;
+            this.buttonReloadActions.Image = global::EDDiscovery.Icons.Controls.Refresh;
+            this.buttonReloadActions.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.buttonReloadActions.Location = new System.Drawing.Point(386, 2);
+            this.buttonReloadActions.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
+            this.buttonReloadActions.MouseOverScaling = 1.3F;
+            this.buttonReloadActions.MouseSelectedScaling = 1.3F;
+            this.buttonReloadActions.Name = "buttonReloadActions";
+            this.buttonReloadActions.Size = new System.Drawing.Size(65, 28);
+            this.buttonReloadActions.TabIndex = 1;
+            this.buttonReloadActions.Text = "Actions";
+            this.buttonReloadActions.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.buttonReloadActions.UseVisualStyleBackColor = true;
+            this.buttonReloadActions.Visible = false;
+            this.buttonReloadActions.Click += new System.EventHandler(this.buttonReloadActions_Click);
             // 
             // extButtonCAPI
             // 
@@ -496,25 +491,30 @@ namespace EDDiscovery
             this.extButtonCAPI.Visible = false;
             this.extButtonCAPI.Click += new System.EventHandler(this.extButtonCAPI_Click);
             // 
-            // buttonReloadActions
+            // extButtonDrawnHelp
             // 
-            this.buttonReloadActions.BackColor2 = System.Drawing.Color.Red;
-            this.buttonReloadActions.ButtonDisabledScaling = 0.5F;
-            this.buttonReloadActions.GradientDirection = 90F;
-            this.buttonReloadActions.Image = global::EDDiscovery.Icons.Controls.Refresh;
-            this.buttonReloadActions.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.buttonReloadActions.Location = new System.Drawing.Point(386, 2);
-            this.buttonReloadActions.Margin = new System.Windows.Forms.Padding(1, 1, 3, 1);
-            this.buttonReloadActions.MouseOverScaling = 1.3F;
-            this.buttonReloadActions.MouseSelectedScaling = 1.3F;
-            this.buttonReloadActions.Name = "buttonReloadActions";
-            this.buttonReloadActions.Size = new System.Drawing.Size(65, 28);
-            this.buttonReloadActions.TabIndex = 1;
-            this.buttonReloadActions.Text = "Actions";
-            this.buttonReloadActions.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            this.buttonReloadActions.UseVisualStyleBackColor = true;
-            this.buttonReloadActions.Visible = false;
-            this.buttonReloadActions.Click += new System.EventHandler(this.buttonReloadActions_Click);
+            this.extButtonDrawnHelp.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelp.AutoEllipsis = false;
+            this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelp.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelp.BorderWidth = 1;
+            this.extButtonDrawnHelp.ButtonDisabledScaling = 0.25F;
+            this.extButtonDrawnHelp.Image = null;
+            this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelp.Location = new System.Drawing.Point(923, 2);
+            this.extButtonDrawnHelp.Margin = new System.Windows.Forms.Padding(1, 1, 32, 1);
+            this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";
+            this.extButtonDrawnHelp.Padding = new System.Windows.Forms.Padding(0);
+            this.extButtonDrawnHelp.Selectable = true;
+            this.extButtonDrawnHelp.Size = new System.Drawing.Size(28, 28);
+            this.extButtonDrawnHelp.TabIndex = 25;
+            this.extButtonDrawnHelp.Text = "?";
+            this.extButtonDrawnHelp.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelp.UseMnemonic = true;
+            this.extButtonDrawnHelp.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
             // extButtonNewFeature
             // 
@@ -523,7 +523,7 @@ namespace EDDiscovery
             this.extButtonNewFeature.ButtonDisabledScaling = 0.5F;
             this.extButtonNewFeature.GradientDirection = 90F;
             this.extButtonNewFeature.Image = global::EDDiscovery.Icons.Controls.NewFeature;
-            this.extButtonNewFeature.Location = new System.Drawing.Point(558, 2);
+            this.extButtonNewFeature.Location = new System.Drawing.Point(871, 2);
             this.extButtonNewFeature.MouseOverScaling = 1.3F;
             this.extButtonNewFeature.MouseSelectedScaling = 1.3F;
             this.extButtonNewFeature.Name = "extButtonNewFeature";
@@ -1067,6 +1067,7 @@ namespace EDDiscovery
             this.extPanelTopResizer.ChildrenThemed = true;
             this.extPanelTopResizer.Cursor = System.Windows.Forms.Cursors.SizeNS;
             this.extPanelTopResizer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.extPanelTopResizer.FlowDirection = null;
             this.extPanelTopResizer.GradientDirection = 0F;
             this.extPanelTopResizer.Location = new System.Drawing.Point(0, 0);
             this.extPanelTopResizer.Movement = System.Windows.Forms.DockStyle.Top;
