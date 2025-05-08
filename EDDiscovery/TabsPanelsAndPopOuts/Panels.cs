@@ -89,6 +89,7 @@ namespace EDDiscovery
             Resources=59,
             SpanshStations=60,
             TestOverlay = 61,
+            Colonisation = 62,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -118,6 +119,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", "Statistics Information") },
             { new PanelInfo( PanelIDs.SuitsWeapons, typeof(UserControlSuitsWeapons), "Suits & Weapons", "SuitsWeapons", "Suits, Loadouts, Weapons") },
             { new PanelInfo( PanelIDs.Carrier, typeof(UserControlCarrier), "Carrier", "Carrier", "Data about your fleet carrier") },
+            { new PanelInfo( PanelIDs.Colonisation, typeof(UserControlColonisation), "Colonisation", "Colonisation", "Colonisation statistics") },
 
             { new PanelInfo( "Station Data") },
             { new PanelInfo( PanelIDs.MarketData, typeof(UserControlMarketData), "Market Data", "MarketData", "Market data, giving commodity price information where available" ) },

@@ -251,6 +251,18 @@
     <Compile Include="UserControls\3DMap\UserControlLocal3DMap.Designer.cs">
       <DependentUpon>UserControlLocal3DMap.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Colonisation\ColonisationStation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Colonisation\ColonisationStation.Designer.cs">
+      <DependentUpon>ColonisationStation.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Colonisation\UserControlColonisation.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Colonisation\UserControlColonisation.Designer.cs">
+      <DependentUpon>UserControlColonisation.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CurrentState\UserControlCarrier.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -854,6 +866,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\3DMap\UserControlLocal3DMap.resx">
       <DependentUpon>UserControlLocal3DMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Colonisation\UserControlColonisation.resx">
+      <DependentUpon>UserControlColonisation.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\CurrentState\UserControlCarrier.resx">
       <DependentUpon>UserControlCarrier.cs</DependentUpon>

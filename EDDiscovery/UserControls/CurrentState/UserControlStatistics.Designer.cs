@@ -101,7 +101,7 @@ namespace EDDiscovery.UserControls
             this.extChartCombat = new ExtendedControls.ExtSafeChart();
             this.statsTimeUserControlCombat = new EDDiscovery.UserControls.StatsTimeUserControl();
             this.tabPageGameStats = new System.Windows.Forms.TabPage();
-            this.treeViewStats = new ExtendedControls.Controls.ExtTreeView();
+            this.treeViewStats = new ExtendedControls.ExtTreeView();
             this.tabPageByShip = new System.Windows.Forms.TabPage();
             this.splitContainerShips = new System.Windows.Forms.SplitContainer();
             this.extPanelDataGridViewScrollByShip = new ExtendedControls.ExtPanelDataGridViewScroll();
@@ -1272,7 +1272,7 @@ namespace EDDiscovery.UserControls
         private StatsTimeUserControl userControlStatsTimeScan;
         private BaseUtils.DataGridViewColumnControl dataGridViewScan;
         private System.Windows.Forms.TabPage tabPageGameStats;
-        private ExtendedControls.Controls.ExtTreeView treeViewStats;
+        private ExtendedControls.ExtTreeView treeViewStats;
         private System.Windows.Forms.TabPage tabPageByShip;
         private BaseUtils.DataGridViewColumnControl dataGridViewByShip;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollTravel;

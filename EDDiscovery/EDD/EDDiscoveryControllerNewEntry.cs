@@ -99,8 +99,11 @@ namespace EDDiscovery
                 HistoryEntry historyentry = History.MakeHistoryEntry(current);
                 OnNewHistoryEntryUnfiltered?.Invoke(historyentry);     // this is our raw unfiltered history entry
 
-                if (JournalEventsManagement.DiscardDynamicJournalRecordsFromHistory(current))   // we may want to discard this dynamic record
+                if (JournalEventsManagement.DiscardDynamicJournalRecordsFromHistory(current) ||     // we may want to discard this dynamic record
+                    JournalEventsManagement.DiscardJournalRecordDueToRepeat(current, History.EntryOrder()))     // or due to repeat from one below
+                {
                     continue;
+                }
 
                 while (journalqueue.Count > 0)                      // go thru the list and find merge candidates
                 {
