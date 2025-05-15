@@ -251,11 +251,18 @@
     <Compile Include="UserControls\3DMap\UserControlLocal3DMap.Designer.cs">
       <DependentUpon>UserControlLocal3DMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Colonisation\ColonisationStation.cs">
+    <Compile Include="UserControls\Colonisation\ColonisationData.cs" />
+    <Compile Include="UserControls\Colonisation\ColonisationPort.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Colonisation\ColonisationStation.Designer.cs">
-      <DependentUpon>ColonisationStation.cs</DependentUpon>
+    <Compile Include="UserControls\Colonisation\ColonisationPort.Designer.cs">
+      <DependentUpon>ColonisationPort.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Colonisation\ColonisationSystem.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Colonisation\ColonisationSystem.Designer.cs">
+      <DependentUpon>ColonisationSystem.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Colonisation\UserControlColonisation.cs">
       <SubType>UserControl</SubType>
@@ -866,6 +873,12 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\3DMap\UserControlLocal3DMap.resx">
       <DependentUpon>UserControlLocal3DMap.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Colonisation\ColonisationPort.resx">
+      <DependentUpon>ColonisationPort.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Colonisation\ColonisationSystem.resx">
+      <DependentUpon>ColonisationSystem.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Colonisation\UserControlColonisation.resx">
       <DependentUpon>UserControlColonisation.cs</DependentUpon>

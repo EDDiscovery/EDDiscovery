@@ -93,9 +93,9 @@ namespace EDDiscovery.UserControls
                     configbut.ApplyDisplayFilters(sd);
                     sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
                 };
+                configbut.ApplyDisplayFilters(sd);
 
                 sd.BackColor = ExtendedControls.Theme.Current.Form;
-                configbut.ApplyDisplayFilters(sd);
                 sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
 
                 asm = AutoScaleMode.None;   // because we are using a picture box, it does not autoscale, so we can't use that logic on it.

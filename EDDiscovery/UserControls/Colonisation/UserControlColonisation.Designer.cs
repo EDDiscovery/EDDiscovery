@@ -45,17 +45,12 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
             this.extTabControl = new ExtendedControls.ExtTabControl();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.tabPage2 = new System.Windows.Forms.TabPage();
-            this.extTabControl.SuspendLayout();
             this.SuspendLayout();
             // 
             // extTabControl
             // 
             this.extTabControl.AllowDragReorder = false;
             this.extTabControl.AutoForceUpdate = true;
-            this.extTabControl.Controls.Add(this.tabPage1);
-            this.extTabControl.Controls.Add(this.tabPage2);
             this.extTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extTabControl.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extTabControl.Location = new System.Drawing.Point(0, 0);
@@ -86,26 +81,6 @@ namespace EDDiscovery.UserControls
         System.Drawing.SystemColors.Control};
             this.extTabControl.ThemeColorSet = 1;
             // 
-            // tabPage1
-            // 
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(488, 357);
-            this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // tabPage2
-            // 
-            this.tabPage2.Location = new System.Drawing.Point(4, 22);
-            this.tabPage2.Name = "tabPage2";
-            this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(488, 357);
-            this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
-            this.tabPage2.UseVisualStyleBackColor = true;
-            // 
             // UserControlColonisation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -113,14 +88,11 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.extTabControl);
             this.Name = "UserControlColonisation";
             this.Size = new System.Drawing.Size(496, 383);
-            this.extTabControl.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
         private ExtendedControls.ExtTabControl extTabControl;
-        private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.TabPage tabPage2;
     }
 }
