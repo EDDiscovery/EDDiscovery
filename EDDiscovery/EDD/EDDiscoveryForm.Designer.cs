@@ -45,8 +45,6 @@ namespace EDDiscovery
         {
             this.components = new System.ComponentModel.Container();
             ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
-            ExtendedControls.DropDownTheme dropDownTheme1 = new ExtendedControls.DropDownTheme();
-            ExtendedControls.DropDownTheme dropDownTheme2 = new ExtendedControls.DropDownTheme();
             this.notifyIconEDD = new System.Windows.Forms.NotifyIcon(this.components);
             this.notifyIconContextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.notifyIconMenu_Open = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,6 +67,8 @@ namespace EDDiscovery
             this.panelToolBar = new ExtendedControls.ExtPanelRollUp();
             this.buttonReloadActions = new ExtendedControls.ExtButton();
             this.extButtonCAPI = new ExtendedControls.ExtButton();
+            this.extButtonSingleStep = new ExtendedControls.ExtButton();
+            this.extButtonStop = new ExtendedControls.ExtButton();
             this.extButtonDrawnHelp = new ExtendedControls.ExtButtonDrawn();
             this.extButtonNewFeature = new ExtendedControls.ExtButton();
             this.statusStripEDD = new ExtendedControls.ExtStatusStrip();
@@ -125,6 +125,17 @@ namespace EDDiscovery
             this.panel_minimize = new ExtendedControls.ExtButtonDrawn();
             this.panel_eddiscovery = new System.Windows.Forms.Panel();
             this.extPanelTopResizer = new ExtendedControls.ExtPanelResizer();
+            this.contextMenuStripDebugger = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.debuggerSingleJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debuggerStep10ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debuggerStep20ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debuggerNextFSDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debuggerNextDockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nextUndockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nextSupercruiseEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nextSupercruiseExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debuggerNextScanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.debuggerShutdownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconContextMenuStrip.SuspendLayout();
             this.contextMenuStripTabs.SuspendLayout();
             this.panelToolBar.SuspendLayout();
@@ -133,6 +144,7 @@ namespace EDDiscovery
             this.menuFlowPanel.SuspendLayout();
             this.mainMenu.SuspendLayout();
             this.closeminimizeFlowPanel.SuspendLayout();
+            this.contextMenuStripDebugger.SuspendLayout();
             this.SuspendLayout();
             // 
             // notifyIconEDD
@@ -218,24 +230,6 @@ namespace EDDiscovery
             this.comboBoxCommander.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCommander.DisabledScaling = 0.5F;
             this.comboBoxCommander.DisplayMember = "";
-            dropDownTheme1.ListBoxGradientDirection = 0F;
-            dropDownTheme1.ListBoxSelectionBackgroundColor = System.Drawing.Color.Gray;
-            dropDownTheme1.ListBoxSelectionBackgroundColor2 = System.Drawing.Color.Gray;
-            dropDownTheme1.ListBoxSelectionColor = System.Drawing.Color.Green;
-            dropDownTheme1.MouseOverSliderButtonColor = System.Drawing.Color.Red;
-            dropDownTheme1.MouseOverSliderButtonColor2 = System.Drawing.Color.Red;
-            dropDownTheme1.PressedSliderButtonColor = System.Drawing.Color.DarkCyan;
-            dropDownTheme1.PressedSliderButtonColor2 = System.Drawing.Color.DarkCyan;
-            dropDownTheme1.SliderArrowBackColor = System.Drawing.Color.Cyan;
-            dropDownTheme1.SliderArrowBackColor2 = System.Drawing.Color.Cyan;
-            dropDownTheme1.SliderButtonArrowColor = System.Drawing.Color.White;
-            dropDownTheme1.SliderButtonBackColor = System.Drawing.Color.Blue;
-            dropDownTheme1.SliderButtonBackColor2 = System.Drawing.Color.Blue;
-            dropDownTheme1.SliderButtonGradientDirection = 90F;
-            dropDownTheme1.SliderColor = System.Drawing.Color.Green;
-            dropDownTheme1.SliderColor2 = System.Drawing.Color.Green;
-            dropDownTheme1.SliderGradientDirection = 90F;
-            this.comboBoxCommander.DropDownTheme = dropDownTheme1;
             this.comboBoxCommander.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCommander.GradientDirection = 90F;
             this.comboBoxCommander.Location = new System.Drawing.Point(1, 6);
@@ -262,24 +256,6 @@ namespace EDDiscovery
             this.comboBoxCustomProfiles.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomProfiles.DisabledScaling = 0.5F;
             this.comboBoxCustomProfiles.DisplayMember = "";
-            dropDownTheme2.ListBoxGradientDirection = 0F;
-            dropDownTheme2.ListBoxSelectionBackgroundColor = System.Drawing.Color.Gray;
-            dropDownTheme2.ListBoxSelectionBackgroundColor2 = System.Drawing.Color.Gray;
-            dropDownTheme2.ListBoxSelectionColor = System.Drawing.Color.Green;
-            dropDownTheme2.MouseOverSliderButtonColor = System.Drawing.Color.Red;
-            dropDownTheme2.MouseOverSliderButtonColor2 = System.Drawing.Color.Red;
-            dropDownTheme2.PressedSliderButtonColor = System.Drawing.Color.DarkCyan;
-            dropDownTheme2.PressedSliderButtonColor2 = System.Drawing.Color.DarkCyan;
-            dropDownTheme2.SliderArrowBackColor = System.Drawing.Color.Cyan;
-            dropDownTheme2.SliderArrowBackColor2 = System.Drawing.Color.Cyan;
-            dropDownTheme2.SliderButtonArrowColor = System.Drawing.Color.White;
-            dropDownTheme2.SliderButtonBackColor = System.Drawing.Color.Blue;
-            dropDownTheme2.SliderButtonBackColor2 = System.Drawing.Color.Blue;
-            dropDownTheme2.SliderButtonGradientDirection = 90F;
-            dropDownTheme2.SliderColor = System.Drawing.Color.Green;
-            dropDownTheme2.SliderColor2 = System.Drawing.Color.Green;
-            dropDownTheme2.SliderGradientDirection = 90F;
-            this.comboBoxCustomProfiles.DropDownTheme = dropDownTheme2;
             this.comboBoxCustomProfiles.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomProfiles.GradientDirection = 90F;
             this.comboBoxCustomProfiles.Location = new System.Drawing.Point(282, 6);
@@ -425,6 +401,8 @@ namespace EDDiscovery
             this.panelToolBar.Controls.Add(this.comboBoxCustomProfiles);
             this.panelToolBar.Controls.Add(this.buttonReloadActions);
             this.panelToolBar.Controls.Add(this.extButtonCAPI);
+            this.panelToolBar.Controls.Add(this.extButtonSingleStep);
+            this.panelToolBar.Controls.Add(this.extButtonStop);
             this.panelToolBar.Controls.Add(this.extButtonDrawnHelp);
             this.panelToolBar.Controls.Add(this.extButtonNewFeature);
             this.panelToolBar.Dock = System.Windows.Forms.DockStyle.Top;
@@ -490,6 +468,37 @@ namespace EDDiscovery
             this.extButtonCAPI.UseVisualStyleBackColor = true;
             this.extButtonCAPI.Visible = false;
             this.extButtonCAPI.Click += new System.EventHandler(this.extButtonCAPI_Click);
+            // 
+            // extButtonSingleStep
+            // 
+            this.extButtonSingleStep.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonSingleStep.ButtonDisabledScaling = 0.5F;
+            this.extButtonSingleStep.GradientDirection = 90F;
+            this.extButtonSingleStep.Image = global::EDDiscovery.Icons.Controls.Play;
+            this.extButtonSingleStep.Location = new System.Drawing.Point(526, 2);
+            this.extButtonSingleStep.MouseOverScaling = 1.3F;
+            this.extButtonSingleStep.MouseSelectedScaling = 1.3F;
+            this.extButtonSingleStep.Name = "extButtonSingleStep";
+            this.extButtonSingleStep.Size = new System.Drawing.Size(28, 28);
+            this.extButtonSingleStep.TabIndex = 26;
+            this.extButtonSingleStep.UseVisualStyleBackColor = true;
+            this.extButtonSingleStep.MouseDown += new System.Windows.Forms.MouseEventHandler(this.extButtonSingleStep_MouseDown);
+            // 
+            // extButtonStop
+            // 
+            this.extButtonStop.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonStop.ButtonDisabledScaling = 0.5F;
+            this.extButtonStop.GradientDirection = 90F;
+            this.extButtonStop.Image = global::EDDiscovery.Icons.Controls.Stop;
+            this.extButtonStop.Location = new System.Drawing.Point(560, 2);
+            this.extButtonStop.MouseOverScaling = 1.3F;
+            this.extButtonStop.MouseSelectedScaling = 1.3F;
+            this.extButtonStop.Name = "extButtonStop";
+            this.extButtonStop.Size = new System.Drawing.Size(28, 28);
+            this.extButtonStop.TabIndex = 26;
+            this.extButtonStop.UseVisualStyleBackColor = true;
+            this.extButtonStop.Click += new System.EventHandler(this.extButtonStop_Click);
+            this.extButtonStop.MouseDown += new System.Windows.Forms.MouseEventHandler(this.extButtonSingleStep_MouseDown);
             // 
             // extButtonDrawnHelp
             // 
@@ -1082,6 +1091,92 @@ namespace EDDiscovery
         System.Drawing.SystemColors.Control};
             this.extPanelTopResizer.ThemeColorSet = -1;
             // 
+            // contextMenuStripDebugger
+            // 
+            this.contextMenuStripDebugger.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.debuggerSingleJournalEntryToolStripMenuItem,
+            this.debuggerStep10ToolStripMenuItem,
+            this.debuggerStep20ToolStripMenuItem,
+            this.debuggerNextFSDToolStripMenuItem,
+            this.debuggerNextDockToolStripMenuItem,
+            this.nextUndockToolStripMenuItem,
+            this.nextSupercruiseEntryToolStripMenuItem,
+            this.nextSupercruiseExitToolStripMenuItem,
+            this.debuggerNextScanToolStripMenuItem,
+            this.debuggerShutdownToolStripMenuItem});
+            this.contextMenuStripDebugger.Name = "contextMenuStripDebugger";
+            this.contextMenuStripDebugger.Size = new System.Drawing.Size(191, 224);
+            // 
+            // debuggerSingleJournalEntryToolStripMenuItem
+            // 
+            this.debuggerSingleJournalEntryToolStripMenuItem.Name = "debuggerSingleJournalEntryToolStripMenuItem";
+            this.debuggerSingleJournalEntryToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debuggerSingleJournalEntryToolStripMenuItem.Text = "Single Journal Entry";
+            this.debuggerSingleJournalEntryToolStripMenuItem.Click += new System.EventHandler(this.debuggerSingleJournalEntryToolStripMenuItem_Click);
+            // 
+            // debuggerStep10ToolStripMenuItem
+            // 
+            this.debuggerStep10ToolStripMenuItem.Name = "debuggerStep10ToolStripMenuItem";
+            this.debuggerStep10ToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debuggerStep10ToolStripMenuItem.Text = "Step 10";
+            this.debuggerStep10ToolStripMenuItem.Click += new System.EventHandler(this.debuggerStep10ToolStripMenuItem_Click);
+            // 
+            // debuggerStep20ToolStripMenuItem
+            // 
+            this.debuggerStep20ToolStripMenuItem.Name = "debuggerStep20ToolStripMenuItem";
+            this.debuggerStep20ToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debuggerStep20ToolStripMenuItem.Text = "Step 20";
+            this.debuggerStep20ToolStripMenuItem.Click += new System.EventHandler(this.debuggerStep20ToolStripMenuItem_Click);
+            // 
+            // debuggerNextFSDToolStripMenuItem
+            // 
+            this.debuggerNextFSDToolStripMenuItem.Name = "debuggerNextFSDToolStripMenuItem";
+            this.debuggerNextFSDToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debuggerNextFSDToolStripMenuItem.Text = "Next FSDJump";
+            this.debuggerNextFSDToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
+            // 
+            // debuggerNextDockToolStripMenuItem
+            // 
+            this.debuggerNextDockToolStripMenuItem.Name = "debuggerNextDockToolStripMenuItem";
+            this.debuggerNextDockToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debuggerNextDockToolStripMenuItem.Text = "Next Docked";
+            this.debuggerNextDockToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
+            // 
+            // nextUndockToolStripMenuItem
+            // 
+            this.nextUndockToolStripMenuItem.Name = "nextUndockToolStripMenuItem";
+            this.nextUndockToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.nextUndockToolStripMenuItem.Text = "Next Undocked";
+            this.nextUndockToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
+            // 
+            // nextSupercruiseEntryToolStripMenuItem
+            // 
+            this.nextSupercruiseEntryToolStripMenuItem.Name = "nextSupercruiseEntryToolStripMenuItem";
+            this.nextSupercruiseEntryToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.nextSupercruiseEntryToolStripMenuItem.Text = "Next SupercruiseEntry";
+            this.nextSupercruiseEntryToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
+            // 
+            // nextSupercruiseExitToolStripMenuItem
+            // 
+            this.nextSupercruiseExitToolStripMenuItem.Name = "nextSupercruiseExitToolStripMenuItem";
+            this.nextSupercruiseExitToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.nextSupercruiseExitToolStripMenuItem.Text = "Next SupercruiseExit";
+            this.nextSupercruiseExitToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
+            // 
+            // debuggerNextScanToolStripMenuItem
+            // 
+            this.debuggerNextScanToolStripMenuItem.Name = "debuggerNextScanToolStripMenuItem";
+            this.debuggerNextScanToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debuggerNextScanToolStripMenuItem.Text = "Next Scan";
+            this.debuggerNextScanToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
+            // 
+            // debuggerShutdownToolStripMenuItem
+            // 
+            this.debuggerShutdownToolStripMenuItem.Name = "debuggerShutdownToolStripMenuItem";
+            this.debuggerShutdownToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debuggerShutdownToolStripMenuItem.Text = "Next Shutdown";
+            this.debuggerShutdownToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1114,6 +1209,7 @@ namespace EDDiscovery
             this.mainMenu.ResumeLayout(false);
             this.mainMenu.PerformLayout();
             this.closeminimizeFlowPanel.ResumeLayout(false);
+            this.contextMenuStripDebugger.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1198,5 +1294,18 @@ namespace EDDiscovery
         private ExtendedControls.ExtButton extButtonCAPI;
         private ExtendedControls.ExtButton extButtonNewFeature;
         private System.Windows.Forms.ToolStripMenuItem fetchStarDataAgainToolStripMenuItem;
+        private ExtendedControls.ExtButton extButtonSingleStep;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripDebugger;
+        private System.Windows.Forms.ToolStripMenuItem debuggerStep10ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debuggerSingleJournalEntryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debuggerStep20ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debuggerNextFSDToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debuggerNextDockToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debuggerNextScanToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem debuggerShutdownToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nextUndockToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nextSupercruiseEntryToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nextSupercruiseExitToolStripMenuItem;
+        private ExtendedControls.ExtButton extButtonStop;
     }
 }

@@ -578,6 +578,11 @@ namespace EDDiscovery
                 extButtonCAPI.Visible = true;
             }
 
+            if ( EDDOptions.Instance.MaxJournalDateUTC != null)
+            {
+                extButtonSingleStep.Visible = true;
+            }
+
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
 
@@ -1354,9 +1359,8 @@ namespace EDDiscovery
                 Show();
         }
 
+        #endregion
 
-
-#endregion
     }
 }
 

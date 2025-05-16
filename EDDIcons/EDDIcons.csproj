@@ -1130,6 +1130,7 @@
     <EmbeddedResource Include="Controls\Bar3.png" />
     <EmbeddedResource Include="Controls\BarNone.png" />
     <EmbeddedResource Include="Controls\Folder.png" />
+    <EmbeddedResource Include="Controls\Play.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

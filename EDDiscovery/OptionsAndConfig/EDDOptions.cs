@@ -88,11 +88,11 @@ namespace EDDiscovery
         public string OutputEventHelp { get; private set; }
         public string DefaultJournalFolder { get; private set; }        // default is null, use computed value
         public string DefaultJournalMatchFilename { get; private set; } = "Journal*.log";      
-        public DateTime MinJournalDateUTC { get; private set; }        // default is MinDate
         public bool EnableTGRightDebugClicks { get; private set; }
         public bool AutoLoadNextCommander { get; private set; }
-        public int HistoryLoadDayLimit { get; private set; }    // default zero not set
-            
+        public int HistoryLoadDayLimit { get; private set; }    // default zero not set. Overrides the FullHistoryLoadDayLimit in EDDConfig
+        public DateTime MinJournalDateUTC { get; private set; }    // default is MinDate, UTC, set by -minjournaldateutc, used by scanner to set a min date limit
+        public DateTime? MaxJournalDateUTC { get; private set; }  // if set by -readto, UTC, read only up to this date from DB.  DB may contain further entries
         public bool DeleteSystemDB { get; private set; }        
         public bool DeleteUserDB { get; private set; }
         public bool DeleteUserJournals { get; private set; }
@@ -152,7 +152,6 @@ namespace EDDiscovery
         #endregion
 
         #region Implementation
-
         private EDDOptions()
         {
             Init();
@@ -480,6 +479,11 @@ namespace EDDiscovery
                 }
                 else
                     HistoryLoadDayLimit = s.InvariantParseInt(0);
+            }
+            else if (optname == "-readto")
+            {
+                string s = toeol ? ca.Rest() : ca.NextEmpty();
+                MaxJournalDateUTC = s.ParseDateTime(ObjectExtensionsDates.MaxValueUTC(), System.Globalization.CultureInfo.CurrentCulture);
             }
             else if (optname.StartsWith("-"))
             {

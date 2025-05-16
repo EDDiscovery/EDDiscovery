@@ -163,5 +163,46 @@ namespace EDDiscovery
             if (he != null && he.Status.IsDocked)
                 Controller.DoCAPI(he.WhereAmI, he.System.Name, History.Shipyards.AllowCobraMkIV);
         }
+
+        private void extButtonSingleStep_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (e.Button == MouseButtons.Left)
+            {
+                Controller.RunDebugger(1);
+            }
+            else if (e.Button == MouseButtons.Right)
+            {
+                contextMenuStripDebugger.Show(extButtonSingleStep.PointToScreen(new Point(extButtonSingleStep.Width, 0)));
+            }
+
+        }
+
+        private void debuggerSingleJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Controller.RunDebugger(0);
+
+        }
+        private void debuggerStep10ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Controller.RunDebugger(10);
+        }
+        private void debuggerStep20ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Controller.RunDebugger(20);
+        }
+
+        private void debuggerNextToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem c = sender as ToolStripMenuItem;
+            if ( Enum.TryParse<JournalTypeEnum>(c.Text.Substring(5), out JournalTypeEnum eventtype))
+            {
+                Controller.RunDebugger(20000, new JournalTypeEnum[] { eventtype, JournalTypeEnum.Shutdown });
+            }
+        }
+
+        private void extButtonStop_Click(object sender, EventArgs e)
+        {
+            Controller.DebuggerStop();
+        }
     }
 }

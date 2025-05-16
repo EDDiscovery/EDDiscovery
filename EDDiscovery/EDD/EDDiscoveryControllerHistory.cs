@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2023 EDDiscovery development team
+ * Copyright 2015 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -234,7 +234,7 @@ namespace EDDiscovery
                                                     args.CurrentCommander, cmdr.Name,
                                                     EDDOptions.Instance.HistoryLoadDayLimit > 0 ? EDDOptions.Instance.HistoryLoadDayLimit : EDDConfig.Instance.FullHistoryLoadDayLimit,
                                                     essentialitemslist,
-                                                    null
+                                                    EDDOptions.Instance.MaxJournalDateUTC
                                                     );
 
                     // now, if its a fresh one, we may have created a new linked commander. If that ends up being the current commander, we have not fully loaded properly
@@ -300,7 +300,8 @@ namespace EDDiscovery
 
                 System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Start monitor");
 
-                journalmonitor.StartMonitor(true);
+                if ( EDDOptions.Instance.MaxJournalDateUTC == null)     // we start monitoring only if we are not single stepping
+                    journalmonitor.StartMonitor(true);
 
                 System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Refresh Complete Invoke");
 
@@ -359,6 +360,55 @@ namespace EDDiscovery
         {
             StatusLineUpdate?.Invoke(EDDiscoveryForm.StatusLineUpdateType.CAPIJournal, -1, message);      // can be invoked in thread
         }
+
+        #region Debugger runner
+
+        EDJournalUIScanner.SingleStepper stepper = null;
+        bool stepperstop = false;
+
+        // step: >=1 N history entry, 0 = one journal entry
+        public void RunDebugger(int historycount, JournalTypeEnum[] stopdueto = null)
+        {
+            var entrylast = History.GetLast;
+
+            if (stepper == null && entrylast != null)
+                stepper = new EDJournalUIScanner.SingleStepper(entrylast.journalEntry);
+
+            if (stepper != null)
+            {
+                stepperstop = false;
+
+                while (true)
+                {
+                    if (journalmonitor.SingleStep(stepper) == false)        // no more, stop
+                        break;
+
+                    if (historycount == 0)                                  // single journal entry, stop
+                        break;
+
+                    if (stepperstop == true)
+                        break;
+
+                    System.Windows.Forms.Application.DoEvents();            // we need the do invokes to work to let the history get updated..
+
+                    if (History.GetLast != entrylast)       // if new history entry
+                    {
+                        if (stopdueto != null && Array.IndexOf(stopdueto, History.GetLast.EntryType) >= 0 )
+                            break;
+
+                        if (--historycount == 0)            // if gone zero, stop
+                            break;
+                    }
+                }
+            }
+        }
+
+        public void DebuggerStop()
+        {
+            stepperstop = true;
+        }
+
+        #endregion
 
     }
 }
