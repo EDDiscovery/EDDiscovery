@@ -478,7 +478,7 @@ namespace EDDiscovery.UserControls
                 colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss:fff");
                 colTime += Environment.NewLine + $"{he.Status.TravelState} @ {he.System.Name}:{he.System.SystemAddress}\r\n"
                                + $"b{he.Status.BodyName},{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}\r\n"
-                               + $"s{he.Status.StationName},{he.Status.StationType}\r\n"
+                               + $"s{he.Status.StationName_Localised},{he.Status.StationType}\r\n"
                                + $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}/ml{he.MissionList}\r\n"
                                + $"b{he.journalEntry.IsBeta}/h{ he.journalEntry.IsHorizons}/o{ he.journalEntry.IsOdyssey}\r\n"
                                + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship} mp {he.Status.IsInMultiPlayer}\r\n"
@@ -516,7 +516,7 @@ namespace EDDiscovery.UserControls
                 if (!matched && search.Terms[2] != null)       // body
                     matched = he.Status.BodyName?.WildCardMatch(search.Terms[2],true) ?? false;
                 if (!matched && search.Terms[3] != null)       // station
-                    matched = he.Status.StationName?.WildCardMatch(search.Terms[3], true) ?? false;
+                    matched = he.Status.StationName_Localised?.WildCardMatch(search.Terms[3], true) ?? false;
                 if (!matched && search.Terms[4] != null)       // stationfaction
                     matched = he.Status.StationFaction?.WildCardMatch(search.Terms[4], true) ?? false;
 

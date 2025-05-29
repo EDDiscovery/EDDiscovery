@@ -376,7 +376,7 @@ namespace EDDiscovery.UserControls
                 if (!matched && search.Terms[2] != null)       // body
                     matched = he.Status.BodyName?.WildCardMatch(search.Terms[2], true) ?? false;
                 if (!matched && search.Terms[3] != null)       // station
-                    matched = he.Status.StationName?.WildCardMatch(search.Terms[3], true) ?? false;
+                    matched = he.Status.StationName_Localised?.WildCardMatch(search.Terms[3], true) ?? false;
                 if (!matched && search.Terms[4] != null)       // stationfaction
                     matched = he.Status.StationFaction?.WildCardMatch(search.Terms[4], true) ?? false;
 

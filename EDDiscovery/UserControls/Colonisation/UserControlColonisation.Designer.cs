@@ -43,56 +43,89 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            ExtendedControls.TabStyleSquare tabStyleSquare1 = new ExtendedControls.TabStyleSquare();
-            this.extTabControl = new ExtendedControls.ExtTabControl();
+            this.extPanelGradientFillToolbar = new ExtendedControls.ExtPanelGradientFill();
+            this.extComboBoxSystemSel = new ExtendedControls.ExtComboBox();
+            this.extPanelGradientFillUCCP = new ExtendedControls.ExtPanelGradientFill();
+            this.extPanelGradientFillToolbar.SuspendLayout();
             this.SuspendLayout();
             // 
-            // extTabControl
+            // extPanelGradientFillToolbar
             // 
-            this.extTabControl.AllowDragReorder = false;
-            this.extTabControl.AutoForceUpdate = true;
-            this.extTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.extTabControl.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.extTabControl.Location = new System.Drawing.Point(0, 0);
-            this.extTabControl.Name = "extTabControl";
-            this.extTabControl.PaintTransparentColor = System.Drawing.Color.Transparent;
-            this.extTabControl.SelectedIndex = 0;
-            this.extTabControl.Size = new System.Drawing.Size(496, 383);
-            this.extTabControl.TabBackgroundGradientDirection = 0F;
-            this.extTabControl.TabControlBorderColor = System.Drawing.Color.DarkGray;
-            this.extTabControl.TabControlBorderColor2 = System.Drawing.Color.DarkGray;
-            this.extTabControl.TabDisabledScaling = 0.5F;
-            this.extTabControl.TabGradientDirection = 90F;
-            this.extTabControl.TabIndex = 2;
-            this.extTabControl.TabMouseOverColor = System.Drawing.Color.White;
-            this.extTabControl.TabMouseOverColor2 = System.Drawing.Color.White;
-            this.extTabControl.TabNotSelectedBorderColor = System.Drawing.Color.Gray;
-            this.extTabControl.TabNotSelectedColor = System.Drawing.Color.Gray;
-            this.extTabControl.TabNotSelectedColor2 = System.Drawing.Color.Gray;
-            this.extTabControl.TabSelectedColor = System.Drawing.Color.LightGray;
-            this.extTabControl.TabSelectedColor2 = System.Drawing.Color.Gray;
-            this.extTabControl.TabStyle = tabStyleSquare1;
-            this.extTabControl.TextNotSelectedColor = System.Drawing.SystemColors.ControlText;
-            this.extTabControl.TextSelectedColor = System.Drawing.SystemColors.ControlText;
-            this.extTabControl.ThemeColors = new System.Drawing.Color[] {
+            this.extPanelGradientFillToolbar.ChildrenThemed = true;
+            this.extPanelGradientFillToolbar.Controls.Add(this.extComboBoxSystemSel);
+            this.extPanelGradientFillToolbar.Dock = System.Windows.Forms.DockStyle.Top;
+            this.extPanelGradientFillToolbar.FlowDirection = null;
+            this.extPanelGradientFillToolbar.GradientDirection = 0F;
+            this.extPanelGradientFillToolbar.Location = new System.Drawing.Point(0, 0);
+            this.extPanelGradientFillToolbar.Name = "extPanelGradientFillToolbar";
+            this.extPanelGradientFillToolbar.PaintTransparentColor = System.Drawing.Color.Transparent;
+            this.extPanelGradientFillToolbar.Size = new System.Drawing.Size(496, 32);
+            this.extPanelGradientFillToolbar.TabIndex = 0;
+            this.extPanelGradientFillToolbar.ThemeColors = new System.Drawing.Color[] {
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
-            this.extTabControl.ThemeColorSet = 1;
+            this.extPanelGradientFillToolbar.ThemeColorSet = -1;
+            // 
+            // extComboBoxSystemSel
+            // 
+            this.extComboBoxSystemSel.BackColor2 = System.Drawing.Color.Red;
+            this.extComboBoxSystemSel.BorderColor = System.Drawing.Color.White;
+            this.extComboBoxSystemSel.ControlBackground = System.Drawing.SystemColors.Control;
+            this.extComboBoxSystemSel.DataSource = null;
+            this.extComboBoxSystemSel.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxSystemSel.DisabledScaling = 0.5F;
+            this.extComboBoxSystemSel.DisplayMember = "";
+            this.extComboBoxSystemSel.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxSystemSel.GradientDirection = 90F;
+            this.extComboBoxSystemSel.Location = new System.Drawing.Point(13, 4);
+            this.extComboBoxSystemSel.MouseOverScalingColor = 1.3F;
+            this.extComboBoxSystemSel.Name = "extComboBoxSystemSel";
+            this.extComboBoxSystemSel.SelectedIndex = -1;
+            this.extComboBoxSystemSel.SelectedItem = null;
+            this.extComboBoxSystemSel.SelectedValue = null;
+            this.extComboBoxSystemSel.Size = new System.Drawing.Size(216, 21);
+            this.extComboBoxSystemSel.TabIndex = 0;
+            this.extComboBoxSystemSel.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extComboBoxSystemSel.ValueMember = "";
+            this.extComboBoxSystemSel.SelectedIndexChanged += new System.EventHandler(this.extComboBoxSystemSel_SelectedIndexChanged);
+            // 
+            // extPanelGradientFillUCCP
+            // 
+            this.extPanelGradientFillUCCP.ChildrenThemed = true;
+            this.extPanelGradientFillUCCP.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPanelGradientFillUCCP.FlowDirection = null;
+            this.extPanelGradientFillUCCP.GradientDirection = 0F;
+            this.extPanelGradientFillUCCP.Location = new System.Drawing.Point(0, 32);
+            this.extPanelGradientFillUCCP.Name = "extPanelGradientFillUCCP";
+            this.extPanelGradientFillUCCP.PaintTransparentColor = System.Drawing.Color.Transparent;
+            this.extPanelGradientFillUCCP.Size = new System.Drawing.Size(496, 351);
+            this.extPanelGradientFillUCCP.TabIndex = 0;
+            this.extPanelGradientFillUCCP.ThemeColors = new System.Drawing.Color[] {
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.extPanelGradientFillUCCP.ThemeColorSet = -1;
             // 
             // UserControlColonisation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.extTabControl);
+            this.Controls.Add(this.extPanelGradientFillUCCP);
+            this.Controls.Add(this.extPanelGradientFillToolbar);
             this.Name = "UserControlColonisation";
             this.Size = new System.Drawing.Size(496, 383);
+            this.extPanelGradientFillToolbar.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
-        private ExtendedControls.ExtTabControl extTabControl;
+
+        private ExtendedControls.ExtPanelGradientFill extPanelGradientFillToolbar;
+        private ExtendedControls.ExtPanelGradientFill extPanelGradientFillUCCP;
+        private ExtendedControls.ExtComboBox extComboBoxSystemSel;
     }
 }

@@ -97,7 +97,7 @@ namespace EDDiscovery
                                 if ( modules?.Count > 0 )
                                 {
                                     var list = modules.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLowerInvariant(), x.Cost)).ToArray();
-                                    var outfitting = new EliteDangerousCore.JournalEvents.JournalOutfitting(servertime, station, system, sh.ID, list, EDCommander.CurrentCmdrID);
+                                    var outfitting = new EliteDangerousCore.JournalEvents.JournalOutfitting(servertime, station, station, system, sh.ID, list, EDCommander.CurrentCmdrID);
 
                                     var jo = outfitting.ToJSON();        // get json of it, and add it to the db
                                     outfitting.Add(jo);
@@ -119,7 +119,7 @@ namespace EDDiscovery
                                 {
                                     var list = ships.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLowerInvariant(), x.BaseValue)).ToArray();
 
-                                    var shipyardevent = new EliteDangerousCore.JournalEvents.JournalShipyard(servertime, station, system, sh.ID, list, EDCommander.CurrentCmdrID, allowcobramkiv.Value);
+                                    var shipyardevent = new EliteDangerousCore.JournalEvents.JournalShipyard(servertime, station, station, system, sh.ID, list, EDCommander.CurrentCmdrID, allowcobramkiv.Value);
 
                                     var jo = shipyardevent.ToJSON();        // get json of it, and add it to the db
                                     shipyardevent.Add(jo);

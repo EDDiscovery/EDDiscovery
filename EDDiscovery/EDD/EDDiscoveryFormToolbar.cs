@@ -15,6 +15,7 @@
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
+using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -182,27 +183,67 @@ namespace EDDiscovery
             Controller.RunDebugger(0);
 
         }
-        private void debuggerStep10ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Controller.RunDebugger(10);
-        }
-        private void debuggerStep20ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Controller.RunDebugger(20);
-        }
 
         private void debuggerNextToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ToolStripMenuItem c = sender as ToolStripMenuItem;
             if ( Enum.TryParse<JournalTypeEnum>(c.Text.Substring(5), out JournalTypeEnum eventtype))
             {
-                Controller.RunDebugger(20000, new JournalTypeEnum[] { eventtype, JournalTypeEnum.Shutdown });
+                var list = new JournalTypeEnum[] { eventtype, JournalTypeEnum.Shutdown };
+                Controller.RunDebugger(20000, (x) => list.Contains(x.EntryType) == false );
             }
         }
+
+        private void nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // not fsdjump, does not add much JournalTypeEnum.FSDJump
+
+            var list = new JournalTypeEnum[] { JournalTypeEnum.Location, JournalTypeEnum.Docked,
+                JournalTypeEnum.ColonisationBeaconDeployed, JournalTypeEnum.ColonisationConstructionDepot, JournalTypeEnum.ColonisationContribution,
+                 JournalTypeEnum.ColonisationSystemClaim, JournalTypeEnum.ColonisationSystemClaimRelease};
+            Controller.RunDebugger(20000, (x) =>
+            {
+                if (list.Contains(x.EntryType))
+                {
+                    ILocDocked il = x.journalEntry as ILocDocked;       // if its a loc dock
+                    if (il != null )                                    // continue if not docked or not a colonisation station
+                        return il.Docked == false || il.MarketClass() < StationDefinitions.Classification.TypesBelowColonisation; // only colonisation class stations count
+                    else
+                        return false;
+                }
+
+                return true;
+            });
+        }
+
+        private void stepEntriesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ToolStripMenuItem c = sender as ToolStripMenuItem;
+            var amount = c.Text.InvariantParseInt(30);
+            Controller.RunDebugger(amount);
+        }
+
+        private void stepTimeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var starttime = History.GetLast?.EventTimeUTC;
+            if (starttime != null)
+            {
+                ToolStripMenuItem c = sender as ToolStripMenuItem;
+                var tvalue = c.Text.Substring(0, c.Text.IndexOf(' '));
+                var amount = tvalue.InvariantParseInt(30);
+                if (c.Text.Contains("day"))
+                    amount *= 60 * 24;
+                var endtime = starttime.Value.AddMinutes(amount);
+                System.Diagnostics.Debug.WriteLine($"Debugger run time {amount} mins {starttime} - {endtime}");
+                Controller.RunDebugger(20000, (x) => x.EventTimeUTC < endtime);
+            }
+        }
+
 
         private void extButtonStop_Click(object sender, EventArgs e)
         {
             Controller.DebuggerStop();
         }
+
     }
 }

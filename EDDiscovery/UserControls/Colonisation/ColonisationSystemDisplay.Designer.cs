@@ -1,6 +1,6 @@
 ﻿namespace EDDiscovery.UserControls.Colonisation
 {
-    partial class ColonisationSystem
+    partial class ColonisationSystemDisplay
     {
         /// <summary> 
         /// Required designer variable.
@@ -31,18 +31,19 @@
             this.components = new System.ComponentModel.Container();
             EliteDangerousCore.SystemDisplay systemDisplay1 = new EliteDangerousCore.SystemDisplay();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
-            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.extPanelGradientFill1 = new ExtendedControls.ExtPanelGradientFill();
             this.extCheckBoxSystemShow = new ExtendedControls.ExtCheckBox();
+            this.scanDisplayBodyFiltersButton = new EDDiscovery.UserControls.ScanDisplayBodyFiltersButton();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.scanDisplayConfigureButton = new EDDiscovery.UserControls.ScanDisplayConfigureButton();
+            this.extPanelGradientFill1 = new ExtendedControls.ExtPanelGradientFill();
             this.labelDataPosition = new ExtendedControls.LabelData();
             this.labelDataGov = new ExtendedControls.LabelData();
             this.labelDataFaction = new ExtendedControls.LabelData();
             this.extLabelClaimReleased = new ExtendedControls.ExtLabel();
             this.extLabelBeaconDeployed = new ExtendedControls.ExtLabel();
-            this.scanDisplayUserControl = new EDDiscovery.UserControls.ScanDisplayUserControl();
-            this.scanDisplayBodyFiltersButton = new EDDiscovery.UserControls.ScanDisplayBodyFiltersButton();
-            this.scanDisplayConfigureButton = new EDDiscovery.UserControls.ScanDisplayConfigureButton();
             this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
+            this.scanDisplayUserControl = new EDDiscovery.UserControls.ScanDisplayUserControl();
+            this.labelDataName = new ExtendedControls.LabelData();
             this.extPanelGradientFill1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -52,40 +53,6 @@
             this.toolTip.InitialDelay = 250;
             this.toolTip.ReshowDelay = 100;
             this.toolTip.ShowAlways = true;
-            // 
-            // toolTip1
-            // 
-            this.toolTip1.AutoPopDelay = 20000;
-            this.toolTip1.InitialDelay = 250;
-            this.toolTip1.ReshowDelay = 100;
-            this.toolTip1.ShowAlways = true;
-            // 
-            // extPanelGradientFill1
-            // 
-            this.extPanelGradientFill1.ChildrenThemed = true;
-            this.extPanelGradientFill1.Controls.Add(this.extCheckBoxSystemShow);
-            this.extPanelGradientFill1.Controls.Add(this.labelDataPosition);
-            this.extPanelGradientFill1.Controls.Add(this.scanDisplayBodyFiltersButton);
-            this.extPanelGradientFill1.Controls.Add(this.scanDisplayConfigureButton);
-            this.extPanelGradientFill1.Controls.Add(this.labelDataGov);
-            this.extPanelGradientFill1.Controls.Add(this.labelDataFaction);
-            this.extPanelGradientFill1.Controls.Add(this.extLabelClaimReleased);
-            this.extPanelGradientFill1.Controls.Add(this.extLabelBeaconDeployed);
-            this.extPanelGradientFill1.Controls.Add(this.edsmSpanshButton);
-            this.extPanelGradientFill1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.extPanelGradientFill1.FlowDirection = null;
-            this.extPanelGradientFill1.GradientDirection = 0F;
-            this.extPanelGradientFill1.Location = new System.Drawing.Point(0, 0);
-            this.extPanelGradientFill1.Name = "extPanelGradientFill1";
-            this.extPanelGradientFill1.PaintTransparentColor = System.Drawing.Color.Transparent;
-            this.extPanelGradientFill1.Size = new System.Drawing.Size(973, 87);
-            this.extPanelGradientFill1.TabIndex = 3;
-            this.extPanelGradientFill1.ThemeColors = new System.Drawing.Color[] {
-        System.Drawing.SystemColors.Control,
-        System.Drawing.SystemColors.Control,
-        System.Drawing.SystemColors.Control,
-        System.Drawing.SystemColors.Control};
-            this.extPanelGradientFill1.ThemeColorSet = -1;
             // 
             // extCheckBoxSystemShow
             // 
@@ -122,6 +89,76 @@
             this.toolTip.SetToolTip(this.extCheckBoxSystemShow, "Select another system to view");
             this.extCheckBoxSystemShow.UseVisualStyleBackColor = false;
             // 
+            // scanDisplayBodyFiltersButton
+            // 
+            this.scanDisplayBodyFiltersButton.BackColor2 = System.Drawing.Color.Red;
+            this.scanDisplayBodyFiltersButton.ButtonDisabledScaling = 0.5F;
+            this.scanDisplayBodyFiltersButton.GradientDirection = 90F;
+            this.scanDisplayBodyFiltersButton.Image = global::EDDiscovery.Icons.Controls.EventFilter;
+            this.scanDisplayBodyFiltersButton.Location = new System.Drawing.Point(40, 51);
+            this.scanDisplayBodyFiltersButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.scanDisplayBodyFiltersButton.MouseOverScaling = 1.3F;
+            this.scanDisplayBodyFiltersButton.MouseSelectedScaling = 1.3F;
+            this.scanDisplayBodyFiltersButton.Name = "scanDisplayBodyFiltersButton";
+            this.scanDisplayBodyFiltersButton.SettingsSplittingChar = ';';
+            this.scanDisplayBodyFiltersButton.Size = new System.Drawing.Size(28, 28);
+            this.scanDisplayBodyFiltersButton.TabIndex = 32;
+            this.toolTip.SetToolTip(this.scanDisplayBodyFiltersButton, "Configure scan display body filters");
+            this.scanDisplayBodyFiltersButton.UseVisualStyleBackColor = true;
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.AutoPopDelay = 20000;
+            this.toolTip1.InitialDelay = 250;
+            this.toolTip1.ReshowDelay = 100;
+            this.toolTip1.ShowAlways = true;
+            // 
+            // scanDisplayConfigureButton
+            // 
+            this.scanDisplayConfigureButton.BackColor2 = System.Drawing.Color.Red;
+            this.scanDisplayConfigureButton.ButtonDisabledScaling = 0.5F;
+            this.scanDisplayConfigureButton.Cursor = System.Windows.Forms.Cursors.Default;
+            this.scanDisplayConfigureButton.GradientDirection = 90F;
+            this.scanDisplayConfigureButton.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
+            this.scanDisplayConfigureButton.Location = new System.Drawing.Point(76, 51);
+            this.scanDisplayConfigureButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.scanDisplayConfigureButton.MouseOverScaling = 1.3F;
+            this.scanDisplayConfigureButton.MouseSelectedScaling = 1.3F;
+            this.scanDisplayConfigureButton.Name = "scanDisplayConfigureButton";
+            this.scanDisplayConfigureButton.SettingsSplittingChar = ';';
+            this.scanDisplayConfigureButton.Size = new System.Drawing.Size(28, 28);
+            this.scanDisplayConfigureButton.TabIndex = 31;
+            this.toolTip1.SetToolTip(this.scanDisplayConfigureButton, "Configure scan display");
+            this.scanDisplayConfigureButton.UseVisualStyleBackColor = true;
+            // 
+            // extPanelGradientFill1
+            // 
+            this.extPanelGradientFill1.ChildrenThemed = true;
+            this.extPanelGradientFill1.Controls.Add(this.extCheckBoxSystemShow);
+            this.extPanelGradientFill1.Controls.Add(this.labelDataName);
+            this.extPanelGradientFill1.Controls.Add(this.labelDataPosition);
+            this.extPanelGradientFill1.Controls.Add(this.scanDisplayBodyFiltersButton);
+            this.extPanelGradientFill1.Controls.Add(this.scanDisplayConfigureButton);
+            this.extPanelGradientFill1.Controls.Add(this.labelDataGov);
+            this.extPanelGradientFill1.Controls.Add(this.labelDataFaction);
+            this.extPanelGradientFill1.Controls.Add(this.extLabelClaimReleased);
+            this.extPanelGradientFill1.Controls.Add(this.extLabelBeaconDeployed);
+            this.extPanelGradientFill1.Controls.Add(this.edsmSpanshButton);
+            this.extPanelGradientFill1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.extPanelGradientFill1.FlowDirection = null;
+            this.extPanelGradientFill1.GradientDirection = 0F;
+            this.extPanelGradientFill1.Location = new System.Drawing.Point(0, 0);
+            this.extPanelGradientFill1.Name = "extPanelGradientFill1";
+            this.extPanelGradientFill1.PaintTransparentColor = System.Drawing.Color.Transparent;
+            this.extPanelGradientFill1.Size = new System.Drawing.Size(973, 112);
+            this.extPanelGradientFill1.TabIndex = 3;
+            this.extPanelGradientFill1.ThemeColors = new System.Drawing.Color[] {
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.extPanelGradientFill1.ThemeColorSet = -1;
+            // 
             // labelDataPosition
             // 
             this.labelDataPosition.BorderColor = System.Drawing.Color.Orange;
@@ -130,7 +167,7 @@
             this.labelDataPosition.Data = null;
             this.labelDataPosition.DataFont = null;
             this.labelDataPosition.InterSpacing = 4;
-            this.labelDataPosition.Location = new System.Drawing.Point(4, 3);
+            this.labelDataPosition.Location = new System.Drawing.Point(325, 3);
             this.labelDataPosition.Name = "labelDataPosition";
             this.labelDataPosition.NoDataText = null;
             this.labelDataPosition.Size = new System.Drawing.Size(315, 23);
@@ -173,7 +210,7 @@
             // extLabelClaimReleased
             // 
             this.extLabelClaimReleased.AutoSize = true;
-            this.extLabelClaimReleased.Location = new System.Drawing.Point(449, 3);
+            this.extLabelClaimReleased.Location = new System.Drawing.Point(446, 54);
             this.extLabelClaimReleased.Name = "extLabelClaimReleased";
             this.extLabelClaimReleased.Size = new System.Drawing.Size(80, 13);
             this.extLabelClaimReleased.TabIndex = 0;
@@ -182,16 +219,32 @@
             // extLabelBeaconDeployed
             // 
             this.extLabelBeaconDeployed.AutoSize = true;
-            this.extLabelBeaconDeployed.Location = new System.Drawing.Point(325, 3);
+            this.extLabelBeaconDeployed.Location = new System.Drawing.Point(322, 54);
             this.extLabelBeaconDeployed.Name = "extLabelBeaconDeployed";
             this.extLabelBeaconDeployed.Size = new System.Drawing.Size(92, 13);
             this.extLabelBeaconDeployed.TabIndex = 0;
             this.extLabelBeaconDeployed.Text = "Beacon Deployed";
             // 
+            // edsmSpanshButton
+            // 
+            this.edsmSpanshButton.BackColor2 = System.Drawing.Color.Red;
+            this.edsmSpanshButton.ButtonDisabledScaling = 0.5F;
+            this.edsmSpanshButton.GradientDirection = 90F;
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(112, 51);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.edsmSpanshButton.MouseOverScaling = 1.3F;
+            this.edsmSpanshButton.MouseSelectedScaling = 1.3F;
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 30;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
+            // 
             // scanDisplayUserControl
             // 
             this.scanDisplayUserControl.Dock = System.Windows.Forms.DockStyle.Top;
-            this.scanDisplayUserControl.Location = new System.Drawing.Point(0, 87);
+            this.scanDisplayUserControl.Location = new System.Drawing.Point(0, 112);
             this.scanDisplayUserControl.Name = "scanDisplayUserControl";
             this.scanDisplayUserControl.Size = new System.Drawing.Size(973, 361);
             systemDisplay1.BackColor = System.Drawing.Color.Black;
@@ -223,56 +276,21 @@
             this.scanDisplayUserControl.SystemDisplay = systemDisplay1;
             this.scanDisplayUserControl.TabIndex = 2;
             // 
-            // scanDisplayBodyFiltersButton
+            // labelDataName
             // 
-            this.scanDisplayBodyFiltersButton.BackColor2 = System.Drawing.Color.Red;
-            this.scanDisplayBodyFiltersButton.ButtonDisabledScaling = 0.5F;
-            this.scanDisplayBodyFiltersButton.GradientDirection = 90F;
-            this.scanDisplayBodyFiltersButton.Image = global::EDDiscovery.Icons.Controls.EventFilter;
-            this.scanDisplayBodyFiltersButton.Location = new System.Drawing.Point(40, 51);
-            this.scanDisplayBodyFiltersButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
-            this.scanDisplayBodyFiltersButton.MouseOverScaling = 1.3F;
-            this.scanDisplayBodyFiltersButton.MouseSelectedScaling = 1.3F;
-            this.scanDisplayBodyFiltersButton.Name = "scanDisplayBodyFiltersButton";
-            this.scanDisplayBodyFiltersButton.SettingsSplittingChar = ';';
-            this.scanDisplayBodyFiltersButton.Size = new System.Drawing.Size(28, 28);
-            this.scanDisplayBodyFiltersButton.TabIndex = 32;
-            this.toolTip.SetToolTip(this.scanDisplayBodyFiltersButton, "Configure scan display body filters");
-            this.scanDisplayBodyFiltersButton.UseVisualStyleBackColor = true;
-            // 
-            // scanDisplayConfigureButton
-            // 
-            this.scanDisplayConfigureButton.BackColor2 = System.Drawing.Color.Red;
-            this.scanDisplayConfigureButton.ButtonDisabledScaling = 0.5F;
-            this.scanDisplayConfigureButton.Cursor = System.Windows.Forms.Cursors.Default;
-            this.scanDisplayConfigureButton.GradientDirection = 90F;
-            this.scanDisplayConfigureButton.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.scanDisplayConfigureButton.Location = new System.Drawing.Point(76, 51);
-            this.scanDisplayConfigureButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
-            this.scanDisplayConfigureButton.MouseOverScaling = 1.3F;
-            this.scanDisplayConfigureButton.MouseSelectedScaling = 1.3F;
-            this.scanDisplayConfigureButton.Name = "scanDisplayConfigureButton";
-            this.scanDisplayConfigureButton.SettingsSplittingChar = ';';
-            this.scanDisplayConfigureButton.Size = new System.Drawing.Size(28, 28);
-            this.scanDisplayConfigureButton.TabIndex = 31;
-            this.toolTip1.SetToolTip(this.scanDisplayConfigureButton, "Configure scan display");
-            this.scanDisplayConfigureButton.UseVisualStyleBackColor = true;
-            // 
-            // edsmSpanshButton
-            // 
-            this.edsmSpanshButton.BackColor2 = System.Drawing.Color.Red;
-            this.edsmSpanshButton.ButtonDisabledScaling = 0.5F;
-            this.edsmSpanshButton.GradientDirection = 90F;
-            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
-            this.edsmSpanshButton.Location = new System.Drawing.Point(112, 51);
-            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
-            this.edsmSpanshButton.MouseOverScaling = 1.3F;
-            this.edsmSpanshButton.MouseSelectedScaling = 1.3F;
-            this.edsmSpanshButton.Name = "edsmSpanshButton";
-            this.edsmSpanshButton.SettingsSplittingChar = ';';
-            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
-            this.edsmSpanshButton.TabIndex = 30;
-            this.edsmSpanshButton.UseVisualStyleBackColor = true;
+            this.labelDataName.BorderColor = System.Drawing.Color.Orange;
+            this.labelDataName.BorderWidth = 1;
+            this.labelDataName.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
+            this.labelDataName.Data = null;
+            this.labelDataName.DataFont = null;
+            this.labelDataName.InterSpacing = 4;
+            this.labelDataName.Location = new System.Drawing.Point(4, 3);
+            this.labelDataName.Name = "labelDataName";
+            this.labelDataName.NoDataText = null;
+            this.labelDataName.Size = new System.Drawing.Size(315, 23);
+            this.labelDataName.TabIndex = 1;
+            this.labelDataName.TabSpacingData = 0;
+            this.labelDataName.Text = "Name: {}";
             // 
             // ColonisationSystem
             // 
@@ -282,7 +300,7 @@
             this.Controls.Add(this.scanDisplayUserControl);
             this.Controls.Add(this.extPanelGradientFill1);
             this.Name = "ColonisationSystem";
-            this.Size = new System.Drawing.Size(973, 461);
+            this.Size = new System.Drawing.Size(973, 473);
             this.extPanelGradientFill1.ResumeLayout(false);
             this.extPanelGradientFill1.PerformLayout();
             this.ResumeLayout(false);
@@ -303,5 +321,6 @@
         private System.Windows.Forms.ToolTip toolTip1;
         private ExtendedControls.ExtCheckBox extCheckBoxSystemShow;
         private ExtendedControls.LabelData labelDataGov;
+        private ExtendedControls.LabelData labelDataName;
     }
 }

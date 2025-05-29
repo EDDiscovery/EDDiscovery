@@ -367,7 +367,7 @@ namespace EDDiscovery
         bool stepperstop = false;
 
         // step: >=1 N history entry, 0 = one journal entry
-        public void RunDebugger(int historycount, JournalTypeEnum[] stopdueto = null)
+        public void RunDebugger(int historycount, Func<HistoryEntry,bool> continuestepping = null)
         {
             var entrylast = History.GetLast;
 
@@ -378,7 +378,7 @@ namespace EDDiscovery
             {
                 stepperstop = false;
 
-                while (true)
+                while (!PendingClose.IsCancellationRequested)
                 {
                     if (journalmonitor.SingleStep(stepper) == false)        // no more, stop
                         break;
@@ -393,7 +393,9 @@ namespace EDDiscovery
 
                     if (History.GetLast != entrylast)       // if new history entry
                     {
-                        if (stopdueto != null && Array.IndexOf(stopdueto, History.GetLast.EntryType) >= 0 )
+                        entrylast = History.GetLast;
+
+                        if ( continuestepping != null && !continuestepping(entrylast))
                             break;
 
                         if (--historycount == 0)            // if gone zero, stop

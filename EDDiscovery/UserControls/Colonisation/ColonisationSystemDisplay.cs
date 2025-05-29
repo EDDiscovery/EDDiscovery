@@ -18,19 +18,25 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls.Colonisation
 {
-    public partial class ColonisationSystem: UserControl
+    public partial class ColonisationSystemDisplay: UserControl
     {
+        public ColonisationSystemData SystemData { get; set; }
+
         public bool ScanDisplayVisible { get { return scanDisplayUserControl.Visible; } }
 
-        public ColonisationSystem()
+        public ColonisationSystemDisplay()
         {
             InitializeComponent();
         }
 
-        public void Initialise(ISystem system, HistoryList hl)
+        public void Initialise(ColonisationSystemData systemdata, HistoryList hl)
         {
+            SystemData = systemdata;
+
             EliteDangerousCore.DB.UserDatabaseSettingsSaver db = new EliteDangerousCore.DB.UserDatabaseSettingsSaver(EliteDangerousCore.DB.UserDatabase.Instance, "ColonisationUC_");
             edsmSpanshButton.Init(db, "EDSMSpansh", "");
+
+            labelDataName.Data0 = SystemData.System.Name;
 
             extCheckBoxSystemShow.CheckedChanged += (s, e) => {
                 scanDisplayConfigureButton.Visible =
@@ -45,7 +51,7 @@ namespace EDDiscovery.UserControls.Colonisation
 
             edsmSpanshButton.ValueChanged += (s, e) =>
             {
-                nodedata = hl.StarScan.FindSystemSynchronous(system, edsmSpanshButton.WebLookup);    // look up system, unfort must be sync due to limitations in c#
+                nodedata = hl.StarScan.FindSystemSynchronous(SystemData.System, edsmSpanshButton.WebLookup);    // look up system, unfort must be sync due to limitations in c#
                 sd.SystemDisplay.ShowWebBodies = edsmSpanshButton.WebLookup != WebExternalDataLookup.None;
                 sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
             };
@@ -73,11 +79,12 @@ namespace EDDiscovery.UserControls.Colonisation
 
         }
 
-        public void Update(ColonisationSystemData csd)
+        public void UpdateSystem()
         {
-            labelDataPosition.Data = new object[] { csd.System.X, csd.System.Y, csd.System.Z };
+            labelDataPosition.Data = new object[] { SystemData.System.X, SystemData.System.Y, SystemData.System.Z };
 
-            var je = csd.LastLocOrJump.journalEntry as JournalLocOrJump; // may be null
+            var je = SystemData.LastLocOrJump?.journalEntry as JournalLocOrJump; // may be null
+
             labelDataFaction.Data = new object[] { je?.Faction, 
                                                         je != null ? FactionDefinitions.ToLocalisedLanguage(je.FactionState) : null,
             };
@@ -88,13 +95,13 @@ namespace EDDiscovery.UserControls.Colonisation
                                                je != null ? SecurityDefinitions.ToLocalisedLanguage(je.Security) : null,
             };
             
-            extLabelClaimReleased.Visible = csd.ClaimReleased;
-            extLabelBeaconDeployed.Visible = csd.BeaconDeployed;
+            extLabelClaimReleased.Visible = SystemData.ClaimReleased;
+            extLabelBeaconDeployed.Visible = SystemData.BeaconDeployed;
         }
 
-        public async void UpdateSystemDiagramAsync(ColonisationSystemData csd, HistoryList hl)
+        public async void UpdateSystemDiagramAsync(HistoryList hl)
         {
-            StarScan.SystemNode nodedata = await hl.StarScan.FindSystemAsync(csd.System, edsmSpanshButton.WebLookup);    // look up system async
+            StarScan.SystemNode nodedata = await hl.StarScan.FindSystemAsync(SystemData.System, edsmSpanshButton.WebLookup);    // look up system async
             scanDisplayUserControl.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: scanDisplayBodyFiltersButton.BodyFilters);
         }
 

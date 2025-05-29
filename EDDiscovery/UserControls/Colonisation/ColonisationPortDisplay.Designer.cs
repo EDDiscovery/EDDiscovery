@@ -1,6 +1,6 @@
 ﻿namespace EDDiscovery.UserControls.Colonisation
 {
-    partial class ColonisationPort
+    partial class ColonisationPortDisplay
     {
         /// <summary> 
         /// Required designer variable.

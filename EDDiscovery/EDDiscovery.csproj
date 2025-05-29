@@ -252,17 +252,17 @@
       <DependentUpon>UserControlLocal3DMap.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Colonisation\ColonisationData.cs" />
-    <Compile Include="UserControls\Colonisation\ColonisationPort.cs">
+    <Compile Include="UserControls\Colonisation\ColonisationPortDisplay.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Colonisation\ColonisationPort.Designer.cs">
-      <DependentUpon>ColonisationPort.cs</DependentUpon>
+    <Compile Include="UserControls\Colonisation\ColonisationPortDisplay.Designer.cs">
+      <DependentUpon>ColonisationPortDisplay.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Colonisation\ColonisationSystem.cs">
+    <Compile Include="UserControls\Colonisation\ColonisationSystemDisplay.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Colonisation\ColonisationSystem.Designer.cs">
-      <DependentUpon>ColonisationSystem.cs</DependentUpon>
+    <Compile Include="UserControls\Colonisation\ColonisationSystemDisplay.Designer.cs">
+      <DependentUpon>ColonisationSystemDisplay.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Colonisation\UserControlColonisation.cs">
       <SubType>UserControl</SubType>
@@ -874,11 +874,11 @@
     <EmbeddedResource Include="UserControls\3DMap\UserControlLocal3DMap.resx">
       <DependentUpon>UserControlLocal3DMap.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Colonisation\ColonisationPort.resx">
-      <DependentUpon>ColonisationPort.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\Colonisation\ColonisationPortDisplay.resx">
+      <DependentUpon>ColonisationPortDisplay.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Colonisation\ColonisationSystem.resx">
-      <DependentUpon>ColonisationSystem.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\Colonisation\ColonisationSystemDisplay.resx">
+      <DependentUpon>ColonisationSystemDisplay.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Colonisation\UserControlColonisation.resx">
       <DependentUpon>UserControlColonisation.cs</DependentUpon>

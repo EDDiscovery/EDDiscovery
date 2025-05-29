@@ -18,32 +18,34 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls.Colonisation
 {
-    public partial class ColonisationPort: UserControl
+    public partial class ColonisationPortDisplay: UserControl
     {
-        public ColonisationPort()
+        public ColonisationPortData Port { get; set; }
+        public ColonisationPortDisplay()
         {
             InitializeComponent();
             extLabelFailed.Location = labelDataProgress.Location;
             extLabelFailed.Visible = false;
         }
 
-        public void Initialise()
+        public void Initialise(ColonisationPortData port)
         {
+            Port = port;
             extCheckBoxShowContributions.CheckedChanged += (s, e) => { extPanelDataGridViewScrollContributions.Visible = extCheckBoxShowContributions.Checked; };
             extCheckBoxShowRL.CheckedChanged += (s, e) => { extPanelDataGridViewScrollRL.Visible = extCheckBoxShowRL.Checked; };
             dataGridViewContributions.SortCompare += DataGridViewContributions_SortCompare;
             dataGridViewRL.SortCompare += DataGridViewRL_SortCompare;
         }
 
-        public void Update(ColonisationPortData port)
+        public void UpdatePort()
         {
-            extLabelStationName.Text = port.Name;
+            extLabelStationName.Text = Port.Name + " " + Port.MarketID;
 
-            var je = port.LastDockedOrLocation as ILocDocked; // may be null
+            var je = Port.LastDockedOrLocation as ILocDocked; // may be null
 
-            labelDataProgress.Data0 = port.State?.ConstructionProgress != null ? (double?)(port.State.ConstructionProgress * 100.0) : null;
-            extLabelFailed.Visible = port.State != null && port.State.ConstructionFailed == true;
-            labelDataProgress.Visible = port.State != null && port.State.ConstructionFailed == false;
+            labelDataProgress.Data0 = Port.State?.ConstructionProgress != null ? (double?)(Port.State.ConstructionProgress * 100.0) : null;
+            extLabelFailed.Visible = Port.State != null && Port.State.ConstructionFailed == true;
+            labelDataProgress.Visible = Port.State != null && Port.State.ConstructionFailed == false;
 
             labelDataFaction.Data = new object[] { je?.StationFaction,
                                                         je != null ? FactionDefinitions.ToLocalisedLanguage(je.StationFactionState) : null,
@@ -56,9 +58,9 @@ namespace EDDiscovery.UserControls.Colonisation
 
             dataGridViewRL.Rows.Clear();
 
-            if (port.State != null)
+            if (Port.State != null)
             {
-                foreach (JournalColonisationConstructionDepot.ResourcesList p in port.State.ResourcesRequired.EmptyIfNull())
+                foreach (JournalColonisationConstructionDepot.ResourcesList p in Port.State.ResourcesRequired.EmptyIfNull())
                 {
                     dataGridViewRL.Rows.Add(new object[] {MaterialCommodityMicroResourceType.GetTranslatedNameByFDName(p.Name),
                                                           p.RequiredAmount.ToString("N0"), p.ProvidedAmount.ToString("N0"), p.Payment.ToString("N0")});
@@ -69,7 +71,7 @@ namespace EDDiscovery.UserControls.Colonisation
             extCheckBoxShowRL.Visible = dataGridViewRL.Rows.Count > 0;      // no button if nothing
 
             dataGridViewContributions.Rows.Clear();
-            foreach(JournalColonisationContribution ct in port.Contributions )
+            foreach(JournalColonisationContribution ct in Port.Contributions )
             {
                 foreach( var c in ct.Contributions.EmptyIfNull() )
                 {

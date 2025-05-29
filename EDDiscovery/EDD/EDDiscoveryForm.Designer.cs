@@ -127,8 +127,27 @@ namespace EDDiscovery
             this.extPanelTopResizer = new ExtendedControls.ExtPanelResizer();
             this.contextMenuStripDebugger = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.debuggerSingleJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debuggerStep10ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.debuggerStep20ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.stepEntriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.minsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem4 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem5 = new System.Windows.Forms.ToolStripMenuItem();
+            this.stepTimeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.minToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.minToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.minToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem6 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem7 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem8 = new System.Windows.Forms.ToolStripMenuItem();
+            this.minsToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.minsToolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.minsToolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.mins12HrsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mins20HrsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.dayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.daysToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debuggerNextFSDToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debuggerNextDockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.nextUndockToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -1095,8 +1114,9 @@ namespace EDDiscovery
             // 
             this.contextMenuStripDebugger.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.debuggerSingleJournalEntryToolStripMenuItem,
-            this.debuggerStep10ToolStripMenuItem,
-            this.debuggerStep20ToolStripMenuItem,
+            this.stepTimeToolStripMenuItem,
+            this.stepEntriesToolStripMenuItem,
+            this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem,
             this.debuggerNextFSDToolStripMenuItem,
             this.debuggerNextDockToolStripMenuItem,
             this.nextUndockToolStripMenuItem,
@@ -1105,7 +1125,7 @@ namespace EDDiscovery
             this.debuggerNextScanToolStripMenuItem,
             this.debuggerShutdownToolStripMenuItem});
             this.contextMenuStripDebugger.Name = "contextMenuStripDebugger";
-            this.contextMenuStripDebugger.Size = new System.Drawing.Size(191, 224);
+            this.contextMenuStripDebugger.Size = new System.Drawing.Size(191, 268);
             // 
             // debuggerSingleJournalEntryToolStripMenuItem
             // 
@@ -1114,19 +1134,171 @@ namespace EDDiscovery
             this.debuggerSingleJournalEntryToolStripMenuItem.Text = "Single Journal Entry";
             this.debuggerSingleJournalEntryToolStripMenuItem.Click += new System.EventHandler(this.debuggerSingleJournalEntryToolStripMenuItem_Click);
             // 
-            // debuggerStep10ToolStripMenuItem
+            // stepEntriesToolStripMenuItem
             // 
-            this.debuggerStep10ToolStripMenuItem.Name = "debuggerStep10ToolStripMenuItem";
-            this.debuggerStep10ToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.debuggerStep10ToolStripMenuItem.Text = "Step 10";
-            this.debuggerStep10ToolStripMenuItem.Click += new System.EventHandler(this.debuggerStep10ToolStripMenuItem_Click);
+            this.stepEntriesToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.minsToolStripMenuItem,
+            this.toolStripMenuItem2,
+            this.toolStripMenuItem3,
+            this.toolStripMenuItem4,
+            this.toolStripMenuItem5});
+            this.stepEntriesToolStripMenuItem.Name = "stepEntriesToolStripMenuItem";
+            this.stepEntriesToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.stepEntriesToolStripMenuItem.Text = "Step Entries";
             // 
-            // debuggerStep20ToolStripMenuItem
+            // minsToolStripMenuItem
             // 
-            this.debuggerStep20ToolStripMenuItem.Name = "debuggerStep20ToolStripMenuItem";
-            this.debuggerStep20ToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
-            this.debuggerStep20ToolStripMenuItem.Text = "Step 20";
-            this.debuggerStep20ToolStripMenuItem.Click += new System.EventHandler(this.debuggerStep20ToolStripMenuItem_Click);
+            this.minsToolStripMenuItem.Name = "minsToolStripMenuItem";
+            this.minsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.minsToolStripMenuItem.Text = "10";
+            this.minsToolStripMenuItem.Click += new System.EventHandler(this.stepEntriesToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Text = "20";
+            this.toolStripMenuItem2.Click += new System.EventHandler(this.stepEntriesToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem3.Text = "30";
+            this.toolStripMenuItem3.Click += new System.EventHandler(this.stepEntriesToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem4
+            // 
+            this.toolStripMenuItem4.Name = "toolStripMenuItem4";
+            this.toolStripMenuItem4.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem4.Text = "50";
+            this.toolStripMenuItem4.Click += new System.EventHandler(this.stepEntriesToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem5
+            // 
+            this.toolStripMenuItem5.Name = "toolStripMenuItem5";
+            this.toolStripMenuItem5.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem5.Text = "100";
+            this.toolStripMenuItem5.Click += new System.EventHandler(this.stepEntriesToolStripMenuItem_Click);
+            // 
+            // stepTimeToolStripMenuItem
+            // 
+            this.stepTimeToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.minToolStripMenuItem,
+            this.minToolStripMenuItem1,
+            this.minToolStripMenuItem2,
+            this.toolStripMenuItem6,
+            this.toolStripMenuItem7,
+            this.toolStripMenuItem8,
+            this.minsToolStripMenuItem1,
+            this.minsToolStripMenuItem2,
+            this.minsToolStripMenuItem3,
+            this.mins12HrsToolStripMenuItem,
+            this.mins20HrsToolStripMenuItem,
+            this.dayToolStripMenuItem,
+            this.daysToolStripMenuItem});
+            this.stepTimeToolStripMenuItem.Name = "stepTimeToolStripMenuItem";
+            this.stepTimeToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.stepTimeToolStripMenuItem.Text = "Step Time";
+            // 
+            // minToolStripMenuItem
+            // 
+            this.minToolStripMenuItem.Name = "minToolStripMenuItem";
+            this.minToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.minToolStripMenuItem.Text = "1 min";
+            this.minToolStripMenuItem.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+            // 
+            // minToolStripMenuItem1
+            // 
+            this.minToolStripMenuItem1.Name = "minToolStripMenuItem1";
+            this.minToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.minToolStripMenuItem1.Text = "2 min";
+            this.minToolStripMenuItem1.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+
+            // 
+            // minToolStripMenuItem2
+            // 
+            this.minToolStripMenuItem2.Name = "minToolStripMenuItem2";
+            this.minToolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.minToolStripMenuItem2.Text = "5 min";
+            this.minToolStripMenuItem2.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem6
+            // 
+            this.toolStripMenuItem6.Name = "toolStripMenuItem6";
+            this.toolStripMenuItem6.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem6.Text = "10 mins";
+            this.toolStripMenuItem6.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem7
+            // 
+            this.toolStripMenuItem7.Name = "toolStripMenuItem7";
+            this.toolStripMenuItem7.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem7.Text = "20 mins";
+            this.toolStripMenuItem7.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+            // 
+            // toolStripMenuItem8
+            // 
+            this.toolStripMenuItem8.Name = "toolStripMenuItem8";
+            this.toolStripMenuItem8.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem8.Text = "30 mins";
+            this.toolStripMenuItem8.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+            // 
+            // minsToolStripMenuItem1
+            // 
+            this.minsToolStripMenuItem1.Name = "minsToolStripMenuItem1";
+            this.minsToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.minsToolStripMenuItem1.Text = "60 mins";
+            this.minsToolStripMenuItem1.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+            // 
+            // minsToolStripMenuItem2
+            // 
+            this.minsToolStripMenuItem2.Name = "minsToolStripMenuItem2";
+            this.minsToolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.minsToolStripMenuItem2.Text = "120 mins";
+            this.minsToolStripMenuItem2.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+            // 
+            // minsToolStripMenuItem3
+            // 
+            this.minsToolStripMenuItem3.Name = "minsToolStripMenuItem3";
+            this.minsToolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.minsToolStripMenuItem3.Text = "240 mins / 4 hrs";
+            this.minsToolStripMenuItem3.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+            // 
+            // mins12HrsToolStripMenuItem
+            // 
+            this.mins12HrsToolStripMenuItem.Name = "mins12HrsToolStripMenuItem";
+            this.mins12HrsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mins12HrsToolStripMenuItem.Text = "720 mins / 12 hrs";
+            this.mins12HrsToolStripMenuItem.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+            // 
+            // mins20HrsToolStripMenuItem
+            // 
+            this.mins20HrsToolStripMenuItem.Name = "mins20HrsToolStripMenuItem";
+            this.mins20HrsToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mins20HrsToolStripMenuItem.Text = "1200 mins / 20 hrs";
+            this.mins20HrsToolStripMenuItem.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+            // 
+            // dayToolStripMenuItem
+            // 
+            this.dayToolStripMenuItem.Name = "dayToolStripMenuItem";
+            this.dayToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.dayToolStripMenuItem.Text = "1 day";
+            this.dayToolStripMenuItem.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+            // 
+            // daysToolStripMenuItem
+            // 
+            this.daysToolStripMenuItem.Name = "daysToolStripMenuItem";
+            this.daysToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.daysToolStripMenuItem.Text = "2 days";
+            this.daysToolStripMenuItem.Click += new System.EventHandler(this.stepTimeToolStripMenuItem_Click);
+            // 
+            // nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem
+            // 
+            this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem.Name = "nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem";
+            this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem.Text = "Next Colonisation*";
+            this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem.Click += new System.EventHandler(this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem_Click);
             // 
             // debuggerNextFSDToolStripMenuItem
             // 
@@ -1296,9 +1468,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem fetchStarDataAgainToolStripMenuItem;
         private ExtendedControls.ExtButton extButtonSingleStep;
         private System.Windows.Forms.ContextMenuStrip contextMenuStripDebugger;
-        private System.Windows.Forms.ToolStripMenuItem debuggerStep10ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debuggerSingleJournalEntryToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem debuggerStep20ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debuggerNextFSDToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debuggerNextDockToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem debuggerNextScanToolStripMenuItem;
@@ -1307,5 +1477,26 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem nextSupercruiseEntryToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem nextSupercruiseExitToolStripMenuItem;
         private ExtendedControls.ExtButton extButtonStop;
+        private System.Windows.Forms.ToolStripMenuItem nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stepEntriesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem stepTimeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem minsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem4;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem5;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem6;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem7;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem8;
+        private System.Windows.Forms.ToolStripMenuItem minsToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem minsToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem minsToolStripMenuItem3;
+        private System.Windows.Forms.ToolStripMenuItem dayToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem daysToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mins12HrsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mins20HrsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem minToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem minToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem minToolStripMenuItem2;
     }
 }

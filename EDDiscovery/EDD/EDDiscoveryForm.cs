@@ -16,6 +16,7 @@ using ActionLanguage.Manager;
 using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -662,6 +663,13 @@ namespace EDDiscovery
                         tabControlMain.EnsureMajorTabIsPresent(pid,false);
                 }
             }
+
+            SystemEvents.PowerModeChanged += (senderpe, pevent) => {
+                if ( pevent.Mode == PowerModes.Suspend )
+                {
+                    System.Diagnostics.Debug.WriteLine("**** Power Mode suspend");
+                }
+            };
 
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load Complete");
         }
@@ -1359,8 +1367,8 @@ namespace EDDiscovery
                 Show();
         }
 
-        #endregion
 
+        #endregion
     }
 }
 

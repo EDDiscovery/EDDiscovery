@@ -46,7 +46,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "BodyType"] = he.Status.BodyType ?? "";
                 vars[prefix + "BodyName"] = he.Status.BodyName ?? "";
                 vars[prefix + "BodyID"] = (he.Status.BodyID ?? -1).ToStringInvariant();
-                vars[prefix + "StationName"] = he.Status.StationName ?? "";
+                vars[prefix + "StationName"] = he.Status.StationName_Localised ?? "";
                 vars[prefix + "StationType"] = he.Status.StationType ?? "";
                 vars[prefix + "StationFaction"] = he.Status.StationFaction ?? "";
                 vars[prefix + "ShipType"] = he.Status.ShipType ?? "";
