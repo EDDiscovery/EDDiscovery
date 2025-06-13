@@ -1,5 +1,5 @@
 /*
- * Copyright © 2016 - 2024 EDDiscovery development team
+ * Copyright 2016 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -15,13 +15,11 @@
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
-using EliteDangerousCore.UIEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Reflection;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
@@ -269,7 +267,7 @@ namespace EDDiscovery.UserControls
                     System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor start jump changed to {cur_sys.Name} Draw title, scan summary, scan system");
 
                     // clear the system triggers memory here, in case we get something during start jump sequence
-                    cursystriggered = new Dictionary<string, HashSet<string>>();
+                    playedtriggers = new Dictionary<string, HashSet<string>>();
 
                     starclass = jsj.FriendlyStarClass;  // reset vars
                     bodies_found = 0;
@@ -664,7 +662,7 @@ namespace EDDiscovery.UserControls
             if (sys != null)      // if we have a system
             {
                 // record triggers for this system
-                Dictionary<string, HashSet<string>> triggers = new Dictionary<string, HashSet<string>>();
+                Dictionary<string, HashSet<string>> cursystriggers = new Dictionary<string, HashSet<string>>();
 
                 // perform searches, and store them in searchresults, keyed by body name matched
 
@@ -713,12 +711,18 @@ namespace EDDiscovery.UserControls
                 if (IsClosed)   // may close during await..
                     return;
 
-                bool producebodytriggers = is_latest && eventsseen > 0;     // produce triggers only if we have seen events, so don't produce them on startup
-                bool producesearchtriggers = producebodytriggers;       // two of them exist for debugging
+                // produce body event triggers only if we have seen events, so don't produce them on startup
+                bool producebodytriggers = is_latest && eventsseen > 0;
 
-// tbd
-  producebodytriggers = true;
-producesearchtriggers = false;
+                // produce search triggers, normally the same as body, but two of them exist for debugging
+                bool producesearchtriggers = producebodytriggers;
+
+                // if to play if we already have played a tigger
+                bool playalwaystriggers = false;
+
+//  producebodytriggers = true;
+//producesearchtriggers = true;
+//  playalwaystriggers = true;
 
                 if (systemnode != null)     // if we have a node (should do of course since july 22 due to AddLocation in scan node)
                 {
@@ -750,39 +754,36 @@ producesearchtriggers = false;
                         bool matchedlandablevolcanism = sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism);
                         bool matchedvolcanism = sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism);
 
-                        // make up triggers for the action programs
-
-                        triggers[sd.BodyName] = new HashSet<string>();
-                        var en = triggers[sd.BodyName];
+                        // for this body, put into cursystriggers a fresh hashset
+                        HashSet<string> curbodytriggers = cursystriggers[sd.BodyName] = new HashSet<string>();
 
                         // we only send trigger actions when we are tracking the latest travel history, not when we are back in the history
                         // and we have had new events come in (showing we are not just started up cold)
-
                         if (producebodytriggers)
                         {
                             // test
                             //en.Add(TTThargoidSignals); en.Add(TTMiningSignals); en.Add(TTHighGravity + sd.nSurfaceGravityG.Value.ToStringInvariant("#.##")); en.Add(TTHuge);
 
-                            if (hasminingsignals) en.Add(TTMiningSignals);
-                            if (hasgeosignals) en.Add(TTGeoSignals);
-                            if (hasbiosignals) en.Add(TTBioSignals);
-                            if (hasthargoidsignals) en.Add(TTThargoidSignals);
-                            if (hasguardiansignals) en.Add(TTGuardianSignals);
-                            if (hashumansignals) en.Add(TTHumanSignals);
-                            if (hasothersignals) en.Add(TTOtherSignals);
-                            if (sd.CanBeTerraformable) en.Add(TTCanBeTerraformed);
-                            if (sd.IsLandable) en.Add(TTLandable);
-                            if (sd.HasMeaningfulVolcanism) en.Add(TTVolcanism);
-                            if (sd.HasRings) en.Add(TTRings);
-                            if (sd.HasBelts) en.Add(TTBelts);
-                            if (sd.Earthlike) en.Add(TTEarthlike);
-                            if (sd.WaterWorld) en.Add(TTWaterWorld);
-                            if (sd.AmmoniaWorld) en.Add(TTAmmoniaWorld);
-                            if (sd.nEccentricity >= eccentricityLimit) en.Add(TTEccentric);
-                            if (sd.nRadius < lowRadiusLimit && sd.IsPlanet) en.Add(TTTiny);
-                            if (sd.nRadius > largeRadiusLimit && sd.IsPlanet && sd.IsLandable) en.Add(TTHuge);
-                            if (sd.HasAtmosphericComposition) en.Add(TTAtmosphere + sd.AtmosphereTranslated);
-                            if (sd.IsPlanet && sd.nSurfaceGravityG >= 2) en.Add(TTHighGravity + sd.nSurfaceGravityG.Value.ToStringInvariant("#.##"));
+                            if (hasminingsignals) curbodytriggers.Add(TTMiningSignals);
+                            if (hasgeosignals) curbodytriggers.Add(TTGeoSignals);
+                            if (hasbiosignals) curbodytriggers.Add(TTBioSignals);
+                            if (hasthargoidsignals) curbodytriggers.Add(TTThargoidSignals);
+                            if (hasguardiansignals) curbodytriggers.Add(TTGuardianSignals);
+                            if (hashumansignals) curbodytriggers.Add(TTHumanSignals);
+                            if (hasothersignals) curbodytriggers.Add(TTOtherSignals);
+                            if (sd.CanBeTerraformable) curbodytriggers.Add(TTCanBeTerraformed);
+                            if (sd.IsLandable) curbodytriggers.Add(TTLandable);
+                            if (sd.HasMeaningfulVolcanism) curbodytriggers.Add(TTVolcanism);
+                            if (sd.HasRings) curbodytriggers.Add(TTRings);
+                            if (sd.HasBelts) curbodytriggers.Add(TTBelts);
+                            if (sd.Earthlike) curbodytriggers.Add(TTEarthlike);
+                            if (sd.WaterWorld) curbodytriggers.Add(TTWaterWorld);
+                            if (sd.AmmoniaWorld) curbodytriggers.Add(TTAmmoniaWorld);
+                            if (sd.nEccentricity >= eccentricityLimit) curbodytriggers.Add(TTEccentric);
+                            if (sd.nRadius < lowRadiusLimit && sd.IsPlanet) curbodytriggers.Add(TTTiny);
+                            if (sd.nRadius > largeRadiusLimit && sd.IsPlanet && sd.IsLandable) curbodytriggers.Add(TTHuge);
+                            if (sd.HasAtmosphericComposition) curbodytriggers.Add(TTAtmosphere + sd.AtmosphereTranslated);
+                            if (sd.IsPlanet && sd.nSurfaceGravityG >= 2) curbodytriggers.Add(TTHighGravity + sd.nSurfaceGravityG.Value.ToStringInvariant("#.##"));
                         }
 
                         // compute if we want search results displayed
@@ -851,7 +852,7 @@ producesearchtriggers = false;
                                         searchpasslist = searchpasslist.AppendPrePad(hrentry.FilterPassed, ", ");
 
                                     if (producesearchtriggers && searchesactivevoice.Contains(hrentry.FilterPassed))   // if its a text entry
-                                        en.Add(TTDiscovery + hrentry.FilterPassed);       // add a trigger
+                                        curbodytriggers.Add(TTDiscovery + hrentry.FilterPassed);       // add a trigger which is called discovery:filter name
                                 }
 
                                 if ( searchpasslist.HasChars())
@@ -883,7 +884,7 @@ producesearchtriggers = false;
                             searchpasslist = searchpasslist.AppendPrePad(hrentry.FilterPassed, ", ");
 
                         if (producesearchtriggers && searchesactivevoice.Contains(hrentry.FilterPassed))   // if its a text entry
-                            triggers[kvp.Key].Add(TTDiscovery + hrentry.FilterPassed);       // add a trigger
+                            cursystriggers[kvp.Key].Add(TTDiscovery + hrentry.FilterPassed);       // add a trigger
                     }
 
                     if ( searchpasslist.HasChars())
@@ -930,19 +931,24 @@ producesearchtriggers = false;
                     }
                 }
 
-                foreach (var kvp in triggers)
+                // we have collected triggers for this system in cursystriggers
+                // send them out, triaging for triggers already sent by body name
+
+                foreach (var kvp in cursystriggers)
                 {
                     BaseUtils.Variables v = new BaseUtils.Variables();
 
                     int index = 1;
-                    foreach (var str in kvp.Value)
+                    foreach (string str in kvp.Value)          // this is all the triggers for this kvp.Key body
                     {
-                        if (!cursystriggered.TryGetValue(kvp.Key, out HashSet<string> hs))      // if cursys triggered does not have this body, add
-                            hs = cursystriggered[kvp.Key] = new HashSet<string>();
-// tbd
-                        if (true || !hs.Contains(str))     // if a new trigger
+                        // if played triggers, for this body, does not have a hash set, make one
+                        if (!playedtriggers.TryGetValue(kvp.Key, out HashSet<string> hs))      
+                            hs = playedtriggers[kvp.Key] = new HashSet<string>();
+
+                        if (playalwaystriggers || !hs.Contains(str))     // if play always, or its a new trigger to the body
                         {
                             hs.Add(str);
+
                             string name = str.Substring(0, str.IndexOfOrLength(":"));
                             string data = str.Contains(":") ? str.Substring(str.IndexOf(':') + 1) : "";
                             v["EventName" + index.ToStringInvariant()] = name;
@@ -1502,7 +1508,7 @@ producesearchtriggers = false;
         private const int largeRadiusLimit = 20000 * 1000; // large body limit in km converted to m
         private const double eccentricityLimit = 0.95; //orbital eccentricity limit
 
-        Dictionary<string, HashSet<string>> cursystriggered = new Dictionary<string, HashSet<string>>();    // triggers already played
+        Dictionary<string, HashSet<string>> playedtriggers = new Dictionary<string, HashSet<string>>();    // triggers already played
 
         public const string TTMiningSignals = "MiningSignals";      // triggering names
         public const string TTGeoSignals = "GeoSignals";

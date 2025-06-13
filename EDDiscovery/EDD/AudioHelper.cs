@@ -13,6 +13,7 @@
  */
 
 using AudioExtensions;
+using AudioTest;
 using System;
 using System.Runtime.CompilerServices;
 
@@ -23,17 +24,37 @@ namespace EDDiscovery
      */
     public static class AudioHelper
     {
-        public static ISpeechEngine GetSpeechEngine(Action<string> log)
+        public static ISpeechEngine GetWindowsSpeechEngine(Action<string> log)
         {
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
             {
                 try
                 {
-                    return AudioHelperWindowsProxy.GetSpeechEngine();
+                    return AudioHelperWindowsProxy.GetWindowsSpeechEngine();
                 }
                 catch (Exception ex)
                 {
-                    log(String.Format("Error initializing Windows speech synthesis engine: {0}\nSpeech synthesis will be unavailable", ex.Message));
+                    log($"Error initializing Windows speech synthesis engine: {ex}");
+                    return new DummySpeechEngine();
+                }
+            }
+            else
+            {
+                return new DummySpeechEngine();
+            }
+        }
+
+        public static ISpeechEngine GetWindowsMediaSpeechEngine(Action<string> log)
+        {
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            {
+                try
+                {
+                    return AudioHelperWindowsProxy.GetWindowsMediaSpeechEngine();
+                }
+                catch (Exception ex)
+                {
+                    log($"Error initializing Windows media speech synthesis engine: {ex}");
                     return new DummySpeechEngine();
                 }
             }
@@ -53,7 +74,7 @@ namespace EDDiscovery
                 }
                 catch (Exception ex)
                 {
-                    log(String.Format("Error initializing Windows speech recognition engine: {0}\nSpeech recognition will be unavailable", ex.Message));
+                    log($"Error initializing Windows speech recognition engine: {ex}");
                     return new VoiceRecognitionDummy();
                 }
             }
@@ -73,7 +94,7 @@ namespace EDDiscovery
                 }
                 catch (Exception ex)
                 {
-                    log(String.Format("Error initializing CSCore Audio driver: {0}\nAudio will be unavailable", ex.Message));
+                    log($"Error initializing CSCore Audio driver: {ex}");
                     return new AudioDriverDummy();
                 }
             }
@@ -87,10 +108,20 @@ namespace EDDiscovery
     public static class AudioHelperWindowsProxy
     {
         [MethodImpl(MethodImplOptions.NoInlining)]
-        public static ISpeechEngine GetSpeechEngine()
+        public static ISpeechEngine GetWindowsSpeechEngine()
         {
 #if !NO_SYSTEM_SPEECH
             return new WindowsSpeechEngine();
+#else
+            return new DummySpeechEngine();
+#endif
+        }
+
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        public static ISpeechEngine GetWindowsMediaSpeechEngine()
+        {
+#if !NO_SYSTEM_SPEECH
+            return new WindowsMediaSpeechEngine();
 #else
             return new DummySpeechEngine();
 #endif

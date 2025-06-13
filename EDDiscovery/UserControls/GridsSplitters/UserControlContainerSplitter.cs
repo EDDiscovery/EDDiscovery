@@ -266,6 +266,10 @@ namespace EDDiscovery.UserControls
                 tabstrip.Tag = tagid;                         // Tag stores the ID index of this view
                 tabstrip.Name = Name + "." + tagid.ToStringInvariant();
 
+                // we need to theme the tabstrip since we added it..
+
+                tabstrip.Theme(ExtendedControls.Theme.Current, ExtendedControls.Theme.Current.GetFont);
+
                 //System.Diagnostics.Debug.WriteLine("Make new tab control " + tabstrip.Name + " id "  + tagid + " of " + panelid );
 
                 tabstrip.AllowClose += (tab, index, ctrl) =>
@@ -311,7 +315,7 @@ namespace EDDiscovery.UserControls
                         System.Diagnostics.Trace.WriteLine($"Splitter apply scaling to {uccb.Name} {scale}");
                         uccb.Scale(scale);       // keeping to the contract, scale and theme the uc. between init and set cursor
 
-                        ExtendedControls.Theme.Current.ApplyStd(uccb);     
+                        ExtendedControls.Theme.Current.ApplyStd(uccb);
 
                         uccb.LoadLayout();
                         uccb.InitialDisplay();

@@ -200,10 +200,7 @@ namespace EDDiscovery
 
                                     System.Diagnostics.Trace.WriteLine($"Peforming spansh update on data {delta} old from {url}");
 
-                                    // we do this non overlapped with replace, to pause to allow main system to run ok
-                                    SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 50000, grids, true, false );        
-                                    syncstate.updatesync_count = loader3.ParseJSONFile(downloadfile, PendingClose.Token, ReportSyncProgress);
-                                    loader3.Finish(PendingClose.Token);
+                                    syncstate.updatesync_count = SystemsDatabase.Instance.UpdateSystems(downloadfile, grids, PendingClose.Token, ReportSyncProgress);
 
                                     System.Diagnostics.Trace.WriteLine($"Downloaded from spansh {syncstate.updatesync_count}");
                                 }

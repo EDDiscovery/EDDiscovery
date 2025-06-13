@@ -356,10 +356,10 @@ namespace EDDiscovery
             {
                 audiodriverwave = AudioHelper.GetAudioDriver(LogLineHighlight, EDDConfig.Instance.DefaultWaveDevice);
                 audiodriverspeech = AudioHelper.GetAudioDriver(LogLineHighlight, EDDConfig.Instance.DefaultVoiceDevice);
-                AudioExtensions.ISpeechEngine speechengine;
 
-                speechengine = AudioHelper.GetSpeechEngine(LogLineHighlight);
-                speechsynth = new AudioExtensions.SpeechSynthesizer(speechengine);
+                var windowsspeechengine = AudioHelper.GetWindowsSpeechEngine(LogLineHighlight);
+                var windowsmediaspeechenginer = AudioHelper.GetWindowsMediaSpeechEngine(LogLineHighlight);
+                speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.ISpeechEngine[] { windowsspeechengine, windowsmediaspeechenginer });
             }
             else
             {
@@ -987,6 +987,8 @@ namespace EDDiscovery
             audiodriverspeech.Dispose();
             audioqueuewave.Dispose();
             audiodriverwave.Dispose();
+
+            speechsynth.Dispose();
 
             disallowclose = false;
             Close();
