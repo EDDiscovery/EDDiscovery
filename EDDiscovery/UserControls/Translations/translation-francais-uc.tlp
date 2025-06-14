@@ -212,7 +212,7 @@ SECTION UserControlEngineering
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "Filtrer le tableau par type de module"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Lorsque rouge, utilise les matériaux à la position du curseur pour estimer. Lorsque vert, utilise toujours les derniers matériaux"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" = UserControlSynthesis.extButtonPushResources.ToolTip
 
 SECTION UserControlEngineers
 
@@ -221,7 +221,7 @@ SECTION UserControlEngineers
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" => "Augmente la taille de la grille pour afficher plus de détails"
 .buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." = UserControlEngineering.chkNotHistoric.ToolTip
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" = UserControlSynthesis.extButtonPushResources.ToolTip
 
 SECTION UserControlEstimatedValues
 
@@ -731,7 +731,7 @@ SECTION UserControlScan
 .StarAge: "Show age of stars" => "Afficher l'age des étoiles"
 .Expired: "Expired:" => "Expiré :"
 .StarsOnDiffLines: "Show bodyless stars on separate lines" => "Afficher les étoiles sans corps sur des lignes séparées"
-.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" => "Créer un nouveau marque-page pour le système actuel"
 
 SECTION UserControlScanGrid
 
@@ -763,7 +763,7 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Anneaux"
 .materialsToolStripMenuItem: "Show materials" = UserControlMaterialCommodities.Mats
 .extButtonHighValue.ToolTip: "Set High Value Limit" = UserControlScan.extButtonHighValue.ToolTip
-.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" = UserControlScan.extButtonNewBookmark.ToolTip
 
 SECTION UserControlSettings
 
@@ -874,7 +874,7 @@ SECTION UserControlShipYards
 .Distance: "Distance" @
 .Price: "Price" = UserControlOutfitting.Price
 .Ship: "Ship" = UserControlModules.labelShip
-.Manufacturer: "Manufacturer" @
+.Manufacturer: "Manufacturer" => "Fabricant"
 .MS: "Mass/Speed" => "Masse/Vitesse"
 
 SECTION UserControlShoppingList
@@ -970,7 +970,7 @@ SECTION UserControlStarList
 .ColumnSystem: "System" = SearchScans.ColumnSystem
 .ColumnVisits: "Visits" = UserControlExpedition.Visits
 .ColumnInformation: "Information" @
-.ColumnBodycount: "Body count" @
+.ColumnBodycount: "Body count" => "Nombre de corps"
 .labelSearch: "Search" = UserControlBookmarks.labelSearch
 .labelTime: "Time" = UserControlLedger.TimeCol
 .removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" = UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem
@@ -1279,8 +1279,8 @@ SECTION UserControlTravelGrid
 .checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "Déplace automatiquement le curseur sur la dernière entrée lorsqu'elle arrive"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
 .extCheckBoxOutlines.ToolTip: "Control Outlining" => "Contrôle du regroupement"
-.extButtonTimeRanges.ToolTip: "Define new time ranges for time selector" @
-.extComboBoxQuickMarks.ToolTip: "Go to a marked journal entry. Use right click to mark an entry" @
+.extButtonTimeRanges.ToolTip: "Define new time ranges for time selector" => "Définir de nouvelles plages horaires pour le sélecteur de temps"
+.extComboBoxQuickMarks.ToolTip: "Go to a marked journal entry. Use right click to mark an entry" => "Accédez à une entrée de journal marquée. Faites un clic droit pour marquer une entrée"
 .SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 .StartStopHidden: "Next start/stop marker is hidden" => "Le marqueur début/fin suivant est caché"
 .StartStopNotFound: "No start/stop marker found below" => "Pas de marqueur début/fin trouvé ci-dessous"
@@ -1643,7 +1643,7 @@ SECTION UserControlCarrier
 .extTabControl.tabPageCAPI3.dataGridViewTextBoxColumnValue: "Value" = UserControlModules.Value
 .extTabControl.tabPageCAPI1: "CAPI Ships/Modules" => "CAPI Vaisseaux/Modules"
 .extTabControl.tabPageCAPI1.colCAPIShipsName: "Name" = UserControlCombatPanel.Name
-.extTabControl.tabPageCAPI1.colCAPIShipsManu: "Manufacturer" @
+.extTabControl.tabPageCAPI1.colCAPIShipsManu: "Manufacturer" = UserControlShipYards.Manufacturer
 .extTabControl.tabPageCAPI1.colCAPIShipsPriceNumeric: "Price" = UserControlOutfitting.Price
 .extTabControl.tabPageCAPI1.colCAPIShipsSpeedNumeric: "Speed" => "Vitesse"
 .extTabControl.tabPageCAPI1.colCAPIShipsBoostNumeric: "Boost" @
