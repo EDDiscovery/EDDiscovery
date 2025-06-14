@@ -61,7 +61,6 @@ namespace EDDiscovery
         const int ForceEDSMFullDownloadDays = 56;      // beyond this time, we force a full download
         const int ForceSpanshFullDownloadDays = 170;   // beyond this time, we force a full download
         const int MiniumSpanshUpdateAge = 3;           // beyond this time, we update spansh
-        const int EDSMUpdateFetchHours = 12;           // for an update fetch, its these number of hours at a time (Feb 2021 moved to 6 due to EDSM new server)
 
         public void CheckForSync()      // called in background init
         {
@@ -146,7 +145,7 @@ namespace EDDiscovery
                                     {
                                         ReportSyncProgress("Download complete, creating database");
 
-                                        syncstate.fullsync_count = SystemsDatabase.Instance.MakeSystemTableFromFile(downloadfile, grids, 200000, PendingClose.Token, ReportSyncProgress, method: 3);
+                                        syncstate.fullsync_count = SystemsDatabase.Instance.CreateSystemDBFromJSONFile(downloadfile, grids, 200000, PendingClose.Token, ReportSyncProgress, method: 3);
 
                                         if (deletefile && !PendingClose.IsCancellationRequested)        // if remove file, and we are not cancelled, delete it
                                             BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       
@@ -200,7 +199,7 @@ namespace EDDiscovery
 
                                     System.Diagnostics.Trace.WriteLine($"Peforming spansh update on data {delta} old from {url}");
 
-                                    syncstate.updatesync_count = SystemsDatabase.Instance.UpdateSystems(downloadfile, grids, PendingClose.Token, ReportSyncProgress);
+                                    syncstate.updatesync_count = SystemsDatabase.Instance.UpdateSpanshSystemsFromJSONFile(downloadfile, grids, PendingClose.Token, ReportSyncProgress);
 
                                     System.Diagnostics.Trace.WriteLine($"Downloaded from spansh {syncstate.updatesync_count}");
                                 }
@@ -215,7 +214,7 @@ namespace EDDiscovery
                         }
                         else
                         {
-                            syncstate.updatesync_count = EDSMUpdateSync(grids, PendingClose.Token, ReportSyncProgress);
+                            syncstate.updatesync_count = SystemsDatabase.Instance.UpdateEDSMSystemsFromWeb(grids, PendingClose.Token, ReportSyncProgress, LogLine, ForceEDSMFullDownloadDays);
                         }
                     }
                 }
@@ -248,152 +247,6 @@ namespace EDDiscovery
             resyncSysDBRequestedFlag = 0;        // releases flag and allow another async to happen
 
             System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLap() + " Perform sync completed");
-        }
-
-        public long EDSMUpdateSync(bool[] grididallow, CancellationToken cancel, Action<string> ReportProgress)
-        {
-            // smallish block size, non overlap, allow overwrite
-            SystemsDB.Loader3 loader3 = new SystemsDB.Loader3("", 50000, grididallow, false, false);       
-
-            DateTime maximumupdatetimewindow = DateTime.UtcNow.AddDays(-ForceEDSMFullDownloadDays);        // limit download to this amount of days
-            if (loader3.LastDate < maximumupdatetimewindow)
-                loader3.LastDate = maximumupdatetimewindow;               // this stops crazy situations where somehow we have a very old date but the full sync did not take care of it
-
-            long updates = 0;
-
-            double fetchmult = 1;
-
-            DateTime minimumfetchspan = DateTime.UtcNow.AddHours(-EDSMUpdateFetchHours / 2);        // we don't bother fetching if last record time is beyond this point
-
-            while (loader3.LastDate < minimumfetchspan)                              // stop at X mins before now, so we don't get in a condition
-            {                                                                           // where we do a set, the time moves to just before now, 
-                                                                                        // and we then do another set with minimum amount of hours
-                if (cancel.IsCancellationRequested)
-                    break;
-
-                if ( updates == 0)
-                    LogLine("Checking for updated EDSM systems (may take a few moments).");
-
-                EDSMClass edsm = new EDSMClass();
-
-                double hourstofetch = EDSMUpdateFetchHours;        //EDSM new server feb 2021, more capable, 
-
-                DateTime enddate = loader3.LastDate + TimeSpan.FromHours(hourstofetch * fetchmult);
-                if (enddate > DateTime.UtcNow)
-                    enddate = DateTime.UtcNow;
-
-                LogLine($"Downloading systems from UTC {loader3.LastDate} to {enddate}");
-                System.Diagnostics.Debug.WriteLine($"Downloading systems from UTC {loader3.LastDate} to {enddate} {hourstofetch}");
-
-                string json = null;
-                BaseUtils.HttpCom.Response response;
-                try
-                {
-                    System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch();
-                    response = edsm.RequestSystemsData(loader3.LastDate, enddate, timeout: 20000);
-                    fetchmult = Math.Max(0.1, Math.Min(Math.Min(fetchmult * 1.1, 1.0), 5000.0 / sw.ElapsedMilliseconds));
-                }
-                catch (WebException ex)
-                {
-                    ReportProgress($"EDSM request failed");
-                    if (ex.Status == WebExceptionStatus.ProtocolError && ex.Response != null && ex.Response is HttpWebResponse)
-                    {
-                        string status = ((HttpWebResponse)ex.Response).StatusDescription;
-                        LogLine($"Download of EDSM systems from the server failed ({status}), will try next time program is run");
-                    }
-                    else
-                    {
-                        LogLine($"Download of EDSM systems from the server failed ({ex.Status.ToString()}), will try next time program is run");
-                    }
-
-                    break;
-                }
-                catch (Exception ex)
-                {
-                    ReportProgress($"EDSM request failed");
-                    LogLine($"Download of EDSM systems from the server failed ({ex.Message}), will try next time program is run");
-                    break;
-                }
-
-                if (response.Error)
-                {
-                    if ((int)response.StatusCode == 429)
-                    {
-                        LogLine($"EDSM rate limit hit - waiting 2 minutes");
-                        for (int sec = 0; sec < 120; sec++)
-                        {
-                            if (!cancel.IsCancellationRequested)
-                            {
-                                System.Threading.Thread.Sleep(1000);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        LogLine($"Download of EDSM systems from the server failed ({response.StatusCode.ToString()}), will try next time program is run");
-                        break;
-                    }
-                }
-
-                json = response.Body;
-
-                if (json == null)
-                {
-                    ReportProgress("EDSM request failed");
-                    LogLine("Download of EDSM systems from the server failed (no data returned), will try next time program is run");
-                    break;
-                }
-
-                // debug File.WriteAllText(@"c:\code\json.txt", json);
-
-                ReportProgress($"EDSM star database update from UTC " + loader3.LastDate.ToString() );
-
-                var prevrectime = loader3.LastDate;
-
-                long updated = loader3.ParseJSONString(json, cancel, ReportSyncProgress);
-
-                System.Diagnostics.Trace.WriteLine($"EDSM partial download updated {updated} to {loader3.LastDate}");
-
-                // if lastrecordtime did not change (=) or worse still, EDSM somehow moved the time back (unlikely)
-                if (loader3.LastDate <= prevrectime)
-                {
-                    loader3.LastDate += TimeSpan.FromHours(12);       // Lets move on manually so we don't get stuck
-                }
-
-                updates += updated;
-
-                int delay = 10;     // Anthor's normal delay 
-                int ratelimitlimit;
-                int ratelimitremain;
-                int ratelimitreset;
-
-                if (response.Headers != null &&
-                    response.Headers["X-Rate-Limit-Limit"] != null &&
-                    response.Headers["X-Rate-Limit-Remaining"] != null &&
-                    response.Headers["X-Rate-Limit-Reset"] != null &&
-                    Int32.TryParse(response.Headers["X-Rate-Limit-Limit"], out ratelimitlimit) &&
-                    Int32.TryParse(response.Headers["X-Rate-Limit-Remaining"], out ratelimitremain) &&
-                    Int32.TryParse(response.Headers["X-Rate-Limit-Reset"], out ratelimitreset))
-                {
-                    if (ratelimitremain < ratelimitlimit * 3 / 4)       // lets keep at least X remaining for other purposes later..
-                        delay = ratelimitreset / (ratelimitlimit - ratelimitremain);    // slow down to its pace now.. example 878/(360-272) = 10 seconds per quota
-                    else
-                        delay = 0;
-
-                    System.Diagnostics.Debug.WriteLine("EDSM Delay Parameters {0} {1} {2} => {3}s", ratelimitlimit, ratelimitremain, ratelimitreset, delay);
-                }
-
-                for (int sec = 0; sec < delay; sec++)
-                {
-                    if (!cancel.IsCancellationRequested)
-                    {
-                        System.Threading.Thread.Sleep(1000);
-                    }
-                }
-            }
-
-            loader3.Finish(cancel);
-            return updates;
         }
 
 

@@ -723,9 +723,14 @@ namespace EDDiscovery.UserControls
         public static void RemoveSectors(List<int> sectors, Action<string> inform)
         {
             inform("Removing Grids" + Environment.NewLine);
-            SystemsDatabase.Instance.RemoveGridSystems(sectors.ToArray(), inform);   
-            inform("Vacuum Database for size" + Environment.NewLine);
-            SystemsDB.Vacuum();
+            if (SystemsDatabase.Instance.RemoveGridSystems(sectors.ToArray(), inform))
+            {
+                inform("Vacuum Database for size" + Environment.NewLine);
+                SystemsDB.Vacuum();
+                inform("Vacuum Complete" + Environment.NewLine);
+            }
+            else
+                inform("Other DB update is occurring aborting sector removal" + Environment.NewLine);
         }
 
         private Task taskremovesectors = null;

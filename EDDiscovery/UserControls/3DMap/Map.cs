@@ -889,7 +889,7 @@ namespace EDDiscovery.UserControls.Map3D
                     // if auto update, and eyedistance close, and db is okay, try it
 
                     if ((parts & Parts.AutoEDSMStarsUpdate) != 0 && gl3dcontroller.MatrixCalc.EyeDistance < 400 &&
-                                    EliteDangerousCore.DB.SystemsDatabase.Instance.RebuildRunning == false)
+                                    EliteDangerousCore.DB.SystemsDatabase.Instance.DBUpdating == false)
                     {
                         galaxystars.Request9x3BoxConditional(gl3dcontroller.PosCamera.LookAt);
                     }
