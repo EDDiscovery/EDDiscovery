@@ -664,10 +664,17 @@ namespace EDDiscovery
                 }
             }
 
-            SystemEvents.PowerModeChanged += (senderpe, pevent) => {
-                if ( pevent.Mode == PowerModes.Suspend )
+            SystemEvents.PowerModeChanged += (senderpe, pevent) =>
+            {
+                if (pevent.Mode == PowerModes.Suspend)
                 {
-                    System.Diagnostics.Debug.WriteLine("**** Power Mode suspend");
+                    System.Diagnostics.Trace.WriteLine("**** Power Mode suspend for sleep (3D Map panels closed)");
+                    RemovePanel(PanelInformation.PanelIDs.LocalMap3D);
+                    RemovePanel(PanelInformation.PanelIDs.Map3D);
+                }
+                else if (pevent.Mode == PowerModes.Resume)
+                {
+                    System.Diagnostics.Trace.WriteLine("**** Power Mode resume due to wakeup");
                 }
             };
 
