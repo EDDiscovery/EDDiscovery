@@ -927,7 +927,6 @@ namespace EDDiscovery.UserControls
             // treeViewStats
             // 
             this.treeViewStats.BorderColor = System.Drawing.Color.Transparent;
-            this.treeViewStats.BorderColorScaling = 0.5F;
             this.treeViewStats.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeViewStats.HideScrollBar = true;
             this.treeViewStats.Location = new System.Drawing.Point(0, 0);
