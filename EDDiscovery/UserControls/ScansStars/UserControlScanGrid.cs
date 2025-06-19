@@ -286,7 +286,7 @@ namespace EDDiscovery.UserControls
                         if (sn.ScanData.Terraformable)
                             bdClass.Append("Terraformable".T(EDTx.UserControlScanGrid_Terraformable)).Append(", ");
 
-                        if (sn.NodeType == StarScan.ScanNodeType.body)      // Planet, not barycenter/belt
+                        if (sn.ScanData.IsPlanet)      // Planet, not barycenter/belt
                         {
                             bdClass.Append(sn.ScanData.PlanetTypeText);
 
@@ -474,7 +474,7 @@ namespace EDDiscovery.UserControls
 
                     texttoadd = new string[] { sn.BodyDesignator, "", "", bdDetails.ToString() };
                     pc.Add(new ExtPictureBox.ImageElement(new Rectangle(0, 0, imagesize.Width, imagesize.Height),
-                            sn.NodeType == StarScan.ScanNodeType.star ? BodyToImages.GetStarImageNotScanned() :
+                            sn.NodeType == StarScan.ScanNodeType.toplevelstar ? BodyToImages.GetStarImageNotScanned() :
                             sn.NodeType == StarScan.ScanNodeType.belt ? BodyToImages.GetBeltImage() :
                             BodyToImages.GetPlanetImageNotScanned(),
                             imgowned:false));       // NOTE the picture box does not own the image

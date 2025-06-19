@@ -227,7 +227,7 @@ namespace EDDiscovery.Actions
             if ( childreninfoname != null )
             {
                 int totalchildren = (scannode.Children != null) ? scannode.Children.Count : 0;
-                int totalbodies = (scannode.Children != null) ? (from x in scannode.Children where x.Value.NodeType == StarScan.ScanNodeType.body select x).Count() : 0;
+                int totalbodies = (scannode.Children != null) ? (from x in scannode.Children where x.Value.NodeType == StarScan.ScanNodeType.planetmoonsubstar select x).Count() : 0;
                 ap[storename + childreninfoname] = totalchildren.ToStringInvariant();
                 ap[storename + childreninfoname + "_Only"] = totalbodies.ToStringInvariant();       // we do this, because children can be other than bodies..
             }

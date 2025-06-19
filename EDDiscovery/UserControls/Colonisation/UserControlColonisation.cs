@@ -110,7 +110,7 @@ namespace EDDiscovery.UserControls
                 redisplay = true;
                 System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation switched to `{current.System.Name}` due to ret.newsystem");
             }
-            else if (ret.csd == current)                    // if we changed something about the current system
+            else if (ret.csd != null && ret.csd == current)                    // if we changed something about the current system
             {
                 System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation update display due to change in `{current.System.Name}`");
                 redisplay = true;
