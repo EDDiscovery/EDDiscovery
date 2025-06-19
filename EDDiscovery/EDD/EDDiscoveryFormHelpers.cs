@@ -547,7 +547,7 @@ namespace EDDiscovery
                 jo["buttonstyle"] = UserDatabase.Instance.GetSetting("ButtonStyle", Theme.ButtonstyleGradient);
                 jo["textboxborderstyle"] = UserDatabase.Instance.GetSetting("TextBoxBorderStyle", Theme.TextboxborderstyleColor);
 
-                jo.WriteJSONFile(@"c:\code\eddtheme.json", true);
+                //jo.WriteJSONFile(@"c:\code\eddtheme.json", true);
 
                 Theme tme = Theme.FromJSON(jo);
 

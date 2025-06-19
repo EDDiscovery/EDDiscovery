@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017-2022 EDDiscovery development team
+ * Copyright 2017-2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -516,12 +516,13 @@ namespace EDDiscovery.UserControls
                         var mr = e.journalEntry as JournalMiningRefined;
                         var matmr = MaterialsFound.Find(mr.Type, found);
                         matmr.amountrefined++;
+                       // System.Diagnostics.Debug.WriteLine($"Mining {e.EventTimeUTC} Refined {matmr.amountrefined}");
                         break;
                     case JournalTypeEnum.MaterialCollected:
                         var mc = e.journalEntry as JournalMaterialCollected;
                         var matmc = MaterialsFound.Find(mc.Name, found);
                         matmc.amountcollected += mc.Count;
-                        //System.Diagnostics.Debug.WriteLine("Collected {0} {1}", mc.Count, matmc.amountcollected);
+                       // System.Diagnostics.Debug.WriteLine($"Mining {e.EventTimeUTC} Collected {mc.Count} {matmc.amountcollected}");
                         break;
                     case JournalTypeEnum.MaterialDiscarded:
                         var md = e.journalEntry as JournalMaterialDiscarded;

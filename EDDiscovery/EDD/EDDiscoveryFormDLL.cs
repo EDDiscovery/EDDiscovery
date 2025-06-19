@@ -231,7 +231,7 @@ namespace EDDiscovery
                 if ( json == null )
                     json = new JObject();   // default return
 
-                BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllscan.json", json.ToString(true));
+                //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllscan.json", json.ToString(true));
                 dll.DataResult(requesttag, usertag, json.ToString());
             }
 
@@ -270,7 +270,7 @@ namespace EDDiscovery
                 if (json == null)
                     json = new JObject();   // default return
 
-                BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllscan.json", json.ToString(true));
+                //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllscan.json", json.ToString(true));
                 dll.DataResult(requesttag, usertag, json.ToString());
             }
 
@@ -299,7 +299,7 @@ namespace EDDiscovery
                 if (json == null)
                     json = new JObject();   // default return
 
-                BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\spanshdump.json", json.ToString(true));
+                //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\spanshdump.json", json.ToString(true));
                 dll.DataResult(requesttag, usertag, json.ToString());
             }
 

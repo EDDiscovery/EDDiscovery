@@ -343,9 +343,9 @@ namespace EDDiscovery.UserControls
                 DateTimeRangeDialog(extButtonStartStop, reformedlist);
             }
         }
-        private void extButtonDocked_Click(object sender, EventArgs e)
+        private void extButtonUndocked_Click(object sender, EventArgs e)
         {
-            var docked = JournalEntry.GetByEventType(JournalTypeEnum.Docked, EDCommander.CurrentCmdrID, DateTime.MinValue, DateTime.MaxValue);
+            var docked = JournalEntry.GetByEventType(JournalTypeEnum.Undocked, EDCommander.CurrentCmdrID, DateTime.MinValue, DateTime.MaxValue);
 
             if (docked.Count > 0)
             {
@@ -356,7 +356,7 @@ namespace EDDiscovery.UserControls
                 for (int i = docked.Count - 1; i >= docked.Count - 1000 && i >= 1; i -= 1)        // limit to 1000 last entries
                     times.Add(new Tuple<DateTime, DateTime>(docked[i - 1].EventTimeUTC, docked[i].EventTimeUTC));
 
-                DateTimeRangeDialog(extButtonDocked, times);
+                DateTimeRangeDialog(extButtonUndocked, times);
             }
         }
 
