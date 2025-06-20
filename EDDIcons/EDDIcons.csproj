@@ -476,6 +476,12 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\ColonisationSystemClaimRelease.png" />
+    <EmbeddedResource Include="Journal\ColonisationBeaconDeployed.png" />
+    <EmbeddedResource Include="Journal\ColonisationSystemClaim.png" />
+    <EmbeddedResource Include="Journal\ColonisationContribution.png" />
+    <EmbeddedResource Include="Journal\ColonisationConstructionDepot.png" />
+    <EmbeddedResource Include="Panels\Colonisation.png" />
     <EmbeddedResource Include="Journal\HoloscreenHacked.png" />
     <EmbeddedResource Include="Journal\RequestPowerMicroResources.png" />
     <EmbeddedResource Include="Journal\DeliverPowerMicroResources.png" />
