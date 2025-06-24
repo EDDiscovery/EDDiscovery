@@ -10,7 +10,7 @@ namespace EDDiscovery.Icons
     {
         public static void Include()         // if no direct references to the assembly is present, it gets optimised away.
         {
-            System.Diagnostics.Debug.WriteLine("Included EDDicons");
+            //System.Diagnostics.Debug.WriteLine("Included EDDicons");
         }
     }
 }

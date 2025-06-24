@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022 EDDiscovery development team
+ * Copyright 2016-2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -11,6 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+
 using System;
 using System.Data;
 using System.Drawing;
@@ -107,7 +108,7 @@ namespace EDDiscovery.UserControls
             {
                 int tagid = (int)c.Tag;
                 int displaynumber = DisplayNumberOfSplitter(tagid);                         // tab strip - use tag to remember display id which helps us save context.
-                System.Diagnostics.Trace.WriteLine($"Splitter Make {uccb.PanelID} tag {tagid} dno {displaynumber}");
+                //System.Diagnostics.Trace.WriteLine($"Splitter Make {uccb.PanelID} tag {tagid} dno {displaynumber}");
 
                 uccb.Init(DiscoveryForm, displaynumber);
             });
@@ -180,7 +181,7 @@ namespace EDDiscovery.UserControls
                 if (uccb != null)     // tab strip may not have a control set..
                 {
                     uccb.CloseDown();
-                    System.Diagnostics.Trace.WriteLine($"Splitter Close {uccb.PanelID} dno {DisplayNumber}");
+                    //System.Diagnostics.Trace.WriteLine($"Splitter Close {uccb.PanelID} dno {DisplayNumber}");
                 }
             });
 
@@ -293,7 +294,7 @@ namespace EDDiscovery.UserControls
                     c.Name = pi.WindowTitle;        // tabs uses Name field for display, must set it
                     tab.HelpAction = (pt) => { EDDHelp.Help(this.FindForm(), pt,uccb.HelpKeyOrAddress()); };
 
-                    System.Diagnostics.Trace.WriteLine("SplitterCreate Tab " + c.Name );
+                    //System.Diagnostics.Trace.WriteLine("SplitterCreate Tab " + c.Name );
 
                     uccb.RequestPanelOperation += SplitterRequestAction;
 
@@ -308,11 +309,11 @@ namespace EDDiscovery.UserControls
 
                     if (uccb != null)
                     {
-                        System.Diagnostics.Trace.WriteLine("Splitter Make Tab " + tabstripid + " with dno " + displaynumber );
+                        //System.Diagnostics.Trace.WriteLine("Splitter Make Tab " + tabstripid + " with dno " + displaynumber );
                         uccb.Init(DiscoveryForm, displaynumber);      // init..
 
                         var scale = this.FindForm().CurrentAutoScaleFactor();
-                        System.Diagnostics.Trace.WriteLine($"Splitter apply scaling to {uccb.Name} {scale}");
+                        //System.Diagnostics.Trace.WriteLine($"Splitter apply scaling to {uccb.Name} {scale}");
                         uccb.Scale(scale);       // keeping to the contract, scale and theme the uc. between init and set cursor
 
                         ExtendedControls.Theme.Current.ApplyStd(uccb);
