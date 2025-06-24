@@ -763,7 +763,7 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Ringe"
 .materialsToolStripMenuItem: "Show materials" => "Materialien"
 .extButtonHighValue.ToolTip: "Set High Value Limit" = UserControlScan.extButtonHighValue.ToolTip
-.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" => "Erstelle ein neue Lesezeichen für das aktuelle System"
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" = UserControlScan.extButtonNewBookmark.ToolTip
 
 SECTION UserControlSettings
 

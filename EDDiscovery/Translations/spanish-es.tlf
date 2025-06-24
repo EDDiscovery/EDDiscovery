@@ -193,6 +193,10 @@ SECTION PopOutInfo
 .Resources.Description: "All Materials, Commodity, MicroResources" => "Todos los materiales, productos básicos, micro-recursos"
 .SpanshStations.Title: "Spansh Stations" => "Estaciones de Spansh"
 .SpanshStations.Description: "Stations in the system from spansh web data" => "Estaciones en el sistema desde datos web de Spansh"
+.Colonisation.Title: "Colonisation" @
+.Colonisation.Description: "Colonisation statistics" @
+.TestOverlay.Title: "TestOverlay" @
+.TestOverlay.Description: "Test overlay" @
 
 SECTION EDDiscoveryForm
 

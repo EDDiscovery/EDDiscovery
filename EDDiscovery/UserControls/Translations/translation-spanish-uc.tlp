@@ -474,7 +474,7 @@ SECTION UserControlSurveyor
 .extButtonStars.ToolTip: "Star Filter" => "Filtro de estrellas"
 .extButtonShowControl.ToolTip: "Display Settings" => "Configuración de pantalla"
 .extButtonAlignment.ToolTip: "Alignment" => "Alineación"
-.extButtonFont.ToolTip: "Font" => "Fuente"
+.extButtonFont.ToolTip: "Font" = UserControlEstimatedValues.EDSM
 .extButtonFSS.ToolTip: "FSS Signal Selection" => "Selección de señal ECS"
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" => "Ajuste de palabras"
 .extButtonSetRoute.ToolTip: "Select route to follow" => "Seleccionar ruta a seguir"
@@ -763,7 +763,7 @@ SECTION UserControlScanGrid
 .structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Anillos"
 .materialsToolStripMenuItem: "Show materials" = UserControlMaterialCommodities.Mats
 .extButtonHighValue.ToolTip: "Set High Value Limit" => "Establecer Valor de Límite Elevado"
-.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" => "Crear un nuevo marcador para el sistema actual"
+.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" = UserControlScan.extButtonNewBookmark.ToolTip
 
 SECTION UserControlSettings
 
@@ -939,7 +939,7 @@ SECTION UserControlSpanel
 .buttonField.ToolTip: "Filter out events" => "Filtrar eventos"
 .extButtonScanShow.ToolTip: "Configure scan display" => "Configurar visualización de escaneo"
 .extButtoScanPos.ToolTip: "Set position of scan display" => "Establecer posición de la visualización de escaneo"
-.extButtonFont.ToolTip: "Font" = UserControlSurveyor.extButtonFont.ToolTip
+.extButtonFont.ToolTip: "Font" = UserControlEstimatedValues.EDSM
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" = UserControlSurveyor.extCheckBoxWordWrap.ToolTip
 .Target: "Target" = UserControlCombatPanel.labelTarget
 .TVE: "View system on EDSM" => "Ver sistema en EDSM"
@@ -1324,7 +1324,7 @@ SECTION UserControlTrilateration
 .ColumnDistance: "Distance" = UserControlOutfitting.Distance
 .ColumnCalculated: "Calculated" => "Calculado"
 .ColumnStatus: "Status" = UserControlSysInfo.labelState
-.Source: "Source" = UserControlSurveyor.extButtonFont.ToolTip
+.Source: "Source" = UserControlEstimatedValues.EDSM
 .dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" => "Sistema buscado"
 .removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" => "Eliminar de los sistemas deseados"
 .viewOnEDSMToolStripMenuItem1: "View on EDSM" = DataGridViewStarResults.EDSM
@@ -1474,7 +1474,7 @@ SECTION UserControlFactions
 SECTION UserControlOrganics
 
 .extButtonShowControl.ToolTip: "Display Settings" => "Mostrar configuración"
-.extButtonFont.ToolTip: "Font" = UserControlSurveyor.extButtonFont.ToolTip
+.extButtonFont.ToolTip: "Font" = UserControlEstimatedValues.EDSM
 .extCheckBoxWordWrap.ToolTip: "Word Wrap" => "Ajuste de palabra"
 .extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" => "Mostrar escaneos incompletos"
 .at: "At {0}" => "En {0}"

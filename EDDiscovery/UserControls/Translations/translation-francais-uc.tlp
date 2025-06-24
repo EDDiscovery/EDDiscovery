@@ -212,7 +212,7 @@ SECTION UserControlEngineering
 .buttonFilterModule.ToolTip: "Filter the table by module type" => "Filtrer le tableau par type de module"
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Lorsque rouge, utilise les matériaux à la position du curseur pour estimer. Lorsque vert, utilise toujours les derniers matériaux"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" = SearchScans.extCheckBoxWordWrap.ToolTip
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" = UserControlSynthesis.extButtonPushResources.ToolTip
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlEngineers
 
@@ -221,7 +221,7 @@ SECTION UserControlEngineers
 .extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" => "Augmente la taille de la grille pour afficher plus de détails"
 .buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
 .chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." = UserControlEngineering.chkNotHistoric.ToolTip
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" = UserControlSynthesis.extButtonPushResources.ToolTip
+.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
 
 SECTION UserControlEstimatedValues
 
