@@ -118,9 +118,12 @@ namespace EDDiscovery
         {
             foreach (TabPage p in TabPages)
             {
-                UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
-                if (uccb.AllowClose() == false)
-                    return false;
+                if (p.Controls.Count > 0)       // should not happen, but just seen it closing with no controls when using the python plugin - double check
+                {
+                    UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
+                    if (uccb?.AllowClose() == false)
+                        return false;
+                }
             }
             return true;
         }

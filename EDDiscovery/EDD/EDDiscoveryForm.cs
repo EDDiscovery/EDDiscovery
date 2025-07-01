@@ -573,16 +573,11 @@ namespace EDDiscovery
 
             panelToolBar.SetToolTip(toolTip);    // use the defaults
 
-            if (EDDOptions.Instance.ActionButton)
-            {
-                buttonReloadActions.Visible = true;
-                extButtonCAPI.Visible = true;
-            }
+            // these are on the -showactionbutton 
+            buttonReloadActions.Visible = extButtonCAPI.Visible = EDDOptions.Instance.ActionButton;
 
-            if ( EDDOptions.Instance.MaxJournalDateUTC != null)
-            {
-                extButtonSingleStep.Visible = true;
-            }
+            // these are on the -readto date option, if selecting a max date, show single step buttons
+            extButtonStop.Visible = extButtonSingleStep.Visible = EDDOptions.Instance.MaxJournalDateUTC != null;    
 
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
