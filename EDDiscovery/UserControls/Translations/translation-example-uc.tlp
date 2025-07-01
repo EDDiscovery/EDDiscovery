@@ -539,6 +539,7 @@ SECTION UserControlModules
 .ConfirmForceSell: "Confirm sell of ship" @
 .StoredModules: "Stored Modules" @
 .TravelHistoryEntry: "Travel History Entry" @
+.OwnedShips: "Owned Ships" @
 .System: "System" @
 .TxTime: "Tx Time" @
 .Cost: "Cost" @

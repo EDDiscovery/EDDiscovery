@@ -755,7 +755,10 @@ namespace EDDiscovery.UserControls
                         bool matchedvolcanism = sd.HasMeaningfulVolcanism && IsSet(CtrlList.showVolcanism);
 
                         // for this body, put into cursystriggers a fresh hashset
-                        HashSet<string> curbodytriggers = cursystriggers[sd.BodyName] = new HashSet<string>();
+                        cursystriggers[sd.BodyName] = new HashSet<string>();
+
+                        // this is an alias to cursystriggers
+                        HashSet<string> cursystriggersalias = cursystriggers[sd.BodyName];
 
                         // we only send trigger actions when we are tracking the latest travel history, not when we are back in the history
                         // and we have had new events come in (showing we are not just started up cold)
@@ -764,26 +767,26 @@ namespace EDDiscovery.UserControls
                             // test
                             //en.Add(TTThargoidSignals); en.Add(TTMiningSignals); en.Add(TTHighGravity + sd.nSurfaceGravityG.Value.ToStringInvariant("#.##")); en.Add(TTHuge);
 
-                            if (hasminingsignals) curbodytriggers.Add(TTMiningSignals);
-                            if (hasgeosignals) curbodytriggers.Add(TTGeoSignals);
-                            if (hasbiosignals) curbodytriggers.Add(TTBioSignals);
-                            if (hasthargoidsignals) curbodytriggers.Add(TTThargoidSignals);
-                            if (hasguardiansignals) curbodytriggers.Add(TTGuardianSignals);
-                            if (hashumansignals) curbodytriggers.Add(TTHumanSignals);
-                            if (hasothersignals) curbodytriggers.Add(TTOtherSignals);
-                            if (sd.CanBeTerraformable) curbodytriggers.Add(TTCanBeTerraformed);
-                            if (sd.IsLandable) curbodytriggers.Add(TTLandable);
-                            if (sd.HasMeaningfulVolcanism) curbodytriggers.Add(TTVolcanism);
-                            if (sd.HasRings) curbodytriggers.Add(TTRings);
-                            if (sd.HasBelts) curbodytriggers.Add(TTBelts);
-                            if (sd.Earthlike) curbodytriggers.Add(TTEarthlike);
-                            if (sd.WaterWorld) curbodytriggers.Add(TTWaterWorld);
-                            if (sd.AmmoniaWorld) curbodytriggers.Add(TTAmmoniaWorld);
-                            if (sd.nEccentricity >= eccentricityLimit) curbodytriggers.Add(TTEccentric);
-                            if (sd.nRadius < lowRadiusLimit && sd.IsPlanet) curbodytriggers.Add(TTTiny);
-                            if (sd.nRadius > largeRadiusLimit && sd.IsPlanet && sd.IsLandable) curbodytriggers.Add(TTHuge);
-                            if (sd.HasAtmosphericComposition) curbodytriggers.Add(TTAtmosphere + sd.AtmosphereTranslated);
-                            if (sd.IsPlanet && sd.nSurfaceGravityG >= 2) curbodytriggers.Add(TTHighGravity + sd.nSurfaceGravityG.Value.ToStringInvariant("#.##"));
+                            if (hasminingsignals) cursystriggersalias.Add(TTMiningSignals);
+                            if (hasgeosignals) cursystriggersalias.Add(TTGeoSignals);
+                            if (hasbiosignals) cursystriggersalias.Add(TTBioSignals);
+                            if (hasthargoidsignals) cursystriggersalias.Add(TTThargoidSignals);
+                            if (hasguardiansignals) cursystriggersalias.Add(TTGuardianSignals);
+                            if (hashumansignals) cursystriggersalias.Add(TTHumanSignals);
+                            if (hasothersignals) cursystriggersalias.Add(TTOtherSignals);
+                            if (sd.CanBeTerraformable) cursystriggersalias.Add(TTCanBeTerraformed);
+                            if (sd.IsLandable) cursystriggersalias.Add(TTLandable);
+                            if (sd.HasMeaningfulVolcanism) cursystriggersalias.Add(TTVolcanism);
+                            if (sd.HasRings) cursystriggersalias.Add(TTRings);
+                            if (sd.HasBelts) cursystriggersalias.Add(TTBelts);
+                            if (sd.Earthlike) cursystriggersalias.Add(TTEarthlike);
+                            if (sd.WaterWorld) cursystriggersalias.Add(TTWaterWorld);
+                            if (sd.AmmoniaWorld) cursystriggersalias.Add(TTAmmoniaWorld);
+                            if (sd.nEccentricity >= eccentricityLimit) cursystriggersalias.Add(TTEccentric);
+                            if (sd.nRadius < lowRadiusLimit && sd.IsPlanet) cursystriggersalias.Add(TTTiny);
+                            if (sd.nRadius > largeRadiusLimit && sd.IsPlanet && sd.IsLandable) cursystriggersalias.Add(TTHuge);
+                            if (sd.HasAtmosphericComposition) cursystriggersalias.Add(TTAtmosphere + sd.AtmosphereTranslated);
+                            if (sd.IsPlanet && sd.nSurfaceGravityG >= 2) cursystriggersalias.Add(TTHighGravity + sd.nSurfaceGravityG.Value.ToStringInvariant("#.##"));
                         }
 
                         // compute if we want search results displayed
@@ -852,7 +855,7 @@ namespace EDDiscovery.UserControls
                                         searchpasslist = searchpasslist.AppendPrePad(hrentry.FilterPassed, ", ");
 
                                     if (producesearchtriggers && searchesactivevoice.Contains(hrentry.FilterPassed))   // if its a text entry
-                                        curbodytriggers.Add(TTDiscovery + hrentry.FilterPassed);       // add a trigger which is called discovery:filter name
+                                        cursystriggersalias.Add(TTDiscovery + hrentry.FilterPassed);       // add a trigger which is called discovery:filter name
                                 }
 
                                 if ( searchpasslist.HasChars())
@@ -884,9 +887,14 @@ namespace EDDiscovery.UserControls
                             searchpasslist = searchpasslist.AppendPrePad(hrentry.FilterPassed, ", ");
 
                         if (producesearchtriggers && searchesactivevoice.Contains(hrentry.FilterPassed))   // if its a text entry
-                            cursystriggers[kvp.Key].Add(TTDiscovery + hrentry.FilterPassed);       // add a trigger
-                    }
+                        {
+                            if (!cursystriggers.TryGetValue(kvp.Key, out HashSet<string> list))     // if we did not make the body above, make it..
+                                cursystriggers.Add(kvp.Key, new HashSet<string>());
 
+                            cursystriggers[kvp.Key].Add(TTDiscovery + hrentry.FilterPassed);       // add a trigger
+                        }
+                    }
+                            
                     if ( searchpasslist.HasChars())
                     {
                         ldrawsystemtext[kvp.Key] = $"{kvp.Key.ReplaceIfStartsWith(sys.Name)}: {searchpasslist}";
