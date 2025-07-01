@@ -1266,6 +1266,7 @@ namespace EDDiscovery
         UserControlEstimatedValues_checkBoxShowZeros_ToolTip, // ToolTip 'Green will show materials with zero counts, red means remove them'
         UserControlEstimatedValues_extCheckBoxShowImpossible_ToolTip, // ToolTip 'Show all values, even ones which are impossible to get'
         UserControlEstimatedValues_SV, // Estimated Scan Values for {0}
+        UserControlEstimatedValues_SBTB, //  | You scanned {1} of {2} bodies in this system.
 
 
         UserControlLog_toolStripMenuItemCopy, // ToolStrip control 'Copy'

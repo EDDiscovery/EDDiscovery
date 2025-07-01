@@ -239,6 +239,7 @@ SECTION UserControlEstimatedValues
 .checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" @
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
 .SV: "Estimated Scan Values for {0}" @
+.SBTB: " | You scanned {1} of {2} bodies in this system." @
 
 SECTION UserControlExpedition
 
