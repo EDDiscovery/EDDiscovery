@@ -579,7 +579,7 @@ namespace EDDiscovery.UserControls.Helpers
             string systemname = extTextBoxAutoCompleteSystem.Text.Substring(0, extTextBoxAutoCompleteSystem.Text.IndexOfOrLength("(")).Trim();
 
             ConfigurableForm.ShowDialogCentred((f) => {
-                var ships = ItemData.GetSpaceships().Select(x => x.EDCDID).ToArray();
+                var ships = ItemData.GetSpaceships().Select(x => x.EDCDName).OrderBy(y=>y).ToArray();
                 f.AddBools(ships, ships, shipsstate, 4, 24, 200, 4, 200, "S_");
                 AddSearchEntries(f, shipssearchdistance, shipsclearfilters, shipslargepad, shipscarriers);
             },

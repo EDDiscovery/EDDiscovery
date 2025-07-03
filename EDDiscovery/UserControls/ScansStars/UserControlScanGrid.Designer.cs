@@ -80,10 +80,15 @@ namespace EDDiscovery.UserControls
             // extButtonShowControl
             // 
             this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonShowControl.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonShowControl.ButtonDisabledScaling = 0.5F;
             this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonShowControl.GradientDirection = 90F;
             this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
             this.extButtonShowControl.Location = new System.Drawing.Point(4, 1);
             this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.extButtonShowControl.MouseOverScaling = 1.3F;
+            this.extButtonShowControl.MouseSelectedScaling = 1.3F;
             this.extButtonShowControl.Name = "extButtonShowControl";
             this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
             this.extButtonShowControl.TabIndex = 29;
@@ -94,10 +99,15 @@ namespace EDDiscovery.UserControls
             // extButtonHighValue
             // 
             this.extButtonHighValue.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonHighValue.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonHighValue.ButtonDisabledScaling = 0.5F;
             this.extButtonHighValue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonHighValue.GradientDirection = 90F;
             this.extButtonHighValue.Image = global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue;
             this.extButtonHighValue.Location = new System.Drawing.Point(40, 1);
             this.extButtonHighValue.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.extButtonHighValue.MouseOverScaling = 1.3F;
+            this.extButtonHighValue.MouseSelectedScaling = 1.3F;
             this.extButtonHighValue.Name = "extButtonHighValue";
             this.extButtonHighValue.Size = new System.Drawing.Size(28, 28);
             this.extButtonHighValue.TabIndex = 37;
@@ -107,8 +117,13 @@ namespace EDDiscovery.UserControls
             // 
             // extButtonNewBookmark
             // 
+            this.extButtonNewBookmark.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonNewBookmark.ButtonDisabledScaling = 0.5F;
+            this.extButtonNewBookmark.GradientDirection = 90F;
             this.extButtonNewBookmark.Image = global::EDDiscovery.Icons.Controls.Bookmarks;
             this.extButtonNewBookmark.Location = new System.Drawing.Point(111, 3);
+            this.extButtonNewBookmark.MouseOverScaling = 1.3F;
+            this.extButtonNewBookmark.MouseSelectedScaling = 1.3F;
             this.extButtonNewBookmark.Name = "extButtonNewBookmark";
             this.extButtonNewBookmark.Size = new System.Drawing.Size(28, 28);
             this.extButtonNewBookmark.TabIndex = 38;
@@ -123,6 +138,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel2.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel2.Location = new System.Drawing.Point(0, 34);
             this.dataViewScrollerPanel2.Name = "dataViewScrollerPanel2";
+            this.dataViewScrollerPanel2.ScrollBarWidth = 48;
             this.dataViewScrollerPanel2.Size = new System.Drawing.Size(1007, 515);
             this.dataViewScrollerPanel2.TabIndex = 25;
             this.dataViewScrollerPanel2.VerticalScrollBarDockRight = true;
@@ -166,7 +182,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.RowTemplate.ReadOnly = true;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(988, 515);
+            this.dataGridView.Size = new System.Drawing.Size(959, 515);
             this.dataGridView.TabIndex = 23;
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewScangrid_CellDoubleClick);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
@@ -239,6 +255,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.AlwaysHideScrollBar = false;
             this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom2.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
@@ -246,18 +263,24 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(988, 0);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(959, 0);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom2.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom2.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(19, 515);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(48, 515);
+            this.vScrollBarCustom2.SkinnyStyle = false;
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom2.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom2.SliderDrawAngle = 90F;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 24;
             this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom2.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
             this.vScrollBarCustom2.Value = -1;
             this.vScrollBarCustom2.ValueLimited = -1;
@@ -268,11 +291,15 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop.AutoHeightWidthDisable = false;
             this.rollUpPanelTop.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
             this.rollUpPanelTop.AutoWidth = false;
+            this.rollUpPanelTop.ChildrenThemed = true;
             this.rollUpPanelTop.Controls.Add(this.panelControls);
             this.rollUpPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.rollUpPanelTop.FlowDirection = null;
+            this.rollUpPanelTop.GradientDirection = 0F;
             this.rollUpPanelTop.HiddenMarkerWidth = 400;
             this.rollUpPanelTop.Location = new System.Drawing.Point(0, 0);
             this.rollUpPanelTop.Name = "rollUpPanelTop";
+            this.rollUpPanelTop.PaintTransparentColor = System.Drawing.Color.Transparent;
             this.rollUpPanelTop.PinState = true;
             this.rollUpPanelTop.RolledUpHeight = 5;
             this.rollUpPanelTop.RollUpAnimationTime = 500;
@@ -281,6 +308,12 @@ namespace EDDiscovery.UserControls
             this.rollUpPanelTop.ShowHiddenMarker = true;
             this.rollUpPanelTop.Size = new System.Drawing.Size(1007, 34);
             this.rollUpPanelTop.TabIndex = 25;
+            this.rollUpPanelTop.ThemeColors = new System.Drawing.Color[] {
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.rollUpPanelTop.ThemeColorSet = -1;
             this.rollUpPanelTop.UnrollHoverDelay = 1000;
             // 
             // panelControls
@@ -300,9 +333,14 @@ namespace EDDiscovery.UserControls
             // 
             // edsmSpanshButton
             // 
+            this.edsmSpanshButton.BackColor2 = System.Drawing.Color.Red;
+            this.edsmSpanshButton.ButtonDisabledScaling = 0.5F;
+            this.edsmSpanshButton.GradientDirection = 90F;
             this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
             this.edsmSpanshButton.Location = new System.Drawing.Point(76, 1);
             this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.edsmSpanshButton.MouseOverScaling = 1.3F;
+            this.edsmSpanshButton.MouseSelectedScaling = 1.3F;
             this.edsmSpanshButton.Name = "edsmSpanshButton";
             this.edsmSpanshButton.SettingsSplittingChar = ';';
             this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);

@@ -548,6 +548,7 @@ SECTION UserControlModules
 .Value: "Value" @
 .Stored: "Stored" @
 .AllModules: "All Modules" @
+.AllShips: "All Ships" @
 .Mass: "Mass" @
 
 .InTransit: "In Transit" @

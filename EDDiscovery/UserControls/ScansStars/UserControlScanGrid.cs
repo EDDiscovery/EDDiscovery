@@ -501,14 +501,7 @@ namespace EDDiscovery.UserControls
                         rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;           // need to add like this due to different types of cells
                         DataGridViewPictureBoxCell c0 = new DataGridViewPictureBoxCell();
                         rw.Cells.Add(c0);
-
-                        for (int c = 1; c <= 7; c++)        // N more text rows
-                        {
-                            DataGridViewTextBoxCell cx = new DataGridViewTextBoxCell();
-                            cx.Value = "";
-                            rw.Cells.Add(cx);
-                        }
-
+                        rw.AddTextCells(7);
                         int rwn = dataGridView.Rows.Add(rw);
                         rw.Tag = sn;                    // record sn in row so we can find it next time
                     }

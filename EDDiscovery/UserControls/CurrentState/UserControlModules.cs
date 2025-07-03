@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2024 EDDiscovery development team
+ * Copyright 2016 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -12,8 +12,8 @@
  * governing permissions and limitations under the License.
  */
 
-using BaseUtils;
 using EliteDangerousCore;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,7 +30,10 @@ namespace EDDiscovery.UserControls
         private string storedmoduletext;
         private string travelhistorytext;
         private string allmodulestext;
+        private string allshipstext;
         private string allknownmodulestext;
+
+        private string sortmodecol = "";
 
         private HistoryEntry last_he = null;
         private Ship last_si = null;
@@ -73,6 +76,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             ownedshipstext = "Owned Ships".T(EDTx.UserControlModules_OwnedShips);
+            allshipstext = "All Ships".T(EDTx.UserControlModules_AllShips);
             storedmoduletext = "Stored Modules".T(EDTx.UserControlModules_StoredModules);
             travelhistorytext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
             allmodulestext = "All Modules".T(EDTx.UserControlModules_AllModules);
@@ -186,9 +190,15 @@ namespace EDDiscovery.UserControls
 
                 update = !allmodulesref.ReferenceEquals(curref);        // if not identical, something has changed, execute update
             }
-            else if (comboBoxShips.Text == ownedshipstext )           
+            else if (comboBoxShips.Text == ownedshipstext)
             {
                 update = true;      // tbd optimise we need a way of knowing ship info has changed
+            }
+            else if (comboBoxShips.Text == allshipstext)
+            {
+                last_he = he;
+                if (dataGridViewModules.Rows.Count == 0)                // if nothing displayed, display, else ignore subsequence updates
+                    Display();
             }
             else if (comboBoxShips.Text == travelhistorytext)           // travel history, it should the the current si vs the last displayed si
             {
@@ -231,12 +241,9 @@ namespace EDDiscovery.UserControls
             last_si = null;     // no ship info
             allmodulesref.Clear();      // no ref to all modules info
 
-            SlotCol.HeaderText = "Slot".T(EDTx.UserControlModules_SlotCol); // col 2
-            ItemInfo.HeaderText = "Info".T(EDTx.UserControlModules_ItemInfo);       // col 3
-            Mass.HeaderText = "Mass".T(EDTx.UserControlModules_Mass);  // col 4
-            Mass.HeaderText = "BluePrint".T(EDTx.UserControlModules_BluePrint);  // col 5
-            Value.HeaderText = "Value".T(EDTx.UserControlModules_Value);    // col 6
-            PriorityEnable.HeaderText = "P/E".T(EDTx.UserControlModules_PriorityEnable);  // col 7
+            SetColHeaders(null,null,null,null, null,null,null,null);        //default
+            sortmodecol = "AAAANANA";
+
             Value.Visible = SlotCol.Visible = PriorityEnable.Visible = BluePrint.Visible = true;
 
             if (comboBoxShips.Text == storedmoduletext)
@@ -245,9 +252,8 @@ namespace EDDiscovery.UserControls
 
                 if (last_he?.StoredModules != null)
                 {
-                    SlotCol.HeaderText = "System".T(EDTx.UserControlModules_System);
-                    ItemInfo.HeaderText = "Tx Time".T(EDTx.UserControlModules_TxTime);
-                    Value.HeaderText = "Cost".T(EDTx.UserControlModules_Cost);
+                    SetColHeaders(null, null, "System".T(EDTx.UserControlModules_System), "Tx Time".T(EDTx.UserControlModules_TxTime), 
+                                    null, null, "Cost".T(EDTx.UserControlModules_Cost), "");
 
                     ShipModulesInStore mi = last_he.StoredModules;
                     labelVehicle.Text = "";
@@ -257,7 +263,8 @@ namespace EDDiscovery.UserControls
                         object[] rowobj = {
                                 JournalFieldNaming.GetForeignModuleType(sm.NameFD),
                                 JournalFieldNaming.GetForeignModuleName(sm.NameFD,sm.Name_Localised),
-                                sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit)), sm.TransferTimeString ,
+                                sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit)), 
+                                sm.TransferTimeString ,
                                 sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
                                 sm.EngineerModifications.Alt(""),
                                 sm.TransferCost>0 ? sm.TransferCost.ToString("N0") : "",
@@ -323,44 +330,81 @@ namespace EDDiscovery.UserControls
                     dataGridViewModules.Rows.Add(rowobj);
                 }
             }
+            else if ( comboBoxShips.Text == allshipstext)
+            {
+                SetColHeaders("", "Type".T(EDTx.UserControlModules_ItemLocalised), "Manufacturer".T(EDTx.UserControlShipYards_Manufacturer), "Speed".T(EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsSpeedNumeric),
+                                null, "Class".T(EDTx.UserControlScanGrid_colClass), null, "Info".T(EDTx.UserControlModules_ItemInfo));
+                sortmodecol = "AAANNANA";
+                HideShipRelatedButtons();
+
+                foreach( var ship in ItemData.GetSpaceships())
+                {
+                    var rw = dataGridViewModules.RowTemplate.Clone() as DataGridViewRow;           // need to add like this due to different types of cells
+                    var pcb = new DataGridViewPictureBoxCell();
+                    rw.Cells.Add(pcb);
+                    rw.AddTextCells(7);
+                    pcb.PictureBox.AddImage(new Rectangle(8, 8, 128, 128), ItemData.GetShipImage(ship.FDID));
+                    pcb.PictureBox.Render(minsize: new Size(128 + 8 + 8, 128 + 8 + 8));
+
+                    rw.Cells[1].Value = ship.Name;
+                    rw.Cells[2].Value = ship.Manufacturer;
+                    rw.Cells[3].Value = ship.Speed.ToString("N0") + " / " + ship.Boost.ToString("N0");
+                    rw.Cells[4].Value = ship.HullMass.ToString("N0");
+                    rw.Cells[5].Value = ship.ClassString;
+                    rw.Cells[6].Value = ship.HullCost.ToString("N0");
+                    rw.Cells[7].Value = "S: " + ship.Shields.ToString("N0") + Environment.NewLine +
+                                        "A: " + ship.Armour.ToString("N0") + Environment.NewLine +
+                                        "Crew: " + ship.Crew.ToString("N0");
+                    dataGridViewModules.Rows.Add(rw);
+                }
+
+            }
             else if (comboBoxShips.Text == ownedshipstext)
             {
                 ShipList shm = DiscoveryForm.History.ShipInformationList;
                 var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
-                ItemCol.HeaderText = "Name".TxID(EDTx.UserControlCombatPanel_Name);       // col 1
-                SlotCol.HeaderText = "Ident".TxID(EDTx.UserControlStats_Ident); // col2
-                // col 3 is info
-                Mass.HeaderText = "Value".TxID(EDTx.UserControlModules_Value);  // col 4
-                BluePrint.HeaderText = "";    // col 5
-                Value.HeaderText = "";
-                PriorityEnable.HeaderText = "";
-
+                SetColHeaders("", "Type".T(EDTx.UserControlModules_ItemLocalised), "Manufacturer".T(EDTx.UserControlShipYards_Manufacturer), "Name".TxID(EDTx.UserControlCombatPanel_Name),
+                              "Ident".TxID(EDTx.UserControlStats_Ident), "Mass".T(EDTx.UserControlModules_Mass), "Location".T(EDTx.SearchMaterialsCommodities_ColumnLocation), "Cost".T(EDTx.UserControlModules_Cost));
+                sortmodecol = "AAAAANAN";
                 HideShipRelatedButtons();
 
                 foreach (var ship in ownedships)
                 {
-                    object[] rowobj = {
-                                    ship.ShipType,
-                                    ship.ShipUserName,
-                                    ship.ShipUserIdent,
-                                    ship.InTransit ? "Transit" : ship.StoredAtSystem != null ? (ship.StoredAtSystem + (ship.StoredAtStation!=null ? (" " + ship.StoredAtStation) : "" )) : "",
-                                    ship.HullValue.ToString("N0") + " / " + ship.ModulesValue.ToString("N0"),
-                                    
-                                };
+                    var rw = dataGridViewModules.RowTemplate.Clone() as DataGridViewRow;           // need to add like this due to different types of cells
+                    var pcb = new DataGridViewPictureBoxCell();
+                    rw.Cells.Add(pcb);
+                    rw.AddTextCells(7);
 
-                    dataGridViewModules.Rows.Add(rowobj);
+                    pcb.PictureBox.AddImage(new Rectangle(8, 8, 128, 128), ItemData.GetShipImage(ship.ShipFD));
+                    pcb.PictureBox.Render(minsize: new Size(128 + 8 + 8, 128 + 8 + 8));
+
+                    rw.Cells[1].Value = ship.ShipType;
+                    rw.Cells[2].Value = ship.GetShipProperties().Manufacturer;
+                    rw.Cells[3].Value = ship.ShipUserName;
+                    rw.Cells[4].Value = ship.ShipUserIdent;
+                    rw.Cells[5].Value = "T: " + (ship.HullMass()+ship.ModuleMass()).ToString("N0") + Environment.NewLine +
+                                        "H: " + ship.HullMass().ToString("N0") + Environment.NewLine + 
+                                        "M: " + ship.ModuleMass().ToString("N0");
+                    rw.Cells[6].Value = ship.InTransit ? "Transit" : ship.StoredAtSystem != null ? (ship.StoredAtSystem + (ship.StoredAtStation != null ? (" " + ship.StoredAtStation) : "")) : "";
+                    rw.Cells[7].Value = ship.HullValue > 0 || ship.ModulesValue > 0 ?
+                                            "T: " + (ship.HullValue + ship.ModulesValue).ToString("N0") + Environment.NewLine +
+                                            "H: " + ship.HullValue.ToString("N0") + Environment.NewLine + 
+                                            "M: " + ship.ModulesValue.ToString("N0") 
+                                            : "";
+
+                    dataGridViewModules.Rows.Add(rw);
                 }
             }
-            else if ( comboBoxShips.Text.ContainsIIC(".loadout"))
+            else if (comboBoxShips.Text.ContainsIIC(".loadout"))
             {
-                string loadoutfile = BaseUtils.FileHelpers.TryReadAllTextFromFile(System.IO.Path.Combine(EDDOptions.Instance.ShipLoadoutsDirectory(), comboBoxShips.Text)); 
+                string loadoutfile = BaseUtils.FileHelpers.TryReadAllTextFromFile(System.IO.Path.Combine(EDDOptions.Instance.ShipLoadoutsDirectory(), comboBoxShips.Text));
                 if (loadoutfile.HasChars())
                 {
                     Ship si = Ship.CreateFromLoadout(loadoutfile);
-                    if ( si != null )
+                    if (si != null)
                     {
-                        DisplayShip(si,true);
+                        DisplayShip(si, true);
                     }
                 }
             }
@@ -370,7 +414,7 @@ namespace EDDiscovery.UserControls
                 {
                     last_cargo = DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(last_he.MaterialCommodity);
                     last_he.ShipInformation.UpdateFuelWarningPercent();      // ensure its fresh from the DB
-                    DisplayShip(last_he.ShipInformation,false);
+                    DisplayShip(last_he.ShipInformation, false);
                 }
             }
             else
@@ -380,7 +424,7 @@ namespace EDDiscovery.UserControls
                 {
                     last_cargo = 0;                     // presume empty cargo
                     si.UpdateFuelWarningPercent();      // ensure its fresh from the DB
-                    DisplayShip(si,false);
+                    DisplayShip(si, false);
                 }
             }
 
@@ -554,6 +598,18 @@ namespace EDDiscovery.UserControls
                 dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[0].ToolTipText = tooltip;
         }
 
+        void SetColHeaders(params string[] list)
+        {
+            ItemLocalised.HeaderText = list[0] ?? "Type".T(EDTx.UserControlModules_ItemLocalised);
+            ItemCol.HeaderText = list[1] ?? "Item".T(EDTx.UserControlModules_ItemCol);
+            SlotCol.HeaderText = list[2] ?? "Slot".T(EDTx.UserControlModules_SlotCol);
+            ItemInfo.HeaderText = list[3] ?? "Info".T(EDTx.UserControlModules_ItemInfo);
+            Mass.HeaderText = list[4] ?? "Mass".T(EDTx.UserControlModules_Mass);
+            BluePrint.HeaderText = list[5] ?? "BluePrint".T(EDTx.UserControlModules_BluePrint);
+            Value.HeaderText = list[6] ?? "Value".T(EDTx.UserControlModules_Value);
+            PriorityEnable.HeaderText = list[7] ?? "P/E".T(EDTx.UserControlModules_PriorityEnable);
+        }
+
         private void HideShipRelatedButtons()
         {
             extPanelRollUpStats.Visible = extButtonSaveLoadout.Visible = extButtonDeleteLoadout.Visible = extButtonLoadLoadout.Visible =
@@ -588,6 +644,7 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Clear();
             comboBoxShips.Items.Add(travelhistorytext);
             comboBoxShips.Items.Add(ownedshipstext);
+            comboBoxShips.Items.Add(allshipstext);
             comboBoxShips.Items.Add(storedmoduletext);
             comboBoxShips.Items.Add(allmodulestext);
             comboBoxShips.Items.Add(allknownmodulestext);
@@ -788,8 +845,8 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewModules_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column == Mass || e.Column == Value)
-                e.SortDataGridViewColumnNumeric("t");
+            if (sortmodecol.HasChars() && sortmodecol[e.Column.Index] == 'N')
+                e.SortDataGridViewColumnNumeric(removetext:"t", striptonumeric:true);
         }
 
         private void dataGridViewModules_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
