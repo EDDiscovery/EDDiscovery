@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewEstimatedValues.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
                 dataGridViewEstimatedValues.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
-                SetControlText(string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV) + ": " + totalvalue.ToString("N0") + " cr", last_sn.System.Name));
+                SetControlText(string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV) + ": " + totalvalue.ToString("N0") + " cr" + " | You scanned {1} of {2} bodies in this system.".T(EDTx.UserControlEstimatedValues_SBTB), last_sn.System.Name, last_sn.StarPlanetsWithData(false).ToString(), last_sn.FSSTotalBodies?.ToString() ?? "?"));
             }
             else
             {
