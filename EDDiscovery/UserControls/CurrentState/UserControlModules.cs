@@ -106,6 +106,9 @@ namespace EDDiscovery.UserControls
             extButtonDrawnResetPips.Text = "RST";   // done to bypass translation
 
             HideShipRelatedButtons();
+
+            dataGridViewModules.EnableCellHoverOverCallback();
+            dataGridViewModules.HoverOverCell += HoverOverCell;
         }
 
         public override void LoadLayout()
@@ -125,8 +128,6 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
-
-        #region Display
 
         private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
@@ -225,6 +226,8 @@ namespace EDDiscovery.UserControls
                 Display();
             }
         }
+
+        #region Display
 
         private void Display()      // allow redisplay of last data
         {
@@ -343,7 +346,9 @@ namespace EDDiscovery.UserControls
                     var pcb = new DataGridViewPictureBoxCell();
                     rw.Cells.Add(pcb);
                     rw.AddTextCells(7);
-                    pcb.PictureBox.AddImage(new Rectangle(8, 8, 128, 128), ItemData.GetShipImage(ship.FDID));
+                    Image img = ItemData.GetShipImage(ship.FDID);
+                    pcb.Tag = img;      // directing the hover over to the image
+                    pcb.PictureBox.AddImage(new Rectangle(8, 8, 128, 128), img);
                     pcb.PictureBox.Render(minsize: new Size(128 + 8 + 8, 128 + 8 + 8));
 
                     rw.Cells[1].Value = ship.Name;
@@ -375,10 +380,12 @@ namespace EDDiscovery.UserControls
                     var pcb = new DataGridViewPictureBoxCell();
                     rw.Cells.Add(pcb);
                     rw.AddTextCells(7);
-
-                    pcb.PictureBox.AddImage(new Rectangle(8, 8, 128, 128), ItemData.GetShipImage(ship.ShipFD));
+                    Image img = ItemData.GetShipImage(ship.ShipFD);
+                    pcb.Tag = img;      // directing the hover over to the image
+                    pcb.PictureBox.AddImage(new Rectangle(8, 8, 128, 128), img);
                     pcb.PictureBox.Render(minsize: new Size(128 + 8 + 8, 128 + 8 + 8));
 
+                   
                     rw.Cells[1].Value = ship.ShipType;
                     rw.Cells[2].Value = ship.GetShipProperties().Manufacturer;
                     rw.Cells[3].Value = ship.ShipUserName;
@@ -393,6 +400,7 @@ namespace EDDiscovery.UserControls
                                             "M: " + ship.ModulesValue.ToString("N0") 
                                             : "";
 
+                    rw.Tag = ship;                      // record for double click
                     dataGridViewModules.Rows.Add(rw);
                 }
             }
@@ -515,8 +523,6 @@ namespace EDDiscovery.UserControls
                             hullmass, modulemass, hullmass + modulemass, last_cargo, si.CalculateCargoCapacity(), warningpercent};
 
             labelDataCost.Data = new object[] { si.HullValue, si.ModulesValue, si.HullValue + si.ModulesValue, si.Rebuy };
-
-
         }
 
         void AddModuleLine(ShipModule sm , Ship onship = null)
@@ -616,7 +622,6 @@ namespace EDDiscovery.UserControls
             labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
         }
 
-
         #endregion
 
         #region Word wrap
@@ -636,6 +641,8 @@ namespace EDDiscovery.UserControls
         #endregion
 
 
+        #region UI
+
         private void UpdateComboBox()
         {
             ShipList shm = DiscoveryForm.History.ShipInformationList;
@@ -649,14 +656,14 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Add(allmodulestext);
             comboBoxShips.Items.Add(allknownmodulestext);
 
-            var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
-            var soldships = (from x1 in shm.Ships where x1.Value.State != Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
+            IEnumerable<Ship> ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
+            IEnumerable<Ship> soldships = (from x1 in shm.Ships where x1.Value.State != Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
             // withdrawn, appears loadouts no longer written for these. var fightersrvs = (from x1 in shm.Ships where ItemData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
 
-            var now = (from x1 in ownedships where x1.StoredAtSystem == null select x1.ShipNameIdentType).ToList();
+            var now = (from x1 in ownedships where x1.StoredAtSystem == null select x1.ShipNameIdentType);
             comboBoxShips.Items.AddRange(now);
 
-            var stored = (from x1 in ownedships where x1.StoredAtSystem != null select x1.ShipNameIdentType).ToList();
+            var stored = (from x1 in ownedships where x1.StoredAtSystem != null select x1.ShipNameIdentType);
             comboBoxShips.Items.AddRange(stored);
 
 
@@ -853,15 +860,27 @@ namespace EDDiscovery.UserControls
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                string tt = dataGridViewModules.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText;
-                if (!string.IsNullOrEmpty(tt))
+                if (comboBoxShips.Text == ownedshipstext)
                 {
-                    Form mainform = FindForm();
-                    ExtendedControls.InfoForm frm = new ExtendedControls.InfoForm();
-                    frm.Info("Module Information".T(EDTx.UserControlModules_MI), mainform.Icon, tt);
-                    frm.Size = new Size(600, 400);
-                    frm.StartPosition = FormStartPosition.CenterParent;
-                    frm.Show(mainform);
+                    Ship shp = dataGridViewModules.Rows[e.RowIndex].Tag as Ship;
+                    if (shp != null)     // paranoia
+                    {
+                        string ident = shp.ShipNameIdentType;
+                        comboBoxShips.SelectedItem = ident;
+                    }
+                }
+                else
+                {
+                    string tt = dataGridViewModules.Rows[e.RowIndex].Cells[e.ColumnIndex].ToolTipText;
+                    if (!string.IsNullOrEmpty(tt))
+                    {
+                        Form mainform = FindForm();
+                        ExtendedControls.InfoForm frm = new ExtendedControls.InfoForm();
+                        frm.Info("Module Information".T(EDTx.UserControlModules_MI), mainform.Icon, tt);
+                        frm.Size = new Size(600, 400);
+                        frm.StartPosition = FormStartPosition.CenterParent;
+                        frm.Show(mainform);
+                    }
                 }
             }
         }
@@ -1027,5 +1046,31 @@ namespace EDDiscovery.UserControls
                 Display();
             }
         }
+
+        #endregion
+
+        #region Hover over
+        void HoverOverCell(DataGridViewCell cell, Rectangle area, Point screenpos)
+        {
+            ulong curtime = (ulong)Environment.TickCount;
+
+            if (cell.Tag is Image && cell.ColumnIndex == 0 )
+            {
+                if (popupform != null)
+                    popupform.Close();
+                screenpos.Offset(8, 8);
+                popupform = new PopUpForm(screenpos, new Size(400, 400), 750);
+                var imgctrl = new ImageControl();
+                imgctrl.Dock = DockStyle.Fill;
+                imgctrl.SetDrawImage(cell.Tag as Image, new Rectangle(0, 0, 400, 400));
+                popupform.ContentPanel.Controls.Add(imgctrl);
+
+                popupform.Show(this);
+            }
+        }
+
+        PopUpForm popupform = null;
+
+        #endregion
     }
 }
