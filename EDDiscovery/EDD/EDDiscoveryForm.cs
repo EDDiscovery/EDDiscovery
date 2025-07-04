@@ -521,7 +521,7 @@ namespace EDDiscovery
 
                 GalacticMapping.LoadCSV(EDDiscovery.Properties.Resources.TouristBeacons, "GECTB", "", "Community Sourced Tourist Beacon");
 
-                GalacticMapping.LoadCSV(EDDiscovery.Properties.Resources.Marx_Nebula_List_26_10_21, "MarxNebula", " Nebula", "Marx sourced nebula");
+                GalacticMapping.LoadCSV(EDDiscovery.Properties.Resources.Marx_Nebula_List_14_06_25, "MarxNebula", " Nebula", "Marx sourced nebula");
 
                 // GalacticMapping.Dump();
 

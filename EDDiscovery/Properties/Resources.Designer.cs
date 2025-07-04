@@ -19,7 +19,7 @@ namespace EDDiscovery.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -65,10 +65,7 @@ namespace EDDiscovery.Properties {
         ///Cmdr Robby
         ///
         ///Developers for this release series:
-        ///Eahlstan, Jugom
-        ///
-        ///Test Support
-        ///Eahlstan
+        ///Eahlstan, Jugom, Flynn
         ///
         ///Images Captured by:
         ///Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
@@ -80,7 +77,7 @@ namespace EDDiscovery.Properties {
         ///Cmdr Finwen  (Robert Wahlström)
         ///
         ///Previous Contributors:
-        ///Merovech,  [rest of string was truncated]&quot;;.
+        ///Merovech, Bravada Cadelanne,  [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Credits {
             get {
@@ -150,21 +147,20 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Aemonz EQ-Y e1899,,4549.97,-850.56,33732.38
-        ///Aemonz WP-X e1-230,,3852.91,-321.16,33901.03
-        ///Aemonz WZ-Y e2137,,3857.34,-576.5,33733.88
-        ///Aemonz YK-P e5-68,,3865.31,-1287.53,34537.06
-        ///Aemorrs CG-O e6-2183,,2312.81,-816.81,34644.41
-        ///Aemorrs FB-X e1-3356,,1805.81,-792.78,33828.25
-        ///Aemorrs HX-T e3-4455,,1531.47,-409.75,34137.81
-        ///Aemorrs HX-T e3-4517,,1470.34,-469.34,34159.25
-        ///Aemorrs KW-W e1-4401,,2241.31,-840.41,33926.31
-        ///Aemorrs LC-U e3-1611,,2378.97,-295.13,34195.56
-        ///Aemorrs LH-V e2-6480,,2063.41,-811.56,34049 [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Aemonz EQ-Y e1899,,4549.96875,-850.5625,33732.375
+        ///Aemonz WP-X e1-230 ,,3852.90625,-321.15625,33901.03125
+        ///Aemonz WZ-Y e2137 ,,3857.34375,-576.5,33733.875
+        ///Aemonz YK-P e5-68 ,,3865.3125,-1287.53125,34537.0625
+        ///Aemorrs CG-O e6-2183,,2312.8125,-816.8125,34644.40625
+        ///Aemorrs FB-X e1-3356,,1805.8125,-792.78125,33828.25
+        ///Aemorrs HX-T e3-4455 ,,1531.46875,-409.75,34137.8125
+        ///Aemorrs HX-T e3-4517 ,,1470.34375,-469.34375,34159.25
+        ///Aemorrs KW-W e1-4401,,2241.3125,-840.40625,33926.3125
+        ///Aemorrs LC-U e3-1611,,2378.968 [rest of string was truncated]&quot;;.
         /// </summary>
-        public static string Marx_Nebula_List_26_10_21 {
+        public static string Marx_Nebula_List_14_06_25 {
             get {
-                return ResourceManager.GetString("Marx_Nebula_List_26_10_21", resourceCulture);
+                return ResourceManager.GetString("Marx_Nebula_List_14_06_25", resourceCulture);
             }
         }
         

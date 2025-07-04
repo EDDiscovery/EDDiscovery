@@ -193,10 +193,10 @@
   <data name="URLSpanshSystemsRoot" xml:space="preserve">
     <value>http://downloads.spansh.co.uk/systems{0}.json.gz</value>
   </data>
-  <data name="Marx_Nebula_List_26_10_21" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\Marx Nebula List 26-10-21.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
   <data name="TouristBeacons" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\TouristBeacons.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="Marx_Nebula_List_14_06_25" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\Marx Nebula List 14-06-25.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>
