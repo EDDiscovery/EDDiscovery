@@ -549,6 +549,7 @@ SECTION UserControlModules
 .Value: "Value" => "Wert"
 .Stored: "Stored" => "Gelagert"
 .AllModules: "All Modules" => "Alle Module"
+.AllShips: "All Ships" @
 .Mass: "Mass" = UserControlModules.labelMass
 
 .InTransit: "In Transit" => "Im Transit"

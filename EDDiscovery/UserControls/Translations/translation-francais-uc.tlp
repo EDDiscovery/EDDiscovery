@@ -239,6 +239,7 @@ SECTION UserControlEstimatedValues
 .checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" => "Lorsque vert, affiche tous les corps même avec les valeurs à 0. Lorsque rouge, ne les affiches pas."
 .extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" => "Affiche toutes les valeurs, même celles impossible à obtenir"
 .SV: "Estimated Scan Values for {0}" => "Valeur estimée du scan de {0}"
+.SBTB: " | You scanned {1} of {2} bodies in this system." @
 
 SECTION UserControlExpedition
 
@@ -539,6 +540,7 @@ SECTION UserControlModules
 .ConfirmForceSell: "Confirm sell of ship" => "Confirmer la vente du vaisseau"
 .StoredModules: "Stored Modules" => "Modules stockés"
 .TravelHistoryEntry: "Travel History Entry" => "Historique de voyage"
+.OwnedShips: "Owned Ships" @
 .System: "System" = SearchScans.ColumnSystem
 .TxTime: "Tx Time" @
 .Cost: "Cost" => "Coût"
@@ -547,6 +549,7 @@ SECTION UserControlModules
 .Value: "Value" => "Valeur"
 .Stored: "Stored" => "Stocké"
 .AllModules: "All Modules" => "Tous les modules"
+.AllShips: "All Ships" @
 .Mass: "Mass" => "Masse"
 
 .InTransit: "In Transit" => "En transit"
