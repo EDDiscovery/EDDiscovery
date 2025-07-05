@@ -208,6 +208,12 @@
     <Compile Include="EDD\EDDiscoveryFormTabs.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Forms\ExceptionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\ExceptionForm.Designer.cs">
+      <DependentUpon>ExceptionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ImportExportForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -858,6 +864,9 @@
     </Compile>
     <EmbeddedResource Include="Forms\DraggableFormPos.resx">
       <DependentUpon>DraggableFormPos.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\ExceptionForm.resx">
+      <DependentUpon>ExceptionForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\GalaxySectorSelect.resx">
       <DependentUpon>GalaxySectorSelect.cs</DependentUpon>

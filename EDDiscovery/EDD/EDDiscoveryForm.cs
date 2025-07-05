@@ -24,6 +24,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Security.Authentication;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -202,7 +203,11 @@ namespace EDDiscovery
             // if no debugger, or log exceptions set
             if (!System.Diagnostics.Debugger.IsAttached || EDDOptions.Instance.LogExceptions)          
             {
-                ExceptionCatcher.RedirectExceptions(Properties.Resources.URLProjectFeedback);
+                ExceptionCatcher.RedirectExceptions((exc, exttype) => {
+                    EDDiscovery.Forms.ExceptionForm.ShowException(exc,
+                                exttype == ExceptionCatcher.ExceptionType.Application ? "There was an unhandled UI exception." : "An unhandled fatal exception has occurred.",
+                                Properties.Resources.URLProjectFeedback, exttype == ExceptionCatcher.ExceptionType.CurrentDomain);
+                });
             }
 
             if (EDDOptions.Instance.LogExceptions)
