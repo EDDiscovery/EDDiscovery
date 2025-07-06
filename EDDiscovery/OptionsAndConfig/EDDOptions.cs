@@ -100,7 +100,7 @@ namespace EDDiscovery
         public bool KeepSystemDataDownloadedFiles { get; private set; }
         public string Culture { get; private set; }             // default null use system culture, use de-DE etc
 
-        public int ZMQPort { get; set; } = 12300;       // < 10000 does not launch python, you should be running the script via the debugger
+        public int ZMQPort { get; set; } = 12300;       // < 10000 does not launch the program, you should be running the script via the debugger
 
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
@@ -125,7 +125,6 @@ namespace EDDiscovery
         public string IconsAppDirectory() { return SubAppDirectory("Icons"); }
         public string MapsAppDirectory() { return SubAppDirectory("Maps"); }
         public string LogAppDirectory() { return SubAppDirectory("Log"); }
-        public string FlightsAppDirectory() { return SubAppDirectory("Flights"); }
         public string ThemeAppDirectory() { return SubAppDirectory("Theme"); }
         public string DLLAppDirectory() { return SubAppDirectory("DLL"); }
         public string DLLExeDirectory() { return SubExeDirectory("DLL"); }
