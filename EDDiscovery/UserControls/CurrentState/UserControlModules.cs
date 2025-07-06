@@ -338,7 +338,7 @@ namespace EDDiscovery.UserControls
                 SetColHeaders("", "Type".T(EDTx.UserControlModules_ItemLocalised), "Manufacturer".T(EDTx.UserControlShipYards_Manufacturer), "Speed".T(EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsSpeedNumeric),
                                 null, "Class".T(EDTx.UserControlScanGrid_colClass), null, "Info".T(EDTx.UserControlModules_ItemInfo));
                 sortmodecol = "AAANNANA";
-                HideShipRelatedButtons();
+                HideShipRelatedButtons(false);
 
                 foreach( var ship in ItemData.GetSpaceships())
                 {
@@ -372,7 +372,7 @@ namespace EDDiscovery.UserControls
                 SetColHeaders("", "Type".T(EDTx.UserControlModules_ItemLocalised), "Manufacturer".T(EDTx.UserControlShipYards_Manufacturer), "Name".TxID(EDTx.UserControlCombatPanel_Name),
                               "Ident".TxID(EDTx.UserControlStats_Ident), "Mass".T(EDTx.UserControlModules_Mass), "Location".T(EDTx.SearchMaterialsCommodities_ColumnLocation), "Cost".T(EDTx.UserControlModules_Cost));
                 sortmodecol = "AAAAANAN";
-                HideShipRelatedButtons();
+                HideShipRelatedButtons(false);
 
                 foreach (var ship in ownedships)
                 {
@@ -616,8 +616,9 @@ namespace EDDiscovery.UserControls
             PriorityEnable.HeaderText = list[7] ?? "P/E".T(EDTx.UserControlModules_PriorityEnable);
         }
 
-        private void HideShipRelatedButtons()
+        private void HideShipRelatedButtons(bool showcontrol = true)
         {
+            extButtonShowControl.Visible = showcontrol;
             extPanelRollUpStats.Visible = extButtonSaveLoadout.Visible = extButtonDeleteLoadout.Visible = extButtonLoadLoadout.Visible =
             labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
         }
