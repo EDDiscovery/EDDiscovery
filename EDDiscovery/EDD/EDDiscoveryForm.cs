@@ -416,7 +416,7 @@ namespace EDDiscovery
                 // we need to make up the same structures as used in add on manager so we know what to do
                 GitActionFiles gaf = new GitActionFiles(EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.TempDirectory());
                 gaf.ReadLocalFolder(EDDOptions.Instance.ActionsAppDirectory(), gaf.ActionFileWildCard, "Action Files");
-                gaf.ReadDownloadedFolder(Properties.Resources.URLGithubDataDownload, System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionValues(), "EDDiscovery");
+                gaf.ReadDownloadedFolder(Properties.Resources.URLGithubDataDownload, System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersion(), "EDDiscovery");
 
                 foreach (var install in installdeinstallsettings)
                 {
@@ -883,9 +883,7 @@ namespace EDDiscovery
             {
                 var lastaboutversion = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("AboutBoxLastVersionPresented", "0.0.0.0").VersionFromString();
                 var eddversion = EDDApplicationContext.AppVersion.VersionFromString();
-                lastaboutversion[3] = eddversion[3] = 0;        // ignore the last dot
-                lastaboutversion[2] = eddversion[2] = 0;        // ignore the second one
-                if (lastaboutversion.CompareVersion(eddversion) < 0)
+                if (lastaboutversion.VersionMajorMinorCompare(eddversion) < 0)
                 {
                     EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("AboutBoxLastVersionPresented", EDDApplicationContext.AppVersion);
                     AboutBox();

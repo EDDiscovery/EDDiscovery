@@ -32,13 +32,15 @@ namespace EDDiscovery.Actions
         // see ActionFileList for meaning
         public ActionFile Get(string name, StringComparison c = StringComparison.InvariantCultureIgnoreCase) { return actionfiles.Get(name, c); }     // get or return null
         public ActionFile[] Get(string[] names, bool? enablestate, StringComparison c = StringComparison.InvariantCultureIgnoreCase) { return actionfiles.Get(names, enablestate, c); }
+        
+        // true if action file name is older than version
         public bool IsOlderEnabled(string name, string version, StringComparison c = StringComparison.InvariantCultureIgnoreCase) 
         {
             var pack = Get(name);
-            int[] v = version.VersionFromString();
-            int[] pv = pack?.Version;
+            Version pv = pack?.Version();                // may be null
+            Version v = version.VersionFromString();     // may be null
             // pack must be there, enabled, version must parse, and pack version must parse
-            return (pack?.Enabled == true && v != null && pv != null) ? pack.Version.CompareVersion(v) < 0 : false;
+            return (pack?.Enabled == true && v != null && pv != null) ? pv < v : false;
         }
         public override AudioExtensions.AudioQueue AudioQueueWave { get;  }
         public override AudioExtensions.AudioQueue AudioQueueSpeech { get;  }
@@ -470,7 +472,7 @@ namespace EDDiscovery.Actions
 
             using (ActionLanguage.Manager.AddOnManagerForm dmf = new ActionLanguage.Manager.AddOnManagerForm())
             {
-                var edversion = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionValues();
+                var edversion = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersion();
                 System.Diagnostics.Debug.Assert(edversion != null);
 
                 Dictionary<string, string> installdeinstall = GetInstallDeinstallSettings(false);

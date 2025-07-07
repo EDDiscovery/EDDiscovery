@@ -72,15 +72,21 @@ namespace EDDiscovery
 
         protected bool Version(out string output)
         {
-            int[] edversion = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionValues();
-
+            Version edversion = System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersion();
             int para = paras[0].Int;
-            if (para >= 0 && para <= edversion.Length)
+
+            if (para >= 0 && para <= 4)
             {
                 if (para == 0)
-                    output = edversion[0] + "." + edversion[1] + "." + edversion[2] + "." + edversion[3];
-                else
-                    output = edversion[para - 1].ToString(ct);
+                    output = edversion.ToString();
+                else if (para == 1)
+                    output = edversion.Major.ToString(ct);
+                else if (para == 2)
+                    output = edversion.Minor.ToString(ct);
+                else if (para == 3)
+                    output = edversion.Revision.ToString(ct);
+                else 
+                    output = edversion.Build.ToString(ct);
                 return true;
             }
             else
