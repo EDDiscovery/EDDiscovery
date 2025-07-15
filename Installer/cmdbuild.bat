@@ -20,10 +20,11 @@ echo ExeFile is %exefile%, Want version `%vno%`
 
 if "%vno%"=="" goto :errorVER
 
-wmic datafile where Name="%exefile%" get Version |more >%TMP%\vno.txt
+rem windows 11 does not support - need powershell? wmic datafile where Name="%exefile%" get Version |more >%TMP%\vno.txt
 
-find "%vno%" %TMP%\vno.txt
-if %ERRORLEVEL%==1 goto :errorEXE
+rem find "%vno%" %TMP%\vno.txt
+rem if %ERRORLEVEL%==1 goto :errorEXE
+
 echo Exe passed
 
 find "%vno%" ..\eddiscovery\properties\AssemblyInfo.cs
