@@ -387,7 +387,7 @@ namespace EDDiscovery.UserControls
 
                    
                     rw.Cells[1].Value = ship.ShipType;
-                    rw.Cells[2].Value = ship.GetShipProperties().Manufacturer;
+                    rw.Cells[2].Value = ship.GetShipProperties()?.Manufacturer ?? "Unknown ship";       // ship may be unknown to us
                     rw.Cells[3].Value = ship.ShipUserName;
                     rw.Cells[4].Value = ship.ShipUserIdent;
                     rw.Cells[5].Value = "T: " + (ship.HullMass()+ship.ModuleMass()).ToString("N0") + Environment.NewLine +
