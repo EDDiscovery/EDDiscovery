@@ -18,6 +18,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using ActionLanguage;
 using BaseUtils;
+using ExtendedControls;
 
 namespace EDDiscovery.Actions
 {
@@ -401,6 +402,37 @@ namespace EDDiscovery.Actions
                         }
                         else
                             ap.ReportError("Missing triggername and/or triggertype after ActionEvent");
+                    }
+                    else if (cmdname.Equals("mainwindowdimensions"))
+                    {
+                        ap["X"] = ac.DiscoveryForm.Bounds.X.ToStringInvariant();
+                        ap["Y"] = ac.DiscoveryForm.Bounds.Y.ToStringInvariant();
+                        ap["Width"] = ac.DiscoveryForm.Bounds.Width.ToStringInvariant();
+                        ap["Height"] = ac.DiscoveryForm.Bounds.Height.ToStringInvariant();
+                        var sf = ac.DiscoveryForm.CurrentAutoScaleFactor();
+                        ap["DUWidth"] = ((int)(ac.DiscoveryForm.Bounds.Width / sf.Width)).ToStringInvariant();
+                        ap["DUHeight"] = ((int)(ac.DiscoveryForm.Bounds.Height / sf.Height)).ToStringInvariant();
+                        ap["SFX"] = sf.Width.ToStringInvariant();
+                        ap["SFY"] = sf.Height.ToStringInvariant();
+                    }
+                    else if (cmdname.Equals("mainwindowscreendimensions"))
+                    {
+                        Screen scr = Screen.FromControl(ac.DiscoveryForm);
+                        ap["WAX"] = scr.WorkingArea.X.ToStringInvariant();
+                        ap["WAY"] = scr.WorkingArea.Y.ToStringInvariant();
+                        ap["WAWidth"] = scr.WorkingArea.Width.ToStringInvariant();
+                        ap["WAHeight"] = scr.WorkingArea.Height.ToStringInvariant();
+                        var sf = ac.DiscoveryForm.CurrentAutoScaleFactor();
+                        ap["DUWAWidth"] = ((int)(scr.WorkingArea.Width / sf.Width)).ToStringInvariant();
+                        ap["DUWAHeight"] = ((int)(scr.WorkingArea.Height / sf.Height)).ToStringInvariant();
+                        ap["X"] = scr.Bounds.X.ToStringInvariant();
+                        ap["Y"] = scr.Bounds.Y.ToStringInvariant();
+                        ap["Width"] = scr.Bounds.Width.ToStringInvariant();
+                        ap["Height"] = scr.Bounds.Height.ToStringInvariant();
+                        ap["DUWidth"] = ((int)(scr.Bounds.Width / sf.Width)).ToStringInvariant();
+                        ap["DUHeight"] = ((int)(scr.Bounds.Height / sf.Height)).ToStringInvariant();
+                        ap["SFX"] = sf.Width.ToStringInvariant();
+                        ap["SFY"] = sf.Height.ToStringInvariant();
                     }
                     else
                         ap.ReportError("Unknown command " + cmdname + " in Performaction");
