@@ -503,13 +503,16 @@ namespace EDDiscovery.UserControls
 
                         if (IsSet(RouteControl.shownotetext) && closest.nextsystemwaypointnote.HasChars())
                         {
-                            if ( sys.Name == closest.lastsystem.Name)
+                            // closest lastsystem can be null
+                            if (closest.lastsystem != null && sys.Name == closest.lastsystem.Name)
                             {
                                 lastroutetext = lastroutetext.AppendPrePad(closest.lastsystem.Name + ": " + closest.lastsystemwaypointnote, Environment.NewLine);
                                 lastroutetext = lastroutetext.AppendPrePad(closest.nextsystem.Name + ": " + closest.nextsystemwaypointnote, Environment.NewLine);
                             }
                             else
+                            {
                                 lastroutetext = lastroutetext.AppendPrePad(closest.nextsystemwaypointnote, Environment.NewLine);
+                            }
                         }
 
                         string closestsystem = closest.nextsystem.Name;
