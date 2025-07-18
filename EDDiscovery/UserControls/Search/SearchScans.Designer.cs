@@ -96,6 +96,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.ScrollBarWidth = 24;
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 342);
             this.dataViewScrollerPanel.TabIndex = 7;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
@@ -105,24 +106,31 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = false;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(785, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(780, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(19, 342);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(24, 342);
+            this.vScrollBarCustom.SkinnyStyle = false;
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SliderDrawAngle = 90F;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
             this.vScrollBarCustom.Value = -1;
             this.vScrollBarCustom.ValueLimited = -1;
@@ -155,7 +163,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(785, 342);
+            this.dataGridView.Size = new System.Drawing.Size(780, 342);
             this.dataGridView.TabIndex = 0;
             this.dataGridView.WebLookup = EliteDangerousCore.WebExternalDataLookup.None;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
@@ -273,13 +281,18 @@ namespace EDDiscovery.UserControls
             // 
             // comboBoxSearches
             // 
+            this.comboBoxSearches.BackColor2 = System.Drawing.Color.Red;
             this.comboBoxSearches.BorderColor = System.Drawing.Color.White;
+            this.comboBoxSearches.ControlBackground = System.Drawing.SystemColors.Control;
             this.comboBoxSearches.DataSource = null;
             this.comboBoxSearches.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxSearches.DisabledScaling = 0.5F;
             this.comboBoxSearches.DisplayMember = "";
             this.comboBoxSearches.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxSearches.Location = new System.Drawing.Point(0, 1);
-            this.comboBoxSearches.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.comboBoxSearches.GradientDirection = 90F;
+            this.comboBoxSearches.Location = new System.Drawing.Point(3, 4);
+            this.comboBoxSearches.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
+            this.comboBoxSearches.MouseOverScalingColor = 1.3F;
             this.comboBoxSearches.Name = "comboBoxSearches";
             this.comboBoxSearches.SelectedIndex = -1;
             this.comboBoxSearches.SelectedItem = null;
@@ -312,9 +325,14 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFind
             // 
+            this.buttonFind.BackColor2 = System.Drawing.Color.Red;
+            this.buttonFind.ButtonDisabledScaling = 0.5F;
+            this.buttonFind.GradientDirection = 90F;
             this.buttonFind.Image = global::EDDiscovery.Icons.Controls.Find;
-            this.buttonFind.Location = new System.Drawing.Point(207, 1);
-            this.buttonFind.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonFind.Location = new System.Drawing.Point(208, 1);
+            this.buttonFind.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonFind.MouseOverScaling = 1.3F;
+            this.buttonFind.MouseSelectedScaling = 1.3F;
             this.buttonFind.Name = "buttonFind";
             this.buttonFind.Size = new System.Drawing.Size(28, 28);
             this.buttonFind.TabIndex = 0;
@@ -325,10 +343,15 @@ namespace EDDiscovery.UserControls
             // extButtonNew
             // 
             this.extButtonNew.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonNew.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonNew.ButtonDisabledScaling = 0.5F;
             this.extButtonNew.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonNew.GradientDirection = 90F;
             this.extButtonNew.Image = global::EDDiscovery.Icons.Controls.Stop;
-            this.extButtonNew.Location = new System.Drawing.Point(251, 1);
-            this.extButtonNew.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonNew.Location = new System.Drawing.Point(242, 1);
+            this.extButtonNew.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonNew.MouseOverScaling = 1.3F;
+            this.extButtonNew.MouseSelectedScaling = 1.3F;
             this.extButtonNew.Name = "extButtonNew";
             this.extButtonNew.Size = new System.Drawing.Size(28, 28);
             this.extButtonNew.TabIndex = 29;
@@ -338,9 +361,14 @@ namespace EDDiscovery.UserControls
             // 
             // buttonSave
             // 
+            this.buttonSave.BackColor2 = System.Drawing.Color.Red;
+            this.buttonSave.ButtonDisabledScaling = 0.5F;
+            this.buttonSave.GradientDirection = 90F;
             this.buttonSave.Image = global::EDDiscovery.Icons.Controls.Save;
-            this.buttonSave.Location = new System.Drawing.Point(283, 1);
-            this.buttonSave.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonSave.Location = new System.Drawing.Point(276, 1);
+            this.buttonSave.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonSave.MouseOverScaling = 1.3F;
+            this.buttonSave.MouseSelectedScaling = 1.3F;
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(28, 28);
             this.buttonSave.TabIndex = 0;
@@ -350,9 +378,14 @@ namespace EDDiscovery.UserControls
             // 
             // buttonDelete
             // 
+            this.buttonDelete.BackColor2 = System.Drawing.Color.Red;
+            this.buttonDelete.ButtonDisabledScaling = 0.5F;
+            this.buttonDelete.GradientDirection = 90F;
             this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
-            this.buttonDelete.Location = new System.Drawing.Point(319, 1);
-            this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonDelete.Location = new System.Drawing.Point(310, 1);
+            this.buttonDelete.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonDelete.MouseOverScaling = 1.3F;
+            this.buttonDelete.MouseSelectedScaling = 1.3F;
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(28, 28);
             this.buttonDelete.TabIndex = 0;
@@ -362,9 +395,14 @@ namespace EDDiscovery.UserControls
             // 
             // extButtonExport
             // 
+            this.extButtonExport.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonExport.ButtonDisabledScaling = 0.5F;
+            this.extButtonExport.GradientDirection = 90F;
             this.extButtonExport.Image = global::EDDiscovery.Icons.Controls.ExportFile;
-            this.extButtonExport.Location = new System.Drawing.Point(355, 1);
-            this.extButtonExport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonExport.Location = new System.Drawing.Point(344, 1);
+            this.extButtonExport.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonExport.MouseOverScaling = 1.3F;
+            this.extButtonExport.MouseSelectedScaling = 1.3F;
             this.extButtonExport.Name = "extButtonExport";
             this.extButtonExport.Size = new System.Drawing.Size(28, 28);
             this.extButtonExport.TabIndex = 0;
@@ -374,9 +412,14 @@ namespace EDDiscovery.UserControls
             // 
             // extButtonImport
             // 
+            this.extButtonImport.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonImport.ButtonDisabledScaling = 0.5F;
+            this.extButtonImport.GradientDirection = 90F;
             this.extButtonImport.Image = global::EDDiscovery.Icons.Controls.ImportFile;
-            this.extButtonImport.Location = new System.Drawing.Point(391, 1);
-            this.extButtonImport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonImport.Location = new System.Drawing.Point(378, 1);
+            this.extButtonImport.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonImport.MouseOverScaling = 1.3F;
+            this.extButtonImport.MouseSelectedScaling = 1.3F;
             this.extButtonImport.Name = "extButtonImport";
             this.extButtonImport.Size = new System.Drawing.Size(28, 28);
             this.extButtonImport.TabIndex = 0;
@@ -389,10 +432,14 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
             this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.ButtonGradientDirection = 90F;
             this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxGradientDirection = 225F;
             this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.CheckColor2 = System.Drawing.Color.DarkBlue;
             this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.DisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
             this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
             this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
@@ -402,8 +449,10 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(427, 1);
-            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(412, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extCheckBoxWordWrap.MouseOverScaling = 1.3F;
+            this.extCheckBoxWordWrap.MouseSelectedScaling = 1.3F;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 41;
@@ -413,10 +462,15 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtExcel
             // 
+            this.buttonExtExcel.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.GradientDirection = 90F;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(463, 1);
-            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(446, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonExtExcel.MouseOverScaling = 1.3F;
+            this.buttonExtExcel.MouseSelectedScaling = 1.3F;
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 37;
@@ -429,10 +483,14 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxDebug.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxDebug.BackColor = System.Drawing.Color.Transparent;
             this.extCheckBoxDebug.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxDebug.ButtonGradientDirection = 90F;
             this.extCheckBoxDebug.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxDebug.CheckBoxGradientDirection = 225F;
             this.extCheckBoxDebug.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxDebug.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxDebug.CheckColor2 = System.Drawing.Color.DarkBlue;
             this.extCheckBoxDebug.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxDebug.DisabledScaling = 0.5F;
             this.extCheckBoxDebug.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
             this.extCheckBoxDebug.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
             this.extCheckBoxDebug.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
@@ -442,8 +500,10 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxDebug.ImageIndeterminate = null;
             this.extCheckBoxDebug.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxDebug.ImageUnchecked = global::EDDiscovery.Icons.Controls.SafeModeHelp;
-            this.extCheckBoxDebug.Location = new System.Drawing.Point(499, 1);
-            this.extCheckBoxDebug.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxDebug.Location = new System.Drawing.Point(480, 1);
+            this.extCheckBoxDebug.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extCheckBoxDebug.MouseOverScaling = 1.3F;
+            this.extCheckBoxDebug.MouseSelectedScaling = 1.3F;
             this.extCheckBoxDebug.Name = "extCheckBoxDebug";
             this.extCheckBoxDebug.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxDebug.TabIndex = 41;
@@ -455,7 +515,7 @@ namespace EDDiscovery.UserControls
             // labelCount
             // 
             this.labelCount.AutoSize = true;
-            this.labelCount.Location = new System.Drawing.Point(538, 4);
+            this.labelCount.Location = new System.Drawing.Point(514, 4);
             this.labelCount.Margin = new System.Windows.Forms.Padding(3, 4, 3, 0);
             this.labelCount.Name = "labelCount";
             this.labelCount.Size = new System.Drawing.Size(43, 13);

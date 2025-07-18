@@ -243,7 +243,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonFilterUpgrade.Image = global::EDDiscovery.Icons.Controls.EngineerRecipe;
             this.buttonFilterUpgrade.Location = new System.Drawing.Point(8, 1);
-            this.buttonFilterUpgrade.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonFilterUpgrade.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonFilterUpgrade.Name = "buttonFilterUpgrade";
             this.buttonFilterUpgrade.Size = new System.Drawing.Size(28, 28);
             this.buttonFilterUpgrade.TabIndex = 3;
@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterModule.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonFilterModule.Image = global::EDDiscovery.Icons.Controls.ModuleInfo;
             this.buttonFilterModule.Location = new System.Drawing.Point(48, 1);
-            this.buttonFilterModule.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonFilterModule.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonFilterModule.Name = "buttonFilterModule";
             this.buttonFilterModule.Size = new System.Drawing.Size(28, 28);
             this.buttonFilterModule.TabIndex = 0;
@@ -269,7 +269,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterLevel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonFilterLevel.Image = global::EDDiscovery.Icons.Controls.Level;
             this.buttonFilterLevel.Location = new System.Drawing.Point(88, 1);
-            this.buttonFilterLevel.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonFilterLevel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonFilterLevel.Name = "buttonFilterLevel";
             this.buttonFilterLevel.Size = new System.Drawing.Size(28, 28);
             this.buttonFilterLevel.TabIndex = 2;
@@ -281,7 +281,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonFilterEngineer.Image = global::EDDiscovery.Icons.Controls.EngineerCraft;
             this.buttonFilterEngineer.Location = new System.Drawing.Point(128, 1);
-            this.buttonFilterEngineer.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonFilterEngineer.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonFilterEngineer.Name = "buttonFilterEngineer";
             this.buttonFilterEngineer.Size = new System.Drawing.Size(28, 28);
             this.buttonFilterEngineer.TabIndex = 1;
@@ -294,7 +294,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilterMaterial.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonFilterMaterial.Image = global::EDDiscovery.Icons.Controls.Materials;
             this.buttonFilterMaterial.Location = new System.Drawing.Point(168, 1);
-            this.buttonFilterMaterial.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonFilterMaterial.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonFilterMaterial.Name = "buttonFilterMaterial";
             this.buttonFilterMaterial.Size = new System.Drawing.Size(28, 28);
             this.buttonFilterMaterial.TabIndex = 4;
@@ -308,7 +308,7 @@ namespace EDDiscovery.UserControls
             this.buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonClear.Image = global::EDDiscovery.Icons.Controls.Cross;
             this.buttonClear.Location = new System.Drawing.Point(208, 1);
-            this.buttonClear.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonClear.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(28, 28);
             this.buttonClear.TabIndex = 5;
@@ -327,7 +327,7 @@ namespace EDDiscovery.UserControls
             this.chkNotHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.chkNotHistoric.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
             this.chkNotHistoric.Location = new System.Drawing.Point(288, 1);
-            this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.chkNotHistoric.Name = "chkNotHistoric";
             this.chkNotHistoric.Size = new System.Drawing.Size(28, 28);
             this.chkNotHistoric.TabIndex = 6;
@@ -355,7 +355,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
             this.extCheckBoxWordWrap.Location = new System.Drawing.Point(328, 1);
-            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 31;
@@ -369,7 +369,7 @@ namespace EDDiscovery.UserControls
             this.extButtonPushResources.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonPushResources.Image = global::EDDiscovery.Icons.Controls.Resources;
             this.extButtonPushResources.Location = new System.Drawing.Point(248, 1);
-            this.extButtonPushResources.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonPushResources.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonPushResources.Name = "extButtonPushResources";
             this.extButtonPushResources.Size = new System.Drawing.Size(28, 28);
             this.extButtonPushResources.TabIndex = 5;

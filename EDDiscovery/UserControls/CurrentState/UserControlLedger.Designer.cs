@@ -240,7 +240,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
             this.buttonFilter.Location = new System.Drawing.Point(351, 1);
-            this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonFilter.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonFilter.TabIndex = 25;
@@ -263,7 +263,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.EndButtonVisible = false;
             this.textBoxFilter.InErrorCondition = false;
             this.textBoxFilter.Location = new System.Drawing.Point(195, 1);
-            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.textBoxFilter.Multiline = false;
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.ReadOnly = false;
@@ -296,7 +296,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.DisplayMember = "";
             this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTime.Location = new System.Drawing.Point(38, 1);
-            this.comboBoxTime.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.comboBoxTime.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.comboBoxTime.Name = "comboBoxTime";
             this.comboBoxTime.SelectedIndex = -1;
             this.comboBoxTime.SelectedItem = null;
@@ -317,7 +317,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(459, 1);
-            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 32;
@@ -344,7 +344,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
             this.extCheckBoxWordWrap.Location = new System.Drawing.Point(387, 1);
-            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 33;
@@ -390,7 +390,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
             this.checkBoxCursorToTop.Location = new System.Drawing.Point(423, 1);
-            this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.checkBoxCursorToTop.Name = "checkBoxCursorToTop";
             this.checkBoxCursorToTop.Size = new System.Drawing.Size(28, 28);
             this.checkBoxCursorToTop.TabIndex = 30;

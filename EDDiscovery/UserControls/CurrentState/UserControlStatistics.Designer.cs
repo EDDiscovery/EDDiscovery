@@ -1160,7 +1160,7 @@ namespace EDDiscovery.UserControls
             this.extButtonUndocked.GradientDirection = 90F;
             this.extButtonUndocked.Image = global::EDDiscovery.Icons.Controls.Undocked;
             this.extButtonUndocked.Location = new System.Drawing.Point(753, 1);
-            this.extButtonUndocked.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonUndocked.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonUndocked.MouseOverScaling = 1.3F;
             this.extButtonUndocked.MouseSelectedScaling = 1.3F;
             this.extButtonUndocked.Name = "extButtonUndocked";
@@ -1178,7 +1178,7 @@ namespace EDDiscovery.UserControls
             this.extButtonStartStop.GradientDirection = 90F;
             this.extButtonStartStop.Image = global::EDDiscovery.Icons.Controls.FlagsRedGreen;
             this.extButtonStartStop.Location = new System.Drawing.Point(722, 1);
-            this.extButtonStartStop.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonStartStop.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonStartStop.MouseOverScaling = 1.3F;
             this.extButtonStartStop.MouseSelectedScaling = 1.3F;
             this.extButtonStartStop.Name = "extButtonStartStop";

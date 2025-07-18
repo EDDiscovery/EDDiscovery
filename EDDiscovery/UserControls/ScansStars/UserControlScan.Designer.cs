@@ -80,7 +80,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxStar.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxStar.ImageUnchecked = null;
             this.extCheckBoxStar.Location = new System.Drawing.Point(4, 1);
-            this.extCheckBoxStar.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.extCheckBoxStar.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxStar.Name = "extCheckBoxStar";
             this.extCheckBoxStar.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxStar.TabIndex = 2;
@@ -95,7 +95,7 @@ namespace EDDiscovery.UserControls
             this.buttonSize.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonSize.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
             this.buttonSize.Location = new System.Drawing.Point(112, 1);
-            this.buttonSize.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.buttonSize.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonSize.Name = "buttonSize";
             this.buttonSize.Size = new System.Drawing.Size(28, 28);
             this.buttonSize.TabIndex = 29;
@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
             this.extButtonHighValue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonHighValue.Image = global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue;
             this.extButtonHighValue.Location = new System.Drawing.Point(148, 1);
-            this.extButtonHighValue.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.extButtonHighValue.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonHighValue.Name = "extButtonHighValue";
             this.extButtonHighValue.Size = new System.Drawing.Size(28, 28);
             this.extButtonHighValue.TabIndex = 29;
@@ -133,7 +133,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.Scan_ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(184, 1);
-            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 29;
@@ -152,7 +152,7 @@ namespace EDDiscovery.UserControls
             // 
             this.scanDisplayBodyFiltersButton.Image = global::EDDiscovery.Icons.Controls.EventFilter;
             this.scanDisplayBodyFiltersButton.Location = new System.Drawing.Point(40, 1);
-            this.scanDisplayBodyFiltersButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.scanDisplayBodyFiltersButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.scanDisplayBodyFiltersButton.Name = "scanDisplayBodyFiltersButton";
             this.scanDisplayBodyFiltersButton.SettingsSplittingChar = ';';
             this.scanDisplayBodyFiltersButton.Size = new System.Drawing.Size(28, 28);
@@ -165,7 +165,7 @@ namespace EDDiscovery.UserControls
             this.scanDisplayConfigureButton.Cursor = System.Windows.Forms.Cursors.Default;
             this.scanDisplayConfigureButton.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
             this.scanDisplayConfigureButton.Location = new System.Drawing.Point(76, 1);
-            this.scanDisplayConfigureButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.scanDisplayConfigureButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.scanDisplayConfigureButton.Name = "scanDisplayConfigureButton";
             this.scanDisplayConfigureButton.SettingsSplittingChar = ';';
             this.scanDisplayConfigureButton.Size = new System.Drawing.Size(28, 28);
@@ -216,7 +216,7 @@ namespace EDDiscovery.UserControls
             // 
             this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
             this.edsmSpanshButton.Location = new System.Drawing.Point(220, 1);
-            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.edsmSpanshButton.Name = "edsmSpanshButton";
             this.edsmSpanshButton.SettingsSplittingChar = ';';
             this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);

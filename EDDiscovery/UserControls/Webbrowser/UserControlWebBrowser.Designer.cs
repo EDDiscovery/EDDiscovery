@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxStar.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxStar.ImageUnchecked = null;
             this.extCheckBoxStar.Location = new System.Drawing.Point(32, 1);
-            this.extCheckBoxStar.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
+            this.extCheckBoxStar.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxStar.Name = "extCheckBoxStar";
             this.extCheckBoxStar.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxStar.TabIndex = 2;
@@ -110,7 +110,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxAutoTrack.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxAutoTrack.ImageUnchecked = null;
             this.checkBoxAutoTrack.Location = new System.Drawing.Point(72, 1);
-            this.checkBoxAutoTrack.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.checkBoxAutoTrack.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.checkBoxAutoTrack.Name = "checkBoxAutoTrack";
             this.checkBoxAutoTrack.Size = new System.Drawing.Size(28, 28);
             this.checkBoxAutoTrack.TabIndex = 4;
@@ -137,7 +137,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxBack.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxBack.ImageUnchecked = null;
             this.extCheckBoxBack.Location = new System.Drawing.Point(0, 1);
-            this.extCheckBoxBack.Margin = new System.Windows.Forms.Padding(0, 1, 4, 1);
+            this.extCheckBoxBack.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxBack.Name = "extCheckBoxBack";
             this.extCheckBoxBack.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxBack.TabIndex = 2;
@@ -165,7 +165,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxAllowedList.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxAllowedList.ImageUnchecked = null;
             this.extCheckBoxAllowedList.Location = new System.Drawing.Point(112, 1);
-            this.extCheckBoxAllowedList.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extCheckBoxAllowedList.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxAllowedList.Name = "extCheckBoxAllowedList";
             this.extCheckBoxAllowedList.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxAllowedList.TabIndex = 4;
@@ -216,7 +216,7 @@ namespace EDDiscovery.UserControls
             this.extButtonIE11Warning.Image = global::EDDiscovery.Icons.Controls.Warning;
             this.extButtonIE11Warning.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.extButtonIE11Warning.Location = new System.Drawing.Point(152, 1);
-            this.extButtonIE11Warning.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonIE11Warning.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonIE11Warning.Name = "extButtonIE11Warning";
             this.extButtonIE11Warning.Size = new System.Drawing.Size(254, 23);
             this.extButtonIE11Warning.TabIndex = 5;

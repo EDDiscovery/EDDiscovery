@@ -79,7 +79,7 @@
             this.extCheckBoxSystemShow.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxSystemShow.ImageUnchecked = null;
             this.extCheckBoxSystemShow.Location = new System.Drawing.Point(4, 51);
-            this.extCheckBoxSystemShow.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.extCheckBoxSystemShow.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxSystemShow.MouseOverScaling = 1.3F;
             this.extCheckBoxSystemShow.MouseSelectedScaling = 1.3F;
             this.extCheckBoxSystemShow.Name = "extCheckBoxSystemShow";
@@ -96,7 +96,7 @@
             this.scanDisplayBodyFiltersButton.GradientDirection = 90F;
             this.scanDisplayBodyFiltersButton.Image = global::EDDiscovery.Icons.Controls.EventFilter;
             this.scanDisplayBodyFiltersButton.Location = new System.Drawing.Point(40, 51);
-            this.scanDisplayBodyFiltersButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.scanDisplayBodyFiltersButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.scanDisplayBodyFiltersButton.MouseOverScaling = 1.3F;
             this.scanDisplayBodyFiltersButton.MouseSelectedScaling = 1.3F;
             this.scanDisplayBodyFiltersButton.Name = "scanDisplayBodyFiltersButton";
@@ -121,7 +121,7 @@
             this.scanDisplayConfigureButton.GradientDirection = 90F;
             this.scanDisplayConfigureButton.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
             this.scanDisplayConfigureButton.Location = new System.Drawing.Point(76, 51);
-            this.scanDisplayConfigureButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.scanDisplayConfigureButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.scanDisplayConfigureButton.MouseOverScaling = 1.3F;
             this.scanDisplayConfigureButton.MouseSelectedScaling = 1.3F;
             this.scanDisplayConfigureButton.Name = "scanDisplayConfigureButton";
@@ -232,7 +232,7 @@
             this.edsmSpanshButton.GradientDirection = 90F;
             this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
             this.edsmSpanshButton.Location = new System.Drawing.Point(112, 51);
-            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.edsmSpanshButton.MouseOverScaling = 1.3F;
             this.edsmSpanshButton.MouseSelectedScaling = 1.3F;
             this.edsmSpanshButton.Name = "edsmSpanshButton";

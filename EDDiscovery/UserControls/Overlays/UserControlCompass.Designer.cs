@@ -62,8 +62,8 @@ namespace EDDiscovery.UserControls
             // labelTargetLat
             // 
             this.labelTargetLat.AutoSize = true;
-            this.labelTargetLat.Location = new System.Drawing.Point(3, 6);
-            this.labelTargetLat.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.labelTargetLat.Location = new System.Drawing.Point(3, 4);
+            this.labelTargetLat.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
             this.labelTargetLat.Name = "labelTargetLat";
             this.labelTargetLat.Size = new System.Drawing.Size(38, 13);
             this.labelTargetLat.TabIndex = 4;
@@ -72,25 +72,27 @@ namespace EDDiscovery.UserControls
             // 
             // numberBoxTargetLatitude
             // 
-            this.numberBoxTargetLatitude.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.numberBoxTargetLatitude.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.numberBoxTargetLatitude.BackErrorColor = System.Drawing.Color.Red;
             this.numberBoxTargetLatitude.BorderColor = System.Drawing.Color.Transparent;
+            this.numberBoxTargetLatitude.BorderColor2 = System.Drawing.Color.Transparent;
             this.numberBoxTargetLatitude.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numberBoxTargetLatitude.ClearOnFirstChar = false;
             this.numberBoxTargetLatitude.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxTargetLatitude.DelayBeforeNotification = 0;
             this.numberBoxTargetLatitude.EndButtonEnable = true;
             this.numberBoxTargetLatitude.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxTargetLatitude.EndButtonImage")));
+            this.numberBoxTargetLatitude.EndButtonSize16ths = 10;
             this.numberBoxTargetLatitude.EndButtonVisible = false;
             this.numberBoxTargetLatitude.Format = "N4";
             this.numberBoxTargetLatitude.InErrorCondition = false;
-            this.numberBoxTargetLatitude.Location = new System.Drawing.Point(47, 6);
-            this.numberBoxTargetLatitude.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.numberBoxTargetLatitude.Location = new System.Drawing.Point(47, 4);
+            this.numberBoxTargetLatitude.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
             this.numberBoxTargetLatitude.Maximum = 90D;
             this.numberBoxTargetLatitude.Minimum = -90D;
             this.numberBoxTargetLatitude.Multiline = false;
             this.numberBoxTargetLatitude.Name = "numberBoxTargetLatitude";
+            this.numberBoxTargetLatitude.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.numberBoxTargetLatitude.ReadOnly = false;
             this.numberBoxTargetLatitude.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.numberBoxTargetLatitude.SelectionLength = 0;
@@ -98,31 +100,34 @@ namespace EDDiscovery.UserControls
             this.numberBoxTargetLatitude.Size = new System.Drawing.Size(54, 20);
             this.numberBoxTargetLatitude.TabIndex = 9;
             this.numberBoxTargetLatitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.numberBoxTargetLatitude.TextNoChange = "0.0000";
             this.toolTip.SetToolTip(this.numberBoxTargetLatitude, "Latitude of target position, blank for none");
             this.numberBoxTargetLatitude.Value = 0D;
             this.numberBoxTargetLatitude.WordWrap = true;
             // 
             // numberBoxTargetLongitude
             // 
-            this.numberBoxTargetLongitude.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.numberBoxTargetLongitude.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.numberBoxTargetLongitude.BackErrorColor = System.Drawing.Color.Red;
             this.numberBoxTargetLongitude.BorderColor = System.Drawing.Color.Transparent;
+            this.numberBoxTargetLongitude.BorderColor2 = System.Drawing.Color.Transparent;
             this.numberBoxTargetLongitude.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.numberBoxTargetLongitude.ClearOnFirstChar = false;
             this.numberBoxTargetLongitude.ControlBackground = System.Drawing.SystemColors.Control;
             this.numberBoxTargetLongitude.DelayBeforeNotification = 0;
             this.numberBoxTargetLongitude.EndButtonEnable = true;
             this.numberBoxTargetLongitude.EndButtonImage = ((System.Drawing.Image)(resources.GetObject("numberBoxTargetLongitude.EndButtonImage")));
+            this.numberBoxTargetLongitude.EndButtonSize16ths = 10;
             this.numberBoxTargetLongitude.EndButtonVisible = false;
             this.numberBoxTargetLongitude.Format = "N4";
             this.numberBoxTargetLongitude.InErrorCondition = false;
-            this.numberBoxTargetLongitude.Location = new System.Drawing.Point(107, 6);
-            this.numberBoxTargetLongitude.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.numberBoxTargetLongitude.Location = new System.Drawing.Point(107, 4);
+            this.numberBoxTargetLongitude.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
             this.numberBoxTargetLongitude.Maximum = 180D;
             this.numberBoxTargetLongitude.Minimum = -180D;
             this.numberBoxTargetLongitude.Multiline = false;
             this.numberBoxTargetLongitude.Name = "numberBoxTargetLongitude";
+            this.numberBoxTargetLongitude.NumberStyles = ((System.Globalization.NumberStyles)(((System.Globalization.NumberStyles.AllowLeadingSign | System.Globalization.NumberStyles.AllowDecimalPoint) 
+            | System.Globalization.NumberStyles.AllowThousands)));
             this.numberBoxTargetLongitude.ReadOnly = false;
             this.numberBoxTargetLongitude.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.numberBoxTargetLongitude.SelectionLength = 0;
@@ -130,19 +135,25 @@ namespace EDDiscovery.UserControls
             this.numberBoxTargetLongitude.Size = new System.Drawing.Size(54, 20);
             this.numberBoxTargetLongitude.TabIndex = 10;
             this.numberBoxTargetLongitude.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
+            this.numberBoxTargetLongitude.TextNoChange = "0.0000";
             this.toolTip.SetToolTip(this.numberBoxTargetLongitude, "Longitude of target position, blank for none");
             this.numberBoxTargetLongitude.Value = 0D;
             this.numberBoxTargetLongitude.WordWrap = true;
             // 
             // comboBoxBookmarks
             // 
+            this.comboBoxBookmarks.BackColor2 = System.Drawing.Color.Red;
             this.comboBoxBookmarks.BorderColor = System.Drawing.Color.White;
+            this.comboBoxBookmarks.ControlBackground = System.Drawing.SystemColors.Control;
             this.comboBoxBookmarks.DataSource = null;
             this.comboBoxBookmarks.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxBookmarks.DisabledScaling = 0.5F;
             this.comboBoxBookmarks.DisplayMember = "";
             this.comboBoxBookmarks.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxBookmarks.Location = new System.Drawing.Point(167, 6);
-            this.comboBoxBookmarks.Margin = new System.Windows.Forms.Padding(3, 6, 3, 3);
+            this.comboBoxBookmarks.GradientDirection = 90F;
+            this.comboBoxBookmarks.Location = new System.Drawing.Point(167, 4);
+            this.comboBoxBookmarks.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
+            this.comboBoxBookmarks.MouseOverScalingColor = 1.3F;
             this.comboBoxBookmarks.Name = "comboBoxBookmarks";
             this.comboBoxBookmarks.SelectedIndex = -1;
             this.comboBoxBookmarks.SelectedItem = null;
@@ -156,9 +167,14 @@ namespace EDDiscovery.UserControls
             // 
             // buttonNewBookmark
             // 
+            this.buttonNewBookmark.BackColor2 = System.Drawing.Color.Red;
+            this.buttonNewBookmark.ButtonDisabledScaling = 0.5F;
+            this.buttonNewBookmark.GradientDirection = 90F;
             this.buttonNewBookmark.Image = global::EDDiscovery.Icons.Controls.Bookmarks;
-            this.buttonNewBookmark.Location = new System.Drawing.Point(454, 4);
-            this.buttonNewBookmark.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
+            this.buttonNewBookmark.Location = new System.Drawing.Point(454, 1);
+            this.buttonNewBookmark.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonNewBookmark.MouseOverScaling = 1.3F;
+            this.buttonNewBookmark.MouseSelectedScaling = 1.3F;
             this.buttonNewBookmark.Name = "buttonNewBookmark";
             this.buttonNewBookmark.Size = new System.Drawing.Size(28, 28);
             this.buttonNewBookmark.TabIndex = 13;
@@ -175,15 +191,16 @@ namespace EDDiscovery.UserControls
             this.compassControl.BugColor = System.Drawing.Color.White;
             this.compassControl.BugSizePixels = 10;
             this.compassControl.CentreTickColor = System.Drawing.Color.Green;
+            this.compassControl.DisabledScaling = 0.5F;
             this.compassControl.DisableMessage = "";
             this.compassControl.Distance = double.NaN;
             this.compassControl.DistanceFormat = "{0:0.##}";
             this.compassControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.compassControl.GlideSlope = double.NaN;
-            this.compassControl.Location = new System.Drawing.Point(0, 35);
+            this.compassControl.Location = new System.Drawing.Point(0, 30);
             this.compassControl.Name = "compassControl";
             this.compassControl.ShowNegativeDegrees = false;
-            this.compassControl.Size = new System.Drawing.Size(915, 285);
+            this.compassControl.Size = new System.Drawing.Size(915, 290);
             this.compassControl.SlewRateDegreesSec = 40;
             this.compassControl.SlewToBearing = 0D;
             this.compassControl.StencilColor = System.Drawing.Color.Red;
@@ -208,15 +225,20 @@ namespace EDDiscovery.UserControls
             this.flowLayoutPanelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.flowLayoutPanelTop.Location = new System.Drawing.Point(0, 0);
             this.flowLayoutPanelTop.Name = "flowLayoutPanelTop";
-            this.flowLayoutPanelTop.Size = new System.Drawing.Size(915, 35);
+            this.flowLayoutPanelTop.Size = new System.Drawing.Size(915, 30);
             this.flowLayoutPanelTop.TabIndex = 15;
             this.flowLayoutPanelTop.WrapContents = false;
             // 
             // extButtonBlank
             // 
+            this.extButtonBlank.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonBlank.ButtonDisabledScaling = 0.5F;
+            this.extButtonBlank.GradientDirection = 90F;
             this.extButtonBlank.Image = global::EDDiscovery.Icons.Controls.Cross;
-            this.extButtonBlank.Location = new System.Drawing.Point(420, 4);
-            this.extButtonBlank.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
+            this.extButtonBlank.Location = new System.Drawing.Point(420, 1);
+            this.extButtonBlank.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonBlank.MouseOverScaling = 1.3F;
+            this.extButtonBlank.MouseSelectedScaling = 1.3F;
             this.extButtonBlank.Name = "extButtonBlank";
             this.extButtonBlank.Size = new System.Drawing.Size(28, 28);
             this.extButtonBlank.TabIndex = 13;
@@ -227,10 +249,15 @@ namespace EDDiscovery.UserControls
             // extButtonShowControl
             // 
             this.extButtonShowControl.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonShowControl.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonShowControl.ButtonDisabledScaling = 0.5F;
             this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonShowControl.GradientDirection = 90F;
             this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.extButtonShowControl.Location = new System.Drawing.Point(488, 4);
-            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
+            this.extButtonShowControl.Location = new System.Drawing.Point(488, 1);
+            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonShowControl.MouseOverScaling = 1.3F;
+            this.extButtonShowControl.MouseSelectedScaling = 1.3F;
             this.extButtonShowControl.Name = "extButtonShowControl";
             this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
             this.extButtonShowControl.TabIndex = 31;
@@ -241,10 +268,15 @@ namespace EDDiscovery.UserControls
             // extButtonFont
             // 
             this.extButtonFont.BackColor = System.Drawing.SystemColors.Control;
+            this.extButtonFont.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonFont.ButtonDisabledScaling = 0.5F;
             this.extButtonFont.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonFont.GradientDirection = 90F;
             this.extButtonFont.Image = global::EDDiscovery.Icons.Controls.Font;
-            this.extButtonFont.Location = new System.Drawing.Point(522, 4);
-            this.extButtonFont.Margin = new System.Windows.Forms.Padding(3, 4, 3, 3);
+            this.extButtonFont.Location = new System.Drawing.Point(522, 1);
+            this.extButtonFont.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonFont.MouseOverScaling = 1.3F;
+            this.extButtonFont.MouseSelectedScaling = 1.3F;
             this.extButtonFont.Name = "extButtonFont";
             this.extButtonFont.Size = new System.Drawing.Size(28, 28);
             this.extButtonFont.TabIndex = 30;

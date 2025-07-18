@@ -60,7 +60,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTimeMode.DisplayMember = "";
             this.comboBoxTimeMode.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTimeMode.Location = new System.Drawing.Point(0, 4);
-            this.comboBoxTimeMode.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.comboBoxTimeMode.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.comboBoxTimeMode.Name = "comboBoxTimeMode";
             this.comboBoxTimeMode.SelectedIndex = -1;
             this.comboBoxTimeMode.SelectedItem = null;

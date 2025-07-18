@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             this.extButtonRemoveImage.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonRemoveImage.Image = global::EDDiscovery.Icons.Controls.Cross;
             this.extButtonRemoveImage.Location = new System.Drawing.Point(433, 1);
-            this.extButtonRemoveImage.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonRemoveImage.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonRemoveImage.Name = "extButtonRemoveImage";
             this.extButtonRemoveImage.Size = new System.Drawing.Size(28, 28);
             this.extButtonRemoveImage.TabIndex = 29;
@@ -135,7 +135,7 @@ namespace EDDiscovery.UserControls
             this.extButtonCopy.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonCopy.Image = global::EDDiscovery.Icons.Controls.Copy;
             this.extButtonCopy.Location = new System.Drawing.Point(473, 1);
-            this.extButtonCopy.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonCopy.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonCopy.Name = "extButtonCopy";
             this.extButtonCopy.Size = new System.Drawing.Size(28, 28);
             this.extButtonCopy.TabIndex = 29;

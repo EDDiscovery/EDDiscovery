@@ -195,7 +195,7 @@
             this.extCheckBoxShowContributions.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowContributions.ImageUnchecked = null;
             this.extCheckBoxShowContributions.Location = new System.Drawing.Point(39, 54);
-            this.extCheckBoxShowContributions.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.extCheckBoxShowContributions.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxShowContributions.MouseOverScaling = 1.3F;
             this.extCheckBoxShowContributions.MouseSelectedScaling = 1.3F;
             this.extCheckBoxShowContributions.Name = "extCheckBoxShowContributions";
@@ -229,7 +229,7 @@
             this.extCheckBoxShowRL.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowRL.ImageUnchecked = null;
             this.extCheckBoxShowRL.Location = new System.Drawing.Point(3, 54);
-            this.extCheckBoxShowRL.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.extCheckBoxShowRL.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxShowRL.MouseOverScaling = 1.3F;
             this.extCheckBoxShowRL.MouseSelectedScaling = 1.3F;
             this.extCheckBoxShowRL.Name = "extCheckBoxShowRL";

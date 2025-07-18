@@ -94,7 +94,7 @@ namespace EDDiscovery.UserControls.Search
             this.extCheckBoxAscending.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxAscending.ImageUnchecked = global::EDDiscovery.Icons.Controls.RoundDown;
             this.extCheckBoxAscending.Location = new System.Drawing.Point(863, 0);
-            this.extCheckBoxAscending.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxAscending.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxAscending.Name = "extCheckBoxAscending";
             this.extCheckBoxAscending.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxAscending.TabIndex = 31;

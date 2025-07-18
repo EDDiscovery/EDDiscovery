@@ -85,8 +85,8 @@ namespace EDDiscovery.UserControls
             this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonShowControl.GradientDirection = 90F;
             this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.extButtonShowControl.Location = new System.Drawing.Point(4, 1);
-            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.extButtonShowControl.Location = new System.Drawing.Point(3, 1);
+            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonShowControl.MouseOverScaling = 1.3F;
             this.extButtonShowControl.MouseSelectedScaling = 1.3F;
             this.extButtonShowControl.Name = "extButtonShowControl";
@@ -104,8 +104,8 @@ namespace EDDiscovery.UserControls
             this.extButtonHighValue.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonHighValue.GradientDirection = 90F;
             this.extButtonHighValue.Image = global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue;
-            this.extButtonHighValue.Location = new System.Drawing.Point(40, 1);
-            this.extButtonHighValue.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.extButtonHighValue.Location = new System.Drawing.Point(37, 1);
+            this.extButtonHighValue.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonHighValue.MouseOverScaling = 1.3F;
             this.extButtonHighValue.MouseSelectedScaling = 1.3F;
             this.extButtonHighValue.Name = "extButtonHighValue";
@@ -121,7 +121,7 @@ namespace EDDiscovery.UserControls
             this.extButtonNewBookmark.ButtonDisabledScaling = 0.5F;
             this.extButtonNewBookmark.GradientDirection = 90F;
             this.extButtonNewBookmark.Image = global::EDDiscovery.Icons.Controls.Bookmarks;
-            this.extButtonNewBookmark.Location = new System.Drawing.Point(111, 3);
+            this.extButtonNewBookmark.Location = new System.Drawing.Point(105, 3);
             this.extButtonNewBookmark.MouseOverScaling = 1.3F;
             this.extButtonNewBookmark.MouseSelectedScaling = 1.3F;
             this.extButtonNewBookmark.Name = "extButtonNewBookmark";
@@ -337,8 +337,8 @@ namespace EDDiscovery.UserControls
             this.edsmSpanshButton.ButtonDisabledScaling = 0.5F;
             this.edsmSpanshButton.GradientDirection = 90F;
             this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
-            this.edsmSpanshButton.Location = new System.Drawing.Point(76, 1);
-            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(4, 1, 4, 1);
+            this.edsmSpanshButton.Location = new System.Drawing.Point(71, 1);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.edsmSpanshButton.MouseOverScaling = 1.3F;
             this.edsmSpanshButton.MouseSelectedScaling = 1.3F;
             this.edsmSpanshButton.Name = "edsmSpanshButton";

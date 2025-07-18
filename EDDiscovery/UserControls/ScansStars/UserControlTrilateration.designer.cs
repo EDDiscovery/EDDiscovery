@@ -234,8 +234,9 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonNew.Image = global::EDDiscovery.Icons.Controls.ManyStars;
             this.toolStripButtonNew.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonNew.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonNew.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.toolStripButtonNew.Name = "toolStripButtonNew";
-            this.toolStripButtonNew.Size = new System.Drawing.Size(86, 29);
+            this.toolStripButtonNew.Size = new System.Drawing.Size(86, 30);
             this.toolStripButtonNew.Text = "Start New";
             this.toolStripButtonNew.ToolTipText = "Enter distances to systems with unknown coordinates";
             this.toolStripButtonNew.Click += new System.EventHandler(this.buttonStartNew_Click);
@@ -243,8 +244,9 @@ namespace EDDiscovery.UserControls
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.BackColor = System.Drawing.SystemColors.ButtonFace;
+            this.toolStripSeparator1.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 32);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(6, 30);
             // 
             // toolStripButtonRemoveUnused
             // 
@@ -253,8 +255,9 @@ namespace EDDiscovery.UserControls
             this.toolStripButtonRemoveUnused.Image = global::EDDiscovery.Icons.Controls.Cross;
             this.toolStripButtonRemoveUnused.ImageScaling = System.Windows.Forms.ToolStripItemImageScaling.None;
             this.toolStripButtonRemoveUnused.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButtonRemoveUnused.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.toolStripButtonRemoveUnused.Name = "toolStripButtonRemoveUnused";
-            this.toolStripButtonRemoveUnused.Size = new System.Drawing.Size(28, 29);
+            this.toolStripButtonRemoveUnused.Size = new System.Drawing.Size(28, 30);
             this.toolStripButtonRemoveUnused.Text = "<code>";
             this.toolStripButtonRemoveUnused.ToolTipText = "Remove unused";
             this.toolStripButtonRemoveUnused.Click += new System.EventHandler(this.toolStripButtonRemoveUnused_Click);
@@ -292,8 +295,9 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripLabelSystem
             // 
+            this.toolStripLabelSystem.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
             this.toolStripLabelSystem.Name = "toolStripLabelSystem";
-            this.toolStripLabelSystem.Size = new System.Drawing.Size(79, 29);
+            this.toolStripLabelSystem.Size = new System.Drawing.Size(79, 27);
             this.toolStripLabelSystem.Text = "From System:";
             // 
             // toolStripTextBoxSystem
@@ -305,8 +309,9 @@ namespace EDDiscovery.UserControls
             // 
             // toolStripLabel1
             // 
+            this.toolStripLabel1.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(154, 29);
+            this.toolStripLabel1.Size = new System.Drawing.Size(154, 30);
             this.toolStripLabel1.Text = "Visited without coordinates:";
             this.toolStripLabel1.ToolTipText = "Start New to update count";
             // 
@@ -397,32 +402,41 @@ namespace EDDiscovery.UserControls
             this.dataViewScroller_Distances.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScroller_Distances.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Distances.Name = "dataViewScroller_Distances";
+            this.dataViewScroller_Distances.ScrollBarWidth = 24;
             this.dataViewScroller_Distances.Size = new System.Drawing.Size(588, 675);
             this.dataViewScroller_Distances.TabIndex = 0;
             this.dataViewScroller_Distances.VerticalScrollBarDockRight = true;
             // 
             // vScrollBarCustom1
             // 
+            this.vScrollBarCustom1.AlwaysHideScrollBar = false;
             this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom1.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 1;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(572, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(564, 0);
             this.vScrollBarCustom1.Maximum = 0;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom1.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom1.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 675);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(24, 675);
+            this.vScrollBarCustom1.SkinnyStyle = false;
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SliderDrawAngle = 90F;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 1;
             this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom1.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
             this.vScrollBarCustom1.Value = 0;
             this.vScrollBarCustom1.ValueLimited = 0;
@@ -430,6 +444,7 @@ namespace EDDiscovery.UserControls
             // dataGridViewDistances
             // 
             this.dataGridViewDistances.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewDistances.AutoSortByColumnName = false;
             this.dataGridViewDistances.ColumnHeaderMenuStrip = null;
             this.dataGridViewDistances.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewDistances.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -444,7 +459,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewDistances.RowHeaderMenuStrip = null;
             this.dataGridViewDistances.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewDistances.SingleRowSelect = true;
-            this.dataGridViewDistances.Size = new System.Drawing.Size(572, 675);
+            this.dataGridViewDistances.Size = new System.Drawing.Size(564, 675);
             this.dataGridViewDistances.TabIndex = 0;
             this.dataGridViewDistances.TopLeftHeaderMenuStrip = null;
             this.dataGridViewDistances.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewDistances_CellClick);
@@ -483,6 +498,8 @@ namespace EDDiscovery.UserControls
             // richTextBox_History
             // 
             this.richTextBox_History.BorderColor = System.Drawing.Color.Transparent;
+            this.richTextBox_History.BorderColor2 = System.Drawing.Color.Transparent;
+            this.richTextBox_History.DetectUrls = true;
             this.richTextBox_History.Dock = System.Windows.Forms.DockStyle.Fill;
             this.richTextBox_History.HideScrollBar = true;
             this.richTextBox_History.Location = new System.Drawing.Point(0, 0);
@@ -505,32 +522,41 @@ namespace EDDiscovery.UserControls
             this.dataViewScroller_Wanted.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScroller_Wanted.Location = new System.Drawing.Point(0, 0);
             this.dataViewScroller_Wanted.Name = "dataViewScroller_Wanted";
+            this.dataViewScroller_Wanted.ScrollBarWidth = 24;
             this.dataViewScroller_Wanted.Size = new System.Drawing.Size(496, 820);
             this.dataViewScroller_Wanted.TabIndex = 0;
             this.dataViewScroller_Wanted.VerticalScrollBarDockRight = true;
             // 
             // vScrollBarCustom2
             // 
+            this.vScrollBarCustom2.AlwaysHideScrollBar = false;
             this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom2.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 0;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(480, 0);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(472, 0);
             this.vScrollBarCustom2.Maximum = -1;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom2.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom2.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(16, 820);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(24, 820);
+            this.vScrollBarCustom2.SkinnyStyle = false;
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom2.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom2.SliderDrawAngle = 90F;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 14;
             this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom2.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
             this.vScrollBarCustom2.Value = -1;
             this.vScrollBarCustom2.ValueLimited = -1;
@@ -540,6 +566,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewClosestSystems.AllowUserToAddRows = false;
             this.dataGridViewClosestSystems.AllowUserToDeleteRows = false;
             this.dataGridViewClosestSystems.AllowUserToResizeRows = false;
+            this.dataGridViewClosestSystems.AutoSortByColumnName = false;
             this.dataGridViewClosestSystems.ClipboardCopyMode = System.Windows.Forms.DataGridViewClipboardCopyMode.EnableWithoutHeaderText;
             this.dataGridViewClosestSystems.ColumnHeaderMenuStrip = null;
             dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
@@ -564,7 +591,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewClosestSystems.RowHeadersVisible = false;
             this.dataGridViewClosestSystems.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewClosestSystems.SingleRowSelect = true;
-            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(480, 820);
+            this.dataGridViewClosestSystems.Size = new System.Drawing.Size(472, 820);
             this.dataGridViewClosestSystems.TabIndex = 13;
             this.dataGridViewClosestSystems.TopLeftHeaderMenuStrip = null;
             this.dataGridViewClosestSystems.CellMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.dataGridViewClosestSystems_CellMouseClick);

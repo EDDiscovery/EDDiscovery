@@ -124,10 +124,9 @@
             // 
             // textBoxFilter
             // 
-            this.textBoxFilter.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxFilter.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxFilter.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxFilter.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxFilter.ClearOnFirstChar = false;
             this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
@@ -136,8 +135,8 @@
             this.textBoxFilter.EndButtonSize16ths = 10;
             this.textBoxFilter.EndButtonVisible = false;
             this.textBoxFilter.InErrorCondition = false;
-            this.textBoxFilter.Location = new System.Drawing.Point(49, 4);
-            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.textBoxFilter.Location = new System.Drawing.Point(50, 4);
+            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
             this.textBoxFilter.Multiline = false;
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.ReadOnly = false;
@@ -154,9 +153,14 @@
             // 
             // buttonFilter
             // 
+            this.buttonFilter.BackColor2 = System.Drawing.Color.Red;
+            this.buttonFilter.ButtonDisabledScaling = 0.5F;
+            this.buttonFilter.GradientDirection = 90F;
             this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
-            this.buttonFilter.Location = new System.Drawing.Point(205, 1);
-            this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonFilter.Location = new System.Drawing.Point(204, 1);
+            this.buttonFilter.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonFilter.MouseOverScaling = 1.3F;
+            this.buttonFilter.MouseSelectedScaling = 1.3F;
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonFilter.TabIndex = 40;
@@ -166,9 +170,14 @@
             // 
             // buttonNew
             // 
+            this.buttonNew.BackColor2 = System.Drawing.Color.Red;
+            this.buttonNew.ButtonDisabledScaling = 0.5F;
+            this.buttonNew.GradientDirection = 90F;
             this.buttonNew.Image = global::EDDiscovery.Icons.Controls.New;
-            this.buttonNew.Location = new System.Drawing.Point(241, 1);
-            this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonNew.Location = new System.Drawing.Point(238, 1);
+            this.buttonNew.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonNew.MouseOverScaling = 1.3F;
+            this.buttonNew.MouseSelectedScaling = 1.3F;
             this.buttonNew.Name = "buttonNew";
             this.buttonNew.Size = new System.Drawing.Size(28, 28);
             this.buttonNew.TabIndex = 2;
@@ -178,9 +187,14 @@
             // 
             // extButtonEditSystem
             // 
+            this.extButtonEditSystem.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonEditSystem.ButtonDisabledScaling = 0.5F;
+            this.extButtonEditSystem.GradientDirection = 90F;
             this.extButtonEditSystem.Image = global::EDDiscovery.Icons.Controls.EditSystem;
-            this.extButtonEditSystem.Location = new System.Drawing.Point(277, 1);
-            this.extButtonEditSystem.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonEditSystem.Location = new System.Drawing.Point(272, 1);
+            this.extButtonEditSystem.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonEditSystem.MouseOverScaling = 1.3F;
+            this.extButtonEditSystem.MouseSelectedScaling = 1.3F;
             this.extButtonEditSystem.Name = "extButtonEditSystem";
             this.extButtonEditSystem.Size = new System.Drawing.Size(28, 28);
             this.extButtonEditSystem.TabIndex = 3;
@@ -190,9 +204,14 @@
             // 
             // extButtonNewRegion
             // 
+            this.extButtonNewRegion.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonNewRegion.ButtonDisabledScaling = 0.5F;
+            this.extButtonNewRegion.GradientDirection = 90F;
             this.extButtonNewRegion.Image = global::EDDiscovery.Icons.Controls.NewRegion;
-            this.extButtonNewRegion.Location = new System.Drawing.Point(313, 1);
-            this.extButtonNewRegion.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonNewRegion.Location = new System.Drawing.Point(306, 1);
+            this.extButtonNewRegion.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonNewRegion.MouseOverScaling = 1.3F;
+            this.extButtonNewRegion.MouseSelectedScaling = 1.3F;
             this.extButtonNewRegion.Name = "extButtonNewRegion";
             this.extButtonNewRegion.Size = new System.Drawing.Size(28, 28);
             this.extButtonNewRegion.TabIndex = 2;
@@ -202,9 +221,14 @@
             // 
             // buttonEdit
             // 
+            this.buttonEdit.BackColor2 = System.Drawing.Color.Red;
+            this.buttonEdit.ButtonDisabledScaling = 0.5F;
+            this.buttonEdit.GradientDirection = 90F;
             this.buttonEdit.Image = global::EDDiscovery.Icons.Controls.Edit;
-            this.buttonEdit.Location = new System.Drawing.Point(349, 1);
-            this.buttonEdit.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonEdit.Location = new System.Drawing.Point(340, 1);
+            this.buttonEdit.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonEdit.MouseOverScaling = 1.3F;
+            this.buttonEdit.MouseSelectedScaling = 1.3F;
             this.buttonEdit.Name = "buttonEdit";
             this.buttonEdit.Size = new System.Drawing.Size(28, 28);
             this.buttonEdit.TabIndex = 3;
@@ -214,9 +238,14 @@
             // 
             // buttonDelete
             // 
+            this.buttonDelete.BackColor2 = System.Drawing.Color.Red;
+            this.buttonDelete.ButtonDisabledScaling = 0.5F;
+            this.buttonDelete.GradientDirection = 90F;
             this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
-            this.buttonDelete.Location = new System.Drawing.Point(385, 1);
-            this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonDelete.Location = new System.Drawing.Point(374, 1);
+            this.buttonDelete.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonDelete.MouseOverScaling = 1.3F;
+            this.buttonDelete.MouseSelectedScaling = 1.3F;
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(28, 28);
             this.buttonDelete.TabIndex = 27;
@@ -226,9 +255,14 @@
             // 
             // buttonTags
             // 
+            this.buttonTags.BackColor2 = System.Drawing.Color.Red;
+            this.buttonTags.ButtonDisabledScaling = 0.5F;
+            this.buttonTags.GradientDirection = 90F;
             this.buttonTags.Image = global::EDDiscovery.Icons.Controls.Tags;
-            this.buttonTags.Location = new System.Drawing.Point(421, 1);
-            this.buttonTags.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonTags.Location = new System.Drawing.Point(408, 1);
+            this.buttonTags.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonTags.MouseOverScaling = 1.3F;
+            this.buttonTags.MouseSelectedScaling = 1.3F;
             this.buttonTags.Name = "buttonTags";
             this.buttonTags.Size = new System.Drawing.Size(28, 28);
             this.buttonTags.TabIndex = 39;
@@ -238,10 +272,15 @@
             // 
             // buttonExtExcel
             // 
+            this.buttonExtExcel.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.GradientDirection = 90F;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(457, 1);
-            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(442, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonExtExcel.MouseOverScaling = 1.3F;
+            this.buttonExtExcel.MouseSelectedScaling = 1.3F;
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 38;
@@ -251,10 +290,15 @@
             // 
             // buttonExtImport
             // 
+            this.buttonExtImport.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtImport.ButtonDisabledScaling = 0.5F;
             this.buttonExtImport.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtImport.GradientDirection = 90F;
             this.buttonExtImport.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
-            this.buttonExtImport.Location = new System.Drawing.Point(493, 1);
-            this.buttonExtImport.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtImport.Location = new System.Drawing.Point(476, 1);
+            this.buttonExtImport.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonExtImport.MouseOverScaling = 1.3F;
+            this.buttonExtImport.MouseSelectedScaling = 1.3F;
             this.buttonExtImport.Name = "buttonExtImport";
             this.buttonExtImport.Size = new System.Drawing.Size(28, 28);
             this.buttonExtImport.TabIndex = 38;
@@ -288,6 +332,7 @@
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.ScrollBarWidth = 24;
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(676, 204);
             this.dataViewScrollerPanel.TabIndex = 5;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
@@ -297,24 +342,31 @@
             this.vScrollBarCustom1.AlwaysHideScrollBar = false;
             this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom1.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(657, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(652, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom1.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom1.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(19, 204);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(24, 204);
+            this.vScrollBarCustom1.SkinnyStyle = false;
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SliderDrawAngle = 90F;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 6;
             this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom1.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
             this.vScrollBarCustom1.Value = -1;
             this.vScrollBarCustom1.ValueLimited = -1;
@@ -344,7 +396,7 @@
             this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(657, 204);
+            this.dataGridView.Size = new System.Drawing.Size(652, 204);
             this.dataGridView.TabIndex = 4;
             this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellClick);
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewBookMarks_CellDoubleClick);
@@ -431,8 +483,8 @@
             // labelSearch
             // 
             this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(0, 4);
-            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelSearch.Location = new System.Drawing.Point(3, 4);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
             this.labelSearch.Name = "labelSearch";
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
             this.labelSearch.TabIndex = 26;

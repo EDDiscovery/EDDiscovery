@@ -233,7 +233,7 @@ namespace EDDiscovery.UserControls
             // 
             this.labelSearch.AutoSize = true;
             this.labelSearch.Location = new System.Drawing.Point(0, 4);
-            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.labelSearch.Name = "labelSearch";
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
             this.labelSearch.TabIndex = 28;
@@ -254,7 +254,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.EndButtonVisible = false;
             this.textBoxFilter.InErrorCondition = false;
             this.textBoxFilter.Location = new System.Drawing.Point(49, 4);
-            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.textBoxFilter.Multiline = false;
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.ReadOnly = false;
@@ -273,7 +273,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
             this.buttonFilter.Location = new System.Drawing.Point(205, 1);
-            this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonFilter.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonFilter.TabIndex = 26;

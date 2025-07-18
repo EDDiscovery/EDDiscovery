@@ -180,7 +180,7 @@
             this.customDateTimePickerStart.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
             this.customDateTimePickerStart.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.customDateTimePickerStart.Location = new System.Drawing.Point(0, 1);
-            this.customDateTimePickerStart.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.customDateTimePickerStart.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.customDateTimePickerStart.Name = "customDateTimePickerStart";
             this.customDateTimePickerStart.SelectedColor = System.Drawing.Color.Yellow;
             this.customDateTimePickerStart.ShowCheckBox = true;
@@ -195,7 +195,7 @@
             // 
             this.labelTo.AutoSize = true;
             this.labelTo.Location = new System.Drawing.Point(258, 4);
-            this.labelTo.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelTo.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.labelTo.Name = "labelTo";
             this.labelTo.Size = new System.Drawing.Size(16, 13);
             this.labelTo.TabIndex = 1;
@@ -208,7 +208,7 @@
             this.customDateTimePickerEnd.CustomFormat = "yyyy/MM/dd | HH:mm:ss";
             this.customDateTimePickerEnd.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
             this.customDateTimePickerEnd.Location = new System.Drawing.Point(282, 1);
-            this.customDateTimePickerEnd.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.customDateTimePickerEnd.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.customDateTimePickerEnd.Name = "customDateTimePickerEnd";
             this.customDateTimePickerEnd.SelectedColor = System.Drawing.Color.Yellow;
             this.customDateTimePickerEnd.ShowCheckBox = true;
@@ -223,7 +223,7 @@
             // 
             this.labelSearch.AutoSize = true;
             this.labelSearch.Location = new System.Drawing.Point(540, 4);
-            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.labelSearch.Name = "labelSearch";
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
             this.labelSearch.TabIndex = 1;
@@ -259,7 +259,7 @@
             // 
             this.labelValue.AutoSize = true;
             this.labelValue.Location = new System.Drawing.Point(745, 4);
-            this.labelValue.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelValue.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.labelValue.Name = "labelValue";
             this.labelValue.Size = new System.Drawing.Size(43, 13);
             this.labelValue.TabIndex = 1;

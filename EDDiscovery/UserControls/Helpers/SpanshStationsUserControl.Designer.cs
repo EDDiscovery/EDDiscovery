@@ -138,11 +138,10 @@ namespace EDDiscovery.UserControls.Helpers
             // extTextBoxAutoCompleteSystem
             // 
             this.extTextBoxAutoCompleteSystem.AutoCompleteCommentMarker = null;
-            this.extTextBoxAutoCompleteSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.extTextBoxAutoCompleteSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxAutoCompleteSystem.AutoCompleteTimeout = 500;
             this.extTextBoxAutoCompleteSystem.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxAutoCompleteSystem.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBoxAutoCompleteSystem.BorderColor2 = System.Drawing.Color.Transparent;
             this.extTextBoxAutoCompleteSystem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxAutoCompleteSystem.ClearOnFirstChar = false;
             this.extTextBoxAutoCompleteSystem.ControlBackground = System.Drawing.SystemColors.Control;
@@ -169,9 +168,14 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonTravelSystem
             // 
+            this.extButtonTravelSystem.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonTravelSystem.ButtonDisabledScaling = 0.5F;
+            this.extButtonTravelSystem.GradientDirection = 90F;
             this.extButtonTravelSystem.Image = global::EDDiscovery.Icons.Controls.Home;
             this.extButtonTravelSystem.Location = new System.Drawing.Point(222, 1);
             this.extButtonTravelSystem.Margin = new System.Windows.Forms.Padding(3, 1, 3, 3);
+            this.extButtonTravelSystem.MouseOverScaling = 1.3F;
+            this.extButtonTravelSystem.MouseSelectedScaling = 1.3F;
             this.extButtonTravelSystem.Name = "extButtonTravelSystem";
             this.extButtonTravelSystem.Size = new System.Drawing.Size(22, 22);
             this.extButtonTravelSystem.TabIndex = 34;
@@ -191,9 +195,14 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonSearchCommodities
             // 
+            this.extButtonSearchCommodities.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonSearchCommodities.ButtonDisabledScaling = 0.5F;
+            this.extButtonSearchCommodities.GradientDirection = 90F;
             this.extButtonSearchCommodities.Image = global::EDDiscovery.Icons.Controls.Commodity;
             this.extButtonSearchCommodities.Location = new System.Drawing.Point(300, 3);
             this.extButtonSearchCommodities.Margin = new System.Windows.Forms.Padding(4, 3, 3, 3);
+            this.extButtonSearchCommodities.MouseOverScaling = 1.3F;
+            this.extButtonSearchCommodities.MouseSelectedScaling = 1.3F;
             this.extButtonSearchCommodities.Name = "extButtonSearchCommodities";
             this.extButtonSearchCommodities.Size = new System.Drawing.Size(28, 28);
             this.extButtonSearchCommodities.TabIndex = 34;
@@ -203,8 +212,13 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonSearchServiceTypes
             // 
+            this.extButtonSearchServiceTypes.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonSearchServiceTypes.ButtonDisabledScaling = 0.5F;
+            this.extButtonSearchServiceTypes.GradientDirection = 90F;
             this.extButtonSearchServiceTypes.Image = global::EDDiscovery.Icons.Controls.People;
             this.extButtonSearchServiceTypes.Location = new System.Drawing.Point(334, 3);
+            this.extButtonSearchServiceTypes.MouseOverScaling = 1.3F;
+            this.extButtonSearchServiceTypes.MouseSelectedScaling = 1.3F;
             this.extButtonSearchServiceTypes.Name = "extButtonSearchServiceTypes";
             this.extButtonSearchServiceTypes.Size = new System.Drawing.Size(28, 28);
             this.extButtonSearchServiceTypes.TabIndex = 34;
@@ -214,8 +228,13 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonSearchEconomy
             // 
+            this.extButtonSearchEconomy.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonSearchEconomy.ButtonDisabledScaling = 0.5F;
+            this.extButtonSearchEconomy.GradientDirection = 90F;
             this.extButtonSearchEconomy.Image = global::EDDiscovery.Icons.Controls.Economy;
             this.extButtonSearchEconomy.Location = new System.Drawing.Point(368, 3);
+            this.extButtonSearchEconomy.MouseOverScaling = 1.3F;
+            this.extButtonSearchEconomy.MouseSelectedScaling = 1.3F;
             this.extButtonSearchEconomy.Name = "extButtonSearchEconomy";
             this.extButtonSearchEconomy.Size = new System.Drawing.Size(28, 28);
             this.extButtonSearchEconomy.TabIndex = 34;
@@ -225,8 +244,13 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonSearchShips
             // 
+            this.extButtonSearchShips.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonSearchShips.ButtonDisabledScaling = 0.5F;
+            this.extButtonSearchShips.GradientDirection = 90F;
             this.extButtonSearchShips.Image = global::EDDiscovery.Icons.Controls.Shipyard;
             this.extButtonSearchShips.Location = new System.Drawing.Point(402, 3);
+            this.extButtonSearchShips.MouseOverScaling = 1.3F;
+            this.extButtonSearchShips.MouseSelectedScaling = 1.3F;
             this.extButtonSearchShips.Name = "extButtonSearchShips";
             this.extButtonSearchShips.Size = new System.Drawing.Size(28, 28);
             this.extButtonSearchShips.TabIndex = 34;
@@ -236,8 +260,13 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonSearchOutfitting
             // 
+            this.extButtonSearchOutfitting.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonSearchOutfitting.ButtonDisabledScaling = 0.5F;
+            this.extButtonSearchOutfitting.GradientDirection = 90F;
             this.extButtonSearchOutfitting.Image = global::EDDiscovery.Icons.Controls.Outfitting;
             this.extButtonSearchOutfitting.Location = new System.Drawing.Point(436, 3);
+            this.extButtonSearchOutfitting.MouseOverScaling = 1.3F;
+            this.extButtonSearchOutfitting.MouseSelectedScaling = 1.3F;
             this.extButtonSearchOutfitting.Name = "extButtonSearchOutfitting";
             this.extButtonSearchOutfitting.Size = new System.Drawing.Size(28, 28);
             this.extButtonSearchOutfitting.TabIndex = 34;
@@ -260,10 +289,14 @@ namespace EDDiscovery.UserControls.Helpers
             this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
             this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.ButtonGradientDirection = 90F;
             this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxGradientDirection = 225F;
             this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.CheckColor2 = System.Drawing.Color.DarkBlue;
             this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.DisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
             this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
             this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
@@ -275,6 +308,8 @@ namespace EDDiscovery.UserControls.Helpers
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
             this.extCheckBoxWordWrap.Location = new System.Drawing.Point(508, 2);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.extCheckBoxWordWrap.MouseOverScaling = 1.3F;
+            this.extCheckBoxWordWrap.MouseSelectedScaling = 1.3F;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 33;
@@ -284,10 +319,15 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // buttonExtExcel
             // 
+            this.buttonExtExcel.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.GradientDirection = 90F;
             this.buttonExtExcel.Image = ((System.Drawing.Image)(resources.GetObject("buttonExtExcel.Image")));
             this.buttonExtExcel.Location = new System.Drawing.Point(544, 2);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.buttonExtExcel.MouseOverScaling = 1.3F;
+            this.buttonExtExcel.MouseSelectedScaling = 1.3F;
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 29;
@@ -307,10 +347,9 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // valueBoxMaxLs
             // 
-            this.valueBoxMaxLs.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.valueBoxMaxLs.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.valueBoxMaxLs.BackErrorColor = System.Drawing.Color.Red;
             this.valueBoxMaxLs.BorderColor = System.Drawing.Color.Transparent;
+            this.valueBoxMaxLs.BorderColor2 = System.Drawing.Color.Transparent;
             this.valueBoxMaxLs.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.valueBoxMaxLs.ClearOnFirstChar = false;
             this.valueBoxMaxLs.ControlBackground = System.Drawing.SystemColors.Control;
@@ -389,9 +428,14 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonType
             // 
+            this.extButtonType.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonType.ButtonDisabledScaling = 0.5F;
+            this.extButtonType.GradientDirection = 90F;
             this.extButtonType.Image = global::EDDiscovery.Icons.Controls.CoriolisYellow;
             this.extButtonType.Location = new System.Drawing.Point(41, 2);
             this.extButtonType.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.extButtonType.MouseOverScaling = 1.3F;
+            this.extButtonType.MouseSelectedScaling = 1.3F;
             this.extButtonType.Name = "extButtonType";
             this.extButtonType.SettingsSplittingChar = ';';
             this.extButtonType.Size = new System.Drawing.Size(28, 28);
@@ -401,9 +445,14 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonCommoditiesBuy
             // 
+            this.extButtonCommoditiesBuy.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonCommoditiesBuy.ButtonDisabledScaling = 0.5F;
+            this.extButtonCommoditiesBuy.GradientDirection = 90F;
             this.extButtonCommoditiesBuy.Image = global::EDDiscovery.Icons.Controls.CommodityBuy;
             this.extButtonCommoditiesBuy.Location = new System.Drawing.Point(77, 2);
             this.extButtonCommoditiesBuy.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.extButtonCommoditiesBuy.MouseOverScaling = 1.3F;
+            this.extButtonCommoditiesBuy.MouseSelectedScaling = 1.3F;
             this.extButtonCommoditiesBuy.Name = "extButtonCommoditiesBuy";
             this.extButtonCommoditiesBuy.SettingsSplittingChar = ';';
             this.extButtonCommoditiesBuy.Size = new System.Drawing.Size(28, 28);
@@ -413,9 +462,14 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonServices
             // 
+            this.extButtonServices.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonServices.ButtonDisabledScaling = 0.5F;
+            this.extButtonServices.GradientDirection = 90F;
             this.extButtonServices.Image = global::EDDiscovery.Icons.Controls.People;
             this.extButtonServices.Location = new System.Drawing.Point(149, 2);
             this.extButtonServices.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.extButtonServices.MouseOverScaling = 1.3F;
+            this.extButtonServices.MouseSelectedScaling = 1.3F;
             this.extButtonServices.Name = "extButtonServices";
             this.extButtonServices.SettingsSplittingChar = ';';
             this.extButtonServices.Size = new System.Drawing.Size(28, 28);
@@ -425,9 +479,14 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonEconomy
             // 
+            this.extButtonEconomy.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonEconomy.ButtonDisabledScaling = 0.5F;
+            this.extButtonEconomy.GradientDirection = 90F;
             this.extButtonEconomy.Image = global::EDDiscovery.Icons.Controls.Economy;
             this.extButtonEconomy.Location = new System.Drawing.Point(185, 2);
             this.extButtonEconomy.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.extButtonEconomy.MouseOverScaling = 1.3F;
+            this.extButtonEconomy.MouseSelectedScaling = 1.3F;
             this.extButtonEconomy.Name = "extButtonEconomy";
             this.extButtonEconomy.SettingsSplittingChar = ';';
             this.extButtonEconomy.Size = new System.Drawing.Size(28, 28);
@@ -437,9 +496,14 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonShipyard
             // 
+            this.extButtonShipyard.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonShipyard.ButtonDisabledScaling = 0.5F;
+            this.extButtonShipyard.GradientDirection = 90F;
             this.extButtonShipyard.Image = global::EDDiscovery.Icons.Controls.Shipyard;
             this.extButtonShipyard.Location = new System.Drawing.Point(221, 2);
             this.extButtonShipyard.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.extButtonShipyard.MouseOverScaling = 1.3F;
+            this.extButtonShipyard.MouseSelectedScaling = 1.3F;
             this.extButtonShipyard.Name = "extButtonShipyard";
             this.extButtonShipyard.SettingsSplittingChar = ';';
             this.extButtonShipyard.Size = new System.Drawing.Size(28, 28);
@@ -449,9 +513,14 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonOutfitting
             // 
+            this.extButtonOutfitting.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonOutfitting.ButtonDisabledScaling = 0.5F;
+            this.extButtonOutfitting.GradientDirection = 90F;
             this.extButtonOutfitting.Image = global::EDDiscovery.Icons.Controls.Outfitting;
             this.extButtonOutfitting.Location = new System.Drawing.Point(257, 2);
             this.extButtonOutfitting.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.extButtonOutfitting.MouseOverScaling = 1.3F;
+            this.extButtonOutfitting.MouseSelectedScaling = 1.3F;
             this.extButtonOutfitting.Name = "extButtonOutfitting";
             this.extButtonOutfitting.SettingsSplittingChar = ';';
             this.extButtonOutfitting.Size = new System.Drawing.Size(28, 28);
@@ -461,9 +530,14 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonEditCommodities
             // 
+            this.extButtonEditCommodities.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonEditCommodities.ButtonDisabledScaling = 0.5F;
+            this.extButtonEditCommodities.GradientDirection = 90F;
             this.extButtonEditCommodities.Image = global::EDDiscovery.Icons.Controls.Commodity;
             this.extButtonEditCommodities.Location = new System.Drawing.Point(476, 2);
             this.extButtonEditCommodities.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.extButtonEditCommodities.MouseOverScaling = 1.3F;
+            this.extButtonEditCommodities.MouseSelectedScaling = 1.3F;
             this.extButtonEditCommodities.Name = "extButtonEditCommodities";
             this.extButtonEditCommodities.Size = new System.Drawing.Size(28, 28);
             this.extButtonEditCommodities.TabIndex = 34;
@@ -473,9 +547,14 @@ namespace EDDiscovery.UserControls.Helpers
             // 
             // extButtonCommoditiesSell
             // 
+            this.extButtonCommoditiesSell.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonCommoditiesSell.ButtonDisabledScaling = 0.5F;
+            this.extButtonCommoditiesSell.GradientDirection = 90F;
             this.extButtonCommoditiesSell.Image = global::EDDiscovery.Icons.Controls.CommoditySell;
             this.extButtonCommoditiesSell.Location = new System.Drawing.Point(113, 2);
             this.extButtonCommoditiesSell.Margin = new System.Windows.Forms.Padding(4, 2, 4, 2);
+            this.extButtonCommoditiesSell.MouseOverScaling = 1.3F;
+            this.extButtonCommoditiesSell.MouseSelectedScaling = 1.3F;
             this.extButtonCommoditiesSell.Name = "extButtonCommoditiesSell";
             this.extButtonCommoditiesSell.SettingsSplittingChar = ';';
             this.extButtonCommoditiesSell.Size = new System.Drawing.Size(28, 28);
@@ -543,6 +622,7 @@ namespace EDDiscovery.UserControls.Helpers
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 66);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.ScrollBarWidth = 24;
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(978, 711);
             this.dataViewScrollerPanel.TabIndex = 26;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
@@ -552,6 +632,7 @@ namespace EDDiscovery.UserControls.Helpers
             this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
@@ -559,18 +640,24 @@ namespace EDDiscovery.UserControls.Helpers
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(962, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(954, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 711);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(24, 711);
+            this.vScrollBarCustom.SkinnyStyle = false;
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SliderDrawAngle = 90F;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 24;
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
             this.vScrollBarCustom.Value = -1;
             this.vScrollBarCustom.ValueLimited = -1;
@@ -645,7 +732,7 @@ namespace EDDiscovery.UserControls.Helpers
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(962, 711);
+            this.dataGridView.Size = new System.Drawing.Size(954, 711);
             this.dataGridView.TabIndex = 23;
             this.dataGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellDoubleClick);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);

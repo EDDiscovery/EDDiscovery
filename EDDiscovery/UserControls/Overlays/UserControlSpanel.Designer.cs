@@ -135,7 +135,7 @@ namespace EDDiscovery.UserControls
             this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
             this.extButtonShowControl.Location = new System.Drawing.Point(8, 1);
-            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonShowControl.Name = "extButtonShowControl";
             this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
             this.extButtonShowControl.TabIndex = 29;
@@ -150,7 +150,7 @@ namespace EDDiscovery.UserControls
             this.extButtonColumns.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonColumns.Image = global::EDDiscovery.Icons.Controls.Columns;
             this.extButtonColumns.Location = new System.Drawing.Point(48, 1);
-            this.extButtonColumns.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonColumns.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonColumns.Name = "extButtonColumns";
             this.extButtonColumns.Size = new System.Drawing.Size(28, 28);
             this.extButtonColumns.TabIndex = 29;
@@ -165,7 +165,7 @@ namespace EDDiscovery.UserControls
             this.extButtonColumnOrder.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonColumnOrder.Image = global::EDDiscovery.Icons.Controls.ColumnOrder;
             this.extButtonColumnOrder.Location = new System.Drawing.Point(88, 1);
-            this.extButtonColumnOrder.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonColumnOrder.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonColumnOrder.Name = "extButtonColumnOrder";
             this.extButtonColumnOrder.Size = new System.Drawing.Size(28, 28);
             this.extButtonColumnOrder.TabIndex = 29;
@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
             this.extButtonHabZones.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonHabZones.Image = global::EDDiscovery.Icons.Controls.Scan_SizeLarge;
             this.extButtonHabZones.Location = new System.Drawing.Point(128, 1);
-            this.extButtonHabZones.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonHabZones.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonHabZones.Name = "extButtonHabZones";
             this.extButtonHabZones.Size = new System.Drawing.Size(28, 28);
             this.extButtonHabZones.TabIndex = 35;
@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
             this.buttonFilter.Location = new System.Drawing.Point(168, 1);
-            this.buttonFilter.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonFilter.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonFilter.TabIndex = 36;
@@ -206,7 +206,7 @@ namespace EDDiscovery.UserControls
             // 
             this.buttonField.Image = global::EDDiscovery.Icons.Controls.FieldFilter;
             this.buttonField.Location = new System.Drawing.Point(208, 1);
-            this.buttonField.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.buttonField.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonField.Name = "buttonField";
             this.buttonField.Size = new System.Drawing.Size(28, 28);
             this.buttonField.TabIndex = 37;
@@ -221,7 +221,7 @@ namespace EDDiscovery.UserControls
             this.extButtonScanShow.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonScanShow.Image = global::EDDiscovery.Icons.Controls.Scan;
             this.extButtonScanShow.Location = new System.Drawing.Point(248, 1);
-            this.extButtonScanShow.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonScanShow.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonScanShow.Name = "extButtonScanShow";
             this.extButtonScanShow.Size = new System.Drawing.Size(28, 28);
             this.extButtonScanShow.TabIndex = 29;
@@ -236,7 +236,7 @@ namespace EDDiscovery.UserControls
             this.extButtoScanPos.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtoScanPos.Image = global::EDDiscovery.Icons.Controls.ScanPosition;
             this.extButtoScanPos.Location = new System.Drawing.Point(288, 1);
-            this.extButtoScanPos.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtoScanPos.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtoScanPos.Name = "extButtoScanPos";
             this.extButtoScanPos.Size = new System.Drawing.Size(28, 28);
             this.extButtoScanPos.TabIndex = 29;
@@ -251,7 +251,7 @@ namespace EDDiscovery.UserControls
             this.extButtonFont.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonFont.Image = global::EDDiscovery.Icons.Controls.Font;
             this.extButtonFont.Location = new System.Drawing.Point(328, 1);
-            this.extButtonFont.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonFont.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonFont.Name = "extButtonFont";
             this.extButtonFont.Size = new System.Drawing.Size(28, 28);
             this.extButtonFont.TabIndex = 29;
@@ -279,7 +279,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
             this.extCheckBoxWordWrap.Location = new System.Drawing.Point(368, 1);
-            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 34;

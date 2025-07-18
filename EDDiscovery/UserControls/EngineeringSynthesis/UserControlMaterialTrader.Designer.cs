@@ -88,32 +88,41 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.ScrollBarWidth = 24;
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
             // vScrollBarCustomMC
             // 
+            this.vScrollBarCustomMC.AlwaysHideScrollBar = false;
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustomMC.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(784, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(776, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustomMC.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustomMC.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 572);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(24, 572);
+            this.vScrollBarCustomMC.SkinnyStyle = false;
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustomMC.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustomMC.SliderDrawAngle = 90F;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
             this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustomMC.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
             this.vScrollBarCustomMC.Value = -1;
             this.vScrollBarCustomMC.ValueLimited = -1;
@@ -121,11 +130,14 @@ namespace EDDiscovery.UserControls
             // dataGridViewTrades
             // 
             this.dataGridViewTrades.AllowDrop = true;
+            this.dataGridViewTrades.AllowRowHeaderVisibleSelection = false;
             this.dataGridViewTrades.AllowUserToAddRows = false;
             this.dataGridViewTrades.AllowUserToDeleteRows = false;
             this.dataGridViewTrades.AllowUserToOrderColumns = true;
             this.dataGridViewTrades.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewTrades.AutoSortByColumnName = false;
             this.dataGridViewTrades.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewTrades.ColumnReorder = true;
             this.dataGridViewTrades.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.UpgradeCol,
             this.LevelCol,
@@ -137,12 +149,13 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTrades.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewTrades.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewTrades.Name = "dataGridViewTrades";
+            this.dataGridViewTrades.PerColumnWordWrapControl = true;
             this.dataGridViewTrades.RowHeaderMenuStrip = null;
             this.dataGridViewTrades.RowHeadersVisible = false;
             this.dataGridViewTrades.RowHeadersWidth = 25;
             this.dataGridViewTrades.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewTrades.SingleRowSelect = true;
-            this.dataGridViewTrades.Size = new System.Drawing.Size(784, 143);
+            this.dataGridViewTrades.Size = new System.Drawing.Size(776, 143);
             this.dataGridViewTrades.TabIndex = 1;
             // 
             // UpgradeCol
@@ -201,20 +214,25 @@ namespace EDDiscovery.UserControls
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.clearTradeToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(181, 48);
+            this.contextMenuStrip.Size = new System.Drawing.Size(133, 26);
             // 
             // clearTradeToolStripMenuItem
             // 
             this.clearTradeToolStripMenuItem.Name = "clearTradeToolStripMenuItem";
-            this.clearTradeToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.clearTradeToolStripMenuItem.Size = new System.Drawing.Size(132, 22);
             this.clearTradeToolStripMenuItem.Text = "Clear Trade";
             this.clearTradeToolStripMenuItem.Click += new System.EventHandler(this.clearTradeToolStripMenuItem_Click);
             // 
             // buttonClear
             // 
             this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.buttonClear.Location = new System.Drawing.Point(0, 1);
-            this.buttonClear.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonClear.BackColor2 = System.Drawing.Color.Red;
+            this.buttonClear.ButtonDisabledScaling = 0.5F;
+            this.buttonClear.GradientDirection = 90F;
+            this.buttonClear.Location = new System.Drawing.Point(3, 1);
+            this.buttonClear.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonClear.MouseOverScaling = 1.3F;
+            this.buttonClear.MouseSelectedScaling = 1.3F;
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(80, 23);
             this.buttonClear.TabIndex = 5;
@@ -232,10 +250,14 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.Appearance = System.Windows.Forms.Appearance.Button;
             this.checkBoxCursorToTop.BackColor = System.Drawing.Color.Transparent;
             this.checkBoxCursorToTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxCursorToTop.ButtonGradientDirection = 90F;
             this.checkBoxCursorToTop.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxCursorToTop.CheckBoxGradientDirection = 225F;
             this.checkBoxCursorToTop.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxCursorToTop.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCursorToTop.CheckColor2 = System.Drawing.Color.DarkBlue;
             this.checkBoxCursorToTop.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxCursorToTop.DisabledScaling = 0.5F;
             this.checkBoxCursorToTop.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
             this.checkBoxCursorToTop.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
             this.checkBoxCursorToTop.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
@@ -245,8 +267,10 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.ImageIndeterminate = null;
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
-            this.checkBoxCursorToTop.Location = new System.Drawing.Point(204, 1);
-            this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.checkBoxCursorToTop.Location = new System.Drawing.Point(207, 1);
+            this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.checkBoxCursorToTop.MouseOverScaling = 1.3F;
+            this.checkBoxCursorToTop.MouseSelectedScaling = 1.3F;
             this.checkBoxCursorToTop.Name = "checkBoxCursorToTop";
             this.checkBoxCursorToTop.Size = new System.Drawing.Size(28, 28);
             this.checkBoxCursorToTop.TabIndex = 31;
@@ -293,38 +317,49 @@ namespace EDDiscovery.UserControls
             this.extPanelScrollTrades.FlowControlsLeftToRight = false;
             this.extPanelScrollTrades.Location = new System.Drawing.Point(0, 30);
             this.extPanelScrollTrades.Name = "extPanelScrollTrades";
+            this.extPanelScrollTrades.ScrollBarWidth = 48;
             this.extPanelScrollTrades.Size = new System.Drawing.Size(800, 370);
             this.extPanelScrollTrades.TabIndex = 4;
             this.extPanelScrollTrades.VerticalScrollBarDockRight = true;
             // 
             // vScrollBarCustom
             // 
+            this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = true;
             this.vScrollBarCustom.LargeChange = 20;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(784, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(752, 0);
             this.vScrollBarCustom.Maximum = -132;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 370);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(48, 370);
+            this.vScrollBarCustom.SkinnyStyle = false;
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SliderDrawAngle = 90F;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 3;
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
             this.vScrollBarCustom.Value = -132;
             this.vScrollBarCustom.ValueLimited = -132;
             // 
             // extPictureTrades
             // 
+            this.extPictureTrades.FillColor = System.Drawing.Color.Transparent;
+            this.extPictureTrades.FreezeTracking = false;
             this.extPictureTrades.Location = new System.Drawing.Point(0, 0);
             this.extPictureTrades.Name = "extPictureTrades";
             this.extPictureTrades.Size = new System.Drawing.Size(632, 219);
@@ -344,12 +379,17 @@ namespace EDDiscovery.UserControls
             // 
             // extComboBoxTraderType
             // 
+            this.extComboBoxTraderType.BackColor2 = System.Drawing.Color.Red;
             this.extComboBoxTraderType.BorderColor = System.Drawing.Color.White;
+            this.extComboBoxTraderType.ControlBackground = System.Drawing.SystemColors.Control;
             this.extComboBoxTraderType.DataSource = null;
             this.extComboBoxTraderType.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxTraderType.DisabledScaling = 0.5F;
             this.extComboBoxTraderType.DisplayMember = "";
             this.extComboBoxTraderType.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxTraderType.GradientDirection = 90F;
             this.extComboBoxTraderType.Location = new System.Drawing.Point(3, 3);
+            this.extComboBoxTraderType.MouseOverScalingColor = 1.3F;
             this.extComboBoxTraderType.Name = "extComboBoxTraderType";
             this.extComboBoxTraderType.SelectedIndex = -1;
             this.extComboBoxTraderType.SelectedItem = null;
@@ -367,32 +407,41 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollDGVTrades.InternalMargin = new System.Windows.Forms.Padding(0);
             this.extPanelDataGridViewScrollDGVTrades.Location = new System.Drawing.Point(0, 25);
             this.extPanelDataGridViewScrollDGVTrades.Name = "extPanelDataGridViewScrollDGVTrades";
+            this.extPanelDataGridViewScrollDGVTrades.ScrollBarWidth = 24;
             this.extPanelDataGridViewScrollDGVTrades.Size = new System.Drawing.Size(800, 143);
             this.extPanelDataGridViewScrollDGVTrades.TabIndex = 4;
             this.extPanelDataGridViewScrollDGVTrades.VerticalScrollBarDockRight = true;
             // 
             // extScrollBarDGVTrades
             // 
+            this.extScrollBarDGVTrades.AlwaysHideScrollBar = false;
             this.extScrollBarDGVTrades.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBarDGVTrades.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarDGVTrades.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.extScrollBarDGVTrades.ArrowDownDrawAngle = 270F;
             this.extScrollBarDGVTrades.ArrowUpDrawAngle = 90F;
             this.extScrollBarDGVTrades.BorderColor = System.Drawing.Color.White;
             this.extScrollBarDGVTrades.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarDGVTrades.HideScrollBar = false;
             this.extScrollBarDGVTrades.LargeChange = 0;
-            this.extScrollBarDGVTrades.Location = new System.Drawing.Point(784, 0);
+            this.extScrollBarDGVTrades.Location = new System.Drawing.Point(776, 0);
             this.extScrollBarDGVTrades.Maximum = -1;
             this.extScrollBarDGVTrades.Minimum = 0;
             this.extScrollBarDGVTrades.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarDGVTrades.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.extScrollBarDGVTrades.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarDGVTrades.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarDGVTrades.Name = "extScrollBarDGVTrades";
-            this.extScrollBarDGVTrades.Size = new System.Drawing.Size(16, 143);
+            this.extScrollBarDGVTrades.Size = new System.Drawing.Size(24, 143);
+            this.extScrollBarDGVTrades.SkinnyStyle = false;
             this.extScrollBarDGVTrades.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarDGVTrades.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarDGVTrades.SliderDrawAngle = 90F;
             this.extScrollBarDGVTrades.SmallChange = 1;
             this.extScrollBarDGVTrades.TabIndex = 4;
             this.extScrollBarDGVTrades.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarDGVTrades.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarDGVTrades.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBarDGVTrades.ThumbDrawAngle = 0F;
             this.extScrollBarDGVTrades.Value = -1;
             this.extScrollBarDGVTrades.ValueLimited = -1;

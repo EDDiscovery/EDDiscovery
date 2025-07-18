@@ -106,7 +106,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips.DisplayMember = "";
             this.comboBoxShips.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxShips.Location = new System.Drawing.Point(36, 1);
-            this.comboBoxShips.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.comboBoxShips.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.comboBoxShips.Name = "comboBoxShips";
             this.comboBoxShips.SelectedIndex = -1;
             this.comboBoxShips.SelectedItem = null;
@@ -124,7 +124,7 @@ namespace EDDiscovery.UserControls
             this.extButtonShowControl.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonShowControl.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
             this.extButtonShowControl.Location = new System.Drawing.Point(240, 1);
-            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonShowControl.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonShowControl.Name = "extButtonShowControl";
             this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
             this.extButtonShowControl.TabIndex = 33;
@@ -151,7 +151,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
             this.extCheckBoxWordWrap.Location = new System.Drawing.Point(272, 1);
-            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 32;
@@ -164,7 +164,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtCoriolis.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtCoriolis.Image = global::EDDiscovery.Icons.Controls.Coriolis;
             this.buttonExtCoriolis.Location = new System.Drawing.Point(308, 1);
-            this.buttonExtCoriolis.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtCoriolis.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonExtCoriolis.Name = "buttonExtCoriolis";
             this.buttonExtCoriolis.Size = new System.Drawing.Size(24, 24);
             this.buttonExtCoriolis.TabIndex = 29;
@@ -178,7 +178,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtEDShipyard.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtEDShipyard.Image = global::EDDiscovery.Icons.Controls.EDShipYard;
             this.buttonExtEDShipyard.Location = new System.Drawing.Point(340, 1);
-            this.buttonExtEDShipyard.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtEDShipyard.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonExtEDShipyard.Name = "buttonExtEDShipyard";
             this.buttonExtEDShipyard.Size = new System.Drawing.Size(24, 24);
             this.buttonExtEDShipyard.TabIndex = 29;
@@ -192,7 +192,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtConfigure.BackColor = System.Drawing.Color.Transparent;
             this.buttonExtConfigure.Image = global::EDDiscovery.Icons.Controls.Spaceship;
             this.buttonExtConfigure.Location = new System.Drawing.Point(372, 1);
-            this.buttonExtConfigure.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtConfigure.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonExtConfigure.Name = "buttonExtConfigure";
             this.buttonExtConfigure.Size = new System.Drawing.Size(24, 24);
             this.buttonExtConfigure.TabIndex = 29;
@@ -205,7 +205,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
             this.buttonExtExcel.Location = new System.Drawing.Point(404, 1);
-            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 31;
@@ -218,7 +218,7 @@ namespace EDDiscovery.UserControls
             this.extButtonLoadLoadout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonLoadLoadout.Image = global::EDDiscovery.Icons.Controls.ImportExcel;
             this.extButtonLoadLoadout.Location = new System.Drawing.Point(440, 1);
-            this.extButtonLoadLoadout.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonLoadLoadout.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonLoadLoadout.Name = "extButtonLoadLoadout";
             this.extButtonLoadLoadout.Size = new System.Drawing.Size(28, 28);
             this.extButtonLoadLoadout.TabIndex = 31;
@@ -231,7 +231,7 @@ namespace EDDiscovery.UserControls
             this.extButtonSaveLoadout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonSaveLoadout.Image = global::EDDiscovery.Icons.Controls.Save;
             this.extButtonSaveLoadout.Location = new System.Drawing.Point(476, 1);
-            this.extButtonSaveLoadout.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonSaveLoadout.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonSaveLoadout.Name = "extButtonSaveLoadout";
             this.extButtonSaveLoadout.Size = new System.Drawing.Size(28, 28);
             this.extButtonSaveLoadout.TabIndex = 31;
@@ -244,7 +244,7 @@ namespace EDDiscovery.UserControls
             this.extButtonDeleteLoadout.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.extButtonDeleteLoadout.Image = global::EDDiscovery.Icons.Controls.Delete;
             this.extButtonDeleteLoadout.Location = new System.Drawing.Point(512, 1);
-            this.extButtonDeleteLoadout.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonDeleteLoadout.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extButtonDeleteLoadout.Name = "extButtonDeleteLoadout";
             this.extButtonDeleteLoadout.Size = new System.Drawing.Size(28, 28);
             this.extButtonDeleteLoadout.TabIndex = 31;
@@ -701,7 +701,7 @@ namespace EDDiscovery.UserControls
             // 
             this.labelShip.AutoSize = true;
             this.labelShip.Location = new System.Drawing.Point(0, 1);
-            this.labelShip.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelShip.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.labelShip.Name = "labelShip";
             this.labelShip.Size = new System.Drawing.Size(28, 13);
             this.labelShip.TabIndex = 26;
@@ -711,7 +711,7 @@ namespace EDDiscovery.UserControls
             // 
             this.labelVehicle.AutoSize = true;
             this.labelVehicle.Location = new System.Drawing.Point(548, 1);
-            this.labelVehicle.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelVehicle.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.labelVehicle.Name = "labelVehicle";
             this.labelVehicle.Size = new System.Drawing.Size(53, 13);
             this.labelVehicle.TabIndex = 28;

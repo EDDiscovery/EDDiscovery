@@ -77,6 +77,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.ScrollBarWidth = 24;
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 542);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
@@ -108,7 +109,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewSynthesis.RowHeadersWidth = 25;
             this.dataGridViewSynthesis.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewSynthesis.SingleRowSelect = true;
-            this.dataGridViewSynthesis.Size = new System.Drawing.Size(784, 542);
+            this.dataGridViewSynthesis.Size = new System.Drawing.Size(776, 542);
             this.dataGridViewSynthesis.TabIndex = 1;
             this.dataGridViewSynthesis.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewSynthesis_CellDoubleClick);
             this.dataGridViewSynthesis.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellEndEdit);
@@ -189,34 +190,46 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.AlwaysHideScrollBar = false;
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustomMC.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(784, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(776, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustomMC.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustomMC.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 542);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(24, 542);
+            this.vScrollBarCustomMC.SkinnyStyle = false;
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustomMC.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustomMC.SliderDrawAngle = 90F;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
             this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustomMC.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
             this.vScrollBarCustomMC.Value = -1;
             this.vScrollBarCustomMC.ValueLimited = -1;
             // 
             // buttonRecipeFilter
             // 
+            this.buttonRecipeFilter.BackColor2 = System.Drawing.Color.Red;
+            this.buttonRecipeFilter.ButtonDisabledScaling = 0.5F;
             this.buttonRecipeFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonRecipeFilter.GradientDirection = 90F;
             this.buttonRecipeFilter.Image = global::EDDiscovery.Icons.Controls.Synthesis;
-            this.buttonRecipeFilter.Location = new System.Drawing.Point(4, 1);
-            this.buttonRecipeFilter.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
+            this.buttonRecipeFilter.Location = new System.Drawing.Point(3, 1);
+            this.buttonRecipeFilter.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonRecipeFilter.MouseOverScaling = 1.3F;
+            this.buttonRecipeFilter.MouseSelectedScaling = 1.3F;
             this.buttonRecipeFilter.Name = "buttonRecipeFilter";
             this.buttonRecipeFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonRecipeFilter.TabIndex = 2;
@@ -230,10 +243,15 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilterLevel
             // 
+            this.buttonFilterLevel.BackColor2 = System.Drawing.Color.Red;
+            this.buttonFilterLevel.ButtonDisabledScaling = 0.5F;
             this.buttonFilterLevel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonFilterLevel.GradientDirection = 90F;
             this.buttonFilterLevel.Image = global::EDDiscovery.Icons.Controls.Level;
-            this.buttonFilterLevel.Location = new System.Drawing.Point(44, 1);
-            this.buttonFilterLevel.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
+            this.buttonFilterLevel.Location = new System.Drawing.Point(37, 1);
+            this.buttonFilterLevel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonFilterLevel.MouseOverScaling = 1.3F;
+            this.buttonFilterLevel.MouseSelectedScaling = 1.3F;
             this.buttonFilterLevel.Name = "buttonFilterLevel";
             this.buttonFilterLevel.Size = new System.Drawing.Size(28, 28);
             this.buttonFilterLevel.TabIndex = 3;
@@ -243,10 +261,15 @@ namespace EDDiscovery.UserControls
             // 
             // buttonMaterialFilter
             // 
+            this.buttonMaterialFilter.BackColor2 = System.Drawing.Color.Red;
+            this.buttonMaterialFilter.ButtonDisabledScaling = 0.5F;
             this.buttonMaterialFilter.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonMaterialFilter.GradientDirection = 90F;
             this.buttonMaterialFilter.Image = global::EDDiscovery.Icons.Controls.Materials;
-            this.buttonMaterialFilter.Location = new System.Drawing.Point(84, 1);
-            this.buttonMaterialFilter.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
+            this.buttonMaterialFilter.Location = new System.Drawing.Point(71, 1);
+            this.buttonMaterialFilter.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonMaterialFilter.MouseOverScaling = 1.3F;
+            this.buttonMaterialFilter.MouseSelectedScaling = 1.3F;
             this.buttonMaterialFilter.Name = "buttonMaterialFilter";
             this.buttonMaterialFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonMaterialFilter.TabIndex = 4;
@@ -257,10 +280,15 @@ namespace EDDiscovery.UserControls
             // buttonClear
             // 
             this.buttonClear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonClear.BackColor2 = System.Drawing.Color.Red;
+            this.buttonClear.ButtonDisabledScaling = 0.5F;
             this.buttonClear.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClear.GradientDirection = 90F;
             this.buttonClear.Image = global::EDDiscovery.Icons.Controls.Cross;
-            this.buttonClear.Location = new System.Drawing.Point(124, 1);
-            this.buttonClear.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
+            this.buttonClear.Location = new System.Drawing.Point(105, 1);
+            this.buttonClear.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonClear.MouseOverScaling = 1.3F;
+            this.buttonClear.MouseSelectedScaling = 1.3F;
             this.buttonClear.Name = "buttonClear";
             this.buttonClear.Size = new System.Drawing.Size(28, 28);
             this.buttonClear.TabIndex = 1;
@@ -271,15 +299,21 @@ namespace EDDiscovery.UserControls
             // chkNotHistoric
             // 
             this.chkNotHistoric.Appearance = System.Windows.Forms.Appearance.Button;
+            this.chkNotHistoric.ButtonGradientDirection = 90F;
             this.chkNotHistoric.CheckBoxColor = System.Drawing.Color.Gray;
+            this.chkNotHistoric.CheckBoxGradientDirection = 225F;
             this.chkNotHistoric.CheckBoxInnerColor = System.Drawing.Color.White;
             this.chkNotHistoric.CheckColor = System.Drawing.Color.DarkBlue;
+            this.chkNotHistoric.CheckColor2 = System.Drawing.Color.DarkBlue;
+            this.chkNotHistoric.DisabledScaling = 0.5F;
             this.chkNotHistoric.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
             this.chkNotHistoric.ImageIndeterminate = null;
             this.chkNotHistoric.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.chkNotHistoric.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
-            this.chkNotHistoric.Location = new System.Drawing.Point(204, 1);
-            this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
+            this.chkNotHistoric.Location = new System.Drawing.Point(173, 1);
+            this.chkNotHistoric.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.chkNotHistoric.MouseOverScaling = 1.3F;
+            this.chkNotHistoric.MouseSelectedScaling = 1.3F;
             this.chkNotHistoric.Name = "chkNotHistoric";
             this.chkNotHistoric.Size = new System.Drawing.Size(28, 28);
             this.chkNotHistoric.TabIndex = 7;
@@ -293,10 +327,14 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
             this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.ButtonGradientDirection = 90F;
             this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxGradientDirection = 225F;
             this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.CheckColor2 = System.Drawing.Color.DarkBlue;
             this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.DisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
             this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
             this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
@@ -306,8 +344,10 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(244, 1);
-            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(4, 1, 8, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(207, 1);
+            this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extCheckBoxWordWrap.MouseOverScaling = 1.3F;
+            this.extCheckBoxWordWrap.MouseSelectedScaling = 1.3F;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 32;
@@ -318,10 +358,15 @@ namespace EDDiscovery.UserControls
             // extButtonPushResources
             // 
             this.extButtonPushResources.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonPushResources.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonPushResources.ButtonDisabledScaling = 0.5F;
             this.extButtonPushResources.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.extButtonPushResources.GradientDirection = 90F;
             this.extButtonPushResources.Image = global::EDDiscovery.Icons.Controls.Resources;
-            this.extButtonPushResources.Location = new System.Drawing.Point(168, 1);
-            this.extButtonPushResources.Margin = new System.Windows.Forms.Padding(8, 1, 4, 1);
+            this.extButtonPushResources.Location = new System.Drawing.Point(139, 1);
+            this.extButtonPushResources.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonPushResources.MouseOverScaling = 1.3F;
+            this.extButtonPushResources.MouseSelectedScaling = 1.3F;
             this.extButtonPushResources.Name = "extButtonPushResources";
             this.extButtonPushResources.Size = new System.Drawing.Size(28, 28);
             this.extButtonPushResources.TabIndex = 33;

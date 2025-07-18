@@ -78,9 +78,10 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.vScrollBarCustomMC);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 34);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 30);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(1055, 538);
+            this.dataViewScrollerPanel.ScrollBarWidth = 24;
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(1055, 542);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -111,7 +112,7 @@ namespace EDDiscovery.UserControls
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(1039, 538);
+            this.dataGridView.Size = new System.Drawing.Size(1031, 542);
             this.dataGridView.TabIndex = 1;
             this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewMarketData_RowPostPaint);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewMarketData_SortCompare);
@@ -199,24 +200,31 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.AlwaysHideScrollBar = false;
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustomMC.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(1039, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(1031, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustomMC.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustomMC.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(16, 538);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(24, 542);
+            this.vScrollBarCustomMC.SkinnyStyle = false;
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustomMC.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustomMC.SliderDrawAngle = 90F;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
             this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustomMC.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
             this.vScrollBarCustomMC.Value = -1;
             this.vScrollBarCustomMC.ValueLimited = -1;
@@ -224,14 +232,20 @@ namespace EDDiscovery.UserControls
             // checkBoxAutoSwap
             // 
             this.checkBoxAutoSwap.AutoSize = true;
+            this.checkBoxAutoSwap.ButtonGradientDirection = 90F;
             this.checkBoxAutoSwap.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxAutoSwap.CheckBoxGradientDirection = 225F;
             this.checkBoxAutoSwap.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxAutoSwap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxAutoSwap.CheckColor2 = System.Drawing.Color.DarkBlue;
+            this.checkBoxAutoSwap.DisabledScaling = 0.5F;
             this.checkBoxAutoSwap.ImageIndeterminate = null;
             this.checkBoxAutoSwap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxAutoSwap.ImageUnchecked = null;
-            this.checkBoxAutoSwap.Location = new System.Drawing.Point(369, 8);
-            this.checkBoxAutoSwap.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
+            this.checkBoxAutoSwap.Location = new System.Drawing.Point(362, 4);
+            this.checkBoxAutoSwap.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
+            this.checkBoxAutoSwap.MouseOverScaling = 1.3F;
+            this.checkBoxAutoSwap.MouseSelectedScaling = 1.3F;
             this.checkBoxAutoSwap.Name = "checkBoxAutoSwap";
             this.checkBoxAutoSwap.Size = new System.Drawing.Size(75, 17);
             this.checkBoxAutoSwap.TabIndex = 29;
@@ -242,14 +256,20 @@ namespace EDDiscovery.UserControls
             // checkBoxBuyOnly
             // 
             this.checkBoxBuyOnly.AutoSize = true;
+            this.checkBoxBuyOnly.ButtonGradientDirection = 90F;
             this.checkBoxBuyOnly.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxBuyOnly.CheckBoxGradientDirection = 225F;
             this.checkBoxBuyOnly.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxBuyOnly.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxBuyOnly.CheckColor2 = System.Drawing.Color.DarkBlue;
+            this.checkBoxBuyOnly.DisabledScaling = 0.5F;
             this.checkBoxBuyOnly.ImageIndeterminate = null;
             this.checkBoxBuyOnly.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxBuyOnly.ImageUnchecked = null;
-            this.checkBoxBuyOnly.Location = new System.Drawing.Point(197, 8);
-            this.checkBoxBuyOnly.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
+            this.checkBoxBuyOnly.Location = new System.Drawing.Point(194, 4);
+            this.checkBoxBuyOnly.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
+            this.checkBoxBuyOnly.MouseOverScaling = 1.3F;
+            this.checkBoxBuyOnly.MouseSelectedScaling = 1.3F;
             this.checkBoxBuyOnly.Name = "checkBoxBuyOnly";
             this.checkBoxBuyOnly.Size = new System.Drawing.Size(68, 17);
             this.checkBoxBuyOnly.TabIndex = 29;
@@ -261,8 +281,8 @@ namespace EDDiscovery.UserControls
             // labelVs
             // 
             this.labelVs.AutoSize = true;
-            this.labelVs.Location = new System.Drawing.Point(85, 4);
-            this.labelVs.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelVs.Location = new System.Drawing.Point(86, 1);
+            this.labelVs.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.labelVs.Name = "labelVs";
             this.labelVs.Size = new System.Drawing.Size(19, 13);
             this.labelVs.TabIndex = 28;
@@ -271,8 +291,8 @@ namespace EDDiscovery.UserControls
             // labelLocation
             // 
             this.labelLocation.AutoSize = true;
-            this.labelLocation.Location = new System.Drawing.Point(0, 8);
-            this.labelLocation.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
+            this.labelLocation.Location = new System.Drawing.Point(3, 4);
+            this.labelLocation.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
             this.labelLocation.Name = "labelLocation";
             this.labelLocation.Size = new System.Drawing.Size(43, 13);
             this.labelLocation.TabIndex = 26;
@@ -285,14 +305,20 @@ namespace EDDiscovery.UserControls
             // checkBoxHasDemand
             // 
             this.checkBoxHasDemand.AutoSize = true;
+            this.checkBoxHasDemand.ButtonGradientDirection = 90F;
             this.checkBoxHasDemand.CheckBoxColor = System.Drawing.Color.Gray;
+            this.checkBoxHasDemand.CheckBoxGradientDirection = 225F;
             this.checkBoxHasDemand.CheckBoxInnerColor = System.Drawing.Color.White;
             this.checkBoxHasDemand.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxHasDemand.CheckColor2 = System.Drawing.Color.DarkBlue;
+            this.checkBoxHasDemand.DisabledScaling = 0.5F;
             this.checkBoxHasDemand.ImageIndeterminate = null;
             this.checkBoxHasDemand.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxHasDemand.ImageUnchecked = null;
-            this.checkBoxHasDemand.Location = new System.Drawing.Point(273, 8);
-            this.checkBoxHasDemand.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
+            this.checkBoxHasDemand.Location = new System.Drawing.Point(268, 4);
+            this.checkBoxHasDemand.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
+            this.checkBoxHasDemand.MouseOverScaling = 1.3F;
+            this.checkBoxHasDemand.MouseSelectedScaling = 1.3F;
             this.checkBoxHasDemand.Name = "checkBoxHasDemand";
             this.checkBoxHasDemand.Size = new System.Drawing.Size(88, 17);
             this.checkBoxHasDemand.TabIndex = 29;
@@ -315,13 +341,19 @@ namespace EDDiscovery.UserControls
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(1055, 34);
+            this.panelTop.Size = new System.Drawing.Size(1055, 30);
             this.panelTop.TabIndex = 2;
             // 
             // extButtonSelectWhere
             // 
+            this.extButtonSelectWhere.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonSelectWhere.ButtonDisabledScaling = 0.5F;
+            this.extButtonSelectWhere.GradientDirection = 90F;
             this.extButtonSelectWhere.Image = global::EDDiscovery.Icons.Controls.Find;
-            this.extButtonSelectWhere.Location = new System.Drawing.Point(54, 3);
+            this.extButtonSelectWhere.Location = new System.Drawing.Point(52, 1);
+            this.extButtonSelectWhere.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonSelectWhere.MouseOverScaling = 1.3F;
+            this.extButtonSelectWhere.MouseSelectedScaling = 1.3F;
             this.extButtonSelectWhere.Name = "extButtonSelectWhere";
             this.extButtonSelectWhere.Size = new System.Drawing.Size(28, 28);
             this.extButtonSelectWhere.TabIndex = 30;
@@ -331,8 +363,8 @@ namespace EDDiscovery.UserControls
             // labelComparison
             // 
             this.labelComparison.AutoSize = true;
-            this.labelComparison.Location = new System.Drawing.Point(112, 8);
-            this.labelComparison.Margin = new System.Windows.Forms.Padding(0, 8, 8, 1);
+            this.labelComparison.Location = new System.Drawing.Point(111, 4);
+            this.labelComparison.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
             this.labelComparison.Name = "labelComparison";
             this.labelComparison.Size = new System.Drawing.Size(43, 13);
             this.labelComparison.TabIndex = 26;
@@ -340,8 +372,14 @@ namespace EDDiscovery.UserControls
             // 
             // extButtonSelectComparision
             // 
+            this.extButtonSelectComparision.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonSelectComparision.ButtonDisabledScaling = 0.5F;
+            this.extButtonSelectComparision.GradientDirection = 90F;
             this.extButtonSelectComparision.Image = global::EDDiscovery.Icons.Controls.Find;
-            this.extButtonSelectComparision.Location = new System.Drawing.Point(166, 3);
+            this.extButtonSelectComparision.Location = new System.Drawing.Point(160, 1);
+            this.extButtonSelectComparision.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonSelectComparision.MouseOverScaling = 1.3F;
+            this.extButtonSelectComparision.MouseSelectedScaling = 1.3F;
             this.extButtonSelectComparision.Name = "extButtonSelectComparision";
             this.extButtonSelectComparision.Size = new System.Drawing.Size(28, 28);
             this.extButtonSelectComparision.TabIndex = 31;

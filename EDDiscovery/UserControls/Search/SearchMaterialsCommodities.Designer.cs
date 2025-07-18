@@ -72,43 +72,54 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Controls.Add(this.dataGridView);
             this.dataViewScrollerPanel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 67);
+            this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 56);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 649);
+            this.dataViewScrollerPanel.ScrollBarWidth = 24;
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(804, 660);
             this.dataViewScrollerPanel.TabIndex = 7;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
             // vScrollBarCustom
             // 
+            this.vScrollBarCustom.AlwaysHideScrollBar = false;
             this.vScrollBarCustom.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustom.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom.HideScrollBar = false;
             this.vScrollBarCustom.LargeChange = 0;
-            this.vScrollBarCustom.Location = new System.Drawing.Point(788, 0);
+            this.vScrollBarCustom.Location = new System.Drawing.Point(780, 0);
             this.vScrollBarCustom.Maximum = -1;
             this.vScrollBarCustom.Minimum = 0;
             this.vScrollBarCustom.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustom.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
-            this.vScrollBarCustom.Size = new System.Drawing.Size(16, 649);
+            this.vScrollBarCustom.Size = new System.Drawing.Size(24, 660);
+            this.vScrollBarCustom.SkinnyStyle = false;
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom.SliderDrawAngle = 90F;
             this.vScrollBarCustom.SmallChange = 1;
             this.vScrollBarCustom.TabIndex = 7;
             this.vScrollBarCustom.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom.ThumbDrawAngle = 0F;
             this.vScrollBarCustom.Value = -1;
             this.vScrollBarCustom.ValueLimited = -1;
             // 
             // dataGridView
             // 
+            this.dataGridView.AllowRowHeaderVisibleSelection = false;
             this.dataGridView.AllowUserToAddRows = false;
             this.dataGridView.AllowUserToDeleteRows = false;
             this.dataGridView.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridView.AutoSortByColumnName = false;
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -120,12 +131,14 @@ namespace EDDiscovery.UserControls
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
             this.dataGridView.Name = "dataGridView";
+            this.dataGridView.PerColumnWordWrapControl = true;
             this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.RowHeadersVisible = false;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(788, 649);
+            this.dataGridView.Size = new System.Drawing.Size(780, 660);
             this.dataGridView.TabIndex = 0;
+            this.dataGridView.WebLookup = EliteDangerousCore.WebExternalDataLookup.None;
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridView_SortCompare);
             // 
             // ColumnDate
@@ -177,14 +190,20 @@ namespace EDDiscovery.UserControls
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(804, 67);
+            this.panelTop.Size = new System.Drawing.Size(804, 56);
             this.panelTop.TabIndex = 8;
             // 
             // buttonExtExcel
             // 
+            this.buttonExtExcel.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.GradientDirection = 90F;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(514, 14);
+            this.buttonExtExcel.Location = new System.Drawing.Point(514, 3);
+            this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonExtExcel.MouseOverScaling = 1.3F;
+            this.buttonExtExcel.MouseSelectedScaling = 1.3F;
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 37;
@@ -194,8 +213,14 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtFind
             // 
+            this.buttonExtFind.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtFind.ButtonDisabledScaling = 0.5F;
+            this.buttonExtFind.GradientDirection = 90F;
             this.buttonExtFind.Image = global::EDDiscovery.Icons.Controls.Find;
-            this.buttonExtFind.Location = new System.Drawing.Point(480, 14);
+            this.buttonExtFind.Location = new System.Drawing.Point(480, 2);
+            this.buttonExtFind.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonExtFind.MouseOverScaling = 1.3F;
+            this.buttonExtFind.MouseSelectedScaling = 1.3F;
             this.buttonExtFind.Name = "buttonExtFind";
             this.buttonExtFind.Size = new System.Drawing.Size(28, 28);
             this.buttonExtFind.TabIndex = 3;
@@ -205,12 +230,18 @@ namespace EDDiscovery.UserControls
             // 
             // comboBoxCustomCMANDOR
             // 
+            this.comboBoxCustomCMANDOR.BackColor2 = System.Drawing.Color.Red;
             this.comboBoxCustomCMANDOR.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomCMANDOR.ControlBackground = System.Drawing.SystemColors.Control;
             this.comboBoxCustomCMANDOR.DataSource = null;
             this.comboBoxCustomCMANDOR.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxCustomCMANDOR.DisabledScaling = 0.5F;
             this.comboBoxCustomCMANDOR.DisplayMember = "";
             this.comboBoxCustomCMANDOR.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomCMANDOR.Location = new System.Drawing.Point(386, 43);
+            this.comboBoxCustomCMANDOR.GradientDirection = 90F;
+            this.comboBoxCustomCMANDOR.Location = new System.Drawing.Point(379, 34);
+            this.comboBoxCustomCMANDOR.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.comboBoxCustomCMANDOR.MouseOverScalingColor = 1.3F;
             this.comboBoxCustomCMANDOR.Name = "comboBoxCustomCMANDOR";
             this.comboBoxCustomCMANDOR.SelectedIndex = -1;
             this.comboBoxCustomCMANDOR.SelectedItem = null;
@@ -223,12 +254,18 @@ namespace EDDiscovery.UserControls
             // 
             // comboBoxCustomCM2
             // 
+            this.comboBoxCustomCM2.BackColor2 = System.Drawing.Color.Red;
             this.comboBoxCustomCM2.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomCM2.ControlBackground = System.Drawing.SystemColors.Control;
             this.comboBoxCustomCM2.DataSource = null;
             this.comboBoxCustomCM2.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxCustomCM2.DisabledScaling = 0.5F;
             this.comboBoxCustomCM2.DisplayMember = "";
             this.comboBoxCustomCM2.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomCM2.Location = new System.Drawing.Point(91, 42);
+            this.comboBoxCustomCM2.GradientDirection = 90F;
+            this.comboBoxCustomCM2.Location = new System.Drawing.Point(84, 33);
+            this.comboBoxCustomCM2.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.comboBoxCustomCM2.MouseOverScalingColor = 1.3F;
             this.comboBoxCustomCM2.Name = "comboBoxCustomCM2";
             this.comboBoxCustomCM2.SelectedIndex = -1;
             this.comboBoxCustomCM2.SelectedItem = null;
@@ -241,12 +278,18 @@ namespace EDDiscovery.UserControls
             // 
             // comboBoxCustomCM1
             // 
+            this.comboBoxCustomCM1.BackColor2 = System.Drawing.Color.Red;
             this.comboBoxCustomCM1.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCustomCM1.ControlBackground = System.Drawing.SystemColors.Control;
             this.comboBoxCustomCM1.DataSource = null;
             this.comboBoxCustomCM1.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxCustomCM1.DisabledScaling = 0.5F;
             this.comboBoxCustomCM1.DisplayMember = "";
             this.comboBoxCustomCM1.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxCustomCM1.Location = new System.Drawing.Point(91, 14);
+            this.comboBoxCustomCM1.GradientDirection = 90F;
+            this.comboBoxCustomCM1.Location = new System.Drawing.Point(84, 5);
+            this.comboBoxCustomCM1.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.comboBoxCustomCM1.MouseOverScalingColor = 1.3F;
             this.comboBoxCustomCM1.Name = "comboBoxCustomCM1";
             this.comboBoxCustomCM1.SelectedIndex = -1;
             this.comboBoxCustomCM1.SelectedItem = null;
@@ -260,7 +303,8 @@ namespace EDDiscovery.UserControls
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 42);
+            this.label2.Location = new System.Drawing.Point(7, 33);
+            this.label2.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(36, 13);
             this.label2.TabIndex = 1;
@@ -269,7 +313,8 @@ namespace EDDiscovery.UserControls
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(14, 14);
+            this.label1.Location = new System.Drawing.Point(7, 5);
+            this.label1.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(36, 13);
             this.label1.TabIndex = 0;

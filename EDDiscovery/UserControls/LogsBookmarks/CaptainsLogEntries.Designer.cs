@@ -48,15 +48,15 @@
             this.ColNote = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.viewScanDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mapGoto3StartoolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewOnEDSMToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.viewScanDisplayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewOnSpanshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.buttonFilter = new ExtendedControls.ExtButton();
             this.flowLayoutPanel1 = new System.Windows.Forms.FlowLayoutPanel();
             this.extButtonExcel = new ExtendedControls.ExtButton();
             this.flowLayoutPanel2 = new System.Windows.Forms.FlowLayoutPanel();
-            this.viewOnSpanshToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView)).BeginInit();
             this.contextMenuStrip.SuspendLayout();
@@ -67,11 +67,13 @@
             // dateTimePickerEndDate
             // 
             this.dateTimePickerEndDate.BorderColor = System.Drawing.Color.Transparent;
+            this.dateTimePickerEndDate.BorderColor2 = System.Drawing.Color.Transparent;
             this.dateTimePickerEndDate.Checked = false;
             this.dateTimePickerEndDate.CustomFormat = "dd MMMM yyyy";
+            this.dateTimePickerEndDate.DisabledScaling = 0.5F;
             this.dateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.dateTimePickerEndDate.Location = new System.Drawing.Point(387, 1);
-            this.dateTimePickerEndDate.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.dateTimePickerEndDate.Location = new System.Drawing.Point(384, 1);
+            this.dateTimePickerEndDate.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.dateTimePickerEndDate.Name = "dateTimePickerEndDate";
             this.dateTimePickerEndDate.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerEndDate.ShowCheckBox = true;
@@ -84,8 +86,8 @@
             // labelEndDate
             // 
             this.labelEndDate.AutoSize = true;
-            this.labelEndDate.Location = new System.Drawing.Point(324, 1);
-            this.labelEndDate.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelEndDate.Location = new System.Drawing.Point(323, 1);
+            this.labelEndDate.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.labelEndDate.Name = "labelEndDate";
             this.labelEndDate.Size = new System.Drawing.Size(55, 13);
             this.labelEndDate.TabIndex = 31;
@@ -94,11 +96,13 @@
             // dateTimePickerStartDate
             // 
             this.dateTimePickerStartDate.BorderColor = System.Drawing.Color.Transparent;
+            this.dateTimePickerStartDate.BorderColor2 = System.Drawing.Color.Transparent;
             this.dateTimePickerStartDate.Checked = false;
             this.dateTimePickerStartDate.CustomFormat = "dd MMMM yyyy";
+            this.dateTimePickerStartDate.DisabledScaling = 0.5F;
             this.dateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Long;
-            this.dateTimePickerStartDate.Location = new System.Drawing.Point(66, 1);
-            this.dateTimePickerStartDate.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.dateTimePickerStartDate.Location = new System.Drawing.Point(67, 1);
+            this.dateTimePickerStartDate.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.dateTimePickerStartDate.Name = "dateTimePickerStartDate";
             this.dateTimePickerStartDate.SelectedColor = System.Drawing.Color.Yellow;
             this.dateTimePickerStartDate.ShowCheckBox = true;
@@ -111,8 +115,8 @@
             // labelDateStart
             // 
             this.labelDateStart.AutoSize = true;
-            this.labelDateStart.Location = new System.Drawing.Point(0, 1);
-            this.labelDateStart.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.labelDateStart.Location = new System.Drawing.Point(3, 1);
+            this.labelDateStart.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.labelDateStart.Name = "labelDateStart";
             this.labelDateStart.Size = new System.Drawing.Size(58, 13);
             this.labelDateStart.TabIndex = 28;
@@ -120,9 +124,14 @@
             // 
             // buttonTags
             // 
+            this.buttonTags.BackColor2 = System.Drawing.Color.Red;
+            this.buttonTags.ButtonDisabledScaling = 0.5F;
+            this.buttonTags.GradientDirection = 90F;
             this.buttonTags.Image = global::EDDiscovery.Icons.Controls.Tags;
-            this.buttonTags.Location = new System.Drawing.Point(313, 1);
-            this.buttonTags.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonTags.Location = new System.Drawing.Point(306, 1);
+            this.buttonTags.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonTags.MouseOverScaling = 1.3F;
+            this.buttonTags.MouseSelectedScaling = 1.3F;
             this.buttonTags.Name = "buttonTags";
             this.buttonTags.Size = new System.Drawing.Size(28, 28);
             this.buttonTags.TabIndex = 27;
@@ -132,9 +141,14 @@
             // 
             // buttonDelete
             // 
+            this.buttonDelete.BackColor2 = System.Drawing.Color.Red;
+            this.buttonDelete.ButtonDisabledScaling = 0.5F;
+            this.buttonDelete.GradientDirection = 90F;
             this.buttonDelete.Image = global::EDDiscovery.Icons.Controls.Delete;
-            this.buttonDelete.Location = new System.Drawing.Point(277, 1);
-            this.buttonDelete.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonDelete.Location = new System.Drawing.Point(272, 1);
+            this.buttonDelete.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonDelete.MouseOverScaling = 1.3F;
+            this.buttonDelete.MouseSelectedScaling = 1.3F;
             this.buttonDelete.Name = "buttonDelete";
             this.buttonDelete.Size = new System.Drawing.Size(28, 28);
             this.buttonDelete.TabIndex = 27;
@@ -144,9 +158,14 @@
             // 
             // buttonNew
             // 
+            this.buttonNew.BackColor2 = System.Drawing.Color.Red;
+            this.buttonNew.ButtonDisabledScaling = 0.5F;
+            this.buttonNew.GradientDirection = 90F;
             this.buttonNew.Image = global::EDDiscovery.Icons.Controls.NewPage;
-            this.buttonNew.Location = new System.Drawing.Point(241, 1);
-            this.buttonNew.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonNew.Location = new System.Drawing.Point(238, 1);
+            this.buttonNew.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonNew.MouseOverScaling = 1.3F;
+            this.buttonNew.MouseSelectedScaling = 1.3F;
             this.buttonNew.Name = "buttonNew";
             this.buttonNew.Size = new System.Drawing.Size(28, 28);
             this.buttonNew.TabIndex = 2;
@@ -156,10 +175,9 @@
             // 
             // textBoxFilter
             // 
-            this.textBoxFilter.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxFilter.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxFilter.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxFilter.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxFilter.ClearOnFirstChar = false;
             this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
@@ -168,8 +186,8 @@
             this.textBoxFilter.EndButtonSize16ths = 10;
             this.textBoxFilter.EndButtonVisible = false;
             this.textBoxFilter.InErrorCondition = false;
-            this.textBoxFilter.Location = new System.Drawing.Point(49, 4);
-            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.textBoxFilter.Location = new System.Drawing.Point(50, 4);
+            this.textBoxFilter.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
             this.textBoxFilter.Multiline = false;
             this.textBoxFilter.Name = "textBoxFilter";
             this.textBoxFilter.ReadOnly = false;
@@ -187,8 +205,8 @@
             // labelSearch
             // 
             this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(0, 4);
-            this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 4, 8, 1);
+            this.labelSearch.Location = new System.Drawing.Point(3, 4);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
             this.labelSearch.Name = "labelSearch";
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
             this.labelSearch.TabIndex = 26;
@@ -202,6 +220,7 @@
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 52);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.ScrollBarWidth = 24;
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(896, 598);
             this.dataViewScrollerPanel.TabIndex = 5;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
@@ -211,24 +230,31 @@
             this.vScrollBarCustom1.AlwaysHideScrollBar = false;
             this.vScrollBarCustom1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom1.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustom1.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom1.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom1.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom1.HideScrollBar = false;
             this.vScrollBarCustom1.LargeChange = 0;
-            this.vScrollBarCustom1.Location = new System.Drawing.Point(880, 0);
+            this.vScrollBarCustom1.Location = new System.Drawing.Point(872, 0);
             this.vScrollBarCustom1.Maximum = -1;
             this.vScrollBarCustom1.Minimum = 0;
             this.vScrollBarCustom1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom1.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustom1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom1.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
-            this.vScrollBarCustom1.Size = new System.Drawing.Size(16, 598);
+            this.vScrollBarCustom1.Size = new System.Drawing.Size(24, 598);
+            this.vScrollBarCustom1.SkinnyStyle = false;
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom1.SliderDrawAngle = 90F;
             this.vScrollBarCustom1.SmallChange = 1;
             this.vScrollBarCustom1.TabIndex = 6;
             this.vScrollBarCustom1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom1.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom1.ThumbDrawAngle = 0F;
             this.vScrollBarCustom1.Value = -1;
             this.vScrollBarCustom1.ValueLimited = -1;
@@ -255,7 +281,7 @@
             this.dataGridView.RowHeaderMenuStrip = null;
             this.dataGridView.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridView.SingleRowSelect = true;
-            this.dataGridView.Size = new System.Drawing.Size(880, 598);
+            this.dataGridView.Size = new System.Drawing.Size(872, 598);
             this.dataGridView.TabIndex = 4;
             this.dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellClick);
             this.dataGridView.CellEndEdit += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView_CellEndEdit);
@@ -302,8 +328,15 @@
             this.viewOnEDSMToolStripMenuItem,
             this.viewOnSpanshToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStripBookmarks";
-            this.contextMenuStrip.Size = new System.Drawing.Size(187, 114);
+            this.contextMenuStrip.Size = new System.Drawing.Size(187, 92);
             this.contextMenuStrip.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip_Opening);
+            // 
+            // viewScanDisplayToolStripMenuItem
+            // 
+            this.viewScanDisplayToolStripMenuItem.Name = "viewScanDisplayToolStripMenuItem";
+            this.viewScanDisplayToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.viewScanDisplayToolStripMenuItem.Text = "View Scan Display";
+            this.viewScanDisplayToolStripMenuItem.Click += new System.EventHandler(this.viewScanDisplayToolStripMenuItem_Click);
             // 
             // mapGoto3StartoolStripMenuItem
             // 
@@ -319,12 +352,12 @@
             this.viewOnEDSMToolStripMenuItem.Text = "View on EDSM";
             this.viewOnEDSMToolStripMenuItem.Click += new System.EventHandler(this.openInEDSMToolStripMenuItem_Click);
             // 
-            // viewScanDisplayToolStripMenuItem
+            // viewOnSpanshToolStripMenuItem
             // 
-            this.viewScanDisplayToolStripMenuItem.Name = "viewScanDisplayToolStripMenuItem";
-            this.viewScanDisplayToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.viewScanDisplayToolStripMenuItem.Text = "View Scan Display";
-            this.viewScanDisplayToolStripMenuItem.Click += new System.EventHandler(this.viewScanDisplayToolStripMenuItem_Click);
+            this.viewOnSpanshToolStripMenuItem.Name = "viewOnSpanshToolStripMenuItem";
+            this.viewOnSpanshToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
+            this.viewOnSpanshToolStripMenuItem.Text = "View on Spansh";
+            this.viewOnSpanshToolStripMenuItem.Click += new System.EventHandler(this.viewOnSpanshToolStripMenuItem_Click);
             // 
             // toolTip
             // 
@@ -332,9 +365,14 @@
             // 
             // buttonFilter
             // 
+            this.buttonFilter.BackColor2 = System.Drawing.Color.Red;
+            this.buttonFilter.ButtonDisabledScaling = 0.5F;
+            this.buttonFilter.GradientDirection = 90F;
             this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
-            this.buttonFilter.Location = new System.Drawing.Point(205, 1);
-            this.buttonFilter.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.buttonFilter.Location = new System.Drawing.Point(204, 1);
+            this.buttonFilter.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonFilter.MouseOverScaling = 1.3F;
+            this.buttonFilter.MouseSelectedScaling = 1.3F;
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonFilter.TabIndex = 28;
@@ -360,9 +398,14 @@
             // 
             // extButtonExcel
             // 
+            this.extButtonExcel.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonExcel.ButtonDisabledScaling = 0.5F;
+            this.extButtonExcel.GradientDirection = 90F;
             this.extButtonExcel.Image = global::EDDiscovery.Icons.Controls.Scan_ExportToExcel;
-            this.extButtonExcel.Location = new System.Drawing.Point(349, 1);
-            this.extButtonExcel.Margin = new System.Windows.Forms.Padding(0, 1, 8, 1);
+            this.extButtonExcel.Location = new System.Drawing.Point(340, 1);
+            this.extButtonExcel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonExcel.MouseOverScaling = 1.3F;
+            this.extButtonExcel.MouseSelectedScaling = 1.3F;
             this.extButtonExcel.Name = "extButtonExcel";
             this.extButtonExcel.Size = new System.Drawing.Size(28, 28);
             this.extButtonExcel.TabIndex = 27;
@@ -381,13 +424,6 @@
             this.flowLayoutPanel2.Name = "flowLayoutPanel2";
             this.flowLayoutPanel2.Size = new System.Drawing.Size(896, 22);
             this.flowLayoutPanel2.TabIndex = 28;
-            // 
-            // viewOnSpanshToolStripMenuItem
-            // 
-            this.viewOnSpanshToolStripMenuItem.Name = "viewOnSpanshToolStripMenuItem";
-            this.viewOnSpanshToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.viewOnSpanshToolStripMenuItem.Text = "View on Spansh";
-            this.viewOnSpanshToolStripMenuItem.Click += new System.EventHandler(this.viewOnSpanshToolStripMenuItem_Click);
             // 
             // CaptainsLogEntries
             // 
