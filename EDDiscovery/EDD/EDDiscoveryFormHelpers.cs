@@ -543,7 +543,7 @@ namespace EDDiscovery
                 jo["windowsframe"] = UserDatabase.Instance.GetSetting("ThemeWindowsFrame", true);
                 jo["formopacity"] = UserDatabase.Instance.GetSetting("ThemeFormOpacity", 100.0f);
                 jo["fontname"] = UserDatabase.Instance.GetSetting("ThemeFont", "Arial");
-                jo["fontsize"] = (float)UserDatabase.Instance.GetSetting("ThemeFontSize", 12);
+                jo["fontsize"] = (float)UserDatabase.Instance.GetSetting("ThemeFontSize", 12F);
                 jo["buttonstyle"] = UserDatabase.Instance.GetSetting("ButtonStyle", Theme.ButtonstyleGradient);
                 jo["textboxborderstyle"] = UserDatabase.Instance.GetSetting("TextBoxBorderStyle", Theme.TextboxborderstyleColor);
 
