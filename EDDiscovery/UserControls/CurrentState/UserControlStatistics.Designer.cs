@@ -869,7 +869,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarCombatDGV.SliderDrawAngle = 90F;
             this.extScrollBarCombatDGV.SmallChange = 1;
             this.extScrollBarCombatDGV.TabIndex = 6;
-            this.extScrollBarCombatDGV.Text = "extScrollBar1";
+            this.extScrollBarCombatDGV.Text = "";
             this.extScrollBarCombatDGV.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCombatDGV.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarCombatDGV.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;

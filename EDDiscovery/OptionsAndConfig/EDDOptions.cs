@@ -12,10 +12,8 @@
  * governing permissions and limitations under the License.
  */
 
-using EliteDangerousCore.EDSM;
 using System;
 using System.IO;
-using System.Linq;
 using System.Linq;
 using System.Text;
 

@@ -323,7 +323,7 @@
             this.extScrollBarItinerary.SliderDrawAngle = 90F;
             this.extScrollBarItinerary.SmallChange = 1;
             this.extScrollBarItinerary.TabIndex = 1;
-            this.extScrollBarItinerary.Text = "extScrollBar1";
+            this.extScrollBarItinerary.Text = "";
             this.extScrollBarItinerary.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarItinerary.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarItinerary.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -505,7 +505,7 @@
             this.extScrollBarLedger.SliderDrawAngle = 90F;
             this.extScrollBarLedger.SmallChange = 1;
             this.extScrollBarLedger.TabIndex = 1;
-            this.extScrollBarLedger.Text = "extScrollBar1";
+            this.extScrollBarLedger.Text = "";
             this.extScrollBarLedger.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarLedger.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarLedger.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -809,7 +809,7 @@
             this.extScrollBarServices.SliderDrawAngle = 90F;
             this.extScrollBarServices.SmallChange = 1;
             this.extScrollBarServices.TabIndex = 0;
-            this.extScrollBarServices.Text = "extScrollBar1";
+            this.extScrollBarServices.Text = "";
             this.extScrollBarServices.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarServices.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarServices.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -940,7 +940,7 @@
             this.extScrollBarOrders.SliderDrawAngle = 90F;
             this.extScrollBarOrders.SmallChange = 1;
             this.extScrollBarOrders.TabIndex = 1;
-            this.extScrollBarOrders.Text = "extScrollBar1";
+            this.extScrollBarOrders.Text = "";
             this.extScrollBarOrders.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarOrders.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarOrders.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -1091,7 +1091,7 @@
             this.extScrollBarCAPIStats.SliderDrawAngle = 90F;
             this.extScrollBarCAPIStats.SmallChange = 1;
             this.extScrollBarCAPIStats.TabIndex = 1;
-            this.extScrollBarCAPIStats.Text = "extScrollBar1";
+            this.extScrollBarCAPIStats.Text = "";
             this.extScrollBarCAPIStats.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPIStats.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPIStats.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -1254,7 +1254,7 @@
             this.extScrollBarCAPIShips.SliderDrawAngle = 90F;
             this.extScrollBarCAPIShips.SmallChange = 1;
             this.extScrollBarCAPIShips.TabIndex = 1;
-            this.extScrollBarCAPIShips.Text = "extScrollBar1";
+            this.extScrollBarCAPIShips.Text = "";
             this.extScrollBarCAPIShips.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPIShips.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPIShips.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -1386,7 +1386,7 @@
             this.extScrollBarCAPIModules.SliderDrawAngle = 90F;
             this.extScrollBarCAPIModules.SmallChange = 1;
             this.extScrollBarCAPIModules.TabIndex = 1;
-            this.extScrollBarCAPIModules.Text = "extScrollBar1";
+            this.extScrollBarCAPIModules.Text = "";
             this.extScrollBarCAPIModules.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPIModules.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPIModules.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -1583,7 +1583,7 @@
             this.extScrollBarCAPICargo.SliderDrawAngle = 90F;
             this.extScrollBarCAPICargo.SmallChange = 1;
             this.extScrollBarCAPICargo.TabIndex = 1;
-            this.extScrollBarCAPICargo.Text = "extScrollBar1";
+            this.extScrollBarCAPICargo.Text = "";
             this.extScrollBarCAPICargo.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPICargo.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPICargo.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -1704,7 +1704,7 @@
             this.extScrollBarCAPILocker.SliderDrawAngle = 90F;
             this.extScrollBarCAPILocker.SmallChange = 1;
             this.extScrollBarCAPILocker.TabIndex = 1;
-            this.extScrollBarCAPILocker.Text = "extScrollBar1";
+            this.extScrollBarCAPILocker.Text = "";
             this.extScrollBarCAPILocker.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPILocker.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPILocker.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;

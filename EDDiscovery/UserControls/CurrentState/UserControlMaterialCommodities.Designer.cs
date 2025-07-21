@@ -566,7 +566,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarShoppingList.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarShoppingList.SmallChange = 1;
             this.extScrollBarShoppingList.TabIndex = 2;
-            this.extScrollBarShoppingList.Text = "extScrollBar1";
+            this.extScrollBarShoppingList.Text = "";
             this.extScrollBarShoppingList.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarShoppingList.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarShoppingList.ThumbDrawAngle = 0F;

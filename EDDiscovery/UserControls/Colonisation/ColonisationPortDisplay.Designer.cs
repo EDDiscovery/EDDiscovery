@@ -94,7 +94,7 @@
             this.extScrollBarRL.SliderDrawAngle = 90F;
             this.extScrollBarRL.SmallChange = 1;
             this.extScrollBarRL.TabIndex = 1;
-            this.extScrollBarRL.Text = "extScrollBar1";
+            this.extScrollBarRL.Text = "";
             this.extScrollBarRL.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarRL.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarRL.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -379,7 +379,7 @@
             this.extScrollBarContributions.SliderDrawAngle = 90F;
             this.extScrollBarContributions.SmallChange = 1;
             this.extScrollBarContributions.TabIndex = 1;
-            this.extScrollBarContributions.Text = "extScrollBar1";
+            this.extScrollBarContributions.Text = "";
             this.extScrollBarContributions.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarContributions.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarContributions.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
