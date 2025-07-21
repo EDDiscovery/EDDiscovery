@@ -478,14 +478,15 @@ namespace EDDiscovery.Actions
                 Dictionary<string, string> installdeinstall = GetInstallDeinstallSettings(false);
 
                 dmf.Init("EDDiscovery", 
-                            manage, EDDOptions.Instance.CheckGithubFiles,
+                            manage, EDDOptions.Instance.CheckGithubAddOn,
                             this.Icon, edversion,
                             approotfolder,
                             actfolder,
                             manage ? otherinstalledfilesfolder : null,      // only on manage!
                             EDDOptions.Instance.TempDirectory(),
                             Properties.Resources.URLGithubDataDownload,
-                            installdeinstall);
+                            installdeinstall,
+                            EDDOptions.ExeDirectory());
 
                 dmf.EditActionFile += Dmf_OnEditActionFile;     // only used when manage = false
                 dmf.EditGlobals += Dmf_OnEditGlobals;

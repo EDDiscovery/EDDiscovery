@@ -214,7 +214,7 @@ namespace EDDiscovery
 
             ReportSyncProgress("");
 
-            if (EDDOptions.Instance.CheckGithubFiles)      // not normal in debug, due to git hub choking
+            if (EDDOptions.Instance.CheckGithubNotifications)      // not normal in debug, due to git hub choking - same start up behaviour for notifications
             {
                 DateTime lastdownloadtime = UserDatabase.Instance.GetSetting("DownloadFilesLastTime", DateTime.MinValue);
                 

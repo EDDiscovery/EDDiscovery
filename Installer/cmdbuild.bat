@@ -31,6 +31,12 @@ find "%vno%" ..\eddiscovery\properties\AssemblyInfo.cs
 if %ERRORLEVEL%==1 goto :errorAI
 echo Assembly passed
 
+echo .
+echo Building default act files into %exefolder%
+del %exefolder%\defaultactfiles.zip >nul
+powershell compress-archive -Path ..\..\EDDiscoveryData\ActionFiles\V1\*.act -DestinationPath %exefolder%\defaultactfiles.zip
+
+
 echo.
 echo Build %vno%
 "\Program Files (x86)\Inno Setup 6\iscc.exe" /DMyAppVersion=%vno% innoscript.iss

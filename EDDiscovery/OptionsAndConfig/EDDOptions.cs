@@ -16,6 +16,7 @@ using EliteDangerousCore.EDSM;
 using System;
 using System.IO;
 using System.Linq;
+using System.Linq;
 using System.Text;
 
 namespace EDDiscovery
@@ -65,8 +66,9 @@ namespace EDDiscovery
         public bool DontAskGithubForPacks { get; private set; }
         public bool DisableBetaCommanderCheck { get; private set; }
         public bool ForceBetaOnCommander { get; private set; }
-        public bool CheckRelease { get; private set; }
-        public bool CheckGithubFiles { get; private set; }
+        public bool CheckGithubRelease { get; private set; }
+        public bool CheckGithubNotifications { get; private set; }
+        public bool CheckGithubAddOn { get; private set; }
         public bool ResetLanguage { get; set; }
         public string SelectLanguage { get; private set; }
         public bool SafeMode { get; private set; }
@@ -159,8 +161,7 @@ namespace EDDiscovery
         private void Init()
         {
 #if !DEBUG
-            CheckGithubFiles = true;
-            CheckRelease = true;
+            CheckGithubNotifications = CheckGithubAddOn = CheckGithubRelease = true;
 #else
             EnableTGRightDebugClicks = true;
 #endif
@@ -501,10 +502,12 @@ namespace EDDiscovery
                     case "nosystemsload": NoSystemsLoad = true; break;
                     case "logexceptions": LogExceptions = true; break;
                     case "nogithubpacks": DontAskGithubForPacks = true; break;
-                    case "checkrelease": CheckRelease = true; break;
-                    case "checkgithub": CheckGithubFiles = true; break;
-                    case "nocheckrelease": CheckRelease = false; break;
-                    case "nocheckgithub": CheckGithubFiles = false; break;
+                    case "checkrelease": CheckGithubRelease = true; break;
+                    case "checknotifications": CheckGithubNotifications = true; break;
+                    case "checkaddons": CheckGithubAddOn = true; break;
+                    case "nocheckrelease": CheckGithubRelease = false; break;
+                    case "nochecknotifications": CheckGithubNotifications = false; break;
+                    case "nocheckaddons": CheckGithubAddOn = false; break;
                     case "disablemerge": DisableJournalMerge = true; break;
                     case "disableremoval": DisableJournalRemoval = true; break;
                     case "disablebetacheck":

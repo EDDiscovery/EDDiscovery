@@ -13,6 +13,7 @@
  */
 
 
+using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
@@ -31,7 +32,10 @@ namespace EDDiscovery
             EngineeringUnitTest.UnitTest();
             //EngineeringUnitTest.ScanLoadouts();
 
-            System.Drawing.Color s = "#22202324".ColorFromNameOrValues();
+     //       FileHelpers.ReadWriteTextFile(@"c:\code\chatconsole.act", @"c:\code\o1.act");//, outlf:"\n");
+     //       FileHelpers.ReadWriteTextFile(@"c:\code\EDDCanonnPanel.act", @"c:\code\o2.act");//, outlf:"\n");
+
+
         }
 
         public void PostInitDebug()

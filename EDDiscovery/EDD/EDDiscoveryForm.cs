@@ -770,7 +770,7 @@ namespace EDDiscovery
 
             // Notifications, only check github when directed and we are not debugging it using a folder override
 
-            Notifications.CheckForNewNotifications(EDDOptions.Instance.CheckGithubFiles && EDDOptions.Instance.NotificationFolderOverride == null, 
+            Notifications.CheckForNewNotifications(EDDOptions.Instance.CheckGithubNotifications && EDDOptions.Instance.NotificationFolderOverride == null, 
                                                    "Notifications", // github folder name
                                                    EDDOptions.Instance.NotificationsAppDirectory(),
                                                    EDDiscovery.Properties.Resources.URLGithubDataDownload,  // github url
@@ -839,7 +839,7 @@ namespace EDDiscovery
 
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Installer");
 
-            if (EDDOptions.Instance.CheckRelease )
+            if (EDDOptions.Instance.CheckGithubRelease )
             {
                 GitHubRelease.CheckForNewInstallerAsync(EDDiscovery.Properties.Resources.URLGithubDownload,
                             System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionString(), (rel) =>  // in thread

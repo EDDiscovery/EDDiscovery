@@ -199,9 +199,15 @@
     <Compile Include="CapiClientID.cs" />
     <Compile Include="EDD\EDDiscoveryControllerHelpers.cs" />
     <Compile Include="EDD\EDDiscoveryControllerCAPI.cs" />
-    <Compile Include="EDD\EDDiscoveryFormDebug.cs" />
-    <Compile Include="EDD\EDDiscoveryFormToolbar.cs" />
-    <Compile Include="EDD\EDDiscoveryFormTabs.cs" />
+    <Compile Include="EDD\EDDiscoveryFormDebug.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EDD\EDDiscoveryFormToolbar.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EDD\EDDiscoveryFormTabs.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Forms\ExceptionForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -212,12 +218,18 @@
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="TabsPanelsAndPopOuts\EDDHelp.cs" />
-    <Compile Include="EDD\EDDiscoveryFormDLL.cs" />
-    <Compile Include="EDD\EDDiscoveryFormProfiles.cs" />
+    <Compile Include="EDD\EDDiscoveryFormDLL.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EDD\EDDiscoveryFormProfiles.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="EDD\EDDiscoveryFormHelpers.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EDD\EDDiscoveryFormJournalEvents.cs" />
+    <Compile Include="EDD\EDDiscoveryFormJournalEvents.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="TabsPanelsAndPopOuts\MajorTabControlPanelActions.cs">
       <SubType>Component</SubType>
     </Compile>

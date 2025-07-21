@@ -60,6 +60,7 @@ Source: "runtimes\win-x86\*.*"; DestDir: "{app}\runtimes\win-x86"; Flags: ignore
 Source: "*.dll"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "*.pdb"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "eddwebsite.zip"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "defaultactfiles.zip"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\Translations\*.tlf"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\UserControls\Translations\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\..\EliteDangerousCore\EliteDangerous\EliteDangerous\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
