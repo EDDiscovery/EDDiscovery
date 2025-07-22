@@ -594,56 +594,56 @@ namespace EDDiscovery.UserControls
 
             var savedroutes = SavedRouteClass.GetAllSavedRoutes();
 
-            if (savedroutes.Count > 0)
+            if (savedroutes.Count > 0)      // may not in debug situation of bad internet have any
             {
                 foreach (var x in savedroutes)
                 {
                     selection.UC.AddButton("tag", x.Name, EDDiscovery.Icons.Controls.expedition, usertag: x);
                 }
-            }
 
-            //displayfilter.UC.ImageSize = new Size(4, 4);
-            selection.CloseBoundaryRegion = new Size(32,32);
-            selection.UC.MultiColumnSlide = true;
-            selection.PositionBelow(but);
-            selection.UC.ButtonPressed += (index, tag, text, usertag, barg) => 
-            {
-                selection.Close();
-                if (PromptAndSaveIfNeeded())
+                //displayfilter.UC.ImageSize = new Size(4, 4);
+                selection.CloseBoundaryRegion = new Size(32, 32);
+                selection.UC.MultiColumnSlide = true;
+                selection.PositionBelow(but);
+                selection.UC.ButtonPressed += (index, tag, text, usertag, barg) =>
                 {
-                    string name = savedroutes[index].Name;
-                    savedroutes = SavedRouteClass.GetAllSavedRoutes();      // reload, in case reselecting saved route
-                    loadedroute = savedroutes.Find(x => x.Name == name);        // if your picking the same route again for some strange reason
-
-                    textBoxRouteName.Text = loadedroute.Name;
-                    if (loadedroute.StartDateUTC == null)
+                    selection.Close();
+                    if (PromptAndSaveIfNeeded())
                     {
-                        dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
-                        dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = false;
-                    }
-                    else
-                    {
-                        dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = true;
-                        dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(loadedroute.StartDateUTC.Value);
-                    }
+                        string name = savedroutes[index].Name;
+                        savedroutes = SavedRouteClass.GetAllSavedRoutes();      // reload, in case reselecting saved route
+                        loadedroute = savedroutes.Find(x => x.Name == name);        // if your picking the same route again for some strange reason
 
-                    if (loadedroute.EndDateUTC == null)
-                    {
-                        dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
-                        dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = false;
-                    }
-                    else
-                    {
-                        dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = true;
-                        dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(loadedroute.EndDateUTC.Value);
-                    }
+                        textBoxRouteName.Text = loadedroute.Name;
+                        if (loadedroute.StartDateUTC == null)
+                        {
+                            dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                            dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = false;
+                        }
+                        else
+                        {
+                            dateTimePickerStartTime.Checked = dateTimePickerStartDate.Checked = true;
+                            dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(loadedroute.StartDateUTC.Value);
+                        }
 
-                    dataGridView.Rows.Clear();
-                    AppendOrInsertSystems(-1, loadedroute.Systems);
-                }
-            };
+                        if (loadedroute.EndDateUTC == null)
+                        {
+                            dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
+                            dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = false;
+                        }
+                        else
+                        {
+                            dateTimePickerEndTime.Checked = dateTimePickerEndDate.Checked = true;
+                            dateTimePickerEndTime.Value = dateTimePickerEndDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(loadedroute.EndDateUTC.Value);
+                        }
 
-            selection.Show(this.FindForm());
+                        dataGridView.Rows.Clear();
+                        AppendOrInsertSystems(-1, loadedroute.Systems);
+                    }
+                };
+
+                selection.Show(this.FindForm());
+            }
         }
 
         private void extButtonNew_Click(object sender, EventArgs e)

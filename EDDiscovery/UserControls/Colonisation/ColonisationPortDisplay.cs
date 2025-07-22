@@ -63,7 +63,10 @@ namespace EDDiscovery.UserControls.Colonisation
                 foreach (JournalColonisationConstructionDepot.ResourcesList p in Port.State.ResourcesRequired.EmptyIfNull())
                 {
                     dataGridViewRL.Rows.Add(new object[] {MaterialCommodityMicroResourceType.GetTranslatedNameByFDName(p.Name),
-                                                          p.RequiredAmount.ToString("N0"), p.ProvidedAmount.ToString("N0"), p.Payment.ToString("N0")});
+                                                            p.RequiredAmount.ToString("N0"),
+                                                            p.ProvidedAmount.ToString("N0"),
+                                                            (p.RequiredAmount-p.ProvidedAmount).ToString("N0"),
+                                                            p.Payment.ToString("N0")});
                 }
             }
 
@@ -87,7 +90,7 @@ namespace EDDiscovery.UserControls.Colonisation
 
         private void DataGridViewRL_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (e.Column == ColRLPayment || e.Column == ColRLProvided || e.Column == ColRLRequired)
+            if (e.Column == ColRLPayment || e.Column == ColRLProvided || e.Column == ColRLRequired || e.Column == ColRLRemaining)
                 e.SortDataGridViewColumnNumeric();
         }
 

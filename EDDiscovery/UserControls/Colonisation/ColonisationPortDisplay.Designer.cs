@@ -31,10 +31,6 @@
             this.extPanelDataGridViewScrollRL = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarRL = new ExtendedControls.ExtScrollBar();
             this.dataGridViewRL = new System.Windows.Forms.DataGridView();
-            this.ColRLName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColRLRequired = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColRLProvided = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColRLPayment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extPanelGradientFill1 = new ExtendedControls.ExtPanelGradientFill();
             this.extCheckBoxShowContributions = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxShowRL = new ExtendedControls.ExtCheckBox();
@@ -49,6 +45,11 @@
             this.colContributionsAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extPanelDataGridViewScrollContributions = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarContributions = new ExtendedControls.ExtScrollBar();
+            this.ColRLName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColRLRequired = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColRLProvided = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColRLRemaining = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColRLPayment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extPanelDataGridViewScrollRL.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRL)).BeginInit();
             this.extPanelGradientFill1.SuspendLayout();
@@ -64,6 +65,7 @@
             this.extPanelDataGridViewScrollRL.InternalMargin = new System.Windows.Forms.Padding(0);
             this.extPanelDataGridViewScrollRL.Location = new System.Drawing.Point(0, 86);
             this.extPanelDataGridViewScrollRL.Name = "extPanelDataGridViewScrollRL";
+            this.extPanelDataGridViewScrollRL.ScrollBarWidth = 24;
             this.extPanelDataGridViewScrollRL.Size = new System.Drawing.Size(772, 227);
             this.extPanelDataGridViewScrollRL.TabIndex = 4;
             this.extPanelDataGridViewScrollRL.VerticalScrollBarDockRight = true;
@@ -80,7 +82,7 @@
             this.extScrollBarRL.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarRL.HideScrollBar = false;
             this.extScrollBarRL.LargeChange = 0;
-            this.extScrollBarRL.Location = new System.Drawing.Point(753, 0);
+            this.extScrollBarRL.Location = new System.Drawing.Point(748, 0);
             this.extScrollBarRL.Maximum = -1;
             this.extScrollBarRL.Minimum = 0;
             this.extScrollBarRL.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -88,13 +90,13 @@
             this.extScrollBarRL.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarRL.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarRL.Name = "extScrollBarRL";
-            this.extScrollBarRL.Size = new System.Drawing.Size(19, 227);
+            this.extScrollBarRL.Size = new System.Drawing.Size(24, 227);
+            this.extScrollBarRL.SkinnyStyle = false;
             this.extScrollBarRL.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarRL.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarRL.SliderDrawAngle = 90F;
             this.extScrollBarRL.SmallChange = 1;
             this.extScrollBarRL.TabIndex = 1;
-            this.extScrollBarRL.Text = "";
             this.extScrollBarRL.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarRL.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarRL.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -112,38 +114,14 @@
             this.ColRLName,
             this.ColRLRequired,
             this.ColRLProvided,
+            this.ColRLRemaining,
             this.ColRLPayment});
             this.dataGridViewRL.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewRL.Name = "dataGridViewRL";
             this.dataGridViewRL.RowHeadersVisible = false;
             this.dataGridViewRL.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewRL.Size = new System.Drawing.Size(753, 227);
+            this.dataGridViewRL.Size = new System.Drawing.Size(748, 227);
             this.dataGridViewRL.TabIndex = 0;
-            // 
-            // ColRLName
-            // 
-            this.ColRLName.FillWeight = 200F;
-            this.ColRLName.HeaderText = "Name";
-            this.ColRLName.Name = "ColRLName";
-            this.ColRLName.ReadOnly = true;
-            // 
-            // ColRLRequired
-            // 
-            this.ColRLRequired.HeaderText = "Required";
-            this.ColRLRequired.Name = "ColRLRequired";
-            this.ColRLRequired.ReadOnly = true;
-            // 
-            // ColRLProvided
-            // 
-            this.ColRLProvided.HeaderText = "Provided";
-            this.ColRLProvided.Name = "ColRLProvided";
-            this.ColRLProvided.ReadOnly = true;
-            // 
-            // ColRLPayment
-            // 
-            this.ColRLPayment.HeaderText = "Payment";
-            this.ColRLPayment.Name = "ColRLPayment";
-            this.ColRLPayment.ReadOnly = true;
             // 
             // extPanelGradientFill1
             // 
@@ -319,7 +297,7 @@
             this.dataGridViewContributions.Name = "dataGridViewContributions";
             this.dataGridViewContributions.RowHeadersVisible = false;
             this.dataGridViewContributions.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewContributions.Size = new System.Drawing.Size(753, 227);
+            this.dataGridViewContributions.Size = new System.Drawing.Size(748, 227);
             this.dataGridViewContributions.TabIndex = 0;
             // 
             // colContributionsTime
@@ -349,6 +327,7 @@
             this.extPanelDataGridViewScrollContributions.InternalMargin = new System.Windows.Forms.Padding(0);
             this.extPanelDataGridViewScrollContributions.Location = new System.Drawing.Point(0, 313);
             this.extPanelDataGridViewScrollContributions.Name = "extPanelDataGridViewScrollContributions";
+            this.extPanelDataGridViewScrollContributions.ScrollBarWidth = 24;
             this.extPanelDataGridViewScrollContributions.Size = new System.Drawing.Size(772, 227);
             this.extPanelDataGridViewScrollContributions.TabIndex = 5;
             this.extPanelDataGridViewScrollContributions.VerticalScrollBarDockRight = true;
@@ -365,7 +344,7 @@
             this.extScrollBarContributions.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarContributions.HideScrollBar = false;
             this.extScrollBarContributions.LargeChange = 0;
-            this.extScrollBarContributions.Location = new System.Drawing.Point(753, 0);
+            this.extScrollBarContributions.Location = new System.Drawing.Point(748, 0);
             this.extScrollBarContributions.Maximum = -1;
             this.extScrollBarContributions.Minimum = 0;
             this.extScrollBarContributions.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -373,13 +352,13 @@
             this.extScrollBarContributions.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarContributions.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarContributions.Name = "extScrollBarContributions";
-            this.extScrollBarContributions.Size = new System.Drawing.Size(19, 227);
+            this.extScrollBarContributions.Size = new System.Drawing.Size(24, 227);
+            this.extScrollBarContributions.SkinnyStyle = false;
             this.extScrollBarContributions.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarContributions.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarContributions.SliderDrawAngle = 90F;
             this.extScrollBarContributions.SmallChange = 1;
             this.extScrollBarContributions.TabIndex = 1;
-            this.extScrollBarContributions.Text = "";
             this.extScrollBarContributions.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarContributions.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarContributions.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -387,7 +366,37 @@
             this.extScrollBarContributions.Value = -1;
             this.extScrollBarContributions.ValueLimited = -1;
             // 
-            // ColonisationPort
+            // ColRLName
+            // 
+            this.ColRLName.FillWeight = 200F;
+            this.ColRLName.HeaderText = "Name";
+            this.ColRLName.Name = "ColRLName";
+            this.ColRLName.ReadOnly = true;
+            // 
+            // ColRLRequired
+            // 
+            this.ColRLRequired.HeaderText = "Required";
+            this.ColRLRequired.Name = "ColRLRequired";
+            this.ColRLRequired.ReadOnly = true;
+            // 
+            // ColRLProvided
+            // 
+            this.ColRLProvided.HeaderText = "Provided";
+            this.ColRLProvided.Name = "ColRLProvided";
+            this.ColRLProvided.ReadOnly = true;
+            // 
+            // ColRLRemaining
+            // 
+            this.ColRLRemaining.HeaderText = "Remaining";
+            this.ColRLRemaining.Name = "ColRLRemaining";
+            // 
+            // ColRLPayment
+            // 
+            this.ColRLPayment.HeaderText = "Payment";
+            this.ColRLPayment.Name = "ColRLPayment";
+            this.ColRLPayment.ReadOnly = true;
+            // 
+            // ColonisationPortDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -395,7 +404,7 @@
             this.Controls.Add(this.extPanelDataGridViewScrollContributions);
             this.Controls.Add(this.extPanelDataGridViewScrollRL);
             this.Controls.Add(this.extPanelGradientFill1);
-            this.Name = "ColonisationPort";
+            this.Name = "ColonisationPortDisplay";
             this.Size = new System.Drawing.Size(772, 577);
             this.extPanelDataGridViewScrollRL.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRL)).EndInit();
@@ -418,10 +427,6 @@
         private System.Windows.Forms.DataGridView dataGridViewRL;
         private ExtendedControls.LabelData labelDataProgress;
         private ExtendedControls.ExtLabel extLabelFailed;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColRLName;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColRLRequired;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColRLProvided;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ColRLPayment;
         private System.Windows.Forms.DataGridView dataGridViewContributions;
         private ExtendedControls.ExtCheckBox extCheckBoxShowRL;
         private ExtendedControls.ExtCheckBox extCheckBoxShowContributions;
@@ -430,5 +435,10 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colContributionsTime;
         private System.Windows.Forms.DataGridViewTextBoxColumn colContributionsName;
         private System.Windows.Forms.DataGridViewTextBoxColumn colContributionsAmount;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColRLName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColRLRequired;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColRLProvided;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColRLRemaining;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColRLPayment;
     }
 }
