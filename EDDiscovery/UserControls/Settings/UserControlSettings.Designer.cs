@@ -1237,8 +1237,7 @@ namespace EDDiscovery.UserControls
             this.labelSafeMode.Name = "labelSafeMode";
             this.labelSafeMode.Size = new System.Drawing.Size(235, 65);
             this.labelSafeMode.TabIndex = 5;
-            this.labelSafeMode.Text = "Click this to perform special operations, such as to move system databases to ano" +
-    "ther drive, reset UI, and other maintenance tasks...\r\n\r\n";
+            this.labelSafeMode.Text = "Click this to perform special operations, such as to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n";
             // 
             // extButtonUnDelete
             // 

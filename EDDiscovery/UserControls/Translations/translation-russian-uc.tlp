@@ -537,7 +537,7 @@ SECTION UserControlModules
 .extButtonLoadLoadout.ToolTip: "Import a ship definition for display" @
 
 .ForceSell: "Force Sell" @
-.ConfirmForceSell: "Confirm sell of ship" @
+.ConfirmForceSell: "Confirm sell of ship:" @
 .StoredModules: "Stored Modules" => "Модули в хранилище"
 .TravelHistoryEntry: "Travel History Entry" => "Запись истории полетов"
 .OwnedShips: "Owned Ships" @
@@ -633,7 +633,7 @@ SECTION UserControlRoute
 .extCheckBoxPermitSystems: "Use Permit Systems" @
 .groupBoxInternal: "EDD Router" @
 .labelMetric: "Metric" => "Режим"
-.extButtonRoute: "Find route" => "Построить маршрут"
+.extButtonRoute: "Find Route" => "Построить маршрут"
 .groupBoxPara: "Parameters" @
 .checkBox_FsdBoost: "Use Boosts" @
 .labelFrom: "From" => "Из"
@@ -1574,7 +1574,7 @@ SECTION UserControlCarrier
 .DecommissionedOn: "Decommissioning on" @
 .Cargo: "Cargo: ; t;N0" @
 .Services: "Services: ; t;N0" @
-.Shippacks: "Ship packs: ; t;N0" @
+.Shippacks: "Ship Packs: ; t;N0" @
 .Modulepacks: "Module Packs: ; t;N0" @
 .Reservedspace: "Reserved Space: ; t;N0" @
 .Freespace: "Free Space: ; t;N0" @
@@ -1603,7 +1603,7 @@ SECTION UserControlCarrier
 .Suspendedupkeepcost: "Suspended upkeep cost: ; cr;N0" @
 .CrewName: "Crew Name: " @
 .ServiceActive: "This Service is Active" @
-.ServiceSuspended: "This service is suspended" @
+.ServiceSuspended: "This Service is Suspended" @
 .ServiceNotInstalled: "This Service is Not Installed" @
 .NoPacks: "No Module or Ship packs installed" @
 .Tier: "Tier " @

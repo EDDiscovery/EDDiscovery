@@ -891,7 +891,7 @@ namespace EDDiscovery.UserControls
 
                         if ( nocarrier )
                         {
-                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Commander has no carrier".TxID(EDTx.UserControlCarrier_NoCarrier),
+                            ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Carrier".TxID(EDTx.UserControlCarrier_NoCarrier),
                                 "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                         else if ( fc == null  )
@@ -906,8 +906,8 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "You are not logged into CAPI." + Environment.NewLine +
-                    "Go to the settings page and select your commanders settings, and log into CAPI.".TxID(EDTx.UserControlCarrier_NotLoggedIn),
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(),
+                    "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI.".TxID(EDTx.UserControlCarrier_NotLoggedIn),
                     "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }

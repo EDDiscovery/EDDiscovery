@@ -60,7 +60,7 @@ namespace EDDiscovery.UserControls
             this.extButton1.Name = "extButton1";
             this.extButton1.Size = new System.Drawing.Size(75, 23);
             this.extButton1.TabIndex = 1;
-            this.extButton1.Text = "extButton1";
+            this.extButton1.Text = "<code extButton1>";
             this.extButton1.UseVisualStyleBackColor = true;
             // 
             // extTabControl1
@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage1.Size = new System.Drawing.Size(192, 74);
             this.tabPage1.TabIndex = 0;
-            this.tabPage1.Text = "tabPage1";
+            this.tabPage1.Text = "<code tabPage1>";
             this.tabPage1.UseVisualStyleBackColor = true;
             // 
             // tabPage2
@@ -102,7 +102,7 @@ namespace EDDiscovery.UserControls
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(192, 74);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "tabPage2";
+            this.tabPage2.Text = "<code tabPage2>";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
             // extCheckBox1
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBox1.Name = "extCheckBox1";
             this.extCheckBox1.Size = new System.Drawing.Size(95, 17);
             this.extCheckBox1.TabIndex = 3;
-            this.extCheckBox1.Text = "extCheckBox1";
+            this.extCheckBox1.Text = "<code extCheckBox1>";
             this.extCheckBox1.TickBoxReductionRatio = 0.75F;
             this.extCheckBox1.UseVisualStyleBackColor = true;
             // 

@@ -442,7 +442,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBar2.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBar2.SmallChange = 1;
             this.extScrollBar2.TabIndex = 0;
-            this.extScrollBar2.Text = "extScrollBar2";
+            this.extScrollBar2.Text = "";
             this.extScrollBar2.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBar2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBar2.ThumbDrawAngle = 0F;

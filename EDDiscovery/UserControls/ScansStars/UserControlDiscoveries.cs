@@ -88,7 +88,7 @@ namespace EDDiscovery.UserControls
             dataGridView.GotoEntryClicked += (he) =>
             {
                 if (RequestPanelOperation(this, new UserControlCommonBase.RequestTravelToJID() { JID = he.Journalid, MakeVisible = true }) == PanelActionState.Failed)
-                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry is filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
             };
 
         }

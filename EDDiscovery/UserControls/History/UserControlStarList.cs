@@ -675,7 +675,7 @@ namespace EDDiscovery.UserControls
                 FireChangeSelection();
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry is filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
         }
 
         #endregion
@@ -790,7 +790,7 @@ namespace EDDiscovery.UserControls
             displayfilter.UC.Add("beltcluster", "Show Belt Clusters".TxID(EDTx.UserControlSurveyor_showBeltClustersToolStripMenuItem), global::EDDiscovery.Icons.Controls.Belt);
             displayfilter.UC.Add("valueables", "Show valuable bodies".T(EDTx.UserControlStarList_valueables), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
             displayfilter.UC.Add("jumponium", "Show/Hide presence of Jumponium Materials".T(EDTx.UserControlStarList_JUMP), global::EDDiscovery.Icons.Controls.Scan_FSD);
-            displayfilter.UC.Add("signals", "Has Signals".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasSignalsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.UC.Add("signals", "Has any other signals".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasSignalsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
             displayfilter.UC.Add("volcanism", "Has volcanism".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasVolcanismToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism);
             displayfilter.UC.Add("values", "Show values".TxID(EDTx.UserControlSurveyor_showValuesToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
             displayfilter.UC.Add("shortinfo", "Show more information".TxID(EDTx.UserControlSurveyor_showMoreInformationToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);

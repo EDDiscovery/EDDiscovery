@@ -101,7 +101,7 @@
             // 
             this.viewOnSpanshToolStripMenuItem.Name = "viewOnSpanshToolStripMenuItem";
             this.viewOnSpanshToolStripMenuItem.Size = new System.Drawing.Size(186, 22);
-            this.viewOnSpanshToolStripMenuItem.Text = "View On Spansh";
+            this.viewOnSpanshToolStripMenuItem.Text = "View on Spansh";
             this.viewOnSpanshToolStripMenuItem.Click += new System.EventHandler(this.viewOnSpanshToolStripMenuItem_Click);
             // 
             // viewOnEDSMToolStripMenuItem

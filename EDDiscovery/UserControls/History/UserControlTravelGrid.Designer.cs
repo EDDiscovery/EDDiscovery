@@ -443,28 +443,28 @@ namespace EDDiscovery.UserControls
             // trilaterationToolStripMenuItem
             // 
             this.trilaterationToolStripMenuItem.Name = "trilaterationToolStripMenuItem";
-            this.trilaterationToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.trilaterationToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.trilaterationToolStripMenuItem.Text = "System on Trilateration Panel";
             this.trilaterationToolStripMenuItem.Click += new System.EventHandler(this.trilaterationToolStripMenuItem_Click);
             // 
             // wantedSystemsToolStripMenuItem
             // 
             this.wantedSystemsToolStripMenuItem.Name = "wantedSystemsToolStripMenuItem";
-            this.wantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.wantedSystemsToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.wantedSystemsToolStripMenuItem.Text = "Wanted Systems on Trilateration Panel";
             this.wantedSystemsToolStripMenuItem.Click += new System.EventHandler(this.wantedSystemsToolStripMenuItem_Click);
             // 
             // bothToolStripMenuItem
             // 
             this.bothToolStripMenuItem.Name = "bothToolStripMenuItem";
-            this.bothToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.bothToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.bothToolStripMenuItem.Text = "Both of the above";
             this.bothToolStripMenuItem.Click += new System.EventHandler(this.bothToolStripMenuItem_Click);
             // 
             // expeditionToolStripMenuItem
             // 
             this.expeditionToolStripMenuItem.Name = "expeditionToolStripMenuItem";
-            this.expeditionToolStripMenuItem.Size = new System.Drawing.Size(275, 22);
+            this.expeditionToolStripMenuItem.Size = new System.Drawing.Size(276, 22);
             this.expeditionToolStripMenuItem.Text = "Expedition Panel";
             this.expeditionToolStripMenuItem.Click += new System.EventHandler(this.expeditionToolStripMenuItem_Click);
             // 
@@ -645,7 +645,6 @@ namespace EDDiscovery.UserControls
             this.extComboBoxQuickMarks.SelectedValue = null;
             this.extComboBoxQuickMarks.Size = new System.Drawing.Size(139, 21);
             this.extComboBoxQuickMarks.TabIndex = 0;
-            this.extComboBoxQuickMarks.Text = "Go to a marked entry";
             this.extComboBoxQuickMarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.extComboBoxQuickMarks, "Go to a marked journal entry. Use right click to mark an entry");
             this.extComboBoxQuickMarks.ValueMember = "";

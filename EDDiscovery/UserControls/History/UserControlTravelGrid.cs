@@ -1243,7 +1243,7 @@ namespace EDDiscovery.UserControls
             List<long> jids = extComboBoxQuickMarks.Tag as List<long>;
             long jid = jids[extComboBoxQuickMarks.SelectedIndex];
             if (!GotoPosByJID(jid))
-                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry is filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
         }
 
         #endregion

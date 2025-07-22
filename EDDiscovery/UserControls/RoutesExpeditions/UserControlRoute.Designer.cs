@@ -306,7 +306,7 @@
             this.extButtonRoute.Name = "extButtonRoute";
             this.extButtonRoute.Size = new System.Drawing.Size(111, 27);
             this.extButtonRoute.TabIndex = 40;
-            this.extButtonRoute.Text = "Find route";
+            this.extButtonRoute.Text = "Find Route";
             this.toolTip.SetToolTip(this.extButtonRoute, "Compute the route");
             this.extButtonRoute.UseVisualStyleBackColor = true;
             this.extButtonRoute.Click += new System.EventHandler(this.button_Route_Click);
