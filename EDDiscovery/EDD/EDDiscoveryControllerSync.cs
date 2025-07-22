@@ -148,17 +148,20 @@ namespace EDDiscovery
                                         syncstate.fullsync_count = SystemsDatabase.Instance.CreateSystemDBFromJSONFile(downloadfile, grids, 200000, PendingClose.Token, ReportSyncProgress, method: 3);
 
                                         if (deletefile && !PendingClose.IsCancellationRequested)        // if remove file, and we are not cancelled, delete it
-                                            BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       
+                                            BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);
 
                                         if (syncstate.fullsync_count < 0)     // this should always update something, the table is replaced.  If its not, its been cancelled
+                                        {
+                                            InvokeAsyncOnUiThread(() => PerformSyncCompletedonUI());
                                             return;
+                                        }
                                     }
                                     else
                                     {
-                                        ReportSyncProgress("");
                                         LogLineHighlight("Failed to download full systems file. Try re-running EDD later");
                                         BaseUtils.FileHelpers.DeleteFileNoError(downloadfile);       // remove file - don't hold in storage
-                                        return;     // new! if we failed to download, fail here, wait for another time
+                                        InvokeAsyncOnUiThread(() => PerformSyncCompletedonUI());
+                                        return;
                                     }
                                 }
                             }

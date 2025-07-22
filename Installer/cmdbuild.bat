@@ -34,8 +34,7 @@ echo Assembly passed
 echo .
 echo Building default act files into %exefolder%
 del %exefolder%\defaultactfiles.zip >nul
-powershell compress-archive -Path ..\..\EDDiscoveryData\ActionFiles\V1\*.act -DestinationPath %exefolder%\defaultactfiles.zip
-
+powershell compress-archive -Path ..\..\EDDiscoveryData\ActionFiles\V1\*.* -DestinationPath %exefolder%\defaultactfiles.zip
 
 echo.
 echo Build %vno%
