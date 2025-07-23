@@ -21,11 +21,12 @@ echo ExeFile is %exefile%, Want version `%vno%`
 if "%vno%"=="" goto :errorVER
 
 rem windows 11 does not support - need powershell? wmic datafile where Name="%exefile%" get Version |more >%TMP%\vno.txt
-
 rem find "%vno%" %TMP%\vno.txt
 rem if %ERRORLEVEL%==1 goto :errorEXE
 
 echo Exe passed
+
+if "%CAPIID%"=="" goto :errorCAPI
 
 find "%vno%" ..\eddiscovery\properties\AssemblyInfo.cs
 if %ERRORLEVEL%==1 goto :errorAI
@@ -56,6 +57,11 @@ exit /b
 
 :errorVER
 echo Must give version on command line, example: build 16.1.1
+exit /b
+
+
+:errorCAPI
+echo No CAPIID variable defined
 exit /b
 
 
