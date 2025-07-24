@@ -27,6 +27,8 @@ rem if %ERRORLEVEL%==1 goto :errorEXE
 
 echo Exe passed
 
+if "%CAPIID%"=="" goto :errorCAPI
+
 find "%vno%" ..\eddiscovery\properties\AssemblyInfo.cs
 if %ERRORLEVEL%==1 goto :errorAI
 echo Assembly passed
@@ -34,7 +36,7 @@ echo Assembly passed
 echo .
 echo Building default act files into %exefolder%
 del %exefolder%\defaultactfiles.zip >nul
-powershell compress-archive -Path ..\..\EDDiscoveryData\ActionFiles\V1\*.act -DestinationPath %exefolder%\defaultactfiles.zip
+powershell compress-archive -Path ..\..\EDDiscoveryData\ActionFiles\V1\*.* -DestinationPath %exefolder%\defaultactfiles.zip
 
 
 echo.
@@ -59,4 +61,8 @@ exit /b
 echo Must give version on command line, example: build 16.1.1
 exit /b
 
+
+:errorCAPI
+echo No CAPIID variable defined
+exit /b
 
