@@ -29,7 +29,7 @@ namespace EDDiscovery.UserControls
 
         const int topmargin = 30;
         const int dataleft = 140;
-        Size numberboxsize = new Size(64, 24);
+        Size numberboxsize = new Size(100, 24);
         Size comboboxsize = new Size(200, 24);
         Size textboxsize = new Size(200, 28);
         Size checkboxsize = new Size(154, 24);
