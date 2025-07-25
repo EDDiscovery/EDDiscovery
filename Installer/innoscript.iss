@@ -63,9 +63,8 @@ Source: "eddwebsite.zip"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "defaultactfiles.zip"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\Translations\*.tlf"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\UserControls\Translations\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "..\..\..\EliteDangerousCore\EliteDangerous\EliteDangerous\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
+Source: "..\..\..\EliteDangerousCore\EliteDangerous\Translations\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
 Source: "..\..\..\Installer\ExtraFiles\EUROCAPS.TTF"; DestDir: "{app}"; Flags: ignoreversion;
-Source: "..\..\..\EliteDangerousCore\EliteDangerous\JournalEvents\*.tlp"; DestDir: "{app}"; Flags: ignoreversion;
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]
