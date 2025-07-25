@@ -105,14 +105,14 @@ namespace EDDiscovery.Forms
             string exptext = exception.ToString();
             if (exptext.Contains("SQLLiteExtensions.SQLProcessingThreadException:"))
             {
-                if ( exptext.Contains("EliteDangerous\\Systems\\"))     // detect by path so all inside this folder are caught
+                if ( exptext.Contains("\\Systems\\"))     // detect by path so all inside this folder are caught
                 {
                     textBoxRecoveryDetails.Text = "It appears that your system database has been corrupted" + DoubleNewLine +
                             "Your best option is to delete it." + DoubleNewLine +
                             "Hold down shift and rerun EDD. This will bring up the safe mode dialog" + Environment.NewLine +
                             "Use the option to delete the system DB, and then let EDD rebuild it";
                 }
-                else if ( exptext.Contains("EliteDangerous\\DB\\"))
+                else if ( exptext.Contains("\\DB\\"))
                 {
                     textBoxRecoveryDetails.Text = "It appears that your user database has been corrupted" + DoubleNewLine +
                             "Your best option is to delete it. As long as you have the journal records still in your Elite folders then EDD will rebuild your history" + DoubleNewLine +
