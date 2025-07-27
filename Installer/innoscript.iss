@@ -110,7 +110,6 @@ var SettoAppData: TButton;
 // callbacks for the data dir page
 
 procedure OnClickSetChangeDataFolder(Sender: TObject);
-var installunderpf:Boolean;
 begin
   if ( DataDirPage.Values[0] = 'c:\' ) then begin // if we have a c:\ default marker in there, we are installing to PFs, but they want a custom location, so pick a default one
       DataDirPage.Values[0] := 'c:\EDDiscoveryData';
