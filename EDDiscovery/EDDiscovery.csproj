@@ -1308,8 +1308,7 @@
       <ZipFiles Include="$(OutDir)eddwebsite.zip" />
       <ZipFiles Include="$(MSBuildProjectDirectory)\Translations\*.tlf" />
       <ZipFiles Include="$(MSBuildProjectDirectory)\UserControls\Translations\*.tlp" />
-      <ZipFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerousCore\EliteDangerous\EliteDangerous\*.tlp" />
-      <ZipFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerousCore\EliteDangerous\JournalEvents\*.tlp" />
+      <ZipFiles Include="$(MSBuildProjectDirectory)\..\EliteDangerousCore\EliteDangerous\Translations\*.tlp" />
       <ZipFiles Include="$(ProjectDir)optionsportable.txt" />
       <Zipfiles Include="$(OutDir)x64\SQLite.Interop.dll">
         <Name>x64\SQLite.Interop.dll</Name>
