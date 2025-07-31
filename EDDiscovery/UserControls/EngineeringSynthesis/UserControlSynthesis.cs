@@ -110,17 +110,8 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
 
-            var enumlist = new Enum[] { EDTx.UserControlSynthesis_UpgradeCol, EDTx.UserControlSynthesis_Level, EDTx.UserControlSynthesis_MaxCol, 
-                        EDTx.UserControlSynthesis_WantedCol, EDTx.UserControlSynthesis_Available, EDTx.UserControlSynthesis_Notes, 
-                        EDTx.UserControlSynthesis_Recipe };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-
-            var enumlisttt = new Enum[] { EDTx.UserControlSynthesis_buttonRecipeFilter_ToolTip, EDTx.UserControlSynthesis_buttonFilterLevel_ToolTip, 
-                                EDTx.UserControlSynthesis_buttonMaterialFilter_ToolTip, EDTx.UserControlSynthesis_buttonClear_ToolTip, 
-                                EDTx.UserControlSynthesis_chkNotHistoric_ToolTip, EDTx.UserControlSynthesis_extCheckBoxWordWrap_ToolTip,
-                                EDTx.UserControlSynthesis_extButtonPushResources_ToolTip};
-
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
         }
 
         public override void LoadLayout()

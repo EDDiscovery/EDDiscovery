@@ -1,1756 +1,1378 @@
 ﻿
 SECTION UserControlBookmarks
 
-.ColType: "Bookmark Type" => "Тип закладки"
-.ColBookmarkName: "Bookmark Name" => "Название закладки"
-.ColDescription: "Description" => "Описание"
-.labelSearch: "Search" => "Поиск"
-.buttonDelete.ToolTip: "Delete selected bookmark" => "Удалить выбранную закладку"
-.buttonNew.ToolTip: "New Bookmark" => "Новая закладка"
-.buttonEdit.ToolTip: "Edit Selected Bookmark" => "Изменить выбранную закладку"
-.textBoxFilter.ToolTip: "Search for Bookmark" => "Поиск в закладках"
-.CFN: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" => "Вы действительно хотите удалить закладки ({0} шт.)?"
-.CF: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" => "Вы действительно хотите удалить закладки для {0}?"
-.SysU: "System could not be found - has not been synched or EDSM is unavailable" => "Не удалось найти систему, нет синхронизации или доступа к EDSM"
-.buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" => "Импорт закладок из csv-файла в EDD"
-.buttonExtExcel.ToolTip: "Export bookmarks to CSV file" => "Экспорт закладок в csv-файл"
-.extButtonEditSystem.ToolTip: "New bookmark on current system" @
-.extButtonNewRegion.ToolTip: "New Region Bookmark" @
-.ColTags: "Tags" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
-.buttonTags.ToolTip: "Edit Tags" @
-.addToExpeditionToolStripMenuItem: "Add to Expedition" @
+CF7ABE3724E426: "Bookmark Type" => "Тип закладки"
+B98F2462F08F82: "Bookmark Name" => "Название закладки"
+2E89129D66743F: "Delete selected bookmark" => "Удалить выбранную закладку"
+D2A5C67BBEE822: "New Bookmark" => "Новая закладка"
+6319AA02C9FB73: "Edit Selected Bookmark" => "Изменить выбранную закладку"
+B85750D457FE9A: "Search for Bookmark" => "Поиск в закладках"
+E398338D28B496: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" => "Вы действительно хотите удалить закладки ({0} шт.)?"
+882252A12A74FC: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" => "Вы действительно хотите удалить закладки для {0}?"
+90DFF113AC3FB4: "System could not be found - has not been synched or EDSM is unavailable" => "Не удалось найти систему, нет синхронизации или доступа к EDSM"
+568BA6A0FCB8CE: "Import bookmarks to EDD from CSV file" => "Импорт закладок из csv-файла в EDD"
+4E0D3ABD07EF26: "Export bookmarks to CSV file" => "Экспорт закладок в csv-файл"
+D3D49E22353948: "New bookmark on current system" => "Bearbeite Lesezeichen des aktuellen Systems"
+0F2EFE41F3122D: "New Region Bookmark" => "Neues Regionslesezeichen"
+848EED0FBD5429: "Tags" => "Marke"
+87CA81FA83093E: "Filter out entries based on tag" => "Einträge anhand von Marke filtern"
+B15BC9CCE1BA39: "Edit Tags" => "Marken bearbeiten"
+31992A69737FC4: "Add to Expedition" => "Zur Expediton hinzufügen"
 
 SECTION UserControlCombatPanel
 
-.Time: "Time" = Time
-.Event: "Event" => "Событие"
-.Description: "Description" = UserControlBookmarks.ColDescription
-.Reward: "Reward" => "Награда"
-.labelCredits: "Credits" => "Кредиты"
-.labelTotalKills: "Kills" => "Убийства"
-.labelFactionKills: "Faction Kills" => "Фракционные убийства"
-.labelBalance: "Balance" => "Остаток"
-.labelDied: "Died" @
-.labelTotalCrimes: "Crimes" => "Преступления"
-.labelTarget: "Target" => "Цель"
-.labelFaction: "Faction" => "Фракция"
-.labelTotalReward: "TotalReward" => "Общая награда"
-.labelFactionReward: "FactionReward" => "Фракционная награда"
-.buttonExtEditCampaign: "Edit" => "Изм."
-.checkBoxCustomGridOn: "Grid" => "Сетка"
-.labelCredits.ToolTip: "Current Credits" => "Текущие кредиты"
-.labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" => "Всего убийств за кампанию"
-.labelFactionKills.ToolTip: "Faction Kills" => "Фракционных убийств"
-.labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" => "Общая награда за вычетом всех расходов (штрафы, выкуп и пр.)"
-.labelTotalCrimes.ToolTip: "How many times you've been caught!" => "Сколько раз вас поймали"
-.labelFaction.ToolTip: "Target Faction" => "Целевая фракция"
-.labelTotalReward.ToolTip: "Total reward" = UserControlCombatPanel.labelTotalReward
-.labelFactionReward.ToolTip: "Reward associated with destroying the faction ships" => "Награда за уничтожение фракционных кораблей"
-.comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "Выберите кампанию для просмотра"
-.buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "Изменить пользовательскую кампанию"
-.checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "Показывать сетку в режиме прозрачности"
-.NT: "No Target" => "Нет цели"
-.NewCampaign: "New Campaign" => "Новая кампания"
-.SinceLastDock: "Since Last Dock" => "С момента последней стыковки"
-.Name: "Name" => "Название"
-.C1: "Give name to campaign" => "Назовите кампанию"
-.Faction: "Faction" = UserControlCombatPanel.labelFaction
-.C2: "Optional faction to target" => "Выберите фракцию для атаки (необязательно)"
-.Start: "Start" => "Начало"
-.C3: "Select Start time" => "Выберите время начала кампании"
-.End: "End" => "Конец: "
-.C4: "Select Start time" => "Выберите время завершения кампании"
-.C5: "Press to Accept" => "Принять"
-.C6: "Press to Cancel" = Cancel
-.C7: "Press to Delete" = Delete
-.NoOverwrite: "Name of campaign already in use, cannot overwrite" => "Кампания с таким названием уже есть"
-.Condel: "Confirm deletion of {0}" => "Вы действительно хотите удалить {0}?"
-.NC: "Name changed - can't delete" => "Название изменено, удаление невозможно"
-.Kills: "Kills" => "Убийств"
-.Crimes: "Crimes" => "Преступлений"
-.Bal: "Bal" => "Баланс"
+AD8919ACE091B1: "Event" => "Событие"
+C7D7652EC6A795: "Reward" => "Награда"
+BFAC50D6424B51: "Credits" => "Кредиты"
+9EC34025B6DB16: "Kills" => "Убийства"
+645DE66F0C79ED: "Faction Kills" => "Фракционные убийства"
+90EEF613042C5A: "Balance" => "Остаток"
+68316444B99C6B: "Died" => "Gestorben"
+000C7B010AA15B: "Crimes" => "Преступления"
+61AD50A9B9189C: "Target" => "Цель"
+9D269517397775: "Faction" => "Фракция"
+A116A463F16F3B: "TotalReward" => "Общая награда"
+2AD918FF81A2C4: "FactionReward" => "Фракционная награда"
+078EB757BF1155: "Current Credits" => "Текущие кредиты"
+6B3534A2242650: "Total kills (NPC/PVP) in campaign" => "Всего убийств за кампанию"
+6344C1B665774D: "Total reward less any costs (fines, rebuys etc)" => "Общая награда за вычетом всех расходов (штрафы, выкуп и пр.)"
+3E680888D11E9A: "How many times you've been caught!" => "Сколько раз вас поймали"
+FCAA3EA68677B6: "Target Faction" => "Целевая фракция"
+0A11B11F4BD307: "Total reward" => "Общая награда"
+68C7A5D8D1ECF1: "Reward associated with destroying the faction ships" => "Награда за уничтожение фракционных кораблей"
+2A4D800653DEFF: "Select Campaign to view" => "Выберите кампанию для просмотра"
+986756D007F78B: "Edit user defined campaign" => "Изменить пользовательскую кампанию"
+52DF2DF585563D: "Show grid when in transparent mode" => "Показывать сетку в режиме прозрачности"
+C0BEED0FD04454: "No Target" => "Нет цели"
+1F0D021C027337: "New Campaign" => "Новая кампания"
+FDCE09ED980672: "Since Last Dock" => "С момента последней стыковки"
+17395737697D96: "Give name to campaign" => "Назовите кампанию"
+E8EFD7F8053084: "Optional faction to target" => "Выберите фракцию для атаки (необязательно)"
+952F375412E89F: "Start" => "Начало"
+B42FF2D11E4363: "Select Start time" => "Выберите время начала кампании"
+A2BB9D34B8A1A7: "End" => "Конец: "
+1510FD8CF43BD1: "Press to Delete" => "Удалить"
+AC6345BDC5189A: "Name of campaign already in use, cannot overwrite" => "Кампания с таким названием уже есть"
+C5A715320080CE: "Confirm deletion of {0}" => "Вы действительно хотите удалить {0}?"
+547C7CF9543709: "Name changed - can't delete" => "Название изменено, удаление невозможно"
+C99A37D48B4758: "Bal" => "Баланс"
 
 SECTION UserControlContainerGrid
 
-.buttonExtTile.ToolTip: "Tile the grid panels" => "Упорядочить панели"
-.buttonExtDelete.ToolTip: "Remove selected panel" => "Удалить выбранную панель"
-.buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "Выбрать панель"
+D57E1461B54A4D: "Tile the grid panels" => "Упорядочить панели"
+3E4ACCE04F4D52: "Remove selected panel" => "Удалить выбранную панель"
 
 SECTION UserControlCompass
 
-.labelTargetLat: "Target" = UserControlCombatPanel.labelTarget
-.numberBoxTargetLatitude.ToolTip: "Latitude of target position, blank for none" @
-.numberBoxTargetLongitude.ToolTip: "Longitude of target position, blank for none" @
-.comboBoxBookmarks.ToolTip: "Select known body feature or select bookmark" @
-.extButtonBlank.ToolTip: "Clear target latitude and longitude and selection" @
-.buttonNewBookmark.ToolTip: "Edit or create bookmark on system" @
-.extButtonShowControl.ToolTip: "Configure compass overlay" @
-.extButtonFont.ToolTip: "Configure font of compass" @
-.hidewhennolatlong: "Hide when Elite has no Lat/Long" @
-.hidewhennotarget: "Hide when no Lat/Long target is set" @
-.hidewhenonfoot: "Hide when on foot" @
-.cleartargetonleavingbody: "Clear target when leaving a body" @
-.hidewheninSRV: "Hide when in SRV" @
-.hidewheninship: "Hide when in ship" @
+05227E10EFA617: "Latitude of target position, blank for none" => "Breitengrad der Zielposition, leer für Nichts"
+E16DC0093C54A4: "Longitude of target position, blank for none" => "Langengrad der Zielposition, leer für Nichts"
+8DAF2F1FB42A69: "Select known body feature or select bookmark" => "Wähle bekanntes Körpermerkmal oder Lesezeichen"
+4F4F73D3580988: "Clear target latitude and longitude and selection" => "Lösche Zielbreiten- und Längengrad sowie Auswahl"
+40B4BA016F2820: "Edit or create bookmark on system" => "Bearbeite oder erstelle Systemlesezeichen"
+6757DB83BE30A7: "Configure compass overlay" => "Konfiguriere Kompassoverlay"
+3147F72CFDEFED: "Configure font of compass" => "Konfiguriere Kompassschrift"
+09C3677389910F: "Hide when Elite has no Lat/Long" => "Verbergen wenn Elite keine aktive Breite/Länge sendet"
+B2C71E235D149C: "Hide when no Lat/Long target is set" => "Verbergen wenn keine Breite/Länge als Zeil gesetzt wurde"
+BCFBA399BF71D3: "Hide when on foot" => "Verbergen wenn zu Fuß"
+B2529C881FD681: "Clear target when leaving a body" => "Lösche Ziel beim Verlassen des Körpers"
+5671BE2CC4E89E: "Hide when in SRV" => "Verberge wenn im SRV"
+DBF922321BB2C4: "Hide when in ship" => "Verberge wenn im Schiff"
 
 SECTION UserControlWebBrowser
 
-.extButtonIE11Warning: "Using IE11 - click here to get WebView2" @
-.extCheckBoxBack.ToolTip: "Back" @
-.checkBoxAutoTrack.ToolTip: "Track system in history panel" @
-.extCheckBoxAllowedList.ToolTip: "URLs" @
-.extCheckBoxStar.ToolTip: "Select another system to view" @
-.System: "System: " @
-.EnterSys: "Show System" @
+5C4856412380E1: "Using IE11 - click here to get WebView2" => "Benutze IE11 - hier klicken um WebView2 zu erhalten"
+E79777EDFFFA20: "Track system in history panel" => "Verfolge System im Historienpaneel"
+01F03837323AAB: "URLs" => "URLs"
+58CF52A56F41EA: "Select another system to view" => "Wähle ein anderes System zum Anzeigen"
+48984F66C09441: "System: " => "System: "
+D6335B2F4D21A6: "Show System" => "Zeige System"
 
 SECTION UserControlSearch
 
-.MaterialsCommodities: "Materials Commodities" => "Материалы/товары"
-.Stars: "Stars" => "Системы"
-.Scans: "Scans" => "Сканы"
+B6BE1D1F90812C: "Materials Commodities" => "Материалы/товары"
+ADB03812B4EF51: "Stars" => "Системы"
+71FAF74908ACAE: "Scans" => "Сканы"
 
 SECTION SearchMaterialsCommodities
 
-.RareCommodity: ", Rare Commodity" => ", редкий товар"
-.AND: "AND" => "И"
-.OR: "OR" => "ИЛИ"
-.DIS: "Discovered at " => "Обнаружено на "
-.COL: "Collected at " => "Собрано на "
-.MR: "Mission Reward at " @
-.label2: "Item 2" => "Предмет 2"
-.label1: "Item 1" => "Предмет 1"
-.ColumnDate: "Date" => "Дата"
-.ColumnStar: "Star" => "Система"
-.ColumnLocation: "Location" => "Местонахождение"
-.ColumnCurrentDistance: "Current Distance" => "Текущее расстояние"
-.ColumnPosition: "Position" => "Положение"
-.buttonExtExcel.ToolTip: "Output grid to CSV" @
-.buttonExtFind.ToolTip: "Find materials/commodities" @
-.comboBoxCustomCMANDOR.ToolTip: "Select the condition between Item 1 and 2" @
-.comboBoxCustomCM1.ToolTip: "Primary material or commodity to search for" @
-.comboBoxCustomCM2.ToolTip: "Secondary material or commodity to search for" @
+77EDFE8755BB52: ", Rare Commodity" => ", редкий товар"
+C2F934CB8CAB6C: "AND" => "И"
+F579C523960AF1: "OR" => "ИЛИ"
+E1988D908E0FDA: "Discovered at " => "Обнаружено на "
+99E5A4469C78D3: "Collected at " => "Собрано на "
+3F6D793961F187: "Mission Reward at " => "Missionsbelohnung bei"
+18CED5C76DB797: "Item 2" => "Предмет 2"
+14D5C9FDE290FE: "Item 1" => "Предмет 1"
+EB9A4BC1C0C153: "Date" => "Дата"
+85A7DE6E270547: "Star" => "Система"
+D219C68101F532: "Location" => "Местонахождение"
+84C078AF3EFE1A: "Current Distance" => "Текущее расстояние"
+CF1C85ADBA548E: "Position" => "Положение"
+209B0897FD112F: "Output grid to CSV" => "Gitter nach CSV ausgeben"
+B366981EAEF1CF: "Find materials/commodities" => "Finde Materialien/Handelswaren"
+2FEF1A8EEACCEB: "Select the condition between Item 1 and 2" => "Wähle die Bedingung von Element 1 zu Element 2"
+376753B016814C: "Primary material or commodity to search for" => "Primäre(s) Material oder Handelsware für die Suche"
+AA3B17BAA83D49: "Secondary material or commodity to search for" => "Sekundäre(s) Material oder Handelsware für die Suche"
 
 SECTION SearchScans
 
-.Select: "Select" => "Выберите"
-.Name: "Name: " => "Название: "
-.SN: "Enter Search Name: " => "Сохранение параметров поиска"
-.DEL: "Confirm deletion of" => "Вы собираетесь удалить"
-.DELNO: "Cannot delete this entry" => "Эту запись удалить нельзя"
-.CNV: "Condition is not valid" => "Некорректное условие поиска"
-.CD: "Condition" => "Условие поиска"
-.ColumnDate: "Date" = SearchMaterialsCommodities.ColumnDate
-.ColumnBody: "Body" @
-.ColumnInformation: "Information" = Information
-.ColumnCurrentDistance: "Current Distance" = SearchMaterialsCommodities.ColumnCurrentDistance
-.ColumnPosition: "Position" = SearchMaterialsCommodities.ColumnPosition
-.ColumnParent: "Parent" @
-.ColumnStar: "Star" @
-.ColumnParentParent: "Grandparent" @
-.ColumnStarStar: "Parent of Star" @
-.ColumnSystem: "System" @
-.comboBoxSearches.ToolTip: "Select a predefined condition" @
-.buttonFind.ToolTip: "Search for condition below" @
-.buttonSave.ToolTip: "Save current condition" @
-.buttonDelete.ToolTip: "Delete current condition" @
-.buttonExtExcel.ToolTip: "Output results grid to CSV" @
-.extButtonExport.ToolTip: "Export user searches to a file" @
-.extButtonImport.ToolTip: "Import user queries from a file (overwrite existing queries if present)" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.extCheckBoxDebug.ToolTip: "Click to enable debug log production on search" @
-.extButtonNew.ToolTip: "Clear current condition" @
-.ColumnSearches: "Searches" @
-.labelTime: "Time" @
-.labelSearch: "Search" @
-.Export: "Export user searches" @
-.Import: "Import user searches" @
-.scanSortControl.labelSort: "Sort:" @
-.TooMany: "Too many results to display, truncating to the first {0}" @
+8598222918D3C6: "Select" => "Выберите"
+469CEC3C536805: "Enter Search Name: " => "Сохранение параметров поиска"
+576B5ACFD6F9E4: "Confirm deletion of" => "Вы собираетесь удалить"
+0088C59DD3E567: "Cannot delete this entry" => "Эту запись удалить нельзя"
+37A47BD94B5C5D: "Condition is not valid" => "Некорректное условие поиска"
+2F4979324E03E4: "Condition" => "Условие поиска"
+718A7E8A582E98: "Body" => "Körper"
+23D692F07A3FB6: "Parent" => "Elter"
+EFAAD58C837641: "Grandparent" => "Großelter"
+4A7891A93B7D2C: "Parent of Star" => "Elter des Sterns"
+BC0792D8DC81E8: "System" => "System"
+9054FF5F5ED0C8: "Select a predefined condition" => "Wähle eine vordefinierte Bedingung"
+E732D75B811346: "Search for condition below" => "Suche nach unten definierter Bedingung"
+C199BFDEBEFCEA: "Save current condition" => "Speichere gegenwärtige Bedingung"
+060F0D08DA3956: "Delete current condition" => "Lösche gegenwärtige Bedingung"
+AAD2904EE61EAE: "Output results grid to CSV" => "Ergebnisgitter nach CSV ausgeben"
+15ABFEF9649547: "Export user searches to a file" => "Exportiere Benutzersuchen in Datei"
+D1E9B89DD47EC3: "Import user queries from a file (overwrite existing queries if present)" => "Importiere Benutzersuchen aus Datei (überschreibe existierende Suchen falls vorhanden)"
+5CF3EE0A5AE568: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
+D14970EE4E27AE: "Click to enable debug log production on search" => "Klicken um Debuglogerzeugung während der Suche zu aktivieren"
+081F88C3D6CCEA: "Clear current condition" => "Lösche gegenwärtige Bedingung"
+450D52D3EF8975: "Searches" => "Suchen"
+07C3B8B498D6BD: "Export user searches" => "Exortiere Benutzersuchen"
+F6FBA35BE4C529: "Import user searches" => "Importiere Benutzersuchen"
+8B335A234E4193: "Sort:" => "Sortieren:"
+5531C4FF55C5CF: "Too many results to display, truncating to the first {0}" => "Zu viele Ergebnisse um sie anzuzeigen, kürze auf die ersten {0}"
 
 SECTION UserControlDiscoveries
 
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
-.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.buttonExtExcel.ToolTip: "Export" @
+4CC658129E454D: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Spezifiziere einen Suchterm um Zelleninhalte zu filtern. Verfügbar sind system:<Platzhalter>, body:<Platzhalter>, station:<Platzhalter> und stationfaction:<Platzhalter> um Ereignisse die diesen Parametern zugewiesen sind zu filtern"
+B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" => "Wähle Entdeckungen um danach zu suchen, Liste wird aus dem Suchpanel übernommen"
 
 SECTION SearchStars
 
-.ColumnIndex: "Index" @
-.ColumnStar: "Star" = SearchMaterialsCommodities.ColumnStar
-.ColumnStarType: "Star type" @
-.ColumnCentreDistance: "Centre Distance" => "Расстояние от центра"
-.ColumnCurrentDistance: "Current Distance" = SearchMaterialsCommodities.ColumnCurrentDistance
-.ColumnPosition: "Position" = SearchMaterialsCommodities.ColumnPosition
+C2DF9B932637FE: "Index" => "Index"
+30B532455535CF: "Star type" => "Sternenklasse"
+CD732FC5901D56: "Centre Distance" => "Расстояние от центра"
 
 SECTION DataGridViewStarResults
 
-.3d: "Go to star on 3D Map" => "Показать систему на 3D-карте"
-.EDSM: "View on EDSM" => "Открыть в EDSM"
-.Spansh: "View on Spansh" @
-.Data: "View Scan Display" => "Показать данные сканирования"
-.Goto: "View on History Grid" @
+CA7D47897BA965: "Go to star on 3D Map" => "Показать систему на 3D-карте"
+790C6DD0436B24: "View on EDSM" => "Открыть в EDSM"
+BE05494B382962: "View on Spansh" => "Zeige auf Spansh"
+A99CF05BCB299B: "View Scan Display" => "Показать данные сканирования"
+D4FDD27AAE7070: "View on History Grid" => "Zeige in Historie"
 
 SECTION UserControlEngineering
 
-.UpgradeCol: "Upgrade/Mat" => "Улучшения/Материалы"
-.ModuleCol: "Module" => "Модуль"
-.LevelCol: "Level" => "Уровень"
-.MaxCol: "Max" => "Макс."
-.WantedCol: "Wanted" => "Требуется"
-.AvailableCol: "Avail." => "Доступно"
-.NotesCol: "Notes" => "Примечание"
-.RecipeCol: "Recipe" => "Рецепт"
-.EngineersCol: "Engineers" => "Инженеры"
-.CraftedCol: "Crafted" @
-.buttonClear.ToolTip: "Set all wanted values to zero" => "Сбросить все значения в столбце «Требуется»"
-.buttonFilterMaterial.ToolTip: "Filter the table by material" => "Фильтровать таблицу по материалам"
-.buttonFilterUpgrade.ToolTip: "Filter the table by upgrade type" => "Фильтровать таблицу по улучшениям"
-.buttonFilterLevel.ToolTip: "Filter the table by level" => "Фильтровать таблицу по уровням"
-.buttonFilterEngineer.ToolTip: "Filter the table by engineer" => "Фильтровать таблицу по инженерам"
-.buttonFilterModule.ToolTip: "Filter the table by module type" => "Фильтровать таблицу по модулям"
-.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
+8F388BB9800713: "Upgrade/Mat" => "Улучшения/Материалы"
+B8FF02892916FF: "Module" => "Модуль"
+7C7F5D049FAD25: "Level" => "Уровень"
+A95E85AED56318: "Max" => "Макс."
+B568B10AECDDE8: "Wanted" => "Требуется"
+F2367E42DEFDAC: "Avail." => "Доступно"
+1DCDA804C96DA3: "Recipe" => "Рецепт"
+21467D0FE8237D: "Crafted" => "Erzeugt"
+49578C008054B9: "Set all wanted values to zero" => "Сбросить все значения в столбце «Требуется»"
+1D418FD622BE3F: "Filter the table by material" => "Фильтровать таблицу по материалам"
+3E62F26251B4EB: "Filter the table by upgrade type" => "Фильтровать таблицу по улучшениям"
+55D32FC9D63E6C: "Filter the table by level" => "Фильтровать таблицу по уровням"
+85DCAE4F7ADF58: "Filter the table by engineer" => "Фильтровать таблицу по инженерам"
+53A4C779B6A4AD: "Filter the table by module type" => "Фильтровать таблицу по модулям"
+80CC3E5A8D4D63: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Wenn 'rot' verwende die Materialien beim Zeiger zum Schätzen, wenn 'grün' verwende immer die letzten Materialien."
+0DDF332D4C73CA: "Push items wanted to Resources panel" => "Schiebe gewollte Gegenstände ins Ressourcenpanel"
 
 SECTION UserControlEngineers
 
-.buttonFilterEngineer.ToolTip: "Select which engineers are shown" @
-.extCheckBoxWordWrap.ToolTip: "Turn on and off word wrap" @
-.extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
-.buttonClear.ToolTip: "Set all wanted values to zero" @
-.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
+F3045D9B6D60DE: "Select which engineers are shown" => "Wähle welche Ingenieure angezeigt werden"
+1CA9412669C134: "Turn on and off word wrap" => "Aktivere oder deaktiviere Zeilenumbruch"
+5C22155C221233: "Increase size of engineers grid and show more engineer details" => "Vergrößere das Ingenieursgitter and zeige mehr Ingenieursdetails"
 
 SECTION UserControlEstimatedValues
 
-.BodyName: "Body Name" => "Название тела"
-.BodyType: "Body Type" @
-.EDSM: "Source" @
-.Mapped: "Mapped" @
-.WasMapped: "Already Mapped" @
-.WasDiscovered: "Already Discovered" @
-.EstBase: "Base Value" @
-.MappedValue: "Mapped" @
-.FirstMappedEff: "First Mapped" @
-.FirstDiscMapped: "First Discovered Mapped" @
-.EstValue: "Current Value" => "Примерная стоимость"
-.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" @
-.extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
-.SV: "Estimated Scan Values for {0}" => "Примерная стоимость данных сканирования для {0}"
-.SBTB: " | You scanned {1} of {2} bodies in this system." @
+1D68666BDF4A40: "Body Name" => "Название тела"
+D6B23A46B95CAF: "Body Type" => "Körperart"
+6DA13ADDB000B6: "Source" => "Quelle"
+4A7C05BDEB22B3: "Mapped" => "Kartographiert"
+21B572F3D9F3E3: "Already Mapped" => "Bereits kartographiert"
+43DF814DBC5742: "Already Discovered" => "Bereits entdeckt"
+CB34D7DD05451F: "Base Value" => "Basiswert"
+EEA6FFEE027AB4: "First Mapped" => "Zuerst kartographiert"
+CB083BFF78F38B: "First Discovered Mapped" => "Zuerst entdeckt und kartographiert"
+4F993153012BCF: "Current Value" => "Примерная стоимость"
+3B2FE7700E6893: "Green will show all bodies even with zero value, red will only show bodies with value" => "Grün zeigt alle Materialien, Rot entfernt Materialien mit Lagerstand Null"
+C746EA1EC215F8: "Show all values, even ones which are impossible to get" => "Zeige alle Wete, auch jene die unerreichbar sind."
+AC0E083CA2C4C4: "Estimated Scan Values for {0}" => "Примерная стоимость данных сканирования для {0}"
+2A07C88E4554DD: " | You scanned {1} of {2} bodies in this system." => " | Du hast {1} von {2} Körpern in diesem System gescanned."
 
 SECTION UserControlExpedition
 
-.CurDist: "Cur. Dist" @
-.Visits: "Visits" => "Посещений"
-.Scans: "Scans" => "Отсканировано"
-.FSSBodies: "FSS Bodies" @
-.KnownBodies: "Known Bodies" @
-.Stars: "Stars" => "Главная звезда"
-.Info: "Info" = Information
-.extButtonLoadRoute.ToolTip: "Load Route" => "Загрузить"
-.extButtonNew.ToolTip: "New Expedition" => "Новый маршрут"
-.extButtonSave.ToolTip: "Save Expedition" => "Сохранить маршрут"
-.extButtonDelete.ToolTip: "Delete Expedition" => "Удалить маршрут"
-.extButtonImportFile.ToolTip: "Import File" => "Импорт из файла"
-.extButtonImportRoute.ToolTip: "Import from Route Panel" => "Импорт маршрута"
-.extButtonImportNavRoute.ToolTip: "Import a Nav Route" => "Импорт Nav маршрута"
-.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
-.buttonExtExport.ToolTip: "Export to File" = ImportExportForm
-.extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" => "Показать на 3D-карте"
-.extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "Добавить системы"
-.extButtonDisplayFilters.ToolTip: "Select filters on Info" @
-.buttonReverseRoute.ToolTip: "Reverse" => "Реверс"
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.AddSys: "Add Systems" = UserControlExpedition.extButtonAddSystems.ToolTip
-.SystemName: "System Name" => "Название системы"
-.Distance: "Dist." => "Расстояние"
-.Note: "Note" = UserControlEngineering.NotesCol
-.ColumnDistStart: "Dist Start" @
-.ColumnDistanceRemaining: "Dist Remaining" @
-.ColumnHistoryNote: "History Note" @
-.labelCml: "Cml Distance:" => "Суммарное: "
-.labelP2P: "P2P Distance:" => "Точка-точка: "
-.labelEndDate: "End Date:" => "Окончание: "
-.labelDateStart: "Start Date:" => "Начало: "
-.labelRouteName: "Route Name:" => "Маршрут: "
-.viewSystemToolStripMenuItem: "View System" @
-.viewOnSpanshToolStripMenuItem: "View on Spansh" @
-.viewOnEDSMToolStripMenuItem: "View on EDSM" @
-.copyToolStripMenuItem: "Copy" => "Копировать"
-.pasteToolStripMenuItem: "Paste" => "Вставить"
-.cutToolStripMenuItem: "Cut" @
-.insertRowAboveToolStripMenuItem: "Insert row above" @
-.setTargetToolStripMenuItem: "Set Target" => "Выбрать цель"
-.editBookmarkToolStripMenuItem: "Edit bookmark" => "Изменить закладку"
-.NoRoute: "No route set up. Please add at least two systems." => "Маршрут не установлен. Добавьте как минимум две системы"
-.Delete: "Are you sure you want to delete this route?" => "Вы действительно хотите удалить этот маршрут?"
-.Createroute: "Please create a route on a route panel" => "Создайте маршрут во вкладке/окне маршрута"
-.NoRouteExport: "There is no route to export " => "Нет маршрута для экспорта"
-.GMOInfo: "Disable showing GMO Info" @
-.Unsaved: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "Изменения текущего маршрута не сохранены.\r\nСохранить маршрут перед продолжением?"
-.Specify: "Please specify a name for the route." => "Введите название маршрута"
-.Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "Текущее название маршрута конфликтует с названием известной экспедиции\r\nВыберите другое имя."
-.Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "Внимание: маршрут уже существует. Вы действительно хотите его перезаписать?"
-.EDSMUnk: "System not known" => "Система неизвестна в EDSM"
-.NoScanInfo: "No local scan info" @
+499605941FE37D: "Cur. Dist" => "Akt.Entf."
+6A4BE2FAC27DAA: "Visits" => "Посещений"
+52F10A52951678: "FSS Bodies" => "VSS Körper"
+C8A4EA417FB23E: "Known Bodies" => "Bekannte Körper"
+4B631F69842530: "Info" => "Информация"
+6571CA05AEE6A2: "Load Route" => "Загрузить"
+9B02F8B01803D3: "New Expedition" => "Новый маршрут"
+4990961CC3F641: "Save Expedition" => "Сохранить маршрут"
+089954DA2CE32A: "Delete Expedition" => "Удалить маршрут"
+173DF362CCF8F7: "Import File" => "Импорт из файла"
+0BBA82BEA5C475: "Import from Route Panel" => "Импорт маршрута"
+1FA9E4E897C90D: "Import a Nav Route" => "Импорт Nav маршрута"
+627110C8C10EE5: "Import Latest Nav Route" => "Importiere letzte Nav-Route"
+A7CC24BCEE6D11: "Export to File" => "Экспорт"
+371C4F43678BC9: "Show expedition on 3D Map" => "Показать на 3D-карте"
+1DAE53CF1781CC: "Import Systems from EDSM/DB" => "Добавить системы"
+682D92FDA51262: "Select filters on Info" => "Wähle Filter für Info"
+57F9933768794F: "Reverse" => "Реверс"
+07303D6679BBB3: "Add Systems" => "Добавить системы"
+162DD0495B19B2: "System Name" => "Название системы"
+FCBDC25ADED443: "Dist." => "Расстояние"
+2C924E3088204E: "Note" => "Примечание"
+5FF07654F5C831: "Dist Start" => "Dist Start"
+CE33081BD85857: "Dist Remaining" => "Dist Verbleibend"
+942A8B6ED71457: "History Note" => "Historiennotiz"
+6FAE50524E4FCC: "Cml Distance:" => "Суммарное: "
+907EB0BA50086A: "P2P Distance:" => "Точка-точка: "
+5F0AC2A013B639: "End Date:" => "Окончание: "
+FA4DD9CA914ECE: "Start Date:" => "Начало: "
+F1E28A201CEE47: "Route Name:" => "Маршрут: "
+5ECE584160349A: "View System" => "Zeige System"
+AF74F7C5362AAE: "Copy" => "Копировать"
+DB2483000D154C: "Paste" => "Вставить"
+38D13BDA5C40AF: "Cut" => "Ausschneiden"
+506AD5294AD65A: "Insert row above" => "Zeile darüber einfügen"
+13DA14D35B49E2: "Set Target" => "Выбрать цель"
+D371A4A652422C: "Edit bookmark" => "Изменить закладку"
+4A59635C57E1C9: "No route set up. Please add at least two systems." => "Маршрут не установлен. Добавьте как минимум две системы"
+2D013B428EBF32: "Are you sure you want to delete this route?" => "Вы действительно хотите удалить этот маршрут?"
+984AB4F90B5D2B: "Please create a route on a route panel" => "Создайте маршрут во вкладке/окне маршрута"
+7F9E20DBB71B41: "There is no route to export " => "Нет маршрута для экспорта"
+8FF9BDD201C4EA: "Disable showing GMO Info" => "Deaktivere Anzeige von GMO-Infos"
+20A543A1CE8991: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "Изменения текущего маршрута не сохранены.\r\nСохранить маршрут перед продолжением?"
+638C59CA247034: "Please specify a name for the route." => "Введите название маршрута"
+A6419AC5F7F3B3: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "Текущее название маршрута конфликтует с названием известной экспедиции\r\nВыберите другое имя."
+CD249D0309B0E4: "Warning: route already exists. Would you like to overwrite it?" => "Внимание: маршрут уже существует. Вы действительно хотите его перезаписать?"
+9F6A7413561C8D: "System not known" => "Система неизвестна в EDSM"
+C13DDF91AFA61A: "No local scan info" => "Keine lokale Scaninformation"
 
 SECTION UserControlJournalGrid
 
-.comboBoxTime.ToolTip: "Select the entries selected by age" => "Выбор записей по времени"
-.ColumnTime: "Time" = Time
-.ColumnEvent: "Event" = UserControlCombatPanel.Event
-.ColumnDescription: "Description" = UserControlBookmarks.ColDescription
-.ColumnInformation: "Information" = Information
-.labelTime: "Time" = Time
-.labelSearch: "Search" = UserControlBookmarks.labelSearch
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Введите текст для поиска в любых полях"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "Передать данные в Excel"
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
-.buttonField.ToolTip: "Filter out entries matching the field selection" @
-.buttonFilter.ToolTip: "Filter out entries based on event type" => "Фильтровать события по типу"
-.removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "Сбросить сортировку столбцов"
-.jumpToEntryToolStripMenuItem: "Jump to Entry" => "Перейти к другой записи..."
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = DataGridViewStarResults.3d
-.viewOnEDSMToolStripMenuItem: "View on EDSM" => "Открыть в ESDM"
-.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "Выбрать начальную/конечную метки для поиска маршрута"
-.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "Выполнить Actions для этой записи"
-.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard" => "Скопировать запись в буфер обмена"
-.viewScanDisplayToolStripMenuItem: "View Scan Display" @
-.viewOnSpanshToolStripMenuItem: "View on Spansh" @
-.TT1: " showing {0} original {1}" => ", показано {0} из {1}"
-.TTFilt1: "Filtered {0}" => "По времени отфильтровано {0}"
-.TTSelAge: "Select the entries by age, " => "Выбор записей по времени "
-.JHF: "Journal: Filter out fields" => "Журнал: фильтры полей"
-.NotSynced: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
+07A2022F0AA5BD: "Select the entries selected by age" => "Выбор записей по времени"
+5F2FF95345B84E: "Send data on grid to excel" => "Передать данные в Excel"
+1E766B1CB17AF6: "Automatically move the cursor to the latest entry when it arrives" => "При появлении новой записи курсор автоматически перемещается наверх"
+4D0FFFE0C867B1: "Filter out entries matching the field selection" => "Mit der Feldauswahl übereinstimmende Einträge ausfiltern"
+CD0FB121DB7E4E: "Filter out entries based on event type" => "Фильтровать события по типу"
+8E5C8029D9BC99: "Remove sorting of columns" => "Сбросить сортировку столбцов"
+F4DE89CE1015FB: "Jump to Entry" => "Перейти к другой записи..."
+752DA692C2C1B2: "Set Start/Stop point for travel calculations" => "Выбрать начальную/конечную метки для поиска маршрута"
+F792127FD17C22: "Run Actions on this entry" => "Выполнить Actions для этой записи"
+290084F20A44C9: "Copy journal entry to clipboard" => "Скопировать запись в буфер обмена"
+E4370C63EC4290: " showing {0} original {1}" => ", показано {0} из {1}"
+ADE8224F6E2B20: "Filtered {0}" => "По времени отфильтровано {0}"
+079B875FC72C76: "Select the entries by age, " => "Выбор записей по времени "
+F70EA8DC6685B3: "Journal: Filter out fields" => "Журнал: фильтры полей"
 
 SECTION UserControlLedger
 
-.TimeCol: "Time" = Time
-.Type: "Type" => "Тип"
-.Notes: "Notes" = UserControlEngineering.NotesCol
-.Credits: "Credits" => "Приход"
-.Debits: "Debits" => "Расход"
-.Balance: "Balance" = UserControlCombatPanel.Bal
-.NormProfit: "Profit Per Unit" => "Прибыль за единицу"
-.labelTime: "Time" = Time
-.labelSearch: "Search" = UserControlBookmarks.labelSearch
-.buttonFilter.ToolTip: "Display entries matching this event type filter" => "Фильтровать записи по типу события"
-.textBoxFilter.ToolTip: "Search to particular items" => "Поиск определенного объекта"
-.comboBoxTime.ToolTip: "Select the entries by age" = UserControlJournalGrid.comboBoxTime.ToolTip
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.toolStripMenuItemGotoItem: "View on History Grid" => "Перейти к записи в таблице"
-.CashTransactions: "Cash Transactions" => "Финансовые операции"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.NOLG: "No Ledger available" @
-.TotalProfit: "Total Profit" @
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
+F547624A8BDDF0: "Debits" => "Расход"
+CA808D99D64C9C: "Profit Per Unit" => "Прибыль за единицу"
+DC12265956ECE5: "Display entries matching this event type filter" => "Фильтровать записи по типу события"
+B501410D1C0E50: "Search to particular items" => "Поиск определенного объекта"
+61FE5EB291070D: "Select the entries by age" => "Выбор записей по времени"
+A51F65FF7C070F: "Cash Transactions" => "Финансовые операции"
+662560B640930C: "No Ledger available" => "Kein Kassabuch verfügbar"
+45EBD38F4C641E: "Total Profit" => "Gesamter Profit"
 
 
 SECTION UserControlLog
 
-.toolStripMenuItemCopy: "Copy" = UserControlExpedition.copyToolStripMenuItem
-.clearLogToolStripMenuItem: "Clear Log" => "Очистить логи"
+3FC9C386B10C3C: "Clear Log" => "Очистить логи"
 
 SECTION UserControlMarketData
 
-.CategoryCol: "Category" => "Категория"
-.NameCol: "Name" => "Товар"
-.SellCol: "Sell" => "Продажа\r\n(продать на рынке)"
-.BuyCol: "Buy" => "Покупка\r\n(купить на рынке)"
-.CargoCol: "Cargo" => "Груз"
-.DemandCol: "Demand" => "Спрос"
-.SupplyCol: "Supply" => "Предложение"
-.GalAvgCol: "Galactic Avg" => "Средняя по Галактике"
-.ProfitToCol: "Profit To cr/t" => "Прибыль от\r\nэкспорта (кр./т)"
-.ProfitFromCol: "Profit From cr/t" => "Прибыль от\r\nимпорта(кр./т)"
-.checkBoxAutoSwap: "AutoSwap" => "Автопереключение"
-.checkBoxBuyOnly: "Buy Only" => "Наличие"
-.labelVs: "Vs" => "ср. с"
-.checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "Показывать только товары, которые можно купить"
-.Conly: "Cargo only, no market data on this item" => "Только груз, нет рыночных данных в этом списке"
-.LEntry: "Travel History Entry Last" => "Последняя запись в истории полетов"
-.checkBoxHasDemand: "Has Demand" @
-.checkBoxHasDemand.ToolTip: "Show items with demand" @
+A3C686E711E472: "Category" => "Категория"
+FA3CF2AD51E078: "Sell" => "Продажа\r\n(продать на рынке)"
+7CECA51FCAFE42: "Buy" => "Покупка\r\n(купить на рынке)"
+6C98E86FC49B32: "Cargo" => "Груз"
+5DFC68721F3D07: "Demand" => "Спрос"
+222DB0FC1CADF0: "Supply" => "Предложение"
+7C9EF052D00BFD: "Galactic Avg" => "Средняя по Галактике"
+429BAF3C0DB89C: "Profit To cr/t" => "Прибыль от\r\nэкспорта (кр./т)"
+0901A376AF18BD: "Profit From cr/t" => "Прибыль от\r\nимпорта(кр./т)"
+3B406FFE94872F: "AutoSwap" => "Автопереключение"
+3CD1261A4B2B6E: "Buy Only" => "Наличие"
+4D2E486F643D8E: "Vs" => "ср. с"
+AB78A7C020BC2A: "Show items you can buy only" => "Показывать только товары, которые можно купить"
+82D589FF7E4287: "Cargo only, no market data on this item" => "Только груз, нет рыночных данных в этом списке"
+CCB827281EB7DF: "Travel History Entry Last" => "Последняя запись в истории полетов"
+BB4C560BF53C47: "Has Demand" => "Hat Bedarf"
+898844D2F6FD03: "Show items with demand" => "Zeige Elemente derer bedurft wird"
 
 SECTION UserControlMaterialCommodities
 
-.ShipLocker: "Ship Locker" @
-.Data: "Data" => "Данные"
-.Mats: "Mats" => "Мат-лы"
-.Total: "Total" => "Всего"
-.Rare: "Rare" => "Редкие товары"
-.ColName: "Name" = UserControlCombatPanel.Name
-.ColShortName: "Abv" => "Сокращение"
-.ColCategory: "Category" = UserControlMarketData.CategoryCol
-.ColType: "Type" = UserControlLedger.Type
-.ColNumber: "Number" => "Количество"
-.ColBackPack: "Backpack" @
-.ColPrice: "Avg. Price" => "Средняя цена"
-.ColRecipes: "Recipes" @
-.ColWanted: "Want" @
-.ColNeed: "Need" @
+4DA805AFD83F17: "Ship Locker" => "Schiffsspind"
+E5E429BCC9C2E4: "Data" => "Данные"
+BEFB21EE719272: "Mats" => "Мат-лы"
+B25928C6990255: "Total" => "Всего"
+CCE370D2F9781A: "Rare" => "Редкие товары"
+FE187BD4E80F7E: "Abv" => "Сокращение"
+B7BAA1D40C4EA2: "Number" => "Количество"
+0CCF90EB09D636: "Backpack" => "Rucksack"
+6358DC846638BD: "Avg. Price" => "Средняя цена"
+9FB1092F32D4FC: "Recipes" => "Rezepte"
+B18F6ADE27CF7A: "Want" => "Gewollt"
+ED4855C28D40C3: "Need" => "Benötigt"
 
-.AllMats: "All Materials" @
-.AllCommods: "All Commodities" @
-.AllMicroresources: "All Microresources" @
+7B61D21566CEEC: "All Materials" => "Alle Materialien"
+31BD45E1404855: "All Commodities" => "Alle Handelswaren"
+DD6B2E81B38C70: "All Microresources" => "Alle Mikroressourcen"
 
-.textBoxItems1.ToolTip: "Count of Items" @
-.textBoxItems2.ToolTip: "Count of Items" => "Количество предметов"
-.buttonFilter.ToolTip: "Filter out items" => "Фильтровать"
+AFF3ACED3CA75C: "Count of Items" => "Anzahl"
+2E7C22E163AEC2: "Filter out items" => "Фильтровать"
 
-.buttonClear.ToolTip: "Set all wanted values to zero" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
-.extCheckBoxMaterialView.ToolTip: "Switch Material Views" @
-.extButtonFont.ToolTip: "Font for shopping list" @
-.buttonExtImport.ToolTip: "Import materials list into panel" @
+4D542614DA0B16: "Green will show materials with zero counts, red means remove them" => "Grün zeigt Einträge auf Null, Rot filtert diese"
+8B4BB0C8C3D12D: "Switch Material Views" => "Wechsle Materialansicht"
+0F67E16954DB21: "Font for shopping list" => "Schrift für Einkaufsliste"
+9D94613F7CF820: "Import materials list into panel" => "Importiere Materialienliste in Panel"
 
-.openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" @
-.displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" @
-.clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" @
-.displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" @
-.toolStripMenuItemSLClearAll: "Clear all display items in shopping list" @
-.Progress: "Progress" @
+963A200F087C8F: "Open Recipe in Window" => "Öffne Rezept in Fenster"
+BA416FBADB0F09: "Display Item in shopping list" => "Zeige Element in Enkaufsliste"
+EB8E343579E999: "Clear all display items in shopping list" => "Lösche alle angezeigten Elemente in Einkaufsliste"
+3EE4B7555F0B02: "Display all non zero items in shopping list" => "Zeige alle 'Nicht Null'-Elemente in Einkaufsliste"
+1B90271D66CF2D: "Progress" => "Fortschritt"
 
 
 SECTION UserControlMissionOverlay
 
-.IL: " Left " @
-.missionNameToolStripMenuItem: "Mission Name" => "Название миссии"
-.missionDescriptionToolStripMenuItem: "Mission Description" => "Описание миссии"
-.startDateToolStripMenuItem: "Start Date" = UserControlCombatPanel.Start
-.factionInformationToolStripMenuItem: "Faction Information" => "Информация о фракции"
-.rewardToolStripMenuItem: "Reward" = UserControlCombatPanel.Reward
-.endDateToolStripMenuItem: "End Date" => "Окончание"
+BC775B0E4D5ED0: " Left " => " Pozostało "
+50C4713CBC3348: "Mission Name" => "Название миссии"
+90DC27E4C3BEB4: "Mission Description" => "Описание миссии"
+9D7AB1A557965B: "Start Date" => "Начало"
+7190FFD9B23765: "Faction Information" => "Информация о фракции"
+84B1478125890B: "End Date" => "Окончание"
 
 SECTION UserControlSurveyor
 
-.Scan: "Scan" @
-.Systemscancomplete: "System scan complete" => "Сканирование системы завершено"
-.bodiesdetected: " bodies detected." @
-.bodiesfound: " bodies found." => " тел найдено."
-.ShowSignalMismatch: " Cluster and NonBody counts differ by " @
-.textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" => "По левому краю"
-.textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" => "По центру"
-.textAlignToolStripMenuItem.rightToolStripMenuItem: "Alignment Right" => "По правому краю"
-.showAllPlanetsToolStripMenuItem: "Show All Planets" @
-.planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" => "Аммиачные планеты"
-.planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" => "Землеподобные планеты"
-.planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" => "Водные планеты"
-.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
-.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
-.bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" => "Терраформируемые"
-.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has volcanism" => "С вулканизмом"
-.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" => "С кольцами"
-.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
-.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
-.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has any other signals" @
-.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has geological signals" @
-.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has biological signals" @
-.bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
-.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
-.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
-.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
-.showAllStarsToolStripMenuItem: "Show All Stars" @
-.showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
-.showSignalsToolStripMenuItem: "Show signals" @
-.showSignalMismatchToolStripMenuItem: "Show signal mismatch" @
-.showValuesToolStripMenuItem: "Show values" @
-.showMoreInformationToolStripMenuItem: "Show more information" @
-.showGravityToolStripMenuItem: "Show gravity of landables" @
-.showAtmosToolStripMenuItem: "Show atmospheres" @
-.showTempToolStripMenuItem: "Show surface temperature" @
-.showVolcanismToolStripMenuItem: "Show volcanism" @
-.autoHideToolStripMenuItem: "Auto Hide" @
-.dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" @
-.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" => "Скрыть уже картографированные планеты"
-.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show system info always" @
-.showScanSummaryOnScreenWhenInTransparentModeToolStripMenuItem: "Show scan summary always" @
-.showstarclassToolStripMenuItem: "Show star class in system info" @
-.showDividersToolStripMenuItem: "Show dividers" @
-.extButtonPlanets.ToolTip: "Planet Filter" @
-.extButtonStars.ToolTip: "Star Filter" @
-.extButtonShowControl.ToolTip: "Display Settings" @
-.extButtonAlignment.ToolTip: "Alignment" @
-.extButtonFont.ToolTip: "Font" @
-.extButtonFSS.ToolTip: "FSS Signal Selection" @
-.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
-.extButtonSetRoute.ToolTip: "Select route to follow" @
-.extButtonControlRoute.ToolTip: "Route Settings" @
-.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
-.navroute: "Nav Route" @
-.fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
-.fsssignals: "List signals to display, semicolon seperated" @
+C545D651351423: "System scan complete" => "Сканирование системы завершено"
+7FBED1E5CF7C0C: " bodies detected." => " Körper erkannt."
+7B14664F50BD79: " bodies found." => " тел найдено."
+60B6BCE139DBD6: " Cluster and NonBody counts differ by " => " Gruppen- und NichtKörper-Zählungen differieren um "
+1C8BA580027067: "Alignment Left" => "По левому краю"
+DF79D6CA8BD2F3: "Alignment Center" => "По центру"
+43EF428A78F1FA: "Alignment Right" => "По правому краю"
+0C309E8F04C0F1: "Show All Planets" => "Zeige alle Planeten"
+C310B6E9C77045: "Ammonia World" => "Аммиачные планеты"
+B52BBF018CF9EC: "Earthlike World" => "Землеподобные планеты"
+909C1B5FFD57ED: "Water World" => "Водные планеты"
+3D43FF8C48FA2C: "High metal content body" => "Planet mit hochwertigen Metallen"
+EA5B349025CF82: "Metal-rich body" => "Metallreicher Planet"
+4D8D48B5146934: "Terraformable" => "Терраформируемые"
+D4617F3267AD60: "Has volcanism" => "С вулканизмом"
+3821671BA55EA5: "Has Rings" => "С кольцами"
+BE57FAED31951F: "High eccentricity" => "Hohe Exzentrizität"
+7D6183BB46469D: "Tiny body" => "niedriger Radius"
+CB270B1D277411: "Has any other signals" => "Hat beliebige andere Signale"
+2B332D20943805: "Has geological signals" => "Hat geologische Signale"
+F70D62F8263274: "Has biological signals" => "Hat biologische Signale"
+A9292825CC0CA6: "Landable" => "landbar"
+80F9887F7F5A1B: "Landable with atmosphere" => "Landbar mit Atmosphäre"
+C269F2C820ADBB: "Landable and large" => "Landbar und groß"
+3F9C411965E271: "Landable with volcanism" => "Landbar mit Vulkanismus"
+167210938F96A8: "Show All Stars" => "Zeige alle Sterne"
+5097B5F23AD8D4: "Show Belt Clusters" => "Zeige Gürtelgruppen"
+80ABC1AA30BCD0: "Show signals" => "Zeige Signale"
+05B917D12283B7: "Show signal mismatch" => "Zeige Signaldiskrepanz"
+85A950DCA2796C: "Show values" => "Zeige Werte"
+96AF5179B25859: "Show more information" => "Zeige mehr Informationen"
+51D3D53A0D6A7E: "Show gravity of landables" => "Zeige Gravitation bei landbaren"
+B8EFA4FD4838B4: "Show atmospheres" => "Zeige Atmosphäre"
+8BB27FDBF605FF: "Show surface temperature" => "Zeige Oberflächentemperatur"
+1F599CE9A5F201: "Show volcanism" => "Zeige Vulkanismus"
+1300E34B1510AA: "Auto Hide" => "Automatisch verstecken"
+AA12356A13B1CE: "Don't hide in FSS Mode" => "Im FSS-Modus nicht verbergen"
+5E30FC90BB9E47: "Hide already mapped bodies" => "Скрыть уже картографированные планеты"
+A6F528EE452953: "Show system info always" => "Systeminformation immer anzeigen"
+26B6A73ABC8985: "Show scan summary always" => "Scanzusammenfassung immer anzeigen"
+0C958474BD3F89: "Show star class in system info" => "Zeige Sternenklasse in Systeminformation"
+38F6C10BC38855: "Show dividers" => "Zeige Unterteiler"
+7CCD13400121F3: "Planet Filter" => "Planetenfilter"
+7AA20A2EFC7BB6: "Star Filter" => "Sternenfilter"
+274A5199553A8D: "Display Settings" => "Anzeigeeinstellungen"
+7F8C5176C3F03B: "Alignment" => "Ausrichtung"
+B97C4D4CDDF23E: "Font" => "Schriftart"
+7E65928ECE63CA: "FSS Signal Selection" => "VSS-Signalauswahl"
+23048BC1AE69FE: "Word Wrap" => "Zeilenumbruch"
+1BB6C810B1DA16: "Select route to follow" => "Wähle zu verfolgende Route"
+524DD2CDBBAD94: "Route Settings" => "Routeneinstellungen"
+B10CFFF10BABC0: "Nav Route" => "Nav-Route"
+9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => "Halber Tank {0:N1} Lj, Maximum {1:N1} Lj, Reichweite {2:N1} Lj"
+B37E90C8789813: "List signals to display, semicolon seperated" => "Trage anzuzeigende Signale ein, Semikolon als Trennzeichen"
 
 SECTION MissionListUserControl
 
-.PcolName: "Name" = UserControlCombatPanel.Name
-.pColStart: "Start Date" = UserControlCombatPanel.Start
-.pColEnd: "End Date" = UserControlMissionOverlay.endDateToolStripMenuItem
-.pColOrigin: "Origin" => "Отправная точка"
-.pColFromFaction: "Faction" = UserControlCombatPanel.labelFaction
-.pColDestSys: "Destination" => "Пункт назначения"
-.pColTargetFaction: "Target Faction" = UserControlCombatPanel.labelFaction.ToolTip
-.pColResult: "Result (cr)" => "Результат (кр.)"
-.pColInfo: "Info" = Information
-.labelTo: "to" => "в"
-.labelSearch: "Search" @
+44AB85A252ADB7: "Origin" => "Отправная точка"
+D42713493CA811: "Destination" => "Пункт назначения"
+731322861EF2C0: "Result (cr)" => "Результат (кр.)"
+4374AAEE247FB2: "to" => "в"
 
 SECTION UserControlMissions
 
-.MPlural: " Missions" => " Миссии"
-.MSingular: " Mission" => "Миссия"
-.Name: "Name" = UserControlCombatPanel.Name
-.Value: "Value (cr):\n{0:N0}" => "Награда (кр.):\n{0:N0}"
-.ValueN: "Value (cr)" => "Награда (кр.)"
-.ValueC: "Value: " => "Награда: "
+A91D37462D4799: " Missions" => " Миссии"
+F8B59037B2A4AE: " Mission" => "Миссия"
+199EA69AF2F28C: "Value (cr):\n{0:N0}" => "Награда (кр.):\n{0:N0}"
+59EF5FF5CFDAFB: "Value (cr)" => "Награда (кр.)"
+2688E219B0D815: "Value: " => "Награда: "
 
 SECTION UserControlModules
 
-.ItemLocalised: "Type" = UserControlLedger.Type
-.ItemCol: "Item" = UserControlEngineering.ModuleCol
-.BluePrint: "BluePrint" => "Модификация"
-.PriorityEnable: "P/E" => "Приоритет"
-.labelShip: "Ship" => "Объект"
-.labelVehicle: "Unknown" = Unknown
-.labelMass: "Mass:" @
-.labelCost: "Cost:" @
-.labelFSD: "FSD:" @
-.labelThrusters: "Thrust:" @
-.labelShields: "Shields:" @
-.labelArmour: "Armour:" @
+ECDDA59AEA5EE6: "Item" => "Модуль"
+20DD0E149BA65F: "BluePrint" => "Модификация"
+02D2B8A95C0CDF: "P/E" => "Приоритет"
+323D4FC7337134: "Ship" => "Объект"
+FF36CBDAB65662: "Mass:" => "Masse:"
+24AB018B53A3D1: "Cost:" => "Kosten:"
+7BC0F9941B91E6: "FSD:" => "FSA:"
+BE87DB1726CE63: "Thrust:" => "Schub:"
+BB75822ED5263A: "Shields:" => "Schilde:"
+C401139400D59D: "Armour:" => "Panzerung:"
 
 
-.FullBluePrint: "Show full blueprint information" @
-.EngineeredValues: "Show Engineered Values" @
+6129EFBCDDA076: "Show full blueprint information" => "Zeige vollständige Blaupauseninformationen"
+69105EFE4137CC: "Show Engineered Values" => "Zeige verbesserte Werte"
 
-.comboBoxShips.ToolTip: "Select ship to view" => "Выберите объект для просмотра"
-.extButtonShowControl.ToolTip: "Display Settings" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.buttonExtCoriolis.ToolTip: "Send to Coriolis" => "Передать в Coriolis"
-.buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "Передать в ED Ship Yard"
-.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "Настройте дополнительные данные, отсутствующие в Elite Journal"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.extButtonLoadLoadout.ToolTip: "Import a ship definition for display" @
+D9B049A9B6DA3B: "Select ship to view" => "Выберите объект для просмотра"
+6BC3E7B6D12CF8: "Send to Coriolis" => "Передать в Coriolis"
+5533DAD808E457: "Send to ED Ship Yard" => "Передать в ED Ship Yard"
+FE4704B79D6001: "Configure extra data missing from Elite Journal Output" => "Настройте дополнительные данные, отсутствующие в Elite Journal"
+A64AB328A429FA: "Import a ship definition for display" => "Schiffsdefinition zum Anzeigen importieren"
 
-.ForceSell: "Force Sell" @
-.ConfirmForceSell: "Confirm sell of ship:" @
-.StoredModules: "Stored Modules" => "Модули в хранилище"
-.TravelHistoryEntry: "Travel History Entry" => "Запись истории полетов"
-.OwnedShips: "Owned Ships" @
-.System: "System" = SearchMaterialsCommodities.ColumnStar
-.TxTime: "Tx Time" => "Время перемещения"
-.Cost: "Cost" => "Цена"
-.SlotCol: "Slot" => "Слот"
-.ItemInfo: "Info" = Information
-.Value: "Value" => "Стоимость"
-.Stored: "Stored" @
-.AllModules: "All Modules" @
-.AllShips: "All Ships" @
-.Mass: "Mass" => "Масса"
+FE5C2531E39340: "Force Sell" => "Verkaufen erzwingen"
+6274EC09200AD8: "Confirm sell of ship:" => "Bestätige Verkauf von Schiff"
+CA73BB4E22EBFD: "Stored Modules" => "Модули в хранилище"
+D2F025FD0D6F0C: "Travel History Entry" => "Запись истории полетов"
+673463FDF95385: "Owned Ships" => "Schiffe in Besitz"
+44B046E04F2B04: "Tx Time" => "Время перемещения"
+64AE43E8FE7620: "Cost" => "Цена"
+ECE2AC10D7266F: "Slot" => "Слот"
+8DCE170DE238B1: "Value" => "Стоимость"
+B2B53EE4FC1A90: "Stored" => "Gelagert"
+22F4D0D2422A35: "All Modules" => "Alle Module"
+9569A6C389205D: "All Ships" => "Alle Schiffe"
+AF0AD10B2A196B: "Mass" => "Масса"
 
-.InTransit: "In Transit" => "В пути"
-.EDSURL: "Enter ED Shipyard URL" @
-.CURL: "Enter Coriolis URL" @
-.FW: "Fuel Warning: " => "Следить за баком: "
-.TTF: "Enter fuel warning level in % (0 = off, 1-100%)" => "Введите уровень предупреждения о топливе в % (0 = отключено, 1-100%)"
-.PresstoAccept: "Press to Accept" => "Нажмите для подтверждения"
-.PresstoCancel: "Press to Cancel" => "Нажмите для отмены"
-.NValid: "A Value is not valid" => "Неверное значение"
-.SC: "Ship Configure" => "Настройка корабля"
-.MI: "Module Information" => "Информация о модуле"
-.NOSI: "No Ship Information available" @
+046E5CEE819C2B: "In Transit" => "В пути"
+EF14AB9080E8AD: "Enter ED Shipyard URL" => "Wprowadź URL ED Shipyard"
+5406A1422EA878: "Enter Coriolis URL" => "Wprowadź URL Coriolis"
+2A39E6AA297AED: "Fuel Warning: " => "Следить за баком: "
+6915FDD1AF8A81: "Enter fuel warning level in % (0 = off, 1-100%)" => "Введите уровень предупреждения о топливе в % (0 = отключено, 1-100%)"
+E613FC90158F3E: "A Value is not valid" => "Неверное значение"
+3F86F40ECFD2E5: "Ship Configure" => "Настройка корабля"
+2A7F42E6F0BB55: "Module Information" => "Информация о модуле"
+5E09137F0F0012: "No Ship Information available" => "Keine Schiffsinformationen verfügbar"
 
-.labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" @
-.labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" @
-.labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" @
-.labelDataCost: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" @
-.labelDataFSD: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
-.labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
-.labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
-.labelWep: "Weapons:" @
+5434A871028102: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" => "Roh {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Ätz {0.#|% =|0.#}"
+AA4EDB168CAE21: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" => "Roh {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}"
+7D67DDF30E8473: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" => "Masse {0.##|t} Hülle {0.##|t} Module {0.##|t} Unbeladen {0.##|t} Fracht {0|/|0|t} Warnung bei {0.#|%}"
+E5379DCF7E564E: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" => "Kosten Hülle {N0|cr} Module {N0|cr} Total {N0|cr} Rückkauf {N0|cr}"
+C8DF6EB8BFDFCF: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" => "Dzt {0.##|ly} Reichweite {0.##|ly} Beladen {0.##|ly} Unbeladen {0.##|ly} Max {0.##|ly} MaxTStoff {0.##|t} Derzeit {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} Im Transfer nach {} Gelagert bei {}"
+C11EA28A729193: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" => "Dzt Gsw {0.#} Bst {0.#} Beladen {0.#|/|0.#} Unbeladen {0.#|/|0.#} Max {0.#|/|0.#} Nachbrenner Dzt {0.#|s} Max {0.#|s}"
+6CC0AEA921D9CD: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" => "Roh {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dau {0.#|s} DauMax {0.#|s} Ammo {0.#|s} Dzt {0.#|%} Max {0.#|%}"
+825EC079E4368A: "Weapons:" => "Waffen"
 
-.extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" @
-.extButtonDeleteLoadout.ToolTip: "Delete loadout" @
+60830556FBB8D7: "Save this loadout to the EDD loadout folder" => "Speichere diese Konfiguration im EDD-Loadout-Ordner"
+391427FC2F26EA: "Delete loadout" => "Konfiguration löschen"
 
-.SaveLoadout: "Enter loadout description to save ship with" @
+6E34095646ED42: "Enter loadout description to save ship with" => "Konfigurationsbeschreibung unter der das Schiff gespeichert wird eingeben"
 
 SECTION UserControlNotePanel
 
-.miGMPNotes: "Display galactic mapping notes" => "Показать примечания на карте"
-.miSystemNotes: "Display system notes" => "Показать примечания к системам"
+0DC8008FE2CDB2: "Display galactic mapping notes" => "Показать примечания на карте"
+BBABBD48675D28: "Display system notes" => "Показать примечания к системам"
 
 SECTION UserControlOutfitting
 
-.labelYard: "Unknown" = Unknown
-.labelYardSel: "Sel" = UserControlModules.labelShip
-.comboBoxYards.ToolTip: "Select ship to view" = UserControlModules.comboBoxShips.ToolTip
-.TravelHistoryEntry: "Travel History Entry" = UserControlModules.TravelHistoryEntry
-.Date: "Date" = SearchMaterialsCommodities.ColumnDate
-.Yard: "Yard" => "Верфь"
-.Item: "Item" => "Наименование"
-.Distance: "Distance" = UserControlExpedition.Distance
-.Price: "Price" = UserControlModules.Cost
-.Type: "Type" = UserControlLedger.Type
-.Info: "Info" = Information
-.Mass: "Mass" = UserControlModules.Mass
+7481B2E308A25E: "Sel" => "Объект"
+0637A8C214DE05: "Yard" => "Верфь"
+423208095DD7FC: "Distance" => "Расстояние"
+3E8248E32EDFCA: "Price" => "Цена"
 
 SECTION UserControlPanelSelector
 
-.NOADDONS: "NO ADD ONS!" => "Нет дополнений"
-.AddOns: " Add Ons" => " дополнен."
-.TTA: "Click to add or remove Add Ons" => "Нажмите, чтобы добавить или удалить дополнение"
-.TTB: "Add ons are essential additions to your EDD experience!" => "Дополнения расширяют возможности EDD"
-.PP1: "Pop out in a new window" => "Открыть в отдельном окне"
-.MT1: "Open as a new menu tab" => "Добавить как вкладку"
+F195557637BC15: "NO ADD ONS!" => "Нет дополнений"
+2CB644D01CC1F0: " Add Ons" => " дополнен."
+F219DBFBA7E199: "Click to add or remove Add Ons" => "Нажмите, чтобы добавить или удалить дополнение"
+AE0FE6B7276775: "Add ons are essential additions to your EDD experience!" => "Дополнения расширяют возможности EDD"
+03B4832BADF372: "Pop out in a new window" => "Открыть в отдельном окне"
+CD2C44353CE1A8: "Open as a new menu tab" => "Добавить как вкладку"
 
 SECTION UserControlRoute
 
-.M1: "Nearest to Waypoint" @
-.M2: "Minimum Deviation from Path" @
-.M3: "Nearest to Waypoint with dev<=100ly" @
-.M4: "Nearest to Waypoint with dev<=250ly" @
-.M5: "Nearest to Waypoint with dev<=500ly" @
-.M6: "Nearest to Waypoint + Deviation / 2" @
-.SystemCol: "System" = SearchMaterialsCommodities.ColumnStar
-.NoteCol: "Notes" @
-.DistanceCol: "Distance" = UserControlExpedition.Distance
-.StarClassCol: "Star Class" @
-.WayPointDistCol: "Dist. Waypoint" => "Расстояние до точки маршрута"
-.DeviationCol: "Deviation" => "Отклонение"
-.groupBoxSpansh: "Spansh" @
-.extButtonNeutronRouter: "Neutron Router" @
-.extButtonSpanshRoadToRiches: "Road to Riches" @
-.extButtonSpanshAmmoniaWorlds: "Ammonia Worlds" @
-.extButtonSpanshEarthLikes: "Earth Likes" @
-.extButtonSpanshTradeRouter: "Trade Router" @
-.extButtonFleetCarrier: "Fleet Carrier" @
-.extButtonSpanshGalaxyPlotter: "Galaxy Plotter" @
-.extButtonExoMastery: "Exo Mastery" @
-.extCheckBoxPermitSystems: "Use Permit Systems" @
-.groupBoxInternal: "EDD Router" @
-.labelMetric: "Metric" => "Режим"
-.extButtonRoute: "Find Route" => "Построить маршрут"
-.groupBoxPara: "Parameters" @
-.checkBox_FsdBoost: "Use Boosts" @
-.labelFrom: "From" => "Из"
-.labelLy2: "ly" => "св. л."
-.labelLy1: "ly" = UserControlRoute.labelLy2
-.buttonExtTravelTo: "History" => "История"
-.labelEDSMBut: "Web Lookup" @
-.labelMaxJump: "Max jump" => "Макс. прыжок"
-.labelDistance: "Distance" = UserControlExpedition.Distance
-.buttonExtTravelFrom: "History" = UserControlRoute.buttonExtTravelTo
-.labelTo: "To" = MissionListUserControl.labelTo
-.buttonExtTargetTo: "Target" = UserControlCombatPanel.labelTarget
-.buttonTargetFrom: "Target" = UserControlCombatPanel.labelTarget
-.copyToolStripMenuItem: "Copy" => "Назначить"
-.showScanToolStripMenuItem: "View Scan Display" @
-.viewOnSpanshToolStripMenuItem: "View on Spansh" @
-.showInEDSMToolStripMenuItem: "View on EDSM" => "открыть в EDSM"
-.extButtonExpeditionPush.ToolTip: "Push to expedition" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
-.cmd3DMap.ToolTip: "Show route on 3D Map" => "Показать маршрут на 3D-карте"
-.comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" => "Выберите режим расчета маршрута"
-.extButtonRoute.ToolTip: "Compute the route" => "Рассчитать маршрут"
-.textBox_From.ToolTip: "Select system to start the route" => "Выберите начальную точку маршрута"
-.textBox_FromX.ToolTip: "X Co-ord" => "Координата X"
-.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." @
-.textBox_FromY.ToolTip: "Y (Vertical) Co-ord" => "Координата Y (вертикальная)"
-.textBox_ToName.ToolTip: "Alternate Name" => "Альтернативное название"
-.textBox_FromZ.ToolTip: "Z Co-ord" => "Координата Z"
-.textBox_Range.ToolTip: "Give your jump range, or search range for long jumps. This is updated on history change or change of ship/modules to the jump range with  zero cargo and maximum fuel" => "Укажите дальность прыжка или дальность поиска для длинных прыжков"
-.textBox_FromName.ToolTip: "Alternate name" = UserControlRoute.textBox_ToName.ToolTip
-.textBox_ToX.ToolTip: "X Co-Ord" = UserControlRoute.textBox_FromX.ToolTip
-.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" = UserControlRoute.textBox_FromY.ToolTip
-.textBox_Distance.ToolTip: "Distance between start and end" => "Расстояние между начальной и конечной точкой"
-.buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" => "Назначить запись из основной таблицы маршрутов конечной точкой маршрута"
-.textBox_ToZ.ToolTip: "Z Co-ord" = UserControlRoute.textBox_FromZ.ToolTip
-.buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" => "Назначить запись из основной таблицы маршрутов начальной точкой маршрута"
-.buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" => "Назначить целевую систему конечной точкой маршрута"
-.textBox_To.ToolTip: "Select the system to end in" => "Выберите конечную точку маршрута"
-.buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "Открыть конечную точку маршрута в EDSM"
-.buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "Назначить целевую систему начальной точкой маршрута"
-.buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "Открыть начальную точку маршрута в EDSM"
-.extButtonExpeditionSave.ToolTip: "Save as an expedition for use on expedition and surveyor panels" @
-.labelCargo: "Cargo" @
-.Confirm: "This will result in a large number ({0}) of jumps\r\nConfirm please" @
-.NoRoute: "No route set up, retry" @
+26FF00FE75BC12: "Nearest to Waypoint" => "Nähester Wegpunkt"
+508F66A88A61E3: "Minimum Deviation from Path" => "Geringste Abweichung vom Pfad"
+BE27456DCDC392: "Nearest to Waypoint with dev<=100ly" => "Nähester Wegpunkt mit Abw.<=100Lj"
+0B067FBCFEC659: "Nearest to Waypoint with dev<=250ly" => "Nähester Wegpunkt mit Abw.<=250Lj"
+F81B5CCC0CBA7E: "Nearest to Waypoint with dev<=500ly" => "Nähester Wegpunkt mit Abw.<=500Lj"
+A889A01619F167: "Nearest to Waypoint + Deviation / 2" => "Nähester Wegpunkt + Abweichung / 2"
+4AF0AE296CB9BC: "Star Class" => "Sternenklasse"
+A5B44BA4A6C532: "Dist. Waypoint" => "Расстояние до точки маршрута"
+37148FF19B7B45: "Deviation" => "Отклонение"
+4219EE1EC9D603: "Neutron Router" => "Neutronenrouter"
+CFD4E874046B93: "Road to Riches" => "Straße zum Reichtum"
+1DF8F8D30FDD0F: "Ammonia Worlds" => "Ammoniakwelten"
+AB2A9F0D8D787B: "Earth Likes" => "Erdähnliche"
+0077D22826A77F: "Trade Router" => "Handelsrouter"
+0CF5E327910E74: "Fleet Carrier" => "Fleet Carrier"
+B12CDD63114BA4: "Galaxy Plotter" => "Galaxieplotter"
+B364AA8B4033FF: "Exo Mastery" => "Exo-Meisterschaft"
+07AB47C5737BA1: "Use Permit Systems" => "Benutze gesperrte Systeme"
+C596F14D22DF2A: "EDD Router" => "EDD Router"
+B2BB7604C825F9: "Metric" => "Режим"
+B604A930356A28: "Find Route" => "Построить маршрут"
+A975EEA30DB9FA: "Parameters" => "Parameter"
+281FA0DAFE53E1: "Use Boosts" => "Verwende Boosts"
+3F66052A107EAF: "From" => "Из"
+EC59449017E5B6: "ly" => "св. л."
+8424A6DD977331: "Web Lookup" => "Netzsuche"
+A0E237BAC8B17A: "Max jump" => "Макс. прыжок"
+AE79EA1E9C6391: "To" => "в"
+7CF37443D567D9: "Push to expedition" => "Schiebe zu Expeditionen"
+D5C87506FD897A: "Show route on 3D Map" => "Показать маршрут на 3D-карте"
+2FB4DE63226EC5: "Pick the metric to use when searching for a route" => "Выберите режим расчета маршрута"
+15C8B586D75855: "Compute the route" => "Рассчитать маршрут"
+7CB23251C521A7: "Select system to start the route" => "Выберите начальную точку маршрута"
+CF2DBA7382BBC7: "X Co-ord" => "Координата X"
+57F290A76CC277: "The route finder will try and use FSD injections in case a direct route could not be found." => "Der Routenfinder wird versuchen FSA-Einspeisungen zu verwenden für den Fall das ein normaler Sprung nicht ausreicht"
+8F93A6BCCBBDE4: "Y (Vertical) Co-ord" => "Координата Y (вертикальная)"
+E2DB86200AEE3A: "Alternate Name" => "Альтернативное название"
+DA99EA2DAC297D: "Z Co-ord" => "Координата Z"
+7A6B5B6E3B9F41: "Give your jump range, or search range for long jumps. This is updated on history change or change of ship/modules to the jump range with  zero cargo and maximum fuel" => "Укажите дальность прыжка или дальность поиска для длинных прыжков"
+3964427D386841: "Alternate name" => "Альтернативное название"
+F380CB0DC8B202: "X Co-Ord" => "Координата X"
+FC8F6F814A4A0A: "Distance between start and end" => "Расстояние между начальной и конечной точкой"
+58323E0E70D331: "Copy the entry in the main travel grid to end route entry" => "Назначить запись из основной таблицы маршрутов конечной точкой маршрута"
+70B586862B1E2B: "Copy the entry in the main travel grid to start route entry" => "Назначить запись из основной таблицы маршрутов начальной точкой маршрута"
+DE6A8B4B96A80A: "Copy the target system to end route entry" => "Назначить целевую систему конечной точкой маршрута"
+97F2080200A937: "Select the system to end in" => "Выберите конечную точку маршрута"
+49EF07BB828D47: "Open this end route system in EDSM" => "Открыть конечную точку маршрута в EDSM"
+9373E102BD9CCC: "Copy the target system to start route entry" => "Назначить целевую систему начальной точкой маршрута"
+87C399D0E2BAD2: "Open this start route system in EDSM" => "Открыть начальную точку маршрута в EDSM"
+681943CB0EA134: "Save as an expedition for use on expedition and surveyor panels" => "Als Expedition speichern um es im Expeditions- oder Gutachterpanel zu benutzen"
+4BB903205B7347: "This will result in a large number ({0}) of jumps\r\nConfirm please" => "Dies wird eine hohe Anzahl ({0}) an Sprüngen ergeben\r\nBitte bestätigen"
+33C5EE107CFEC3: "No route set up, retry" => "Keine Route eingerichtet, wiederholen"
 
 SECTION UserControlRouteTracker
 
-.showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" @
-.showJumpsToolStripMenuItem: "Show Jumps To Go" => "Показать количество прыжков до цели"
-.showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" => "Показать координаты точки маршрута"
-.showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" => "Показать отклонение от маршрута"
-.autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "Автоматически копировать точку маршрута"
-.autoSetTargetToolStripMenuItem: "Auto set target" => "Автоматически выбирать цель"
-.showSystemRouteNoteToolStripMenuItem: "Show Route Note on waypoint" @
-.showtargetinfo: "Show Target Information" @
-.showfuelinfo: "Show Fuel Information" @
-.J1: "jump" => "прыжок"
-.TF: "To First WP " => "До первой точки маршрута "
-.JS: "jumps" => "прыж."
-.FL: "From Last WP " => "От последней точки маршрута "
-.LF: ", Left {0:N1}ly" => ", осталось {0:N1} св. л."
-.ToWP: "(WP {0})" => "(точки маршрута {0})"
-.NoFSD: " No Ship FSD Information" => "Нет информации о FSD"
-.Dev: ", Dev {0:N1}ly" => ", отклонение {0:N1} св. л."
-.NoWay: "Route contains no waypoints" => "Маршрут не содержит точек маршрута"
-.NoCo: "No systems in route have known co-ords" => "Ни одна система маршрута не содержит известных координат"
-.Note: "Note: {0}" @
+0BA3B547C8344B: "Show Bookmark Notes" => "Zeige Lesezeichennotizen"
+DF44D515D3D0A7: "Show Jumps To Go" => "Показать количество прыжков до цели"
+DA8C8F2A82D1B3: "Show Waypoint Coordinates" => "Показать координаты точки маршрута"
+9068E91DD59D7E: "Show Deviation from route" => "Показать отклонение от маршрута"
+0E41D824E76FFC: "Auto copy waypoint" => "Автоматически копировать точку маршрута"
+47A9634A94F762: "Auto set target" => "Автоматически выбирать цель"
+E732DB70301B2D: "Show Route Note on waypoint" => "Zeige Routennotiz am Wegpunkt"
+F01A41B43B8868: "Show Target Information" => "Zeige Zielinformation"
+79A125B4CFF3BE: "Show Fuel Information" => "Zeige Treibstoffinformation"
+271E9A568C0E9E: "jump" => "прыжок"
+24C1C17E2C811B: "To First WP " => "До первой точки маршрута "
+EDA92612CF2474: "jumps" => "прыж."
+8212F4935A232D: "From Last WP " => "От последней точки маршрута "
+DD0341E14022F3: ", Left {0:N1}ly" => ", осталось {0:N1} св. л."
+DF5C9749BAE618: "(WP {0})" => "(точки маршрута {0})"
+F01632B2B22D3F: " No Ship FSD Information" => "Нет информации о FSD"
+2DA19892882702: ", Dev {0:N1}ly" => ", отклонение {0:N1} св. л."
+CEE17FB4380701: "Route contains no waypoints" => "Маршрут не содержит точек маршрута"
+C415DA3D51A1E9: "No systems in route have known co-ords" => "Ни одна система маршрута не содержит известных координат"
+33F6E6F622B613: "Note: {0}" => "Notiz: {0}"
 
 SECTION UserControlScan
 
-.scanDisplayBodyFiltersButton.ToolTip: "Configure scan display body filters" @
-.scanDisplayConfigureButton.ToolTip: "Configure scan display" @
-.extCheckBoxStar.ToolTip: "Select another system to view" => "Выбрать другую систему"
-.buttonSize.ToolTip: "Select image size" => "Выбрать размер изображений"
-.extButtonHighValue.ToolTip: "Set High Value Limit" => "Выбрать стоимость скана"
-.buttonExtExcel.ToolTip: "Export" = UserControlJournalGrid.buttonExtExcel.ToolTip
-.System: "System:" => "Система: "
-.EnterSys: "Show System" => "Выбор системы"
-.VLMT: "Set Valuable Minimum" => "Выбор минимальной стоимости скана, кр."
-.StatusIcons: "Show body status icons" @
-.SystemValue: "Show system and value in main display" @
-.MatFull: "Hide materials which have reached their storage limit" @
-.ShowMaterials: "Show Materials" @
-.ShowRaresOnly: "Show rare materials only" @
-.ShowMoons: "Show Moons" @
-.Belt: "Belt" @
-.Star: "Star" @
-.Barycentre: "Barycentre" @
-.Body: "Body" @
-.AllG: "Show G on all planets" @
-.HabZone: "Show Habitation Zone" @
-.PlanetClass: "Show Classes of Planets" @
-.StarClass: "Show Classes of Stars" @
-.Distance: "Show distance of bodies" @
-.PlanetMass: "Show mass of planets" @
-.StarMass: "Show mass of stars" @
-.StarAge: "Show age of stars" @
-.Expired: "Expired:" @
-.StarsOnDiffLines: "Show bodyless stars on separate lines" @
-.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
+F3B7084D189898: "Configure scan display body filters" => "Konfiguriere Körperfilter für Scananzeige"
+0FE1B534E56651: "Configure scan display" => "Konfiguriere Scananzeige"
+111D3A2E729C26: "Select image size" => "Выбрать размер изображений"
+A0BB88B66F57E8: "Set High Value Limit" => "Выбрать стоимость скана"
+2F2F42105ABA82: "Set Valuable Minimum" => "Выбор минимальной стоимости скана, кр."
+0DE266189138B6: "Show body status icons" => "Zeige Körperstatussymbole"
+3466741E7D93DA: "Show system and value in main display" => "Zeige System und Wert in der Hauptanzeige"
+028F51CCB7BAD7: "Hide materials which have reached their storage limit" => "Verbirg Materialien deren Aufbewahrungslimit erreicht ist"
+9F6C1D41D0D032: "Show Materials" => "Zeige Materialien"
+B028A006D79224: "Show rare materials only" => "Zeige nur seltene Materialien"
+00848F83A633FB: "Show Moons" => "Zeige Monde"
+2DBDE6DD6FB541: "Belt" => "Gürtel"
+17B8D69486D780: "Barycentre" => "Baryzentrum"
+14E0E8D442549A: "Show G on all planets" => "Zeige 'G' bei allen Planeten"
+12071F4330F803: "Show Habitation Zone" => "Zeige habitable Zone"
+64E6C643FFE7E8: "Show Classes of Planets" => "Zeige Planetenklassen"
+E0B7B8CC8BD7CC: "Show Classes of Stars" => "Zeige Sternenklassen"
+9BD1DE0511B36C: "Show distance of bodies" => "Zeige Entfernungen der Körper"
+1BC356C17D4433: "Show mass of planets" => "Zeige Planetenmasse"
+FA07BE19814A99: "Show mass of stars" => "Zeige Sternenmasse"
+A35655D05BB820: "Show age of stars" => "Zeige Sternenalter"
+0A78BBC3075642: "Expired:" => "Abgelaufen:"
+90EAF9559AB2D2: "Show bodyless stars on separate lines" => "Zeige körperlose Sterne auf separater Linie"
+79F1829F7C4ED0: "Create a new bookmark for the current system" => "Erstelle ein neue Lesezeichen für das aktuelle System"
 
 SECTION UserControlScanGrid
 
-.colName: "Name" = UserControlCombatPanel.Name
-.colClass: "Class" => "Класс"
-.colDistance: "Distance" = UserControlExpedition.Distance
-.colBriefing: "Information" => "Сводка"
-.ColCurValue: "Current Value" @
-.ColMaxValue: "Max Value" @
-.ColOrganics: "Organics Value" @
-.extButtonShowControl.ToolTip: "Configure overall settings" @
-.extButtonHighValue_ToolTip: "Set High Value Limit" @
-.MainStar: "Main Star" = UserControlExpedition.Stars
-.Mass: "Mass" = UserControlModules.Mass
-.Radius: "Radius" => "Радиус"
-.Temperature: "Temperature" => "Температура"
-.Terraformable: "Terraformable" => "Пригодна для терраформирования"
-.Moon: "Moon" => "луна"
-.Landable: "Landable" => "Пригодна для посадки"
-.Geologicalactivity: "Geological activity" => "Геологическая активность"
-.Surfacemapped: "Surface mapped" => "Картографирована"
-.BC: "This body contains: " => "Материалы на планете: "
-.Ring: "Ring: " => "С кольцом: "
-.Belt: "Belt: " => "Пояс: "
-.GS: "This is a green system, as it has all existing jumponium materials available!" @
-.JS: " jumponium materials found in system." @
-.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Результат сканирования {0} — звезд: {1}; планет: {2} (из них земного типа: {3}, газовых гигантов: {4}), лун: {5}"
-.structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" => "Пояса"
-.structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "Кольца"
-.materialsToolStripMenuItem: "Show materials" => "Материалы"
-.extButtonHighValue.ToolTip: "Set High Value Limit" @
-.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
+41FF354B2B330B: "Class" => "Класс"
+63289439EF0B8A: "Max Value" => "Maximaler Wert"
+ED567CF0E9AE1F: "Organics Value" => "Wert der Organismen"
+EBFEA75A0A6AC5: "Configure overall settings" => "Konfiguriere allgemeine Einstellungen"
+0498696B357E52: "Main Star" => "Главная звезда"
+E5AAEAAC2E19A2: "Radius" => "Радиус"
+0A9062A9CB5199: "Temperature" => "Температура"
+846B90266CABF4: "Moon" => "луна"
+F85D3B343E0C17: "Geological activity" => "Геологическая активность"
+8E140B3FB3635C: "Surface mapped" => "Картографирована"
+A7D0680CBE63CD: "This body contains: " => "Материалы на планете: "
+8189F9AF9F3214: "Ring: " => "С кольцом: "
+70D78F107FF0C0: "Belt: " => "Пояс: "
+CB7305DF2F4D76: "This is a green system, as it has all existing jumponium materials available!" => "To jest zielony układ, ponieważ zawiera wszystkie istniejące materiały jumponium!"
+318EF98C2276FA: " jumponium materials found in system." => " materiały jumponium znalezione w układzie."
+37B1866847BAC8: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Результат сканирования {0} — звезд: {1}; планет: {2} (из них земного типа: {3}, газовых гигантов: {4}), лун: {5}"
+E8DE686E802FAB: "Show belts" => "Пояса"
+F914C4A8D920BF: "Show rings" => "Кольца"
+66076C60802EA8: "Show materials" => "Материалы"
 
 SECTION UserControlSettings
 
-.groupBoxCommanders: "Commanders" => "Командир"
-.ColumnCommander: "Commander" = UserControlSettings.groupBoxCommanders
-.EdsmName: "EDSM Name" => "Имя в EDSM"
-.JournalDirCol: "Journal Folder" => "Путь к файлам журнала"
-.NotesCol: "Notes" = UserControlEngineering.NotesCol
-.btnDeleteCommander: "Delete" = Delete
-.extButtonUnDelete: "Undelete" @
-.buttonEditCommander: "Edit" => "Изменить"
-.buttonAddCommander: "Add" => "Добавить"
-.groupBoxTheme: "Theme" => "Тема"
-.button_edittheme: "Edit Theme" => "Изменить тему"
-.buttonSaveTheme: "Save Theme" => "Сохранить тему"
-.groupBoxCustomHistoryLoad: "History" => "Настройки истории"
-.checkBoxOrderRowsInverted: "Number Rows by Date Ascending" => "Нумерация строк снизу вверх"
-.labelTimeDisplay: "Time:" @
-.extGroupBoxWebServer: "Web Server" @
-.labelPortNo: "Port" @
-.extButtonTestWeb: "Test" @
-.extCheckBoxWebServerEnable: "Enable" @
-.groupBoxInteraction: "Interaction" @
-.labelTKey: "Key to activate transparent windows" => "Клавиша для включения прозрачности"
-.groupBoxMemory: "Memory" @
-.labelHistoryEssItems: "Essential entries:" => "Важные события это"
-.labelHistorySel: "Entries to read:" => "Только важные события"
-.groupBoxCustomScreenShots: "Screenshots conversion" => "Скриншоты"
-.buttonExtScreenshot: "Configure" => "Настройки"
-.checkBoxCustomEnableScreenshots: "Enable" => "Преобразовывать скриншоты"
-.groupBoxCustomEDSM: "System DB Control" => "Управление EDSM/EDDB"
-.buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "Размер Галактики"
-.checkBoxCustomEDSMDownload: "Enable Star Data Download" => "Загрузка данных о системах"
-.groupBoxPopOuts: "Window Options" => "Параметры окна"
-.checkBoxPanelSortOrder: "Panel List Sorted Alphanumerically" => "Сортировать список панелей по алфавиту"
-.checkBoxKeepOnTop: "Keep on Top" => "Закрепить поверх других окон"
-.checkBoxCustomResize: "Redraw the screen during resizing" => "Обновлять окно после изменения размера"
-.checkBoxMinimizeToNotifyIcon: "Minimize to notification area icon" => "Сворачивать в трей"
-.checkBoxUseNotifyIcon: "Show notification area icon" => "Показать значок в трее"
-.extGroupBoxDLLPerms: "DLLs" @
-.extButtonDLLPerms: "Permissions" @
-.extButtonDLLConfigure: "Configure" @
-.groupBoxCustomLanguage: "Language" => "Язык"
-.groupBoxCustomSafeMode: "Advanced" @
-.buttonExtSafeMode: "Restart in Safe Mode" => "Перезапуск в безопасном режиме"
-.labelSafeMode: "Click this to perform special operations, such as to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" => "Выполнение специфичных действий"
-.btnDeleteCommander.ToolTip: "Delete selected commander" => "Удалить выбранного командира"
-.buttonEditCommander.ToolTip: "Edit selected commander" => "Редактировать настройки выбранного командира"
-.buttonAddCommander.ToolTip: "Add a new commander" => "Добавить нового командира"
-.comboBoxTheme.ToolTip: "Select the theme to use" => "Выбрать тему интерфейса"
-.button_edittheme.ToolTip: "Edit theme and change colours fonts" => "Изменить тему и цвет шрифтов"
-.buttonSaveTheme.ToolTip: "Save theme to disk" => "Сохранить тему на диск"
-.checkBoxOrderRowsInverted.ToolTip: "Number oldest entry 1, latest entry highest" => "Нумерация начнется от самой старой записи к самой новой"
-.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "Выбор клавиши, удержание которой не менее 500 мс покажет форму внешнего прозрачного окна, если\r\nего режим прозрачности Tc (элементы управления активны) или Tf (элементы управления неактивны)\r\nНе все клавиши гарантированно работают на всех клавиатурах"
-.comboBoxCustomEssentialEntries.ToolTip: "Select which items you consider essential to load older than the time above" => "Какие события считать важными, если загружать не все события старше определенного интервала времени"
-.comboBoxCustomHistoryLoadTime.ToolTip: "Reduce Memory use. Select either load all records, or load only essential items of records older than a set time before now" => "Для записей старше определенного интервала времени загружать только важные события"
-.buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "Дополнительные настройки для скриншотов"
-.checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "Включить / выключить преобразование скриншотов"
-.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "Выберите, какая часть Галактики будет храниться в базе данных"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or Spansh. Will apply at next start." => "Разрешить загрузку систем из EDSM и информацию о них из EDDB. Начнет действовать после перезапуска"
-.checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Список панелей отсортирован по алфавиту, а не по группам. Потребуется перезапуск."
-.checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "Закрепить это окно (и все дочерние) поверх других окон"
-.checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Разрешить EDD перерисовать окна при изменении размера главного окна. Помогает, если EDD работает слишком медленно"
-.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." => "Сворачивать основное окно в область уведомлений (трей)"
-.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." => "Показать значок EDDiscovery в области уведомлений (трее)"
-.buttonExtSafeMode.ToolTip: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." => "В безопасном режиме вы сможете восстановить настройки интерфейса, сбросить дополнения, переместить файл базы и т. д."
-.GameTime: "Game Time" @
-.Local: "Local" @
-.WSQ: "Warning about webserver-  see english text" @
-.WSF: "Did not start - click OK to configure windows" @
-.FS: "All entries for Statistics" => "Все события (для статистики)"
-.SM: "Safe Mode" => "Вы действительно хотите перезапустить программу в безопасном режиме?"
-.CSM: "Confirm restart to safe mode" => "Безопасный режим"
-.DLA: "Disabled-Load All" => "Откл. (загружать все)"
-.7daysold: ">7 days old" => ">7 дней"
-.30daysold: ">30 days old" => ">30 дней"
-.60daysold: ">60 days old" => ">60 дней"
-.90daysold: ">90 days old" => ">90 дней"
-.180daysold: ">180 days old" => ">180 дней"
-.270daysold: ">270 days old" => ">270 дней"
-.365daysold: "> 365 days old" => ">365 дней"
-.AddC: "Commander name is not valid or duplicate (this includes deleted commanders)" => "Неправильное или дублирующееся имя командира"
-.AddT: "Cannot create Commander" => "Не удалось создать командира"
-.Language: "Applies at next restart of ED Discovery" => "Изменения вступят в силу после перезапуска ED Discovery"
-.RemoveSectors: "Remove Sectors" => "Удалить сектора"
-.GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "Число удаляемых секторов: {0}\r\n\r\nЭто может занять некоторое время (до 30 минут, в зависимости от типа диска и числа секторов).\r\nВ процессе удаления вы можете продолжать пользоваться EDD, но скорость работы программы будет снижена.\r\nНе выходите из программы, пока в этом окне не появится надпись о завершении процесса удаления\r\n\r\n"
-.ESM: "Scans,Cargo,Missions,State,Jumps etc" => "Сканы, груз, миссии, состояния, прыжки и пр."
-.EJS: "Jumps and Scans" => "Прыжки и сканы"
-.EJ: "Jumps" => "Прыжки"
-.EN: "Nothing" = None
-.DelCmdr: "Do you wish to delete commander " @
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
-.NoMap: "No map available!" @
-.GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Процесс удаления завершен, можете закрыть это окно.\r\nЕсли 3D-карта была открыта, то изменения не будут видны до перезапуска ED Discovery\r\n"
-.extButtonReloadStarDatabase: "Reload Star Database" @
-.RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" @
-.PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" @
-.PermDelTLUs: "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned" @
+B6EB402E86A9AA: "Commanders" => "Командир"
+79056C7AE5C30B: "Commander" => "Командир"
+F5110F31C60E83: "EDSM Name" => "Имя в EDSM"
+DE5B4A878597E3: "Journal Folder" => "Путь к файлам журнала"
+9B2A9354670636: "Undelete" => "Wiederherstellen"
+A797E30923AC1B: "Theme" => "Тема"
+2E150D8A081FC8: "Edit Theme" => "Изменить тему"
+3F3EC4F121D583: "Save Theme" => "Сохранить тему"
+566A5EE14C22AA: "Number Rows by Date Ascending" => "Нумерация строк снизу вверх"
+179578FE1B6B89: "Time:" => "Zeit:"
+A030328790B9CB: "Web Server" => "Webserver"
+FE035157CDA20B: "Port" => "Port"
+94DC8E4A59FAFE: "Interaction" => "Interaktion"
+C223113FF59532: "Key to activate transparent windows" => "Клавиша для включения прозрачности"
+89C8A2851D1755: "Memory" => "Speicher"
+CED36555EC7260: "Essential entries:" => "Важные события это"
+7807CC93D64789: "Entries to read:" => "Только важные события"
+5F6928B2C259B9: "Screenshots conversion" => "Скриншоты"
+792C81A4CFDCB5: "Configure" => "Настройки"
+12AC0D4B1657FF: "System DB Control" => "Управление EDSM/EDDB"
+334E943E9FB004: "Select Galaxy Sectors" => "Размер Галактики"
+A8BC1FAAA274A7: "Enable Star Data Download" => "Загрузка данных о системах"
+317A9C4C64BC59: "Window Options" => "Параметры окна"
+0FC3A60BCF5F54: "Panel List Sorted Alphanumerically" => "Сортировать список панелей по алфавиту"
+794E96F604BFC5: "Keep on Top" => "Закрепить поверх других окон"
+004EBAB30A7ED5: "Redraw the screen during resizing" => "Обновлять окно после изменения размера"
+A7123DF1E1E2B7: "Minimize to notification area icon" => "Сворачивать в трей"
+D6D452D0168D18: "Show notification area icon" => "Показать значок в трее"
+C30412531E342C: "DLLs" => "DLLs"
+D06D55570938D1: "Permissions" => "Bewilligungen"
+89B86AB0E66F52: "Language" => "Язык"
+4D064726954A17: "Advanced" => "Przenieś Bazę Danych Układów / Resetuj UI itp."
+00626039F3FF33: "Restart in Safe Mode" => "Перезапуск в безопасном режиме"
+EC0002676E6536: "Click this to perform special operations, such as to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" => "Выполнение специфичных действий"
+5E012313D53D6A: "Delete selected commander" => "Удалить выбранного командира"
+7C7C0A7584F6BD: "Edit selected commander" => "Редактировать настройки выбранного командира"
+073DC101EBF015: "Add a new commander" => "Добавить нового командира"
+C5D82DE31444DF: "Select the theme to use" => "Выбрать тему интерфейса"
+3862B55B3D720A: "Edit theme and change colours fonts" => "Изменить тему и цвет шрифтов"
+BAABF5504D96C4: "Save theme to disk" => "Сохранить тему на диск"
+06D37B3D46DDCA: "Number oldest entry 1, latest entry highest" => "Нумерация начнется от самой старой записи к самой новой"
+46F5DE3952C339: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "Выбор клавиши, удержание которой не менее 500 мс покажет форму внешнего прозрачного окна, если\r\nего режим прозрачности Tc (элементы управления активны) или Tf (элементы управления неактивны)\r\nНе все клавиши гарантированно работают на всех клавиатурах"
+E0B7735E842CE8: "Select which items you consider essential to load older than the time above" => "Какие события считать важными, если загружать не все события старше определенного интервала времени"
+2C69938F3F03DE: "Reduce Memory use. Select either load all records, or load only essential items of records older than a set time before now" => "Для записей старше определенного интервала времени загружать только важные события"
+D6C9D5C40DF2C7: "Configure further screenshot options" => "Дополнительные настройки для скриншотов"
+A76FCAEEA65CBF: "Screen shot conversion on/off" => "Включить / выключить преобразование скриншотов"
+BE90FE37C78533: "Configure what parts of the galaxy is stored in the databases" => "Выберите, какая часть Галактики будет храниться в базе данных"
+26DF220E45D164: "Click to enable downloading of stars from EDSM or Spansh. Will apply at next start." => "Разрешить загрузку систем из EDSM и информацию о них из EDDB. Начнет действовать после перезапуска"
+F4DEBC114897AE: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "Список панелей отсортирован по алфавиту, а не по группам. Потребуется перезапуск."
+54FEFCA3DB03FE: "This window, and its children, top" => "Закрепить это окно (и все дочерние) поверх других окон"
+A480FFBFDC2BF0: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "Разрешить EDD перерисовать окна при изменении размера главного окна. Помогает, если EDD работает слишком медленно"
+BCCEBEFF588CE4: "Minimize the main window to the system notification area (system tray) icon." => "Сворачивать основное окно в область уведомлений (трей)"
+5AE9F629C09614: "Show a system notification area (system tray) icon for EDDiscovery." => "Показать значок EDDiscovery в области уведомлений (трее)"
+F6CB7AD3D68BFC: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." => "В безопасном режиме вы сможете восстановить настройки интерфейса, сбросить дополнения, переместить файл базы и т. д."
+DC99D54D9990E3: "Local" => "Lokal"
+920917D62700D0: "Warning about webserver-  see english text" => "Webserverwarnung - beachte den englischen Text"
+00A0EA8208DAC7: "Did not start - click OK to configure windows" => "Hat nicht gestartet - Klicke OK um Windows zu konfigurieren"
+96645A6CB7E91B: "All entries for Statistics" => "Все события (для статистики)"
+6A8283358AA59B: "Safe Mode" => "Вы действительно хотите перезапустить программу в безопасном режиме?"
+BBD0319867FC1E: "Confirm restart to safe mode" => "Безопасный режим"
+AB146721A7BC2F: "Disabled-Load All" => "Откл. (загружать все)"
+45683F096FC430: ">7 days old" => ">7 дней"
+9A7AEB2BA766D8: ">30 days old" => ">30 дней"
+BD98EE695EC66F: ">60 days old" => ">60 дней"
+198BC754294DA9: ">90 days old" => ">90 дней"
+902084E644DC1D: ">180 days old" => ">180 дней"
+7615E2DC91B27E: ">270 days old" => ">270 дней"
+FFF1F5F39D9153: "> 365 days old" => ">365 дней"
+267279EDD392BA: "Commander name is not valid or duplicate (this includes deleted commanders)" => "Неправильное или дублирующееся имя командира"
+8B98347828D14F: "Cannot create Commander" => "Не удалось создать командира"
+0221468E9EFD76: "Applies at next restart of ED Discovery" => "Изменения вступят в силу после перезапуска ED Discovery"
+C552D2599FF6E0: "Remove Sectors" => "Удалить сектора"
+66B750A2F3569C: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "Число удаляемых секторов: {0}\r\n\r\nЭто может занять некоторое время (до 30 минут, в зависимости от типа диска и числа секторов).\r\nВ процессе удаления вы можете продолжать пользоваться EDD, но скорость работы программы будет снижена.\r\nНе выходите из программы, пока в этом окне не появится надпись о завершении процесса удаления\r\n\r\n"
+39F0CD5F9474CD: "Scans,Cargo,Missions,State,Jumps etc" => "Сканы, груз, миссии, состояния, прыжки и пр."
+3EEDD176CCBBA9: "Jumps and Scans" => "Прыжки и сканы"
+933ADEA19EEE0A: "Jumps" => "Прыжки"
+4481948392A884: "Nothing" => "Ничего"
+E3AEDF672CD00D: "Do you wish to delete commander " => "Willst du den Kommandanten löschen"
+EB4FD2BBBBAACE: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Die von diesem Thema verwendete Schriftart ist auf diesem System nicht verfügbar.\r\nDie benötigte Schriftart ist \"{0}\"\r\nInstalliere diese Schriftart um das Thema wie vorgesehen zu nutzen.\r\nDie Schriftart Euro Caps ist auf www.edassets.org frei verfügbar.\r\n\r\nWillst du diese Thema mit einer Ersatzschriftart laden?"
+57768403688225: "No map available!" => "Keine Karte verfügbar!"
+35F9B4B074BFBC: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Процесс удаления завершен, можете закрыть это окно.\r\nЕсли 3D-карта была открыта, то изменения не будут видны до перезапуска ED Discovery\r\n"
+BB75D637DC2C4D: "Reload Star Database" => "Sternendatenbank neu laden"
+CA622FCCA53890: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" => "Dies löscht die Sternendatenbank.\r\n\r\nDanach kannst du erneut die Datenquelle sowie\r\ndie Regionen wählen.\r\nDies benötigt einen erneuten Download der Daten vom Server.\r\nBenutze dies nur, wenn du die Datenbank neu erstellen willst."
+9124C85C715BCB: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" => "Willst du alle Kommandanten und Journaldaten permanent löschen (JA),\r\noder den Kommandanten nur verbergen und ihn nie wieder anzeigen (NEIN)?"
+A60B40E8AD02DD: "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned" => "Willst du alle Aufzeichnungen über die Journaldateien dieses Kommandanten löschen?(Ja)\r\nJa zu wählen bedeutet, dass die Dateien ernuet gescannt werden sofern sie noch vorhanden sind.\r\nNein zu wählen bedeutet, dass sie nicht erneut gescannt werden."
 
 SECTION UserControlShipYards
 
-.labelYard: "Unknown" = Unknown
-.labelYardSel: "Sel" @
-.comboBoxYards.ToolTip: "Select ship to view" => "Выберите корабль или космоверфь для просмотра"
-.TravelHistoryEntry: "Travel History Entry" = UserControlModules.TravelHistoryEntry
-.Date: "Date" = SearchMaterialsCommodities.ColumnDate
-.Yard: "Yard" => "Космоверфь"
-.Distance: "Distance" = UserControlExpedition.Distance
-.Price: "Price" = UserControlModules.Cost
-.Ship: "Ship" => "Корабль"
-.Manufacturer: "Manufacturer" => "Производитель"
-.MS: "Mass/Speed" => "Масса, скорость макс./форсаж"
+7ADFCD13B3B01D: "Manufacturer" => "Производитель"
+BA513F9A92BA39: "Mass/Speed" => "Масса, скорость макс./форсаж"
 
 SECTION UserControlShoppingList
 
-.toggleListPositionToolStripMenuItem: "Toggle Shopping List Position" @
-.showMaxFSDInjectionsToolStripMenuItem: "Show Max FSD Injections" => "Показать максимум вбросов в FSD"
-.showBodyMaterialsWhenLandedToolStripMenuItem: "Show Body Materials When Landed" => "Показывать материалы на планете (после посадки)"
-.showBodyMaterialsWhenLandedToolStripMenuItem.onlyCapacityToolStripMenuItem: "Hide when storage full" => "Скрыть, если хранилище заполнено"
-.showAvailableMaterialsInListWhenLandedToolStripMenuItem: "Include Material %age on Landed Body in Shopping List" => "Показывать % содержания материалов на планете (после посадки)"
-.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem: "Show System Availability in Shopping List in flight" => "Показывать доступные материалы в системе (во время полета)"
-.useEDSMDataInSystemAvailabilityToolStripMenuItem: "Use EDSM data in System Availability" => "Для показа доступных в системе материалов использовать данные EDSM"
-.useHistoricMaterialCountsToolStripMenuItem: "Use Historic Material Counts" => "Показывать материалы в системе, выбранной в истории полетов"
-.NM: "Needed Mats" => "Требуются материалы"
-.FS: "Filling Shopping List would exceed capacity for: " => "Выполнение «плана покупок» превысит вместимость для: "
-.NoMat: "No materials currently required." => "В настоящее время материалы не требуется"
-.FSD: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" => "Максимум вбросов в FSD:\r\n   Базовый: {0} \r\n   Стандартный: {1} \r\n   Премиум: {2} "
-.MO: "Materials on {0}" => "Материалы по {0}"
+D22D741A6676D7: "Toggle Shopping List Position" => "Einkaufslistenposition umschalten"
+0812899125F068: "Show Max FSD Injections" => "Показать максимум вбросов в FSD"
+E47EB539D71A8B: "Show Body Materials When Landed" => "Показывать материалы на планете (после посадки)"
+EBB4F47C22800F: "Hide when storage full" => "Скрыть, если хранилище заполнено"
+E003047957A50D: "Include Material %age on Landed Body in Shopping List" => "Показывать % содержания материалов на планете (после посадки)"
+2E54B6C0C40451: "Show System Availability in Shopping List in flight" => "Показывать доступные материалы в системе (во время полета)"
+88E515DDBD6CF6: "Use EDSM data in System Availability" => "Для показа доступных в системе материалов использовать данные EDSM"
+E3E78C5A9B4B48: "Use Historic Material Counts" => "Показывать материалы в системе, выбранной в истории полетов"
+0D1C90F01F1AC9: "Needed Mats" => "Требуются материалы"
+9CAA261BEC144D: "Filling Shopping List would exceed capacity for: " => "Выполнение «плана покупок» превысит вместимость для: "
+0C17E1E2D825FF: "No materials currently required." => "В настоящее время материалы не требуется"
+9CDB9B531A7E2C: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" => "Максимум вбросов в FSD:\r\n   Базовый: {0} \r\n   Стандартный: {1} \r\n   Премиум: {2} "
+7D83DF15795144: "Materials on {0}" => "Материалы по {0}"
 
 SECTION UserControlSpanel
 
-.showSystemInformationToolStripMenuItem: "Show System Information" => "Показать информацию о системе"
-.toolStripMenuItemTargetLine: "Show Target Line" => "Показать цель"
-.blackBoxAroundTextToolStripMenuItem: "Show black box around text" => "Показать черную рамку вокруг текста"
-.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" => "Текст может заполнять пустые столбцы"
-.EDSMButtonToolStripMenuItem: "Show EDSM Button" => "Показать кнопку EDSM"
-.toolStripMenuItemTime: "Show Time" => "Показать время"
-.iconToolStripMenuItem: "Show Event Icon" => "Показать значок события"
-.showDescriptionToolStripMenuItem: "Show Description" => "Показать описание"
-.showInformationToolStripMenuItem: "Show Information" => "Показать информацию"
-.showNotesToolStripMenuItem: "Show Notes" => "Показать примечания"
-.showXYZToolStripMenuItem: "Show XYZ" => "Показать координаты"
-.showTargetToolStripMenuItem: "Show Target Distance per Star" => "Показать расстояние до цели"
-.showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" => "Показывать расстояния/координаты только для FSD-прыжков"
-.showCircumstellarZonesToolStripMenuItem: "Show Habitation Zone" => "Показать околозвездную зону"
-.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Show Metal Rich Planet Zone" => "Богатые металлами планеты"
-.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Show Water World Zone" = UserControlSurveyor.planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem
-.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Show Earth Like Zone" = UserControlSurveyor.planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem
-.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Show Ammonia Worlds Zone" = UserControlSurveyor.planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem
-.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Show Icy Planets Zone" => "Ледяные планеты"
-.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" => "По умолчанию"
-.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" => "Примечания после координат"
-.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance, XYZ, Notes" => "Расстояние, координаты, примечания"
-.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do not show" => "Не показывать"
-.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" => "Показывать на 15 с"
-.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" => "Показывать на 30 с"
-.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" => "Показывать на 60 с"
-.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" => "Показать до следующего сканирования"
-.showInPositionToolStripMenuItem.scanRightMenuItem: "Scan right" => "Справа"
-.showInPositionToolStripMenuItem.scanLeftMenuItem: "Scan left" => "Слева"
-.showInPositionToolStripMenuItem.scanAboveMenuItem: "Scan above" => "Над"
-.showInPositionToolStripMenuItem.scanBelowMenuItem: "Scan below" => "Под"
-.showInPositionToolStripMenuItem.scanOnTopMenuItem: "Scan on top" => "Сверху"
-.dontShowInformationWhenToolStripMenuItem: "Don't show information when" => "Не показывать информацию"
-.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" => "если пристыкован или на поверхности"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "in a panel" => "на панели карты Галактики"
-.dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" @
-.extButtonShowControl.ToolTip: "Configure overall settings" @
-.extButtonColumns.ToolTip: "Configure columns shown" @
-.extButtonColumnOrder.ToolTip: "Configure column order" @
-.extButtonHabZones.ToolTip: "Configure hab zone information" @
-.buttonFilter.ToolTip: "Select what journal events to show" => "Настроить фильтр событий"
-.buttonField.ToolTip: "Filter out events" => "Настроить фильтр полей"
-.extButtonScanShow.ToolTip: "Configure scan display" @
-.extButtoScanPos.ToolTip: "Set position of scan display" @
-.extButtonFont.ToolTip: "Font" @
-.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
-.Target: "Target" = UserControlCombatPanel.labelTarget
-.TVE: "View system on EDSM" => "Открыть систему в EDSM"
-.SPF: "Summary Panel: Filter out fields" => "Сводка: фильтры полей"
+86707E793088A5: "Show System Information" => "Показать информацию о системе"
+947E9DB6290887: "Show Target Line" => "Показать цель"
+99B4A5A694049B: "Show black box around text" => "Показать черную рамку вокруг текста"
+52303D52FDA1E8: "Expand text over empty columns" => "Текст может заполнять пустые столбцы"
+5CE18D19284643: "Show EDSM Button" => "Показать кнопку EDSM"
+BD413A29C4C356: "Show Time" => "Показать время"
+9EC41B75A0854E: "Show Event Icon" => "Показать значок события"
+2B3314685F559A: "Show Description" => "Показать описание"
+06C50F94ED2128: "Show Information" => "Показать информацию"
+56994172648361: "Show Notes" => "Показать примечания"
+4FF7205424F371: "Show XYZ" => "Показать координаты"
+9764DC9D6369A0: "Show Target Distance per Star" => "Показать расстояние до цели"
+447B8D5C3B4655: "Show Distances/Coords on FSD Jumps Only" => "Показывать расстояния/координаты только для FSD-прыжков"
+130D6DAAB12C4F: "Show Metal Rich Planet Zone" => "Богатые металлами планеты"
+6D1F3FC2F261AB: "Show Water World Zone" => "Водные планеты"
+4198FF6D626B23: "Show Earth Like Zone" => "Землеподобные планеты"
+73F63E50AB4582: "Show Ammonia Worlds Zone" => "Аммиачные планеты"
+B2A10246DEC8E8: "Show Icy Planets Zone" => "Ледяные планеты"
+C48B020E9868AE: "Notes after XYZ" => "Примечания после координат"
+9CF96274C9A16D: "Target Distance, XYZ, Notes" => "Расстояние, координаты, примечания"
+D3E54B19E403FB: "Do not show" => "Не показывать"
+EEF268E4AC4B29: "Show for 15s" => "Показывать на 15 с"
+27FA6DFFB4B263: "Show for 30s" => "Показывать на 30 с"
+30F33F637DC3A6: "Show for 60s" => "Показывать на 60 с"
+00A2E5EB339AC1: "Show until next scan" => "Показать до следующего сканирования"
+B3FBFBCD0DCFA6: "Scan right" => "Справа"
+3734BB9FE72C21: "Scan left" => "Слева"
+3B0CEE63CBEFF1: "Scan above" => "Над"
+EB54833DC625A5: "Scan below" => "Под"
+EEA3CFB9910032: "Scan on top" => "Сверху"
+DD4C8476A88CC9: "Don't show information when" => "Не показывать информацию"
+B250917C49B7D5: "docked or landed" => "если пристыкован или на поверхности"
+7EEA35AC162E12: "in a panel" => "на панели карты Галактики"
+FEA2ABBFF1AA3C: "Hide the title when hidden" => "Verbirg den Titel wenn versteckt"
+DA951505B7A2B9: "Configure columns shown" => "Konfiguriere sichtbare Spalten"
+7E9B44443D446C: "Configure column order" => "Konfiguriere Spaltenreihenfolge"
+ABFD5D69CC7519: "Configure hab zone information" => "Konfiguriere Informationen der habitablen Zone"
+A3BC8A32D0EE63: "Select what journal events to show" => "Настроить фильтр событий"
+FE67A0163BF256: "Filter out events" => "Настроить фильтр полей"
+3B3A8D354BD61D: "Set position of scan display" => "Position der Scananzeige festlegen"
+50B0FAEA7E4452: "View system on EDSM" => "Открыть систему в EDSM"
+DBB6ACB5E31084: "Summary Panel: Filter out fields" => "Сводка: фильтры полей"
 
 SECTION UserControlStarDistance
 
-.addToExpeditionToolStripMenuItem: "Add to Expedition" => "Добавить к панели экспедиции"
-.colName: "Name" = UserControlCombatPanel.Name
-.colDistance: "Distance" = UserControlExpedition.Distance
-.colVisited: "Visited" = UserControlExpedition.Visits
-.checkBoxCube: "Cube" => "Куб"
-.labelExtMin: "Min" => "Мин."
-.labelExtMax: "Max" = UserControlEngineering.MaxCol
-.addToTrilaterationToolStripMenuItem1: "Add to Trilateration" => "Добавить в трилатерацию"
-.viewOnEDSMToolStripMenuItem1: "View on EDSM" = DataGridViewStarResults.EDSM
-.checkBoxCube.ToolTip: "Check to indicate use a cube instead of a sphere for distances" => "Для расчета расстояний использовать не сферу, а куб"
-.textMinRadius.ToolTip: "Minimum star distance in ly" => "Минимальная дистанция до системы (св. л.)"
-.textMaxRadius.ToolTip: "Maximum star distance in ly" => "Максимальная дистанция до системы (св. л.)"
-.From: "From {0}" => "от {0}"
-.NoEDSMSys: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
-.viewSystemToolStripMenuItem: "View System" @
-.viewOnSpanshToolStripMenuItem: "View on Spansh" @
+293A9D54650921: "Visited" => "Посещений"
+90CCC9AA84EF50: "Cube" => "Куб"
+7EB0CEE888AB55: "Min" => "Мин."
+BF02C54B8728D4: "Add to Trilateration" => "Добавить в трилатерацию"
+D6EBF4E4344E48: "Check to indicate use a cube instead of a sphere for distances" => "Для расчета расстояний использовать не сферу, а куб"
+D8FA9D7408D9DC: "Minimum star distance in ly" => "Минимальная дистанция до системы (св. л.)"
+146FD57102D84B: "Maximum star distance in ly" => "Максимальная дистанция до системы (св. л.)"
+957DB23D1CF5F7: "From {0}" => "от {0}"
 
 SECTION UserControlStarList
 
-.ColumnTime: "Last Visit" => "Последний визит"
-.ColumnSystem: "System" = SearchMaterialsCommodities.ColumnStar
-.ColumnVisits: "Visits" => "Визитов"
-.ColumnInformation: "Information" = Information
-.ColumnBodycount: "Body count" @
-.labelSearch: "Search" = UserControlBookmarks.labelSearch
-.labelTime: "Time" = Time
-.removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" = UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = DataGridViewStarResults.3d
-.viewOnEDSMToolStripMenuItem: "View on EDSM" = UserControlJournalGrid.viewOnEDSMToolStripMenuItem
-.viewOnSpanshToolStripMenuItem: "View on Spansh" @
-.setNoteToolStripMenuItem: "Set Note" => "Добавить примечание"
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" = UserControlJournalGrid.checkBoxCursorToTop.ToolTip
-.buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
-.comboBoxTime.ToolTip: "Select the entries by age" = UserControlJournalGrid.comboBoxTime.ToolTip
-.viewScanDisplayToolStripMenuItem: "View Scan Display" @
-.Value: "Scan Value" @
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
-.Total: "Total" @
-.CS: "{0} Star(s) {1}" => "Число звезд: {0} {1}"
-.FSD: "This system has materials for FSD boost" => "В этой системе есть материалы для вброса в FSD: "
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
-.OB: "{0} Other bodies" => "число других небесных тел: {0}"
-.JUMP: "Show/Hide presence of Jumponium Materials" @
-.valueables: "Show valuable bodies" @
-.scanorganics: "Show organic scans" @
-.showcodex: "Show codex entries" @
+25229E81F3BF74: "Last Visit" => "Последний визит"
+28442DA04B1BF3: "Body Count" => "Körperanzahl"
+C90A4905639F83: "Scan Value" => "Scanwert"
+A1E87E0BCAE241: "{0} Star(s) {1}" => "Число звезд: {0} {1}"
+FB044B95FD466C: "This system has materials for FSD boost" => "В этой системе есть материалы для вброса в FSD: "
+3DC09A6F2DA211: "{0} Other bodies" => "число других небесных тел: {0}"
+FB90E0C92B3663: "Show/Hide presence of Jumponium Materials" => "Zeige/Verbirg die Präsenz von Sprungmaterialien"
+47D68486BBAA7E: "Show valuable bodies" => "Zeige wertvolle Körper"
+FF058EFC89FB18: "Show organic scans" => "Zeige organische Scans"
+515C004E19233A: "Show codex entries" => "Zeige Codexeinträge"
 
 SECTION UserControlStats
 
-.labelStart: "Start" @
-.labelEndDate: "To" @
-.tabControlCustomStats.tabPageGeneral: "General" => "Общая"
-.tabControlCustomStats.tabPageGeneral.ItemName: "Item" = UserControlOutfitting.Item
-.tabControlCustomStats.tabPageGeneral.Information: "Information" = Information
-.tabControlCustomStats.tabPageTravel: "Travel" => "Полеты"
-.tabControlCustomStats.tabPageScan: "Scan" = UserControlSearch.Scans
-.tabControlCustomStats.tabPageGameStats: "In Game" => "По игре"
-.tabControlCustomStats.tabPageByShip: "By Ship" => "По кораблям"
-.tabControlCustomStats.tabPageRanks: "Ranks" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank: "Rank" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnAtStart: "At Start" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxAtEnd: "At End" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnLastPromotionDate: "Last Promotion/Date" @
-.tabControlCustomStats.tabPageLedger: "Ledger" @
-.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnLedgerDate: "Date" @
-.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnNumericCredits: "Credits" @
-.tabControlCustomStats.tabPageCombat: "Combat" @
-.Powerplay: "Powerplay" @
-.Squadron: "Squadron" @
-.BountiesThargoid: "Bounties on Thargoids" @
-.BountiesOnFootNPC: "Bounties on On Foot NPC" @
-.BountiesSkimmers: "Bounties on Skimmers" @
-.ShipsUnknown: "Ships Unknown Rank" @
-.ShipsElite: "Ships Elite Rank" @
-.ShipsDeadly: "Ships Deadly Rank" @
-.ShipsDangerous: "Ships Dangerous Rank" @
-.ShipsMaster: "Ships Master Rank" @
-.ShipsExpert: "Ships Expert Rank" @
-.ShipsCompetent: "Ships Competent Rank" @
-.ShipsNovice: "Ships Novice Rank" @
-.ShipsHarmless: "Ships Harmless Rank" @
-.PVPElite: "PVP Elite Rank" @
-.PVPDeadly: "PVP Deadly Rank" @
-.PVPDangerous: "PVP Dangerous Rank" @
-.PVPMaster: "PVP Master Rank" @
-.PVPExpert: "PVP Expert Rank" @
-.PVPCompetent: "PVP Competent Rank" @
-.PVPNovice: "PVP Novice Rank" @
-.PVPHarmless: "PVP Harmless Rank" @
-.Bounties: "Bounties" @
-.Bountyvalue: "Bounty Value" @
-.Bountiesonships: "Bounties on Ships" @
-.Crimes: "Crimes" @
-.CrimeCost: "Crime Cost" @
-.FactionKillBonds: "Faction Kill Bonds" @
-.FKBValue: "FKB Value" @
-.InterdictionPlayerSucceeded: "Interdictions Player Succeeded" @
-.InterdictionPlayerFailed: "Interdictions Player Failed" @
-.InterdictionNPCSucceeded: "Interdictions NPC Succeeded" @
-.InterdictionNPCFailed: "Interdictions NPC Failed" @
-.InterdictedPlayerSucceeded: "Interdicted Player Succeeded" @
-.InterdictedPlayerFailed: "Interdicted Player Failed" @
-.InterdictedNPCSucceeded: "Interdicted NPC Succeeded" @
-.InterdictedNPCFailed: "Interdicted NPC Failed" @
-.PVPKills: "PVP Kills" @
-.TotalNoofjumps: "Total No of jumps" => "Общее число прыжков"
-.FSDjumps: "FSD jumps" @
-.JumpHistory: "FSD Jump History" => "Всего прыжков"
-.24hc: "24 Hours: " => "за 24 ч.: "
-.OneWeek: ", One Week: " => ", за неделю: "
-.30Days: ", 30 Days: " => ", за месяц: "
-.OneYear: ", One Year: " => ", за год: "
-.MostNorth: "Most North" => "Самая северная точка"
-.MostSouth: "Most South" => "Самая южная точка"
-.MostEast: "Most East" => "Самая восточная точка"
-.MostWest: "Most West" => "Самая западная точка"
-.MostHighest: "Most Highest" => "Самая высокая точка"
-.MostLowest: "Most Lowest" => "Самая низкая точка"
-.MostVisited: "Most Visited" => "Самые посещаемые системы"
-.Type: "Type" = UserControlLedger.Type
-.Name: "Name" = UserControlCombatPanel.Name
-.Ident: "Ident" => "Идентификатор"
-.Jumps: "Jumps" => "Прыжков"
-.TravelledLy: "Travelled Ly" => "Пройдено св. л."
-.BodiesScanned: "Bodies Scanned" => "Отсканировано тел"
-.Destroyed: "Destroyed" => "Разрушено"
-.PremiumBoost: "Premium Boost" => "Премиум вбросов"
-.StandardBoost: "Standard Boost" => "Стандартных вбросов"
-.BasicBoost: "Basic Boost" => "Базовых вбросов"
-.JetConeBoost: "Jet Cone Boost" => "Перегрузок FSD (джет)"
-.Scans: "Scans" = UserControlExpedition.Scans
-.OrganicScans: "Organic Scans Value" @
-.Mapped: "Mapped" => "Картографировано"
-.Scanvalue: "Scan value" => "Стоимость сканов"
-.Beltcluster: "Belt Cluster" @
-.Lastdock: "Last dock" => "С последней стыковки"
-.All: "All" = UserControlMaterialCommodities.Total
-.BankAccount: "Bank Account" = UserControlCombatPanel.Bal
-.Combat: "Combat" => "Бои"
-.Crime: "Crime" = UserControlCombatPanel.labelTotalCrimes
-.Smuggling: "Smuggling" => "Контрабанда"
-.Trading: "Trading" => "Торговля"
-.Mining: "Mining" => "Добыча ресурсов"
-.Exploration: "Exploration" => "Исследование"
-.Passengers: "Passengers" => "Пассажиры"
-.SearchandRescue: "Search and Rescue" => "Спасательные операции"
-.Crafting: "Crafting" => "Изготовление"
-.Crew: "Crew" => "Экипаж"
-.Multi: "Multi-crew" @
-.MaterialsTrader: "Materials Trader" => "Торговля материалами"
-.FLEETCARRIER: "Fleetcarrier" @
-.CQC: "CQC" @
-.Exobiology: "Exobiology" @
-.Thargoids: "Thargoids" @
-.GoodsBought: "Goods Bought" => "Куплено товаров"
-.GoodsSold: "Goods Sold" => "Продано товаров"
-.GoodsProfit: "Goods Profit" @
+9239EE2CDA84EC: "General" => "Общая"
+22FB76E46F645E: "Travel" => "Полеты"
+12D9C090439BAA: "In Game" => "По игре"
+AB2855156E832D: "By Ship" => "По кораблям"
+00926D0ECAABBF: "Ranks" => "Ränge"
+DD48A1149548F0: "Rank" => "Rang"
+2451A597FA5067: "At Start" => "Zu Beginn"
+0B12D442964C13: "At End" => "Am Schluss"
+F230B2BCC6A6B1: "Last Promotion/Date" => "Letzte(s) Promotion/Datum"
+955A4E9A59BF11: "Powerplay" => "Machtspiel"
+67711E423601BA: "Squadron" => "Schwadron"
+E72ED7A5BCA163: "Bounties on Thargoids" => "Kopfgelder auf Thargoiden"
+C070DE1BD06E83: "Bounties on On Foot NPC" => "Kopfgelder auf NPCs (zu Fuß)"
+6273A2A0CA35EF: "Bounties on Skimmers" => "Kopfgelder auf OF-Drohnen"
+9A18F8035AAEA1: "Ships Unknown Rank" => "Schiffe unbekannter Rang"
+BAC11F62A1EE7D: "Ships Elite Rank" => "Schiffe Rang: Elite"
+6ED71D543A46B5: "Ships Deadly Rank" => "Schiffe Rang: Tödlich"
+C154182DA6A0EA: "Ships Dangerous Rank" => "Schiffe Rang: Gefährlich"
+366E78B1602F76: "Ships Master Rank" => "Schiffe Rang: Meister"
+457AA8E691A5DA: "Ships Expert Rank" => "Schiffe Rang: Experte"
+68F8A460EF2B65: "Ships Competent Rank" => "Schiffe Rang: Kompetent"
+8FAD289393971D: "Ships Novice Rank" => "Schiffe Rang: Novize"
+8727F6D4EE824C: "Ships Harmless Rank" => "Schiffe Rang: Harmlos"
+EAF8AE7FAE1187: "PVP Elite Rank" => "PVP Rang: Elite"
+B313E7107D5C86: "PVP Deadly Rank" => "PVP Rang: Tödlich"
+7743458F23BEEB: "PVP Dangerous Rank" => "PVP Rang: Gefährlich"
+28AF125F4DCEB4: "PVP Master Rank" => "PVP Rang: Meister"
+A6E743F4A8DA1F: "PVP Expert Rank" => "PVP Rang: Experte"
+0D4936734E146A: "PVP Competent Rank" => "PVP Rang: Kompetent"
+0A7B5DB004014C: "PVP Novice Rank" => "PVP Rang: Novize"
+8BED567DC90C30: "PVP Harmless Rank" => "PVP Rang: Harmlos"
+EBA0BF6D59AA23: "Bounties" => "Kopfgelder"
+6C18EAA601E281: "Bounty Value" => "Kopfgelder Wert"
+143706EC834465: "Bounties on Ships" => "Kopfgelder auf Schiffe"
+5975E5601FFC4D: "Crime Cost" => "Verbrechen Kosten"
+19DC8A5F2F52DB: "Faction Kill Bonds" => "Fraktions-Mord-Belohnung"
+91D7F6E6EC96DF: "FKB Value" => "FMB Wert"
+5165C80A7554A6: "Interdictions Player Succeeded" => "Unterbrechungen Spieler Erfolgreich"
+2D360E69870FCA: "Interdictions Player Failed" => "Unterbrechungen Spieler Fehlgeschlagen"
+18AD984165F69E: "Interdictions NPC Succeeded" => "Unterbrechungen NPC Erfolgreich"
+A2F8A5F156DE50: "Interdictions NPC Failed" => "Unterbrechungen NPC Fehlgeschlagen"
+AA3A76881BDE68: "Interdicted Player Succeeded" => "Unterbrochener Spieler Erfolgreich"
+6CDDC5DFA392DB: "Interdicted Player Failed" => "Unterbrochener Spieler Fehlgeschlagen"
+6A6C1A6301AB25: "Interdicted NPC Succeeded" => "Unterbrochener NPC Erfolgreich"
+99C5998D9DBB79: "Interdicted NPC Failed" => "Unterbrochener NPC Fehlgeschlagen"
+D01ADD4A8CF9C6: "PVP Kills" => "PVP Tötungen"
+20CB368601547F: "Total No of jumps" => "Общее число прыжков"
+D06EC3483818A9: "FSD jumps" => "FSA-Sprünge"
+E13CB4A04BC34B: "FSD Jump History" => "Всего прыжков"
+F6C54118BB5CD4: "24 Hours: " => "за 24 ч.: "
+2E2B3457EDF182: ", One Week: " => ", за неделю: "
+D3832EC86D33CE: ", 30 Days: " => ", за месяц: "
+1CDC174DD72EA0: ", One Year: " => ", за год: "
+50CA2C7949A7B3: "Most North" => "Самая северная точка"
+FF4C48EC20A07F: "Most South" => "Самая южная точка"
+ED38C3B32E9FB4: "Most East" => "Самая восточная точка"
+72169EB9002BA0: "Most West" => "Самая западная точка"
+57160FBF8BB19A: "Most Highest" => "Самая высокая точка"
+742DE30108A030: "Most Lowest" => "Самая низкая точка"
+985904BE62860B: "Most Visited" => "Самые посещаемые системы"
+022AFB2A3DD28F: "Ident" => "Идентификатор"
+A42A766FB98A1B: "Travelled Ly" => "Пройдено св. л."
+A3E3727E7AC80E: "Bodies Scanned" => "Отсканировано тел"
+86FD480DBADC22: "Destroyed" => "Разрушено"
+B051CCCD8B0D67: "Premium Boost" => "Премиум вбросов"
+4FE81F7DFC3A7B: "Standard Boost" => "Стандартных вбросов"
+744F275A75FD8F: "Basic Boost" => "Базовых вбросов"
+BF95513D610332: "Jet Cone Boost" => "Перегрузок FSD (джет)"
+80D9028EDFA54B: "Organic Scans Value" => "Wert der organischen Scans"
+93C9D999CAF90E: "Scan value" => "Стоимость сканов"
+D436FDB4D178CC: "Belt Cluster" => "Gürtelgruppen"
+785AD46ADCFC58: "Last dock" => "С последней стыковки"
+6D391E1333D9E0: "Bank Account" => "Баланс"
+1B5A20A804DC74: "Crime" => "Преступления"
+6BEEE635DCA549: "Smuggling" => "Контрабанда"
+49352196F6D28E: "Trading" => "Торговля"
+FAABCF8B4B60DB: "Mining" => "Добыча ресурсов"
+957464A0F91C56: "Exploration" => "Исследование"
+AB86B441AD93E7: "Passengers" => "Пассажиры"
+E0C47B9F787BC5: "Search and Rescue" => "Спасательные операции"
+EA78B34DA11F9D: "Crafting" => "Изготовление"
+DE463BA892C2F3: "Crew" => "Экипаж"
+EB6824747FE3AC: "Multi-crew" => "Multicrew"
+F8D07BF619AB93: "Materials Trader" => "Торговля материалами"
+4EC8D6E506ED34: "Fleetcarrier" => "Carrier"
+B663617A36922A: "CQC" => "CQC"
+E41CFBE34F8307: "Exobiology" => "Exobiologie"
+57D866D2E06189: "Thargoids" => "Thargoiden"
+ED8FE7F50C291D: "Goods Bought" => "Куплено товаров"
+4A9BE7DFAB7DEE: "Goods Sold" => "Продано товаров"
+266338DF847C39: "Goods Profit" => "Warenprofit"
 
 SECTION StatsTimeUserControl
 
-.Summary: "Summary" = UserControlMaterialCommodities.Total
-.Day: "Day" => "День"
-.Week: "Week" => "Неделя"
-.Month: "Month" => "Месяц"
+12B71C3E0FE5F7: "Summary" => "Всего"
+987B9CED08D4AC: "Day" => "День"
+F82BE68A7FB4E7: "Week" => "Неделя"
+082BC378CD60E1: "Month" => "Месяц"
 
 SECTION UserControlSynthesis
 
-.UpgradeCol: "Upgrade/Mat" => "Синтез/Материалы"
-.Level: "Level" = UserControlEngineering.LevelCol
-.MaxCol: "Max" = UserControlEngineering.MaxCol
-.WantedCol: "Wanted" = UserControlEngineering.WantedCol
-.Available: "Avail." = UserControlEngineering.AvailableCol
-.Notes: "Notes" => "Примечания"
-.Recipe: "Recipe" = UserControlEngineering.RecipeCol
-.buttonRecipeFilter.ToolTip: "Filter the table by the synthesis type" => "Фильтровать таблицу по виду синтеза"
-.buttonFilterLevel.ToolTip: "Filter the table by the synthesis level" = UserControlEngineering.buttonFilterLevel.ToolTip
-.buttonMaterialFilter.ToolTip: "Filter the table by the material type" = UserControlEngineering.buttonFilterMaterial.ToolTip
-.buttonClear.ToolTip: "Set all wanted values to zero" = UserControlEngineering.buttonClear.ToolTip
-.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
+EA620860544917: "Filter the table by the synthesis type" => "Фильтровать таблицу по виду синтеза"
+8D373513140E9D: "Filter the table by the synthesis level" => "Фильтровать таблицу по уровням"
+63ACF1721827B7: "Filter the table by the material type" => "Фильтровать таблицу по материалам"
 
 SECTION UserControlSysInfo
 
-.toolStripSystem: "Display System Name" => "Показать название системы"
-.toolStripEDSM: "Display EDSM Buttons" => "Показать кнопки EDSM"
-.toolStripEDSMDownLine: "EDSM buttons on separate line" => "Показать кнопки EDSM в отдельной строке"
-.toolStripVisits: "Display Visits" => "Показать число посещений"
-.toolStripBody: "Display Body Name" => "Показать названия тела"
-.displayStationButtonsToolStripMenuItem: "Display Station Buttons" @
-.displayStationFactionToolStripMenuItem: "Display Station Faction" @
-.toolStripPosition: "Display Position" => "Показать положение"
-.toolStripDistanceFrom: "Display Distance From" => "Показать расстояние от"
-.toolStripSystemState: "Display System State" => "Показать состояние системы"
-.displaySecurityToolStripMenuItem: "Display Security" @
-.toolStripTarget: "Display Target" = UserControlSpanel.toolStripMenuItemTargetLine
-.toolStripShip: "Display Ship Information" => "Показать информацию о корабле"
-.displayShipButtonsToolStripMenuItem: "Display Ship Buttons" @
-.toolStripFuel: "Display Fuel Level" => "Показать уровень топлива"
-.toolStripCargo: "Display Cargo Count" => "Показать кол-во груза"
-.toolStripDataCount: "Display Data Count" => "Показать кол-во данных"
-.toolStripMaterialCounts: "Display Material Count" => "Показать кол-во материалов"
-.displayMicroresourcesCountToolStripMenuItem: "Display Microresources Count" @
-.toolStripCredits: "Display Credits" => "Показать кредиты"
-.toolStripGameMode: "Display Game Mode" => "Показать режим игры"
-.toolStripTravel: "Display Travel Trip Statistics" => "Показать статистику полетов"
-.toolStripMissionList: "Display Mission List" => "Показать список миссий"
-.toolStripJumpRange: "Display Jump Range" => "Показать дальность прыжка"
-.toolStripSkinny: "When transparent, use skinny look" => "Использовать тонкий дизайн при включении прозрачности"
-.toolStripReset: "Reset" => "Сброс"
-.toolStripRemoveAll: "Remove All" => "Удалить все"
-.displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
-.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
-.ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Удерживая клавишу Ctrl, щелкните левой кнопкой мыши и перетащите, чтобы переместить элемент. Доступно 8 столбцов"
-.textBoxTargetDist.ToolTip: "Distance to target" => "Расстояние до цели"
-.textBoxTarget.ToolTip: "Sets the target" = UserControlExpedition.setTargetToolStripMenuItem
-.labelStationFaction: "Faction" @
-.extButtonEDSMTarget: "EDSM" @
-.labelSecurity: "Security" @
-.labelJumpRange: "Range" => "Прыжок"
-.labelTarget: "Target" = UserControlCombatPanel.labelTarget
-.labelSysName: "System" = SearchMaterialsCommodities.ColumnStar
-.labelGamemode: "Mode" = UserControlRoute.labelMetric
-.labelTravel: "Travel" => "Полет"
-.labelOpenShip: "Open" @
-.labelOpenStation: "Open" @
-.labelOpen: "Open" => "Открыть"
-.labelCargo: "Cargo" = UserControlMarketData.CargoCol
-.labelCredits: "Credits" = UserControlCombatPanel.labelCredits
-.labelShip: "Ship" = UserControlShipYards.Ship
-.labelMaterials: "Materials" = UserControlMaterialCommodities.Mats
-.labelVisits: "Visits" => "Посещ."
-.labelMR: "MR" @
-.labelData: "Data" = UserControlMaterialCommodities.Data
-.labelFuel: "Fuel" => "Топливо"
-.labelBodyName: "Body" => "Тело"
-.labelPosition: "Pos" => "Полож."
-.labelMissions: "Missions" => "Миссии"
-.labelEconomy: "Economy" => "Эконом."
-.labelGov: "Gov" => "Правл."
-.labelAllegiance: "Allegiance" => "Принадл."
-.labelState: "State" => "Сост."
-.labelSolDist: "Sol" @
-.labelHomeDist: "Home" => "Дом"
-.labelNextDestination: "Dest" @
-.NoMissions: "No Missions" => "Нет миссий"
-.SysUnk: "System unknown to EDSM" => "Этой системы нет в EDSM"
-.Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" => "Положение {0:0.00},{1:0.00},{2:0.00}"
-.Target: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" => "Щелкните правой кнопкой мыши на 3D-карте, чтобы создать закладку или отметить регион. Щелкните на на примечании, а затем выберите «Выбрать цель» или введите ее сюда и нажмите Enter"
-.OnFoot: "On Foot" @
-.NA: "N/A" @
+C7E62EEFF61FB8: "Display System Name" => "Показать название системы"
+1CA1244CA4E274: "Display EDSM Buttons" => "Показать кнопки EDSM"
+9D4038B19E1FAF: "EDSM buttons on separate line" => "Показать кнопки EDSM в отдельной строке"
+E71BB3490AF666: "Display Visits" => "Показать число посещений"
+16058E391CFC8A: "Display Body Name" => "Показать названия тела"
+2AF8FBE0D3D1F0: "Display Station Buttons" => "Zeige Stationsknöpfe"
+167364FDD294FC: "Display Station Faction" => "Zeige Stationsfraktion"
+859DF4F86EA274: "Display Position" => "Показать положение"
+88DC694EB1EEC5: "Display Distance From" => "Показать расстояние от"
+40A0D02D51569C: "Display System State" => "Показать состояние системы"
+9D4B4AF780F534: "Display Security" => "Zeige Sicherheit"
+9443704433D76B: "Display Target" => "Показать цель"
+C7BFC55F74198E: "Display Ship Information" => "Показать информацию о корабле"
+69FFED82C302AA: "Display Ship Buttons" => "Zeige Schiffsknöpfe"
+60CC67D5043C1F: "Display Fuel Level" => "Показать уровень топлива"
+E16757D13AB37A: "Display Cargo Count" => "Показать кол-во груза"
+0719B412DEA0BD: "Display Data Count" => "Показать кол-во данных"
+F02F62E261A315: "Display Material Count" => "Показать кол-во материалов"
+467B1F3E0B7F4E: "Display Microresources Count" => "Zeige Anzahl der Mikroressourcen"
+6B5FFA7F235884: "Display Credits" => "Показать кредиты"
+6483F70251A314: "Display Game Mode" => "Показать режим игры"
+3CFB6CC2163B0E: "Display Travel Trip Statistics" => "Показать статистику полетов"
+6B797E5C00BD22: "Display Mission List" => "Показать список миссий"
+3CDA0635013859: "Display Jump Range" => "Показать дальность прыжка"
+45E682004141E2: "When transparent, use skinny look" => "Использовать тонкий дизайн при включении прозрачности"
+53B251F715E19A: "Display Next Destination Selected" => "Zeige nächste gewählte Destination"
+5B17A15D263EC5: "Disable copy to clipboard when clicking on text boxes" => "Deaktiviere das Kopieren in die Zwischenablage bei einem Klick auf Textboxen"
+31ACBB09F84846: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Удерживая клавишу Ctrl, щелкните левой кнопкой мыши и перетащите, чтобы переместить элемент. Доступно 8 столбцов"
+A89C9CA2A96AE8: "Distance to target" => "Расстояние до цели"
+9FFE9E9C6D7672: "Sets the target" => "Выбрать цель"
+F25CE1B8A399BD: "Security" => "Sicherheit"
+A16C5BBE4BF996: "Range" => "Прыжок"
+A7B93D2128E820: "Mode" => "Режим"
+208A402074139F: "MR" => "MR"
+0B645D1B659917: "Fuel" => "Топливо"
+C9B1B30D011FE2: "Pos" => "Полож."
+7E8548C30FEF17: "Economy" => "Эконом."
+503335220A6476: "Gov" => "Правл."
+E471FACAC24C5F: "Allegiance" => "Принадл."
+A7250206751868: "State" => "Сост."
+DF5D4664763117: "Sol" => "Sole"
+70F8BB9A8A5393: "Home" => "Дом"
+7B181F6DED4B8C: "Dest" => "Dest"
+8074342446780B: "No Missions" => "Нет миссий"
+32155DB2FEE95E: "System unknown to EDSM" => "Этой системы нет в EDSM"
+EC16F1DC33B505: "Position is {0:0.00},{1:0.00},{2:0.00}" => "Положение {0:0.00},{1:0.00},{2:0.00}"
+43AB6BF5133F6C: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" => "Щелкните правой кнопкой мыши на 3D-карте, чтобы создать закладку или отметить регион. Щелкните на на примечании, а затем выберите «Выбрать цель» или введите ее сюда и нажмите Enter"
+F9D6E7C9EF5584: "On Foot" => "Zu Fuß"
+08D2E98E6754AF: "N/A" => "N/V"
 
 SECTION UserControlContainerSplitter
 
-.sizeRatioToolStripMenuItem: "Set Size Ratio" => "Соотношение размеров"
-.ChangetoHorizontalSplit: "Change to Horizontal Split" => "Горизонтальное разделение"
-.ChangetoVerticalSplit: "Change to Vertical Split" => "Вертикальное разделение"
-.SplitLeftPanel: "Split Left Panel" => "Разделить левую панель"
-.SplitTopPanel: "Split Top Panel" => "Разделить верхнюю панель"
-.SplitRightPanel: "Split Right Panel" => "Разделить правую панель"
-.SplitBottomPanel: "Split Bottom Panel" => "Разделить нижнюю панель"
-.MergeLeftPanel: "Merge Left Panel" => "Объединить левую панель"
-.MergeTopPanel: "Merge Top Panel" => "Объединить верхнюю панель"
-.MergeRightPanel: "Merge Right Panel" => "Объединить правую панель"
-.MergeBottomPanel: "Merge Bottom Panel" => "Объединить нижнюю панель"
-.RC: "Right click on splitter bar to change orientation\nor split or merge panels" @
+536B80F7A77601: "Set Size Ratio" => "Соотношение размеров"
+1B816D5237F141: "Change to Horizontal Split" => "Горизонтальное разделение"
+4B8C8DA06D3F80: "Change to Vertical Split" => "Вертикальное разделение"
+BBEFF50602771F: "Split Left Panel" => "Разделить левую панель"
+0FD8941DF0127F: "Split Top Panel" => "Разделить верхнюю панель"
+B1D75A0C63A7E9: "Split Right Panel" => "Разделить правую панель"
+3280EBBDB2FC8F: "Split Bottom Panel" => "Разделить нижнюю панель"
+B54B57C048EF42: "Merge Left Panel" => "Объединить левую панель"
+EEC2E2243F9659: "Merge Top Panel" => "Объединить верхнюю панель"
+B728CDF769CB75: "Merge Right Panel" => "Объединить правую панель"
+8D65E9F5EF03D3: "Merge Bottom Panel" => "Объединить нижнюю панель"
+B8E0FB8095A05A: "Right click on splitter bar to change orientation\nor split or merge panels" => "Rechtsklick auf Teilungsleiste um Orientierung zu ändern\noder Paneele zu teilen oder zu verschmelzen"
 
 SECTION UserControlTravelGrid
 
-.ColumnTime: "Time" = Time
-.ColumnEvent: "Event" = UserControlCombatPanel.Event
-.ColumnDescription: "Description" = UserControlBookmarks.ColDescription
-.ColumnInformation: "Information" = Information
-.ColumnNote: "Note" = UserControlEngineering.NotesCol
-.labelTime: "Time" = Time
-.labelSearch: "Search" = UserControlBookmarks.labelSearch
-.THF: "History: Filter out fields" => "История полетов: фильтры полей"
-.TT1: " showing {0} original {1}" = UserControlJournalGrid.TT1
-.TTFilt1: "Filtered {0}" = UserControlJournalGrid.TTFilt1
-.TTSelAge: "Select the entries by age, " = UserControlJournalGrid.comboBoxTime.ToolTip
-.CSTART: "Clear Start marker" => "Удалить начальную метку"
-.CSTOP: "Clear Stop marker" => "Удалить конечную метку"
-.SETSTOPTC: "Set Stop marker for travel calculations" => "Выбрать конечную метку для поиска маршрута"
-.SETSTARTTC: "Set Start marker for travel calculations" => "Выбрать начальную метку для поиска маршрута"
-.NotSynced: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
-.Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Вы действительно хотите удалить эту запись?\r\nОна может появиться снова после повторного импорта журналов."
-.quickMarkToolStripMenuItem: "Marked" @
-.removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" = UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem
-.gotoEntryNumberToolStripMenuItem: "Jump to Entry" = UserControlJournalGrid.jumpToEntryToolStripMenuItem
-.setNoteToolStripMenuItem: "Set Note" = UserControlStarList.setNoteToolStripMenuItem
-.createEditBookmarkToolStripMenuItem: "Create/Edit Bookmark" => "Создать/изменить закладку"
-.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "Выбрать начальную/конечную точки для поиска маршрута"
-.gotoNextStartStopMarkerToolStripMenuItem: "Jump to next Start/Stop marker" => "Перейти к следующей начальной/конечной точке"
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = DataGridViewStarResults.3d
-.viewOnEDSMToolStripMenuItem: "View on EDSM" = UserControlJournalGrid.viewOnEDSMToolStripMenuItem
-.starMapColourToolStripMenuItem: "Star Map Colour..." => "Цвет на карте"
-.addToTrilaterationToolStripMenuItem: "Add to ..." => "Добавить к..."
-.addToTrilaterationToolStripMenuItem.trilaterationToolStripMenuItem: "System on Trilateration Panel" => "Системе в панели трилатерации"
-.addToTrilaterationToolStripMenuItem.wantedSystemsToolStripMenuItem: "Wanted Systems on Trilateration Panel" => "Разыскиваемой системе в панели трилатерации"
-.addToTrilaterationToolStripMenuItem.bothToolStripMenuItem: "Both of the above" => "Обоим вышеперечисленным"
-.addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" @
-.moveToAnotherCommanderToolStripMenuItem: "Move Entries to another Commander" => "Переместить запись к другому командиру"
-.hideSystemToolStripMenuItem: "Hide Entries" => "Скрыть запись"
-.removeJournalEntryToolStripMenuItem: "Remove Journal Entry" => "Удалить запись в журнале"
-.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" = UserControlJournalGrid.runActionsOnThisEntryToolStripMenuItem
-.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard/Log" => "Скопировать запись в буфер обмена/лог"
-.writeEventInfoToLogDebugToolStripMenuItem: "Write event class info to Log (Debug)" => "Записать информацию о классе событий в журнал (отладка)"
-.viewScanDisplayToolStripMenuItem: "View Scan Display" @
-.viewOnSpanshToolStripMenuItem: "View on Spansh" @
-.runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" => "Выполнить actions для этой записи для speech debugging (отладка)"
-.runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" => "Выполнить событие через Inara System (отладка)"
-.runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" => "Выполнить событие через Profile System (отладка)"
-.runSelectionThroughEDDNThruTestToolStripMenuItem: "Run selection through EDDN Test Server (Debug)" @
-.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
-.sendJournalEntriesToDLLsToolStripMenuItem: "Send selection to DLLs (Debug)" @
-.showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
-.travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
-.outliningOnOffToolStripMenuItem: "Outlining On" => "Включить группирование"
-.scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" => "Группировать записи о сканировании"
-.toolStripRollUpOlderOutlines: "Roll up older entries" => "Свернуть старые записи"
-.toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" => "Не сворачивать"
-.toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" => "После первой группы"
-.toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" => "После первых пяти групп"
-.comboBoxTime.ToolTip: "Select the entries by age" = UserControlJournalGrid.comboBoxTime.ToolTip
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" = UserControlJournalGrid.textBoxSearch.ToolTip
-.buttonFilter.ToolTip: "Filter out entries based on event type" = UserControlJournalGrid.buttonFilter.ToolTip
-.buttonField.ToolTip: "Filter out entries matching the field selection" => "Фильтровать записи в соответствии с указанными условиями"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" = UserControlJournalGrid.checkBoxCursorToTop.ToolTip
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.extCheckBoxOutlines.ToolTip: "Control Outlining" => "Группировать"
-.extButtonTimeRanges.ToolTip: "Define new time ranges for time selector" @
-.extComboBoxQuickMarks.ToolTip: "Go to a marked journal entry. Use right click to mark an entry" @
-.SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
-.StartStopHidden: "Next start/stop marker is hidden" @
-.StartStopNotFound: "No start/stop marker found below" @
-.entryfilteredout: "Entry filtered out of grid" @
+618ED5F457C419: "History: Filter out fields" => "История полетов: фильтры полей"
+041FA7A8EDCBCD: "Clear Start marker" => "Удалить начальную метку"
+E3E17E3743DED0: "Clear Stop marker" => "Удалить конечную метку"
+9045B8BC31F856: "Set Stop marker for travel calculations" => "Выбрать конечную метку для поиска маршрута"
+2DEA8F5618E216: "Set Start marker for travel calculations" => "Выбрать начальную метку для поиска маршрута"
+6857AC1911CEFA: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Вы действительно хотите удалить эту запись?\r\nОна может появиться снова после повторного импорта журналов."
+99A8606358921C: "Marked" => "Markiert"
+3D7BEC2A65F239: "Remove Sorting of Columns" => "Сбросить сортировку столбцов"
+46D6F08522DB6C: "Create/Edit Bookmark" => "Создать/изменить закладку"
+A1CB43A6C382E3: "Jump to next Start/Stop marker" => "Перейти к следующей начальной/конечной точке"
+A099AE49F4552C: "Star Map Colour..." => "Цвет на карте"
+4D94DD4E25AEFB: "Add to ..." => "Добавить к..."
+1E5656B093A9A7: "System on Trilateration Panel" => "Системе в панели трилатерации"
+65886B813B2541: "Wanted Systems on Trilateration Panel" => "Разыскиваемой системе в панели трилатерации"
+1AADA0255D587D: "Both of the above" => "Обоим вышеперечисленным"
+BCA2F73AFA4757: "Expedition Panel" => "Expeditionspanel"
+614EC9DFB9DA9D: "Move Entries to another Commander" => "Переместить запись к другому командиру"
+661E31218E2EE8: "Hide Entries" => "Скрыть запись"
+6D8F628DD22939: "Remove Journal Entry" => "Удалить запись в журнале"
+4E340D4B1C6A0B: "Copy journal entry to clipboard/Log" => "Скопировать запись в буфер обмена/лог"
+CC0A855DF345BC: "Write event class info to Log (Debug)" => "Записать информацию о классе событий в журнал (отладка)"
+BE71EBC23A96B1: "Run actions across selection for speech debugging (Debug)" => "Выполнить actions для этой записи для speech debugging (отладка)"
+EF5031AC6BB79D: "Run selection through Inara System (Debug)" => "Выполнить событие через Inara System (отладка)"
+4678C5C9A7EA0E: "Run entry through Profile System (Debug)" => "Выполнить событие через Profile System (отладка)"
+87AA55A4D8390D: "Run selection through EDDN Test Server (Debug)" => "Führe Auswahl über EDDN-Testserver aus (Debug)"
+524BF0531AFD77: "Run selection through EDAstro (Debug)" => "Führe Auswahl über EDAstro aus (Debug)"
+0F5FE8CD3D51BA: "Send selection to DLLs (Debug)" => "Sende Auswahl an DLLs (Debug)"
+B91F8B4B18E7EA: "Show lines in System Visited Fore Colour" => "Zeige Linien in 'besuchtes System'-Vordergrundfarbe"
+27E9DD0E266E2D: "Travel grid in Debug Mode" => "Reisegitter im Debugmodus"
+21FE521D359452: "Outlining On" => "Включить группирование"
+7CD3494777C5DB: "Scan Events Outlining" => "Группировать записи о сканировании"
+F66672D57338E9: "Roll up older entries" => "Свернуть старые записи"
+C0DDF9320E29B7: "After First" => "После первой группы"
+2B36562B65054F: "After 5" => "После первых пяти групп"
+D9273536780112: "Control Outlining" => "Группировать"
+41A18489F97F70: "Define new time ranges for time selector" => "Definiere neue Zeitspanne für den Zeitselektor"
+10FA8B1B034219: "Go to a marked journal entry. Use right click to mark an entry" => "Gehe zu einem markierten Journaleintrag. Klicke rechts um einen Eintrag zu markieren."
+0128C783DB2024: "system:body:station:stationfaction" => "system:body:station:stationfaction"
+03C54D66F2DA56: "Next start/stop marker is hidden" => "Nächste Start/Stopp-Markierung ist versteckt"
+905A92084F2F46: "No start/stop marker found below" => "Weiter unten keine Start/Stopp-Markierung gefunden"
+A89F26DDCFE091: "Entry filtered out of grid" => "Eintrag in Historie ausgefiltert"
 
 SECTION UserControlCaptainsLog
 
-.Diary: "Diary" => "Календарь"
-.Entries: "Entries" => "Записи"
+EFD742A1695D89: "Diary" => "Календарь"
+F056D0D56AFCAD: "Entries" => "Записи"
 
 SECTION CaptainsLogDiary
 
-.Daysofweek: "Sun;Mon;Tue;Wed;Thu;Fri;Sat" => "вс.;пн.;вт.;ср.;чт.;пт.;сб."
+EF78A6EC93835C: "Sun;Mon;Tue;Wed;Thu;Fri;Sat" => "вс.;пн.;вт.;ср.;чт.;пт.;сб."
 
 SECTION CaptainsLogEntries
 
-.DTF: "Bad/Out of Range Date Time format" => "Неправильный формат времени"
-.Note: "Note: " => "Текст: "
-.EnterNote: "Enter Note" => "Заметка"
-.CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" => "Вы действительно хотите удалить заметки ({0} шт.)?"
-.CF: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" => "Вы действительно хотите удалить заметки для {0}?"
-.SetTags: "Set Tags" => "Редактировать теги"
-.SysU: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
-.ColTime: "Time" = Time
-.ColSystem: "System" = SearchMaterialsCommodities.ColumnStar
-.ColBodyName: "Body" = UserControlSysInfo.labelBodyName
-.ColNote: "Note" = CaptainsLogEntries.EnterNote
-.ColTags: "Tags" => "Теги"
-.labelEndDate: "End Date:" = UserControlExpedition.labelEndDate
-.labelDateStart: "Start Date:" = UserControlExpedition.labelDateStart
-.buttonTags.ToolTip: "Edit Tags" = CaptainsLogEntries.SetTags
-.buttonDelete.ToolTip: "Delete selected entries" => "Удалить выбранные записи"
-.buttonNew.ToolTip: "New Entry" => "Новая запись"
-.textBoxFilter.ToolTip: "Search for Log Entries" => "Поиск в заметках"
-.labelSearch: "Search" = UserControlBookmarks.labelSearch
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
+7B1E36DA0107B5: "Bad/Out of Range Date Time format" => "Неправильный формат времени"
+AA1E8410ED98F2: "Note: " => "Текст: "
+C2016469805D19: "Enter Note" => "Заметка"
+1DD4DD39159EAF: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" => "Вы действительно хотите удалить заметки ({0} шт.)?"
+261A5FFA4D0D81: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" => "Вы действительно хотите удалить заметки для {0}?"
+8A2F6148BCF096: "Set Tags" => "Редактировать теги"
+E958459C6F2200: "Delete selected entries" => "Удалить выбранные записи"
+1BAE251DC4BD91: "New Entry" => "Новая запись"
+1ED33E573883C3: "Search for Log Entries" => "Поиск в заметках"
 
 SECTION UserControlTrilateration
 
-.ColumnSystem: "System" = SearchMaterialsCommodities.ColumnStar
-.ColumnDistance: "Distance" = UserControlExpedition.Distance
-.ColumnCalculated: "Calculated" => "Вычисленный"
-.ColumnStatus: "Status" => "Статус"
-.Source: "Source" => "Источник"
-.dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" => "Разыскиваемая система"
-.removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" => "Удалить из разыскиваемых систем"
-.viewOnEDSMToolStripMenuItem1: "View on EDSM" = UserControlJournalGrid.viewOnEDSMToolStripMenuItem
-.deleteAllWithKnownPositionToolStripMenuItem: "Delete all with known position" => "Удалить все записи с известными положениями"
-.addAllLocalSystemsToolStripMenuItem: "Add all local systems" => "Добавить все локальные системы"
-.addAllEDSMSystemsToolStripMenuItem: "Add all EDSM systems" => "Добавить все EDSM-системы "
-.addToWantedSystemsToolStripMenuItem: "Add to wanted systems" => "Добавить к разыскиваемым системам"
-.viewOnEDSMToolStripMenuItem: "View on EDSM" = UserControlJournalGrid.viewOnEDSMToolStripMenuItem
-.pasteToolStripMenuItem: "Paste" = UserControlExpedition.pasteToolStripMenuItem
-.toolStripButtonSubmitDistances: "&Submit Distances" => "Передать расстояние"
-.toolStripButtonNew: "Start New" => "Начать новую"
-.toolStripLabelSystem: "From System:" => "Из системы: "
-.toolStripLabel1: "Visited without coordinates:" => "Посещено без координат: "
-.toolStripAddFromHistory: "Add 20 oldest" => "Добавить 20 самых старых систем"
-.toolStripAddRecentHistory: "Add 20 newest" => "Добавить 20 самых новых систем"
-.ToolStripText: "Press Start New" => "Нажмите «Начать новую»"
-.DUP: "Duplicate system entry is not allowed" => "Двойной ввод системы не допускается"
-.TP: "Trilateration Panel" => "Трилатерация"
-.CHK: "You are about to submit distances from {0}.\r\nThe most recent known location in your history is {1}.\r\nSubmit distances without changing 'From' system?" => "Вы собираетесь передать расстояние из {0}.\r\nСамое последнее известное место в вашей истории {1}.\r\nПередать расстояние, не изменяя систему в поле «Из системы»?"
-.UPD: "Update 'From' system to current position ({0}) and submit entered distances?" => "Установить в поле «Из системы» текущее положение ({0}) и передать введенные расстояния?"
-.Sub: "Submitting system to EDSM, please wait..." => "Система передается в EDSM, пожалуйста, подождите..."
-.NOTREM: "{0} is pushed from EDSM and cannot be removed" => "Система {0} передана в EDSM и не может быть удалена"
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
-.Cmdr: "Please enter commander name before submitting the system!" => "Перед передачей системы, пожалуйста, введите имя командира!"
-.Horray: "EDSM submission succeeded, trilateration successful." => "Передача в EDSM прошла успешно, трилатерация удалась."
-.Failed: "EDSM submission succeeded, but trilateration failed. Try adding more distances." => "Передача в EDSM прошла успешно, но трилатерация не удалась. Пожалуйста, укажите больше расстояний."
-.Dead: "EDSM submission failed." => "Передача в EDSM не удалась."
-.Co: "Only systems with coordinates or already known to EDSM can be added" => "Можно добавлять только системы с координатами или системы, уже известные EDSM"
-.PU: "Position unknown" => "Положение неизвестно"
-.PF: "Position found" => "Положение найдено"
-.addAllSectorSystemsToolStripMenuItem: "Add all Sector systems" @
-.toolStripButtonSector: "Sector Systems" @
-.NotProcGen: "Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems." @
-.NoSector: "No systems with unknown coordinates were found for the current sector." @
-.SectorCount: "{0} systems with unknown coordinates found in {1} sector." @
+757D86654EDA4B: "Calculated" => "Вычисленный"
+57A96541268342: "Wanted System" => "Разыскиваемая система"
+35201A050F3AAF: "Remove from wanted systems" => "Удалить из разыскиваемых систем"
+C787D6ED2C9C15: "Delete all with known position" => "Удалить все записи с известными положениями"
+436C9224924A17: "Add all local systems" => "Добавить все локальные системы"
+C4923981307F3C: "Add all EDSM systems" => "Добавить все EDSM-системы "
+7ABC2E762F1C11: "Add to wanted systems" => "Добавить к разыскиваемым системам"
+47B25478D21515: "&Submit Distances" => "Передать расстояние"
+D12B3719BBD6F1: "Start New" => "Начать новую"
+0E258A8C046375: "From System:" => "Из системы: "
+0C87234D1B2DD1: "Visited without coordinates:" => "Посещено без координат: "
+6F38D28253F348: "Add 20 oldest" => "Добавить 20 самых старых систем"
+CD2E16EBD3BDBA: "Add 20 newest" => "Добавить 20 самых новых систем"
+0BF9E53A212E10: "Press Start New" => "Нажмите «Начать новую»"
+C268CAA16336DB: "Duplicate system entry is not allowed" => "Двойной ввод системы не допускается"
+1038B10F521092: "Trilateration Panel" => "Трилатерация"
+7768F29A8F62CB: "You are about to submit distances from {0}.\r\nThe most recent known location in your history is {1}.\r\nSubmit distances without changing 'From' system?" => "Вы собираетесь передать расстояние из {0}.\r\nСамое последнее известное место в вашей истории {1}.\r\nПередать расстояние, не изменяя систему в поле «Из системы»?"
+E3813A7FAC1F7A: "Update 'From' system to current position ({0}) and submit entered distances?" => "Установить в поле «Из системы» текущее положение ({0}) и передать введенные расстояния?"
+C3F22D80EC765B: "Submitting system to EDSM, please wait..." => "Система передается в EDSM, пожалуйста, подождите..."
+3025AC0C367A57: "{0} is pushed from EDSM and cannot be removed" => "Система {0} передана в EDSM и не может быть удалена"
+D822E8C1F9039E: "Please enter commander name before submitting the system!" => "Перед передачей системы, пожалуйста, введите имя командира!"
+ADC569B9A46FD5: "EDSM submission succeeded, trilateration successful." => "Передача в EDSM прошла успешно, трилатерация удалась."
+B02A742A947290: "EDSM submission succeeded, but trilateration failed. Try adding more distances." => "Передача в EDSM прошла успешно, но трилатерация не удалась. Пожалуйста, укажите больше расстояний."
+183AE19E7E5DC7: "EDSM submission failed." => "Передача в EDSM не удалась."
+9430459228FC8E: "Only systems with coordinates or already known to EDSM can be added" => "Можно добавлять только системы с координатами или системы, уже известные EDSM"
+8DE285BE18F269: "Position unknown" => "Положение неизвестно"
+16D3525290820F: "Position found" => "Положение найдено"
+44DA1E80428347: "Add all Sector systems" => "Füge alle Sektorsysteme hinzu"
+FFB238EB86BF11: "Sector Systems" => "Sektorsysteme"
+C41C3AF13C07BD: "Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems." => "Sektorname konnte vom Systemnamen nicht abgeleitet werden (möglicherweise ist es nicht prozedural generiert).   Bekomme keine Sektorsysteme."
+0F21EB2F39FE84: "No systems with unknown coordinates were found for the current sector." => "Keine Systeme mit unbekannten Koordinaten für den derzeitigen Sektor gefunden."
+EEBF564BAF4F90: "{0} systems with unknown coordinates found in {1} sector." => "{0} Systeme mit unbekannten Koordinaten im {1}-Sektor gefunden."
 
 SECTION UserControlMaterialTrader
 
-.UpgradeCol: "From" @
-.LevelCol: "Use" @
-.WantedCol: "Left" @
-.ModuleCol: "To" @
-.MaxCol: "Get" @
-.AvailableCol: "Total" @
-.buttonClear: "Clear" @
-.checkBoxCursorToTop.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
-.buttonClear.ToolTip: "Set all wanted values to zero" @
-.Offer: "Offer" @
-.Receive: "Receive" @
-.clearTradeToolStripMenuItem: "Clear Trade" @
-.Raw: "Raw" @
-.Encoded: "Encoded" @
-.Manufactured: "Manufactured" @
+1D4D43CC6F3A83: "Use" => "Benutzen"
+8AE1C34BD37FAD: "Left" => "Übrig"
+BFFFD736CDDD08: "Get" => "Erhalte"
+719EA396AD92E0: "Clear" => "Leeren"
+3898B9AA06204B: "Offer" => "Angebot"
+965FB2DDF63D60: "Receive" => "Erhalten"
+127F7960FB4A8D: "Clear Trade" => "Handel leeren"
+DA433CD41E7FB7: "Raw" => "Roh"
+58AC2F7D78D326: "Encoded" => "Verschlüsselt"
+8AB3DB9BFC3921: "Manufactured" => "Produziert"
 
 SECTION UserControlMiningOverlay
 
-.Proscoll: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" @
-.ref: "Ref." @
-.coll: "Coll." @
-.pros: "Prosp." @
-.ratio: "Ratio%" @
-.avg: "Avg%" @
-.min: "Min%" @
-.max: "Max%" @
-.mload: "M.Lode" @
-.hml: "HML Ct." @
-.discv: "Discv" @
-.astpros: "Asteroids Pros." @
-.content: "Content %" @
-.above: "% Above" @
-.dist: "Distribution" @
-.Limcargo: "Limpets left {0}, Cargo left {1}" @
-.extCheckBoxZeroRefined.ToolTip: "Display items with zero refined items" @
-.buttonExtExcel.ToolTip: "Export" @
-.extComboBoxChartOptions.ToolTip: "Select chart options" @
-.extCheckBoxChartBase.ToolTip: "Select chart between showing % chance for asteroids containing only this material, and % chance over all asteroids" @
-.distall: "Distribution vs All" @
+92743D7648AAD4: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" => ", Erzsucher abgefeuert {0}, Sammler ausgebracht {1}, geknackt {2}"
+3E82E468720F25: "Ref." => "Raf."
+633C0EE42BDD19: "Coll." => "Samm."
+FF44397BA75466: "Prosp." => "Erzs."
+0BBC5D86769FF1: "Ratio%" => "Anteil%"
+E9F6F27B0B2C27: "Avg%" => "Dsn%"
+EF0DFE1169222D: "Min%" => "Min%"
+E07CB141188F05: "Max%" => "Max%"
+79982906F01743: "M.Lode" => "Hauptader"
+6FAB4B5F335EB6: "HML Ct." => "HMN Zl"
+67B93882093149: "Discv" => "Entd."
+ACBFF454D6581B: "Asteroids Pros." => "Asteroiden prospektiert"
+805723CC0E68E1: "Content %" => "Inhalt %"
+98FD8A73E231A5: "% Above" => "% Über"
+1D3C457CBE3E35: "Distribution" => "Verteilung"
+7B169F19D2E9BB: "Limpets left {0}, Cargo left {1}" => "Drohnen übrig {0}, Fracht übrig {1}"
+CA0FBEE8E26BBE: "Display items with zero refined items" => "Zeige Objekte mit null raffinierten Gegenständen"
+081E86CF24ED15: "Select chart options" => "Wähle Tabellenoptionen"
+2A543AE1B0442B: "Select chart between showing % chance for asteroids containing only this material, and % chance over all asteroids" => "Wechsle Diagramm von 'Basierend auf Asteroiden, die dieses Material enthalten.' zu 'Basierend auf allen Asteroiden.'"
+78148038EB4C3C: "Distribution vs All" => "Verteilung gegen Alles"
 
 SECTION UserControlFactions
 
-.colFaction: "Faction" @
-.colMissions: "Missions" @
-.colInfluence: "Inf +" @
-.colReputation: "Rep +" @
-.colMissionCredits: "Mission Credits" @
-.CBought: "Commds +" @
-.CSold: "Commds -" @
-.CProfit: "Commds Profit" @
-.MBought: "Mats +" @
-.MSold: "Mats -" @
-.CrimeCommitted: "Crimes Committed" @
-.BountyKills: "Bounty Kills" @
-.BountyValue: "Bounty Rewards" @
-.BountyRewardsValue: "Bounty Rewards Value" @
-.Interdicted: "Interdicted" @
-.Interdiction: "Interdiction" @
-.KillBondVictim: "Kill Bonds Victim" @
-.KillBondsAward: "Kill Bonds Awarded" @
-.KillBondsValue: "Kill Bonds Value" @
-.CartoValue: "Cartographic Value" @
-.colInfo: "Other Info" @
-.labelTo: "to" @
-.startDateTimePicker.ToolTip: "Include from" @
-.endDateTimePicker.ToolTip: "Include to" @
-.FactionsPlural: "Factions" @
-.MissionsFor: "Missions for " @
-.BountyBond: "Bounty/Bond" @
-.Target: "Target" @
-.TargetFaction: "Target Faction" @
-.Reward: "Reward" @
-.BountiesBondsFor: "Bounties/Bonds for " @
-.Item: "Item" @
-.MaterialCommodsFor: "Materials/Commodities for " @
-.showMissionsForFactionToolStripMenuItem: "Show missions for faction" @
-.showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" @
-.showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" @
-.MissionsInProgress: "Missions In Progress: " @
-.CapShipVictims: "Capital ship Victims: " @
-.CapShipAward: "Capital ship Award: " @
-.colRedeemVoucher: "Redeem Voucher" @
-.colFines: "Pay Fines" @
-.colBountyValue: "Pay Bounty Value" @
-.colDataLinkVictimFaction: "DL Victim" @
-.colDataLinkPayeeFaction: "DL Payee Faction" @
-.colDataLinkPayeeValue: "DL Payee Value" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+A2BF9187FC85BA: "Inf +" => "Einfl. +"
+B128DA516E58BF: "Rep +" => "Ruf +"
+697DF284DA4F67: "Mission Credits" => "Mission Credits"
+6FF0E311B944E1: "Commds +" => "Waren +"
+AC18551E261653: "Commds -" => "Waren -"
+C1ECFEB8DEF4DC: "Commds Profit" => "Warenprofit"
+6EA689CC53EA9A: "Mats +" => "Mats +"
+07FDDC35BB0E65: "Mats -" => "Mats -"
+6AC2053328E50A: "Crimes Committed" => "Verbrechen begangen"
+77E2DD8141E981: "Bounty Kills" => "Kopfgeld"
+397B67A90DEC91: "Bounty Rewards" => "Kopfgeldbelohnungen"
+D5965451E332A6: "Bounty Rewards Value" => "Wert der Kopfgeldbelohnungen"
+B83FE58DB23E57: "Interdicted" => "Unterbrochen"
+C21AFB3EFA18AB: "Interdiction" => "Unterbrechungen"
+5F22266A168021: "Kill Bonds Victim" => "Tötungsbelohnungen Opfer"
+FC21DB8588503E: "Kill Bonds Awarded" => "Tötungsbelohnungen erhalten"
+DAE2AEC9BE1018: "Kill Bonds Value" => "Tötungsbelohnungen Wert"
+424368E7EC512D: "Cartographic Value" => "Kartographischer Wert"
+775CBA539E85D7: "Other Info" => "Andere Info"
+E28F24331D5916: "Include from" => "Inkludiere von"
+657AC92FA1AFD9: "Include to" => "Inkludiere bis"
+05EC5A8E4188D0: "Missions for " => "Missionen für "
+80046482992EB0: "Bounty/Bond" => "Kopfgeld/Belohnung"
+90E82138823B6D: "Bounties/Bonds for " => "Kopfgelder/Belohnungen für "
+EE4A9C0F4355B9: "Materials/Commodities for " => "Materialien/Waren für "
+449B4068617074: "Show missions for faction" => "Zeige Missionen für Fraktion"
+4CA2AF672FCE38: "Show commodity/material trades for faction" => "Zeige Waren-/Materialienhandel für Fraktion"
+5B997E7442275B: "Show bounties and bonds for faction" => "Zeige Kopfgelder und Belohnungen für Fraktion"
+819A8C7163E967: "Missions In Progress: " => "Misionen in Arbeit: "
+3AA9F747E12858: "Capital ship Victims: " => "Großkampfschiff Opfer: "
+A466B1F86CE710: "Capital ship Award: " => "Großkampfschiff Belohnung: "
+C7AD6F7B6831A8: "Redeem Voucher" => "Gutschein eingelöst"
+2C60D95A352DA3: "Pay Fines" => "Bezahlte Strafen"
+7E2BA2DEEF4EF3: "Pay Bounty Value" => "Wert bezahlter Kopfgelder"
+984FAF564D50B9: "DL Victim" => "DL Opfer"
+AB2BEAA625AAC3: "DL Payee Faction" => "DL auszahlende Fraktion"
+91FDF90FC89C75: "DL Payee Value" => "DL Auszahlungswert"
 
-.colSystem: "System" @
-.colLastRep: "Last Known Reputation" @
-.colFactionState: "Last State" @
-.colFactionGov: "Government" @
-.colFactionAllegiance: "Allegiance" @
-.colFactionSystemInfluence: "System Influence" @
-.colFactionOtherSystemInfo: "Other System Info" @
-.colOrganicDataSold: "Organic Data Value" @
-.labelSearch: "Search" @
-.extCheckBoxShowHideSystemInfo.ToolTip: "Show/Hide System Info" @
-.extCheckBoxShowHideMission.ToolTip: "Show/Hide Mission" @
-.extCheckBoxShowHideCommodities.ToolTip: "Show/Hide Commodities" @
-.extCheckBoxShowHideMaterials.ToolTip: "Show/Hide Materials" @
-.extCheckBoxShowHideBounties.ToolTip: "Show/Hide Crimes/Bounties" @
-.extCheckBoxShowHideInterdictions.ToolTip: "Show/Hide Interdictions" @
-.extCheckBoxShowHideKillBonds.ToolTip: "Show/Hide Kill Bonds" @
-.extCheckBoxShowHideDataLink.ToolTip: "Show/Hide Datalink" @
-.extCheckBoxShowHideCartographic.ToolTip: "Show Hide Cartographic/Organic Sold" @
+01784CA8036C41: "Last Known Reputation" => "Letzter bekannter Ruf"
+CE1FCB4A606ED1: "Last State" => "Letzter Zustand"
+5C9CB498F540DF: "Government" => "Regierung"
+1DD01EBAA45EEF: "System Influence" => "Systemeinfluss"
+05A55AA172DB06: "Other System Info" => "Andere Systeminfos"
+CB7B9C47F344FC: "Organic Data Value" => "Wert der organischen Daten"
+BDE6E14DB0426B: "Show/Hide System Info" => "Zeige/Verstecke Systeminformationen"
+0D19D7A7D356EA: "Show/Hide Mission" => "Zeige/Verstecke Missionen"
+7039D4E6A3112F: "Show/Hide Commodities" => "Zeige/Verstecke Handelswaren"
+20C47CB8700682: "Show/Hide Materials" => "Zeige/Verstecke Materialien"
+406CC4B75DC28D: "Show/Hide Crimes/Bounties" => "Zeige/Verstecke Verbrechen/Kopfgelder"
+E14A324A01BAF1: "Show/Hide Interdictions" => "Zeige/Verstecke Unterbrechungen"
+FBB715DCFB4F59: "Show/Hide Kill Bonds" => "Zeige/Verstecke Tötungsbelohnungen"
+0D9AC62782285E: "Show/Hide Datalink" => "Zeige/Verstecke Datenverbindungen"
+436BF2724D3231: "Show Hide Cartographic/Organic Sold" => "Zeige/Verstecke verkaufte Kartographie/Organismen"
 
 SECTION UserControlOrganics
 
-.extButtonShowControl.ToolTip: "Display Settings" @
-.extButtonFont.ToolTip: "Font" @
-.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
-.extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
-.at: "At {0}" @
-.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
-.extButtonAlignment.ToolTip: "Alignment" @
-.ColDate: "Date" @
-.ColStarSystem: "Star System" @
-.ColBodyName: "Body Name" @
-.ColBodyType: "Body Type" @
-.ColGenus: "Genus" @
-.ColSpecies: "Species" @
-.ColVariant: "Variant" @
-.ColLastScanType: "Last Scan Type" @
-.ColValue: "Value" @
-.labelTime: "Time" @
-.labelStart: "Start" @
-.labelEnd: "End" @
-.comboBoxTime.ToolTip: "Select the entries by age" @
+20ABF8B1A35466: "Display incomplete scans" => "Zeige unvollständige Scans"
+729535298F44FF: "At {0}" => "Bei {0}"
+023888959E33B9: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" => ", {0}, Radius {1}, {2}, {3}, Biosignale: {4}{5}"
+DAB5A87D199E18: "Star System" => "Sternensystem"
+48902F14E5C843: "Genus" => "Gattung"
+83A7238826AB30: "Species" => "Spezies"
+CC91B1EA2C1651: "Variant" => "Variante"
+E214E19943B264: "Last Scan Type" => "Letzter Scantyp"
 
 SECTION ScanDisplayForm
 
-.Sys: "System" = SearchMaterialsCommodities.ColumnStar
-.Station: "Station" => "Станция"
+4CB8D8545ED6BF: "Station" => "Станция"
 
 SECTION TagsForm
 
-.buttonMore.ToolTip: "Add more tags" => "Добавить тег"
-.TN: "Tag name" => "Название тега"
-.SI: "Select image for this tag" => "Выбрать значок для тега"
-.DE: "Delete entry" => "Удалить тег"
+6E225147D2494A: "Add more tags" => "Добавить тег"
+FCF2D565CE96B0: "Tag name" => "Название тега"
+78ADCBEFBDFDD0: "Select image for this tag" => "Выбрать значок для тега"
+CCAF752B04EA9C: "Delete entry" => "Удалить тег"
 
 SECTION FilterSelector
 
-.Travel: "Travel" = UserControlStats.tabControlCustomStats.tabPageTravel
-.Scan: "Scan" = UserControlSearch.Scans
-.Missions: "Missions" = UserControlSysInfo.labelMissions
-.Materials: "Materials" = UserControlScanGrid.materialsToolStripMenuItem
-.Commodities: "Commodities" => "Товары"
-.Ledger: "Ledger" => "Финансы"
-.Ship: "Ship" => "Корабли"
-.Mining: "Mining" @
-.MicroResources: "Micro Resources" @
-.Suits: "Suits" @
-.Carrier: "Carrier" @
-.NewGroup: "Create new group" @
-.Newgroupname: "Enter name of new group" @
-.Confirmremoval: "Confirm removal of" @
+2A98149D995006: "Suits" => "Anzüge"
+279E2C9DDD2C44: "Create new group" => "Erstelle neue Gruppe"
+7DB7848F955BD7: "Enter name of new group" => "Namen der neuen Gruppe eingeben"
+36B0FABDF83DC7: "Confirm removal of" => "Bestätige Entfernung von"
 
 SECTION UserControlCommonBase
 
-.Copyingtexttoclipboardfailed: "Copying text to clipboard failed" => "Не удалось скопировать текст в буфер обмена"
+9A9F28CAB2D108: "Copying text to clipboard failed" => "Не удалось скопировать текст в буфер обмена"
 
 SECTION CSV
 
-.Helpers.OpenFailed: "Failed to open " @
-.Helpers.WriteFailed: "Failed to write to " @
+9EF6280386D761: "Failed to open " => "Fehler beim Öffnen von "
+8BDF9FDF84B40D: "Failed to write to " => "Fehler beim Schreiben von "
 
 SECTION InfoForm
 
-.Copyingtextfailed: "Copying text to clipboard failed" @
 
 SECTION UserControlSuitsWeapons
 
-.CSTime: "Time" @
-.CSName: "Name" @
-.CSMods: "Mods" @
-.CSPrice: "Price" @
-.CSLoadout: "Loadout" @
-.CSPrimary1: "Primary 1" @
-.CSPrimary2: "Primary 2" @
-.CSSecondary: "Secondary" @
-.CWTime: "Time" @
-.CWName: "Name" @
-.CWClass: "Class" @
-.CWMods: "Mods" @
-.CWPrice: "Price" @
-.CWPrimary: "Primary" @
-.CWWType: "Weapon Type" @
-.CWDamageType: "Damage Type" @
-.CWFireMode: "Fire Mode" @
-.CWDamage: "Damage" @
-.CWRPS: "Rate/Sec" @
-.CWClipSize: "Clip Size" @
-.CWHopper: "Hopper Size" @
-.CWRange: "Range m" @
-.CWDPS: "DPS" @
-.CWHSD: "Head Shot Mult" @
-.Confirm: "Confirm Selling of" @
-.forceSellShipToolStripMenuItem: "Force Suit Sale" @
+CC459F63A7AECD: "Mods" => "Mods"
+9E7FD7DDAEE291: "Loadout" => "Konfiguration"
+EF002BCE769B96: "Primary 1" => "Primäre 1"
+34CD6210189BD2: "Primary 2" => "Primäre 2"
+025DE599EA0A62: "Secondary" => "Sekundäre"
+A9A96EC019494D: "Primary" => "Primäre"
+20874E3E8BD17C: "Weapon Type" => "Waffenart"
+1BFD29F2F12AD0: "Damage Type" => "Schadensart"
+9A337CC4EF4BE3: "Fire Mode" => "Feuermodus"
+7BF6D1D3A58A22: "Damage" => "Schaden"
+8A50D0D250AC59: "Rate/Sec" => "Rate/Sek"
+97B39A3F5E9B3A: "Clip Size" => "Magazingröße"
+77604466309D05: "Hopper Size" => "Behältergröße"
+D08EC89EFF37EC: "Range m" => "Reichweite m"
+F3CEC91C2F03B8: "DPS" => "SPS"
+E70031EADDA4DE: "Head Shot Mult" => "Kopfschussmulti"
+2ECE6C47CFB703: "Confirm Selling of" => "Bestätige Verkauf von"
+D13DB38286C90C: "Force Suit Sale" => "Erzwinge Anzugsverkauf"
 
 SECTION UserControlCarrier
 
-.Decommissioned: "Decommissioned" @
-.DecommissionedOn: "Decommissioning on" @
-.Cargo: "Cargo: ; t;N0" @
-.Services: "Services: ; t;N0" @
-.Shippacks: "Ship Packs: ; t;N0" @
-.Modulepacks: "Module Packs: ; t;N0" @
-.Reservedspace: "Reserved Space: ; t;N0" @
-.Freespace: "Free Space: ; t;N0" @
-.Jumprange: "Jump Range: ; ly;N0" @
-.Maxjump: "Max Jump: ; ly;N0" @
-.Fuel: "Fuel: ; t;N0" @
-.DockingAccess: "Docking Access: " @
-.Notorious: "Notorious: " @
-.Balance: "Balance: ; cr;N0" @
-.Reserve: "Reserve: ; cr;N0" @
-.Available: "Available: ; cr;N0" @
-.Reservepercent: "Reserve: ; %;N0" @
-.PioneerTax: "Pioneer Tax" @
-.ShipyardTax: "Shipyard Tax" @
-.RearmTax: "Rearm Tax" @
-.OutfittingTax: "Outfitting Tax" @
-.RefuelTax: "Refuel Tax" @
-.RepairTax: "Repair Tax" @
-.Taxpercentage: ": ; %;N0" @
-.CoreCost: "Core Cost: ; cr;N0" @
-.ServicesCost: "Services Cost: ; cr;N0" @
-.NoCarrier: "No Carrier" @
-.InstallCost: "Install cost: ; cr;N0" @
-.CapacityAllocated: "Capacity Allocated: ; Units;N0" @
-.Upkeepcost: "Upkeep cost: ; cr;N0" @
-.Suspendedupkeepcost: "Suspended upkeep cost: ; cr;N0" @
-.CrewName: "Crew Name: " @
-.ServiceActive: "This Service is Active" @
-.ServiceSuspended: "This Service is Suspended" @
-.ServiceNotInstalled: "This Service is Not Installed" @
-.NoPacks: "No Module or Ship packs installed" @
-.Tier: "Tier " @
-.Cost: "Cost: ; cr;N0" @
-.Jumping: "Jumping" @
-.NetworkFailure: "No CAPI data from frontier, due to either or server/network failure" @
-.NotLoggedIn: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." @
-.OptionalService: "Optional Service" @
-.CoreService: "Core Service" @
-.extTabControl.tabPageOverall: "Overall" @
-.extTabControl.tabPageItinerary: "Itinerary" @
-.extTabControl.tabPageItinerary.colItinDate: "Date" @
-.extTabControl.tabPageItinerary.colItinSystemAlphaInt: "System" @
-.extTabControl.tabPageItinerary.colItinBodyAlphaInt: "Body" @
-.extTabControl.tabPageItinerary.colItinJumpDistNumeric: "Jump Dist" @
-.extTabControl.tabPageItinerary.colItinDistFromNumeric: "Dist From" @
-.extTabControl.tabPageItinerary.colItinInformation: "Information" @
-.extTabControl.tabPageFinances: "Finances" @
-.extTabControl.tabPageFinances.colLedgerDate: "Date" @
-.extTabControl.tabPageFinances.colLedgerStarsystemAlphaInt: "System" @
-.extTabControl.tabPageFinances.colLedgerBodyAlphaInt: "Body" @
-.extTabControl.tabPageFinances.colLedgerEvent: "Event" @
-.extTabControl.tabPageFinances.colLedgerCreditNumeric: "Credits" @
-.extTabControl.tabPageFinances.colLedgerDebitNumeric: "Debits" @
-.extTabControl.tabPageFinances.colLedgerBalanceNumeric: "Balance cr" @
-.extTabControl.tabPageFinances.colLedgerNotes: "Notes" @
-.extTabControl.tabPageServices: "Services" @
-.extTabControl.tabPagePacks: "Packs" @
-.extTabControl.tabPageOrders: "Orders" @
-.extTabControl.tabPageOrders.colOrdersDate: "Date" @
-.extTabControl.tabPageOrders.colOrdersCommodity: "Commodity" @
-.extTabControl.tabPageOrders.colOrdersType: "Type" @
-.extTabControl.tabPageOrders.colOrdersGroup: "Group" @
-.extTabControl.tabPageOrders.colOrdersPurchaseNumeric: "Purchase" @
-.extTabControl.tabPageOrders.colOrdersSaleNumeric: "Sale" @
-.extTabControl.tabPageOrders.colOrdersPriceNumeric: "Price" @
-.extTabControl.tabPageOrders.colOrdersBlackmarket: "Blackmarket" @
-.extTabControl.tabPageCAPI3: "CAPI Stats" @
-.extTabControl.tabPageCAPI3.dataGridViewTextBoxColumn1: "Name" @
-.extTabControl.tabPageCAPI3.dataGridViewTextBoxColumnValue: "Value" @
-.extTabControl.tabPageCAPI1: "CAPI Ships/Modules" @
-.extTabControl.tabPageCAPI1.colCAPIShipsName: "Name" @
-.extTabControl.tabPageCAPI1.colCAPIShipsManu: "Manufacturer" @
-.extTabControl.tabPageCAPI1.colCAPIShipsPriceNumeric: "Price" @
-.extTabControl.tabPageCAPI1.colCAPIShipsSpeedNumeric: "Speed" @
-.extTabControl.tabPageCAPI1.colCAPIShipsBoostNumeric: "Boost" @
-.extTabControl.tabPageCAPI1.colCAPIShipsMassNumeric: "Mass" @
-.extTabControl.tabPageCAPI1.colCAPIShipsLandingPadNumeric: "Landing Pad" @
-.extTabControl.tabPageCAPI1.colCAPIModulesName: "Name" @
-.extTabControl.tabPageCAPI1.colCAPIModulesCat: "Category" @
-.extTabControl.tabPageCAPI1.colCAPIModulesMassNumeric: "Mass" @
-.extTabControl.tabPageCAPI1.colCAPIModulesPowerNumeric: "Power" @
-.extTabControl.tabPageCAPI1.colCAPIModulesCostNumeric: "Cost" @
-.extTabControl.tabPageCAPI1.colCAPIModulesStockNumeric: "Stock" @
-.extTabControl.tabPageCAPI1.colCAPIModulesInfo: "Info" @
-.extTabControl.tabPageCAPI2: "CAPI Items" @
-.extTabControl.tabPageCAPI2.colCAPICargoCommodity: "Commodity" @
-.extTabControl.tabPageCAPI2.colCAPICargoType: "Type" @
-.extTabControl.tabPageCAPI2.colCAPICargoGroup: "Group" @
-.extTabControl.tabPageCAPI2.colCAPICargoQuantityNumeric: "Quantity" @
-.extTabControl.tabPageCAPI2.colCAPICargoPriceNumeric: "Price" @
-.extTabControl.tabPageCAPI2.colCAPICargoStolen: "Stolen" @
-.extTabControl.tabPageCAPI2.colCAPILockerName: "Microresource" @
-.extTabControl.tabPageCAPI2.colCAPILockerType: "Type" @
-.extTabControl.tabPageCAPI2.colCAPILockerQuantityNumeric: "Quantity" @
+3D76FD53AA0F62: "Decommissioned" => "Dekommissioniert"
+0B2AA74B1595AE: "Decommissioning on" => "Dekommissionierung am"
+FECCF27D8A756C: "Cargo: ; t;N0" => "Fracht: ; t;N0"
+E4B184DD2B2AD1: "Services: ; t;N0" => "Einrichtungen: ; t;N0"
+B63CFA032C94BF: "Ship Packs: ; t;N0" => "Schiffspakete: ; t;N0"
+EF1C1576EACED1: "Module Packs: ; t;N0" => "Modulpakete: ; t;N0"
+56B679C0A68C1B: "Reserved Space: ; t;N0" => "Reservierter Platz: ; t;N0"
+0456E14744E365: "Free Space: ; t;N0" => "Freier Platz: ; t;N0"
+11CDC4D5D07633: "Jump Range: ; ly;N0" => "Sprungreichweite: ; ly;N0"
+A2B7F586AACEE5: "Max Jump: ; ly;N0" => "Max. Sprung: ; ly;N0"
+A936AD07CF17C0: "Fuel: ; t;N0" => "Treibstoff: ; t;N0"
+B45F1101FF6819: "Docking Access: " => "Andockzugang: "
+FA0FD4EDB0C658: "Notorious: " => "Berüchtigt: "
+5A1731CE9C0565: "Balance: ; cr;N0" => "Kontostand: : ; cr;N0"
+CB4849CE71609D: "Reserve: ; cr;N0" => "Reserve: ; cr;N0"
+EF688A50489362: "Available: ; cr;N0" => "Verfügbar: ; cr;N0"
+D75DF56D16E59F: "Reserve: ; %;N0" => "Reserve: ; %;N0"
+E8F1C1B55660EB: "Pioneer Tax" => "Pioniersteuer"
+7A6FA51ABA501E: "Shipyard Tax" => "Werftsteuer"
+3583018B5E8131: "Rearm Tax" => "Nachladesteuer"
+460784033FAD01: "Outfitting Tax" => "Ausrüstungssteuer"
+964A427048AAB1: "Refuel Tax" => "Auftanksteuer"
+7A550EE38B3E7C: "Repair Tax" => "Reparatursteuer"
+1A0F5DB337EC25: ": ; %;N0" => ": ; %;N0"
+5DD178DB7162A2: "Core Cost: ; cr;N0" => "Kernkosten: ; cr;N0"
+FE59ED4101E466: "Services Cost: ; cr;N0" => "Einrichtungskosten: ; cr;N0"
+50E6AE8D109017: "No Carrier" => "Kein Carrier"
+B455B013A9CF13: "Install cost: ; cr;N0" => "Installationskosten: ; cr;N0"
+3DF5159B0456C1: "Capacity Allocated: ; Units;N0" => "Zugewiesene Kapazität: ; Einheiten;N0"
+CB7654E3728C0A: "Upkeep cost: ; cr;N0" => "Instandhaltungskosten: ; cr;N0"
+9EC790B9F4E58F: "Suspended upkeep cost: ; cr;N0" => "Eingestellte Instandhaltungskosten: ; cr;N0"
+D8EC343DF22D11: "Crew Name: " => "Crewname: "
+E2CE7274D260B9: "This Service is Active" => "Diese Einrichtung ist aktiv"
+CD7E9084A619FD: "This Service is Suspended" => "Dieser Service ist beurlaubt"
+6C573682E526FF: "This Service is Not Installed" => "Dieser Service ist nicht installiert"
+068D15FAF7392F: "No Module or Ship packs installed" => "Kein Modul- oder Schiffspaket installiert"
+3BECD4DD96195C: "Tier " => "Rang "
+8EF7B327113B48: "Cost: ; cr;N0" => "Kosten: ; cr;N0"
+BB9246B17BFDFF: "Jumping" => "Springend"
+334FBEB50B8D02: "No CAPI data from frontier, due to either or server/network failure" => "KEine CAPI-Daten von Frontier, entweder Server- oder Netzwerkfehler"
+296B6B5743412B: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." => "Du bist nicht im CAPI angemeldet.\r\nGehe zum Einstellungspanel, öffne deine Kommandanteneinstellungen und logge dich ein."
+0D9D81EB1483AC: "Optional Service" => "Optionale Einrichtung"
+5BB5DF1A383AE6: "Core Service" => "Kerneinrichtung"
+8A528519BDABA6: "Overall" => "Insgesamt"
+B1BED287E15EFC: "Itinerary" => "Reiseverlauf"
+251018D2063C94: "Jump Dist" => "Sprungentfernung"
+9E94B37532F75D: "Dist From" => "Entfernungn von"
+4F05E8FDB76807: "Finances" => "Finanzen"
+EA50EDD2233946: "Balance cr" => "Kontostand Cr"
+5CBD584046863B: "Services" => "Einrichtungen"
+DB866831C3D096: "Packs" => "Pakete"
+CDED093321DDAA: "Orders" => "Aufträge"
+38DFC233193C18: "Commodity" => "Handelsware"
+171A0606F7C745: "Group" => "Gruppe"
+160F06D4799C85: "Purchase" => "Einkauf"
+0028D743EB44B8: "Sale" => "Verkauf"
+D909428F5E2D1E: "Blackmarket" => "Schwarzmarkt"
+57218AD66361FC: "CAPI Stats" => "CAPI Statistiken"
+9C452534CDFE1E: "CAPI Ships/Modules" => "CAPI Schiffe/Module"
+2D2CB022BC3D26: "Speed" => "Geschwindigkeit"
+2DA2851FFF3935: "Boost" => "Boost"
+2521738884EF95: "Landing Pad" => "Landeplattform"
+7548AB52C3D1D5: "Power" => "Leistung"
+BCECF4562F1709: "Stock" => "Lagerstand"
+2011FCCFA79102: "CAPI Items" => "CAPI Gegenstände"
+44F6AF6945544C: "Quantity" => "Anzahl"
+678DD8A69CFC99: "Stolen" => "Gestohlen"
+3F6F257DD23224: "Microresource" => "Mikroressource"
 
 SECTION BookmarkForm
 
-.labelName: "Name" = UserControlExpedition.SystemName
-.checkBoxTarget: "Make Target" => "Сделать целью"
-.labelBookmarkNotes: "Bookmark Notes" => "Примечание к закладке"
-.labelTravelNote: "Travel History Note" => "Примечание из истории полетов"
-.labelTimeMade: "Time Made" => "Время создания"
-.Update: "Update" => "Обновить"
-.SB: "New System Bookmark" => "Новая закладка для системы"
-.UB: "Update Bookmark" => "Обновить закладку"
-.RB: "Create Region Bookmark" => "Создать закладку для региона"
-.RN: "Enter a region name..." => "Введите название региона..."
-.NSB: "New System Bookmark" = BookmarkForm.SB
-.ESN: "Enter a system name..." => "Введите название системы..."
+C534BFBF9D187F: "Make Target" => "Сделать целью"
+FDD0B9C679C816: "Bookmark Notes" => "Примечание к закладке"
+095B368956C6D0: "Travel History Note" => "Примечание из истории полетов"
+5ECA49403D2379: "Time Made" => "Время создания"
+6D6AC8B5DA4FBE: "New System Bookmark" => "Новая закладка для системы"
+4CAC4817DCC0BB: "Update Bookmark" => "Обновить закладку"
+0929DC50D7F230: "Create Region Bookmark" => "Создать закладку для региона"
+DF26DBDCA9929A: "Enter a region name..." => "Введите название региона..."
+6BACA0EF4B5908: "Enter a system name..." => "Введите название системы..."
 
 SECTION SurfaceBookmarkUserControl
 
-.Enter: "Enter a name" => "Введите название"
-.PL: "Planet: " => "Планета: "
-.EPN: "Enter planet name" => "Введите название планеты"
-.PresstoAccept: "Press to Accept" = UserControlModules.PresstoAccept
-.PresstoCancel: "Press to Cancel" = UserControlModules.PresstoCancel
-.MAP: "Manually Add Planet" => "Добавить планету вручную"
-.BodyName: "Planetary Body" => "Планета"
-.SurfaceName: "Name" = UserControlCombatPanel.Name
-.SurfaceDesc: "Description" = UserControlBookmarks.ColDescription
-.Latitude: "Latitude" => "Широта"
-.Longitude: "Longitude" => "Долгота"
-.Valid: "Saveable" => "Сохраняемая"
-.labelSearch: "Search" @
-.labelSurface: "Surface Bookmarks In System" => "Закладки на поверхности планет в системе"
-.sendToCompassToolStripMenuItem: "Send to compass" => "Передать на компас"
-.deleteToolStripMenuItem: "Delete Row" => "Удалить строку"
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" = SurfaceBookmarkUserControl.MAP
-.ColTags: "Tags" @
-.textBoxFilter.ToolTip: "Search for planetary locations" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
+7E5FE97F0E9632: "Enter a name" => "Введите название"
+E0FDAC5D3CB4CB: "Planet: " => "Планета: "
+764838B4934B32: "Enter planet name" => "Введите название планеты"
+A3A26DCAD13DD3: "Manually Add Planet" => "Добавить планету вручную"
+8ADA27931CC8B8: "Planetary Body" => "Планета"
+CED3905EC8220A: "Latitude" => "Широта"
+6F9F011C5D36DF: "Longitude" => "Долгота"
+3D88C5A1B39BF3: "Saveable" => "Сохраняемая"
+341D2E1FBE179E: "Surface Bookmarks In System" => "Закладки на поверхности планет в системе"
+CE3A622F2A43D3: "Send to compass" => "Передать на компас"
+F78A5F70C27177: "Delete Row" => "Удалить строку"
+18AF4B1B57E6B0: "Search for planetary locations" => "Suche nach planetarischen Standorten"
 
 SECTION FindSystemsUserControl
 
-.labelRadMax: "Max" = UserControlEngineering.MaxCol
-.labelRadMin: "Radius ly Min" => "Мин. радиус"
-.labelFilter: "Star Name" = SearchMaterialsCommodities.ColumnStar
-.Cannotfindsystem: "Cannot find system " => "Не могу найти систему"
-.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
-.buttonExtNames: "From DB Find Names" => "Найти название в БД"
-.buttonExtEDSM: "From EDSM" => "Поиск по EDSM"
-.buttonExtDB: "From DB" => "Поиск по БД"
-.buttonExtVisited: "From Visited Systems" => "Поиск по посещенным"
-.checkBoxCustomCube: "Cube" = UserControlStarDistance.checkBoxCube
-.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
-.extButtonFromSpansh: "From Spansh" @
-.extButtonFromSpanshFindNames: "From Spansh Find Names" @
+ECF8B0EC8407C9: "Radius ly Min" => "Мин. радиус"
+DEB29771D8FDD9: "Star Name" => "Система"
+8E8DB7C9C725EA: "Cannot find system " => "Не могу найти систему"
+38BA068999A442: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" => "Webseite sendete keine Daten von {0} zurück\nEs könnte ein galaktisches Objekt sein das es nicht kennt."
+809B1882D352CC: "From DB Find Names" => "Найти название в БД"
+7A84B27F1A8FA2: "From EDSM" => "Поиск по EDSM"
+11B2F8BC039DDB: "From DB" => "Поиск по БД"
+CB1B66B801FB67: "From Visited Systems" => "Поиск по посещенным"
+29151554CEF084: "Exclude Visited Systems" => "Exclui sistemas visitados"
+9CD057957A1210: "From Spansh" => "Von Spansh"
+E478A8A04835DC: "From Spansh Find Names" => "Finde Namen mit Spansh"
 
 SECTION TravelHistoryFilter
 
-.Hours: "{0} hours" => "{0} ч."
-.Days: "{0} days" => "{0} дн."
-.1Week: "One Week" = StatsTimeUserControl.Week
-.Weeks: "{0} weeks" => "{0} нед."
-.Month: "Month" = StatsTimeUserControl.Month
-.Quarter: "Quarter" => "Квартал"
-.HYear: "Half year" => "Полгода"
-.Year: "Year" => "Год"
-.LastN: "Last {0} entries" => "Посл. {0} событий"
-.LDock: "Last dock" => "Посл. стыковка"
-.StartEnd: "Start/End Flag" => "Start/End флаг"
+6C204C8FBBB9EC: "{0} hours" => "{0} ч."
+536C16BD9FDF58: "{0} days" => "{0} дн."
+D85B59C8A8549D: "One Week" => "Неделя"
+2985A39CF5BF9E: "{0} weeks" => "{0} нед."
+0D3830748786CE: "Quarter" => "Квартал"
+D0E392BB008D98: "Half year" => "Полгода"
+879E32326C5217: "Year" => "Год"
+1A65F8560C3DE2: "Last {0} entries" => "Посл. {0} событий"
+56BDD40DDBF895: "Start/End Flag" => "Start/End флаг"
 
 SECTION Form2DMap
 
-.LastWeek: "Last Week" => "Последняя неделя"
-.LastMonth: "Last Month" => "Последний месяц"
-.LastYear: "Last Year" => "Последний год"
-.All: "All" = All
-.Custom: "Custom" => "Свое"
+BC159A569313F9: "Last Week" => "Последняя неделя"
+20FE4F42D7F8DB: "Last Month" => "Последний месяц"
+AB9F828234E9C3: "Last Year" => "Последний год"
 
 SECTION UserControlForm
 
-.extButtonDrawnMinimize.ToolTip: "Minimise" => "Минимизировать"
-.extButtonDrawnOnTop.ToolTip: "Toggle window on top of others" => "Переместить окно поверх других"
-.extButtonDrawnClose.ToolTip: "Close" => "Закрыть"
-.extButtonDrawnTaskBarIcon.ToolTip: "Toggle show taskbar icon for this window" => "Показать значок окна на панели задач"
-.extButtonDrawnShowTitle.ToolTip: "Toggle title visibility for this window when transparent" => "Видимость заголовка окна во время прозрачности"
-.extButtonDrawnTransparentMode.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" @
+B7B2AF605BC2A9: "Minimise" => "Минимизировать"
+13BC2BDFDEE5AF: "Toggle window on top of others" => "Переместить окно поверх других"
+BBFA773E5A63A5: "Close" => "Закрыть"
+E693FE24E8C758: "Toggle show taskbar icon for this window" => "Показать значок окна на панели задач"
+EC5BBF8310A48B: "Toggle title visibility for this window when transparent" => "Видимость заголовка окна во время прозрачности"
+986BA9206E1570: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "Imposta a transparência através de quatro presets:\r\nOff - normal, sem transparências\r\nOn (T) - transparente, com os controles ativos quando o mouse está dentro da janela\r\nOn (Tc) - transparente, com os controles ativos, activada mantendo pressionada a tecla de ativação\r\nOn (Tf) - transparência total, inerte, para interagir manter pressionada a tecla de ativação\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n"

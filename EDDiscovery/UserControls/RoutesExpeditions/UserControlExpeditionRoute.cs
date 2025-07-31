@@ -135,7 +135,7 @@ namespace EDDiscovery.UserControls
         {
             if (newrt.Name.IsEmpty())
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please specify a name for the route.".T(EDTx.UserControlExpedition_Specify), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please specify a name for the route.".Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return false;
             }
 
@@ -145,7 +145,7 @@ namespace EDDiscovery.UserControls
             if (edsmroute != null)
             {
                 ExtendedControls.MessageBoxTheme.Show(FindForm(), ("The current route name conflicts with a well-known expedition." + Environment.NewLine
-                    + "Please specify a new name to save your changes.").T(EDTx.UserControlExpedition_Conflict), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                    + "Please specify a new name to save your changes.").Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                 return false;
             }
@@ -154,7 +154,7 @@ namespace EDDiscovery.UserControls
 
             if (overwriteroute != null)
             {
-                if (MessageBoxTheme.Show(FindForm(), "Warning: route already exists. Would you like to overwrite it?".T(EDTx.UserControlExpedition_Overwrite), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo) != DialogResult.Yes)
+                if (MessageBoxTheme.Show(FindForm(), "Warning: route already exists. Would you like to overwrite it?".Tx(), "Warning".Tx(), MessageBoxButtons.YesNo) != DialogResult.Yes)
                     return false;
 
                 overwriteroute.Delete();
@@ -194,7 +194,7 @@ namespace EDDiscovery.UserControls
                 MakeVisible();      // we may not be on this screen if called (shutdown, import) make visible
 
                 var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), ("Expedition - There are unsaved changes to the current route." + Environment.NewLine
-                    + "Would you like to save the current route before proceeding?").T(EDTx.UserControlExpedition_Unsaved), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                    + "Would you like to save the current route before proceeding?").Tx(), "Warning".Tx(), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
                 switch (result)
                 {

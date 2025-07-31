@@ -71,32 +71,9 @@ namespace EDDiscovery.UserControls
 
             var tlnset = new string[] { "UserControlJournalGrid", "UserControlTravelGrid" };    // share top level name between them - new feature dec 24
 
-            var enumlist = new Enum[] { EDTx.UserControlJournalGrid_ColumnTime,
-                EDTx.UserControlJournalGrid_ColumnEvent, EDTx.UserControlJournalGrid_ColumnDescription,
-                EDTx.UserControlJournalGrid_ColumnInformation, EDTx.UserControlJournalGrid_labelTime,
-                EDTx.UserControlJournalGrid_labelSearch };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-
-            var enumlistcms = new Enum[] { EDTx.UserControlJournalGrid_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlJournalGrid_jumpToEntryToolStripMenuItem,
-                EDTx.UserControlJournalGrid_mapGotoStartoolStripMenuItem, EDTx.UserControlJournalGrid_viewOnEDSMToolStripMenuItem,
-                EDTx.UserControlJournalGrid_viewOnSpanshToolStripMenuItem,
-                EDTx.UserControlJournalGrid_viewScanDisplayToolStripMenuItem,
-                EDTx.UserControlJournalGrid_toolStripMenuItemStartStop,
-                EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem,
-                EDTx.UserControlJournalGrid_runActionsOnThisEntryToolStripMenuItem, EDTx.UserControlJournalGrid_copyJournalEntryToClipboardToolStripMenuItem };
-
-            BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, tlnset);
-
-            var enumlisttt = new Enum[] { EDTx.UserControlJournalGrid_comboBoxTime_ToolTip, EDTx.UserControlJournalGrid_textBoxSearch_ToolTip,
-                EDTx.UserControlJournalGrid_buttonFilter_ToolTip, EDTx.UserControlJournalGrid_buttonExtExcel_ToolTip,
-                EDTx.UserControlJournalGrid_checkBoxCursorToTop_ToolTip, EDTx.UserControlJournalGrid_buttonField_ToolTip,
-                EDTx.UserControlTravelGrid_extButtonTimeRanges_ToolTip, EDTx.UserControlTravelGrid_extComboBoxQuickMarks_ToolTip,
-                };
-
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, 
-                                    toplevelnames: tlnset,      // we can use either set of definitions here
-                                    debugit:true);
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(historyContextMenu);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
         }
 
         public override void Init()
@@ -138,8 +115,9 @@ namespace EDDiscovery.UserControls
                 PutSetting(dbTimeSelector, comboBoxTime.Text);
             }
 
-            if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it (share with travel grid)
-                searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);
+
+            if (BaseUtils.TranslatorMkII.Instance.IsDefined(searchterms))
+                searchterms = searchterms.Tx();
         }
 
         public override void LoadLayout()
@@ -264,8 +242,8 @@ namespace EDDiscovery.UserControls
             {
                 System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " JG TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
-                string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlJournalGrid_TT1), dataGridViewJournal.Rows.Count, current_historylist?.Count ?? 0);
-                comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlJournalGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlJournalGrid_TTSelAge) + ms);
+                string ms = string.Format(" showing {0} original {1}".Tx(), dataGridViewJournal.Rows.Count, current_historylist?.Count ?? 0);
+                comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(), fdropdown + ms) : "Select the entries by age, ".Tx()+ ms);
 
                 if (dataGridViewJournal.SelectAndMove(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();
@@ -512,7 +490,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, DiscoveryForm, "Journal: Filter out fields".T(EDTx.UserControlJournalGrid_JHF));
+            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, DiscoveryForm, "Journal: Filter out fields".Tx());
             if ( res != null )
             {
                 fieldfilter = res;
@@ -567,7 +545,7 @@ namespace EDDiscovery.UserControls
                 }
             }
             extComboBoxQuickMarks.Tag = jids;
-            extComboBoxQuickMarks.Text = "Marked".TxID(EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem);      // only works for custom
+            extComboBoxQuickMarks.Text = "Marked".Tx();      // only works for custom
         }
 
         private void extComboBoxQuickMarks_SelectedIndexChanged(object sender, EventArgs e)
@@ -575,7 +553,7 @@ namespace EDDiscovery.UserControls
             List<long> jids = extComboBoxQuickMarks.Tag as List<long>;
             long jid = jids[extComboBoxQuickMarks.SelectedIndex];
             if (!GotoPosByJID(jid))
-                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".Tx(), "Warning".Tx());
         }
 
 
@@ -636,7 +614,7 @@ namespace EDDiscovery.UserControls
         {
             EDSMClass edsm = new EDSMClass();
             if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name))
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlJournalGrid_NotSynced));
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx());
         }
 
         private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
@@ -752,7 +730,7 @@ namespace EDDiscovery.UserControls
                             }
                             catch
                             {
-                                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to open " + frm.Path, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to open " + frm.Path, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                             }
                         }
                     }

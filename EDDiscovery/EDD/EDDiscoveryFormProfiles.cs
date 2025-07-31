@@ -25,7 +25,7 @@ namespace EDDiscovery
             comboBoxCustomProfiles.Enabled = false;                         // and update this box, making sure we don't renter
             comboBoxCustomProfiles.Items.Clear();
             comboBoxCustomProfiles.Items.AddRange(EDDProfiles.Instance.Names());
-            comboBoxCustomProfiles.Items.Add("Edit Profiles".T(EDTx.EDDiscoveryForm_EP));
+            comboBoxCustomProfiles.Items.Add("Edit Profiles".Tx());
             comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(EDDProfiles.Instance.Current.Id);
             comboBoxCustomProfiles.Enabled = true;
         }
@@ -65,7 +65,7 @@ namespace EDDiscovery
                 PopOuts.LoadSavedPopouts();
 
                 System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLap("ProfT") + " *************************** Finished Profile " + id);
-                LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PL), EDDProfiles.Instance.Current.Name));
+                LogLine(string.Format("Profile {0} Loaded".Tx(), EDDProfiles.Instance.Current.Name));
             }
         }
 
@@ -82,7 +82,7 @@ namespace EDDiscovery
                 ChangeToProfileId(i, true);
 
             if (errlist.HasChars())
-                LogLine("Profile reports errors in triggers:".T(EDTx.EDDiscoveryForm_PE1) + errlist);
+                LogLine("Profile reports errors in triggers:".Tx()+ errlist);
         }
 
 

@@ -55,7 +55,7 @@ namespace EDDiscovery.UserControls
             // get setting in utc
             CurrentMonthFirstDayUTC = GetSetting(dbDateSave, DateTime.UtcNow.StartOfMonth());     
 
-            string daynames = "Sun;Mon;Tue;Wed;Thu;Fri;Sat".T(EDTx.CaptainsLogDiary_Daysofweek);
+            string daynames = "Sun;Mon;Tue;Wed;Thu;Fri;Sat".Tx();
             string[] daynamesplit = daynames.Split(';');
 
             for (int i = 0; i < 7; i++)

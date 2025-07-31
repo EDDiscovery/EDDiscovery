@@ -43,11 +43,8 @@ namespace EDDiscovery.UserControls
             groups = new List<Group>();
             InitializeComponent();
 
-            var enumlist = new Enum[] { };      // no controls except OK/Cancel to translate
-            var enumlisttt = new Enum[] { EDTx.TagsForm_buttonMore_ToolTip };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
         }
 
         public void Init(string t, Icon ic, string tagsplitstring, Dictionary<string,string> tags = null )
@@ -87,7 +84,7 @@ namespace EDDiscovery.UserControls
             g.name.Text = var;
             g.name.KeyPress += (s, e) => { if (e.KeyChar == tagssplitstr[0]) e.Handled = true; };   // prevent entry of split char
             g.panel.Controls.Add(g.name);
-            toolTip.SetToolTip(g.name, "Tag name".T(EDTx.TagsForm_TN));
+            toolTip.SetToolTip(g.name, "Tag name".Tx());
 
             int nextpos = g.name.Right;
 
@@ -96,7 +93,7 @@ namespace EDDiscovery.UserControls
             g.icon.Size = new Size(28, 28);     // override autosize after theming
             g.icon.Click += Icon_Click;
             g.icon.Tag = g;
-            toolTip.SetToolTip(g.icon, "Select image for this tag".T(EDTx.TagsForm_SI));
+            toolTip.SetToolTip(g.icon, "Select image for this tag".Tx());
             g.panel.Controls.Add(g.icon);
 
             g.del = new ExtendedControls.ExtButton();
@@ -105,7 +102,7 @@ namespace EDDiscovery.UserControls
             g.del.Text = "X";
             g.del.Tag = g;
             g.del.Click += Del_Clicked;
-            toolTip.SetToolTip(g.del, "Delete entry".T(EDTx.TagsForm_DE));
+            toolTip.SetToolTip(g.del, "Delete entry".Tx());
             g.panel.Controls.Add(g.del);
 
             groups.Add(g);

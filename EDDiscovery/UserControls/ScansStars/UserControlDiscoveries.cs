@@ -39,6 +39,8 @@ namespace EDDiscovery.UserControls
         public UserControlDiscoveries()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -53,16 +55,6 @@ namespace EDDiscovery.UserControls
             extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, true);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
-
-            var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnBody, EDTx.SearchScans_ColumnInformation,
-                                       EDTx.SearchScans_ColumnSearches,  EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent,
-                                       EDTx.SearchScans_ColumnParentParent, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnStarStar,
-                                        EDTx.SearchScans_labelTime , EDTx.SearchScans_labelSearch};
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist,null, new string[] { "SearchScans" });
-
-            var enumlisttt = new Enum[] { EDTx.UserControlDiscoveries_textBoxSearch_ToolTip, EDTx.UserControlDiscoveries_extButtonSearches_ToolTip,
-                                EDTx.UserControlDiscoveries_extCheckBoxWordWrap_ToolTip, EDTx.UserControlDiscoveries_buttonExtExcel_ToolTip };
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             DiscoveryForm.OnNewEntry += NewEntry;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -88,7 +80,7 @@ namespace EDDiscovery.UserControls
             dataGridView.GotoEntryClicked += (he) =>
             {
                 if (RequestPanelOperation(this, new UserControlCommonBase.RequestTravelToJID() { JID = he.Journalid, MakeVisible = true }) == PanelActionState.Failed)
-                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".Tx(), "Warning".Tx());
             };
 
         }
@@ -333,7 +325,7 @@ namespace EDDiscovery.UserControls
             System.Diagnostics.Debug.WriteLine($"Discoveries {Environment.TickCount % 10000} grid drawn");
 
             if (dataGridView.Rows.Count > 0)
-                labelCount.Text = "Total".TxID(EDTx.UserControlMaterialCommodities_Total) + " " + dataGridView.Rows.Count.ToString();
+                labelCount.Text = "Total".Tx()+ " " + dataGridView.Rows.Count.ToString();
             else
                 labelCount.Text = "";
 
@@ -359,7 +351,7 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
             displayfilter.UC.AddAllNone();
             displayfilter.UC.SettingsSplittingChar = SettingsSplittingChar;     // pick a crazy one soe
-            displayfilter.UC.AddGroupItem(HistoryListQueries.Instance.DefaultSearches(SettingsSplittingChar), "Default".T(EDTx.ProfileEditor_Default));
+            displayfilter.UC.AddGroupItem(HistoryListQueries.Instance.DefaultSearches(SettingsSplittingChar), "Default".Tx());
             displayfilter.UC.MultiColumnSlide = true;
 
             var searches = HistoryListQueries.Instance.Searches.Where(x => x.UserOrBuiltIn).ToList();

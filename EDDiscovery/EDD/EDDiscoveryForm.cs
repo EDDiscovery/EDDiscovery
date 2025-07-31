@@ -259,29 +259,26 @@ namespace EDDiscovery
 #if DEBUG
             if (lang == "example-ex")       // if we are loading english, turn on code vs english comparision to see if we can find any out of date english.ex
             {
-                Translator.Instance.CompareTranslatedToCode = true;
+                TranslatorMkII.Instance.CompareTranslatedToCode = true;
                 debugtranslation = true;
             }
 #endif
 
-            bool found = BaseUtils.Translator.Instance.LoadTranslation(lang,
+            // Load MKII version
+
+            bool found2 = BaseUtils.TranslatorMkII.Instance.LoadTranslation(lang,
                     CultureInfo.CurrentUICulture,
                     EDDOptions.Instance.TranslatorFolders(),
                     EDDOptions.Instance.TranslatorDirectoryIncludeSearchUpDepth,
                     debugtranslation ? EDDOptions.Instance.AppDataDirectory : null,
+                    null,
                     debugtranslation
                     );
 
-            if (!found && !lang.Contains("Default", StringComparison.InvariantCultureIgnoreCase) && !lang.Contains("Auto", StringComparison.InvariantCultureIgnoreCase))
-                ExtendedControls.MessageBoxTheme.Show("Translation file disappeared - check your debugger -translationfolder settings!","Translation file");
-
             //BaseUtils.Translator.Instance.WriteToFile(Path.Combine(@"c:\code", lang + ".tlx")); BaseUtils.Translator.Instance.ReadFromFile(Path.Combine(@"c:\code", lang + ".tlx"));
 
-            BaseUtils.Translator.Instance.AddExcludedControls(new Type[]
-            {   typeof(ExtendedControls.ExtComboBox), typeof(ExtendedControls.NumberBoxDouble),typeof(ExtendedControls.NumberBoxFloat),typeof(ExtendedControls.NumberBoxLong),
-                typeof(ExtendedControls.ExtScrollBar),typeof(ExtendedControls.ExtStatusStrip),typeof(ExtendedControls.ExtRichTextBox),typeof(ExtendedControls.ExtTextBox),
-                typeof(ExtendedControls.ExtTextBoxAutoComplete),typeof(ExtendedControls.ExtDateTimePicker),typeof(ExtendedControls.ExtNumericUpDown),
-                typeof(ExtendedControls.MultiPipControl)});
+            if (!found2 && !lang.Contains("Default", StringComparison.InvariantCultureIgnoreCase) && !lang.Contains("Auto", StringComparison.InvariantCultureIgnoreCase))
+                ExtendedControls.MessageBoxTheme.Show("Translation file disappeared - check your debugger -translationfolder settings!", "Translation file");
 
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Initialise Item Data and components");
             msg.Invoke("Loading Items");
@@ -463,11 +460,8 @@ namespace EDDiscovery
 
             //----------------------------------------------------------------- Do translations before any thing else gets added to these toolbars
 
-            var enumlistcms = new Enum[] { EDTx.EDDiscoveryForm_addTabToolStripMenuItem, EDTx.EDDiscoveryForm_removeTabToolStripMenuItem, EDTx.EDDiscoveryForm_renameTabToolStripMenuItem, EDTx.EDDiscoveryForm_popOutPanelToolStripMenuItem, EDTx.EDDiscoveryForm_helpTabToolStripMenuItem };
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripTabs, enumlistcms, this);        // need to translate BEFORE we add in extra items
-
-            var enumlistcms2 = new Enum[] { EDTx.EDDiscoveryForm_notifyIconMenu_Open, EDTx.EDDiscoveryForm_notifyIconMenu_Hide, EDTx.EDDiscoveryForm_notifyIconMenu_Exit };
-            BaseUtils.Translator.Instance.TranslateToolstrip(notifyIconContextMenuStrip, enumlistcms2, this);        // need to translate BEFORE we add in extra items
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStripTabs);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(notifyIconContextMenuStrip);
 
             // ---------------------------------------------------------------- DLL Load
 
@@ -501,7 +495,7 @@ namespace EDDiscovery
 
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(edsmgmofile))        // if allowed to load, and no gmo file, fetch immediately
                 {
-                    LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
+                    LogLine("Get galactic mapping from EDSM.".Tx());
                     if (EliteDangerousCore.EDSM.EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile, new System.Threading.CancellationToken()))
                         SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
                 }
@@ -510,7 +504,7 @@ namespace EDDiscovery
 
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(gecfile))        // if allowed to load, and no gec file, fetch immediately
                 {
-                    LogLine("Get galactic mapping from GEC.".T(EDTx.EDDiscoveryController_GEC));
+                    LogLine("Get galactic mapping from GEC.".Tx());
                     if (EliteDangerousCore.GEC.GECClass.DownloadGECFile(gecfile, new System.Threading.CancellationToken()))
                         SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
                 }
@@ -549,32 +543,8 @@ namespace EDDiscovery
 
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Translate UI");
 
-            var enumlistcms3 = new Enum[] { EDTx.EDDiscoveryForm_toolsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_settingsToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_showAllInTaskBarToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_turnOffAllTransparencyToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_exitToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_sendUnsyncedEDSMJournalsToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_fetchLogsAgainToolStripMenuItem,
-                EDTx.EDDiscoveryForm_adminToolStripMenuItem_fetchStarDataAgainToolStripMenuItem,
-                EDTx.EDDiscoveryForm_adminToolStripMenuItem_rescanAllJournalFilesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_sendHistoricDataToInaraToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_adminToolStripMenuItem_rebuildUserDBIndexesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_rebuildSystemDBIndexesToolStripMenuItem,
-                EDTx.EDDiscoveryForm_adminToolStripMenuItem_updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_showLogfilesToolStripMenuItem,
-                EDTx.EDDiscoveryForm_adminToolStripMenuItem_dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_deleteDuplicateFSDJumpEntriesToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_adminToolStripMenuItem_read21AndFormerLogFilesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_read21AndFormerLogFilesToolStripMenuItem_load21ToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_adminToolStripMenuItem_read21AndFormerLogFilesToolStripMenuItem_read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem, EDTx.EDDiscoveryForm_addOnsToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_addOnsToolStripMenuItem_manageAddOnsToolStripMenuItem, EDTx.EDDiscoveryForm_addOnsToolStripMenuItem_configureAddOnActionsToolStripMenuItem,
-                EDTx.EDDiscoveryForm_addOnsToolStripMenuItem_editLastActionPackToolStripMenuItem, EDTx.EDDiscoveryForm_addOnsToolStripMenuItem_stopCurrentlyRunningActionProgramToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_helpToolStripMenuItem_aboutToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_wikiHelpToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_viewHelpVideosToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_helpToolStripMenuItem_eDDiscoveryChatDiscordToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_helpToolStripMenuItem_frontierForumThreadToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_gitHubToolStripMenuItem, EDTx.EDDiscoveryForm_helpToolStripMenuItem_reportIssueIdeasToolStripMenuItem,
-                EDTx.EDDiscoveryForm_helpToolStripMenuItem_toolStripMenuItemListBindings,
-                EDTx.EDDiscoveryForm_helpToolStripMenuItem_checkForNewReleaseToolStripMenuItem };
-
-            BaseUtils.Translator.Instance.TranslateToolstrip(mainMenu, enumlistcms3, this);
-
-            var enumlisttt = new Enum[] { EDTx.EDDiscoveryForm_tabControlMain_ToolTip, EDTx.EDDiscoveryForm_comboBoxCommander_ToolTip, EDTx.EDDiscoveryForm_buttonExtRefresh_ToolTip, EDTx.EDDiscoveryForm_comboBoxCustomProfiles_ToolTip,
-                EDTx.EDDiscoveryForm_buttonExtManageAddOns_ToolTip, EDTx.EDDiscoveryForm_buttonExtEditAddOns_ToolTip, EDTx.EDDiscoveryForm_buttonExtPopOut_ToolTip };
-
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(mainMenu);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
 
             panelToolBar.SetToolTip(toolTip);    // use the defaults
 
@@ -615,7 +585,7 @@ namespace EDDiscovery
                     MessageBox.Show(("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
                                     "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
                                     "To try and clear it, hold down shift and then launch the program." + Environment.NewLine +
-                                    "Click on Reset tabs, then Run program, which may clear the problem.").T(EDTx.EDDiscoveryForm_TSF));
+                                    "Click on Reset tabs, then Run program, which may clear the problem.").Tx());
                     Application.Exit();
                 }
             }
@@ -628,8 +598,8 @@ namespace EDDiscovery
             removeTabToolStripMenuItem.Click += (s, e) => tabControlMain.RemoveTab(tabControlMain.LastTabClicked);
             renameTabToolStripMenuItem.Click += (s, e) =>
             {
-                string newvalue = ExtendedControls.PromptSingleLine.ShowDialog(this,"Name:".T(EDTx.EDDiscoveryForm_RTABL), tabControlMain.TabPages[tabControlMain.LastTabClicked].Text,
-                                "Rename Tab".T(EDTx.EDDiscoveryForm_RTABT), this.Icon, false, "Enter a new name for the tab".T(EDTx.EDDiscoveryForm_RTABTT), requireinput:true);
+                string newvalue = ExtendedControls.PromptSingleLine.ShowDialog(this,"Name:".Tx(), tabControlMain.TabPages[tabControlMain.LastTabClicked].Text,
+                                "Rename Tab".Tx(), this.Icon, false, "Enter a new name for the tab".Tx(), requireinput:true);
                 if (newvalue != null)
                     tabControlMain.RenameTab(tabControlMain.LastTabClicked, newvalue.Replace(";", "_"));
             };
@@ -749,7 +719,7 @@ namespace EDDiscovery
             // Continue..
  
 
-            LogLine(string.Format("Profile {0} Loaded".T(EDTx.EDDiscoveryForm_PROFL), EDDProfiles.Instance.Current.Name));
+            LogLine(string.Format("Profile {0} Loaded".Tx(), EDDProfiles.Instance.Current.Name));
 
             // Bindings
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Bindings");
@@ -845,8 +815,8 @@ namespace EDDiscovery
                             System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionString(), (rel) =>  // in thread
                 {
                     newRelease = rel;
-                    BeginInvoke(new Action(() => LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".T(EDTx.EDDiscoveryForm_NI), newRelease.ReleaseName))));
-                    BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!".T(EDTx.EDDiscoveryForm_NRA)));
+                    BeginInvoke(new Action(() => LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".Tx(), newRelease.ReleaseName))));
+                    BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!".Tx()));
                 });
             }
 
@@ -939,7 +909,7 @@ namespace EDDiscovery
 
             if (!Controller.PendingClose.IsCancellationRequested)       // if not shutting down..
             {
-                bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the system database\r\nPress OK to close now, Cancel to wait until update is complete".T(EDTx.EDDiscoveryForm_CloseWarning), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
+                bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the system database\r\nPress OK to close now, Cancel to wait until update is complete".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
 
                 if (goforit)
                 {
@@ -951,7 +921,7 @@ namespace EDDiscovery
 
                 if (goforit)
                 {
-                    StatusLineUpdate(EDDiscoveryForm.StatusLineUpdateType.CloseDown, -1,"Closing, please wait!".T(EDTx.EDDiscoveryForm_Closing));
+                    StatusLineUpdate(EDDiscoveryForm.StatusLineUpdateType.CloseDown, -1,"Closing, please wait!".Tx());
                     actioncontroller.ActionRun(Actions.ActionEventEDList.onShutdown);
                     Controller.Shutdown();
                 }
@@ -1048,11 +1018,11 @@ namespace EDDiscovery
         private void syncStarDataSystemsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!EDDConfig.Instance.SystemDBDownload)
-                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".T(EDTx.EDDiscoveryForm_SDDis));
-            else if (ExtendedControls.MessageBoxTheme.Show(this, ("This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?").T(EDTx.EDDiscoveryForm_EDSMQ), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
+                ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".Tx());
+            else if (ExtendedControls.MessageBoxTheme.Show(this, ("This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?").Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
             {
                 if (!Controller.AsyncPerformSync(true))      // we want it to have run, to completion, to allow another go..
-                    ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".T(EDTx.EDDiscoveryForm_SDSyncErr));
+                    ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".Tx());
             }
         }
 
@@ -1096,7 +1066,7 @@ namespace EDDiscovery
 
         private void debugResetAllHistoryToFirstCommanderToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset all history entries to the current commander".T(EDTx.EDDiscoveryForm_ResetCMDR), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset all history entries to the current commander".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.ResetCommanderID(-1, EDCommander.CurrentCmdrID);
                 Controller.RefreshHistoryAsync();
@@ -1118,13 +1088,13 @@ namespace EDDiscovery
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show(this,"No new release found".T(EDTx.EDDiscoveryForm_NoRel), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(this,"No new release found".Tx(), "Warning".Tx(), MessageBoxButtons.OK);
             }
         }
 
         private void deleteDuplicateFSDJumpEntriesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you remove any duplicate FSD entries from the current commander".T(EDTx.EDDiscoveryForm_RevFSD), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you remove any duplicate FSD entries from the current commander".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 Controller.RefreshHistoryAsync(removedupfsdentries: true);
             }
@@ -1139,12 +1109,12 @@ namespace EDDiscovery
                 UserDatabase.Instance.PutSetting("InaraLastHistoricUpload", DateTime.UtcNow);
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".T(EDTx.EDDiscoveryForm_InaraW), "Warning".T(EDTx.Warning));
+                ExtendedControls.MessageBoxTheme.Show(this, "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding".Tx(), "Warning".Tx());
         }
 
         private void rebuildUserDBIndexesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time.".T(EDTx.EDDiscoveryForm_IndexW), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time.".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 UserDatabase.Instance.RebuildIndexes(LogLine);
             }
@@ -1152,7 +1122,7 @@ namespace EDDiscovery
 
         private void rebuildSystemDBIndexesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time.".T(EDTx.EDDiscoveryForm_IndexW), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time.".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 SystemsDatabase.Instance.RebuildIndexes(LogLine);
             }
@@ -1161,8 +1131,8 @@ namespace EDDiscovery
         private void updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (ExtendedControls.MessageBoxTheme.Show(this, 
-                    "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?".T(EDTx.EDDiscoveryForm_FillPos), 
-                    "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?".Tx(), 
+                    "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 History.FillInPositionsFSDJumps(LogLine);
                 RefreshDisplays();

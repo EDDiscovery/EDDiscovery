@@ -24,6 +24,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             richTextBox_History.ReadOnly = true;
             richTextBox_History.ContextMenuStrip = contextMenuStrip;
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
         }
 
         public override void Init()
@@ -31,9 +32,6 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewLogEntry += AppendText;
             AppendText(DiscoveryForm.LogText, ExtendedControls.Theme.Current.TextBlockForeColor);
             richTextBox_History.ScrollToCaret();
-
-            var enumlistcms = new Enum[] { EDTx.UserControlLog_toolStripMenuItemCopy, EDTx.UserControlLog_clearLogToolStripMenuItem };
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
         }
 
         public override void InitialDisplay()

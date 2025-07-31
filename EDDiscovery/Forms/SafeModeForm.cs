@@ -32,16 +32,9 @@ namespace EDDiscovery.Forms
         {
             InitializeComponent();
 
-            BaseUtils.Translator tx = new BaseUtils.Translator();
+            BaseUtils.TranslatorMkII tx = new BaseUtils.TranslatorMkII();
             tx.LoadTranslation("Auto", CultureInfo.CurrentUICulture, new string[] { System.IO.Path.GetDirectoryName(Application.ExecutablePath) }, 0,System.IO.Path.GetTempPath());
-            //tx.LoadTranslation("example-ex", CultureInfo.CurrentUICulture, new string[] { @"c:\code\eddiscovery\eddiscovery\translations" }, 2,System.IO.Path.GetTempPath());
-
-            var enumlist = new Enum[] { EDTx.SafeModeForm, EDTx.SafeModeForm_buttonCancel, EDTx.SafeModeForm_buttonRun, EDTx.SafeModeForm_buttonRemoveJournals, 
-                                        EDTx.SafeModeForm_buttonDeleteUserDB, EDTx.SafeModeForm_buttonDeleteSystemDB, EDTx.SafeModeForm_buttonResetDBLoc, 
-                                        EDTx.SafeModeForm_buttonBackup, EDTx.SafeModeForm_buttonDbs, EDTx.SafeModeForm_buttonLang, 
-                                        EDTx.SafeModeForm_buttonActionPacks, EDTx.SafeModeForm_buttonRemoveDLLs, EDTx.SafeModeForm_buttonResetTabs, 
-                                        EDTx.SafeModeForm_buttonPositions, EDTx.SafeModeForm_buttonResetTheme, EDTx.SafeModeForm_buttonRemoveJournalsCommanders };
-            tx.TranslateControls(this, enumlist);
+            tx.TranslateControls(this);
         }
 
         public SafeModeForm(bool userdbgood) : this()

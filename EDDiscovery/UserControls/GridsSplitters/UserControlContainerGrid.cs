@@ -48,8 +48,7 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "GridControl";
 
-            var enumlisttt = new Enum[] { EDTx.UserControlContainerGrid_buttonExtTile_ToolTip, EDTx.UserControlContainerGrid_buttonExtDelete_ToolTip, EDTx.UserControlContainerGrid_buttonExtPopOut_ToolTip };
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
             rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults
 
             //System.Diagnostics.Debug.WriteLine("Grid Restore from " + DBWindowNames);

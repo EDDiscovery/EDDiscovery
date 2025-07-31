@@ -39,10 +39,10 @@ namespace EDDiscovery
                 catch (TimeoutException te)
                 {
                     System.Diagnostics.Trace.WriteLine($"EDD Program Timeout exception {te} {Environment.StackTrace}");
-                    BaseUtils.Translator tx = new BaseUtils.Translator();
+                    BaseUtils.TranslatorMkII tx = new BaseUtils.TranslatorMkII();
                     tx.LoadTranslation("Auto", CultureInfo.CurrentUICulture, new string[] { System.IO.Path.GetDirectoryName(Application.ExecutablePath) }, 0, System.IO.Path.GetTempPath());
 
-                    if (System.Windows.Forms.MessageBox.Show("EDDiscovery is already running. Launch anyway?".TxID(EDTx.StartUp_DUPLOAD), "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                    if (System.Windows.Forms.MessageBox.Show("EDDiscovery is already running. Launch anyway?".Tx(), "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
                     {
                         Application.Run(new EDDApplicationContext());
                     }

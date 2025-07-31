@@ -1,574 +1,528 @@
-﻿Warning: "Warning" => "Attenzione"
-Today: "Today" => "Oggi"
-t24h: "24h" @
-t7days: "7 days" => "7 giorni"
-All: "All" => "Tutto"
-OK: "OK" @
-Cancel: "Cancel" => "Cancella"
-Delete: "Delete" => "Elimina"
-Campaign: "Campaign" => "Campagna"
-NoScan: "No Scan" => "Nessuna Scansione"
-GameTime: "Game Time" => "Orario del Gioco"
-Time: "Time" => "Orario"
-NoData: "No Data" => "Nienti Dati"
-None: "None" => "Niente"
-on: "on" @
-Off: "Off" @
-Unknown: "Unknown" => "Sconosciuto"
-Information: "Information" => "Informazione"
-NoPos: "No Pos" => "Nessuna Posizione"
+﻿E9C45563358E81: "Warning" => "Attenzione"
+24345A14377FD8: "Today" => "Oggi"
+02779596113109: "24h" => "24h"
+0A8DD6ADCE7A0D: "7 days" => "7 giorni"
+6A72085653E4C5: "All" => "Tutto"
+9CE3BD4224C8C1: "OK" => "OK"
+77DFD2135F4DB7: "Cancel" => "Cancella"
+F6FDBE48DC54DD: "Delete" => "Elimina"
+69390E166570E5: "Campaign" => "Campagna"
+86C16821B16226: "No Scan" => "Nessuna Scansione"
+515FAD8593999E: "Game Time" => "Orario del Gioco"
+6C82E6DD86807E: "Time" => "Orario"
+4276E6AB2A3146: "No Data" => "Nienti Dati"
+6EEF6648406C33: "None" => "Niente"
+DB3D405B106759: "on" => "An"
+E3DE5AB0CA4C69: "Off" => "Aus"
+BC7819B34FF875: "Unknown" => "Sconosciuto"
+0EB5ED506E4923: "Information" => "Informazione"
+DE543B3879BD6E: "No Pos" => "Nessuna Posizione"
 
 // from EDC Core
 
-RemoveAll: "Remove All" @
-Hostile: "Hostile" @
-Unfriendly: "Unfriendly" @
-Neutral: "Neutral" @
-Cordial: "Cordial" @
-Friendly: "Friendly" @
-Allied: "Allied" @
+E8249C664732DF: "Remove All" => "Alle entfernen"
+49CE5DE18C09AA: "Hostile" => "Feindlich"
+C65CDEF3DEF45A: "Unfriendly" => "Unbeliebt"
+4BD29139454399: "Neutral" => "Neutral"
+713DB5C16D862F: "Cordial" => "Akzeptiert"
+BF567DC7870262: "Friendly" => "Befreundet"
+81F1B69D074090: "Allied" => "Verbündet"
 
 // from extended controls
 
-Disabled: "Disabled" @
+F4F4473DF8CB59: "Disabled" => "Deaktiviert"
 
 // from action programs
 
-ToBeDeleted: "To be deleted" @
-ToBeInstalled: "To be installed" @
-Removed: "Removed" @
-Incompatible: "Incompatible" @
+AC1627C6A55792: "To be deleted" => "Wird gelöscht werden"
+EB1BCE574038E4: "To be installed" => "Wird installiert werden"
+B5E77C5C02A90C: "Removed" => "Entfernt"
+06DB4FFA7EFB34: "Incompatible" => "Inkompatibel"
 
 SECTION StartUp
 
-.DUPLOAD: "EDDiscovery is already running. Launch anyway?" @
+3823500F8FE072: "EDDiscovery is already running. Launch anyway?" => "EDDiscovery läuft bereits, trotzdem starten?"
 
 SECTION DataGridView
 
-.Header: "Header" @
-.WordWrap: "Word Wrap (Override)" @
+31341C6F0C7AF6: "Header" => "Entête"
+DF04C6BCA0BCDC: "Word Wrap (Override)" => "Zeilenumbruch (Überschreiben)"
 
 SECTION SafeModeForm
 
-SafeModeForm: "EDDiscovery Safe Mode" @
-.buttonCancel: "Cancel" @
-.buttonRun: "Run" @
-.buttonRemoveJournals: "Remove Journals" @
-.buttonRemoveJournalsCommanders: "Remove Journal Entries && Commanders" @
-.buttonDeleteUserDB: "Delete/Rebuild User DB" @
-.buttonDeleteSystemDB: "Delete/Rebuild System DB" @
-.buttonResetDBLoc: "Reset DB Location" @
-.buttonBackup: "Backup Database" @
-.buttonDbs: "Move Databases" @
-.buttonLang: "Reset Language to English" @
-.buttonActionPacks: "Remove all Action Packs" @
-.buttonRemoveDLLs: "Remove all Extension DLLs" @
-.buttonResetTabs: "Reset Tabs, Remove PopOuts" @
-.buttonPositions: "Reset Window Positions" @
-.buttonResetTheme: "Reset Theme" @
+11DDBF0E006302: "EDDiscovery Safe Mode" => "EDDiscovery abgesicherter Modus"
+B1B392607DEAF2: "Run" => "Starten"
+FCFBF9C6671583: "Remove Journals" => "Journale entfernen"
+5DCC4262C9BB58: "Remove Journal Entries && Commanders" => "Journale && Kommandanten entfernen"
+365C643F550384: "Delete/Rebuild User DB" => "Benutzer-DB löschen/wiederaufbauen"
+01F2FBC637B7E7: "Delete/Rebuild System DB" => "System-DB löschen/wiederaufbauen"
+149C06035C88FF: "Reset DB Location" => "Datenbankort zurücksetzen"
+6B295419D3023F: "Backup Database" => "Datenbank sichern"
+81DE8C10D7B389: "Move Databases" => "Verschiebe Datenbank"
+BF259EDBD80CA0: "Reset Language to English" => "Reset Language to English"
+C5A8F7E7256EF2: "Remove all Action Packs" => "Alle Action-Packs entfernen"
+1B678DD8E0190A: "Remove all Extension DLLs" => "Alle Erweiterungs-DLLs entfernen"
+C6F0F038107FD6: "Reset Tabs, Remove PopOuts" => "Registerkarten zurücksetzen, externe Fenster entfernen"
+52280A445F2276: "Reset Window Positions" => "Fensterpositionen zurücksetzen"
+CCE1690C7ECC94: "Reset Theme" => "Thema zurücksetzen"
 
 SECTION InfoForm
 
-.buttonAcknowledge: "Acknowledge" @
+9BEB96DAC88F56: "Acknowledge" => "Bestätigen"
 
 SECTION PopOutInfo
 
-.Log.Description: "Log of program information" => "Registro del Programma"
-.Log.Title: "Log" => "Registro"
-.Journal.Description: "Journal grid" => "Tabella del Giornale"
-.Journal.Title: "Journal" => "Giornale"
-.TravelGrid.Description: "History grid" => "Tabella dello Storico"
-.TravelGrid.Title: "History" => "Storico di Viaggio"
-.StarList.Description: "Visited Star list" => "List dei Sistemi visitati"
-.StarList.Title: "Visited Stars" => "List dei Sistemi"
-.Materials.Description: "Materials count" => "Liste dei Materiali"
-.Materials.Title: "Materials" => "Materiali"
-.Commodities.Description: "Commodity count" => "List deelle Merci"
-.Commodities.Title: "Commodities" => "Merci"
-.Ledger.Description: "Ledger of cash related entries" => "Ricevute d'incasso relazionate allo storico"
-.Ledger.Title: "Ledger" => "Ricevute"
-.Missions.Description: "Mission list" => "Missioni"
-.Missions.Title: "Missions" = PopOutInfo.Missions.Description
-.Modules.Description: "Ships and their loadouts plus stored modules" => "Navi, Impianti e Moduli"
-.Modules.Title: "Ships/Loadout" => "Navi/Impianti"
-.Statistics.Description: "Statistics Information" => "Statistiche"
-.Statistics.Title: "Statistics" = PopOutInfo.Statistics.Description
-.MarketData.Description: "Market data, giving commodity price information where available" => "Dati di Mercato, mostrando i prezzi delle merci quando disponibili"
-.MarketData.Title: "Market Data" => "Dati di Mercato"
-.ShipYardPanel.Description: "Ship yards information from places you have visited" => "Informazioni sui cantieri dallo storico di visitazione"
-.ShipYardPanel.Title: "Ship Yards" => "Cantieri"
-.OutfittingPanel.Description: "Outfitting items in ship yards from places you have visited" => "Informazioni sugli impianti e moduli dallo storico di visitazione"
-.OutfittingPanel.Title: "Outfitting" => "Impianti/Moduli"
-.Synthesis.Description: "Synthesis planner" => "Pianifica di Sintesi"
-.Synthesis.Title: "Synthesis" => "Sintesi"
-.Engineering.Description: "Engineering planner" => "Pianifica di Ingegneria"
-.Engineering.Title: "Engineering" => "Ingegneria"
-.ShoppingList.Description: "Shopping list planner combining synthesis and engineering" => "Lista di Ricerca combinando pianifica di Sintesi e di Ingegneria"
-.ShoppingList.Title: "Shopping List" => "Lista di Ricerca"
-.Scan.Description: "Scan data on system" => "Registri di Scansioni per sistema, in diagramma"
-.Scan.Title: "Scan" => "Scansioni"
-.ScanGrid.Description: "Scan data on system in a grid" => "Registri di Scansioni per sistema, in tabella"
-.ScanGrid.Title: "Scan Grid" => "Tabella di Scansioni"
-.StarDistance.Description: "Nearest stars from current position" => "Lista dei Sistemi prossimi"
-.StarDistance.Title: "Nearest Stars" => "Sistemi prossimi"
-.EstimatedValues.Description: "Estimated Scan values of bodies in system" => "Stima del valore dei dati di Scansione"
-.EstimatedValues.Title: "Estimated Values" => "Valori Stimati"
-.Map2D.Title: "2D Map" @
-.Map2D.Description: "2D Map of galaxy" @
-.MiningOverlay.Title: "Mining Overlay" @
-.MiningOverlay.Description: "Mining overlay" @
-.LocalMap.Description: "3D Map of systems in range" => "Mappa 3D dei Sistemi dentro i raggi definiti"
-.LocalMap.Title: "Local Map" => "Mappa Locale"
-.Plot.Description: "2D Plot of systems in range" => "Grafico 2D dei sistemi dentro i raggi definiti"
-.Plot.Title: "2D Plot" => "Grafico 2D"
-.Trilateration.Description: "Trilateration of stars with unknown positions" => "Trilaterazione di sistemi con posizione sconosciuta"
-.Trilateration.Title: "Trilateration" => "Trilaterazione"
-.BookmarkManager.Description: "Bookmarks on systems and planets" => "Gestire favoriti di Pianeti e Sistemi"
-.BookmarkManager.Title: "Bookmarks" @
-.CombatPanel.Description: "Combat statistics" => "Visualizza statistiche di combattimento"
-.CombatPanel.Title: "Combat" => "Combattimento"
-.Route.Description: "Route Finder from stored star data" => "Preparazione di Itinerario usando i dati nella banca dati"
-.Route.Title: "Route Finder" => "Itinerario"
-.Expedition.Description: "Expedition Planner, make up a expedition route" => "Pianifica di Spedizione, prepara un itinerario di spedizione"
-.Expedition.Title: "Expedition" => "Spedizioni"
-.SystemInformation.Description: "System Information" => "Informazioni sul Sistema"
-.SystemInformation.Title: "System Information" = PopOutInfo.SystemInformation.Description
-.Spanel.Description: "Summary panel overlay" => "Sommario"
-.Spanel.Title: "Summary Panel" = PopOutInfo.Spanel.Description
-.Trippanel.Description: "Trip computer overlay" => "Computer di Viaggio"
-.Trippanel.Title: "Trip Computer" = PopOutInfo.Trippanel.Description
-.NotePanel.Description: "Notes overlay" => "Annotazioni sul Sistema"
-.NotePanel.Title: "Notes" => "Annotazioni"
-.RouteTracker.Description: "Route tracker overlay" => "Tracciatore di Itinerario"
-.RouteTracker.Title: "Route Tracker" = PopOutInfo.RouteTracker.Description
-.Compass.Description: "Compass overlay to show bearing to planetary coordinates" => "Bussola planetaria, mostra la direzione da seguire per raggiungere le cordinate impostate"
-.Compass.Title: "Compass" => "Bussola Planetaria"
-.Settings.Description: "Settings for ED Discovery " => "Configurazioni di ED Discovery "
-.Settings.Title: "Settings" => "Configurazioni"
-.ScreenShot.Description: "Screen shot" => "Salva Schermata"
-.ScreenShot.Title: "Screen Shot" => "Screenshot"
-.Grid.Description: "Grid (allows other panels to be placed in it)" => "Griglia (possibilita inserie e posizionare altri pannelli al suo interno)"
-.Grid.Title: "Grid" => "Griglia"
-.SplitterControl.Description: "Splitter (allows other panels to be placed in it)" => "Splitter (permette di creare ogni tipo di configurazione con pannelli al suo interno)"
-.SplitterControl.Title: "Splitter" @
-.PanelSelector.Description: "" @
-.PanelSelector.Title: "+" @
-.Search.Title: "Search" => "Cerca"
-.Search.Description: "Search" = PopOutInfo.Search.Title
-.CaptainsLog.Title: "Captain's Log" => "Diario del Comandante"
-.CaptainsLog.Description: "Captain's Log - notes on your travels" => "Diario del Comandante - note di viaggio"
-.Surveyor.Title: "Surveyor" => "Topografo"
-.Surveyor.Description: "Surveyor - Exploration and route overlay" => "Assistente di mappatura di superfice"
-.MissionOverlay.Title: "Mission Overlay" => "Simbolo di Missione"
-.MissionOverlay.Description: "Mission List overlay" => "Simbolo della lista di missioni"
-.MaterialTrader.Title: "Material Trader" => "Commerciante di Materiali"
-.MaterialTrader.Description: "Material trader" = PopOutInfo.MaterialTrader.Title
-.EDSM.Title: "EDSM" @
-.EDSM.Description: "EDSM - Automatic web view of system" => "Visualizzazione automatica della pagina di EDSM sul sistema"
-.Inara.Title: "Inara" @
-.Inara.Description: "Inara - Automatic web view of system" @
-.Factions.Title: "Factions" @
-.Factions.Description: "Faction rewards and trading tally" @
-.Spansh.Title: "Spansh" @
-.Spansh.Description: "Spansh - Automatic web view of system" @
-.EDDB.Title: "EDDB" @
-.EDDB.Description: "EDDB - Automatic web view of system" @
-.MicroResources.Title: "Micro Resources" @
-.MicroResources.Description: "Micro resource count" @
-.SuitsWeapons.Title: "Suits & Weapons" @
-.SuitsWeapons.Description: "Suits, Loadouts, Weapons" @
-.Map3D.Title: "3D Map" @
-.Map3D.Description: "3D Map of galaxy" @
-.LocalMap3D.Title: "Local 3D Map" @
-.LocalMap3D.Description: "Local 3D Map of systems near you" @
-.Organics.Title: "Organic Scans" @
-.Organics.Description: "Organic scans of current body and historic scans" @
-.Engineers.Title: "Engineers" @
-.Engineers.Description: "Engineers List, status, recipes" @
-.Discoveries.Title: "Discoveries" @
-.Discoveries.Description: "Discoveries Observer List" @
-.Carrier.Title: "Carrier" @
-.Carrier.Description: "Data about your fleet carrier" @
-.Resources.Title: "Resources" @
-.Resources.Description: "All Materials, Commodity, MicroResources" @
-.SpanshStations.Title: "Spansh Stations" @
-.SpanshStations.Description: "Stations in the system from spansh web data" @
-.Colonisation.Title: "Colonisation" @
-.Colonisation.Description: "Colonisation statistics" @
-.TestOverlay.Title: "TestOverlay" @
-.TestOverlay.Description: "Test overlay" @
+76FB040C270F12: "Log of program information" => "Registro del Programma"
+8BF95EA372568C: "Log" => "Registro"
+A09BA3EA152A4C: "Journal grid" => "Tabella del Giornale"
+57D7F743BBD1A2: "Journal" => "Giornale"
+5C4D4F216D8BF4: "History grid" => "Tabella dello Storico"
+90CCD6497400B5: "History" => "Storico di Viaggio"
+8AE3AF9C3B3CDF: "Visited Star list" => "List dei Sistemi visitati"
+0184AA8A46AF1D: "Visited Stars" => "List dei Sistemi"
+D8E431F017DBF4: "Materials count" => "Liste dei Materiali"
+2402EA36326521: "Materials" => "Materiali"
+9668DDAD4FBCDC: "Commodity count" => "List deelle Merci"
+6ABB1B41C4C775: "Commodities" => "Merci"
+5EB3307B4BCE13: "Ledger of cash related entries" => "Ricevute d'incasso relazionate allo storico"
+1AA2F31EE7CCBD: "Ledger" => "Ricevute"
+D0CE44CC23615F: "Mission list" => "Missioni"
+323EA30C1DCCD5: "Missions" => "Missioni"
+48F48CBFECAAEB: "Ships and their loadouts plus stored modules" => "Navi, Impianti e Moduli"
+C9AAB3AD20D010: "Ships/Loadout" => "Navi/Impianti"
+8415368612653C: "Statistics Information" => "Statistiche"
+2086B21F8F4927: "Statistics" => "Statistiche"
+0408BFBA0435A5: "Market data, giving commodity price information where available" => "Dati di Mercato, mostrando i prezzi delle merci quando disponibili"
+3BE93448CA0805: "Market Data" => "Dati di Mercato"
+93A7328B4F8E54: "Ship yards information from places you have visited" => "Informazioni sui cantieri dallo storico di visitazione"
+2919BE026701EF: "Ship Yards" => "Cantieri"
+55AD8F7B31A275: "Outfitting items in ship yards from places you have visited" => "Informazioni sugli impianti e moduli dallo storico di visitazione"
+DEF494BAD4AAB6: "Outfitting" => "Impianti/Moduli"
+950AD71B4EFEE2: "Synthesis planner" => "Pianifica di Sintesi"
+D7B22A6928D409: "Synthesis" => "Sintesi"
+608915C58B801E: "Engineering planner" => "Pianifica di Ingegneria"
+4143D04801509C: "Engineering" => "Ingegneria"
+593DC32DF5C4CE: "Shopping list planner combining synthesis and engineering" => "Lista di Ricerca combinando pianifica di Sintesi e di Ingegneria"
+6160F4C2D06317: "Shopping List" => "Lista di Ricerca"
+844922E5491066: "Scan data on system" => "Registri di Scansioni per sistema, in diagramma"
+28CBA55D2AADF5: "Scan" => "Scansioni"
+FB45D404829E9E: "Scan data on system in a grid" => "Registri di Scansioni per sistema, in tabella"
+AFAC1D100B4A2C: "Scan Grid" => "Tabella di Scansioni"
+5698E21A28B5F8: "Nearest stars from current position" => "Lista dei Sistemi prossimi"
+34D42F419DF1E1: "Nearest Stars" => "Sistemi prossimi"
+CB92E6CAAAB685: "Estimated Scan values of bodies in system" => "Stima del valore dei dati di Scansione"
+18163829DCDD6E: "Estimated Values" => "Valori Stimati"
+6DA68A5C45C3B6: "2D Map" => "2D-Karte"
+9C4EE43BE8AD56: "2D Map of galaxy" => "2D-Karte der Galaxis"
+3C6489B3276EF3: "Mining Overlay" => "Abbau Overlay"
+D6FF8EAE6FDB7D: "Mining overlay" => "Abbau Overlay"
+2CB83259459C98: "3D Map of systems in range" => "Mappa 3D dei Sistemi dentro i raggi definiti"
+60D12B289C0F47: "Local Map" => "Mappa Locale"
+A7528D77703FD5: "2D Plot of systems in range" => "Grafico 2D dei sistemi dentro i raggi definiti"
+142ADE7739800A: "2D Plot" => "Grafico 2D"
+893A59853B6083: "Trilateration of stars with unknown positions" => "Trilaterazione di sistemi con posizione sconosciuta"
+35E19316B84348: "Trilateration" => "Trilaterazione"
+90897EA3342CFD: "Bookmarks on systems and planets" => "Gestire favoriti di Pianeti e Sistemi"
+CA3CDDD25BD8F6: "Bookmarks" => "Lesezeichen"
+8349378742E6AF: "Combat statistics" => "Visualizza statistiche di combattimento"
+AF169BB89CFBA4: "Combat" => "Combattimento"
+4FEC43B7690B88: "Route Finder from stored star data" => "Preparazione di Itinerario usando i dati nella banca dati"
+DF8B99C5B42959: "Route Finder" => "Itinerario"
+4AAA969F8C8AE7: "Expedition Planner, make up a expedition route" => "Pianifica di Spedizione, prepara un itinerario di spedizione"
+C7BFEE111A04BC: "Expedition" => "Spedizioni"
+5131FE5695BC3C: "System Information" => "Informazioni sul Sistema"
+0B8D44BAD5BCAA: "Summary panel overlay" => "Sommario"
+DB6536B2745A44: "Summary Panel" => "Sommario"
+E0F2ED1B7A0283: "Trip computer overlay" => "Computer di Viaggio"
+ECB3577C325E47: "Trip Computer" => "Computer di Viaggio"
+3184D5E0831A5A: "Notes overlay" => "Annotazioni sul Sistema"
+70440046A3DC2E: "Notes" => "Annotazioni"
+3BBCB9B592E4E3: "Route tracker overlay" => "Tracciatore di Itinerario"
+C24689D54DC869: "Route Tracker" => "Tracciatore di Itinerario"
+3E9A0D08AB2CD4: "Compass overlay to show bearing to planetary coordinates" => "Bussola planetaria, mostra la direzione da seguire per raggiungere le cordinate impostate"
+9D5C8E519D85D8: "Compass" => "Bussola Planetaria"
+8038B86D2A5395: "Settings for ED Discovery " => "Configurazioni di ED Discovery "
+C7F73BB54D9289: "Settings" => "Configurazioni"
+BF5CF3ED547461: "Screen shot" => "Salva Schermata"
+AF4B7F220B9658: "Screen Shot" => "Screenshot"
+C999A758A64A62: "Grid (allows other panels to be placed in it)" => "Griglia (possibilita inserie e posizionare altri pannelli al suo interno)"
+701C483F813CF1: "Grid" => "Griglia"
+C05916255EB1DC: "Splitter (allows other panels to be placed in it)" => "Splitter (permette di creare ogni tipo di configurazione con pannelli al suo interno)"
+3C9A6D76F1CED5: "Splitter" => "Splitter"
+DA39A3EE5E6B4B: "" => ""
+A979EF10CC6F6A: "+" => "+"
+BCE06414177F72: "Search" => "Cerca"
+F69D2C0C04A8EE: "Captain's Log" => "Diario del Comandante"
+FE3AF2D4889AE0: "Captain's Log - notes on your travels" => "Diario del Comandante - note di viaggio"
+412258D43710F2: "Surveyor" => "Topografo"
+AF2B2B3C3B9D55: "Surveyor - Exploration and route overlay" => "Assistente di mappatura di superfice"
+F0DAFF585A132F: "Mission Overlay" => "Simbolo di Missione"
+4AC7AEC325927E: "Mission List overlay" => "Simbolo della lista di missioni"
+86896507A6ED88: "Material Trader" => "Commerciante di Materiali"
+471574D885158A: "Material trader" => "Commerciante di Materiali"
+E0A8D47F3E9219: "EDSM" => "EDSM"
+ED52705FDF6D29: "EDSM - Automatic web view of system" => "Visualizzazione automatica della pagina di EDSM sul sistema"
+973EF779DB2CF3: "Inara" => "Inara"
+981781CF8B1E4F: "Inara - Automatic web view of system" => "Zeigt das aktuelle System auf Inara"
+C992AAD4B16F58: "Factions" => "Fraktionen"
+A404D2CFE41408: "Faction rewards and trading tally" => "Statistiken zu lokalen Gruppierungen"
+A9A440245EE992: "Spansh" => "Spansh"
+DAD92F257D7828: "Spansh - Automatic web view of system" => "Zeigt das aktuelle System auf Spansh"
+72F20C151227D8: "EDDB" => "EDDB"
+ADAB7B122964C0: "EDDB - Automatic web view of system" => "Zeigt das aktuelle System auf EDDB"
+55E85562E3BB89: "Micro Resources" => "Mikroressourcen"
+F12262247D08BD: "Micro resource count" => "Anzahl der Mikroressourcen"
+8BEBD95AF22662: "Suits & Weapons" => "Anzüge & Waffen"
+393A482F174DA6: "Suits, Loadouts, Weapons" => "Anzüge, Konfigurationen, Waffen"
+723E769CA8B7F1: "3D Map" => "3D-Karte"
+4927077FF8C996: "3D Map of galaxy" => "3D-Karte der Galaxie"
+4F49FDDD44F492: "Local 3D Map" => "Lokale 3D-Karte"
+112E4D8C9B4EEC: "Local 3D Map of systems near you" => "3D-Karte der lokalen Systeme in deiner Umgebung"
+92F242BD12833A: "Organic Scans" => "Organische Scans"
+092BC4115EF04D: "Organic scans of current body and historic scans" => "Informationen über organische Scans des aktuellen Planeten sowie Scanhistorie"
+C6C5065C1BFCBE: "Engineers" => "Ingenieure"
+104A3B657D7113: "Engineers List, status, recipes" => "Liste der Ingenieure, Status, Blaupausen"
+BE1C21D6FE0AE4: "Discoveries" => "Entdeckungen"
+98A0679EBD354B: "Discoveries Observer List" => "Discoveries Observer-Liste"
+91B0BA24657FE5: "Carrier" => "Carrier"
+42F527004E124B: "Data about your fleet carrier" => "Daten über deinen Fleet Carrier"
+87DF60DE337FB5: "Resources" => "Ressourcen"
+9AE60B8B41DFAD: "Resources: All Materials, Commodity, Micro resources" => "Alle Materialien, Handelswaren, Mikroressourcen"
+542CC34C1F691F: "Spansh Stations" => "Spansh Stationen"
+17DFA3A002E3D5: "Stations in the system from spansh web data" => "Daten über Stationen im System - von Spansh' Website"
+4DFB01DC92677C: "Colonisation" => "Kolonisation"
+91A4AFA2089B9F: "Colonisation statistics" => "Kolonisationsstatistiken"
+C963A786E115F9: "TestOverlay" => "TestOverlay"
+78576CE18E50B2: "Test overlay" => "Test Overlay"
 
 SECTION EDDiscoveryForm
 
-.ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "Hai disabilitato la sincronizzazione con EDSM per questo comandante. Sei sicuro di voler inviare eventi non sincronizzati a EDSM?"
-.ConfirmSyncToEDSMCaption: "Confirm EDSM sync" => "Conferma syncronizzazione com EDSM"
-.SendEDSMCaption: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
-.SendEDSMAll: "Send All to EDSM" @
-.SendEDSM24: "Send Last 24 Hours of entries to EDSM" @
-.SendEDSMFrom: "Send From" @
-.SendEDSMNone: "EDSM is up to date - send Nothing more" @
-.SendEDSMCancel: "I'll decide later, do nothing" @
-.SendEDSMTitle: "Sending a large number of EDSM Entries" @
-.toolsToolStripMenuItem: "&Tools" => "&Strumenti"
-.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" => "Configurazione"
-.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "&Finestre"
-.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "&Mostra tutti nella taskbar"
-.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "&Disabilita tutte le trasparenze"
-.toolsToolStripMenuItem.exitToolStripMenuItem: "E&xit" => "E&sci"
-.adminToolStripMenuItem: "A&dmin" => "&Gestione"
-.adminToolStripMenuItem.showLogfilesToolStripMenuItem: "Show journal files directory of current commander" => "Mostra la cartella del giornale del comandante corrente"
-.adminToolStripMenuItem.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem: "Reset all history to current commander" => "Resetta tutta la storia del comandante corrente"
-.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem: "Read 2.1 and former log files" => "Leggi gli archivi di registro (log) 2.1 e anteriori"
-.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem: "Force reload logs" => "Forza la rilettura degli archivi di registro (log)"
-.adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "Re-scan all journal files" => "Riscansiona tutti gli archivi del giornale"
-.adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "Cancella entrate FSD duplicate"
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" => "Invia dati non sincronizzati a EDSM"
-.adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" => "Ripristina indici del DB di sistema"
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Sincronizza con EDSM"
-.adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Invia a Inara dati storici (navi anteriori, moduli in magazzino)"
-.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
-.addOnsToolStripMenuItem: "&Add-Ons" => "&Componenti"
-.addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "&Gestire Componenti"
-.addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "&Modifica Componenti Action Files"
-.addOnsToolStripMenuItem.editLastActionPackToolStripMenuItem: "Edit Last Action Pack" => "Modifica l'ultimo Action Pack"
-.addOnsToolStripMenuItem.stopCurrentlyRunningActionProgramToolStripMenuItem: "&Stop currently running Action Program" => "&Ferma l'Action Program corrente"
-.helpTabToolStripMenuItem: "Help" @
-.helpToolStripMenuItem: "&Help" => "&Aiuto"
-.helpToolStripMenuItem.aboutToolStripMenuItem: "&About" => "Riguardo &a"
-.helpToolStripMenuItem.wikiHelpToolStripMenuItem: "&View Help" @
-.helpToolStripMenuItem.viewHelpVideosToolStripMenuItem: "View Help Videos" @
-.helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" => "Chat della comunitá di EDD"
-.helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "Forum di &Frontier"
-.helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "&Pagine del progetto (GitHub)"
-.helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "&Reporta un Problema o un Suggerimento"
-.helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "&Verifica per aggiornamenti"
-.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" @
-.tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Premi con il bottone destro per aggiungere/rimuovere una scheda, trascina con il sinistro per riordinare"
-.comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Usa per selezionare un nuovo profilo o per modificare il profilo di configurazione"
-.comboBoxCommander.ToolTip: "Select the commander to view" => "Seleziona il comandante da visualizzare"
-.buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "Premi per aprire un pannello popout"
-.buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "Modifica i Componenti"
-.buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "Gestisci i Componenti"
-.buttonExtRefresh.ToolTip: "Refresh the history" => "Aggiorna lo storico"
-.addTabToolStripMenuItem: "Insert Tab with panel.." => "Inserisci un pannelo come scheda"
-.removeTabToolStripMenuItem: "Remove Tab" => "Rimuovi scheda"
-.renameTabToolStripMenuItem: "Rename Tab" => "Rinomina scheda"
-.TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Problemi nel settaggio: scheda principale o gruppo di schede non pu� essere caricato.\r\nQuesta � una condizione anomala. Entra in contatto con gli sviluppatori!"
-.RTABL: "Name: " => "Nome: "
-.RTABT: "Rename Tab" => "Rimuovi Scheda"
-.RTABTT: "Enter a new name for the tab" => "Rinomina la scheda"
-.DLLW: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Le seguenti estensioni DLL sono state trovate\r\nVuoi darle il permesso di essere usate?\r\n{0} \r\nSe non vuoi che vengano usate, rimuovere le DLL dalla cartella DLL di EDDiscovery\r\no rimuovere l'action pack che introduce queste DLL\r\no premere shift alla partenza del programma e selezionare l'opzione Rimuovi le Estensioni DLL"
-.DLLL: "DLLs loaded: {0}" => "DLLs caricate: {0}"
-.DLLF: "DLLs failed to load: {0}" => "Impossibile caricare DLLs: {0}"
-.IndexW: "Are you sure to Rebuild Indexes? It may take a long time." @
-.FillPos: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
-.PROFL: "Profile {0} Loaded" => "Profilo {0} caricato"
-.NI: "New EDDiscovery installer available: {0}" => "Nuovo setup di EDDiscovery disponibile: {0}"
-.NRA: "New Release Available!" => "Nuova versione disponibile!"
-.Arrived: "Arrived at system {0} Visit No. {1}" => "Arrivato al sistema {0} Visita di Numero {1}"
-.PE1: "Profile reports errors in triggers: " => "Errori nel profilo riportati dal trigger: "
-.Closing: "Closing, please wait!" => "Chiudendo, per favore aspettare!"
-.SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Scarico dei dati stellari disabilitato. Abilitarlo nel setup principale"
-.SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Sincronizzazione al banco dati in corso, si prega di aspettare"
-.EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Questa operazione pu� necessitare di molto tempo e molta larghezza di banda.\r\nConfermi?"
-.ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Conferma il desiderio di reimpostare tutti i registri al comandante attuale"
-.NoRel: "No new release found" => "Nessuna nuova versione trovata"
-.RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Confermare la rimozione dei registri FSD duplicati al comandante corrente"
-.FSDRem: "Removed {0} FSD entries" => "Rimossi {0} registri FSD"
-.InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "L'invio dello storico a Inara � disabilitato per un'ora a partire dall'ultimo invio per evitare problemi al server"
-.RH: "Refresh History." => "Rinfrescare lo Storico"
-.NoEDSMAPI: "No EDSM API key set" => "Pre favore, assicurarsi che um comandante sia selezionato e che abbia una chiave di API EDSM assegnata"
-.EP: "Edit Profiles" => "Modificare Profili"
-.PL: "Profile {0} Loaded" => "PRofilo {0} Caricato"
-.popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Pannelo di popout"
-.CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery sta aggiornando i database EDSM e EDDB \\ r \\ nPremere OK per chiudere ora, Annulla per attendere fino al completamento dell'aggiornamento"
-.notifyIconMenu_Open: "&Open EDDiscovery" => "&Apri EDDiscovery"
-.notifyIconMenu_Hide: "&Hide Tray Icon" => "&Nascondi l'icona di notificazione"
-.notifyIconMenu_Exit: "E&xit" => "&Esci"
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Recupera registri nuovamente"
-.adminToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "REcupera dati stellari nuovamente"
-.adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" @
-.adminToolStripMenuItem.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem: "Update systems with unknown co-ordinates" @
-.WSE: "Web server enabled" => "Server web non abilitato"
-.WSF: "Web server failed to start" => "Impossibilie avviare il server web"
-.WSERR: "Web server disabled due to incorrect folder or missing zip file" => "Server Web disabilitato a causa di cartella errata o file zip mancante"
-.WSD: "*** Web server is disabled ***" => "*** Il server web é disabilitato ***"
-.DLLDIS: "DLLs disabled: {0}" @
+586CFE03DAA723: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "Hai disabilitato la sincronizzazione con EDSM per questo comandante. Sei sicuro di voler inviare eventi non sincronizzati a EDSM?"
+25C9D555A2A9B9: "Confirm EDSM sync" => "Conferma syncronizzazione com EDSM"
+FAC898054B2C2B: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." => "Es gibt {0} EDSM-Ereignisse zu senden, dies kostet Zeit und Bandbreite, wähle aus dem Folgenden was zu tun ist. Einträge vor dem gewählten Datum werden als gesendet markiert."
+B61E7134EF7FDD: "Send All to EDSM" => "Sende AllES an EDSM"
+2460BB4C7A146D: "Send Last 24 Hours of entries to EDSM" => "Sende die letzten 24 Stunden an EDSM"
+AA962467914A2B: "Send From" => "Sende alles beginnend mit: "
+5ED64D1D56F6A0: "EDSM is up to date - send Nothing more" => "EDSM ist auf dem neuesten Stand - sende nichts"
+14D2AEDDDD40B0: "I'll decide later, do nothing" => "Ich entscheide später - mache nichts."
+542CFA5900AB5D: "Sending a large number of EDSM Entries" => "Übertrage eine große Anzahl an EDSM_Ereignissen"
+EE178B82F7FF3B: "&Tools" => "&Strumenti"
+7F24C011F1CC03: "&Pop-outs" => "&Finestre"
+5D0D71ACC991B2: "&Show All In Task Bar" => "&Mostra tutti nella taskbar"
+B58EA2C0453904: "&Turn Off All Transparency" => "&Disabilita tutte le trasparenze"
+47AA608083EDEF: "E&xit" => "E&sci"
+E592F675275650: "A&dmin" => "&Gestione"
+AAC8CEA1D98BFE: "Show journal files directory of current commander" => "Mostra la cartella del giornale del comandante corrente"
+D85D0424D5DDE8: "Reset all history to current commander" => "Resetta tutta la storia del comandante corrente"
+E3D7130BAF225D: "Read 2.1 and former log files" => "Leggi gli archivi di registro (log) 2.1 e anteriori"
+6C233E7A4C3485: "Force reload logs" => "Forza la rilettura degli archivi di registro (log)"
+2EB4A69BC73B8C: "Re-scan all journal files" => "Riscansiona tutti gli archivi del giornale"
+ED205CB2A2E5AD: "Delete duplicate FSD Jump entries" => "Cancella entrate FSD duplicate"
+515B067A548F55: "Send Unsynced Journals To EDSM" => "Invia dati non sincronizzati a EDSM"
+80A376F0DAEEC0: "Rebuild System DB Indexes" => "Ripristina indici del DB di sistema"
+A7BF78A5A58AF7: "Synchronise with EDSM" => "Sincronizza con EDSM"
+B5CFC4E9D493BC: "Send to Inara historic data (previous ships, stored modules)" => "Invia a Inara dati storici (navi anteriori, moduli in magazzino)"
+4D33F20C90DE14: "Scan Netlogs" => "Scanne Netlogs"
+990E278543811B: "&Add-Ons" => "&Componenti"
+27F90656BEC6AA: "&Manage Add-Ons" => "&Gestire Componenti"
+CA2878BBFF0A12: "&Edit Add-On Action Files" => "&Modifica Componenti Action Files"
+5589AA6BF97C45: "Edit Last Action Pack" => "Modifica l'ultimo Action Pack"
+B54DCF74E1F1F3: "&Stop currently running Action Program" => "&Ferma l'Action Program corrente"
+C47AE15370CFE1: "Help" => "Hilfe"
+50F1FB3394671C: "&Help" => "&Aiuto"
+73D0A064C9E578: "&About" => "Riguardo &a"
+5562A1E2E70DEB: "&View Help" => "&Zeige Hilfe"
+34F2CCDF930918: "View Help Videos" => "Zeige Hilfevideos"
+178BFB114DDBE3: "&Discord - EDD Community Chat" => "Chat della comunitá di EDD"
+57482767CD6F92: "&Frontier Forum Thread" => "Forum di &Frontier"
+15C7CE4EDE3CD9: "&Project Page (GitHub)" => "&Pagine del progetto (GitHub)"
+A1C144022BAD54: "&Report Issue / Idea" => "&Reporta un Problema o un Suggerimento"
+76222168EA3E4A: "&Check for Updates" => "&Verifica per aggiornamenti"
+C845BB199650AE: "List Elite Bindings" => "Zeige Elite-Tastenbelegungen"
+BBFD0BF677ABD7: "Right click to add/remove tabs, Left click drag to reorder" => "Premi con il bottone destro per aggiungere/rimuovere una scheda, trascina con il sinistro per riordinare"
+0F5C6BE9C1D03B: "Use to select new profile or edit profile settings" => "Usa per selezionare un nuovo profilo o per modificare il profilo di configurazione"
+965A14401B157E: "Select the commander to view" => "Seleziona il comandante da visualizzare"
+F13804FF3542A3: "Click to select a pop out panel to display" => "Premi per aprire un pannello popout"
+B5594BDC32706F: "Edit Add-Ons" => "Modifica i Componenti"
+990761914FAABC: "Manage Add-Ons" => "Gestisci i Componenti"
+76EE286CA0BD95: "Refresh the history" => "Aggiorna lo storico"
+B1B79547453735: "Insert Tab with panel.." => "Inserisci un pannelo come scheda"
+FDB587F6AEF9FC: "Remove Tab" => "Rimuovi scheda"
+A44AD2D137232C: "Rename Tab" => "Rinomina scheda"
+DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Problemi nel settaggio: scheda principale o gruppo di schede non pu� essere caricato.\r\nQuesta � una condizione anomala. Entra in contatto con gli sviluppatori!"
+B3F69F1983924E: "Name: " => "Nome: "
+5365F84B9A53D9: "Enter a new name for the tab" => "Rinomina la scheda"
+FF063FC2431DAF: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Le seguenti estensioni DLL sono state trovate\r\nVuoi darle il permesso di essere usate?\r\n{0} \r\nSe non vuoi che vengano usate, rimuovere le DLL dalla cartella DLL di EDDiscovery\r\no rimuovere l'action pack che introduce queste DLL\r\no premere shift alla partenza del programma e selezionare l'opzione Rimuovi le Estensioni DLL"
+3160432B058751: "DLLs loaded: {0}" => "DLLs caricate: {0}"
+CCFDEF5228D48D: "DLLs failed to load: {0}" => "Impossibile caricare DLLs: {0}"
+5C77F5282CD58B: "Are you sure to Rebuild Indexes? It may take a long time." => "Bist du sicher, dass die Indexes neu erstellt werden sollen? Dies kann lange dauern."
+4B610F7AC3BDAA: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" => "Historie scannen und versuchen für alle Systeme mit unbekannten Koordinaten\r\ndiese aus der Systemdatenbank zu kopieren.\r\nBestätigen?"
+A7BA2B77971D8B: "Profile {0} Loaded" => "Profilo {0} caricato"
+E11B312BFDAE74: "New EDDiscovery installer available: {0}" => "Nuovo setup di EDDiscovery disponibile: {0}"
+2F18E849A799F4: "New Release Available!" => "Nuova versione disponibile!"
+34CFE199A2E81E: "Arrived at system {0} Visit No. {1}" => "Arrivato al sistema {0} Visita di Numero {1}"
+A44C3F341F2CE9: "Profile reports errors in triggers: " => "Errori nel profilo riportati dal trigger: "
+B683FA5A92D7B6: "Closing, please wait!" => "Chiudendo, per favore aspettare!"
+03617D9031DCED: "Star Data download is disabled. Use Settings to reenable it" => "Scarico dei dati stellari disabilitato. Abilitarlo nel setup principale"
+029E79A86E66C0: "Synchronisation to databases is in operation or pending, please wait" => "Sincronizzazione al banco dati in corso, si prega di aspettare"
+5C5508F7B29BD6: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Questa operazione pu� necessitare di molto tempo e molta larghezza di banda.\r\nConfermi?"
+EC8966F52E96C2: "Confirm you wish to reset all history entries to the current commander" => "Conferma il desiderio di reimpostare tutti i registri al comandante attuale"
+690A6A4AC09622: "No new release found" => "Nessuna nuova versione trovata"
+9769B4CCF9B4FE: "Confirm you remove any duplicate FSD entries from the current commander" => "Confermare la rimozione dei registri FSD duplicati al comandante corrente"
+BA32A940331E35: "Removed {0} FSD entries" => "Rimossi {0} registri FSD"
+4F01D475DE606B: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "L'invio dello storico a Inara � disabilitato per un'ora a partire dall'ultimo invio per evitare problemi al server"
+651C69E6D25F44: "Refresh History." => "Rinfrescare lo Storico"
+A2AB3C168B45C2: "No EDSM API key set" => "Pre favore, assicurarsi che um comandante sia selezionato e che abbia una chiave di API EDSM assegnata"
+C34D9E2DBB5632: "Edit Profiles" => "Modificare Profili"
+B155CB3806504B: "Pop Out Panel.." => "Pannelo di popout"
+10A7567860F85A: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery sta aggiornando i database EDSM e EDDB \\ r \\ nPremere OK per chiudere ora, Annulla per attendere fino al completamento dell'aggiornamento"
+F2C6773DD29948: "&Open EDDiscovery" => "&Apri EDDiscovery"
+E9E8D3707EA8A5: "&Hide Tray Icon" => "&Nascondi l'icona di notificazione"
+2E90DDA55C63D8: "Fetch Logs Again" => "Recupera registri nuovamente"
+DE5CFD5A00795F: "Fetch Star Data Again" => "REcupera dati stellari nuovamente"
+3E1DCD88E16D3F: "Rebuild User DB Indexes" => "User-DB-Indexes neu erstellen"
+8CE317851DDE98: "Update systems with unknown co-ordinates" => "Systeme mit unbekannten Koordianten aktualisieren"
+4B8237A3EF2696: "Web server enabled" => "Server web non abilitato"
+7279E939048432: "Web server failed to start" => "Impossibilie avviare il server web"
+683617E8B53C1F: "Web server disabled due to incorrect folder or missing zip file" => "Server Web disabilitato a causa di cartella errata o file zip mancante"
+37F51D0860E8D7: "*** Web server is disabled ***" => "*** Il server web é disabilitato ***"
+AEA794CB1D04DB: "DLLs disabled: {0}" => "DLLs deaktiviert: {0}"
 
 SECTION EDDiscoveryController
 
-.CD: "Closing down, please wait.." => "Chiudendo, per favore aspettare..."
-.EDSM: "Get galactic mapping from EDSM." => "Richiedendo dati galattici da EDSM."
-.GEC: "Get galactic mapping from GEC." @
-.LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Caricando note, favoriti e dati di mappa galattici."
-.RTH: "Reading travel history" => "Leggiendo lo storico di viaggio"
-.SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Per favore, continua a usare EDDiscovery fino al completamento del rinnovo."
-.SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "Sincronizzazione a EDSM e EDDB disabilitati. Abilitarli nel setup del comandante"
-.EDSMU: "Systems update complete with {0:N0} systems" => "Attualizzazione EDSM completata com {0:N0} sistemi"
-.PLF: "Processing log file {0}" => "Processando il file di registro {0}"
-.RD: "Refresh Displays" => "Ricaricando la Schermata"
-.HRC: "History refresh complete." => "Ricaricamento dello storico completato"
-.EXPD: "Checking for new Expedition data" => "Verificando per nuovi dati di Esplorazione"
+9BA9842C1C8616: "Closing down, please wait.." => "Chiudendo, per favore aspettare..."
+DB2578F4000025: "Get galactic mapping from EDSM." => "Richiedendo dati galattici da EDSM."
+B916383C5DCECE: "Get galactic mapping from GEC." => "Erhalte Mappingdaten von GEC"
+855115699D49D3: "Loaded Notes, Bookmarks and Galactic mapping." => "Caricando note, favoriti e dati di mappa galattici."
+D080CC813B189E: "Reading travel history" => "Leggiendo lo storico di viaggio"
+AF6F80B989BC53: "Please continue running ED Discovery until refresh is complete." => "Per favore, continua a usare EDDiscovery fino al completamento del rinnovo."
+592A7473F32418: "Star Data download is disabled. Use Settings panel to reenable" => "Sincronizzazione a EDSM e EDDB disabilitati. Abilitarli nel setup del comandante"
+FC6E2FB62C5980: "Systems update complete with {0:N0} systems" => "Attualizzazione EDSM completata com {0:N0} sistemi"
+CBD5298BFF839E: "Processing log file {0}" => "Processando il file di registro {0}"
+1EB68C8D6B5F34: "Refresh Displays" => "Ricaricando la Schermata"
+DCDB45EA825C67: "History refresh complete." => "Ricaricamento dello storico completato"
+B624A602C8C18F: "Checking for new Expedition data" => "Verificando per nuovi dati di Esplorazione"
 
 SECTION AddOnManagerForm
 
-.buttonExtGlobals: "Globals" => "Globale"
-.AddOnTitle: "Add-On Manager" => "Gestisci gli Add-Ons"
-.EditTitle: "Edit Add-Ons" => "Modifica gli Add-Ons"
-.Type: "Type" => "Tipo"
-.Name: "Name" => "Nome"
-.Version: "Version" => "Versione"
-.Description: "Description" => "Descrizione"
-.Status: "Status" => "Stato"
-.Action: "Action" => "Azione"
-.Delete: "Delete" = Delete
-.Enabled: "Enabled" => "Abilita"
-.Newer: "Newer EDD required" => "Nuova versione di EDD necessaria"
-.Old: "Too old for EDD" => "Troppo vecchio per EDD"
-.Locallymodified: "Locally modified" => "Modificato localmente"
-.UptoDate: "Up to Date" => "Attualizzato"
-.LocalOnly: "Local Only" => "Solo locale"
-.Newversion: "New version" => "Nuova versione"
-.Install: "Install" => "Installa"
-.Update: "Update" => "Attualizza"
-.Edit: "Edit" => "Modifica"
-.Modwarn: "Modified locally, do you wish to overwrite the changes" => "Modificato localmente, sei sicuro di voler scrivere sui cambiamenti"
-.Failed: "Add-on failed to update. Check files for read only status" => "Attualizzazione dell'Add-On fallita. Verifica se gli archivi sono scrivibili"
-.DeleteWarn: "Do you really want to delete {0}" => "Sei sicuro di voler eliminare {0}"
+3F827C66E7E047: "Globals" => "Globale"
+0972452F39F378: "Add-On Manager" => "Gestisci gli Add-Ons"
+3DEB7456519697: "Type" => "Tipo"
+709A23220F2C3D: "Name" => "Nome"
+2DA600BF940484: "Version" => "Versione"
+55F8EBC805E65B: "Description" => "Descrizione"
+BAE7D5BE70820E: "Status" => "Stato"
+97C89A4D6630AD: "Action" => "Azione"
+DF174A3F2FAA31: "Enabled" => "Abilita"
+C9B87AD62761ED: "Newer EDD required" => "Nuova versione di EDD necessaria"
+0AE36D6F55493C: "Too old for EDD" => "Troppo vecchio per EDD"
+5B3A1A44268196: "Locally modified" => "Modificato localmente"
+482E9BD3F6E7A8: "Up to Date" => "Attualizzato"
+05ED059BB7B8B0: "Local Only" => "Solo locale"
+76AFFE13E38473: "New version" => "Nuova versione"
+FD6C3EBF7BEFCA: "Install" => "Installa"
+FB91E24FA52D8D: "Update" => "Attualizza"
+5301648DCF6B53: "Edit" => "Modifica"
+A425A7972A5C05: "Modified locally, do you wish to overwrite the changes" => "Modificato localmente, sei sicuro di voler scrivere sui cambiamenti"
+943E16DB2C7F21: "Add-on failed to update. Check files for read only status" => "Attualizzazione dell'Add-On fallita. Verifica se gli archivi sono scrivibili"
+491F68FCF24992: "Do you really want to delete {0}" => "Sei sicuro di voler eliminare {0}"
 
 SECTION ImportExportForm
 
-ImportExportForm: "Export data" => "Esporta"
-.buttonExport: "Export" = ImportExportForm
-.ImportTitle: "Import data" @
-.ImportButton: "Import" @
-.labelCVSSep: "CSV Separator" => "Separatore CVS"
-.radioButtonComma: "Comma" => "Virgola"
-.radioButtonSemiColon: "Semicolon" => "Punto e Virgola"
-.checkBoxIncludeHeader: "Include Header" => "Includi l'intestazione"
-.checkBoxCustomAutoOpen: "Open" => "Apri in excel"
-.labelUTCEnd: "UTC" @
-.labelUTCStart: "UTC" @
-.labelPaste: "Click Paste or drag text or files to input box" @
-.extRadioButtonTab: "Tab" @
-.extCheckBoxExcludeHeader: "Exclude Header Row" @
-.labelSaveImport: "Save Import As" @
+DEADB4817C6BB8: "Export data" => "Esporta"
+F3E4FADB9E370A: "Export" => "Esporta"
+D82C9379E1E7F3: "Import data" => "Daten importieren"
+D6FBC9D2BDD580: "Import" => "Import"
+6D9BDC92D8C9FC: "CSV Separator" => "Separatore CVS"
+B9EE3DEAAE2695: "Comma" => "Virgola"
+727CECA929343C: "Semicolon" => "Punto e Virgola"
+677937E33CBDF5: "Include Header" => "Includi l'intestazione"
+CF9B77061F7B31: "Open" => "Apri in excel"
+BDFD4D8D695277: "UTC" => "UTC"
+77D2774F81109B: "Click Paste or drag text or files to input box" => "Kopiere Text in, oder ziehe Dateien auf Eingabefeld"
+FE06EB6459C87F: "Tab" => "Tabulator"
+F39A80A0C4C734: "Exclude Header Row" => "Ignoriere Headerzeile"
+F12960ECA66A33: "Save Import As" => "Speichere Import als"
 
 SECTION GalaxySectorSelect
 
-GalaxySectorSelect: "Galaxy Sector Select" => "Seleziona Settori Galattici"
-.buttonExtSet: "Set" => "Imposta"
-.labelSectorName: "Sector" => "Settore"
-.Custom: "Custom" => "Personalizzato"
-.Reset: "Reset" => "Resetta"
-.All: "All" => "Tutti"
-.None: "None" => "Nessuno"
-.Bubble: "Bubble" => "Bolla"
-.ExtendedBubble: "Extended Bubble" => "Bolla Estesa"
-.BC: "Bubble+Colonia" => "Bolla piú Colonia"
-.RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Hai aggiunto nuovi settori!\r\nQuesta operazione richiede un nuovo scarico COMPLETO di tutti i dati EDSM\r\nSei sicuro di voler continuare?"
-.NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Sincronizzazione dei dati stellari disabilitata nel settagio.\r\nAbilitare per impostare l'aggiornamento"
-.RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Hai rimosso settori!\r\nQuesto richiede che tutti i registri siano puliti, cosa che richiede tempo\r\nSei sicuro di voler continuare?"
-.GALSELEX: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "ED Discovery scarica i dati stellari da EDSM/EDDB, che è usato per importare dati addizionali. Seleziona quanti dati vuoi scaricare e conservare. Quanto più settori galattici scarichi, maggiore lo spazio necessario e la memoria usata."
-.Select: "Select: " => "Seleziona"
-.GALSELEN: "Select the data set" => "Seleziona il set di dati"
-.PresstoAccept: "Press to Accept" => "Premi per accettare"
-.GALSELTitle: "Select Galaxy Data" => "Seleziona dati galattici EDSM"
-.Area: "Area:" @
+F9273F1B45D6B8: "Galaxy Sector Select" => "Seleziona Settori Galattici"
+448AB73BA1C21E: "Set" => "Imposta"
+39FD2070D41B91: "Sector" => "Settore"
+081AE3FDC40360: "Custom" => "Personalizzato"
+44C57ABD888A66: "Reset" => "Resetta"
+C763B2138A8CAD: "Bubble" => "Bolla"
+799C88F07B1448: "Extended Bubble" => "Bolla Estesa"
+1EADEFDD069739: "Bubble+Colonia" => "Bolla piú Colonia"
+0AE7FC00D6AA70: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Hai aggiunto nuovi settori!\r\nQuesta operazione richiede un nuovo scarico COMPLETO di tutti i dati EDSM\r\nSei sicuro di voler continuare?"
+2D91E32D25F1DF: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Sincronizzazione dei dati stellari disabilitata nel settagio.\r\nAbilitare per impostare l'aggiornamento"
+B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Hai rimosso settori!\r\nQuesto richiede che tutti i registri siano puliti, cosa che richiede tempo\r\nSei sicuro di voler continuare?"
+13D60E3F37387F: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "ED Discovery scarica i dati stellari da EDSM/EDDB, che è usato per importare dati addizionali. Seleziona quanti dati vuoi scaricare e conservare. Quanto più settori galattici scarichi, maggiore lo spazio necessario e la memoria usata."
+9312B53B772EC5: "Select: " => "Seleziona"
+0EE93787C960CF: "Select the data set" => "Seleziona il set di dati"
+D24336A365C558: "Press to Accept" => "Premi per accettare"
+D65DF91B92B250: "Select Galaxy Data" => "Seleziona dati galattici EDSM"
+8FE9DB16BE5170: "Area:" => "Gebiet"
 
 SECTION MoveToCommander
 
-MoveToCommander: "Move To Commander" => "Sposta al Comandante"
-.buttonTransfer: "Transfer" => "Trasferisci"
-.label1: "Move selected history to commander." => "Muovi lo storico selezionato al comandante."
+264067C44C54E3: "Move To Commander" => "Sposta al Comandante"
+CBB4CC49824BF7: "Transfer" => "Trasferisci"
+1FA39F8C15CB36: "Move selected history to commander." => "Muovi lo storico selezionato al comandante."
 
 SECTION NewReleaseForm
 
-NewReleaseForm: "EDDiscovery Release" => "Versione EDDiscovery"
-.labelName: "Name" = AddOnManagerForm.Name
-.btnClose: "&Close" => "&Chiudi"
-.labelURL: "GitHub URL" => "URL GitHUB"
-.labelDownload: "Download" => "Scarica"
-.buttonPortablezip: "&Portable Zip" => "Zip &Portatile"
-.buttonUrlOpen: "&Open" => "&Apri"
-.buttonExeInstaller: "&Exe Installer" => "Installatore &EXE"
-.labelRelease: "Release info" => "Informazioni sulla Versione"
+72DB64EFA06050: "EDDiscovery Release" => "Versione EDDiscovery"
+BD72C633E81378: "&Close" => "&Chiudi"
+7DC2B81A6BEB1A: "GitHub URL" => "URL GitHUB"
+A479C9C34E878D: "Download" => "Scarica"
+2F2BC6BEC06686: "&Portable Zip" => "Zip &Portatile"
+762DDDD6B73A25: "&Open" => "&Apri"
+339DEB023CDECC: "&Exe Installer" => "Installatore &EXE"
+F7C3F17AFCEDA7: "Release info" => "Informazioni sulla Versione"
 
 SECTION ProfileEditor
 
-ProfileEditor: "ProfileEditor" => "Editor di Profilo"
-.buttonExtGlobals: "Globals" = AddOnManagerForm.buttonExtGlobals
-.Custom: "Custom" = GalaxySectorSelect.Custom
-.Trigger: "Trigger" => "Causa"
-.Back: "Back" => "Indietro"
-.TrigEdit: "Edit Profile {0} Trigger" => "Modifica la causa d'azione del profilo {0}"
-.BackEdit: "Edit Profile {0} Back Trigger" => "Modifica l'azione di ritorno del profilo {0}"
-.DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Vuoi eliminare il profilo {0}?\r\nQuesto farà si che tutte le informazioni si pergano di forma irriversibile!"
-.Default: "Default" => "Predefinito"
+412FC4AB61FF0F: "ProfileEditor" => "Editor di Profilo"
+D3F06A581B2B66: "Trigger" => "Causa"
+B52B36B7269FBF: "Back" => "Indietro"
+AA36EC39CD202E: "Edit Profile {0} Trigger" => "Modifica la causa d'azione del profilo {0}"
+2D8AFF09EA4F7F: "Edit Profile {0} Back Trigger" => "Modifica l'azione di ritorno del profilo {0}"
+29E0884ADB0F1A: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Vuoi eliminare il profilo {0}?\r\nQuesto farà si che tutte le informazioni si pergano di forma irriversibile!"
+808D7DCA8A74D8: "Default" => "Predefinito"
 
 SECTION SetNoteForm
 
-SetNoteForm: "Set Note" => "Imposta Nota"
-.labelTTimestamp: "Timestamp:" => "Data e ora"
-.buttonSave: "Save" => "Salva"
-.labelTSystem: "System:" => "Sistema"
-.labelTSummary: "Summary:" = PopOutInfo.Spanel.Description
-.labelTDetails: "Details:" => "Dettagli"
+335F5087016C3E: "Set Note" => "Imposta Nota"
+A9C75ED2FAFF02: "Timestamp:" => "Data e ora"
+EFC007A393F66C: "Save" => "Salva"
+166616B2BA4454: "System:" => "Sistema"
+6ED816D75E1C95: "Summary:" => "Sommario"
+1DAAAD0084C260: "Details:" => "Dettagli"
 
 SECTION MessageBoxTheme
 
-.Warning: "Warning" = Warning
-.Ignore: "Ignore" => "Ignora"
-.Retry: "Retry" => "Riprova"
-.Abort: "Abort" => "Aborta"
-.Cancel: "Cancel" = Cancel
-.OK: "OK" @
-.No: "No" @
-.Yes: "Yes" => "Si"
-.Add: "Add" @
-.Set: "Set" @
+98F55DB57C8ED8: "Ignore" => "Ignora"
+9F5CD8A2E8807D: "Retry" => "Riprova"
+6F3ABBE484ABD8: "Abort" => "Aborta"
+816C52FD2BDD94: "No" => "Nein"
+5397E0583F14F6: "Yes" => "Si"
+61CC55AA045318: "Add" => "Hinzufügen"
 
 SECTION DataGridViewDialogs
 
-.Jumpto: "Jump to: " => "Va a"
-.EN: "Enter number to jump to or near to" => "Inserisci il numero di salti a o vicino a"
-.PresstoAccept: "Press to Accept" => "Premi per Accettare"
-.PresstoCancel: "Press to Cancel" => "Premi per Cancellare"
-.VNV: "Value is not valid" => "Il Valore non è valido"
+0C0E5051C57E26: "Jump to: " => "Va a"
+411DF1F49FCB30: "Enter number to jump to or near to" => "Inserisci il numero di salti a o vicino a"
+F8328656EF830C: "Press to Cancel" => "Premi per Cancellare"
+AA822BAACB5BCA: "Value is not valid" => "Il Valore non è valido"
 
 SECTION KeyForm
 
-KeyForm: "Define Key Sequence" => "Definisci la sequenza di tasti"
-.radioButtonUp: "Up" => "Su"
-.radioButtonDown: "Down" => "Giù"
-.radioButtonPress: "Press" => "Premi"
-.checkBoxShift: "Shift" @
-.checkBoxCtrl: "Ctrl" @
-.checkBoxAlt: "Alt" @
-.checkBoxKey: "Press Key" => "Premi Tasto"
-.labelNextDelay: "Current Delay" => "Ritardo corrente"
-.labelSelKeys: "Select Key" => "Seleziona Tasto"
-.labelDelay: "Start Delay(ms)" => "Ritardo Iniziale"
-.labelSendTo: "Send To" => "Invia a"
-.buttonReset: "Reset" = GalaxySectorSelect.Reset
-.labelKeys: "Keys" => "Tasti"
-.buttonDelete: "Delete" = Delete
-.buttonNext: "Next" => "Prossimo"
-.buttonTest: "Test" => "Testa"
-.PK: "Press Key" = KeyForm.checkBoxKey
-.NOPN: "Name a process to test sending keys" @
-.KERR: "Error {0} - check entry" @
-.NOP: "No process names to send keys to" @
+A6CC1735E61BA1: "Define Key Sequence" => "Definisci la sequenza di tasti"
+2038BDEC921020: "Up" => "Su"
+BF93E5CE8BC122: "Down" => "Giù"
+EA683AD616063B: "Press" => "Premi"
+469D5B183FDC0D: "Shift" => "Shift"
+DD6A02A553DA4C: "Ctrl" => "Strg"
+E30EFF925100B7: "Alt" => "Alt"
+A24AEF4D03E398: "Press Key" => "Premi Tasto"
+D54FFCD418FB39: "Current Delay" => "Ritardo corrente"
+5606C23DCD17C1: "Select Key" => "Seleziona Tasto"
+0A25165DFF06CC: "Start Delay(ms)" => "Ritardo Iniziale"
+D11F7478DD0192: "Send To" => "Invia a"
+E5651C683F14C9: "Keys" => "Tasti"
+BC981983E7F547: "Next" => "Prossimo"
+640AB2BAE07BED: "Test" => "Testa"
+FB2BE54FDB3408: "Name a process to test sending keys" => "Nenne einen Prozess um das Senden von Tasten zu testen"
+83FFD8A7715ED2: "Error {0} - check entry" => "Error {0} - Eintrag prüfen"
+1C4510E49E02BB: "No process names to send keys to" => "Kein Prozessname an den Tasten gesendet werden können"
 
 SECTION ExtPanelRollUp
 
-.RUPPin: "Pin to stop this menu bar disappearing automatically" => "Fissa per impedire a questa barra di menu di scomparire automaticamente"
-.RUPMarker: "Click or hover over this to unroll the menu bar" => "Premi o passa con il mouse sopra per srotolare la barra di menu"
+56BDE377952CAF: "Pin to stop this menu bar disappearing automatically" => "Fissa per impedire a questa barra di menu di scomparire automaticamente"
+B453A75F11D77E: "Click or hover over this to unroll the menu bar" => "Premi o passa con il mouse sopra per srotolare la barra di menu"
 
 SECTION CommanderForm
 
-.CAPILoggingin: "Logging in" @
-.CAPIDisabled: "Disabled" @
-.CAPILogout: "Logout" @
-.CAPILoggedin: "Logged in" @
-.CAPILogin: "Login" @
-.CAPIAwaitLogin: "Await Log in" @
+783F02798D5892: "Logging in" => "Einloggen"
+E43D612E11F156: "Logout" => "Ausloggen"
+75D39BFAEDAF91: "Logged in" => "Eingeloggt"
+4E5A2893BDCC7D: "Login" => "Login"
+8FB7105CC0349C: "Await Log in" => "Erwarte einloggen"
 
 SECTION SpeechConfigure
 
-SpeechConfigure: "Configure Speech" @
-.Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" @
-.buttonExtTest: "Test" @
-.buttonExtDevice: "Device" @
-.buttonExtEffects: "Effects" @
-.checkBoxCustomLiteral: "Literal" @
-.checkBoxCustomComplete: "Wait until speech completes" @
-.labelEndTrigger: "End Trigger" @
-.labelStartTrigger: "Start Trigger" @
-.labelRate: "Rate" @
-.labelVoice: "Voice" @
-.labelVolume: "Volume" @
-.checkBoxCustomR: "Override" @
-.checkBoxCustomV: "Override" @
+4AA6307BD004DD: "Configure Speech" => "Sprache konfigurieren"
+52F5A347177056: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" => "Text zur Aussprache festlegen (benutze ; um zufällig zu wählende Phrasen zu trennen und {} um zu gruppieren)"
+A5A74A6DF09278: "Device" => "Gerät"
+8F25A859269CA5: "Effects" => "Effekte"
+92E97E035F44F8: "Literal" => "Literal"
+D8CBC0CB400C12: "Wait until speech completes" => "Warte bis Rede endet"
+92D53A895E2EC1: "End Trigger" => "Endtrigger"
+8CF29400C3CFF6: "Start Trigger" => "Starttrigger"
+3A9C736B3175D6: "Rate" => "Rate"
+3091C8446F8D3A: "Voice" => "Stimme"
+3B18E8E332500F: "Volume" => "Lautstärke"
+84219262228FD0: "Override" => "Überschreiben"
 
 SECTION WaveConfigureDialog
 
-WaveConfigureDialog: "Configure Wave" @
-.buttonExtDevice: "Device" @
-.labelStartTrigger: "Start Trigger" @
-.labelEndTrigger: "End Trigger" @
-.labelTitle: "Select Default device, volume and effects" @
-.buttonExtBrowse: "Browse" @
-.checkBoxCustomComplete: "Wait until audio completes" @
-.buttonExtEffects: "Effects" @
-.buttonExtTest: "Test" @
-.checkBoxCustomV: "Override" @
-.labelVolume: "Volume" @
+72209F8C09DF0D: "Configure Wave" => "Wave konfigurieren"
+5CB7091D05A1FB: "Select Default device, volume and effects" => "Wähle Standardgerät, Lautstärke und Effekte"
+2F3B5C55BC27CD: "Browse" => "Durchstöbern"
+2B63A06A3CF32F: "Wait until audio completes" => "Warte bis Audio zu Ende ist"
 
 SECTION SoundEffectsDialog
 
-SoundEffectsDialog: "Sound Effects" @
-.labelEcho: "Echo" @
-.buttonExtTest: "Test" @
-.labelEchoMix: "Mix" @
-.labelChorus: "Chorus" @
-.checkBoxCustomNone: "No effects" @
-.labelReverb: "Reverb" @
-.checkBoxP: "Enable" @
-.checkBoxG: "Enable" @
-.labelDistortion: "Distortion" @
-.checkBoxD: "Enable" @
-.labelEchoFeedback: "Feedback" @
-.labelPitch: "Pitch" @
-.labelGargle: "Gargle" @
-.labelChorusMix: "Mix" @
-.labelEchoDelay: "Delay" @
-.checkBoxR: "Enable" @
-.labelReverbMix: "Mix" @
-.labelDistortionGain: "Gain" @
-.labelChorusFeedback: "Feedback" @
-.checkBoxC: "Enable" @
-.labelPitchOctave: "Octave" @
-.labelGargleFrequency: "Frequency" @
-.checkBoxE: "Enable" @
-.labelReverbTime: "Time" @
-.labelDistortionEdge: "Edge" @
-.labelChorusDelay: "Delay" @
-.labelChorusDepth: "Depth" @
-.labelReverbHFRatio: "HF Ratio" @
-.labelDistortionCentreFreq: "Cent Freq" @
-.labelDistortionFreqWidth: "Freq Width" @
+9C018170B60DB7: "Sound Effects" => "Soundeffekte"
+E738C7D89AFB7A: "Echo" => "Echo"
+FD7391B6720B80: "Mix" => "Mix"
+6973E1FED929E5: "Chorus" => "Chor"
+C26BC3C7F09EAB: "No effects" => "Keine Effekte"
+052BA8E09CD155: "Reverb" => "Hall"
+20063AD9053289: "Enable" => "Aktivieren"
+E73D6E899B5D7D: "Distortion" => "Verzerrung"
+C8D7677E19495F: "Feedback" => "Resonanz"
+A6C2D09A48FE01: "Pitch" => "Höhe"
+8631BA97BBBDF5: "Gargle" => "Gurgeln"
+B4C200BB0D1F7B: "Delay" => "Verzögerung"
+96DD91CDCBE72F: "Gain" => "Zuwachs"
+103165A25EAB02: "Octave" => "Oktave"
+89836A870E44FB: "Frequency" => "Frequenz"
+8440B9EB7D0391: "Edge" => "Grenzer"
+DF0E298E356261: "Depth" => "Tiefe"
+AAC47B153C274D: "HF Ratio" => "HF-Verhältnis"
+E7A1A898CC09B9: "Cent Freq" => "Frequenzmittelpunkt"
+4A7B2D10B5A2DF: "Freq Width" => "Frequenzbreite"
 
 SECTION AudioDeviceConfigure
 
-AudioDeviceConfigure: "Audio Device Select" @
-.labelText: "Select Device" @
+5B91330DCA5F99: "Audio Device Select" => "Wähle Audiogerät"
+87A47513B6B28B: "Select Device" => "Wähle Gerät"
 
 SECTION ActionPackEditPackForm
 
-.buttonInstallationVars: "Install Parameters" @
-.labelEditProg: "Program" @
+3B042F6CEA285B: "Install Parameters" => "Installationsparameter"
+9D68007B0763CB: "Program" => "Programm"
 
 SECTION ActionProgramEditForm
 
-ActionProgramEditForm: "Action Program" @
-.labelName: "Name:" @
-.buttonExtDisk: "As File" @
-.buttonExtLoad: "Load" @
-.buttonExtSave: "Save" @
-.buttonExtEdit: "Text Edit" @
-.extButtonHeader: "Header" @
+4BB0A4AF96D21C: "Action Program" => "Action-Programm"
+71DD2EFF9B4DA3: "Name:" => "Name:"
+9A92F637264375: "As File" => "Als Datei"
+DDCB77FF769EA5: "Load" => "Laden"
+A96C6A2EC6FD15: "Text Edit" => "Text ändern"
 
 SECTION ActionPackEditForm
 
-.ci: "Configuration items for installation - specialist use" @
-.ip: "Input parameters to pass to program on run" @
-.df: "Define Variable:" @
-.cp: "Variables to pass into called program" @
+8774D189CE7F96: "Configuration items for installation - specialist use" => "Konfigurationselemente für Installation - für Spezialisten"
+0878211D394E87: "Input parameters to pass to program on run" => "Eingangsparameter zur Weiterleitung an Programm im Betrieb"
+4A7A920987D3AC: "Define Variable:" => "Definiere Variable:"
+E7181957BFACA6: "Variables to pass into called program" => "Variablen zur Weiterleitung an aufgerufenes Programm"
 
 SECTION ActionPackVariablesForm
 
-.gv: "Global User variables to pass to program on run" @
+EA3E71F3439195: "Global User variables to pass to program on run" => "Globale Benutzervariablen zur Weiterleitung an Programm im Betrieb"
 
 include translation-italiano-uc.tlp
 

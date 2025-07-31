@@ -31,6 +31,9 @@ namespace EDDiscovery.UserControls
         public UserControlStarDistance()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         private StarDistanceComputer computer = null;
@@ -54,17 +57,6 @@ namespace EDDiscovery.UserControls
             textMaxRadius.SetComparitor(textMinRadius, 2);
 
             checkBoxCube.Checked = GetSetting("Behaviour", false);
-
-            var enumlist = new Enum[] { EDTx.UserControlStarDistance_colName, EDTx.UserControlStarDistance_colDistance, EDTx.UserControlStarDistance_colVisited, 
-                EDTx.UserControlStarDistance_labelExtMin, EDTx.UserControlStarDistance_labelExtMax, EDTx.UserControlStarDistance_checkBoxCube };
-            var enumlistcms = new Enum[] { EDTx.UserControlStarDistance_viewSystemToolStripMenuItem, EDTx.UserControlStarDistance_viewOnEDSMToolStripMenuItem1,
-                EDTx.UserControlStarDistance_viewOnSpanshToolStripMenuItem,
-                EDTx.UserControlStarDistance_addToTrilaterationToolStripMenuItem1, EDTx.UserControlStarDistance_addToExpeditionToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlStarDistance_textMinRadius_ToolTip, EDTx.UserControlStarDistance_textMaxRadius_ToolTip, 
-                EDTx.UserControlStarDistance_checkBoxCube_ToolTip };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
         public override void LoadLayout()
@@ -152,7 +144,7 @@ namespace EDDiscovery.UserControls
 
             if (csl != null && csl.Any())
             {
-                SetControlText(string.Format("From {0}".T(EDTx.UserControlStarDistance_From), name));
+                SetControlText(string.Format("From {0}".Tx(), name));
 
                 List<DataGridViewRow> rows = new List<DataGridViewRow>();
 
@@ -246,7 +238,7 @@ namespace EDDiscovery.UserControls
             EDSMClass edsm = new EDSMClass();
             if (!edsm.ShowSystemInEDSM(rightclicksystem.Name))
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarDistance_NoEDSMSys));
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx());
             }
 
             this.Cursor = Cursors.Default;

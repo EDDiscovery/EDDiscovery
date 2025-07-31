@@ -1,574 +1,528 @@
-﻿Warning: "Warning" => "Внимание"
-Today: "Today" => "Сегодня"
-t24h: "24h" => "24 ч."
-t7days: "7 days" => "7 дн."
-All: "All" => "Все"
-OK: "OK" => "OK"
-Cancel: "Cancel" => "Отмена"
-Delete: "Delete" => "Удалить"
-Campaign: "Campaign" => "Кампания"
-NoScan: "No Scan" => "Нет сканов"
-GameTime: "Game Time" => "Время в игре"
-Time: "Time" => "Время"
-NoData: "No Data" => "Нет данных"
-None: "None" => "Ничего"
-on: "on" => "Вкл"
-Off: "Off" => "Выкл"
-Unknown: "Unknown" => "Неизвестно"
-Information: "Information" => "Информация"
-NoPos: "No Pos" => "Нет положения"
+﻿E9C45563358E81: "Warning" => "Внимание"
+24345A14377FD8: "Today" => "Сегодня"
+02779596113109: "24h" => "24 ч."
+0A8DD6ADCE7A0D: "7 days" => "7 дн."
+6A72085653E4C5: "All" => "Все"
+9CE3BD4224C8C1: "OK" => "OK"
+77DFD2135F4DB7: "Cancel" => "Отмена"
+F6FDBE48DC54DD: "Delete" => "Удалить"
+69390E166570E5: "Campaign" => "Кампания"
+86C16821B16226: "No Scan" => "Нет сканов"
+515FAD8593999E: "Game Time" => "Время в игре"
+6C82E6DD86807E: "Time" => "Время"
+4276E6AB2A3146: "No Data" => "Нет данных"
+6EEF6648406C33: "None" => "Ничего"
+DB3D405B106759: "on" => "Вкл"
+E3DE5AB0CA4C69: "Off" => "Выкл"
+BC7819B34FF875: "Unknown" => "Неизвестно"
+0EB5ED506E4923: "Information" => "Информация"
+DE543B3879BD6E: "No Pos" => "Нет положения"
 
 // from EDC Core
 
-RemoveAll: "Remove All" => "Удалить всё"
-Hostile: "Hostile" => "Враждебный"
-Unfriendly: "Unfriendly" => "Недружественный"
-Neutral: "Neutral" => "Нейтральный"
-Cordial: "Cordial" => "Приветливый"
-Friendly: "Friendly" => "Дружественный"
-Allied: "Allied" => "Союзный"
+E8249C664732DF: "Remove All" => "Удалить всё"
+49CE5DE18C09AA: "Hostile" => "Враждебный"
+C65CDEF3DEF45A: "Unfriendly" => "Недружественный"
+4BD29139454399: "Neutral" => "Нейтральный"
+713DB5C16D862F: "Cordial" => "Приветливый"
+BF567DC7870262: "Friendly" => "Дружественный"
+81F1B69D074090: "Allied" => "Союзный"
 
 // from extended controls
 
-Disabled: "Disabled" => "Отключено"
+F4F4473DF8CB59: "Disabled" => "Отключено"
 
 // from action programs
 
-ToBeDeleted: "To be deleted" @
-ToBeInstalled: "To be installed" @
-Removed: "Removed" @
-Incompatible: "Incompatible" @
+AC1627C6A55792: "To be deleted" => "Wird gelöscht werden"
+EB1BCE574038E4: "To be installed" => "Wird installiert werden"
+B5E77C5C02A90C: "Removed" => "Entfernt"
+06DB4FFA7EFB34: "Incompatible" => "Inkompatibel"
 
 SECTION StartUp
 
-.DUPLOAD: "EDDiscovery is already running. Launch anyway?" => "EDDiscovery уже запущена. Всё равно запустить?"
+3823500F8FE072: "EDDiscovery is already running. Launch anyway?" => "EDDiscovery уже запущена. Всё равно запустить?"
 
 SECTION DataGridView
 
-.Header: "Header" @
-.WordWrap: "Word Wrap (Override)" @
+31341C6F0C7AF6: "Header" => "Entête"
+DF04C6BCA0BCDC: "Word Wrap (Override)" => "Zeilenumbruch (Überschreiben)"
 
 SECTION SafeModeForm
 
-SafeModeForm: "EDDiscovery Safe Mode" => "EDDiscovery. Безопасный режим"
-.buttonCancel: "Cancel" = Cancel
-.buttonRun: "Run" => "Запуск"
-.buttonRemoveJournals: "Remove Journals" => "Удалить журналы"
-.buttonRemoveJournalsCommanders: "Remove Journal Entries && Commanders" @
-.buttonDeleteUserDB: "Delete/Rebuild User DB" => "Удалить/перестроить базу данных пользователя"
-.buttonDeleteSystemDB: "Delete/Rebuild System DB" => "Удалить/перестроить базу данных систем"
-.buttonResetDBLoc: "Reset DB Location" => "Сбросить расположение базы данных"
-.buttonBackup: "Backup Database" => "Резервная копия базы данных"
-.buttonDbs: "Move Databases" => "Переместить базу данных"
-.buttonLang: "Reset Language to English" => "Сбросить язык на английский"
-.buttonActionPacks: "Remove all Action Packs" => "Удалить все Action Packs"
-.buttonRemoveDLLs: "Remove all Extension DLLs" => "Удалить все dll дополнений"
-.buttonResetTabs: "Reset Tabs, Remove PopOuts" => "Сбросить вкладки, удалить отдельные окна"
-.buttonPositions: "Reset Window Positions" => "Сбросить положение окна"
-.buttonResetTheme: "Reset Theme" => "Сбросить тему"
+11DDBF0E006302: "EDDiscovery Safe Mode" => "EDDiscovery. Безопасный режим"
+B1B392607DEAF2: "Run" => "Запуск"
+FCFBF9C6671583: "Remove Journals" => "Удалить журналы"
+5DCC4262C9BB58: "Remove Journal Entries && Commanders" => "Journale && Kommandanten entfernen"
+365C643F550384: "Delete/Rebuild User DB" => "Удалить/перестроить базу данных пользователя"
+01F2FBC637B7E7: "Delete/Rebuild System DB" => "Удалить/перестроить базу данных систем"
+149C06035C88FF: "Reset DB Location" => "Сбросить расположение базы данных"
+6B295419D3023F: "Backup Database" => "Резервная копия базы данных"
+81DE8C10D7B389: "Move Databases" => "Переместить базу данных"
+BF259EDBD80CA0: "Reset Language to English" => "Сбросить язык на английский"
+C5A8F7E7256EF2: "Remove all Action Packs" => "Удалить все Action Packs"
+1B678DD8E0190A: "Remove all Extension DLLs" => "Удалить все dll дополнений"
+C6F0F038107FD6: "Reset Tabs, Remove PopOuts" => "Сбросить вкладки, удалить отдельные окна"
+52280A445F2276: "Reset Window Positions" => "Сбросить положение окна"
+CCE1690C7ECC94: "Reset Theme" => "Сбросить тему"
 
 SECTION InfoForm
 
-.buttonAcknowledge: "Acknowledge" @
+9BEB96DAC88F56: "Acknowledge" => "Bestätigen"
 
 SECTION PopOutInfo
 
-.Log.Description: "Log of program information" => "Логи программы"
-.Log.Title: "Log" => "Логи"
-.Journal.Description: "Journal grid" => "Журнал (таблицей)"
-.Journal.Title: "Journal" => "Журнал"
-.TravelGrid.Description: "History grid" => "История (таблицей)"
-.TravelGrid.Title: "History" => "История полётов"
-.StarList.Description: "Visited Star list" => "Список посещённых систем"
-.StarList.Title: "Visited Stars" => "Список систем"
-.Materials.Description: "Materials count" => "Список материалов"
-.Materials.Title: "Materials" => "Материалы"
-.Commodities.Description: "Commodity count" => "Список товаров"
-.Commodities.Title: "Commodities" => "Товары"
-.Ledger.Description: "Ledger of cash related entries" => "Список записей, связанных с финансами"
-.Ledger.Title: "Ledger" => "Финансы"
-.Missions.Description: "Mission list" => "Список миссий"
-.Missions.Title: "Missions" => "Миссии"
-.Modules.Description: "Ships and their loadouts plus stored modules" => "Корабли, снаряжение и модули в хранилище"
-.Modules.Title: "Ships/Loadout" => "Корабли/Снаряжение"
-.Statistics.Description: "Statistics Information" => "Статистическая информация"
-.Statistics.Title: "Statistics" => "Статистика"
-.MarketData.Description: "Market data, giving commodity price information where available" => "Рыночные данные, включая цены на товары (если есть)"
-.MarketData.Title: "Market Data" => "Рынок"
-.ShipYardPanel.Description: "Ship yards information from places you have visited" => "Информация о посещенных космоверфях"
-.ShipYardPanel.Title: "Ship Yards" => "Космоверфи"
-.OutfittingPanel.Description: "Outfitting items in ship yards from places you have visited" => "Информация о снаряжении на посещенных космоверфях"
-.OutfittingPanel.Title: "Outfitting" => "Снаряжение"
-.Synthesis.Description: "Synthesis planner" => "Планировщик синтеза"
-.Synthesis.Title: "Synthesis" => "Синтез"
-.Engineering.Description: "Engineering planner" => "Планировщик модификаций"
-.Engineering.Title: "Engineering" => "Модификации"
-.ShoppingList.Description: "Shopping list planner combining synthesis and engineering" => "Планировщик «покупок» (объединяющий синтез и модификации)"
-.ShoppingList.Title: "Shopping List" => "План покупок"
-.Scan.Description: "Scan data on system" => "Данные сканирования систем"
-.Scan.Title: "Scan" => "Сканы"
-.ScanGrid.Description: "Scan data on system in a grid" => "Имеющиеся данные сканирования систем (таблицей)"
-.ScanGrid.Title: "Scan Grid" => "Сканы (таблицей)"
-.StarDistance.Description: "Nearest stars from current position" => "Список ближайших систем"
-.StarDistance.Title: "Nearest Stars" => "Ближайшие системы"
-.EstimatedValues.Description: "Estimated Scan values of bodies in system" => "Примерная стоимость данных сканирования систем"
-.EstimatedValues.Title: "Estimated Values" => "Стоимость сканов"
-.Map2D.Title: "2D Map" => "2D-карта"
-.Map2D.Description: "2D Map of galaxy" => "2D-карта галактики"
-.MiningOverlay.Title: "Mining Overlay" => "Закладка старателя"
-.MiningOverlay.Description: "Mining overlay" => "Закладка для старателя с данными, необходимыми при разработке астероидов"
-.LocalMap.Description: "3D Map of systems in range" => "3D-карта систем в определённом радиусе"
-.LocalMap.Title: "Local Map" => "3D-карта"
-.Plot.Description: "2D Plot of systems in range" => "2D-карта систем в определенном радиусе"
-.Plot.Title: "2D Plot" = PopOutInfo.Map2D.Title
-.Trilateration.Description: "Trilateration of stars with unknown positions" => "Трилатерация систем с неизвестным положением"
-.Trilateration.Title: "Trilateration" => "Трилатерация "
-.BookmarkManager.Description: "Bookmarks on systems and planets" => "Редактирование закладок для систем и планет"
-.BookmarkManager.Title: "Bookmarks" => "Закладки"
-.CombatPanel.Description: "Combat statistics" => "Боевая статистика"
-.CombatPanel.Title: "Combat" => "Бой"
-.Route.Description: "Route Finder from stored star data" => "Поиск маршрута с использованием сохраненных данных"
-.Route.Title: "Route Finder" => "Поиск маршрута"
-.Expedition.Description: "Expedition Planner, make up a expedition route" => "Планировщик экспедиций, построение маршрута экспедиции"
-.Expedition.Title: "Expedition" => "Экспедиции"
-.SystemInformation.Description: "System Information" => "Информация о системе"
-.SystemInformation.Title: "System Information" => "О системе"
-.Spanel.Description: "Summary panel overlay" => "Сводка (оверлей)"
-.Spanel.Title: "Summary Panel" => "Сводка"
-.Trippanel.Description: "Trip computer overlay" => "Бортовой компьютер (оверлей)"
-.Trippanel.Title: "Trip Computer" => "Бортовой комп"
-.NotePanel.Description: "Notes overlay" => "Примечания к системам (оверлей)"
-.NotePanel.Title: "Notes" => "Примечания"
-.RouteTracker.Description: "Route tracker overlay" => "Маршрут (оверлей)"
-.RouteTracker.Title: "Route Tracker" => "Маршрут"
-.Compass.Description: "Compass overlay to show bearing to planetary coordinates" => "Компас (оверлей), показывающий направление к координатам на планете"
-.Compass.Title: "Compass" => "Компас"
-.Settings.Description: "Settings for ED Discovery " => "Настройки ED Discovery "
-.Settings.Title: "Settings" => "Настройки"
-.ScreenShot.Description: "Screen shot" => "Просмотр скриншотов"
-.ScreenShot.Title: "Screen Shot" => "Скриншоты"
-.Grid.Description: "Grid (allows other panels to be placed in it)" => "Сетка для размещения других панелей"
-.Grid.Title: "Grid" => "Сетка"
-.SplitterControl.Description: "Splitter (allows other panels to be placed in it)" => "Разделитель для размещения других панелей"
-.SplitterControl.Title: "Splitter" => "Разделитель"
-.PanelSelector.Description: "" @
-.PanelSelector.Title: "+" @
-.Search.Title: "Search" => "Поиск"
-.Search.Description: "Search" = PopOutInfo.Search.Title
-.CaptainsLog.Title: "Captain's Log" => "Журнал капитана"
-.CaptainsLog.Description: "Captain's Log - notes on your travels" => "Заметки о путешествиях"
-.Surveyor.Title: "Surveyor" => "Топограф"
-.Surveyor.Description: "Surveyor - Exploration and route overlay" => "Помощь по картам поверхности"
-.MissionOverlay.Title: "Mission Overlay" => "Миссии (оверлей)"
-.MissionOverlay.Description: "Mission List overlay" => "Список миссий (оверлей)"
-.MaterialTrader.Title: "Material Trader" => "Торговец материалами"
-.MaterialTrader.Description: "Material trader" = PopOutInfo.MaterialTrader.Title
-.EDSM.Title: "EDSM" @
-.EDSM.Description: "EDSM - Automatic web view of system" => "EDSM - автоматический вэб-просмотр системы"
-.Inara.Title: "Inara" @
-.Inara.Description: "Inara - Automatic web view of system" => "Inara - автоматический вэб-просмотр системы"
-.Factions.Title: "Factions" => "Фракции"
-.Factions.Description: "Faction rewards and trading tally" => "Награды фракций и подсчёт торговых операций"
-.Spansh.Title: "Spansh" @
-.Spansh.Description: "Spansh - Automatic web view of system" => "Spansh - автоматический вэб-просмотр системы"
-.EDDB.Title: "EDDB" @
-.EDDB.Description: "EDDB - Automatic web view of system" => "EDDB - автоматический вэб-просмотр системы"
-.MicroResources.Title: "Micro Resources" => "Микроресурсы"
-.MicroResources.Description: "Micro resource count" => "Подсчёт микроресурсов"
-.SuitsWeapons.Title: "Suits & Weapons" => "Комбинезоны и оружие"
-.SuitsWeapons.Description: "Suits, Loadouts, Weapons" => "Комбинезоны, снаряжение и оружие"
-.Map3D.Title: "3D Map" = PopOutInfo.LocalMap.Title
-.Map3D.Description: "3D Map of galaxy" => "3D-карта галактики"
-.LocalMap3D.Title: "Local 3D Map" => "Локальная 3D-карта"
-.LocalMap3D.Description: "Local 3D Map of systems near you" => "Локальная 3D-карта системы рядом с вашим положением"
-.Organics.Title: "Organic Scans" => "Сканы органики"
-.Organics.Description: "Organic scans of current body and historic scans" => "Сканированная органика (экзобиологических образцов) текущего тела и история сканирования"
-.Engineers.Title: "Engineers" => "Инженеры"
-.Engineers.Description: "Engineers List, status, recipes" => "Перечень инженеров, статус, чертежи"
-.Discoveries.Title: "Discoveries" => "Открытия"
-.Discoveries.Description: "Discoveries Observer List" => "Перечень открытий"
-.Carrier.Title: "Carrier" => "Корабль-носитель"
-.Carrier.Description: "Data about your fleet carrier" => "Данные вашего корабля-носителя"
-.Resources.Title: "Resources" => "Ресурсы"
-.Resources.Description: "All Materials, Commodity, MicroResources" => "Все материалы, товары, микроресурсы"
-.SpanshStations.Title: "Spansh Stations" => "Станции со Spansh"
-.SpanshStations.Description: "Stations in the system from spansh web data" => "Данные с веб-сайта Spansh о станциях в системе"
-.Colonisation.Title: "Colonisation" @
-.Colonisation.Description: "Colonisation statistics" @
-.TestOverlay.Title: "TestOverlay" @
-.TestOverlay.Description: "Test overlay" @
+76FB040C270F12: "Log of program information" => "Логи программы"
+8BF95EA372568C: "Log" => "Логи"
+A09BA3EA152A4C: "Journal grid" => "Журнал (таблицей)"
+57D7F743BBD1A2: "Journal" => "Журнал"
+5C4D4F216D8BF4: "History grid" => "История (таблицей)"
+90CCD6497400B5: "History" => "История полётов"
+8AE3AF9C3B3CDF: "Visited Star list" => "Список посещённых систем"
+0184AA8A46AF1D: "Visited Stars" => "Список систем"
+D8E431F017DBF4: "Materials count" => "Список материалов"
+2402EA36326521: "Materials" => "Материалы"
+9668DDAD4FBCDC: "Commodity count" => "Список товаров"
+6ABB1B41C4C775: "Commodities" => "Товары"
+5EB3307B4BCE13: "Ledger of cash related entries" => "Список записей, связанных с финансами"
+1AA2F31EE7CCBD: "Ledger" => "Финансы"
+D0CE44CC23615F: "Mission list" => "Список миссий"
+323EA30C1DCCD5: "Missions" => "Миссии"
+48F48CBFECAAEB: "Ships and their loadouts plus stored modules" => "Корабли, снаряжение и модули в хранилище"
+C9AAB3AD20D010: "Ships/Loadout" => "Корабли/Снаряжение"
+8415368612653C: "Statistics Information" => "Статистическая информация"
+2086B21F8F4927: "Statistics" => "Статистика"
+0408BFBA0435A5: "Market data, giving commodity price information where available" => "Рыночные данные, включая цены на товары (если есть)"
+3BE93448CA0805: "Market Data" => "Рынок"
+93A7328B4F8E54: "Ship yards information from places you have visited" => "Информация о посещенных космоверфях"
+2919BE026701EF: "Ship Yards" => "Космоверфи"
+55AD8F7B31A275: "Outfitting items in ship yards from places you have visited" => "Информация о снаряжении на посещенных космоверфях"
+DEF494BAD4AAB6: "Outfitting" => "Снаряжение"
+950AD71B4EFEE2: "Synthesis planner" => "Планировщик синтеза"
+D7B22A6928D409: "Synthesis" => "Синтез"
+608915C58B801E: "Engineering planner" => "Планировщик модификаций"
+4143D04801509C: "Engineering" => "Модификации"
+593DC32DF5C4CE: "Shopping list planner combining synthesis and engineering" => "Планировщик «покупок» (объединяющий синтез и модификации)"
+6160F4C2D06317: "Shopping List" => "План покупок"
+844922E5491066: "Scan data on system" => "Данные сканирования систем"
+28CBA55D2AADF5: "Scan" => "Сканы"
+FB45D404829E9E: "Scan data on system in a grid" => "Имеющиеся данные сканирования систем (таблицей)"
+AFAC1D100B4A2C: "Scan Grid" => "Сканы (таблицей)"
+5698E21A28B5F8: "Nearest stars from current position" => "Список ближайших систем"
+34D42F419DF1E1: "Nearest Stars" => "Ближайшие системы"
+CB92E6CAAAB685: "Estimated Scan values of bodies in system" => "Примерная стоимость данных сканирования систем"
+18163829DCDD6E: "Estimated Values" => "Стоимость сканов"
+6DA68A5C45C3B6: "2D Map" => "2D-карта"
+9C4EE43BE8AD56: "2D Map of galaxy" => "2D-карта галактики"
+3C6489B3276EF3: "Mining Overlay" => "Закладка старателя"
+D6FF8EAE6FDB7D: "Mining overlay" => "Закладка для старателя с данными, необходимыми при разработке астероидов"
+2CB83259459C98: "3D Map of systems in range" => "3D-карта систем в определённом радиусе"
+60D12B289C0F47: "Local Map" => "3D-карта"
+A7528D77703FD5: "2D Plot of systems in range" => "2D-карта систем в определенном радиусе"
+142ADE7739800A: "2D Plot" => "2D-карта"
+893A59853B6083: "Trilateration of stars with unknown positions" => "Трилатерация систем с неизвестным положением"
+35E19316B84348: "Trilateration" => "Трилатерация "
+90897EA3342CFD: "Bookmarks on systems and planets" => "Редактирование закладок для систем и планет"
+CA3CDDD25BD8F6: "Bookmarks" => "Закладки"
+8349378742E6AF: "Combat statistics" => "Боевая статистика"
+AF169BB89CFBA4: "Combat" => "Бой"
+4FEC43B7690B88: "Route Finder from stored star data" => "Поиск маршрута с использованием сохраненных данных"
+DF8B99C5B42959: "Route Finder" => "Поиск маршрута"
+4AAA969F8C8AE7: "Expedition Planner, make up a expedition route" => "Планировщик экспедиций, построение маршрута экспедиции"
+C7BFEE111A04BC: "Expedition" => "Экспедиции"
+5131FE5695BC3C: "System Information" => "Информация о системе"
+0B8D44BAD5BCAA: "Summary panel overlay" => "Сводка (оверлей)"
+DB6536B2745A44: "Summary Panel" => "Сводка"
+E0F2ED1B7A0283: "Trip computer overlay" => "Бортовой компьютер (оверлей)"
+ECB3577C325E47: "Trip Computer" => "Бортовой комп"
+3184D5E0831A5A: "Notes overlay" => "Примечания к системам (оверлей)"
+70440046A3DC2E: "Notes" => "Примечания"
+3BBCB9B592E4E3: "Route tracker overlay" => "Маршрут (оверлей)"
+C24689D54DC869: "Route Tracker" => "Маршрут"
+3E9A0D08AB2CD4: "Compass overlay to show bearing to planetary coordinates" => "Компас (оверлей), показывающий направление к координатам на планете"
+9D5C8E519D85D8: "Compass" => "Компас"
+8038B86D2A5395: "Settings for ED Discovery " => "Настройки ED Discovery "
+C7F73BB54D9289: "Settings" => "Настройки"
+BF5CF3ED547461: "Screen shot" => "Просмотр скриншотов"
+AF4B7F220B9658: "Screen Shot" => "Скриншоты"
+C999A758A64A62: "Grid (allows other panels to be placed in it)" => "Сетка для размещения других панелей"
+701C483F813CF1: "Grid" => "Сетка"
+C05916255EB1DC: "Splitter (allows other panels to be placed in it)" => "Разделитель для размещения других панелей"
+3C9A6D76F1CED5: "Splitter" => "Разделитель"
+DA39A3EE5E6B4B: "" => ""
+A979EF10CC6F6A: "+" => "+"
+BCE06414177F72: "Search" => "Поиск"
+F69D2C0C04A8EE: "Captain's Log" => "Журнал капитана"
+FE3AF2D4889AE0: "Captain's Log - notes on your travels" => "Заметки о путешествиях"
+412258D43710F2: "Surveyor" => "Топограф"
+AF2B2B3C3B9D55: "Surveyor - Exploration and route overlay" => "Помощь по картам поверхности"
+F0DAFF585A132F: "Mission Overlay" => "Миссии (оверлей)"
+4AC7AEC325927E: "Mission List overlay" => "Список миссий (оверлей)"
+86896507A6ED88: "Material Trader" => "Торговец материалами"
+471574D885158A: "Material trader" => "Торговец материалами"
+E0A8D47F3E9219: "EDSM" => "EDSM"
+ED52705FDF6D29: "EDSM - Automatic web view of system" => "EDSM - автоматический вэб-просмотр системы"
+973EF779DB2CF3: "Inara" => "Inara"
+981781CF8B1E4F: "Inara - Automatic web view of system" => "Inara - автоматический вэб-просмотр системы"
+C992AAD4B16F58: "Factions" => "Фракции"
+A404D2CFE41408: "Faction rewards and trading tally" => "Награды фракций и подсчёт торговых операций"
+A9A440245EE992: "Spansh" => "Spansh"
+DAD92F257D7828: "Spansh - Automatic web view of system" => "Spansh - автоматический вэб-просмотр системы"
+72F20C151227D8: "EDDB" => "EDDB"
+ADAB7B122964C0: "EDDB - Automatic web view of system" => "EDDB - автоматический вэб-просмотр системы"
+55E85562E3BB89: "Micro Resources" => "Микроресурсы"
+F12262247D08BD: "Micro resource count" => "Подсчёт микроресурсов"
+8BEBD95AF22662: "Suits & Weapons" => "Комбинезоны и оружие"
+393A482F174DA6: "Suits, Loadouts, Weapons" => "Комбинезоны, снаряжение и оружие"
+723E769CA8B7F1: "3D Map" => "3D-карта"
+4927077FF8C996: "3D Map of galaxy" => "3D-карта галактики"
+4F49FDDD44F492: "Local 3D Map" => "Локальная 3D-карта"
+112E4D8C9B4EEC: "Local 3D Map of systems near you" => "Локальная 3D-карта системы рядом с вашим положением"
+92F242BD12833A: "Organic Scans" => "Сканы органики"
+092BC4115EF04D: "Organic scans of current body and historic scans" => "Сканированная органика (экзобиологических образцов) текущего тела и история сканирования"
+C6C5065C1BFCBE: "Engineers" => "Инженеры"
+104A3B657D7113: "Engineers List, status, recipes" => "Перечень инженеров, статус, чертежи"
+BE1C21D6FE0AE4: "Discoveries" => "Открытия"
+98A0679EBD354B: "Discoveries Observer List" => "Перечень открытий"
+91B0BA24657FE5: "Carrier" => "Корабль-носитель"
+42F527004E124B: "Data about your fleet carrier" => "Данные вашего корабля-носителя"
+87DF60DE337FB5: "Resources" => "Ресурсы"
+9AE60B8B41DFAD: "Resources: All Materials, Commodity, Micro resources" => "Все материалы, товары, микроресурсы"
+542CC34C1F691F: "Spansh Stations" => "Станции со Spansh"
+17DFA3A002E3D5: "Stations in the system from spansh web data" => "Данные с веб-сайта Spansh о станциях в системе"
+4DFB01DC92677C: "Colonisation" => "Kolonisation"
+91A4AFA2089B9F: "Colonisation statistics" => "Kolonisationsstatistiken"
+C963A786E115F9: "TestOverlay" => "TestOverlay"
+78576CE18E50B2: "Test overlay" => "Test Overlay"
 
 SECTION EDDiscoveryForm
 
-.ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "У этого командира отключена синхронизация с EDSM. Вы действительно хотите отправить несинхронизированные события в EDSM?"
-.ConfirmSyncToEDSMCaption: "Confirm EDSM sync" => "Подтвердить синхронизацию с EDSM"
-.SendEDSMCaption: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
-.SendEDSMAll: "Send All to EDSM" => "Отправить всё на EDSM"
-.SendEDSM24: "Send Last 24 Hours of entries to EDSM" @
-.SendEDSMFrom: "Send From" @
-.SendEDSMNone: "EDSM is up to date - send Nothing more" @
-.SendEDSMCancel: "I'll decide later, do nothing" @
-.SendEDSMTitle: "Sending a large number of EDSM Entries" @
-.toolsToolStripMenuItem: "&Tools" => "&Инструменты"
-.toolsToolStripMenuItem.settingsToolStripMenuItem: "Settings" = PopOutInfo.Settings.Title
-.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem: "&Pop-outs" => "Отдельные окна"
-.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.showAllInTaskBarToolStripMenuItem: "&Show All In Task Bar" => "Показать все в панели задач"
-.toolsToolStripMenuItem.showAllPopoutsInTaskBarToolStripMenuItem.turnOffAllTransparencyToolStripMenuItem: "&Turn Off All Transparency" => "Отключить прозрачность"
-.toolsToolStripMenuItem.exitToolStripMenuItem: "E&xit" => "Выход"
-.adminToolStripMenuItem: "A&dmin" => "Управление"
-.adminToolStripMenuItem.showLogfilesToolStripMenuItem: "Show journal files directory of current commander" => "Перейти в папку с файлами журнала текущего командира"
-.adminToolStripMenuItem.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem: "Reset all history to current commander" => "Сбросить всю историю текущего командира"
-.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem: "Read 2.1 and former log files" => "Прочитать данные журнала версии 2.1 и более ранних"
-.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem: "Force reload logs" => "Принудительно перезагрузить журнал"
-.adminToolStripMenuItem.rescanAllJournalFilesToolStripMenuItem: "Re-scan all journal files" => "Перезагрузить все файлы журнала"
-.adminToolStripMenuItem.deleteDuplicateFSDJumpEntriesToolStripMenuItem: "Delete duplicate FSD Jump entries" => "Удалить дубликаты записей FSD-прыжков"
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.sendUnsyncedEDSMJournalsToolStripMenuItem: "Send Unsynced Journals To EDSM" @
-.adminToolStripMenuItem.rebuildSystemDBIndexesToolStripMenuItem: "Rebuild System DB Indexes" => "Перестроить систему индексации базы данных"
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Синхронизация с EDSM"
-.adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Отправить записи истории (предыдущие корабли, модули в хранилище) в Inara"
-.adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
-.addOnsToolStripMenuItem: "&Add-Ons" => "&Дополнения"
-.addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "&Управление дополнениями"
-.addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "Изменить Action Files дополнения"
-.addOnsToolStripMenuItem.editLastActionPackToolStripMenuItem: "Edit Last Action Pack" => "Изменить последний Action Pack"
-.addOnsToolStripMenuItem.stopCurrentlyRunningActionProgramToolStripMenuItem: "&Stop currently running Action Program" => "Остановить текущую Action Program"
-.helpTabToolStripMenuItem: "Help" => "Помощь"
-.helpToolStripMenuItem: "&Help" => "&Помощь"
-.helpToolStripMenuItem.aboutToolStripMenuItem: "&About" => "&О программе"
-.helpToolStripMenuItem.wikiHelpToolStripMenuItem: "&View Help" => "&Посмотреть справку"
-.helpToolStripMenuItem.viewHelpVideosToolStripMenuItem: "View Help Videos" => "Посмотреть вспомогательное видео"
-.helpToolStripMenuItem.eDDiscoveryChatDiscordToolStripMenuItem: "&Discord - EDD Community Chat" @
-.helpToolStripMenuItem.frontierForumThreadToolStripMenuItem: "&Frontier Forum Thread" => "Тема на Frontier Forum"
-.helpToolStripMenuItem.gitHubToolStripMenuItem: "&Project Page (GitHub)" => "Страница проекта (GitHub)"
-.helpToolStripMenuItem.reportIssueIdeasToolStripMenuItem: "&Report Issue / Idea" => "Сообщить о проблеме / идее"
-.helpToolStripMenuItem.checkForNewReleaseToolStripMenuItem: "&Check for Updates" => "Проверить обновления"
-.helpToolStripMenuItem.toolStripMenuItemListBindings: "List Elite Bindings" => "Список назначенных клавиш"
-.tabControlMain.ToolTip: "Right click to add/remove tabs, Left click drag to reorder" => "Правая кнопка мыши — добавить/удалить вкладку, перетаскивание с зажатой левой кнопкой — сортировка"
-.comboBoxCustomProfiles.ToolTip: "Use to select new profile or edit profile settings" => "Выберите новый профиль или измените настройки профиля"
-.comboBoxCommander.ToolTip: "Select the commander to view" => "Выбрать командира для просмотра"
-.buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "Создать отдельную панель"
-.buttonExtEditAddOns.ToolTip: "Edit Add-Ons" => "Изменить дополнения"
-.buttonExtManageAddOns.ToolTip: "Manage Add-Ons" => "Управление дополнениями"
-.buttonExtRefresh.ToolTip: "Refresh the history" => "Обновить историю"
-.addTabToolStripMenuItem: "Insert Tab with panel.." => "Вставить вкладку с панелью..."
-.removeTabToolStripMenuItem: "Remove Tab" => "Удалить вкладку"
-.renameTabToolStripMenuItem: "Rename Tab" => "Переименовать вкладку"
-.TSF: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Установить вкладку не удалось: основная вкладка или TG не загрузились.\r\nТак быть не должно - пожалуйста, сообщите о проблеме команде EDD через Discord или Github.\r\nЧтобы избежать ошибки, перезапустите программу, удерживая клавишу shift,\r\nвыберите опцию Reset tabs и перезапустите программу еще раз."
-.RTABL: "Name: " => "Название"
-.RTABT: "Rename Tab" = EDDiscoveryForm.renameTabToolStripMenuItem
-.RTABTT: "Enter a new name for the tab" => "Новое имя вкладки"
-.DLLW: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Найдены следующие dll дополнений\r\nВы хотите их использовать?\r\n{0} \r\nЕсли нет, удалите dll из папки DLL программы\r\\или удалите соответствующие action pack,\r\\или удерживайте клавишу shift при запуске программы и выберите опцию «Удалить все dll дополнений»"
-.DLLL: "DLLs loaded: {0}" => "Загруженные библиотеки (.dll): {0}"
-.DLLF: "DLLs failed to load: {0}" => "Не удалось загрузить библиотеки (.dll): {0}"
-.IndexW: "Are you sure to Rebuild Indexes? It may take a long time." @
-.FillPos: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
-.PROFL: "Profile {0} Loaded" => "Профиль {0} загружен"
-.NI: "New EDDiscovery installer available: {0}" => "Доступна новая версия EDDiscovery: {0}"
-.NRA: "New Release Available!" => "Доступна новая версия!"
-.Arrived: "Arrived at system {0} Visit No. {1}" => "Прибытие в систему {0}, посещение {1}"
-.PE1: "Profile reports errors in triggers: " => "Профиль сообщает об ошибках в триггерах"
-.Closing: "Closing, please wait!" => "Завершаю работу"
-.SDDis: "Star Data download is disabled. Use Settings to reenable it" => "Загрузка данных о системах отключена. Пожалуйста, включите ее в настройках"
-.SDSyncErr: "Synchronisation to databases is in operation or pending, please wait" => "Идет синхронизация с базой данных, пожалуйста, подождите"
-.EDSMQ: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "На это может уйти много времени и трафика\r\nВы действительно хотите это сделать?"
-.ResetCMDR: "Confirm you wish to reset all history entries to the current commander" => "Вы действительно хотите сбросить все записи истории для текущего командира?"
-.NoRel: "No new release found" => "Новая версия программы не найдена"
-.RevFSD: "Confirm you remove any duplicate FSD entries from the current commander" => "Вы действительно хотите удалить все дубликаты FSD записей для текущего командира?"
-.FSDRem: "Removed {0} FSD entries" => " Количество удалённых FSD записей: {0}"
-.InaraW: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "Загрузка на Inara отключена на 1 час, чтобы предотвратить перегрузку сервера"
-.RH: "Refresh History." => "Обновить историю."
-.NoEDSMAPI: "No EDSM API key set" => "Убедитесь, что выбран командир и установлен EDSM API key"
-.EP: "Edit Profiles" => "Изменить профили"
-.PL: "Profile {0} Loaded" = EDDiscoveryForm.PROFL
-.popOutPanelToolStripMenuItem: "Pop Out Panel.." => "Создать отдельное окно..."
-.CloseWarning: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery обновляет базы данных EDSM и EDDB.\r\nНажмите «ОК», чтобы выйти прямо сейчас, или нажмите «Отмена», чтобы дождаться завершения обновления."
-.notifyIconMenu_Open: "&Open EDDiscovery" => "&Открыть EDDiscovery"
-.notifyIconMenu_Hide: "&Hide Tray Icon" => "&Скрыть значок в трее"
-.notifyIconMenu_Exit: "E&xit" = EDDiscoveryForm.toolsToolStripMenuItem.exitToolStripMenuItem
-.adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem.fetchLogsAgainToolStripMenuItem: "Fetch Logs Again" => "Повторно получить логи"
-.adminToolStripMenuItem.fetchStarDataAgainToolStripMenuItem: "Fetch Star Data Again" => "Повторно получить данные о системах"
-.adminToolStripMenuItem.rebuildUserDBIndexesToolStripMenuItem: "Rebuild User DB Indexes" => "Перестроить индексацию базы данных пользователя"
-.adminToolStripMenuItem.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem: "Update systems with unknown co-ordinates" => "Обновить системы с неизвестными координатами"
-.WSE: "Web server enabled" => "Веб-сервер включён"
-.WSF: "Web server failed to start" => "При запуске веб-сервера произошла ошибка"
-.WSERR: "Web server disabled due to incorrect folder or missing zip file" => "Веб-сервер отключён из-за неправильно указанной папки назначения или отсутствия zip-файла"
-.WSD: "*** Web server is disabled ***" => "***Веб-сервер отключён***"
-.DLLDIS: "DLLs disabled: {0}" => "Отключённые библиотеки (.dll): {0}"
+586CFE03DAA723: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "У этого командира отключена синхронизация с EDSM. Вы действительно хотите отправить несинхронизированные события в EDSM?"
+25C9D555A2A9B9: "Confirm EDSM sync" => "Подтвердить синхронизацию с EDSM"
+FAC898054B2C2B: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." => "Es gibt {0} EDSM-Ereignisse zu senden, dies kostet Zeit und Bandbreite, wähle aus dem Folgenden was zu tun ist. Einträge vor dem gewählten Datum werden als gesendet markiert."
+B61E7134EF7FDD: "Send All to EDSM" => "Отправить всё на EDSM"
+2460BB4C7A146D: "Send Last 24 Hours of entries to EDSM" => "Sende die letzten 24 Stunden an EDSM"
+AA962467914A2B: "Send From" => "Sende alles beginnend mit: "
+5ED64D1D56F6A0: "EDSM is up to date - send Nothing more" => "EDSM ist auf dem neuesten Stand - sende nichts"
+14D2AEDDDD40B0: "I'll decide later, do nothing" => "Ich entscheide später - mache nichts."
+542CFA5900AB5D: "Sending a large number of EDSM Entries" => "Übertrage eine große Anzahl an EDSM_Ereignissen"
+EE178B82F7FF3B: "&Tools" => "&Инструменты"
+7F24C011F1CC03: "&Pop-outs" => "Отдельные окна"
+5D0D71ACC991B2: "&Show All In Task Bar" => "Показать все в панели задач"
+B58EA2C0453904: "&Turn Off All Transparency" => "Отключить прозрачность"
+47AA608083EDEF: "E&xit" => "Выход"
+E592F675275650: "A&dmin" => "Управление"
+AAC8CEA1D98BFE: "Show journal files directory of current commander" => "Перейти в папку с файлами журнала текущего командира"
+D85D0424D5DDE8: "Reset all history to current commander" => "Сбросить всю историю текущего командира"
+E3D7130BAF225D: "Read 2.1 and former log files" => "Прочитать данные журнала версии 2.1 и более ранних"
+6C233E7A4C3485: "Force reload logs" => "Принудительно перезагрузить журнал"
+2EB4A69BC73B8C: "Re-scan all journal files" => "Перезагрузить все файлы журнала"
+ED205CB2A2E5AD: "Delete duplicate FSD Jump entries" => "Удалить дубликаты записей FSD-прыжков"
+515B067A548F55: "Send Unsynced Journals To EDSM" => "Invia dati non sincronizzati a EDSM"
+80A376F0DAEEC0: "Rebuild System DB Indexes" => "Перестроить систему индексации базы данных"
+A7BF78A5A58AF7: "Synchronise with EDSM" => "Синхронизация с EDSM"
+B5CFC4E9D493BC: "Send to Inara historic data (previous ships, stored modules)" => "Отправить записи истории (предыдущие корабли, модули в хранилище) в Inara"
+4D33F20C90DE14: "Scan Netlogs" => "Scanne Netlogs"
+990E278543811B: "&Add-Ons" => "&Дополнения"
+27F90656BEC6AA: "&Manage Add-Ons" => "&Управление дополнениями"
+CA2878BBFF0A12: "&Edit Add-On Action Files" => "Изменить Action Files дополнения"
+5589AA6BF97C45: "Edit Last Action Pack" => "Изменить последний Action Pack"
+B54DCF74E1F1F3: "&Stop currently running Action Program" => "Остановить текущую Action Program"
+C47AE15370CFE1: "Help" => "Помощь"
+50F1FB3394671C: "&Help" => "&Помощь"
+73D0A064C9E578: "&About" => "&О программе"
+5562A1E2E70DEB: "&View Help" => "&Посмотреть справку"
+34F2CCDF930918: "View Help Videos" => "Посмотреть вспомогательное видео"
+178BFB114DDBE3: "&Discord - EDD Community Chat" => "Comunidade chat de EDD no &Discord"
+57482767CD6F92: "&Frontier Forum Thread" => "Тема на Frontier Forum"
+15C7CE4EDE3CD9: "&Project Page (GitHub)" => "Страница проекта (GitHub)"
+A1C144022BAD54: "&Report Issue / Idea" => "Сообщить о проблеме / идее"
+76222168EA3E4A: "&Check for Updates" => "Проверить обновления"
+C845BB199650AE: "List Elite Bindings" => "Список назначенных клавиш"
+BBFD0BF677ABD7: "Right click to add/remove tabs, Left click drag to reorder" => "Правая кнопка мыши — добавить/удалить вкладку, перетаскивание с зажатой левой кнопкой — сортировка"
+0F5C6BE9C1D03B: "Use to select new profile or edit profile settings" => "Выберите новый профиль или измените настройки профиля"
+965A14401B157E: "Select the commander to view" => "Выбрать командира для просмотра"
+F13804FF3542A3: "Click to select a pop out panel to display" => "Создать отдельную панель"
+B5594BDC32706F: "Edit Add-Ons" => "Изменить дополнения"
+990761914FAABC: "Manage Add-Ons" => "Управление дополнениями"
+76EE286CA0BD95: "Refresh the history" => "Обновить историю"
+B1B79547453735: "Insert Tab with panel.." => "Вставить вкладку с панелью..."
+FDB587F6AEF9FC: "Remove Tab" => "Удалить вкладку"
+A44AD2D137232C: "Rename Tab" => "Переименовать вкладку"
+DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Установить вкладку не удалось: основная вкладка или TG не загрузились.\r\nТак быть не должно - пожалуйста, сообщите о проблеме команде EDD через Discord или Github.\r\nЧтобы избежать ошибки, перезапустите программу, удерживая клавишу shift,\r\nвыберите опцию Reset tabs и перезапустите программу еще раз."
+B3F69F1983924E: "Name: " => "Название"
+5365F84B9A53D9: "Enter a new name for the tab" => "Новое имя вкладки"
+FF063FC2431DAF: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Найдены следующие dll дополнений\r\nВы хотите их использовать?\r\n{0} \r\nЕсли нет, удалите dll из папки DLL программы\r\\или удалите соответствующие action pack,\r\\или удерживайте клавишу shift при запуске программы и выберите опцию «Удалить все dll дополнений»"
+3160432B058751: "DLLs loaded: {0}" => "Загруженные библиотеки (.dll): {0}"
+CCFDEF5228D48D: "DLLs failed to load: {0}" => "Не удалось загрузить библиотеки (.dll): {0}"
+5C77F5282CD58B: "Are you sure to Rebuild Indexes? It may take a long time." => "Bist du sicher, dass die Indexes neu erstellt werden sollen? Dies kann lange dauern."
+4B610F7AC3BDAA: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" => "Historie scannen und versuchen für alle Systeme mit unbekannten Koordinaten\r\ndiese aus der Systemdatenbank zu kopieren.\r\nBestätigen?"
+A7BA2B77971D8B: "Profile {0} Loaded" => "Профиль {0} загружен"
+E11B312BFDAE74: "New EDDiscovery installer available: {0}" => "Доступна новая версия EDDiscovery: {0}"
+2F18E849A799F4: "New Release Available!" => "Доступна новая версия!"
+34CFE199A2E81E: "Arrived at system {0} Visit No. {1}" => "Прибытие в систему {0}, посещение {1}"
+A44C3F341F2CE9: "Profile reports errors in triggers: " => "Профиль сообщает об ошибках в триггерах"
+B683FA5A92D7B6: "Closing, please wait!" => "Завершаю работу"
+03617D9031DCED: "Star Data download is disabled. Use Settings to reenable it" => "Загрузка данных о системах отключена. Пожалуйста, включите ее в настройках"
+029E79A86E66C0: "Synchronisation to databases is in operation or pending, please wait" => "Идет синхронизация с базой данных, пожалуйста, подождите"
+5C5508F7B29BD6: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "На это может уйти много времени и трафика\r\nВы действительно хотите это сделать?"
+EC8966F52E96C2: "Confirm you wish to reset all history entries to the current commander" => "Вы действительно хотите сбросить все записи истории для текущего командира?"
+690A6A4AC09622: "No new release found" => "Новая версия программы не найдена"
+9769B4CCF9B4FE: "Confirm you remove any duplicate FSD entries from the current commander" => "Вы действительно хотите удалить все дубликаты FSD записей для текущего командира?"
+BA32A940331E35: "Removed {0} FSD entries" => " Количество удалённых FSD записей: {0}"
+4F01D475DE606B: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "Загрузка на Inara отключена на 1 час, чтобы предотвратить перегрузку сервера"
+651C69E6D25F44: "Refresh History." => "Обновить историю."
+A2AB3C168B45C2: "No EDSM API key set" => "Убедитесь, что выбран командир и установлен EDSM API key"
+C34D9E2DBB5632: "Edit Profiles" => "Изменить профили"
+B155CB3806504B: "Pop Out Panel.." => "Создать отдельное окно..."
+10A7567860F85A: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery обновляет базы данных EDSM и EDDB.\r\nНажмите «ОК», чтобы выйти прямо сейчас, или нажмите «Отмена», чтобы дождаться завершения обновления."
+F2C6773DD29948: "&Open EDDiscovery" => "&Открыть EDDiscovery"
+E9E8D3707EA8A5: "&Hide Tray Icon" => "&Скрыть значок в трее"
+2E90DDA55C63D8: "Fetch Logs Again" => "Повторно получить логи"
+DE5CFD5A00795F: "Fetch Star Data Again" => "Повторно получить данные о системах"
+3E1DCD88E16D3F: "Rebuild User DB Indexes" => "Перестроить индексацию базы данных пользователя"
+8CE317851DDE98: "Update systems with unknown co-ordinates" => "Обновить системы с неизвестными координатами"
+4B8237A3EF2696: "Web server enabled" => "Веб-сервер включён"
+7279E939048432: "Web server failed to start" => "При запуске веб-сервера произошла ошибка"
+683617E8B53C1F: "Web server disabled due to incorrect folder or missing zip file" => "Веб-сервер отключён из-за неправильно указанной папки назначения или отсутствия zip-файла"
+37F51D0860E8D7: "*** Web server is disabled ***" => "***Веб-сервер отключён***"
+AEA794CB1D04DB: "DLLs disabled: {0}" => "Отключённые библиотеки (.dll): {0}"
 
 SECTION EDDiscoveryController
 
-.CD: "Closing down, please wait.." = EDDiscoveryForm.Closing
-.EDSM: "Get galactic mapping from EDSM." => "Получаю карту Галактики с EDSM"
-.GEC: "Get galactic mapping from GEC." => "Получаю карту Галактики с GEC."
-.LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Загружаю примечания, закладки и карту Галактики"
-.RTH: "Reading travel history" => "Читаю историю полётов"
-.SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Пожалуйста, не завершайте работу ED Discovery до завершения обновления."
-.SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "Синхронизация с EDSM и EDDB отключена в настройках"
-.EDSMU: "Systems update complete with {0:N0} systems" => "Количество систем, загруженных при обновлении EDSM: {0:N0}"
-.PLF: "Processing log file {0}" => "Обрабатываю файл журнала {0}"
-.RD: "Refresh Displays" => "Обновляю вкладки"
-.HRC: "History refresh complete." => "Обновление истории завершено"
-.EXPD: "Checking for new Expedition data" => "Ищу новые данные экспедиций"
+9BA9842C1C8616: "Closing down, please wait.." => "Завершаю работу"
+DB2578F4000025: "Get galactic mapping from EDSM." => "Получаю карту Галактики с EDSM"
+B916383C5DCECE: "Get galactic mapping from GEC." => "Получаю карту Галактики с GEC."
+855115699D49D3: "Loaded Notes, Bookmarks and Galactic mapping." => "Загружаю примечания, закладки и карту Галактики"
+D080CC813B189E: "Reading travel history" => "Читаю историю полётов"
+AF6F80B989BC53: "Please continue running ED Discovery until refresh is complete." => "Пожалуйста, не завершайте работу ED Discovery до завершения обновления."
+592A7473F32418: "Star Data download is disabled. Use Settings panel to reenable" => "Синхронизация с EDSM и EDDB отключена в настройках"
+FC6E2FB62C5980: "Systems update complete with {0:N0} systems" => "Количество систем, загруженных при обновлении EDSM: {0:N0}"
+CBD5298BFF839E: "Processing log file {0}" => "Обрабатываю файл журнала {0}"
+1EB68C8D6B5F34: "Refresh Displays" => "Обновляю вкладки"
+DCDB45EA825C67: "History refresh complete." => "Обновление истории завершено"
+B624A602C8C18F: "Checking for new Expedition data" => "Ищу новые данные экспедиций"
 
 SECTION AddOnManagerForm
 
-.buttonExtGlobals: "Globals" => "Глобальные переменные"
-.AddOnTitle: "Add-On Manager" = EDDiscoveryForm.buttonExtManageAddOns.ToolTip
-.EditTitle: "Edit Add-Ons" => "Изменить дополнение"
-.Type: "Type" => "Тип"
-.Name: "Name" = EDDiscoveryForm.RTABL
-.Version: "Version" => "Версия"
-.Description: "Description" => "Описание"
-.Status: "Status" => "Статус"
-.Action: "Action" => "Действие"
-.Delete: "Delete" = Delete
-.Enabled: "Enabled" => "Включено"
-.Newer: "Newer EDD required" => "Требуется более новая версия EDD"
-.Old: "Too old for EDD" => "Слишком старая для EDD"
-.Locallymodified: "Locally modified" => "Изменено локально"
-.UptoDate: "Up to Date" => "Актуальная"
-.LocalOnly: "Local Only" => "Только локально"
-.Newversion: "New version" => "Новая версия"
-.Install: "Install" => "Установить"
-.Update: "Update" => "Обновить"
-.Edit: "Edit" => "Изменить"
-.Modwarn: "Modified locally, do you wish to overwrite the changes" => "Изменено локально, вы хотите отменить изменения?"
-.Failed: "Add-on failed to update. Check files for read only status" => "Дополнение не удалось обновить. Проверьте файлы на защиту от записи"
-.DeleteWarn: "Do you really want to delete {0}" => "Вы действительно хотите удалить {0}?"
+3F827C66E7E047: "Globals" => "Глобальные переменные"
+0972452F39F378: "Add-On Manager" => "Управление дополнениями"
+3DEB7456519697: "Type" => "Тип"
+709A23220F2C3D: "Name" => "Название"
+2DA600BF940484: "Version" => "Версия"
+55F8EBC805E65B: "Description" => "Описание"
+BAE7D5BE70820E: "Status" => "Статус"
+97C89A4D6630AD: "Action" => "Действие"
+DF174A3F2FAA31: "Enabled" => "Включено"
+C9B87AD62761ED: "Newer EDD required" => "Требуется более новая версия EDD"
+0AE36D6F55493C: "Too old for EDD" => "Слишком старая для EDD"
+5B3A1A44268196: "Locally modified" => "Изменено локально"
+482E9BD3F6E7A8: "Up to Date" => "Актуальная"
+05ED059BB7B8B0: "Local Only" => "Только локально"
+76AFFE13E38473: "New version" => "Новая версия"
+FD6C3EBF7BEFCA: "Install" => "Установить"
+FB91E24FA52D8D: "Update" => "Обновить"
+5301648DCF6B53: "Edit" => "Изменить"
+A425A7972A5C05: "Modified locally, do you wish to overwrite the changes" => "Изменено локально, вы хотите отменить изменения?"
+943E16DB2C7F21: "Add-on failed to update. Check files for read only status" => "Дополнение не удалось обновить. Проверьте файлы на защиту от записи"
+491F68FCF24992: "Do you really want to delete {0}" => "Вы действительно хотите удалить {0}?"
 
 SECTION ImportExportForm
 
-ImportExportForm: "Export data" => "Экспорт"
-.buttonExport: "Export" = ImportExportForm
-.ImportTitle: "Import data" => "Импортировать данные"
-.ImportButton: "Import" => "Импорт"
-.labelCVSSep: "CSV Separator" => "Разделитель CSV"
-.radioButtonComma: "Comma" => "Запятая"
-.radioButtonSemiColon: "Semicolon" => "Точка с запятой"
-.checkBoxIncludeHeader: "Include Header" => "С заголовками"
-.checkBoxCustomAutoOpen: "Open" => "Открыть в Excel"
-.labelUTCEnd: "UTC" @
-.labelUTCStart: "UTC" @
-.labelPaste: "Click Paste or drag text or files to input box" @
-.extRadioButtonTab: "Tab" @
-.extCheckBoxExcludeHeader: "Exclude Header Row" @
-.labelSaveImport: "Save Import As" @
+DEADB4817C6BB8: "Export data" => "Экспорт"
+F3E4FADB9E370A: "Export" => "Экспорт"
+D82C9379E1E7F3: "Import data" => "Импортировать данные"
+D6FBC9D2BDD580: "Import" => "Импорт"
+6D9BDC92D8C9FC: "CSV Separator" => "Разделитель CSV"
+B9EE3DEAAE2695: "Comma" => "Запятая"
+727CECA929343C: "Semicolon" => "Точка с запятой"
+677937E33CBDF5: "Include Header" => "С заголовками"
+CF9B77061F7B31: "Open" => "Открыть в Excel"
+BDFD4D8D695277: "UTC" => "UTC"
+77D2774F81109B: "Click Paste or drag text or files to input box" => "Kopiere Text in, oder ziehe Dateien auf Eingabefeld"
+FE06EB6459C87F: "Tab" => "Tabulator"
+F39A80A0C4C734: "Exclude Header Row" => "Ignoriere Headerzeile"
+F12960ECA66A33: "Save Import As" => "Speichere Import als"
 
 SECTION GalaxySectorSelect
 
-GalaxySectorSelect: "Galaxy Sector Select" => "Выбор секторов Галактики"
-.buttonExtSet: "Set" => "Выбрать"
-.labelSectorName: "Sector" => "Сектор"
-.Custom: "Custom" => "Свое"
-.Reset: "Reset" => "Сбросить"
-.All: "All" = All
-.None: "None" = None
-.Bubble: "Bubble" => "Пузырь"
-.ExtendedBubble: "Extended Bubble" => "Расширенный Пузырь"
-.BC: "Bubble+Colonia" => "Пузырь и Колония"
-.RD: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Вы добавили новые сектора!\r\nЭто потребует повторной загрузки данных из EDSM\r\nВы действительно хотите это сделать?"
-.NoSync: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Синхронизация данных о системах отключена в настройках.\r\nВключите ее, чтобы обновить данные."
-.RS: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Вы удалили сектора!\r\nЭто потребует очистки БД, что займет время.\r\nВы действительно хотите это сделать?"
-.GALSELEX: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "Чтобы предоставить вам больше информации, ED Discovery может загрузить данные о системах из EDSM/EDDB. Выберите, сколько данных вы хотите загрузить. Чем большую часть Галактики вы выберете, тем больше места потребуется для хранения."
-.Select: "Select: " => "Выберите: "
-.GALSELEN: "Select the data set" @
-.PresstoAccept: "Press to Accept" => "Нажмите для подтверждения"
-.GALSELTitle: "Select Galaxy Data" => "Выберите EDSM Galaxy Data"
-.Area: "Area:" @
+F9273F1B45D6B8: "Galaxy Sector Select" => "Выбор секторов Галактики"
+448AB73BA1C21E: "Set" => "Выбрать"
+39FD2070D41B91: "Sector" => "Сектор"
+081AE3FDC40360: "Custom" => "Свое"
+44C57ABD888A66: "Reset" => "Сбросить"
+C763B2138A8CAD: "Bubble" => "Пузырь"
+799C88F07B1448: "Extended Bubble" => "Расширенный Пузырь"
+1EADEFDD069739: "Bubble+Colonia" => "Пузырь и Колония"
+0AE7FC00D6AA70: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Вы добавили новые сектора!\r\nЭто потребует повторной загрузки данных из EDSM\r\nВы действительно хотите это сделать?"
+2D91E32D25F1DF: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Синхронизация данных о системах отключена в настройках.\r\nВключите ее, чтобы обновить данные."
+B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Вы удалили сектора!\r\nЭто потребует очистки БД, что займет время.\r\nВы действительно хотите это сделать?"
+13D60E3F37387F: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "Чтобы предоставить вам больше информации, ED Discovery может загрузить данные о системах из EDSM/EDDB. Выберите, сколько данных вы хотите загрузить. Чем большую часть Галактики вы выберете, тем больше места потребуется для хранения."
+9312B53B772EC5: "Select: " => "Выберите: "
+0EE93787C960CF: "Select the data set" => "Escolhe o set de dados estelares"
+D24336A365C558: "Press to Accept" => "Нажмите для подтверждения"
+D65DF91B92B250: "Select Galaxy Data" => "Выберите EDSM Galaxy Data"
+8FE9DB16BE5170: "Area:" => "Gebiet"
 
 SECTION MoveToCommander
 
-MoveToCommander: "Move To Commander" => "Передать командиру"
-.buttonTransfer: "Transfer" => "Переместить"
-.label1: "Move selected history to commander." => "Передать выбранную историю командиру"
+264067C44C54E3: "Move To Commander" => "Передать командиру"
+CBB4CC49824BF7: "Transfer" => "Переместить"
+1FA39F8C15CB36: "Move selected history to commander." => "Передать выбранную историю командиру"
 
 SECTION NewReleaseForm
 
-NewReleaseForm: "EDDiscovery Release" => "Версия EDDiscovery"
-.labelName: "Name" = EDDiscoveryForm.RTABL
-.btnClose: "&Close" => "Закрыть"
-.labelURL: "GitHub URL" => "Ссылка на GitHub"
-.labelDownload: "Download" => "Скачать"
-.buttonPortablezip: "&Portable Zip" @
-.buttonUrlOpen: "&Open" => "Открыть"
-.buttonExeInstaller: "&Exe Installer" @
-.labelRelease: "Release info" => "О версии"
+72DB64EFA06050: "EDDiscovery Release" => "Версия EDDiscovery"
+BD72C633E81378: "&Close" => "Закрыть"
+7DC2B81A6BEB1A: "GitHub URL" => "Ссылка на GitHub"
+A479C9C34E878D: "Download" => "Скачать"
+2F2BC6BEC06686: "&Portable Zip" => "Arquivo &Portátil"
+762DDDD6B73A25: "&Open" => "Открыть"
+339DEB023CDECC: "&Exe Installer" => "Instalador &EXE"
+F7C3F17AFCEDA7: "Release info" => "О версии"
 
 SECTION ProfileEditor
 
-ProfileEditor: "ProfileEditor" @
-.buttonExtGlobals: "Globals" => "Глобальные данные"
-.Custom: "Custom" = GalaxySectorSelect.Custom
-.Trigger: "Trigger" => "Триггер"
-.Back: "Back" => "Назад"
-.TrigEdit: "Edit Profile {0} Trigger" => "Настроить триггер для профиля {0}"
-.BackEdit: "Edit Profile {0} Back Trigger" => "Настроить обратный триггер для профиля {0}"
-.DeleteWarning: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Вы действительно хотите удалить профиль {0}?\r\nЭто удалит всю информацию профиля и \r\nотменить это действие НЕЛЬЗЯ!"
-.Default: "Default" => "По умолчанию"
+412FC4AB61FF0F: "ProfileEditor" => "Editor de Perfil"
+D3F06A581B2B66: "Trigger" => "Триггер"
+B52B36B7269FBF: "Back" => "Назад"
+AA36EC39CD202E: "Edit Profile {0} Trigger" => "Настроить триггер для профиля {0}"
+2D8AFF09EA4F7F: "Edit Profile {0} Back Trigger" => "Настроить обратный триггер для профиля {0}"
+29E0884ADB0F1A: "Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!" => "Вы действительно хотите удалить профиль {0}?\r\nЭто удалит всю информацию профиля и \r\nотменить это действие НЕЛЬЗЯ!"
+808D7DCA8A74D8: "Default" => "По умолчанию"
 
 SECTION SetNoteForm
 
-SetNoteForm: "Set Note" => "Создать примечание"
-.labelTTimestamp: "Timestamp:" => "Отметка времени: "
-.buttonSave: "Save" => "Сохранить"
-.labelTSystem: "System:" => "Система: "
-.labelTSummary: "Summary:" => "Сводка: "
-.labelTDetails: "Details:" => "Подробности: "
+335F5087016C3E: "Set Note" => "Создать примечание"
+A9C75ED2FAFF02: "Timestamp:" => "Отметка времени: "
+EFC007A393F66C: "Save" => "Сохранить"
+166616B2BA4454: "System:" => "Система: "
+6ED816D75E1C95: "Summary:" => "Сводка: "
+1DAAAD0084C260: "Details:" => "Подробности: "
 
 SECTION MessageBoxTheme
 
-.Warning: "Warning" = Warning
-.Ignore: "Ignore" => "Пропустить"
-.Retry: "Retry" => "Повторить"
-.Abort: "Abort" => "Прервать"
-.Cancel: "Cancel" = Cancel
-.OK: "OK" @
-.No: "No" => "Нет"
-.Yes: "Yes" => "Да"
-.Add: "Add" => "Добавить"
-.Set: "Set" = GalaxySectorSelect.buttonExtSet
+98F55DB57C8ED8: "Ignore" => "Пропустить"
+9F5CD8A2E8807D: "Retry" => "Повторить"
+6F3ABBE484ABD8: "Abort" => "Прервать"
+816C52FD2BDD94: "No" => "Нет"
+5397E0583F14F6: "Yes" => "Да"
+61CC55AA045318: "Add" => "Добавить"
 
 SECTION DataGridViewDialogs
 
-.Jumpto: "Jump to: " => "Номер записи: "
-.EN: "Enter number to jump to or near to" => "Введите номер, к которому нужно перейти"
-.PresstoAccept: "Press to Accept" = GalaxySectorSelect.PresstoAccept
-.PresstoCancel: "Press to Cancel" => "Нажмите для отмены"
-.VNV: "Value is not valid" => "Значение недействительно"
+0C0E5051C57E26: "Jump to: " => "Номер записи: "
+411DF1F49FCB30: "Enter number to jump to or near to" => "Введите номер, к которому нужно перейти"
+F8328656EF830C: "Press to Cancel" => "Нажмите для отмены"
+AA822BAACB5BCA: "Value is not valid" => "Значение недействительно"
 
 SECTION KeyForm
 
-KeyForm: "Define Key Sequence" => "Определить последовательность клавиш"
-.radioButtonUp: "Up" => "Вверх"
-.radioButtonDown: "Down" => "Вниз"
-.radioButtonPress: "Press" => "Нажмите"
-.checkBoxShift: "Shift" @
-.checkBoxCtrl: "Ctrl" @
-.checkBoxAlt: "Alt" @
-.checkBoxKey: "Press Key" => "Нажмите клавишу"
-.labelNextDelay: "Current Delay" => "Текущая задержка"
-.labelSelKeys: "Select Key" => "Выберите клавишу"
-.labelDelay: "Start Delay(ms)" => "Начальная задержка (мс)"
-.labelSendTo: "Send To" => "Передать"
-.buttonReset: "Reset" => "Сброс"
-.labelKeys: "Keys" => "Клавиши"
-.buttonDelete: "Delete" = Delete
-.buttonNext: "Next" => "Далее"
-.buttonTest: "Test" => "Тест"
-.PK: "Press Key" = KeyForm.checkBoxKey
-.NOPN: "Name a process to test sending keys" @
-.KERR: "Error {0} - check entry" @
-.NOP: "No process names to send keys to" @
+A6CC1735E61BA1: "Define Key Sequence" => "Определить последовательность клавиш"
+2038BDEC921020: "Up" => "Вверх"
+BF93E5CE8BC122: "Down" => "Вниз"
+EA683AD616063B: "Press" => "Нажмите"
+469D5B183FDC0D: "Shift" => "Shift"
+DD6A02A553DA4C: "Ctrl" => "Strg"
+E30EFF925100B7: "Alt" => "Alt"
+A24AEF4D03E398: "Press Key" => "Нажмите клавишу"
+D54FFCD418FB39: "Current Delay" => "Текущая задержка"
+5606C23DCD17C1: "Select Key" => "Выберите клавишу"
+0A25165DFF06CC: "Start Delay(ms)" => "Начальная задержка (мс)"
+D11F7478DD0192: "Send To" => "Передать"
+E5651C683F14C9: "Keys" => "Клавиши"
+BC981983E7F547: "Next" => "Далее"
+640AB2BAE07BED: "Test" => "Тест"
+FB2BE54FDB3408: "Name a process to test sending keys" => "Nenne einen Prozess um das Senden von Tasten zu testen"
+83FFD8A7715ED2: "Error {0} - check entry" => "Error {0} - Eintrag prüfen"
+1C4510E49E02BB: "No process names to send keys to" => "Kein Prozessname an den Tasten gesendet werden können"
 
 SECTION ExtPanelRollUp
 
-.RUPPin: "Pin to stop this menu bar disappearing automatically" @
-.RUPMarker: "Click or hover over this to unroll the menu bar" @
+56BDE377952CAF: "Pin to stop this menu bar disappearing automatically" => "Fixar para evitar que essa barra de menu desapareça automaticamente"
+B453A75F11D77E: "Click or hover over this to unroll the menu bar" => "Clique ou passe o mouse sobre para abrir a barra de menu"
 
 SECTION CommanderForm
 
-.CAPILoggingin: "Logging in" @
-.CAPIDisabled: "Disabled" @
-.CAPILogout: "Logout" @
-.CAPILoggedin: "Logged in" @
-.CAPILogin: "Login" @
-.CAPIAwaitLogin: "Await Log in" @
+783F02798D5892: "Logging in" => "Einloggen"
+E43D612E11F156: "Logout" => "Ausloggen"
+75D39BFAEDAF91: "Logged in" => "Eingeloggt"
+4E5A2893BDCC7D: "Login" => "Login"
+8FB7105CC0349C: "Await Log in" => "Erwarte einloggen"
 
 SECTION SpeechConfigure
 
-SpeechConfigure: "Configure Speech" @
-.Title: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" @
-.buttonExtTest: "Test" @
-.buttonExtDevice: "Device" @
-.buttonExtEffects: "Effects" @
-.checkBoxCustomLiteral: "Literal" @
-.checkBoxCustomComplete: "Wait until speech completes" @
-.labelEndTrigger: "End Trigger" @
-.labelStartTrigger: "Start Trigger" @
-.labelRate: "Rate" @
-.labelVoice: "Voice" @
-.labelVolume: "Volume" @
-.checkBoxCustomR: "Override" @
-.checkBoxCustomV: "Override" @
+4AA6307BD004DD: "Configure Speech" => "Sprache konfigurieren"
+52F5A347177056: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" => "Text zur Aussprache festlegen (benutze ; um zufällig zu wählende Phrasen zu trennen und {} um zu gruppieren)"
+A5A74A6DF09278: "Device" => "Gerät"
+8F25A859269CA5: "Effects" => "Effekte"
+92E97E035F44F8: "Literal" => "Literal"
+D8CBC0CB400C12: "Wait until speech completes" => "Warte bis Rede endet"
+92D53A895E2EC1: "End Trigger" => "Endtrigger"
+8CF29400C3CFF6: "Start Trigger" => "Starttrigger"
+3A9C736B3175D6: "Rate" => "Rate"
+3091C8446F8D3A: "Voice" => "Stimme"
+3B18E8E332500F: "Volume" => "Lautstärke"
+84219262228FD0: "Override" => "Überschreiben"
 
 SECTION WaveConfigureDialog
 
-WaveConfigureDialog: "Configure Wave" @
-.buttonExtDevice: "Device" @
-.labelStartTrigger: "Start Trigger" @
-.labelEndTrigger: "End Trigger" @
-.labelTitle: "Select Default device, volume and effects" @
-.buttonExtBrowse: "Browse" @
-.checkBoxCustomComplete: "Wait until audio completes" @
-.buttonExtEffects: "Effects" @
-.buttonExtTest: "Test" @
-.checkBoxCustomV: "Override" @
-.labelVolume: "Volume" @
+72209F8C09DF0D: "Configure Wave" => "Wave konfigurieren"
+5CB7091D05A1FB: "Select Default device, volume and effects" => "Wähle Standardgerät, Lautstärke und Effekte"
+2F3B5C55BC27CD: "Browse" => "Durchstöbern"
+2B63A06A3CF32F: "Wait until audio completes" => "Warte bis Audio zu Ende ist"
 
 SECTION SoundEffectsDialog
 
-SoundEffectsDialog: "Sound Effects" @
-.labelEcho: "Echo" @
-.buttonExtTest: "Test" @
-.labelEchoMix: "Mix" @
-.labelChorus: "Chorus" @
-.checkBoxCustomNone: "No effects" @
-.labelReverb: "Reverb" @
-.checkBoxP: "Enable" @
-.checkBoxG: "Enable" @
-.labelDistortion: "Distortion" @
-.checkBoxD: "Enable" @
-.labelEchoFeedback: "Feedback" @
-.labelPitch: "Pitch" @
-.labelGargle: "Gargle" @
-.labelChorusMix: "Mix" @
-.labelEchoDelay: "Delay" @
-.checkBoxR: "Enable" @
-.labelReverbMix: "Mix" @
-.labelDistortionGain: "Gain" @
-.labelChorusFeedback: "Feedback" @
-.checkBoxC: "Enable" @
-.labelPitchOctave: "Octave" @
-.labelGargleFrequency: "Frequency" @
-.checkBoxE: "Enable" @
-.labelReverbTime: "Time" @
-.labelDistortionEdge: "Edge" @
-.labelChorusDelay: "Delay" @
-.labelChorusDepth: "Depth" @
-.labelReverbHFRatio: "HF Ratio" @
-.labelDistortionCentreFreq: "Cent Freq" @
-.labelDistortionFreqWidth: "Freq Width" @
+9C018170B60DB7: "Sound Effects" => "Soundeffekte"
+E738C7D89AFB7A: "Echo" => "Echo"
+FD7391B6720B80: "Mix" => "Mix"
+6973E1FED929E5: "Chorus" => "Chor"
+C26BC3C7F09EAB: "No effects" => "Keine Effekte"
+052BA8E09CD155: "Reverb" => "Hall"
+20063AD9053289: "Enable" => "Aktivieren"
+E73D6E899B5D7D: "Distortion" => "Verzerrung"
+C8D7677E19495F: "Feedback" => "Resonanz"
+A6C2D09A48FE01: "Pitch" => "Höhe"
+8631BA97BBBDF5: "Gargle" => "Gurgeln"
+B4C200BB0D1F7B: "Delay" => "Verzögerung"
+96DD91CDCBE72F: "Gain" => "Zuwachs"
+103165A25EAB02: "Octave" => "Oktave"
+89836A870E44FB: "Frequency" => "Frequenz"
+8440B9EB7D0391: "Edge" => "Grenzer"
+DF0E298E356261: "Depth" => "Tiefe"
+AAC47B153C274D: "HF Ratio" => "HF-Verhältnis"
+E7A1A898CC09B9: "Cent Freq" => "Frequenzmittelpunkt"
+4A7B2D10B5A2DF: "Freq Width" => "Frequenzbreite"
 
 SECTION AudioDeviceConfigure
 
-AudioDeviceConfigure: "Audio Device Select" @
-.labelText: "Select Device" @
+5B91330DCA5F99: "Audio Device Select" => "Wähle Audiogerät"
+87A47513B6B28B: "Select Device" => "Wähle Gerät"
 
 SECTION ActionPackEditPackForm
 
-.buttonInstallationVars: "Install Parameters" @
-.labelEditProg: "Program" @
+3B042F6CEA285B: "Install Parameters" => "Installationsparameter"
+9D68007B0763CB: "Program" => "Programm"
 
 SECTION ActionProgramEditForm
 
-ActionProgramEditForm: "Action Program" @
-.labelName: "Name:" @
-.buttonExtDisk: "As File" @
-.buttonExtLoad: "Load" @
-.buttonExtSave: "Save" @
-.buttonExtEdit: "Text Edit" @
-.extButtonHeader: "Header" @
+4BB0A4AF96D21C: "Action Program" => "Action-Programm"
+71DD2EFF9B4DA3: "Name:" => "Name:"
+9A92F637264375: "As File" => "Als Datei"
+DDCB77FF769EA5: "Load" => "Laden"
+A96C6A2EC6FD15: "Text Edit" => "Text ändern"
 
 SECTION ActionPackEditForm
 
-.ci: "Configuration items for installation - specialist use" @
-.ip: "Input parameters to pass to program on run" @
-.df: "Define Variable:" @
-.cp: "Variables to pass into called program" @
+8774D189CE7F96: "Configuration items for installation - specialist use" => "Konfigurationselemente für Installation - für Spezialisten"
+0878211D394E87: "Input parameters to pass to program on run" => "Eingangsparameter zur Weiterleitung an Programm im Betrieb"
+4A7A920987D3AC: "Define Variable:" => "Definiere Variable:"
+E7181957BFACA6: "Variables to pass into called program" => "Variablen zur Weiterleitung an aufgerufenes Programm"
 
 SECTION ActionPackVariablesForm
 
-.gv: "Global User variables to pass to program on run" @
+EA3E71F3439195: "Global User variables to pass to program on run" => "Globale Benutzervariablen zur Weiterleitung an Programm im Betrieb"
 
 include translation-russian-uc.tlp
 

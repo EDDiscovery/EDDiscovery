@@ -85,11 +85,11 @@ namespace EDDiscovery.UserControls
             }
 
             toolStripComboBoxTime.Items.AddRange(new string[] {
-            "Last Week".T(EDTx.Form2DMap_LastWeek),
-            "Last Month".T(EDTx.Form2DMap_LastMonth),
-            "Last Year".T(EDTx.Form2DMap_LastYear),
-            "All".T(EDTx.Form2DMap_All),
-            "Custom".T(EDTx.Form2DMap_Custom)});
+            "Last Week".Tx(),
+            "Last Month".Tx(),
+            "Last Year".Tx(),
+            "All".Tx(),
+            "Custom".Tx()});
 
             toolStripComboExpo.SelectedIndex = 0;       // causes a display
             toolStripComboBoxTime.SelectedIndex = 3;

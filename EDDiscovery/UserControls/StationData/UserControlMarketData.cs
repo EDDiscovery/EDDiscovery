@@ -35,6 +35,8 @@ namespace EDDiscovery.UserControls
         public UserControlMarketData()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -52,16 +54,7 @@ namespace EDDiscovery.UserControls
 
             checkBoxAutoSwap.Checked = GetSetting(dbAutoSwap, false);
 
-            var enumlist = new Enum[] { EDTx.UserControlMarketData_CategoryCol, EDTx.UserControlMarketData_NameCol, EDTx.UserControlMarketData_SellCol, EDTx.UserControlMarketData_BuyCol, 
-                            EDTx.UserControlMarketData_CargoCol, EDTx.UserControlMarketData_DemandCol, EDTx.UserControlMarketData_SupplyCol, EDTx.UserControlMarketData_GalAvgCol, 
-                            EDTx.UserControlMarketData_ProfitToCol, EDTx.UserControlMarketData_ProfitFromCol,  EDTx.UserControlMarketData_labelVs, 
-                            EDTx.UserControlMarketData_checkBoxBuyOnly, EDTx.UserControlMarketData_checkBoxHasDemand, EDTx.UserControlMarketData_checkBoxAutoSwap };
-            var enumlisttt = new Enum[] {  EDTx.UserControlMarketData_checkBoxBuyOnly_ToolTip, EDTx.UserControlMarketData_checkBoxHasDemand_ToolTip };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
-
-            labelLocation.Text = "No Data".T(EDTx.NoData);
+            labelLocation.Text = "No Data".Tx();
             labelComparison.Text = "-";
         }
 
@@ -262,7 +255,7 @@ namespace EDDiscovery.UserControls
 
                         int rowno = dataGridView.Rows.Add(rowobj);
                         dataGridView.Rows[rowno].Cells[0].ToolTipText =
-                        dataGridView.Rows[rowno].Cells[1].ToolTipText = "Cargo only, no market data on this item".T(EDTx.UserControlMarketData_Conly);
+                        dataGridView.Rows[rowno].Cells[1].ToolTipText = "Cargo only, no market data on this item".Tx();
                     }
                 }
 
@@ -276,7 +269,7 @@ namespace EDDiscovery.UserControls
             else
             {
                 toolTip.SetToolTip(labelLocation, null);
-                labelLocation.Text = "No Data".T(EDTx.NoData);
+                labelLocation.Text = "No Data".Tx();
                 labelComparison.Text = "-";
             }
 
@@ -359,7 +352,7 @@ namespace EDDiscovery.UserControls
         private void extButtonSelectWhere_Click(object sender, EventArgs e)
         {
             CheckedIconNewListBoxForm frm = new CheckedIconNewListBoxForm();
-            frm.UC.AddButton("th", "Travel History Entry Last".T(EDTx.UserControlMarketData_LEntry));
+            frm.UC.AddButton("th", "Travel History Entry Last".Tx());
             PopulateMenu(frm);
             frm.PositionBelow(extButtonSelectWhere);
             frm.UC.MultipleColumns = true;
@@ -398,7 +391,7 @@ namespace EDDiscovery.UserControls
         private void extButtonSelectComparision_Click(object sender, EventArgs e)
         {
             CheckedIconNewListBoxForm frm = new CheckedIconNewListBoxForm();
-            frm.UC.AddButton("none", "None".T(EDTx.None));
+            frm.UC.AddButton("none", "None".Tx());
             PopulateMenu(frm);
             frm.PositionBelow(extButtonSelectWhere);
             frm.UC.MultipleColumns = true;

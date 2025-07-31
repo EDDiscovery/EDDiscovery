@@ -130,11 +130,11 @@ namespace EDDiscovery
         public string GetTimeTitle()
         {
             if (displayTimeFormat == 2)
-                return "Game Time".T(EDTx.GameTime);
+                return "Game Time".Tx();
             else if (displayTimeFormat == 1)
                 return "UTC";
             else
-                return "Time".T(EDTx.Time);
+                return "Time".Tx();
         }
 
         public DateTime ConvertTimeToSelectedFromUTC(DateTime t)        // from UTC->Display format

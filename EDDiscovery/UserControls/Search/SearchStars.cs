@@ -35,6 +35,7 @@ namespace EDDiscovery.UserControls
         public SearchStars()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
         }
 
         public override void Init()
@@ -70,10 +71,6 @@ namespace EDDiscovery.UserControls
             };
 
             findSystemsUserControl.ReturnSystems += StarsFound;
-
-            var enumlist = new Enum[] { EDTx.SearchStars_ColumnStar, EDTx.SearchStars_ColumnIndex, EDTx.SearchStars_ColumnCentreDistance, 
-                                EDTx.SearchStars_ColumnCurrentDistance, EDTx.SearchStars_ColumnPosition, EDTx.SearchStars_ColumnStarType };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { findSystemsUserControl });
 
             dataGridView.Init(DiscoveryForm);
         }

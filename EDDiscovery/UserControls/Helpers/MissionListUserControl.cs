@@ -136,13 +136,13 @@ namespace EDDiscovery.UserControls.Helpers
             if (panelButtons.Visible)
             {
                 labelValue.Visible = (totalreward != 0);
-                labelValue.Text = "Value: ".T(EDTx.UserControlMissions_ValueC) + totalreward.ToString("N0") + " C:" + completed.ToString("N0") + " A:" + abandonded.ToString("N0") + " F:" + failed.ToString("N0");
+                labelValue.Text = "Value: ".Tx()+ totalreward.ToString("N0") + " C:" + completed.ToString("N0") + " A:" + abandonded.ToString("N0") + " F:" + failed.ToString("N0");
             }
 
             int count = dataGridView.RowCount;
             
-            PcolName.HeaderText = (count > 0) ? (count.ToString() + (count > 1 ? " Missions".T(EDTx.UserControlMissions_MPlural) : " Mission".T(EDTx.UserControlMissions_MSingular))) : "Name".T(EDTx.UserControlMissions_Name);
-            pColResult.HeaderText = (totalreward != 0) ? string.Format("Value (cr):\n{0:N0}".T(EDTx.UserControlMissions_Value), totalreward) : "Value (cr)".T(EDTx.UserControlMissions_ValueN);
+            PcolName.HeaderText = (count > 0) ? (count.ToString() + (count > 1 ? " Missions".Tx(): " Mission".Tx())) : "Name".Tx();
+            pColResult.HeaderText = (totalreward != 0) ? string.Format("Value (cr):\n{0:N0}".Tx(), totalreward) : "Value (cr)".Tx();
 
             dataGridView.Sort(sortcolcur, (sortordercur == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridView.Columns[sortcolcur.Index].HeaderCell.SortGlyphDirection = sortordercur;

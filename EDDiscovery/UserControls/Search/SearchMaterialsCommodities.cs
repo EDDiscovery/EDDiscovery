@@ -39,6 +39,8 @@ namespace EDDiscovery.UserControls
         public SearchMaterialsCommodities()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -51,18 +53,12 @@ namespace EDDiscovery.UserControls
             dataGridView.RowTemplate.Height = Font.ScalePixels(26);
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
 
-            var enumlist = new Enum[] { EDTx.SearchMaterialsCommodities_ColumnDate, EDTx.SearchMaterialsCommodities_ColumnStar, EDTx.SearchMaterialsCommodities_ColumnLocation, EDTx.SearchMaterialsCommodities_ColumnCurrentDistance, EDTx.SearchMaterialsCommodities_ColumnPosition, EDTx.SearchMaterialsCommodities_label2, EDTx.SearchMaterialsCommodities_label1 };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] {  });
-
-            var enumlisttt = new Enum[] { EDTx.SearchMaterialsCommodities_buttonExtExcel_ToolTip, EDTx.SearchMaterialsCommodities_buttonExtFind_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCMANDOR_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCM1_ToolTip, EDTx.SearchMaterialsCommodities_comboBoxCustomCM2_ToolTip };
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
-
             dataGridView.Init(DiscoveryForm);
 
             itemlist = MaterialCommodityMicroResourceType.GetAll();
             Array.Sort(itemlist, (left, right) => left.TranslatedName.CompareTo(right.TranslatedName));
 
-            var list = (from x in itemlist select x.TranslatedName + " (" + x.TranslatedCategory + ", " + x.TranslatedType + (x.Rarity ? ", Rare Commodity".T(EDTx.SearchMaterialsCommodities_RareCommodity):"") + ")");
+            var list = (from x in itemlist select x.TranslatedName + " (" + x.TranslatedCategory + ", " + x.TranslatedType + (x.Rarity ? ", Rare Commodity".Tx():"") + ")");
 
             comboBoxCustomCM1.Items.AddRange(list);
             comboBoxCustomCM1.SelectedIndex = Math.Min(GetSetting(dbCM1, 0), list.Count() - 1);
@@ -70,14 +66,14 @@ namespace EDDiscovery.UserControls
             comboBoxCustomCM2.Items.AddRange(list);
             comboBoxCustomCM2.SelectedIndex = Math.Min(GetSetting(dbCM2, 0), list.Count() - 1);
 
-            comboBoxCustomCMANDOR.Items.AddRange(new string[] { "AND".T(EDTx.SearchMaterialsCommodities_AND), "OR".T(EDTx.SearchMaterialsCommodities_OR) });
+            comboBoxCustomCMANDOR.Items.AddRange(new string[] { "AND".Tx(), "OR".Tx()});
             comboBoxCustomCMANDOR.SelectedIndex = GetSetting(dbCMANDOR, 0);
 
             // we need to ask our parent UCCB for the panel op - remembering we are not a normal UCCB # 3478
             dataGridView.GotoEntryClicked += (he) => 
             {
                 if (ParentUCCB.RequestPanelOperation(this, new UserControlCommonBase.RequestTravelToJID() { JID = he.Journalid, MakeVisible = true }) == PanelActionState.Failed)
-                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".Tx(), "Warning".Tx());
             };
         }
 
@@ -150,27 +146,27 @@ namespace EDDiscovery.UserControls
                 {
                     var je = he.journalEntry as JournalMaterialDiscovered;
                     if (je.Name.Equals(cm.FDName))
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".T(EDTx.SearchMaterialsCommodities_DIS) + he.WhereAmI);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".Tx()+ he.WhereAmI);
                 }
                 else if (he.EntryType == JournalTypeEnum.MaterialCollected)
                 {
                     var je = he.journalEntry as JournalMaterialCollected;
                     if (je.Name.Equals(cm.FDName))
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Collected at ".T(EDTx.SearchMaterialsCommodities_COL) + he.WhereAmI);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Collected at ".Tx()+ he.WhereAmI);
                 }
 
                 else if (he.EntryType == JournalTypeEnum.MissionCompleted)
                 {
                     var je = he.journalEntry as JournalMissionCompleted;
                     if (je.HasReceivedReward(cm.FDName))
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Mission Reward at ".T(EDTx.SearchMaterialsCommodities_MR) + he.WhereAmI);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Mission Reward at ".Tx()+ he.WhereAmI);
                 }
 
                 else if (he.EntryType == JournalTypeEnum.SAASignalsFound)
                 {
                     var je = he.journalEntry as JournalSAASignalsFound;
                     if (je.Contains(cm.FDName) > 0)
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".T(EDTx.SearchMaterialsCommodities_DIS) + je.BodyName);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".Tx()+ je.BodyName);
                 }
 
                 else if (he.EntryType == JournalTypeEnum.FCMaterials)
@@ -180,14 +176,14 @@ namespace EDDiscovery.UserControls
 
                     if (je.HasItemToBuy(cm.FDName))
                     {
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Buy".T(EDTx.UserControlMarketData_BuyCol) + tx);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Buy".Tx()+ tx);
                     }
                     if (je.HasItemToSell(cm.FDName))
                     {
                         if ( found == null )
-                            found = new Tuple<HistoryEntry, string>(he, prefix + "Sell".T(EDTx.UserControlMarketData_SellCol) + tx);
+                            found = new Tuple<HistoryEntry, string>(he, prefix + "Sell".Tx()+ tx);
                         else
-                            found = new Tuple<HistoryEntry, string>(he, prefix + "Sell".T(EDTx.UserControlMarketData_SellCol) +  " " + "Buy".T(EDTx.UserControlMarketData_BuyCol) + tx);
+                            found = new Tuple<HistoryEntry, string>(he, prefix + "Sell".Tx()+  " " + "Buy".Tx()+ tx);
                     }
                     checkstation = true;
                 }

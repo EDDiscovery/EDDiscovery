@@ -123,23 +123,23 @@
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="buttonExtExcel.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
-        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAgBJREFUSEvt
-        k01LG1EUhvNruurSbdftqrgqBRcKodBusmi7mp0BEQyCQcli6Bc0JrQkrSKEGBEl2CqmBCwVLCK1pYnB
-        DE1NJnEmmczbe8Y5F0TDnS5cVPrCw7mcyZknM3Nv6PqmtLeHlVIpEEeGAX8seJa3t9F2HDRsG8edDiqm
-        iR+tFr43m+dYLBZBv60GlSTXYph8+2Ag+vIEvlQqkvlcDpT81hYq9bpaEk2PeQODQtd3q1XJbDIpmUul
-        1ALt9X04rgOqxH71M/TCuLfm/tdaTUISehJ6XUsbG2rB45fDsPoWqO7+/ORVYjanyf438b4ZlvD38G8z
-        OI/02zAdE+XDj6B1+fCDrNSn9dHJiYQltAHer6+rBaOJW2h0G4hmH4LWxObBmlepT9UQO4phCe2yzOqq
-        WnAvPoS6XceL4rSEetyn+qvdlrDk+PQUbwoFteDu9E0YjoGaVbsA9en6b3EuGJbQeUnl82rB0/kR3Jm6
-        MZAnqRE0xb9lNE3zaHa7eLWwqBZwnmWzcMW+d/p99AS2ONVWr4eOuJFpWZKZeByRSAQt0X+efRdcoGcy
-        3sFyXfdSCUOScDiMtujTjD+uDp1MzmUSZjwaRXlnBx2xphl/XJ1//wkmEgn/9mehD94nkYBETFdgCakt
-        +jTjj6tz5QI9nYYWi/0VNOOP/0/QhEJ/ABB2sek9t1UuAAAAAElFTkSuQmCC
+        iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAYAAADgdz34AAAABGdBTUEAALGPC/xhBQAAAfxJREFUSEvt
+        k81rE0EYh/vXePLo1bOexFMRelAIQnvJQXvaWwNFMBQMLTksagXThEqiFiGkkdISqpZGApUWKlKsYtLQ
+        LI1NNpv9mJ2fvAMz4LbLxIMHpT94eId3952H/Zixsf829f19vK3XR+LIshCd12Z1exsDxtD1PBw7Dpq2
+        je/9Pr71er+xUquB7m2NKsmtp/Hgxd1YzNVZ7DabiqVyGZTK1haanY5ekircEQNxoet7rZZiPpdTLOTz
+        eoHx/BYYZ6BKfGl9glmdEWvZ/9xuK0hCT0Kv683mpl5wb/Em3NAF1b0fH0Ul5suG6n+1LIWUyO8R3e9M
+        psxrsJmNxuF70Lpx+E5V6tP66PRUISX0A7za2NALbmevout3kSpNgtbEh4N1UalP1bJthZTQX1ZcW9ML
+        xjNX0PE6eFqbU1BP9qmeDAYKKTkeDrFcreoFN+Yuw2IW2m77DNSn6z8dRyEldF7ylYpeML00gesPL8Vy
+        Pz+B3nCoMAxD0PN9PHu9ohfIPC6VwAGwMEQQhvAYgxsEcHwftusqHmUySCaT6Ps+npReji4wi0VxsDjn
+        50okJEkkEhgEAWgmuk9s6GTKnCeRzKRSaOzswAkCcZqj+8Tm33+C2WxWCYQEQEgizoVI4ochXMbgcQ6a
+        ie4Tm78uMAsFGOn0H0Ez0X0uos0vEHax6UyIakQAAAAASUVORK5CYII=
 </value>
   </data>
   <data name="valueBoxMaxLs.EndButtonImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAAwAAAAHCAYAAAA8sqwkAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAe
-        wAAAHsABES62twAAAAd0SU1FB+MDAggpB2WcKicAAAA3SURBVChTlYsBCgAgCMT2/09XmBdCWTkQVDZa
-        EQuAr3F3bnpms2RxizZZnKJUFjF6ysLMgZ8B6KDBfYNZaylsAAAAAElFTkSuQmCC
+        vgAAHr4BkbqOfgAAAAd0SU1FB+MDAggpB2WcKicAAAAzSURBVChTY/hPImAAEwwMRGGoWggLXRIdwxXD
+        AD5NGIphAJsmnIphAFkTQcUwAFaJQzEAoMF9g4mDa50AAAAASUVORK5CYII=
 </value>
   </data>
   <metadata name="contextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">

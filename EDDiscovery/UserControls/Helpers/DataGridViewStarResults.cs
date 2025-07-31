@@ -71,10 +71,9 @@ namespace EDDiscovery.UserControls.Search
             cms.Opening += Cms_Opening;
             CellDoubleClick += cellDoubleClick;
 
-            var enumlistcms = new Enum[] { EDTx.DataGridViewStarResults_3d, EDTx.DataGridViewStarResults_EDSM, EDTx.DataGridViewStarResults_Spansh, 
-                                EDTx.DataGridViewStarResults_Data, EDTx.DataGridViewStarResults_Goto };
-
-            BaseUtils.Translator.Instance.TranslateToolstrip(cms, enumlistcms,this);
+            // we do not translate ourselves, thats up to the parent control to do
+            // but we do translate our toolstrips/tooltips
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(cms);
         }
 
         public void Init(EDDiscoveryForm frm)

@@ -171,7 +171,7 @@ namespace EDDiscovery
                 if (args.RemoveDuplicateFSDEntries)
                 {
                     int n = JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
-                    LogLine(string.Format("Removed {0} FSD entries".T(EDTx.EDDiscoveryForm_FSDRem), n));
+                    LogLine(string.Format("Removed {0} FSD entries".Tx(), n));
                 }
 
                 if (args.CurrentCommander >= 0)             // if we have a real commander
@@ -190,7 +190,7 @@ namespace EDDiscovery
 
                     System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Parse journal files");
 
-                    journalmonitor.ParseJournalFilesOnWatchers((p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".T(EDTx.EDDiscoveryController_PLF),s)),
+                    journalmonitor.ParseJournalFilesOnWatchers((p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".Tx(),s)),
                                                                         PendingClose.Token,
                                                                         EDDOptions.Instance.MinJournalDateUTC,
                                                                          forcereloadoflastn
@@ -261,7 +261,7 @@ namespace EDDiscovery
                 LogLineHighlight("History Refresh Error: " + ex);
             }
 
-            ReportRefreshProgress(100, "Refresh Displays".T(EDTx.EDDiscoveryController_RD));
+            ReportRefreshProgress(100, "Refresh Displays".Tx());
 
             InvokeAsyncOnUiThread(() => ForegroundHistoryRefreshCompleteonUI(hist));
         }
@@ -344,7 +344,7 @@ namespace EDDiscovery
                 refreshHistoryRequestedFlag = 0;
                 readyForNewRefresh.Set();       // say i'm okay for another refresh
 
-                LogLine("History refresh complete.".T(EDTx.EDDiscoveryController_HRC));
+                LogLine("History refresh complete.".Tx());
 
                 ReportRefreshProgress(-1, "");
 

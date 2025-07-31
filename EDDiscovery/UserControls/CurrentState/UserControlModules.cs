@@ -49,38 +49,20 @@ namespace EDDiscovery.UserControls
         public UserControlModules()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
         {
             DBBaseName = "ModulesGrid";
 
-            var enumlist = new Enum[] { EDTx.UserControlModules_ItemLocalised, EDTx.UserControlModules_ItemCol, EDTx.UserControlModules_SlotCol, EDTx.UserControlModules_ItemInfo,
-                                    EDTx.UserControlModules_Mass, EDTx.UserControlModules_BluePrint, EDTx.UserControlModules_Value, EDTx.UserControlModules_PriorityEnable,
-                                    EDTx.UserControlModules_labelShip, EDTx.UserControlModules_labelVehicle ,
-                                    EDTx.UserControlModules_labelArmour, EDTx.UserControlModules_labelShields, EDTx.UserControlModules_labelMass,
-                                    EDTx.UserControlModules_labelCost, EDTx.UserControlModules_labelFSD, EDTx.UserControlModules_labelThrusters, EDTx.UserControlModules_labelWep,
-                                    EDTx.UserControlModules_labelDataWep,EDTx.UserControlModules_labelDataShields,EDTx.UserControlModules_labelDataArmour,
-                                    EDTx.UserControlModules_labelDataCost,EDTx.UserControlModules_labelDataFSD,EDTx.UserControlModules_labelDataThrust,
-                                    EDTx.UserControlModules_labelDataMass,
-
-                                    };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            var enumlisttt = new Enum[] {
-                EDTx.UserControlModules_comboBoxShips_ToolTip, EDTx.UserControlModules_extButtonShowControl_ToolTip, EDTx.UserControlModules_extCheckBoxWordWrap_ToolTip,
-                EDTx.UserControlModules_buttonExtCoriolis_ToolTip, EDTx.UserControlModules_buttonExtEDShipyard_ToolTip, EDTx.UserControlModules_buttonExtConfigure_ToolTip,
-                EDTx.UserControlModules_buttonExtExcel_ToolTip, EDTx.UserControlModules_extButtonLoadLoadout_ToolTip, EDTx.UserControlModules_extButtonSaveLoadout_ToolTip,
-                EDTx.UserControlModules_extButtonDeleteLoadout_ToolTip
-            };
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
-
-            ownedshipstext = "Owned Ships".T(EDTx.UserControlModules_OwnedShips);
-            allshipstext = "All Ships".T(EDTx.UserControlModules_AllShips);
-            storedmoduletext = "Stored Modules".T(EDTx.UserControlModules_StoredModules);
-            travelhistorytext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
-            allmodulestext = "All Modules".T(EDTx.UserControlModules_AllModules);
-            allknownmodulestext = "All Known Modules";
+            ownedshipstext = "Owned Ships".Tx();
+            allshipstext = "All Ships".Tx();
+            storedmoduletext = "Stored Modules".Tx();
+            travelhistorytext = "Travel History Entry".Tx();
+            allmodulestext = "All Modules".Tx();
+            allknownmodulestext = "All Known Modules".Tx();
             dataGridViewModules.MakeDoubleBuffered();
 
             displayfilters = GetSetting(dbDisplayFilters, "fullblueprint;engineeredvalues").Split(';');
@@ -255,8 +237,8 @@ namespace EDDiscovery.UserControls
 
                 if (last_he?.StoredModules != null)
                 {
-                    SetColHeaders(null, null, "System".T(EDTx.UserControlModules_System), "Tx Time".T(EDTx.UserControlModules_TxTime), 
-                                    null, null, "Cost".T(EDTx.UserControlModules_Cost), "");
+                    SetColHeaders(null, null, "System".Tx(), "Tx Time".Tx(), 
+                                    null, null, "Cost".Tx(), "");
 
                     ShipModulesInStore mi = last_he.StoredModules;
                     labelVehicle.Text = "";
@@ -266,7 +248,7 @@ namespace EDDiscovery.UserControls
                         object[] rowobj = {
                                 JournalFieldNaming.GetForeignModuleType(sm.NameFD),
                                 JournalFieldNaming.GetForeignModuleName(sm.NameFD,sm.Name_Localised),
-                                sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit)), 
+                                sm.StarSystem.Alt("In Transit".Tx()), 
                                 sm.TransferTimeString ,
                                 sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
                                 sm.EngineerModifications.Alt(""),
@@ -295,12 +277,12 @@ namespace EDDiscovery.UserControls
 
                 foreach (ShipModulesInStore.StoredModule sm in shm.StoredModules.StoredModules)
                 {
-                    string info = sm.StarSystem.Alt("In Transit".T(EDTx.UserControlModules_InTransit));
+                    string info = sm.StarSystem.Alt("In Transit".Tx());
                     info = info.AppendPrePad(sm.TransferTimeString, ":");
                     object[] rowobj = {
                                 JournalFieldNaming.GetForeignModuleType(sm.NameFD),
                                 JournalFieldNaming.GetForeignModuleName(sm.NameFD,sm.Name_Localised),
-                                "Stored".TxID(EDTx.UserControlModules_Stored),
+                                "Stored".Tx(),
                                  info ,
                                 sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
                                 sm.EngineerModifications.Alt(""),
@@ -320,7 +302,7 @@ namespace EDDiscovery.UserControls
                 {
                     ItemData.ShipModule sm = kvp.Value;
                     object[] rowobj = {
-                                    sm.TranslatedModTypeString,
+                                    sm.TranslatedModTypeString(),
                                     sm.TranslatedModName,
                                     "",
                                     sm.ToString(Environment.NewLine),
@@ -335,8 +317,8 @@ namespace EDDiscovery.UserControls
             }
             else if ( comboBoxShips.Text == allshipstext)
             {
-                SetColHeaders("", "Type".T(EDTx.UserControlModules_ItemLocalised), "Manufacturer".T(EDTx.UserControlShipYards_Manufacturer), "Speed".T(EDTx.UserControlCarrier_extTabControl_tabPageCAPI1_colCAPIShipsSpeedNumeric),
-                                null, "Class".T(EDTx.UserControlScanGrid_colClass), null, "Info".T(EDTx.UserControlModules_ItemInfo));
+                SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Speed".Tx(),
+                                null, "Class".Tx(), null, "Info".Tx());
                 sortmodecol = "AAANNANA";
                 HideShipRelatedButtons(false);
 
@@ -369,8 +351,7 @@ namespace EDDiscovery.UserControls
                 ShipList shm = DiscoveryForm.History.ShipInformationList;
                 var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
-                SetColHeaders("", "Type".T(EDTx.UserControlModules_ItemLocalised), "Manufacturer".T(EDTx.UserControlShipYards_Manufacturer), "Name".TxID(EDTx.UserControlCombatPanel_Name),
-                              "Ident".TxID(EDTx.UserControlStats_Ident), "Mass".T(EDTx.UserControlModules_Mass), "Location".T(EDTx.SearchMaterialsCommodities_ColumnLocation), "Cost".T(EDTx.UserControlModules_Cost));
+                SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Name".Tx(), "Ident".Tx(), "Mass".Tx(), "Location".Tx(), "Cost".Tx());
                 sortmodecol = "AAAAANAN";
                 HideShipRelatedButtons(false);
 
@@ -490,8 +471,8 @@ namespace EDDiscovery.UserControls
                             stats.ShieldsExplosivePercentage, stats.ShieldsExplosiveValue
             } : null;
 
-            string transit = si.InTransit ? (si.StoredAtSystem ?? "Unknown".T(EDTx.Unknown)) + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown)) : null;
-            string storedat = si.StoredAtSystem != null ? (si.StoredAtSystem + ":" + (si.StoredAtStation ?? "Unknown".T(EDTx.Unknown))) : null;
+            string transit = si.InTransit ? (si.StoredAtSystem ?? "Unknown".Tx()) + ":" + (si.StoredAtStation ?? "Unknown".Tx()) : null;
+            string storedat = si.StoredAtSystem != null ? (si.StoredAtSystem + ":" + (si.StoredAtStation ?? "Unknown".Tx())) : null;
 
             labelDataFSD.Data = stats?.FSDCurrentRange.HasValue ?? false ? new object[] {
                     stats.FSDCurrentRange, stats.FSDCurrentMaxRange, stats.FSDLadenRange, stats.FSDUnladenRange, stats.FSDMaxRange, stats.FSDMaxFuelPerJump,
@@ -606,14 +587,14 @@ namespace EDDiscovery.UserControls
 
         void SetColHeaders(params string[] list)
         {
-            ItemLocalised.HeaderText = list[0] ?? "Type".T(EDTx.UserControlModules_ItemLocalised);
-            ItemCol.HeaderText = list[1] ?? "Item".T(EDTx.UserControlModules_ItemCol);
-            SlotCol.HeaderText = list[2] ?? "Slot".T(EDTx.UserControlModules_SlotCol);
-            ItemInfo.HeaderText = list[3] ?? "Info".T(EDTx.UserControlModules_ItemInfo);
-            Mass.HeaderText = list[4] ?? "Mass".T(EDTx.UserControlModules_Mass);
-            BluePrint.HeaderText = list[5] ?? "BluePrint".T(EDTx.UserControlModules_BluePrint);
-            Value.HeaderText = list[6] ?? "Value".T(EDTx.UserControlModules_Value);
-            PriorityEnable.HeaderText = list[7] ?? "P/E".T(EDTx.UserControlModules_PriorityEnable);
+            ItemLocalised.HeaderText = list[0] ?? "Type".Tx();
+            ItemCol.HeaderText = list[1] ?? "Item".Tx();
+            SlotCol.HeaderText = list[2] ?? "Slot".Tx();
+            ItemInfo.HeaderText = list[3] ?? "Info".Tx();
+            Mass.HeaderText = list[4] ?? "Mass".Tx();
+            BluePrint.HeaderText = list[5] ?? "BluePrint".Tx();
+            Value.HeaderText = list[6] ?? "Value".Tx();
+            PriorityEnable.HeaderText = list[7] ?? "P/E".Tx();
         }
 
         private void HideShipRelatedButtons(bool showcontrol = true)
@@ -703,8 +684,8 @@ namespace EDDiscovery.UserControls
             displayfilter.AllOrNoneBack = false;
 
             // not yet as only one item. displayfilter.UC.AddAllNone();
-            displayfilter.UC.Add("fullblueprint", "Show full blueprint information".TxID(EDTx.UserControlModules_FullBluePrint));
-            displayfilter.UC.Add("engineeredvalues", "Show Engineered Values".TxID(EDTx.UserControlModules_EngineeredValues));
+            displayfilter.UC.Add("fullblueprint", "Show full blueprint information".Tx());
+            displayfilter.UC.Add("engineeredvalues", "Show Engineered Values".Tx());
 
             displayfilter.UC.ImageSize = new Size(24, 24);
             displayfilter.SaveSettings = (s, o) =>
@@ -750,7 +731,7 @@ namespace EDDiscovery.UserControls
             if (e.Button == MouseButtons.Right)
             {
                 string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.CoriolisURL,
-                            "Enter Coriolis URL".T(EDTx.UserControlModules_CURL), this.FindForm().Icon, requireinput:true);
+                            "Enter Coriolis URL".Tx(), this.FindForm().Icon, requireinput:true);
                 if (url != null)
                     EDDConfig.Instance.CoriolisURL = url;
             }
@@ -787,7 +768,7 @@ namespace EDDiscovery.UserControls
         {
             if (e.Button == MouseButtons.Right)
             {
-                string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.EDDShipyardURL, "Enter ED Shipyard URL".T(EDTx.UserControlModules_EDSURL), this.FindForm().Icon, requireinput:true);
+                string url = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "URL:", EDDConfig.Instance.EDDShipyardURL, "Enter ED Shipyard URL".Tx(), this.FindForm().Icon, requireinput:true);
                 if (url != null)
                     EDDConfig.Instance.EDDShipyardURL = url;
             }
@@ -802,15 +783,15 @@ namespace EDDiscovery.UserControls
             int width = 430;
             int ctrlleft = 150;
 
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Fuel Warning:".T(EDTx.UserControlModules_FW), new Point(10, 40), new Size(140, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Fuel Warning:".Tx(), new Point(10, 40), new Size(140, 24), ""));
             f.Add(new ExtendedControls.ConfigurableEntryList.Entry("FuelWarning", typeof(ExtendedControls.NumberBoxDouble),
-                last_si.FuelWarningPercent.ToString(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)".T(EDTx.UserControlModules_TTF))
+                last_si.FuelWarningPercent.ToString(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)".Tx())
             { NumberBoxDoubleMinimum = 0, NumberBoxDoubleMaximum = 100, NumberBoxFormat = "0.##" });
 
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Sell", typeof(ExtendedControls.ExtButton), "Force Sell".T(EDTx.UserControlModules_ForceSell), new Point(10, 80), new Size(80, 24),null));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Sell", typeof(ExtendedControls.ExtButton), "Force Sell".Tx(), new Point(10, 80), new Size(80, 24),null));
 
-            f.AddOK(new Point(width - 100, 110), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept));
-            f.AddCancel(new Point(width - 200, 110), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel));
+            f.AddOK(new Point(width - 100, 110), "Press to Accept".Tx());
+            f.AddCancel(new Point(width - 200, 110), "Press to Cancel".Tx());
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -822,7 +803,7 @@ namespace EDDiscovery.UserControls
                         f.ReturnResult(DialogResult.OK);
                     }
                     else
-                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "A Value is not valid".T(EDTx.UserControlModules_NValid), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "A Value is not valid".Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                 }
                 else if (controlname == "Cancel" || controlname == "Close" )
                 {
@@ -830,7 +811,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (controlname == "Sell")
                 {
-                    if ( ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm sell of ship:".TxID(EDTx.UserControlModules_ConfirmForceSell) + Environment.NewLine + last_si.ShipNameIdentType , "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ) 
+                    if ( ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm sell of ship:".Tx()+ Environment.NewLine + last_si.ShipNameIdentType , "Warning".Tx(), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ) 
                     {
                         var je = new EliteDangerousCore.JournalEvents.JournalShipyardSell(DateTime.UtcNow, last_si.ShipFD, last_si.ID, 0, EDCommander.CurrentCmdrID);
                         var jo = je.Json();
@@ -842,7 +823,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Ship Configure".T(EDTx.UserControlModules_SC), closeicon:true);
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Ship Configure".Tx(), closeicon:true);
 
             if (res == DialogResult.OK)
             {
@@ -877,7 +858,7 @@ namespace EDDiscovery.UserControls
                     {
                         Form mainform = FindForm();
                         ExtendedControls.InfoForm frm = new ExtendedControls.InfoForm();
-                        frm.Info("Module Information".T(EDTx.UserControlModules_MI), mainform.Icon, tt);
+                        frm.Info("Module Information".Tx(), mainform.Icon, tt);
                         frm.Size = new Size(600, 400);
                         frm.StartPosition = FormStartPosition.CenterParent;
                         frm.Show(mainform);
@@ -975,7 +956,7 @@ namespace EDDiscovery.UserControls
                 }
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Ship Information available".T(EDTx.UserControlModules_NOSI), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Ship Information available".Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void extButtonLoadLoadout_Click(object sender, EventArgs e)
@@ -1019,7 +1000,7 @@ namespace EDDiscovery.UserControls
         {
             if (dataGridViewModules.RowCount > 0 && last_si != null)
             {
-                string name = ExtendedControls.PromptSingleLine.ShowDialog(FindForm(), "Name:", "", "Enter loadout description to save ship with".T(EDTx.UserControlModules_SaveLoadout), FindForm().Icon, requireinput: true);
+                string name = ExtendedControls.PromptSingleLine.ShowDialog(FindForm(), "Name:", "", "Enter loadout description to save ship with".Tx(), FindForm().Icon, requireinput: true);
 
                 if ( name!=null )
                 {
@@ -1033,13 +1014,13 @@ namespace EDDiscovery.UserControls
                 }
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Ship Information available".T(EDTx.UserControlModules_NOSI), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Ship Information available".Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         private void extButtonDeleteLoadout_Click(object sender, EventArgs e)
         {
             string name = comboBoxShips.Text;
-            if (ExtendedControls.MessageBoxTheme.Show($"Confirm removal of".TxID(EDTx.FilterSelector_Confirmremoval) + " " + name, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show($"Confirm removal of".Tx()+ " " + name, "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 string path = System.IO.Path.Combine(EDDOptions.Instance.ShipLoadoutsDirectory(), name);
                 BaseUtils.FileHelpers.DeleteFileNoError(path);

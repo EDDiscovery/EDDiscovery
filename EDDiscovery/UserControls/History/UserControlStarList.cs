@@ -67,22 +67,9 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
 
-            var tlnset = new string[] { "UserControlStarList", "UserControlTravelGrid" };    // share top level name between them - new feature dec 24
-
-            var enumlist = new Enum[] { EDTx.UserControlStarList_ColumnTime, EDTx.UserControlStarList_ColumnSystem, EDTx.UserControlStarList_ColumnVisits,
-                EDTx.UserControlStarList_ColumnInformation, EDTx.UserControlStarList_ColumnBodycount, EDTx.UserControlStarList_Value, EDTx.UserControlStarList_labelTime, EDTx.UserControlStarList_labelSearch };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-
-            var enumlistcms = new Enum[] { EDTx.UserControlStarList_removeSortingOfColumnsToolStripMenuItem, EDTx.UserControlStarList_mapGotoStartoolStripMenuItem,
-                EDTx.UserControlStarList_viewOnEDSMToolStripMenuItem, EDTx.UserControlStarList_viewOnSpanshToolStripMenuItem, EDTx.UserControlStarList_setNoteToolStripMenuItem,
-                EDTx.UserControlStarList_viewScanDisplayToolStripMenuItem, EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem };
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, tlnset);
-
-            var enumlisttt = new Enum[] { EDTx.UserControlStarList_comboBoxTime_ToolTip,
-                EDTx.UserControlStarList_textBoxSearch_ToolTip, EDTx.UserControlStarList_buttonExtExcel_ToolTip, EDTx.UserControlStarList_checkBoxCursorToTop_ToolTip,
-                EDTx.UserControlTravelGrid_extComboBoxQuickMarks_ToolTip};
-
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, tlnset);
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
         }
 
         public override void Init()
@@ -117,8 +104,8 @@ namespace EDDiscovery.UserControls
                 PutSetting(dbTimeSelector, comboBoxTime.Text);
             }
 
-             if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it (share with travel grid)
-                searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);
+            if (BaseUtils.TranslatorMkII.Instance.IsDefined(searchterms))
+                searchterms = searchterms.Tx();
         }
 
         public override void LoadLayout()
@@ -405,11 +392,11 @@ namespace EDDiscovery.UserControls
                 int stars = sysnode.StarsScanned();
                 int total = sysnode.StarPlanetsWithData(edsmSpanshButton.IsAnySet);      // total with data, include web bodies if we have the tick box on
 
-                infostr = string.Format("{0} Star(s) {1}".T(EDTx.UserControlStarList_CS), stars, st);
+                infostr = string.Format("{0} Star(s) {1}".Tx(), stars, st);
 
                 if (total > stars)
                 {
-                    infostr += " " + string.Format("{0} Other bodies".T(EDTx.UserControlStarList_OB), (total - stars).ToString());
+                    infostr += " " + string.Format("{0} Other bodies".Tx(), (total - stars).ToString());
                 }
 
                 bool showcodex = displayfilters.Contains("codex");
@@ -468,7 +455,7 @@ namespace EDDiscovery.UserControls
 
                 if (jumponium.HasChars() )
                 {
-                    infostr = infostr.AppendPrePad("This system has materials for FSD boost".T(EDTx.UserControlStarList_FSD), Environment.NewLine);
+                    infostr = infostr.AppendPrePad("This system has materials for FSD boost".Tx(), Environment.NewLine);
                     if (showjumponium)
                         infostr = infostr.AppendPrePad(jumponium, Environment.NewLine);
                 }
@@ -660,7 +647,7 @@ namespace EDDiscovery.UserControls
                 extComboBoxQuickMarks.Items.Add(name);
             }
 
-            extComboBoxQuickMarks.Text = "Marked".TxID(EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem);      // only works for custom
+            extComboBoxQuickMarks.Text = "Marked".Tx();      // only works for custom
         }
 
         private void extComboBoxQuickMarks_SelectedIndexChanged(object sender, EventArgs e)
@@ -675,7 +662,7 @@ namespace EDDiscovery.UserControls
                 FireChangeSelection();
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".Tx(), "Warning".Tx());
         }
 
         #endregion
@@ -732,7 +719,7 @@ namespace EDDiscovery.UserControls
             EDSMClass edsm = new EDSMClass();
 
             if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlStarList_NoEDSM));
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx());
         }
 
         private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
@@ -785,21 +772,21 @@ namespace EDDiscovery.UserControls
             displayfilter.AllOrNoneBack = false;
             displayfilter.CloseBoundaryRegion = new Size(32, extButtonDisplayFilters.Height);
             displayfilter.UC.AddAllNone();
-            displayfilter.UC.Add("stars", "Show All Stars".TxID(EDTx.UserControlSurveyor_showAllStarsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.UC.Add("planets", "Show All Planets".TxID(EDTx.UserControlSurveyor_showAllPlanetsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_ShowMoons);
-            displayfilter.UC.Add("beltcluster", "Show Belt Clusters".TxID(EDTx.UserControlSurveyor_showBeltClustersToolStripMenuItem), global::EDDiscovery.Icons.Controls.Belt);
-            displayfilter.UC.Add("valueables", "Show valuable bodies".T(EDTx.UserControlStarList_valueables), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
-            displayfilter.UC.Add("jumponium", "Show/Hide presence of Jumponium Materials".T(EDTx.UserControlStarList_JUMP), global::EDDiscovery.Icons.Controls.Scan_FSD);
-            displayfilter.UC.Add("signals", "Has any other signals".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasSignalsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
-            displayfilter.UC.Add("volcanism", "Has volcanism".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasVolcanismToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism);
-            displayfilter.UC.Add("values", "Show values".TxID(EDTx.UserControlSurveyor_showValuesToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
-            displayfilter.UC.Add("shortinfo", "Show more information".TxID(EDTx.UserControlSurveyor_showMoreInformationToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
-            displayfilter.UC.Add("gravity", "Show gravity of landables".TxID(EDTx.UserControlSurveyor_showGravityToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
-            displayfilter.UC.Add("atmos", "Show atmospheres".TxID(EDTx.UserControlSurveyor_showAtmosToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
-            displayfilter.UC.Add("temp", "Show surface temperature".TxID(EDTx.UserControlSurveyor_showTempToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
-            displayfilter.UC.Add("rings", "Has Rings".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasRingsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
-            displayfilter.UC.Add("organics", "Show organic scans".T(EDTx.UserControlStarList_scanorganics), global::EDDiscovery.Icons.Controls.Scan_Bodies_NSP);
-            displayfilter.UC.Add("codex", "Show codex entries".T(EDTx.UserControlStarList_showcodex), global::EDDiscovery.Icons.Controls.Entries);
+            displayfilter.UC.Add("stars", "Show All Stars".Tx(), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.UC.Add("planets", "Show All Planets".Tx(), global::EDDiscovery.Icons.Controls.Scan_ShowMoons);
+            displayfilter.UC.Add("beltcluster", "Show Belt Clusters".Tx(), global::EDDiscovery.Icons.Controls.Belt);
+            displayfilter.UC.Add("valueables", "Show valuable bodies".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
+            displayfilter.UC.Add("jumponium", "Show/Hide presence of Jumponium Materials".Tx(), global::EDDiscovery.Icons.Controls.Scan_FSD);
+            displayfilter.UC.Add("signals", "Has any other signals".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.UC.Add("volcanism", "Has volcanism".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism);
+            displayfilter.UC.Add("values", "Show values".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
+            displayfilter.UC.Add("shortinfo", "Show more information".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.UC.Add("gravity", "Show gravity of landables".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.UC.Add("atmos", "Show atmospheres".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.UC.Add("temp", "Show surface temperature".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.UC.Add("rings", "Has Rings".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
+            displayfilter.UC.Add("organics", "Show organic scans".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_NSP);
+            displayfilter.UC.Add("codex", "Show codex entries".Tx(), global::EDDiscovery.Icons.Controls.Entries);
             displayfilter.UC.ImageSize = new Size(24, 24);
             displayfilter.SaveSettings = (s, o) =>
             {

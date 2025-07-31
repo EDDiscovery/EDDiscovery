@@ -44,18 +44,10 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             AutoScaleMode = AutoScaleMode.None;  // don't double scale
 
-            var enumlist = new Enum[] { EDTx.SurfaceBookmarkUserControl_BodyName, EDTx.SurfaceBookmarkUserControl_SurfaceName, 
-                                    EDTx.SurfaceBookmarkUserControl_SurfaceDesc, EDTx.SurfaceBookmarkUserControl_Latitude, 
-                                    EDTx.SurfaceBookmarkUserControl_Longitude, EDTx.SurfaceBookmarkUserControl_Valid, 
-                                    EDTx.SurfaceBookmarkUserControl_labelSurface, EDTx.SurfaceBookmarkUserControl_ColTags, EDTx.SurfaceBookmarkUserControl_labelSearch };
-            var enumlistcms = new Enum[] { EDTx.SurfaceBookmarkUserControl_sendToCompassToolStripMenuItem, 
-                                EDTx.SurfaceBookmarkUserControl_deleteToolStripMenuItem, 
-                                EDTx.SurfaceBookmarkUserControl_addPlanetManuallyToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.SurfaceBookmarkUserControl_textBoxFilter_ToolTip, EDTx.SurfaceBookmarkUserControl_buttonFilter_ToolTip }; ;
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            // we do not translate ourselves, thats up to the parent control to do
+            // but we do translate our toolstrips/tooltips
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
 
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
@@ -176,7 +168,7 @@ namespace EDDiscovery.UserControls
 
                 dr.Cells[BodyName.Index].Value = planet;
                 dr.Cells[BodyName.Index].ReadOnly = true;
-                dr.Cells[SurfaceName.Index].Value = "Enter a name".T(EDTx.SurfaceBookmarkUserControl_Enter);
+                dr.Cells[SurfaceName.Index].Value = "Enter a name".Tx();
                 dr.Cells[SurfaceDesc.Index].Value = "";
                 dr.Cells[Latitude.Index].Value = latitude.ToString("F4");
                 dr.Cells[Longitude.Index].Value = longitude.ToString("F4");
@@ -396,12 +388,12 @@ namespace EDDiscovery.UserControls
             int width = 430;
             int ctrlleft = 150;
 
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Planet:".T(EDTx.SurfaceBookmarkUserControl_PL), new Point(10, 40), new Size(140, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Planet:".Tx(), new Point(10, 40), new Size(140, 24), ""));
             f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Planet", typeof(ExtendedControls.ExtTextBox),
-                "", new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter planet name".T(EDTx.SurfaceBookmarkUserControl_EPN)));
+                "", new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter planet name".Tx()));
 
-            f.AddOK(new Point(width - 100, 70), "Press to Accept".T(EDTx.SurfaceBookmarkUserControl_PresstoAccept));
-            f.AddCancel(new Point(width - 200, 70), "Press to Cancel".T(EDTx.SurfaceBookmarkUserControl_PresstoCancel));
+            f.AddOK(new Point(width - 100, 70), "Press to Accept".Tx());
+            f.AddCancel(new Point(width - 200, 70), "Press to Cancel".Tx());
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -415,7 +407,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Manually Add Planet".T(EDTx.SurfaceBookmarkUserControl_MAP), closeicon:true);
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Manually Add Planet".Tx(), closeicon:true);
 
             string pname = f.Get("Planet");
             if (res == DialogResult.OK && pname.HasChars())

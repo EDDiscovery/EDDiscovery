@@ -40,10 +40,10 @@ namespace EDDiscovery.UserControls
                 options.Add(new ExtendedControls.CheckedIconUserControl.Item(x.ToString(), Stars.StarName(x.ParseEnum<EDStar>())));
 
             // these are filter types for items which are either do not have scandata or are not stars/bodies.  Only Belts/Barycentre are displayed.. scans of rings/beltculsters are not displayed
-            options.Add(new ExtendedControls.CheckedIconUserControl.Item("star", "Star".T(EDTx.UserControlScan_Star)));
-            options.Add(new ExtendedControls.CheckedIconUserControl.Item("body", "Body".T(EDTx.UserControlScan_Body)));
-            options.Add(new ExtendedControls.CheckedIconUserControl.Item("barycentre", "Barycentre".T(EDTx.UserControlScan_Barycentre)));
-            options.Add(new ExtendedControls.CheckedIconUserControl.Item("belt", "Belt".T(EDTx.UserControlScan_Belt)));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("star", "Star".Tx()));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("body", "Body".Tx()));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("barycentre", "Barycentre".Tx()));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("belt", "Belt".Tx()));
 
             Init(options,
                 Setting,

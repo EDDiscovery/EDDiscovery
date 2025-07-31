@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
             DBBaseName = "CaptainsLog";
 
             tabStrip.ImageList = new Image[] { EDDiscovery.Icons.Controls.Diary, EDDiscovery.Icons.Controls.Entries};
-            tabStrip.TextList = new string[] { "Diary".T(EDTx.UserControlCaptainsLog_Diary), "Entries".T(EDTx.UserControlCaptainsLog_Entries) };
+            tabStrip.TextList = new string[] { "Diary".Tx(), "Entries".Tx()};
             tabStrip.TagList = new Type[] { typeof(CaptainsLogDiary), typeof(CaptainsLogEntries) };
 
             tabStrip.OnCreateTab += (tab, si) =>

@@ -1,1756 +1,1378 @@
 ﻿
 SECTION UserControlBookmarks
 
-.ColType: "Bookmark Type" => "书签类型"
-.ColBookmarkName: "Bookmark Name" => "书签名称"
-.ColDescription: "Description" => "描述"
-.labelSearch: "Search" => "搜索"
-.buttonDelete.ToolTip: "Delete selected bookmark" => "删除选中的书签"
-.buttonNew.ToolTip: "New Bookmark" => "新建书签"
-.buttonEdit.ToolTip: "Edit Selected Bookmark" => "编辑选中的书签"
-.textBoxFilter.ToolTip: "Search for Bookmark" => "搜索书签"
-.CFN: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" => "你真的要删除这{0}个书签吗？"
-.CF: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" => "你真的要删除书签{0}吗？"
-.SysU: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
-.buttonExtImport.ToolTip: "Import bookmarks to EDD from CSV file" @
-.buttonExtExcel.ToolTip: "Export bookmarks to CSV file" @
-.extButtonEditSystem.ToolTip: "New bookmark on current system" @
-.extButtonNewRegion.ToolTip: "New Region Bookmark" @
-.ColTags: "Tags" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
-.buttonTags.ToolTip: "Edit Tags" @
-.addToExpeditionToolStripMenuItem: "Add to Expedition" @
+CF7ABE3724E426: "Bookmark Type" => "书签类型"
+B98F2462F08F82: "Bookmark Name" => "书签名称"
+2E89129D66743F: "Delete selected bookmark" => "删除选中的书签"
+D2A5C67BBEE822: "New Bookmark" => "新建书签"
+6319AA02C9FB73: "Edit Selected Bookmark" => "编辑选中的书签"
+B85750D457FE9A: "Search for Bookmark" => "搜索书签"
+E398338D28B496: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" => "你真的要删除这{0}个书签吗？"
+882252A12A74FC: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" => "你真的要删除书签{0}吗？"
+90DFF113AC3FB4: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
+568BA6A0FCB8CE: "Import bookmarks to EDD from CSV file" => "Importer des marque-pages vers EDD depuis un fichier CSV"
+4E0D3ABD07EF26: "Export bookmarks to CSV file" => "Exporter des marque-pages vers un fichier CSV"
+D3D49E22353948: "New bookmark on current system" @
+0F2EFE41F3122D: "New Region Bookmark" => "Nouveau marque-page de région"
+848EED0FBD5429: "Tags" @
+87CA81FA83093E: "Filter out entries based on tag" => "Filtrer les entrées suivant les tags"
+B15BC9CCE1BA39: "Edit Tags" => "Modifier les tags"
+31992A69737FC4: "Add to Expedition" => "Ajouter à l'expédition"
 
 SECTION UserControlCombatPanel
 
-.Time: "Time" = Time
-.Event: "Event" => "事件"
-.Description: "Description" = UserControlBookmarks.ColDescription
-.Reward: "Reward" => "报酬"
-.labelCredits: "Credits" => "金钱"
-.labelTotalKills: "Kills" => "杀敌数"
-.labelFactionKills: "Faction Kills" => "派系杀敌数"
-.labelBalance: "Balance" => "净收入"
-.labelDied: "Died" @
-.labelTotalCrimes: "Crimes" => "犯罪"
-.labelTarget: "Target" @
-.labelFaction: "Faction" => "派系"
-.labelTotalReward: "TotalReward" => "总报酬"
-.labelFactionReward: "FactionReward" => "派系报酬"
-.buttonExtEditCampaign: "Edit" => "编辑"
-.checkBoxCustomGridOn: "Grid" => "网格"
-.labelCredits.ToolTip: "Current Credits" => "当前账户余额"
-.labelTotalKills.ToolTip: "Total kills (NPC/PVP) in campaign" => "战斗中的总杀敌数"
-.labelFactionKills.ToolTip: "Faction Kills" = UserControlCombatPanel.labelFactionKills
-.labelBalance.ToolTip: "Total reward less any costs (fines, rebuys etc)" => "净收入（收入减去弹药，维修等费用）"
-.labelTotalCrimes.ToolTip: "How many times you've been caught!" => "你被抓了几次？"
-.labelFaction.ToolTip: "Target Faction" => "目标派系"
-.labelTotalReward.ToolTip: "Total reward" = UserControlCombatPanel.labelTotalReward
-.labelFactionReward.ToolTip: "Reward associated with destroying the faction ships" => "摧毁目标派系所得的报酬"
-.comboBoxCustomCampaign.ToolTip: "Select Campaign to view" => "选择要浏览的战役"
-.buttonExtEditCampaign.ToolTip: "Edit user defined campaign" => "编辑用户创建的战役"
-.checkBoxCustomGridOn.ToolTip: "Show grid when in transparent mode" => "透明模式下显示网格"
-.NT: "No Target" @
-.NewCampaign: "New Campaign" => "新建战役"
-.SinceLastDock: "Since Last Dock" => "自最近降落后"
-.Name: "Name" => "名称"
-.C1: "Give name to campaign" => "给战役输入名称"
-.Faction: "Faction" = UserControlCombatPanel.labelFaction
-.C2: "Optional faction to target" => "目标派系（可选）"
-.Start: "Start" => "开始"
-.C3: "Select Start time" => "选择开始时间"
-.End: "End" => "结束"
-.C4: "Select Start time" => "选择结束时间"
-.C5: "Press to Accept" = OK
-.C6: "Press to Cancel" = Cancel
-.C7: "Press to Delete" = Delete
-.NoOverwrite: "Name of campaign already in use, cannot overwrite" => "该名称的战役已存在，不能覆盖。"
-.Condel: "Confirm deletion of {0}" => "确认要删除战役{0}吗"
-.NC: "Name changed - can't delete" => "名称已改变，不能删除"
-.Kills: "Kills" = UserControlCombatPanel.labelTotalKills
-.Crimes: "Crimes" => "犯罪次数"
-.Bal: "Bal" = UserControlCombatPanel.labelBalance
+AD8919ACE091B1: "Event" => "事件"
+C7D7652EC6A795: "Reward" => "报酬"
+BFAC50D6424B51: "Credits" => "金钱"
+9EC34025B6DB16: "Kills" => "杀敌数"
+645DE66F0C79ED: "Faction Kills" => "派系杀敌数"
+90EEF613042C5A: "Balance" => "净收入"
+68316444B99C6B: "Died" @
+000C7B010AA15B: "Crimes" => "犯罪"
+61AD50A9B9189C: "Target" => "Cible"
+9D269517397775: "Faction" => "派系"
+A116A463F16F3B: "TotalReward" => "总报酬"
+2AD918FF81A2C4: "FactionReward" => "派系报酬"
+078EB757BF1155: "Current Credits" => "当前账户余额"
+6B3534A2242650: "Total kills (NPC/PVP) in campaign" => "战斗中的总杀敌数"
+6344C1B665774D: "Total reward less any costs (fines, rebuys etc)" => "净收入（收入减去弹药，维修等费用）"
+3E680888D11E9A: "How many times you've been caught!" => "你被抓了几次？"
+FCAA3EA68677B6: "Target Faction" => "目标派系"
+0A11B11F4BD307: "Total reward" => "总报酬"
+68C7A5D8D1ECF1: "Reward associated with destroying the faction ships" => "摧毁目标派系所得的报酬"
+2A4D800653DEFF: "Select Campaign to view" => "选择要浏览的战役"
+986756D007F78B: "Edit user defined campaign" => "编辑用户创建的战役"
+52DF2DF585563D: "Show grid when in transparent mode" => "透明模式下显示网格"
+C0BEED0FD04454: "No Target" => "Pas de cible"
+1F0D021C027337: "New Campaign" => "新建战役"
+FDCE09ED980672: "Since Last Dock" => "自最近降落后"
+17395737697D96: "Give name to campaign" => "给战役输入名称"
+E8EFD7F8053084: "Optional faction to target" => "目标派系（可选）"
+952F375412E89F: "Start" => "开始"
+B42FF2D11E4363: "Select Start time" => "选择开始时间"
+A2BB9D34B8A1A7: "End" => "结束"
+1510FD8CF43BD1: "Press to Delete" => "删除"
+AC6345BDC5189A: "Name of campaign already in use, cannot overwrite" => "该名称的战役已存在，不能覆盖。"
+C5A715320080CE: "Confirm deletion of {0}" => "确认要删除战役{0}吗"
+547C7CF9543709: "Name changed - can't delete" => "名称已改变，不能删除"
+C99A37D48B4758: "Bal" => "净收入"
 
 SECTION UserControlContainerGrid
 
-.buttonExtTile.ToolTip: "Tile the grid panels" => "平铺网格面板"
-.buttonExtDelete.ToolTip: "Remove selected panel" => "移除选中的面板"
-.buttonExtPopOut.ToolTip: "Click to select a pop out panel to display" => "点击选取想要显示的弹窗面板"
+D57E1461B54A4D: "Tile the grid panels" => "平铺网格面板"
+3E4ACCE04F4D52: "Remove selected panel" => "移除选中的面板"
 
 SECTION UserControlCompass
 
-.labelTargetLat: "Target" => "目标"
-.numberBoxTargetLatitude.ToolTip: "Latitude of target position, blank for none" @
-.numberBoxTargetLongitude.ToolTip: "Longitude of target position, blank for none" @
-.comboBoxBookmarks.ToolTip: "Select known body feature or select bookmark" @
-.extButtonBlank.ToolTip: "Clear target latitude and longitude and selection" @
-.buttonNewBookmark.ToolTip: "Edit or create bookmark on system" @
-.extButtonShowControl.ToolTip: "Configure compass overlay" @
-.extButtonFont.ToolTip: "Configure font of compass" @
-.hidewhennolatlong: "Hide when Elite has no Lat/Long" @
-.hidewhennotarget: "Hide when no Lat/Long target is set" @
-.hidewhenonfoot: "Hide when on foot" @
-.cleartargetonleavingbody: "Clear target when leaving a body" @
-.hidewheninSRV: "Hide when in SRV" @
-.hidewheninship: "Hide when in ship" @
+05227E10EFA617: "Latitude of target position, blank for none" => "Latitude de la cible, vide pour aucune"
+E16DC0093C54A4: "Longitude of target position, blank for none" => "Longitude de la cible, vide pour aucune"
+8DAF2F1FB42A69: "Select known body feature or select bookmark" => "Sélectionner un élément de corps connu ou un marque-page"
+4F4F73D3580988: "Clear target latitude and longitude and selection" => "Vider les latitude et longitude de la cible et la sélection"
+40B4BA016F2820: "Edit or create bookmark on system" => "Editer ou créer un marque-page sur le système"
+6757DB83BE30A7: "Configure compass overlay" => "Configurer l'overlay du compas"
+3147F72CFDEFED: "Configure font of compass" => "Configurer le compas à pieds"
+09C3677389910F: "Hide when Elite has no Lat/Long" => "Cacher quand il n'y a pas de Lat/Long sur Elite"
+B2C71E235D149C: "Hide when no Lat/Long target is set" => "Cacher quand la cible n'a pas de Lat/Long"
+BCFBA399BF71D3: "Hide when on foot" => "Cacher à pieds"
+B2529C881FD681: "Clear target when leaving a body" => "Vider la cible au départ d'un corps"
+5671BE2CC4E89E: "Hide when in SRV" => "Cacher en VRS"
+DBF922321BB2C4: "Hide when in ship" => "Cacher en vaisseau"
 
 SECTION UserControlWebBrowser
 
-.extButtonIE11Warning: "Using IE11 - click here to get WebView2" @
-.extCheckBoxBack.ToolTip: "Back" @
-.checkBoxAutoTrack.ToolTip: "Track system in history panel" @
-.extCheckBoxAllowedList.ToolTip: "URLs" @
-.extCheckBoxStar.ToolTip: "Select another system to view" @
-.System: "System: " @
-.EnterSys: "Show System" @
+5C4856412380E1: "Using IE11 - click here to get WebView2" => "Vous utilisez IE11 - cliquez ici pour récupérer WebView2"
+E79777EDFFFA20: "Track system in history panel" @
+01F03837323AAB: "URLs" @
+58CF52A56F41EA: "Select another system to view" => "Sélectionner un autre système à afficher"
+48984F66C09441: "System: " => "Système : "
+D6335B2F4D21A6: "Show System" => "Afficher système"
 
 SECTION UserControlSearch
 
-.MaterialsCommodities: "Materials Commodities" => "搜索材料和商品"
-.Stars: "Stars" => "搜索星系"
-.Scans: "Scans" => "搜索扫描数据"
+B6BE1D1F90812C: "Materials Commodities" => "搜索材料和商品"
+ADB03812B4EF51: "Stars" => "搜索星系"
+71FAF74908ACAE: "Scans" => "搜索扫描数据"
 
 SECTION SearchMaterialsCommodities
 
-.RareCommodity: ", Rare Commodity" => "，稀有商品"
-.AND: "AND" => "和"
-.OR: "OR" => "或"
-.DIS: "Discovered at " @
-.COL: "Collected at " @
-.MR: "Mission Reward at " @
-.label2: "Item 2" => "物件2"
-.label1: "Item 1" => "物件1"
-.ColumnDate: "Date" => "日期"
-.ColumnStar: "Star" => "星系"
-.ColumnLocation: "Location" => "地点"
-.ColumnCurrentDistance: "Current Distance" => "距离(ly)"
-.ColumnPosition: "Position" => "坐标(X,Y,Z)"
-.buttonExtExcel.ToolTip: "Output grid to CSV" @
-.buttonExtFind.ToolTip: "Find materials/commodities" @
-.comboBoxCustomCMANDOR.ToolTip: "Select the condition between Item 1 and 2" @
-.comboBoxCustomCM1.ToolTip: "Primary material or commodity to search for" @
-.comboBoxCustomCM2.ToolTip: "Secondary material or commodity to search for" @
+77EDFE8755BB52: ", Rare Commodity" => "，稀有商品"
+C2F934CB8CAB6C: "AND" => "和"
+F579C523960AF1: "OR" => "或"
+E1988D908E0FDA: "Discovered at " => "Découvert à "
+99E5A4469C78D3: "Collected at " => "Collecté à "
+3F6D793961F187: "Mission Reward at " => "Récompense de mission à "
+18CED5C76DB797: "Item 2" => "物件2"
+14D5C9FDE290FE: "Item 1" => "物件1"
+EB9A4BC1C0C153: "Date" => "日期"
+85A7DE6E270547: "Star" => "星系"
+D219C68101F532: "Location" => "地点"
+84C078AF3EFE1A: "Current Distance" => "距离(ly)"
+CF1C85ADBA548E: "Position" => "坐标(X,Y,Z)"
+209B0897FD112F: "Output grid to CSV" => "Exporter"
+B366981EAEF1CF: "Find materials/commodities" => "Trouver des matériaux/marchandises"
+2FEF1A8EEACCEB: "Select the condition between Item 1 and 2" => "Sélectionner la condition entre les objets 1 et 2"
+376753B016814C: "Primary material or commodity to search for" => "Matériau ou marchandise primaire à rechercher"
+AA3B17BAA83D49: "Secondary material or commodity to search for" => "Matériau ou marchandise secondaire à rechercher"
 
 SECTION SearchScans
 
-.Select: "Select" => "请选择"
-.Name: "Name: " = UserControlCombatPanel.Name
-.SN: "Enter Search Name: " => "输入搜索名称："
-.DEL: "Confirm deletion of" => "确认要删除"
-.DELNO: "Cannot delete this entry" => "无法删除此项"
-.CNV: "Condition is not valid" => "条件无效"
-.CD: "Condition" => "条件"
-.ColumnDate: "Date" = SearchMaterialsCommodities.ColumnDate
-.ColumnBody: "Body" @
-.ColumnInformation: "Information" => "信息"
-.ColumnCurrentDistance: "Current Distance" = SearchMaterialsCommodities.ColumnCurrentDistance
-.ColumnPosition: "Position" = SearchMaterialsCommodities.ColumnPosition
-.ColumnParent: "Parent" @
-.ColumnStar: "Star" @
-.ColumnParentParent: "Grandparent" @
-.ColumnStarStar: "Parent of Star" @
-.ColumnSystem: "System" @
-.comboBoxSearches.ToolTip: "Select a predefined condition" @
-.buttonFind.ToolTip: "Search for condition below" @
-.buttonSave.ToolTip: "Save current condition" @
-.buttonDelete.ToolTip: "Delete current condition" @
-.buttonExtExcel.ToolTip: "Output results grid to CSV" @
-.extButtonExport.ToolTip: "Export user searches to a file" @
-.extButtonImport.ToolTip: "Import user queries from a file (overwrite existing queries if present)" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.extCheckBoxDebug.ToolTip: "Click to enable debug log production on search" @
-.extButtonNew.ToolTip: "Clear current condition" @
-.ColumnSearches: "Searches" @
-.labelTime: "Time" @
-.labelSearch: "Search" @
-.Export: "Export user searches" @
-.Import: "Import user searches" @
-.scanSortControl.labelSort: "Sort:" @
-.TooMany: "Too many results to display, truncating to the first {0}" @
+8598222918D3C6: "Select" => "请选择"
+469CEC3C536805: "Enter Search Name: " => "输入搜索名称："
+576B5ACFD6F9E4: "Confirm deletion of" => "确认要删除"
+0088C59DD3E567: "Cannot delete this entry" => "无法删除此项"
+37A47BD94B5C5D: "Condition is not valid" => "条件无效"
+2F4979324E03E4: "Condition" => "条件"
+718A7E8A582E98: "Body" => "Corps"
+23D692F07A3FB6: "Parent" @
+EFAAD58C837641: "Grandparent" => "Grand-parent"
+4A7891A93B7D2C: "Parent of Star" => "Parent de l'étoile"
+BC0792D8DC81E8: "System" => "Système"
+9054FF5F5ED0C8: "Select a predefined condition" => "Sélectionner une condition prédéfinie"
+E732D75B811346: "Search for condition below" => "Rechercher avec les conditions ci-dessous"
+C199BFDEBEFCEA: "Save current condition" => "Sauvegarder les conditions actuelles"
+060F0D08DA3956: "Delete current condition" => "Supprimer les conditions actuelles"
+AAD2904EE61EAE: "Output results grid to CSV" => "Exporter le resultat"
+15ABFEF9649547: "Export user searches to a file" => "Exporter les conditions de recherches dans un ficher"
+D1E9B89DD47EC3: "Import user queries from a file (overwrite existing queries if present)" => "Importer les conditions de recherches depuis un ficher (écrase les conditions actuelles si présentes)"
+5CF3EE0A5AE568: "Enable or disable word wrap" => "Activer/Désactiver le retour à la ligne"
+D14970EE4E27AE: "Click to enable debug log production on search" => "Cliquer pour activer la production de logs sur la recherche"
+081F88C3D6CCEA: "Clear current condition" => "Effacer les conditions actuelles"
+450D52D3EF8975: "Searches" => "Recherches"
+07C3B8B498D6BD: "Export user searches" => "Exporter les conditions de recherches"
+F6FBA35BE4C529: "Import user searches" => "Importer les conditions de recherches"
+8B335A234E4193: "Sort:" => "Tri :"
+5531C4FF55C5CF: "Too many results to display, truncating to the first {0}" => "Trop de résultats à afficher, tronque aux {0} premiers"
 
 SECTION UserControlDiscoveries
 
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
-.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.buttonExtExcel.ToolTip: "Export" @
+4CC658129E454D: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Saisir un texte pour rechercher dans tous les champs une correspondance. Vous pouvez aussi utiliser system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> pour filtrer les résultats ayant ces propriétés."
+B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" => "Sélectionner les découvertes à rechercher, prises depuis les recherches du panneau de recherche de scans"
 
 SECTION SearchStars
 
-.ColumnIndex: "Index" @
-.ColumnStar: "Star" = SearchMaterialsCommodities.ColumnStar
-.ColumnStarType: "Star type" @
-.ColumnCentreDistance: "Centre Distance" => "中心距离(ly)"
-.ColumnCurrentDistance: "Current Distance" => "当前距离(ly)"
-.ColumnPosition: "Position" = SearchMaterialsCommodities.ColumnPosition
+C2DF9B932637FE: "Index" @
+30B532455535CF: "Star type" => "Type d'étoile"
+CD732FC5901D56: "Centre Distance" => "中心距离(ly)"
 
 SECTION DataGridViewStarResults
 
-.3d: "Go to star on 3D Map" => "跳转至3D星图"
-.EDSM: "View on EDSM" => "在EDSM网站上查看"
-.Spansh: "View on Spansh" @
-.Data: "View Scan Display" => "查看该条目的数据"
-.Goto: "View on History Grid" @
+CA7D47897BA965: "Go to star on 3D Map" => "跳转至3D星图"
+790C6DD0436B24: "View on EDSM" => "在EDSM网站上查看"
+BE05494B382962: "View on Spansh" => "Voir sur Spansh"
+A99CF05BCB299B: "View Scan Display" => "查看该条目的数据"
+D4FDD27AAE7070: "View on History Grid" => "Voir sur la grille d'historique"
 
 SECTION UserControlEngineering
 
-.UpgradeCol: "Upgrade/Mat" => "改装/材料"
-.ModuleCol: "Module" => "模组"
-.LevelCol: "Level" => "等级"
-.MaxCol: "Max" => "最多尝试次数"
-.WantedCol: "Wanted" => "愿望单"
-.AvailableCol: "Avail." => "可用"
-.NotesCol: "Notes" => "笔记"
-.RecipeCol: "Recipe" => "配方"
-.EngineersCol: "Engineers" => "工程师"
-.CraftedCol: "Crafted" @
-.buttonClear.ToolTip: "Set all wanted values to zero" => "把所有愿望单内的改装尝试次数设为零"
-.buttonFilterMaterial.ToolTip: "Filter the table by material" => "按材料筛选表格"
-.buttonFilterUpgrade.ToolTip: "Filter the table by upgrade type" => "按改装筛选表格"
-.buttonFilterLevel.ToolTip: "Filter the table by level" => "按等级筛选表格"
-.buttonFilterEngineer.ToolTip: "Filter the table by engineer" => "按工程师筛选表格"
-.buttonFilterModule.ToolTip: "Filter the table by module type" => "按模组筛选表格"
-.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
+8F388BB9800713: "Upgrade/Mat" => "改装/材料"
+B8FF02892916FF: "Module" => "模组"
+7C7F5D049FAD25: "Level" => "等级"
+A95E85AED56318: "Max" => "最多尝试次数"
+B568B10AECDDE8: "Wanted" => "愿望单"
+F2367E42DEFDAC: "Avail." => "可用"
+1DCDA804C96DA3: "Recipe" => "配方"
+21467D0FE8237D: "Crafted" => "Créés"
+49578C008054B9: "Set all wanted values to zero" => "把所有愿望单内的改装尝试次数设为零"
+1D418FD622BE3F: "Filter the table by material" => "按材料筛选表格"
+3E62F26251B4EB: "Filter the table by upgrade type" => "按改装筛选表格"
+55D32FC9D63E6C: "Filter the table by level" => "按等级筛选表格"
+85DCAE4F7ADF58: "Filter the table by engineer" => "按工程师筛选表格"
+53A4C779B6A4AD: "Filter the table by module type" => "按模组筛选表格"
+80CC3E5A8D4D63: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Lorsque rouge, utilise les matériaux à la position du curseur pour estimer. Lorsque vert, utilise toujours les derniers matériaux"
+0DDF332D4C73CA: "Push items wanted to Resources panel" @
 
 SECTION UserControlEngineers
 
-.buttonFilterEngineer.ToolTip: "Select which engineers are shown" @
-.extCheckBoxWordWrap.ToolTip: "Turn on and off word wrap" @
-.extCheckBoxMoreInfo.ToolTip: "Increase size of engineers grid and show more engineer details" @
-.buttonClear.ToolTip: "Set all wanted values to zero" @
-.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
+F3045D9B6D60DE: "Select which engineers are shown" => "Sélectionner quels ingénieurs afficher"
+1CA9412669C134: "Turn on and off word wrap" => "Activer/Désactiver le retour à la ligne"
+5C22155C221233: "Increase size of engineers grid and show more engineer details" => "Augmente la taille de la grille pour afficher plus de détails"
 
 SECTION UserControlEstimatedValues
 
-.BodyName: "Body Name" => "星体名称"
-.BodyType: "Body Type" @
-.EDSM: "Source" @
-.Mapped: "Mapped" @
-.WasMapped: "Already Mapped" @
-.WasDiscovered: "Already Discovered" @
-.EstBase: "Base Value" @
-.MappedValue: "Mapped" @
-.FirstMappedEff: "First Mapped" @
-.FirstDiscMapped: "First Discovered Mapped" @
-.EstValue: "Current Value" => "预计价值"
-.checkBoxShowZeros.ToolTip: "Green will show all bodies even with zero value, red will only show bodies with value" @
-.extCheckBoxShowImpossible.ToolTip: "Show all values, even ones which are impossible to get" @
-.SV: "Estimated Scan Values for {0}" => "{0}星系的预计价值"
-.SBTB: " | You scanned {1} of {2} bodies in this system." @
+1D68666BDF4A40: "Body Name" => "星体名称"
+D6B23A46B95CAF: "Body Type" => "Type du corps"
+6DA13ADDB000B6: "Source" @
+4A7C05BDEB22B3: "Mapped" => "Cartographié"
+21B572F3D9F3E3: "Already Mapped" => "Déjà cartographié"
+43DF814DBC5742: "Already Discovered" => "Déjà découvert"
+CB34D7DD05451F: "Base Value" => "Valeur de base"
+EEA6FFEE027AB4: "First Mapped" => "Première carto."
+CB083BFF78F38B: "First Discovered Mapped" => "Première découverte carto."
+4F993153012BCF: "Current Value" => "预计价值"
+3B2FE7700E6893: "Green will show all bodies even with zero value, red will only show bodies with value" => "Lorsque vert, affiche tous les corps même avec les valeurs à 0. Lorsque rouge, ne les affiches pas."
+C746EA1EC215F8: "Show all values, even ones which are impossible to get" => "Affiche toutes les valeurs, même celles impossible à obtenir"
+AC0E083CA2C4C4: "Estimated Scan Values for {0}" => "{0}星系的预计价值"
+2A07C88E4554DD: " | You scanned {1} of {2} bodies in this system." @
 
 SECTION UserControlExpedition
 
-.CurDist: "Cur. Dist" @
-.Visits: "Visits" => "访问次数"
-.Scans: "Scans" => "扫描"
-.FSSBodies: "FSS Bodies" @
-.KnownBodies: "Known Bodies" @
-.Stars: "Stars" => "主恒星"
-.Info: "Info" = SearchScans.ColumnInformation
-.extButtonLoadRoute.ToolTip: "Load Route" => "加载"
-.extButtonNew.ToolTip: "New Expedition" => "新建航线"
-.extButtonSave.ToolTip: "Save Expedition" => "保存航线"
-.extButtonDelete.ToolTip: "Delete Expedition" => "删除航线"
-.extButtonImportFile.ToolTip: "Import File" => "导入文件"
-.extButtonImportRoute.ToolTip: "Import from Route Panel" => "导入航线"
-.extButtonImportNavRoute.ToolTip: "Import a Nav Route" @
-.extButtonNavRouteLatest.ToolTip: "Import Latest Nav Route" @
-.buttonExtExport.ToolTip: "Export to File" = ImportExportForm
-.extButtonShow3DMap.ToolTip: "Show expedition on 3D Map" => "在3D星图中显示"
-.extButtonAddSystems.ToolTip: "Import Systems from EDSM/DB" => "添加星系"
-.extButtonDisplayFilters.ToolTip: "Select filters on Info" @
-.buttonReverseRoute.ToolTip: "Reverse" => "反转"
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.AddSys: "Add Systems" @
-.SystemName: "System Name" => "星系名称"
-.Distance: "Dist." = SearchMaterialsCommodities.ColumnCurrentDistance
-.Note: "Note" = UserControlEngineering.NotesCol
-.ColumnDistStart: "Dist Start" @
-.ColumnDistanceRemaining: "Dist Remaining" @
-.ColumnHistoryNote: "History Note" @
-.labelCml: "Cml Distance:" => "总距离："
-.labelP2P: "P2P Distance:" => "直线距离："
-.labelEndDate: "End Date:" => "结束日期："
-.labelDateStart: "Start Date:" => "开始日期："
-.labelRouteName: "Route Name:" => "航线名称："
-.viewSystemToolStripMenuItem: "View System" @
-.viewOnSpanshToolStripMenuItem: "View on Spansh" @
-.viewOnEDSMToolStripMenuItem: "View on EDSM" @
-.copyToolStripMenuItem: "Copy" => "复制"
-.pasteToolStripMenuItem: "Paste" => "粘贴"
-.cutToolStripMenuItem: "Cut" @
-.insertRowAboveToolStripMenuItem: "Insert row above" @
-.setTargetToolStripMenuItem: "Set Target" => "设置目标"
-.editBookmarkToolStripMenuItem: "Edit bookmark" => "编辑书签"
-.NoRoute: "No route set up. Please add at least two systems." => "没有建立航线，请至少添加两个星系。"
-.Delete: "Are you sure you want to delete this route?" => "确认要删除此航线？"
-.Createroute: "Please create a route on a route panel" => "请先从航线规划面板里创建一个航线"
-.NoRouteExport: "There is no route to export " => "没有可导出的航线"
-.GMOInfo: "Disable showing GMO Info" @
-.Unsaved: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "有些变动还未保存。\r\n是否要先保存再继续？"
-.Specify: "Please specify a name for the route." => "请给这个航线添加一个名称"
-.Conflict: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "当前保存的航线名称与一个知名的航线名相冲突\r\n请选择另外一个名称以保存变动。"
-.Overwrite: "Warning: route already exists. Would you like to overwrite it?" => "警告：该航线名称已存在。是否要覆盖保存？"
-.EDSMUnk: "System not known" => "该星系还未被收录到EDSM的数据库中"
-.NoScanInfo: "No local scan info" @
+499605941FE37D: "Cur. Dist" => "Dist. actuelle"
+6A4BE2FAC27DAA: "Visits" => "访问次数"
+52F10A52951678: "FSS Bodies" => "Corps ACS"
+C8A4EA417FB23E: "Known Bodies" => "Corps connus"
+4B631F69842530: "Info" => "信息"
+6571CA05AEE6A2: "Load Route" => "加载"
+9B02F8B01803D3: "New Expedition" => "新建航线"
+4990961CC3F641: "Save Expedition" => "保存航线"
+089954DA2CE32A: "Delete Expedition" => "删除航线"
+173DF362CCF8F7: "Import File" => "导入文件"
+0BBA82BEA5C475: "Import from Route Panel" => "导入航线"
+1FA9E4E897C90D: "Import a Nav Route" => "Importer Nav itinéraire"
+627110C8C10EE5: "Import Latest Nav Route" => "Importer dernier Nav itinéraire"
+A7CC24BCEE6D11: "Export to File" => "导出"
+371C4F43678BC9: "Show expedition on 3D Map" => "在3D星图中显示"
+1DAE53CF1781CC: "Import Systems from EDSM/DB" => "添加星系"
+682D92FDA51262: "Select filters on Info" => "Sélectionner les filtres sur Info"
+57F9933768794F: "Reverse" => "反转"
+07303D6679BBB3: "Add Systems" => "Ajouter systèmes"
+162DD0495B19B2: "System Name" => "星系名称"
+FCBDC25ADED443: "Dist." => "距离(ly)"
+2C924E3088204E: "Note" => "笔记"
+5FF07654F5C831: "Dist Start" => "Dist. départ"
+CE33081BD85857: "Dist Remaining" => "Dist. restante"
+942A8B6ED71457: "History Note" => "Note d'historique"
+6FAE50524E4FCC: "Cml Distance:" => "总距离："
+907EB0BA50086A: "P2P Distance:" => "直线距离："
+5F0AC2A013B639: "End Date:" => "结束日期："
+FA4DD9CA914ECE: "Start Date:" => "开始日期："
+F1E28A201CEE47: "Route Name:" => "航线名称："
+5ECE584160349A: "View System" => "Voir le système"
+AF74F7C5362AAE: "Copy" => "复制"
+DB2483000D154C: "Paste" => "粘贴"
+38D13BDA5C40AF: "Cut" => "Couper"
+506AD5294AD65A: "Insert row above" => "Insérer les lignes au-dessus"
+13DA14D35B49E2: "Set Target" => "设置目标"
+D371A4A652422C: "Edit bookmark" => "编辑书签"
+4A59635C57E1C9: "No route set up. Please add at least two systems." => "没有建立航线，请至少添加两个星系。"
+2D013B428EBF32: "Are you sure you want to delete this route?" => "确认要删除此航线？"
+984AB4F90B5D2B: "Please create a route on a route panel" => "请先从航线规划面板里创建一个航线"
+7F9E20DBB71B41: "There is no route to export " => "没有可导出的航线"
+8FF9BDD201C4EA: "Disable showing GMO Info" => "Désactiver l'affichage des infos GMO"
+20A543A1CE8991: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "有些变动还未保存。\r\n是否要先保存再继续？"
+638C59CA247034: "Please specify a name for the route." => "请给这个航线添加一个名称"
+A6419AC5F7F3B3: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "当前保存的航线名称与一个知名的航线名相冲突\r\n请选择另外一个名称以保存变动。"
+CD249D0309B0E4: "Warning: route already exists. Would you like to overwrite it?" => "警告：该航线名称已存在。是否要覆盖保存？"
+9F6A7413561C8D: "System not known" => "该星系还未被收录到EDSM的数据库中"
+C13DDF91AFA61A: "No local scan info" => "Aucune information locale de scan"
 
 SECTION UserControlJournalGrid
 
-.comboBoxTime.ToolTip: "Select the entries selected by age" => "安照时间顺序筛选条目"
-.ColumnTime: "Time" = Time
-.ColumnEvent: "Event" = UserControlCombatPanel.Event
-.ColumnDescription: "Description" = UserControlBookmarks.ColDescription
-.ColumnInformation: "Information" = SearchScans.ColumnInformation
-.labelTime: "Time" = Time
-.labelSearch: "Search" = UserControlBookmarks.labelSearch
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "输入文本以搜索所有的域"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" => "选中后当事件更新时，使光标自动返回顶部。"
-.buttonField.ToolTip: "Filter out entries matching the field selection" @
-.buttonFilter.ToolTip: "Filter out entries based on event type" => "根据事件类型筛选条目"
-.removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" => "取消排序"
-.jumpToEntryToolStripMenuItem: "Jump to Entry" => "跳至行"
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = DataGridViewStarResults.3d
-.viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
-.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" => "设为航行计算的起点/终点"
-.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "对这条项目运行脚本"
-.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard" => "复制航行日志条目到剪切板"
-.viewScanDisplayToolStripMenuItem: "View Scan Display" @
-.viewOnSpanshToolStripMenuItem: "View on Spansh" @
-.TT1: " showing {0} original {1}" => " 显示{1}中的{0}"
-.TTFilt1: "Filtered {0}" => "过滤掉了{0}"
-.TTSelAge: "Select the entries by age, " => "安照时间顺序筛选条目，"
-.JHF: "Journal: Filter out fields" @
-.NotSynced: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
+07A2022F0AA5BD: "Select the entries selected by age" => "安照时间顺序筛选条目"
+5F2FF95345B84E: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
+1E766B1CB17AF6: "Automatically move the cursor to the latest entry when it arrives" => "选中后当事件更新时，使光标自动返回顶部。"
+4D0FFFE0C867B1: "Filter out entries matching the field selection" => "Filtrer les entrées correspondant au champ sélectionné"
+CD0FB121DB7E4E: "Filter out entries based on event type" => "根据事件类型筛选条目"
+8E5C8029D9BC99: "Remove sorting of columns" => "取消排序"
+F4DE89CE1015FB: "Jump to Entry" => "跳至行"
+752DA692C2C1B2: "Set Start/Stop point for travel calculations" => "设为航行计算的起点/终点"
+F792127FD17C22: "Run Actions on this entry" => "对这条项目运行脚本"
+290084F20A44C9: "Copy journal entry to clipboard" => "复制航行日志条目到剪切板"
+E4370C63EC4290: " showing {0} original {1}" => " 显示{1}中的{0}"
+ADE8224F6E2B20: "Filtered {0}" => "过滤掉了{0}"
+079B875FC72C76: "Select the entries by age, " => "安照时间顺序筛选条目，"
+F70EA8DC6685B3: "Journal: Filter out fields" => "Journal : Filtrer les champs"
 
 SECTION UserControlLedger
 
-.TimeCol: "Time" = Time
-.Type: "Type" => "类型"
-.Notes: "Notes" = UserControlEngineering.NotesCol
-.Credits: "Credits" => "进账"
-.Debits: "Debits" => "出账"
-.Balance: "Balance" => "余额"
-.NormProfit: "Profit Per Unit" => "单位利润"
-.labelTime: "Time" = Time
-.labelSearch: "Search" = UserControlBookmarks.labelSearch
-.buttonFilter.ToolTip: "Display entries matching this event type filter" => "显示匹配筛选事件类型的条目"
-.textBoxFilter.ToolTip: "Search to particular items" => "搜索特定的条目"
-.comboBoxTime.ToolTip: "Select the entries by age" = UserControlJournalGrid.comboBoxTime.ToolTip
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.toolStripMenuItemGotoItem: "View on History Grid" => "跳转到表格中的条目"
-.CashTransactions: "Cash Transactions" => "金融交易"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.NOLG: "No Ledger available" @
-.TotalProfit: "Total Profit" @
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
+F547624A8BDDF0: "Debits" => "出账"
+CA808D99D64C9C: "Profit Per Unit" => "单位利润"
+DC12265956ECE5: "Display entries matching this event type filter" => "显示匹配筛选事件类型的条目"
+B501410D1C0E50: "Search to particular items" => "搜索特定的条目"
+61FE5EB291070D: "Select the entries by age" => "安照时间顺序筛选条目"
+A51F65FF7C070F: "Cash Transactions" => "金融交易"
+662560B640930C: "No Ledger available" => "Aucune comptabilité disponible"
+45EBD38F4C641E: "Total Profit" => "Profit total"
 
 
 SECTION UserControlLog
 
-.toolStripMenuItemCopy: "Copy" = UserControlExpedition.copyToolStripMenuItem
-.clearLogToolStripMenuItem: "Clear Log" => "清空日志"
+3FC9C386B10C3C: "Clear Log" => "清空日志"
 
 SECTION UserControlMarketData
 
-.CategoryCol: "Category" => "类别"
-.NameCol: "Name" = UserControlCombatPanel.Name
-.SellCol: "Sell" => "售出价格(Cr/t)"
-.BuyCol: "Buy" => "收购价格(Cr/t)"
-.CargoCol: "Cargo" => "货舱所持(t)"
-.DemandCol: "Demand" => "需求(t)"
-.SupplyCol: "Supply" => "供给(t)"
-.GalAvgCol: "Galactic Avg" => "银河平均价格(Cr/t)"
-.ProfitToCol: "Profit To cr/t" => "去程利润(Cr/t)"
-.ProfitFromCol: "Profit From cr/t" => "返程利润(Cr/t)"
-.checkBoxAutoSwap: "AutoSwap" => "自动切换"
-.checkBoxBuyOnly: "Buy Only" => "仅采购"
-.labelVs: "Vs" @
-.checkBoxBuyOnly.ToolTip: "Show items you can buy only" => "只显示你能买的商品"
-.Conly: "Cargo only, no market data on this item" => "只有货物，没有这项物品的市场数据"
-.LEntry: "Travel History Entry Last" => "最后一项航行记录"
-.checkBoxHasDemand: "Has Demand" @
-.checkBoxHasDemand.ToolTip: "Show items with demand" @
+A3C686E711E472: "Category" => "类别"
+FA3CF2AD51E078: "Sell" => "售出价格(Cr/t)"
+7CECA51FCAFE42: "Buy" => "收购价格(Cr/t)"
+6C98E86FC49B32: "Cargo" => "货舱所持(t)"
+5DFC68721F3D07: "Demand" => "需求(t)"
+222DB0FC1CADF0: "Supply" => "供给(t)"
+7C9EF052D00BFD: "Galactic Avg" => "银河平均价格(Cr/t)"
+429BAF3C0DB89C: "Profit To cr/t" => "去程利润(Cr/t)"
+0901A376AF18BD: "Profit From cr/t" => "返程利润(Cr/t)"
+3B406FFE94872F: "AutoSwap" => "自动切换"
+3CD1261A4B2B6E: "Buy Only" => "仅采购"
+4D2E486F643D8E: "Vs" => "Contre"
+AB78A7C020BC2A: "Show items you can buy only" => "只显示你能买的商品"
+82D589FF7E4287: "Cargo only, no market data on this item" => "只有货物，没有这项物品的市场数据"
+CCB827281EB7DF: "Travel History Entry Last" => "最后一项航行记录"
+BB4C560BF53C47: "Has Demand" => "A de la demande"
+898844D2F6FD03: "Show items with demand" => "Affiche les éléments avec de la demande"
 
 SECTION UserControlMaterialCommodities
 
-.ShipLocker: "Ship Locker" @
-.Data: "Data" => "数据"
-.Mats: "Mats" => "材料"
-.Total: "Total" => "总量"
-.Rare: "Rare" @
-.ColName: "Name" = UserControlCombatPanel.Name
-.ColShortName: "Abv" => "简称"
-.ColCategory: "Category" => "分类"
-.ColType: "Type" => "种类"
-.ColNumber: "Number" => "数量"
-.ColBackPack: "Backpack" @
-.ColPrice: "Avg. Price" => "平均价格"
-.ColRecipes: "Recipes" @
-.ColWanted: "Want" @
-.ColNeed: "Need" @
+4DA805AFD83F17: "Ship Locker" => "Entrepôt du vaisseau"
+E5E429BCC9C2E4: "Data" => "数据"
+BEFB21EE719272: "Mats" => "材料"
+B25928C6990255: "Total" => "总量"
+CCE370D2F9781A: "Rare" @
+FE187BD4E80F7E: "Abv" => "简称"
+B7BAA1D40C4EA2: "Number" => "数量"
+0CCF90EB09D636: "Backpack" => "Sac à dos"
+6358DC846638BD: "Avg. Price" => "平均价格"
+9FB1092F32D4FC: "Recipes" => "Recettes"
+B18F6ADE27CF7A: "Want" => "Souhaité"
+ED4855C28D40C3: "Need" => "Besoin"
 
-.AllMats: "All Materials" @
-.AllCommods: "All Commodities" @
-.AllMicroresources: "All Microresources" @
+7B61D21566CEEC: "All Materials" => "Tous les matériaux"
+31BD45E1404855: "All Commodities" => "Toutes les marchandises"
+DD6B2E81B38C70: "All Microresources" => "Toutes les micro ressources"
 
-.textBoxItems1.ToolTip: "Count of Items" @
-.textBoxItems2.ToolTip: "Count of Items" => "商品数量"
-.buttonFilter.ToolTip: "Filter out items" @
+AFF3ACED3CA75C: "Count of Items" => "Qté de marchandise"
+2E7C22E163AEC2: "Filter out items" => "Exclure des marchandises"
 
-.buttonClear.ToolTip: "Set all wanted values to zero" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.checkBoxShowZeros.ToolTip: "Green will show materials with zero counts, red means remove them" @
-.extCheckBoxMaterialView.ToolTip: "Switch Material Views" @
-.extButtonFont.ToolTip: "Font for shopping list" @
-.buttonExtImport.ToolTip: "Import materials list into panel" @
+4D542614DA0B16: "Green will show materials with zero counts, red means remove them" => "Lorsque vert, affiche les éléments avec 0. Lorsque rouge, ne les affiches pas."
+8B4BB0C8C3D12D: "Switch Material Views" => "Passer en vue matériaux"
+0F67E16954DB21: "Font for shopping list" => "Police de caractère pour la liste de courses"
+9D94613F7CF820: "Import materials list into panel" => "Importer la liste des matériaux dans le panneau"
 
-.openRecipeInWindowToolStripMenuItem: "Open Recipe in Window" @
-.displayItemInShoppingListToolStripMenuItem: "Display Item in shopping list" @
-.clearAllDisplayItemsInShoppingListToolStripMenuItem: "Clear all display items in shopping list" @
-.displayAllInShoppingListToolStripMenuItem: "Display all non zero items in shopping list" @
-.toolStripMenuItemSLClearAll: "Clear all display items in shopping list" @
-.Progress: "Progress" @
+963A200F087C8F: "Open Recipe in Window" => "Ouvre la fenêtre de recette"
+BA416FBADB0F09: "Display Item in shopping list" => "Affiche l'élément dans la liste de courses"
+EB8E343579E999: "Clear all display items in shopping list" => "Effacer tous les éléments affiché de la liste de courses"
+3EE4B7555F0B02: "Display all non zero items in shopping list" => "Afficher tous les éléments qui ne sont pas à 0 dans la liste de courses"
+1B90271D66CF2D: "Progress" => "Progression"
 
 
 SECTION UserControlMissionOverlay
 
-.IL: " Left " @
-.missionNameToolStripMenuItem: "Mission Name" @
-.missionDescriptionToolStripMenuItem: "Mission Description" @
-.startDateToolStripMenuItem: "Start Date" @
-.factionInformationToolStripMenuItem: "Faction Information" @
-.rewardToolStripMenuItem: "Reward" @
-.endDateToolStripMenuItem: "End Date" @
+BC775B0E4D5ED0: " Left " => " restant "
+50C4713CBC3348: "Mission Name" => "Titre de la mission"
+90DC27E4C3BEB4: "Mission Description" => "Description de la mission"
+9D7AB1A557965B: "Start Date" => "Date de début"
+7190FFD9B23765: "Faction Information" => "Information sur la faction"
+84B1478125890B: "End Date" => "Date limite de fin"
 
 SECTION UserControlSurveyor
 
-.Scan: "Scan" @
-.Systemscancomplete: "System scan complete" @
-.bodiesdetected: " bodies detected." @
-.bodiesfound: " bodies found." @
-.ShowSignalMismatch: " Cluster and NonBody counts differ by " @
-.textAlignToolStripMenuItem.leftToolStripMenuItem: "Alignment Left" @
-.textAlignToolStripMenuItem.centerToolStripMenuItem: "Alignment Center" @
-.textAlignToolStripMenuItem.rightToolStripMenuItem: "Alignment Right" @
-.showAllPlanetsToolStripMenuItem: "Show All Planets" @
-.planetaryClassesToolStripMenuItem.ammoniaWorldToolStripMenuItem: "Ammonia World" @
-.planetaryClassesToolStripMenuItem.earthlikeWorldToolStripMenuItem: "Earthlike World" @
-.planetaryClassesToolStripMenuItem.waterWorldToolStripMenuItem: "Water World" @
-.planetaryClassesToolStripMenuItem.highMetalContentBodyToolStripMenuItem: "High metal content body" @
-.planetaryClassesToolStripMenuItem.metalToolStripMenuItem: "Metal-rich body" @
-.bodyFeaturesToolStripMenuItem.terraformableToolStripMenuItem: "Terraformable" @
-.bodyFeaturesToolStripMenuItem.hasVolcanismToolStripMenuItem: "Has volcanism" @
-.bodyFeaturesToolStripMenuItem.hasRingsToolStripMenuItem: "Has Rings" @
-.bodyFeaturesToolStripMenuItem.highEccentricityToolStripMenuItem: "High eccentricity" @
-.bodyFeaturesToolStripMenuItem.lowRadiusToolStripMenuItem: "Tiny body" @
-.bodyFeaturesToolStripMenuItem.hasSignalsToolStripMenuItem: "Has any other signals" @
-.bodyFeaturesToolStripMenuItem.hasGeologicalSignalsToolStripMenuItem: "Has geological signals" @
-.bodyFeaturesToolStripMenuItem.hasBiologicalSignalsToolStripMenuItem: "Has biological signals" @
-.bodyFeaturesToolStripMenuItem.landableToolStripMenuItem: "Landable" @
-.bodyFeaturesToolStripMenuItem.landableWithAtmosphereToolStripMenuItem: "Landable with atmosphere" @
-.bodyFeaturesToolStripMenuItem.landableAndLargeToolStripMenuItem: "Landable and large" @
-.bodyFeaturesToolStripMenuItem.landableWithVolcanismToolStripMenuItem: "Landable with volcanism" @
-.showAllStarsToolStripMenuItem: "Show All Stars" @
-.showBeltClustersToolStripMenuItem: "Show Belt Clusters" @
-.showSignalsToolStripMenuItem: "Show signals" @
-.showSignalMismatchToolStripMenuItem: "Show signal mismatch" @
-.showValuesToolStripMenuItem: "Show values" @
-.showMoreInformationToolStripMenuItem: "Show more information" @
-.showGravityToolStripMenuItem: "Show gravity of landables" @
-.showAtmosToolStripMenuItem: "Show atmospheres" @
-.showTempToolStripMenuItem: "Show surface temperature" @
-.showVolcanismToolStripMenuItem: "Show volcanism" @
-.autoHideToolStripMenuItem: "Auto Hide" @
-.dontHideInFSSModeToolStripMenuItem: "Don't hide in FSS Mode" @
-.hideAlreadyMappedBodiesToolStripMenuItem: "Hide already mapped bodies" @
-.showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem: "Show system info always" @
-.showScanSummaryOnScreenWhenInTransparentModeToolStripMenuItem: "Show scan summary always" @
-.showstarclassToolStripMenuItem: "Show star class in system info" @
-.showDividersToolStripMenuItem: "Show dividers" @
-.extButtonPlanets.ToolTip: "Planet Filter" @
-.extButtonStars.ToolTip: "Star Filter" @
-.extButtonShowControl.ToolTip: "Display Settings" @
-.extButtonAlignment.ToolTip: "Alignment" @
-.extButtonFont.ToolTip: "Font" @
-.extButtonFSS.ToolTip: "FSS Signal Selection" @
-.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
-.extButtonSetRoute.ToolTip: "Select route to follow" @
-.extButtonControlRoute.ToolTip: "Route Settings" @
-.extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" @
-.navroute: "Nav Route" @
-.fuel: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
-.fsssignals: "List signals to display, semicolon seperated" @
+C545D651351423: "System scan complete" => "Scan du système terminé"
+7FBED1E5CF7C0C: " bodies detected." => " corps détectés."
+7B14664F50BD79: " bodies found." => " corps trouvés."
+60B6BCE139DBD6: " Cluster and NonBody counts differ by " => " Ceintures d'astéroïdes et autres corps non célestes : "
+1C8BA580027067: "Alignment Left" => "Gauche"
+DF79D6CA8BD2F3: "Alignment Center" => "Centre"
+43EF428A78F1FA: "Alignment Right" => "Droite"
+0C309E8F04C0F1: "Show All Planets" => "Afficher toutes les planètes"
+C310B6E9C77045: "Ammonia World" => "Monde ammoniac"
+B52BBF018CF9EC: "Earthlike World" => "Monde tellurique"
+909C1B5FFD57ED: "Water World" => "Monde aquatique"
+3D43FF8C48FA2C: "High metal content body" => "Monde abondant en métaux"
+EA5B349025CF82: "Metal-rich body" => "Corps riche en métaux"
+4D8D48B5146934: "Terraformable" @
+D4617F3267AD60: "Has volcanism" => "a du volcanisme"
+3821671BA55EA5: "Has Rings" => "a des anneaux"
+BE57FAED31951F: "High eccentricity" => "Haute excentricité"
+7D6183BB46469D: "Tiny body" => "Corps minuscule"
+CB270B1D277411: "Has any other signals" => "a d'autres signaux"
+2B332D20943805: "Has geological signals" => "a des signaux géologiques"
+F70D62F8263274: "Has biological signals" => "a des signaux biologiques"
+A9292825CC0CA6: "Landable" => "Atterrissable"
+80F9887F7F5A1B: "Landable with atmosphere" => "Atterrissable avec atmosphère"
+C269F2C820ADBB: "Landable and large" => "Atterrissable et large"
+3F9C411965E271: "Landable with volcanism" => "Atterrissable avec du volcanisme"
+167210938F96A8: "Show All Stars" => "Afficher toutes les étoiles"
+5097B5F23AD8D4: "Show Belt Clusters" => "Afficher les ceintures d'astéroïdes"
+80ABC1AA30BCD0: "Show signals" => "Afficher les signaux"
+05B917D12283B7: "Show signal mismatch" => "Afficher les signaux non-concordant"
+85A950DCA2796C: "Show values" => "Afficher les valeurs"
+96AF5179B25859: "Show more information" => "Afficher plus d'informations"
+51D3D53A0D6A7E: "Show gravity of landables" => "Afficher la gravité des atterrissables"
+B8EFA4FD4838B4: "Show atmospheres" => "Afficher les atmosphères"
+8BB27FDBF605FF: "Show surface temperature" => "Afficher la température de surface"
+1F599CE9A5F201: "Show volcanism" => "Afficher le volcanisme"
+1300E34B1510AA: "Auto Hide" => "Masquer automatiquement"
+AA12356A13B1CE: "Don't hide in FSS Mode" => "Ne pas masquer en mode ACS"
+5E30FC90BB9E47: "Hide already mapped bodies" => "Masquer les corps déjà cartographiés"
+A6F528EE452953: "Show system info always" => "Toujours montrer les infos du système"
+26B6A73ABC8985: "Show scan summary always" => "Toujours montrer le résumé du scan"
+0C958474BD3F89: "Show star class in system info" => "Afficher la classe de l'étoile dans les infos du système"
+38F6C10BC38855: "Show dividers" => "Afficher les séparateurs"
+7CCD13400121F3: "Planet Filter" => "Filtre des planètes"
+7AA20A2EFC7BB6: "Star Filter" => "Filtre des étoiles"
+274A5199553A8D: "Display Settings" => "Ouvre les paramètres"
+7F8C5176C3F03B: "Alignment" => "Alignement"
+B97C4D4CDDF23E: "Font" => "Police de caractère"
+7E65928ECE63CA: "FSS Signal Selection" => "Sélection des signaux ACS"
+23048BC1AE69FE: "Word Wrap" => "Retour à la ligne"
+1BB6C810B1DA16: "Select route to follow" => "Sélectionner l'itinéraire à suivre"
+524DD2CDBBAD94: "Route Settings" => "Paramètres d'itinéraire"
+B10CFFF10BABC0: "Nav Route" @
+9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => ", Moy : {0:N1} al, Max : {1:N1} al, Portée : {2:N1} al"
+B37E90C8789813: "List signals to display, semicolon seperated" => "Liste des signaux à afficher, séparés par des points-virgules"
 
 SECTION MissionListUserControl
 
-.PcolName: "Name" => "任务名称"
-.pColStart: "Start Date" => "开始时间"
-.pColEnd: "End Date" => "结束时间"
-.pColOrigin: "Origin" => "起点"
-.pColFromFaction: "Faction" = UserControlCombatPanel.labelFaction
-.pColDestSys: "Destination" => "目的地"
-.pColTargetFaction: "Target Faction" = UserControlCombatPanel.labelFaction.ToolTip
-.pColResult: "Result (cr)" => "奖金(Cr)"
-.pColInfo: "Info" => "详情"
-.labelTo: "to" => "至"
-.labelSearch: "Search" @
+44AB85A252ADB7: "Origin" => "起点"
+D42713493CA811: "Destination" => "目的地"
+731322861EF2C0: "Result (cr)" => "奖金(Cr)"
+4374AAEE247FB2: "to" => "至"
 
 SECTION UserControlMissions
 
-.MPlural: " Missions" => " 任务"
-.MSingular: " Mission" = UserControlMissions.MPlural
-.Name: "Name" = MissionListUserControl.PcolName
-.Value: "Value (cr):\n{0:N0}" => "奖金(Cr)：\n{0:N0}"
-.ValueN: "Value (cr)" = MissionListUserControl.pColResult
-.ValueC: "Value: " => "奖金："
+A91D37462D4799: " Missions" => " 任务"
+F8B59037B2A4AE: " Mission" => " 任务"
+199EA69AF2F28C: "Value (cr):\n{0:N0}" => "奖金(Cr)：\n{0:N0}"
+59EF5FF5CFDAFB: "Value (cr)" => "奖金(Cr)"
+2688E219B0D815: "Value: " => "奖金："
 
 SECTION UserControlModules
 
-.ItemLocalised: "Type" @
-.ItemCol: "Item" @
-.BluePrint: "BluePrint" @
-.PriorityEnable: "P/E" @
-.labelShip: "Ship" => "飞船"
-.labelVehicle: "Unknown" = Unknown
-.labelMass: "Mass:" @
-.labelCost: "Cost:" @
-.labelFSD: "FSD:" @
-.labelThrusters: "Thrust:" @
-.labelShields: "Shields:" @
-.labelArmour: "Armour:" @
+ECDDA59AEA5EE6: "Item" => "Équipement"
+20DD0E149BA65F: "BluePrint" => "Plan"
+02D2B8A95C0CDF: "P/E" => "P/A"
+323D4FC7337134: "Ship" => "飞船"
+FF36CBDAB65662: "Mass:" => "Masse :"
+24AB018B53A3D1: "Cost:" => "Coût :"
+7BC0F9941B91E6: "FSD:" => "FSD :"
+BE87DB1726CE63: "Thrust:" => "Poussée :"
+BB75822ED5263A: "Shields:" => "Boucliers :"
+C401139400D59D: "Armour:" => "Armure :"
 
 
-.FullBluePrint: "Show full blueprint information" @
-.EngineeredValues: "Show Engineered Values" @
+6129EFBCDDA076: "Show full blueprint information" => "Afficher les informations complètes du plan"
+69105EFE4137CC: "Show Engineered Values" => "Afficher les valeurs ingenieurisées"
 
-.comboBoxShips.ToolTip: "Select ship to view" => "选择飞船以查看"
-.extButtonShowControl.ToolTip: "Display Settings" @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.buttonExtCoriolis.ToolTip: "Send to Coriolis" => "在Corolis网站上打开"
-.buttonExtEDShipyard.ToolTip: "Send to ED Ship Yard" => "在ED Ship Yard网站上打开"
-.buttonExtConfigure.ToolTip: "Configure extra data missing from Elite Journal Output" => "添加游戏日志文件缺失的数据"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
-.extButtonLoadLoadout.ToolTip: "Import a ship definition for display" @
+D9B049A9B6DA3B: "Select ship to view" => "选择飞船以查看"
+6BC3E7B6D12CF8: "Send to Coriolis" => "在Corolis网站上打开"
+5533DAD808E457: "Send to ED Ship Yard" => "在ED Ship Yard网站上打开"
+FE4704B79D6001: "Configure extra data missing from Elite Journal Output" => "添加游戏日志文件缺失的数据"
+A64AB328A429FA: "Import a ship definition for display" => "Importer une définition de vaisseau à afficher"
 
-.ForceSell: "Force Sell" @
-.ConfirmForceSell: "Confirm sell of ship:" @
-.StoredModules: "Stored Modules" @
-.TravelHistoryEntry: "Travel History Entry" @
-.OwnedShips: "Owned Ships" @
-.System: "System" = SearchMaterialsCommodities.ColumnStar
-.TxTime: "Tx Time" => "运送时长"
-.Cost: "Cost" => "运送花费"
-.SlotCol: "Slot" @
-.ItemInfo: "Info" @
-.Value: "Value" => "价值"
-.Stored: "Stored" @
-.AllModules: "All Modules" @
-.AllShips: "All Ships" @
-.Mass: "Mass" @
+FE5C2531E39340: "Force Sell" => "Forcer la vente"
+6274EC09200AD8: "Confirm sell of ship:" => "Confirmer la vente du vaisseau"
+CA73BB4E22EBFD: "Stored Modules" => "Modules stockés"
+D2F025FD0D6F0C: "Travel History Entry" => "Historique de voyage"
+673463FDF95385: "Owned Ships" @
+44B046E04F2B04: "Tx Time" => "运送时长"
+64AE43E8FE7620: "Cost" => "运送花费"
+ECE2AC10D7266F: "Slot" => "Emplacement"
+8DCE170DE238B1: "Value" => "价值"
+B2B53EE4FC1A90: "Stored" => "Stocké"
+22F4D0D2422A35: "All Modules" => "Tous les modules"
+9569A6C389205D: "All Ships" @
+AF0AD10B2A196B: "Mass" => "Masse"
 
-.InTransit: "In Transit" => "正在运送中"
-.EDSURL: "Enter ED Shipyard URL" @
-.CURL: "Enter Coriolis URL" @
-.FW: "Fuel Warning: " => "燃料警告："
-.TTF: "Enter fuel warning level in % (0 = off, 1-100%)" => "输入燃料警告的百分比（0为关闭，输入1-100%）"
-.PresstoAccept: "Press to Accept" = OK
-.PresstoCancel: "Press to Cancel" = Cancel
-.NValid: "A Value is not valid" => "请输入一个有效的值"
-.SC: "Ship Configure" => "飞船配置"
-.MI: "Module Information" => "模组信息"
-.NOSI: "No Ship Information available" @
+046E5CEE819C2B: "In Transit" => "正在运送中"
+EF14AB9080E8AD: "Enter ED Shipyard URL" => "Entrer l'URL ED Shipyard"
+5406A1422EA878: "Enter Coriolis URL" => "Entrer l'URL Coriolis"
+2A39E6AA297AED: "Fuel Warning: " => "燃料警告："
+6915FDD1AF8A81: "Enter fuel warning level in % (0 = off, 1-100%)" => "输入燃料警告的百分比（0为关闭，输入1-100%）"
+E613FC90158F3E: "A Value is not valid" => "请输入一个有效的值"
+3F86F40ECFD2E5: "Ship Configure" => "飞船配置"
+2A7F42E6F0BB55: "Module Information" => "模组信息"
+5E09137F0F0012: "No Ship Information available" => "Aucune information disponible pour le vaisseau"
 
-.labelDataArmour: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" @
-.labelDataShields: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" @
-.labelDataMass: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" @
-.labelDataCost: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" @
-.labelDataFSD: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
-.labelDataThrust: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
-.labelDataWep: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
-.labelWep: "Weapons:" @
+5434A871028102: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" => "Brut {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}"
+AA4EDB168CAE21: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" => "Brut {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}"
+7D67DDF30E8473: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" => "Mass {0.##|t} Coque {0.##|t} Modules {0.##|t} Vide {0.##|t} Cargo {0|/|0|t} Alerte à {0.#|%}"
+E5379DCF7E564E: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" => "Valeur Coque {N0|cr} Modules {N0|cr} Total {N0|cr} Rachat {N0|cr}"
+C8DF6EB8BFDFCF: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" => "Actu {0.##|ly} Porté {0.##|ly} Plein {0.##|ly} Vide {0.##|ly} Max {0.##|ly} Max Carbu {0.##|t} Actu {0.#|/|0.#|t} Réserve {0.#|/|0.#|t} En transfert vers {} Stocké à {}"
+C11EA28A729193: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" => "Vit actu {0.#} Boost {0.#} Plein {0.#|/|0.#} Vide {0.#|/|0.#} Max {0.#|/|0.#} Boost Actu {0.#|s} Max {0.#|s}"
+6CC0AEA921D9CD: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" => "Brut {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Munitions {0.#|s} Actu {0.#|%} Max {0.#|%}"
+825EC079E4368A: "Weapons:" => "Armes :"
 
-.extButtonSaveLoadout.ToolTip: "Save this loadout to the EDD loadout folder" @
-.extButtonDeleteLoadout.ToolTip: "Delete loadout" @
+60830556FBB8D7: "Save this loadout to the EDD loadout folder" => "Sauvegarder cette configuration dans le dossier des configurations de EDD"
+391427FC2F26EA: "Delete loadout" => "Supprimer la configuration"
 
-.SaveLoadout: "Enter loadout description to save ship with" @
+6E34095646ED42: "Enter loadout description to save ship with" => "Entrez la description à sauvegarder pour la configuration du vaisseau"
 
 SECTION UserControlNotePanel
 
-.miGMPNotes: "Display galactic mapping notes" => "显示银河系星图绘制计划的笔记"
-.miSystemNotes: "Display system notes" => "显示星系笔记"
+0DC8008FE2CDB2: "Display galactic mapping notes" => "显示银河系星图绘制计划的笔记"
+BBABBD48675D28: "Display system notes" => "显示星系笔记"
 
 SECTION UserControlOutfitting
 
-.labelYard: "Unknown" = Unknown
-.labelYardSel: "Sel" => "出售模组"
-.comboBoxYards.ToolTip: "Select ship to view" => "选择模组以查看"
-.TravelHistoryEntry: "Travel History Entry" => "航行记录"
-.Date: "Date" = SearchMaterialsCommodities.ColumnDate
-.Yard: "Yard" => "空间站"
-.Item: "Item" = UserControlEngineering.ModuleCol
-.Distance: "Distance" => "距离"
-.Price: "Price" => "价格"
-.Type: "Type" = UserControlMaterialCommodities.ColType
-.Info: "Info" = SearchScans.ColumnInformation
-.Mass: "Mass" => "质量"
+7481B2E308A25E: "Sel" => "出售模组"
+0637A8C214DE05: "Yard" => "空间站"
+423208095DD7FC: "Distance" => "距离"
+3E8248E32EDFCA: "Price" => "价格"
 
 SECTION UserControlPanelSelector
 
-.NOADDONS: "NO ADD ONS!" => "没有插件！"
-.AddOns: " Add Ons" => "个插件"
-.TTA: "Click to add or remove Add Ons" => "单击以添加或删除插件"
-.TTB: "Add ons are essential additions to your EDD experience!" => "插件是使用EDDiscovery过程中一种必不可少的体验"
-.PP1: "Pop out in a new window" => "在新弹窗中打开"
-.MT1: "Open as a new menu tab" => "作为新标签页打开"
+F195557637BC15: "NO ADD ONS!" => "没有插件！"
+2CB644D01CC1F0: " Add Ons" => "个插件"
+F219DBFBA7E199: "Click to add or remove Add Ons" => "单击以添加或删除插件"
+AE0FE6B7276775: "Add ons are essential additions to your EDD experience!" => "插件是使用EDDiscovery过程中一种必不可少的体验"
+03B4832BADF372: "Pop out in a new window" => "在新弹窗中打开"
+CD2C44353CE1A8: "Open as a new menu tab" => "作为新标签页打开"
 
 SECTION UserControlRoute
 
-.M1: "Nearest to Waypoint" @
-.M2: "Minimum Deviation from Path" @
-.M3: "Nearest to Waypoint with dev<=100ly" @
-.M4: "Nearest to Waypoint with dev<=250ly" @
-.M5: "Nearest to Waypoint with dev<=500ly" @
-.M6: "Nearest to Waypoint + Deviation / 2" @
-.SystemCol: "System" = SearchMaterialsCommodities.ColumnStar
-.NoteCol: "Notes" @
-.DistanceCol: "Distance" = UserControlOutfitting.Distance
-.StarClassCol: "Star Class" @
-.WayPointDistCol: "Dist. Waypoint" => "航点距离"
-.DeviationCol: "Deviation" => "偏航值"
-.groupBoxSpansh: "Spansh" @
-.extButtonNeutronRouter: "Neutron Router" @
-.extButtonSpanshRoadToRiches: "Road to Riches" @
-.extButtonSpanshAmmoniaWorlds: "Ammonia Worlds" @
-.extButtonSpanshEarthLikes: "Earth Likes" @
-.extButtonSpanshTradeRouter: "Trade Router" @
-.extButtonFleetCarrier: "Fleet Carrier" @
-.extButtonSpanshGalaxyPlotter: "Galaxy Plotter" @
-.extButtonExoMastery: "Exo Mastery" @
-.extCheckBoxPermitSystems: "Use Permit Systems" @
-.groupBoxInternal: "EDD Router" @
-.labelMetric: "Metric" => "计算方法"
-.extButtonRoute: "Find Route" => "规划航线"
-.groupBoxPara: "Parameters" @
-.checkBox_FsdBoost: "Use Boosts" @
-.labelFrom: "From" => "从"
-.labelLy2: "ly" @
-.labelLy1: "ly" @
-.buttonExtTravelTo: "History" = UserControlOutfitting.TravelHistoryEntry
-.labelEDSMBut: "Web Lookup" @
-.labelMaxJump: "Max jump" => "FSD跳跃范围"
-.labelDistance: "Distance" => "直线距离"
-.buttonExtTravelFrom: "History" = UserControlOutfitting.TravelHistoryEntry
-.labelTo: "To" => "到"
-.buttonExtTargetTo: "Target" = UserControlCompass.labelTargetLat
-.buttonTargetFrom: "Target" = UserControlCompass.labelTargetLat
-.copyToolStripMenuItem: "Copy" = UserControlExpedition.copyToolStripMenuItem
-.showScanToolStripMenuItem: "View Scan Display" @
-.viewOnSpanshToolStripMenuItem: "View on Spansh" @
-.showInEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
-.extButtonExpeditionPush.ToolTip: "Push to expedition" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" => "导出表格中的数据到Excel中"
-.cmd3DMap.ToolTip: "Show route on 3D Map" => "在3D星图中显示航线"
-.comboBoxRoutingMetric.ToolTip: "Pick the metric to use when searching for a route" => "选择一个用来计算航线的方法"
-.extButtonRoute.ToolTip: "Compute the route" => "计算航线"
-.textBox_From.ToolTip: "Select system to start the route" => "选择一个星系作为起点"
-.textBox_FromX.ToolTip: "X Co-ord" => "X坐标"
-.checkBox_FsdBoost.ToolTip: "The route finder will try and use FSD injections in case a direct route could not be found." @
-.textBox_FromY.ToolTip: "Y (Vertical) Co-ord" => "Y坐标"
-.textBox_ToName.ToolTip: "Alternate Name" => "别名"
-.textBox_FromZ.ToolTip: "Z Co-ord" => "Z坐标"
-.textBox_Range.ToolTip: "Give your jump range, or search range for long jumps. This is updated on history change or change of ship/modules to the jump range with  zero cargo and maximum fuel" => "输入你的飞船的FSD跳跃范围"
-.textBox_FromName.ToolTip: "Alternate name" = UserControlRoute.textBox_ToName.ToolTip
-.textBox_ToX.ToolTip: "X Co-Ord" = UserControlRoute.textBox_FromX.ToolTip
-.textBox_ToY.ToolTip: "Y (Vertical) Co-ord" = UserControlRoute.textBox_FromY.ToolTip
-.textBox_Distance.ToolTip: "Distance between start and end" => "起点与终点间的直线距离"
-.buttonExtTravelTo.ToolTip: "Copy the entry in the main travel grid to end route entry" => "将主航行历史里选中的条目当作航线终点"
-.textBox_ToZ.ToolTip: "Z Co-ord" = UserControlRoute.textBox_FromZ.ToolTip
-.buttonExtTravelFrom.ToolTip: "Copy the entry in the main travel grid to start route entry" => "将主航行历史里选中的条目当作航线起点"
-.buttonExtTargetTo.ToolTip: "Copy the target system to end route entry" => "将目标星系当作航线终点"
-.textBox_To.ToolTip: "Select the system to end in" => "选择一个星系作为终点"
-.buttonToEDSM.ToolTip: "Open this end route system in EDSM" => "在EDSM中查看这个终点星系"
-.buttonTargetFrom.ToolTip: "Copy the target system to start route entry" => "将目标星系当作航线起点"
-.buttonFromEDSM.ToolTip: "Open this start route system in EDSM" => "在EDSM中查看这个起点星系"
-.extButtonExpeditionSave.ToolTip: "Save as an expedition for use on expedition and surveyor panels" @
-.labelCargo: "Cargo" @
-.Confirm: "This will result in a large number ({0}) of jumps\r\nConfirm please" @
-.NoRoute: "No route set up, retry" @
+26FF00FE75BC12: "Nearest to Waypoint" => "Au plus près du point de passage"
+508F66A88A61E3: "Minimum Deviation from Path" => "Déviation minimale du trajet"
+BE27456DCDC392: "Nearest to Waypoint with dev<=100ly" => "Au plus près du point de passage avec déviation <= 100al"
+0B067FBCFEC659: "Nearest to Waypoint with dev<=250ly" => "Au plus près du point de passage avec déviation <= 250al"
+F81B5CCC0CBA7E: "Nearest to Waypoint with dev<=500ly" => "Au plus près du point de passage avec déviation <= 500al"
+A889A01619F167: "Nearest to Waypoint + Deviation / 2" => "Au plus près du point de passage + déviation / 2"
+4AF0AE296CB9BC: "Star Class" => "Classe d'étoile"
+A5B44BA4A6C532: "Dist. Waypoint" => "航点距离"
+37148FF19B7B45: "Deviation" => "偏航值"
+4219EE1EC9D603: "Neutron Router" => "Itinéraire à neutrons"
+CFD4E874046B93: "Road to Riches" => "Route à la richesse"
+1DF8F8D30FDD0F: "Ammonia Worlds" => "Mondes ammoniacs"
+AB2A9F0D8D787B: "Earth Likes" => "Mondes telluriques"
+0077D22826A77F: "Trade Router" => "Itinéraire commercial"
+0CF5E327910E74: "Fleet Carrier" => "Porte-vaisseaux"
+B12CDD63114BA4: "Galaxy Plotter" => "Itinéraire galactique"
+B364AA8B4033FF: "Exo Mastery" => "Maitrise exobiologique"
+07AB47C5737BA1: "Use Permit Systems" => "Utiliser les systèmes avec permis"
+C596F14D22DF2A: "EDD Router" @
+B2BB7604C825F9: "Metric" => "计算方法"
+B604A930356A28: "Find Route" => "规划航线"
+A975EEA30DB9FA: "Parameters" => "Paramètres"
+281FA0DAFE53E1: "Use Boosts" => "Utilisation des injections"
+3F66052A107EAF: "From" => "从"
+EC59449017E5B6: "ly" => "al"
+8424A6DD977331: "Web Lookup" @
+A0E237BAC8B17A: "Max jump" => "FSD跳跃范围"
+AE79EA1E9C6391: "To" => "到"
+7CF37443D567D9: "Push to expedition" => "Envoyer dans Expédition"
+D5C87506FD897A: "Show route on 3D Map" => "在3D星图中显示航线"
+2FB4DE63226EC5: "Pick the metric to use when searching for a route" => "选择一个用来计算航线的方法"
+15C8B586D75855: "Compute the route" => "计算航线"
+7CB23251C521A7: "Select system to start the route" => "选择一个星系作为起点"
+CF2DBA7382BBC7: "X Co-ord" => "X坐标"
+57F290A76CC277: "The route finder will try and use FSD injections in case a direct route could not be found." => "L'itinéraire essaiera d'utiliser des injections FSD au cas où une route directe ne pourrait pas"
+8F93A6BCCBBDE4: "Y (Vertical) Co-ord" => "Y坐标"
+E2DB86200AEE3A: "Alternate Name" => "别名"
+DA99EA2DAC297D: "Z Co-ord" => "Z坐标"
+7A6B5B6E3B9F41: "Give your jump range, or search range for long jumps. This is updated on history change or change of ship/modules to the jump range with  zero cargo and maximum fuel" => "输入你的飞船的FSD跳跃范围"
+3964427D386841: "Alternate name" => "别名"
+F380CB0DC8B202: "X Co-Ord" => "X坐标"
+FC8F6F814A4A0A: "Distance between start and end" => "起点与终点间的直线距离"
+58323E0E70D331: "Copy the entry in the main travel grid to end route entry" => "将主航行历史里选中的条目当作航线终点"
+70B586862B1E2B: "Copy the entry in the main travel grid to start route entry" => "将主航行历史里选中的条目当作航线起点"
+DE6A8B4B96A80A: "Copy the target system to end route entry" => "将目标星系当作航线终点"
+97F2080200A937: "Select the system to end in" => "选择一个星系作为终点"
+49EF07BB828D47: "Open this end route system in EDSM" => "在EDSM中查看这个终点星系"
+9373E102BD9CCC: "Copy the target system to start route entry" => "将目标星系当作航线起点"
+87C399D0E2BAD2: "Open this start route system in EDSM" => "在EDSM中查看这个起点星系"
+681943CB0EA134: "Save as an expedition for use on expedition and surveyor panels" => "Sauvegarder en tant qu'expédition pour une utilisation sur les panneaux Expédition et Géomètre"
+4BB903205B7347: "This will result in a large number ({0}) of jumps\r\nConfirm please" => "Cela entraînera un grand nombre ({0}) de sauts\r\nVeuillez confirmer"
+33C5EE107CFEC3: "No route set up, retry" => "Aucun itinéraire configuré, réessayez"
 
 SECTION UserControlRouteTracker
 
-.showBookmarkNotesToolStripMenuItem: "Show Bookmark Notes" @
-.showJumpsToolStripMenuItem: "Show Jumps To Go" => "显示所需的FSD跳跃次数"
-.showWaypointCoordinatesToolStripMenuItem: "Show Waypoint Coordinates" => "显示航点坐标"
-.showDeviationFromRouteToolStripMenuItem: "Show Deviation from route" => "显示距航线的偏差"
-.autoCopyWPToolStripMenuItem: "Auto copy waypoint" => "自动复制航点"
-.autoSetTargetToolStripMenuItem: "Auto set target" => "自动设置目标"
-.showSystemRouteNoteToolStripMenuItem: "Show Route Note on waypoint" @
-.showtargetinfo: "Show Target Information" @
-.showfuelinfo: "Show Fuel Information" @
-.J1: "jump" => "次跳跃"
-.TF: "To First WP " => "至下一个航点："
-.JS: "jumps" = UserControlRouteTracker.J1
-.FL: "From Last WP " => "自上一个航点："
-.LF: ", Left {0:N1}ly" => "，剩余 {0:N1}Lj"
-.ToWP: "(WP {0})" => "至航点 {0}"
-.NoFSD: " No Ship FSD Information" => " 无此飞船的FSD参数信息"
-.Dev: ", Dev {0:N1}ly" => ", 偏航 {0:N1}ly"
-.NoWay: "Route contains no waypoints" => "此航线不包含任何航点"
-.NoCo: "No systems in route have known co-ords" => "此航线中没有任何已知坐标的星系"
-.Note: "Note: {0}" @
+0BA3B547C8344B: "Show Bookmark Notes" => "Afficher les notes de marque-page"
+DF44D515D3D0A7: "Show Jumps To Go" => "显示所需的FSD跳跃次数"
+DA8C8F2A82D1B3: "Show Waypoint Coordinates" => "显示航点坐标"
+9068E91DD59D7E: "Show Deviation from route" => "显示距航线的偏差"
+0E41D824E76FFC: "Auto copy waypoint" => "自动复制航点"
+47A9634A94F762: "Auto set target" => "自动设置目标"
+E732DB70301B2D: "Show Route Note on waypoint" => "Affiche la note de route du point de passage"
+F01A41B43B8868: "Show Target Information" => "Afficher les informations de la cible"
+79A125B4CFF3BE: "Show Fuel Information" => "Afficher les informations carburant"
+271E9A568C0E9E: "jump" => "次跳跃"
+24C1C17E2C811B: "To First WP " => "至下一个航点："
+EDA92612CF2474: "jumps" => "次跳跃"
+8212F4935A232D: "From Last WP " => "自上一个航点："
+DD0341E14022F3: ", Left {0:N1}ly" => "，剩余 {0:N1}Lj"
+DF5C9749BAE618: "(WP {0})" => "至航点 {0}"
+F01632B2B22D3F: " No Ship FSD Information" => " 无此飞船的FSD参数信息"
+2DA19892882702: ", Dev {0:N1}ly" => ", 偏航 {0:N1}ly"
+CEE17FB4380701: "Route contains no waypoints" => "此航线不包含任何航点"
+C415DA3D51A1E9: "No systems in route have known co-ords" => "此航线中没有任何已知坐标的星系"
+33F6E6F622B613: "Note: {0}" @
 
 SECTION UserControlScan
 
-.scanDisplayBodyFiltersButton.ToolTip: "Configure scan display body filters" @
-.scanDisplayConfigureButton.ToolTip: "Configure scan display" @
-.extCheckBoxStar.ToolTip: "Select another system to view" => "选择查看另外一个星系"
-.buttonSize.ToolTip: "Select image size" => "选择图标大小"
-.extButtonHighValue.ToolTip: "Set High Value Limit" => "设定高价值星体的最低标准"
-.buttonExtExcel.ToolTip: "Export" => "把当前面板显示的数据导出到Excel中"
-.System: "System:" => "星系："
-.EnterSys: "Show System" => "显示星系"
-.VLMT: "Set Valuable Minimum" = UserControlScan.extButtonHighValue.ToolTip
-.StatusIcons: "Show body status icons" @
-.SystemValue: "Show system and value in main display" @
-.MatFull: "Hide materials which have reached their storage limit" @
-.ShowMaterials: "Show Materials" @
-.ShowRaresOnly: "Show rare materials only" @
-.ShowMoons: "Show Moons" @
-.Belt: "Belt" @
-.Star: "Star" @
-.Barycentre: "Barycentre" @
-.Body: "Body" @
-.AllG: "Show G on all planets" @
-.HabZone: "Show Habitation Zone" @
-.PlanetClass: "Show Classes of Planets" @
-.StarClass: "Show Classes of Stars" @
-.Distance: "Show distance of bodies" @
-.PlanetMass: "Show mass of planets" @
-.StarMass: "Show mass of stars" @
-.StarAge: "Show age of stars" @
-.Expired: "Expired:" @
-.StarsOnDiffLines: "Show bodyless stars on separate lines" @
-.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
+F3B7084D189898: "Configure scan display body filters" => "Configurer les filtres d'affichage du scan pour les corps"
+0FE1B534E56651: "Configure scan display" => "Configurer l'affichage du scan"
+111D3A2E729C26: "Select image size" => "选择图标大小"
+A0BB88B66F57E8: "Set High Value Limit" => "设定高价值星体的最低标准"
+2F2F42105ABA82: "Set Valuable Minimum" => "设定高价值星体的最低标准"
+0DE266189138B6: "Show body status icons" => "Afficher les icônes de statut des corps"
+3466741E7D93DA: "Show system and value in main display" => "Afficher le système et sa valeur dans l'écran principal"
+028F51CCB7BAD7: "Hide materials which have reached their storage limit" => "Masquer les matériaux qui ont atteint la limite de stockage"
+9F6C1D41D0D032: "Show Materials" => "Afficher les matériaux"
+B028A006D79224: "Show rare materials only" => "Afficher uniquement les matériaux rares"
+00848F83A633FB: "Show Moons" => "Afficher les lunes"
+2DBDE6DD6FB541: "Belt" => "Ceinture"
+17B8D69486D780: "Barycentre" @
+14E0E8D442549A: "Show G on all planets" => "Afficher les G sur toutes les planètes"
+12071F4330F803: "Show Habitation Zone" => "Afficher la zone habitable"
+64E6C643FFE7E8: "Show Classes of Planets" => "Afficher les classes de planètes"
+E0B7B8CC8BD7CC: "Show Classes of Stars" => "Afficher les classes d'étoile"
+9BD1DE0511B36C: "Show distance of bodies" => "Afficher la distance des corps"
+1BC356C17D4433: "Show mass of planets" => "Afficher la masse des planètes"
+FA07BE19814A99: "Show mass of stars" => "Afficher la masse des étoiles"
+A35655D05BB820: "Show age of stars" => "Afficher l'age des étoiles"
+0A78BBC3075642: "Expired:" => "Expiré :"
+90EAF9559AB2D2: "Show bodyless stars on separate lines" => "Afficher les étoiles sans corps sur des lignes séparées"
+79F1829F7C4ED0: "Create a new bookmark for the current system" => "Créer un nouveau marque-page pour le système actuel"
 
 SECTION UserControlScanGrid
 
-.colName: "Name" = UserControlEstimatedValues.BodyName
-.colClass: "Class" => "星体种类"
-.colDistance: "Distance" @
-.colBriefing: "Information" = SearchScans.ColumnInformation
-.ColCurValue: "Current Value" @
-.ColMaxValue: "Max Value" @
-.ColOrganics: "Organics Value" @
-.extButtonShowControl.ToolTip: "Configure overall settings" @
-.extButtonHighValue_ToolTip: "Set High Value Limit" @
-.MainStar: "Main Star" = UserControlExpedition.Stars
-.Mass: "Mass" = UserControlOutfitting.Mass
-.Radius: "Radius" => "半径"
-.Temperature: "Temperature" => "温度"
-.Terraformable: "Terraformable" @
-.Moon: "Moon" => "卫星"
-.Landable: "Landable" => "可登陆"
-.Geologicalactivity: "Geological activity" @
-.Surfacemapped: "Surface mapped" @
-.BC: "This body contains: " => "这个星体有："
-.Ring: "Ring: " => "有1个环"
-.Belt: "Belt: " => "小行星带："
-.GS: "This is a green system, as it has all existing jumponium materials available!" @
-.JS: " jumponium materials found in system." @
-.ScanSummaryfor: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "星系{0}的扫描概要：{1}个恒星; {2}个行星（{3}个类地行星，{4}个气态巨行星），{5}个卫星"
-.structuresToolStripMenuItem.beltsToolStripMenuItem: "Show belts" => "小行星带(Belts)"
-.structuresToolStripMenuItem.ringsToolStripMenuItem: "Show rings" => "环(Rings)"
-.materialsToolStripMenuItem: "Show materials" = UserControlMaterialCommodities.Mats
-.extButtonHighValue.ToolTip: "Set High Value Limit" @
-.extButtonNewBookmark.ToolTip: "Create a new bookmark for the current system" @
+41FF354B2B330B: "Class" => "星体种类"
+63289439EF0B8A: "Max Value" => "Valeur maximale"
+ED567CF0E9AE1F: "Organics Value" => "Valeur scans organiques"
+EBFEA75A0A6AC5: "Configure overall settings" => "Paramètres généraux"
+0498696B357E52: "Main Star" => "主恒星"
+E5AAEAAC2E19A2: "Radius" => "半径"
+0A9062A9CB5199: "Temperature" => "温度"
+846B90266CABF4: "Moon" => "卫星"
+F85D3B343E0C17: "Geological activity" => "Activité géologique"
+8E140B3FB3635C: "Surface mapped" => "Surface cartographiée"
+A7D0680CBE63CD: "This body contains: " => "这个星体有："
+8189F9AF9F3214: "Ring: " => "有1个环"
+70D78F107FF0C0: "Belt: " => "小行星带："
+CB7305DF2F4D76: "This is a green system, as it has all existing jumponium materials available!" => "Ceci est un système écologique, tous les matériaux existants pour le Jumponium sont disponibles !"
+318EF98C2276FA: " jumponium materials found in system." => " matériaux pour le Jumponium trouvés dans le système."
+37B1866847BAC8: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "星系{0}的扫描概要：{1}个恒星; {2}个行星（{3}个类地行星，{4}个气态巨行星），{5}个卫星"
+E8DE686E802FAB: "Show belts" => "小行星带(Belts)"
+F914C4A8D920BF: "Show rings" => "环(Rings)"
+66076C60802EA8: "Show materials" => "材料"
 
 SECTION UserControlSettings
 
-.groupBoxCommanders: "Commanders" => "指挥官"
-.ColumnCommander: "Commander" = UserControlSettings.groupBoxCommanders
-.EdsmName: "EDSM Name" => "EDSM 用户名"
-.JournalDirCol: "Journal Folder" => "游戏日志文件路径"
-.NotesCol: "Notes" = UserControlEngineering.NotesCol
-.btnDeleteCommander: "Delete" = Delete
-.extButtonUnDelete: "Undelete" @
-.buttonEditCommander: "Edit" = UserControlCombatPanel.buttonExtEditCampaign
-.buttonAddCommander: "Add" => "添加"
-.groupBoxTheme: "Theme" => "主题"
-.button_edittheme: "Edit Theme" => "编辑主题"
-.buttonSaveTheme: "Save Theme" => "保存主题"
-.groupBoxCustomHistoryLoad: "History" => "航行记录选项"
-.checkBoxOrderRowsInverted: "Number Rows by Date Ascending" => "按照升序方式对事件进行排序"
-.labelTimeDisplay: "Time:" @
-.extGroupBoxWebServer: "Web Server" @
-.labelPortNo: "Port" @
-.extButtonTestWeb: "Test" @
-.extCheckBoxWebServerEnable: "Enable" @
-.groupBoxInteraction: "Interaction" @
-.labelTKey: "Key to activate transparent windows" => "激活窗口热键"
-.groupBoxMemory: "Memory" @
-.labelHistoryEssItems: "Essential entries:" => "重要条目为："
-.labelHistorySel: "Entries to read:" => "仅读取重要的条目"
-.groupBoxCustomScreenShots: "Screenshots conversion" => "截图"
-.buttonExtScreenshot: "Configure" => "配置"
-.checkBoxCustomEnableScreenshots: "Enable" => "启用截图格式转换"
-.groupBoxCustomEDSM: "System DB Control" => "EDSM/EDDB选项"
-.buttonExtEDSMConfigureArea: "Select Galaxy Sectors" => "选择星域"
-.checkBoxCustomEDSMDownload: "Enable Star Data Download" => "启用星系数据下载"
-.groupBoxPopOuts: "Window Options" => "界面设置"
-.checkBoxPanelSortOrder: "Panel List Sorted Alphanumerically" => "面板列表按字母顺序排序"
-.checkBoxKeepOnTop: "Keep on Top" => "窗口置顶"
-.checkBoxCustomResize: "Redraw the screen during resizing" => "改变窗口大小时实时重绘窗口"
-.checkBoxMinimizeToNotifyIcon: "Minimize to notification area icon" => "最小化到系统托盘图标"
-.checkBoxUseNotifyIcon: "Show notification area icon" => "显示系统托盘图标"
-.extGroupBoxDLLPerms: "DLLs" @
-.extButtonDLLPerms: "Permissions" @
-.extButtonDLLConfigure: "Configure" @
-.groupBoxCustomLanguage: "Language" => "语言 (Language)"
-.groupBoxCustomSafeMode: "Advanced" => "安全模式"
-.buttonExtSafeMode: "Restart in Safe Mode" => "重启至安全模式"
-.labelSafeMode: "Click this to perform special operations, such as to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" => "单击这个按钮以进行特殊操作"
-.btnDeleteCommander.ToolTip: "Delete selected commander" => "删除选定的指挥官"
-.buttonEditCommander.ToolTip: "Edit selected commander" => "编辑选定的指挥官"
-.buttonAddCommander.ToolTip: "Add a new commander" => "添加一个新的指挥官"
-.comboBoxTheme.ToolTip: "Select the theme to use" => "选择你想用的主题"
-.button_edittheme.ToolTip: "Edit theme and change colours fonts" => "编辑主题改变颜色和字体"
-.buttonSaveTheme.ToolTip: "Save theme to disk" => "保存当前主题到硬盘"
-.checkBoxOrderRowsInverted.ToolTip: "Number oldest entry 1, latest entry highest" => "将最旧的记录排序为1，最新的记录序号最大"
-.comboBoxClickThruKey.ToolTip: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "选择一个用来显示透明弹窗窗体的热键。\r\n当透明弹窗设定在Tc（鼠标穿透但是可以点击按钮等\r\n控件）或者在Tf（鼠标穿透且不能进行操作）时，把\r\n鼠标指针指在窗体上按下热键500毫米以上后可以活激\r\n透明窗体。不是所有的按钮都能保证可以正常使用。"
-.comboBoxCustomEssentialEntries.ToolTip: "Select which items you consider essential to load older than the time above" => "选择你觉得重要的条目，这些条目即使旧于上面设置的时间范围也会被加载"
-.comboBoxCustomHistoryLoadTime.ToolTip: "Reduce Memory use. Select either load all records, or load only essential items of records older than a set time before now" => "减少内存使用率。选择加载全部记录否则在指定时间范围外只有重要条目才能被加载（指定时间范围外的其余条目将会被忽略）。"
-.buttonExtScreenshot.ToolTip: "Configure further screenshot options" => "进一步配置截图选项"
-.checkBoxCustomEnableScreenshots.ToolTip: "Screen shot conversion on/off" => "打开/关闭截图转换格式功能"
-.buttonExtEDSMConfigureArea.ToolTip: "Configure what parts of the galaxy is stored in the databases" => "选择想要储存在数据库里的银河星域"
-.checkBoxCustomEDSMDownload.ToolTip: "Click to enable downloading of stars from EDSM or Spansh. Will apply at next start." => "选择以启用从EDSM和EDDB下载星系数据。重启后生效。"
-.checkBoxPanelSortOrder.ToolTip: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "面板列表使用字母顺序进行排序，而不是安装类别排序。注意需要重启。（目前中文界面下无效）"
-.checkBoxKeepOnTop.ToolTip: "This window, and its children, top" => "所有窗口置顶"
-.checkBoxCustomResize.ToolTip: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "选中后会允许EDDiscovery的窗口在被缩放时实时改变窗口内容的尺寸。\r\n如果卡顿的话可以把此项关闭。"
-.checkBoxMinimizeToNotifyIcon.ToolTip: "Minimize the main window to the system notification area (system tray) icon." => "最小化窗口到系统托盘图标"
-.checkBoxUseNotifyIcon.ToolTip: "Show a system notification area (system tray) icon for EDDiscovery." => "在系统托盘中显示图片"
-.buttonExtSafeMode.ToolTip: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." => "安全模式可以让你进行特殊操作。比如移动数据库，重置界面，重置插件，DLL等"
-.GameTime: "Game Time" @
-.Local: "Local" @
-.WSQ: "Warning about webserver-  see english text" @
-.WSF: "Did not start - click OK to configure windows" @
-.FS: "All entries for Statistics" => "统计资料用的所有条目"
-.SM: "Safe Mode" = UserControlSettings.groupBoxCustomSafeMode
-.CSM: "Confirm restart to safe mode" => "确认进入安全模式"
-.DLA: "Disabled-Load All" => "禁用-全部加载"
-.7daysold: ">7 days old" => "7天内"
-.30daysold: ">30 days old" => "30天内"
-.60daysold: ">60 days old" => "60天内"
-.90daysold: ">90 days old" => "90天内"
-.180daysold: ">180 days old" => "180天内"
-.270daysold: ">270 days old" => "270天内"
-.365daysold: "> 365 days old" => "365天内"
-.AddC: "Commander name is not valid or duplicate (this includes deleted commanders)" => "指挥官的名字无效或者重复"
-.AddT: "Cannot create Commander" => "无法创建指挥官"
-.Language: "Applies at next restart of ED Discovery" => "改变将在重启EDDiscovery后生效"
-.RemoveSectors: "Remove Sectors" => "移除星域"
-.GalRemove: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "正在移除{0}个星域。\r\n\r\n这将会花上一段时间（根据硬盘类型和星域数量至多可花上30分钟）。\r\n你也许想要在这段时间中继续使用EDDiscovery\r\n但是有可能响应会很慢。请不要关闭EDDiscovery直到这个窗口显示操作已完成！\r\n\r\n"
-.ESM: "Scans,Cargo,Missions,State,Jumps etc" => "扫描，货物，任务，FSD跳跃等"
-.EJS: "Jumps and Scans" => "FSD跳跃和扫描"
-.EJ: "Jumps" => "FSD跳跃"
-.EN: "Nothing" = None
-.DelCmdr: "Do you wish to delete commander " @
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
-.NoMap: "No map available!" @
-.GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "操作已完成，请关闭此窗口。\r\n如果你已经打开了3D星图，做出的改变在下次启动EDDiscovery之前不会展现\r\n"
-.extButtonReloadStarDatabase: "Reload Star Database" @
-.RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" @
-.PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" @
-.PermDelTLUs: "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned" @
+B6EB402E86A9AA: "Commanders" => "指挥官"
+79056C7AE5C30B: "Commander" => "指挥官"
+F5110F31C60E83: "EDSM Name" => "EDSM 用户名"
+DE5B4A878597E3: "Journal Folder" => "游戏日志文件路径"
+9B2A9354670636: "Undelete" => "Annuler supprimer"
+A797E30923AC1B: "Theme" => "主题"
+2E150D8A081FC8: "Edit Theme" => "编辑主题"
+3F3EC4F121D583: "Save Theme" => "保存主题"
+566A5EE14C22AA: "Number Rows by Date Ascending" => "按照升序方式对事件进行排序"
+179578FE1B6B89: "Time:" => "Date"
+A030328790B9CB: "Web Server" => "Serveur Web"
+FE035157CDA20B: "Port" @
+94DC8E4A59FAFE: "Interaction" @
+C223113FF59532: "Key to activate transparent windows" => "激活窗口热键"
+89C8A2851D1755: "Memory" => "Mémoire"
+CED36555EC7260: "Essential entries:" => "重要条目为："
+7807CC93D64789: "Entries to read:" => "仅读取重要的条目"
+5F6928B2C259B9: "Screenshots conversion" => "截图"
+792C81A4CFDCB5: "Configure" => "配置"
+12AC0D4B1657FF: "System DB Control" => "EDSM/EDDB选项"
+334E943E9FB004: "Select Galaxy Sectors" => "选择星域"
+A8BC1FAAA274A7: "Enable Star Data Download" => "启用星系数据下载"
+317A9C4C64BC59: "Window Options" => "界面设置"
+0FC3A60BCF5F54: "Panel List Sorted Alphanumerically" => "面板列表按字母顺序排序"
+794E96F604BFC5: "Keep on Top" => "窗口置顶"
+004EBAB30A7ED5: "Redraw the screen during resizing" => "改变窗口大小时实时重绘窗口"
+A7123DF1E1E2B7: "Minimize to notification area icon" => "最小化到系统托盘图标"
+D6D452D0168D18: "Show notification area icon" => "显示系统托盘图标"
+C30412531E342C: "DLLs" @
+D06D55570938D1: "Permissions" @
+89B86AB0E66F52: "Language" => "语言 (Language)"
+4D064726954A17: "Advanced" => "安全模式"
+00626039F3FF33: "Restart in Safe Mode" => "重启至安全模式"
+EC0002676E6536: "Click this to perform special operations, such as to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" => "单击这个按钮以进行特殊操作"
+5E012313D53D6A: "Delete selected commander" => "删除选定的指挥官"
+7C7C0A7584F6BD: "Edit selected commander" => "编辑选定的指挥官"
+073DC101EBF015: "Add a new commander" => "添加一个新的指挥官"
+C5D82DE31444DF: "Select the theme to use" => "选择你想用的主题"
+3862B55B3D720A: "Edit theme and change colours fonts" => "编辑主题改变颜色和字体"
+BAABF5504D96C4: "Save theme to disk" => "保存当前主题到硬盘"
+06D37B3D46DDCA: "Number oldest entry 1, latest entry highest" => "将最旧的记录排序为1，最新的记录序号最大"
+46F5DE3952C339: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "选择一个用来显示透明弹窗窗体的热键。\r\n当透明弹窗设定在Tc（鼠标穿透但是可以点击按钮等\r\n控件）或者在Tf（鼠标穿透且不能进行操作）时，把\r\n鼠标指针指在窗体上按下热键500毫米以上后可以活激\r\n透明窗体。不是所有的按钮都能保证可以正常使用。"
+E0B7735E842CE8: "Select which items you consider essential to load older than the time above" => "选择你觉得重要的条目，这些条目即使旧于上面设置的时间范围也会被加载"
+2C69938F3F03DE: "Reduce Memory use. Select either load all records, or load only essential items of records older than a set time before now" => "减少内存使用率。选择加载全部记录否则在指定时间范围外只有重要条目才能被加载（指定时间范围外的其余条目将会被忽略）。"
+D6C9D5C40DF2C7: "Configure further screenshot options" => "进一步配置截图选项"
+A76FCAEEA65CBF: "Screen shot conversion on/off" => "打开/关闭截图转换格式功能"
+BE90FE37C78533: "Configure what parts of the galaxy is stored in the databases" => "选择想要储存在数据库里的银河星域"
+26DF220E45D164: "Click to enable downloading of stars from EDSM or Spansh. Will apply at next start." => "选择以启用从EDSM和EDDB下载星系数据。重启后生效。"
+F4DEBC114897AE: "Panel lists sorted alphanumerically instead of ordered in groups. Note Requires Restart" => "面板列表使用字母顺序进行排序，而不是安装类别排序。注意需要重启。（目前中文界面下无效）"
+54FEFCA3DB03FE: "This window, and its children, top" => "所有窗口置顶"
+A480FFBFDC2BF0: "Check to allow EDD to redraw the screen during main window resize. Only disable if its too slow" => "选中后会允许EDDiscovery的窗口在被缩放时实时改变窗口内容的尺寸。\r\n如果卡顿的话可以把此项关闭。"
+BCCEBEFF588CE4: "Minimize the main window to the system notification area (system tray) icon." => "最小化窗口到系统托盘图标"
+5AE9F629C09614: "Show a system notification area (system tray) icon for EDDiscovery." => "在系统托盘中显示图片"
+F6CB7AD3D68BFC: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." => "安全模式可以让你进行特殊操作。比如移动数据库，重置界面，重置插件，DLL等"
+DC99D54D9990E3: "Local" @
+920917D62700D0: "Warning about webserver-  see english text" => "Alerte à propos du serveur Web - voir le texte en anglais"
+00A0EA8208DAC7: "Did not start - click OK to configure windows" => "N'a pas pu démarrer - Cliquer sur OK pour configurer les fenêtres"
+96645A6CB7E91B: "All entries for Statistics" => "统计资料用的所有条目"
+6A8283358AA59B: "Safe Mode" => "安全模式"
+BBD0319867FC1E: "Confirm restart to safe mode" => "确认进入安全模式"
+AB146721A7BC2F: "Disabled-Load All" => "禁用-全部加载"
+45683F096FC430: ">7 days old" => "7天内"
+9A7AEB2BA766D8: ">30 days old" => "30天内"
+BD98EE695EC66F: ">60 days old" => "60天内"
+198BC754294DA9: ">90 days old" => "90天内"
+902084E644DC1D: ">180 days old" => "180天内"
+7615E2DC91B27E: ">270 days old" => "270天内"
+FFF1F5F39D9153: "> 365 days old" => "365天内"
+267279EDD392BA: "Commander name is not valid or duplicate (this includes deleted commanders)" => "指挥官的名字无效或者重复"
+8B98347828D14F: "Cannot create Commander" => "无法创建指挥官"
+0221468E9EFD76: "Applies at next restart of ED Discovery" => "改变将在重启EDDiscovery后生效"
+C552D2599FF6E0: "Remove Sectors" => "移除星域"
+66B750A2F3569C: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "正在移除{0}个星域。\r\n\r\n这将会花上一段时间（根据硬盘类型和星域数量至多可花上30分钟）。\r\n你也许想要在这段时间中继续使用EDDiscovery\r\n但是有可能响应会很慢。请不要关闭EDDiscovery直到这个窗口显示操作已完成！\r\n\r\n"
+39F0CD5F9474CD: "Scans,Cargo,Missions,State,Jumps etc" => "扫描，货物，任务，FSD跳跃等"
+3EEDD176CCBBA9: "Jumps and Scans" => "FSD跳跃和扫描"
+933ADEA19EEE0A: "Jumps" => "FSD跳跃"
+4481948392A884: "Nothing" => "无"
+E3AEDF672CD00D: "Do you wish to delete commander " => "Voulez-vous supprimer le commandant "
+EB4FD2BBBBAACE: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "La police de caractère utilisée par ce thème n'est pas disponible sur votre système.\r\nLa police nécessaire est \"{0}\".\r\nInstallez cette police pour utiliser pleinement ce thème.\r\nLa police Euro Caps est disponible gratuitement sur www.edassets.org.\r\n\r\nSouhaitez-vous charger ce thème en utilisant une police de remplacement ?"
+57768403688225: "No map available!" => "Aucune carte disponible !"
+35F9B4B074BFBC: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "操作已完成，请关闭此窗口。\r\n如果你已经打开了3D星图，做出的改变在下次启动EDDiscovery之前不会展现\r\n"
+BB75D637DC2C4D: "Reload Star Database" => "Recharger la base de données des étoiles"
+CA622FCCA53890: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" => "Ceci supprimera la base de données des systèmes.\r\n\r\nVous pouvez ensuite resélectionner la source de données de\r\nla base de données et le jeu d'étoiles requis.\r\n\r\nCela nécessitera un téléchargement complet de la base de données des étoiles à partir du serveur.\r\nUtilisez-le uniquement si vous souhaitez télécharger à nouveau l'ensemble de données."
+9124C85C715BCB: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" => "Voulez-vous supprimer définitivement toutes les données du commandant y compris les données des journaux (OUI),\r\nou simplement marquer le commandant comme masqué et ne plus jamais l'afficher (NON)"
+A60B40E8AD02DD: "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned" => "Voulez-vous supprimer définitivement tous les enregistrements des fichiers journaux du commandant (OUI),\r\nDire OUI signifie que les fichiers journaux du commandant seront réanalysés s'ils sont toujours présents\r\nDire NON signifie qu'ils ne seront pas réanalysés"
 
 SECTION UserControlShipYards
 
-.labelYard: "Unknown" = Unknown
-.labelYardSel: "Sel" => "出售飞船"
-.comboBoxYards.ToolTip: "Select ship to view" = UserControlModules.comboBoxShips.ToolTip
-.TravelHistoryEntry: "Travel History Entry" = UserControlOutfitting.TravelHistoryEntry
-.Date: "Date" = SearchMaterialsCommodities.ColumnDate
-.Yard: "Yard" => "船坞"
-.Distance: "Distance" = UserControlOutfitting.Distance
-.Price: "Price" = UserControlOutfitting.Price
-.Ship: "Ship" = UserControlModules.labelShip
-.Manufacturer: "Manufacturer" => "制造商"
-.MS: "Mass/Speed" => "质量/速度"
+7ADFCD13B3B01D: "Manufacturer" => "制造商"
+BA513F9A92BA39: "Mass/Speed" => "质量/速度"
 
 SECTION UserControlShoppingList
 
-.toggleListPositionToolStripMenuItem: "Toggle Shopping List Position" @
-.showMaxFSDInjectionsToolStripMenuItem: "Show Max FSD Injections" => "显示FSD推进剂的最大可合成次数"
-.showBodyMaterialsWhenLandedToolStripMenuItem: "Show Body Materials When Landed" => "登陆星球后显示地表材料"
-.showBodyMaterialsWhenLandedToolStripMenuItem.onlyCapacityToolStripMenuItem: "Hide when storage full" => "隐藏库存已满的材料"
-.showAvailableMaterialsInListWhenLandedToolStripMenuItem: "Include Material %age on Landed Body in Shopping List" => "在购物清单上显示登陆星球地表材料的含量"
-.showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem: "Show System Availability in Shopping List in flight" => "当飞行中在购物清单上显示星系内的材料"
-.useEDSMDataInSystemAvailabilityToolStripMenuItem: "Use EDSM data in System Availability" => "使用EDSM数据来显示星系内的材料"
-.useHistoricMaterialCountsToolStripMenuItem: "Use Historic Material Counts" => "使用历史材料计数"
-.NM: "Needed Mats" => "需要的材料"
-.FS: "Filling Shopping List would exceed capacity for: " => "下面几项材料会超出材料容量："
-.NoMat: "No materials currently required." => "当前不需要任何材料。"
-.FSD: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" => "可合成FSD推进剂的最大次数：\r\n  {0} 次基础\r\n  {1} 次标准\r\n  {2} 次高级"
-.MO: "Materials on {0}" => "{0} 上的材料: "
+D22D741A6676D7: "Toggle Shopping List Position" => "Basculer la position de la liste de courses"
+0812899125F068: "Show Max FSD Injections" => "显示FSD推进剂的最大可合成次数"
+E47EB539D71A8B: "Show Body Materials When Landed" => "登陆星球后显示地表材料"
+EBB4F47C22800F: "Hide when storage full" => "隐藏库存已满的材料"
+E003047957A50D: "Include Material %age on Landed Body in Shopping List" => "在购物清单上显示登陆星球地表材料的含量"
+2E54B6C0C40451: "Show System Availability in Shopping List in flight" => "当飞行中在购物清单上显示星系内的材料"
+88E515DDBD6CF6: "Use EDSM data in System Availability" => "使用EDSM数据来显示星系内的材料"
+E3E78C5A9B4B48: "Use Historic Material Counts" => "使用历史材料计数"
+0D1C90F01F1AC9: "Needed Mats" => "需要的材料"
+9CAA261BEC144D: "Filling Shopping List would exceed capacity for: " => "下面几项材料会超出材料容量："
+0C17E1E2D825FF: "No materials currently required." => "当前不需要任何材料。"
+9CDB9B531A7E2C: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" => "可合成FSD推进剂的最大次数：\r\n  {0} 次基础\r\n  {1} 次标准\r\n  {2} 次高级"
+7D83DF15795144: "Materials on {0}" => "{0} 上的材料: "
 
 SECTION UserControlSpanel
 
-.showSystemInformationToolStripMenuItem: "Show System Information" => "显示星系信息"
-.toolStripMenuItemTargetLine: "Show Target Line" => "显示目标行"
-.blackBoxAroundTextToolStripMenuItem: "Show black box around text" => "透明模式下显示黑色文本背景"
-.expandTextOverEmptyColumnsToolStripMenuItem: "Expand text over empty columns" => "扩展文本到空白列"
-.EDSMButtonToolStripMenuItem: "Show EDSM Button" => "显示EDSM按钮"
-.toolStripMenuItemTime: "Show Time" => "显示时间"
-.iconToolStripMenuItem: "Show Event Icon" => "显示事件图标"
-.showDescriptionToolStripMenuItem: "Show Description" => "显示描述"
-.showInformationToolStripMenuItem: "Show Information" => "显示信息"
-.showNotesToolStripMenuItem: "Show Notes" => "显示笔记"
-.showXYZToolStripMenuItem: "Show XYZ" => "显示星系坐标"
-.showTargetToolStripMenuItem: "Show Target Distance per Star" => "显示每个星系与目标的距离"
-.showDistancesOnFSDJumpsOnlyToolStripMenuItem: "Show Distances/Coords on FSD Jumps Only" => "仅在FSD跳跃事件后显示距离以及坐标"
-.showCircumstellarZonesToolStripMenuItem: "Show Habitation Zone" => "显示星体出现范围"
-.showCircumstellarZonesToolStripMenuItem.showMetalRichPlanetsToolStripMenuItem: "Show Metal Rich Planet Zone" => "富金属行星 (Metal Rich Bodies)"
-.showCircumstellarZonesToolStripMenuItem.showWaterWorldsToolStripMenuItem: "Show Water World Zone" => "水质行星 (Water Worlds)"
-.showCircumstellarZonesToolStripMenuItem.showEarthLikeToolStripMenuItem: "Show Earth Like Zone" => "类地行星 (Earth Like Worlds)"
-.showCircumstellarZonesToolStripMenuItem.showAmmoniaWorldsToolStripMenuItem: "Show Ammonia Worlds Zone" => "氨质行星 (Ammonia Worlds)"
-.showCircumstellarZonesToolStripMenuItem.showIcyPlanetsToolStripMenuItem: "Show Icy Planets Zone" => "冰质行星 (Icy Bodies)"
-.OrdertoolStripMenuItem.orderDefaultToolStripMenuItem: "Default" => "标准"
-.OrdertoolStripMenuItem.orderNotesAfterXYZToolStripMenuItem: "Notes after XYZ" => "笔记显示在坐标之后"
-.OrdertoolStripMenuItem.orderTargetDistanceXYZNotesToolStripMenuItem: "Target Distance, XYZ, Notes" => "目标距离，坐标，笔记"
-.surfaceScanDetailsToolStripMenuItem.scanNoToolStripMenuItem: "Do not show" => "不显示"
-.surfaceScanDetailsToolStripMenuItem.scan15sToolStripMenuItem: "Show for 15s" => "显示15秒"
-.surfaceScanDetailsToolStripMenuItem.scan30sToolStripMenuItem: "Show for 30s" => "显示30秒"
-.surfaceScanDetailsToolStripMenuItem.scan60sToolStripMenuItem: "Show for 60s" => "显示60秒"
-.surfaceScanDetailsToolStripMenuItem.scanUntilNextToolStripMenuItem: "Show until next scan" => "显示至下次扫描时"
-.showInPositionToolStripMenuItem.scanRightMenuItem: "Scan right" => "右"
-.showInPositionToolStripMenuItem.scanLeftMenuItem: "Scan left" => "左"
-.showInPositionToolStripMenuItem.scanAboveMenuItem: "Scan above" => "上"
-.showInPositionToolStripMenuItem.scanBelowMenuItem: "Scan below" => "下"
-.showInPositionToolStripMenuItem.scanOnTopMenuItem: "Scan on top" => "顶端"
-.dontShowInformationWhenToolStripMenuItem: "Don't show information when" => "在以下情况下隐藏面板"
-.dontShowInformationWhenToolStripMenuItem.showNothingWhenDockedtoolStripMenuItem: "docked or landed" => "降落在空间站或着陆在星球时"
-.dontShowInformationWhenToolStripMenuItem.dontshowwhenInGalaxyPanelToolStripMenuItem: "in a panel" => "在银河系星图面板时"
-.dontShowInformationWhenToolStripMenuItem.hideTitleToolStripMenuItem: "Hide the title when hidden" @
-.extButtonShowControl.ToolTip: "Configure overall settings" @
-.extButtonColumns.ToolTip: "Configure columns shown" @
-.extButtonColumnOrder.ToolTip: "Configure column order" @
-.extButtonHabZones.ToolTip: "Configure hab zone information" @
-.buttonFilter.ToolTip: "Select what journal events to show" => "设置事件筛选器..."
-.buttonField.ToolTip: "Filter out events" => "设置域筛选器..."
-.extButtonScanShow.ToolTip: "Configure scan display" @
-.extButtoScanPos.ToolTip: "Set position of scan display" @
-.extButtonFont.ToolTip: "Font" @
-.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
-.Target: "Target" = UserControlCompass.labelTargetLat
-.TVE: "View system on EDSM" = DataGridViewStarResults.EDSM
-.SPF: "Summary Panel: Filter out fields" => "概要面板：筛选域"
+86707E793088A5: "Show System Information" => "显示星系信息"
+947E9DB6290887: "Show Target Line" => "显示目标行"
+99B4A5A694049B: "Show black box around text" => "透明模式下显示黑色文本背景"
+52303D52FDA1E8: "Expand text over empty columns" => "扩展文本到空白列"
+5CE18D19284643: "Show EDSM Button" => "显示EDSM按钮"
+BD413A29C4C356: "Show Time" => "显示时间"
+9EC41B75A0854E: "Show Event Icon" => "显示事件图标"
+2B3314685F559A: "Show Description" => "显示描述"
+06C50F94ED2128: "Show Information" => "显示信息"
+56994172648361: "Show Notes" => "显示笔记"
+4FF7205424F371: "Show XYZ" => "显示星系坐标"
+9764DC9D6369A0: "Show Target Distance per Star" => "显示每个星系与目标的距离"
+447B8D5C3B4655: "Show Distances/Coords on FSD Jumps Only" => "仅在FSD跳跃事件后显示距离以及坐标"
+130D6DAAB12C4F: "Show Metal Rich Planet Zone" => "富金属行星 (Metal Rich Bodies)"
+6D1F3FC2F261AB: "Show Water World Zone" => "水质行星 (Water Worlds)"
+4198FF6D626B23: "Show Earth Like Zone" => "类地行星 (Earth Like Worlds)"
+73F63E50AB4582: "Show Ammonia Worlds Zone" => "氨质行星 (Ammonia Worlds)"
+B2A10246DEC8E8: "Show Icy Planets Zone" => "冰质行星 (Icy Bodies)"
+C48B020E9868AE: "Notes after XYZ" => "笔记显示在坐标之后"
+9CF96274C9A16D: "Target Distance, XYZ, Notes" => "目标距离，坐标，笔记"
+D3E54B19E403FB: "Do not show" => "不显示"
+EEF268E4AC4B29: "Show for 15s" => "显示15秒"
+27FA6DFFB4B263: "Show for 30s" => "显示30秒"
+30F33F637DC3A6: "Show for 60s" => "显示60秒"
+00A2E5EB339AC1: "Show until next scan" => "显示至下次扫描时"
+B3FBFBCD0DCFA6: "Scan right" => "右"
+3734BB9FE72C21: "Scan left" => "左"
+3B0CEE63CBEFF1: "Scan above" => "上"
+EB54833DC625A5: "Scan below" => "下"
+EEA3CFB9910032: "Scan on top" => "顶端"
+DD4C8476A88CC9: "Don't show information when" => "在以下情况下隐藏面板"
+B250917C49B7D5: "docked or landed" => "降落在空间站或着陆在星球时"
+7EEA35AC162E12: "in a panel" => "在银河系星图面板时"
+FEA2ABBFF1AA3C: "Hide the title when hidden" => "Cacher le titre quand caché"
+DA951505B7A2B9: "Configure columns shown" => "Configurer l'affichage des colonnes"
+7E9B44443D446C: "Configure column order" => "Configurer l'ordre des colonnes"
+ABFD5D69CC7519: "Configure hab zone information" => "Paramètres de zone habitable"
+A3BC8A32D0EE63: "Select what journal events to show" => "设置事件筛选器..."
+FE67A0163BF256: "Filter out events" => "设置域筛选器..."
+3B3A8D354BD61D: "Set position of scan display" => "Configurer la position du scan"
+50B0FAEA7E4452: "View system on EDSM" => "在EDSM网站上查看"
+DBB6ACB5E31084: "Summary Panel: Filter out fields" => "概要面板：筛选域"
 
 SECTION UserControlStarDistance
 
-.addToExpeditionToolStripMenuItem: "Add to Expedition" => "添加至远航面板"
-.colName: "Name" = UserControlExpedition.SystemName
-.colDistance: "Distance" = SearchMaterialsCommodities.ColumnCurrentDistance
-.colVisited: "Visited" = UserControlExpedition.Visits
-.checkBoxCube: "Cube" => "立方体"
-.labelExtMin: "Min" => "最近"
-.labelExtMax: "Max" => "最远"
-.addToTrilaterationToolStripMenuItem1: "Add to Trilateration" => "添加至三边测量面板"
-.viewOnEDSMToolStripMenuItem1: "View on EDSM" = DataGridViewStarResults.EDSM
-.checkBoxCube.ToolTip: "Check to indicate use a cube instead of a sphere for distances" => "勾选以使用立方体而不是球体作为距离范围"
-.textMinRadius.ToolTip: "Minimum star distance in ly" => "最近的星系距离 (ly)"
-.textMaxRadius.ToolTip: "Maximum star distance in ly" => "最远的星系距离 (ly)"
-.From: "From {0}" => "距离 {0} 星系"
-.NoEDSMSys: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
-.viewSystemToolStripMenuItem: "View System" @
-.viewOnSpanshToolStripMenuItem: "View on Spansh" @
+293A9D54650921: "Visited" => "访问次数"
+90CCC9AA84EF50: "Cube" => "立方体"
+7EB0CEE888AB55: "Min" => "最近"
+BF02C54B8728D4: "Add to Trilateration" => "添加至三边测量面板"
+D6EBF4E4344E48: "Check to indicate use a cube instead of a sphere for distances" => "勾选以使用立方体而不是球体作为距离范围"
+D8FA9D7408D9DC: "Minimum star distance in ly" => "最近的星系距离 (ly)"
+146FD57102D84B: "Maximum star distance in ly" => "最远的星系距离 (ly)"
+957DB23D1CF5F7: "From {0}" => "距离 {0} 星系"
 
 SECTION UserControlStarList
 
-.ColumnTime: "Last Visit" => "最后访问时间"
-.ColumnSystem: "System" = UserControlExpedition.SystemName
-.ColumnVisits: "Visits" = UserControlExpedition.Visits
-.ColumnInformation: "Information" = SearchScans.ColumnInformation
-.ColumnBodycount: "Body count" @
-.labelSearch: "Search" = UserControlBookmarks.labelSearch
-.labelTime: "Time" = Time
-.removeSortingOfColumnsToolStripMenuItem: "Remove sorting of columns" = UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = DataGridViewStarResults.3d
-.viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
-.viewOnSpanshToolStripMenuItem: "View on Spansh" @
-.setNoteToolStripMenuItem: "Set Note" => "添加笔记"
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
-.comboBoxTime.ToolTip: "Select the entries by age" = UserControlJournalGrid.comboBoxTime.ToolTip
-.viewScanDisplayToolStripMenuItem: "View Scan Display" @
-.Value: "Scan Value" @
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" = UserControlJournalGrid.textBoxSearch.ToolTip
-.Total: "Total" @
-.CS: "{0} Star(s) {1}" => "{0}个恒星 {1}"
-.FSD: "This system has materials for FSD boost" => "这个行星存在合成FSD助推剂用的材料："
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
-.OB: "{0} Other bodies" => "{0}个其他星体"
-.JUMP: "Show/Hide presence of Jumponium Materials" @
-.valueables: "Show valuable bodies" @
-.scanorganics: "Show organic scans" @
-.showcodex: "Show codex entries" @
+25229E81F3BF74: "Last Visit" => "最后访问时间"
+28442DA04B1BF3: "Body Count" => "Nombre de corps"
+C90A4905639F83: "Scan Value" => "Valeur de scan"
+A1E87E0BCAE241: "{0} Star(s) {1}" => "{0}个恒星 {1}"
+FB044B95FD466C: "This system has materials for FSD boost" => "这个行星存在合成FSD助推剂用的材料："
+3DC09A6F2DA211: "{0} Other bodies" => "{0}个其他星体"
+FB90E0C92B3663: "Show/Hide presence of Jumponium Materials" => "Afficher/Masquer la présence de matériaux pour le Jumponium"
+47D68486BBAA7E: "Show valuable bodies" => "Afficher les corps de valeurs"
+FF058EFC89FB18: "Show organic scans" => "Afficher les scans organiques"
+515C004E19233A: "Show codex entries" => "Afficher les entrées de codex"
 
 SECTION UserControlStats
 
-.labelStart: "Start" @
-.labelEndDate: "To" @
-.tabControlCustomStats.tabPageGeneral: "General" => "概况"
-.tabControlCustomStats.tabPageGeneral.ItemName: "Item" => "项目"
-.tabControlCustomStats.tabPageGeneral.Information: "Information" = SearchScans.ColumnInformation
-.tabControlCustomStats.tabPageTravel: "Travel" => "航行"
-.tabControlCustomStats.tabPageScan: "Scan" = UserControlExpedition.Scans
-.tabControlCustomStats.tabPageGameStats: "In Game" => "游戏记录"
-.tabControlCustomStats.tabPageByShip: "By Ship" = UserControlModules.labelShip
-.tabControlCustomStats.tabPageRanks: "Ranks" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnRank: "Rank" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnAtStart: "At Start" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxAtEnd: "At End" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextColumnRankProgressNumeric: "Progress" @
-.tabControlCustomStats.tabPageRanks.dataGridViewTextBoxColumnLastPromotionDate: "Last Promotion/Date" @
-.tabControlCustomStats.tabPageLedger: "Ledger" @
-.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnLedgerDate: "Date" @
-.tabControlCustomStats.tabPageLedger.dataGridViewTextBoxColumnNumericCredits: "Credits" @
-.tabControlCustomStats.tabPageCombat: "Combat" @
-.Powerplay: "Powerplay" @
-.Squadron: "Squadron" @
-.BountiesThargoid: "Bounties on Thargoids" @
-.BountiesOnFootNPC: "Bounties on On Foot NPC" @
-.BountiesSkimmers: "Bounties on Skimmers" @
-.ShipsUnknown: "Ships Unknown Rank" @
-.ShipsElite: "Ships Elite Rank" @
-.ShipsDeadly: "Ships Deadly Rank" @
-.ShipsDangerous: "Ships Dangerous Rank" @
-.ShipsMaster: "Ships Master Rank" @
-.ShipsExpert: "Ships Expert Rank" @
-.ShipsCompetent: "Ships Competent Rank" @
-.ShipsNovice: "Ships Novice Rank" @
-.ShipsHarmless: "Ships Harmless Rank" @
-.PVPElite: "PVP Elite Rank" @
-.PVPDeadly: "PVP Deadly Rank" @
-.PVPDangerous: "PVP Dangerous Rank" @
-.PVPMaster: "PVP Master Rank" @
-.PVPExpert: "PVP Expert Rank" @
-.PVPCompetent: "PVP Competent Rank" @
-.PVPNovice: "PVP Novice Rank" @
-.PVPHarmless: "PVP Harmless Rank" @
-.Bounties: "Bounties" @
-.Bountyvalue: "Bounty Value" @
-.Bountiesonships: "Bounties on Ships" @
-.Crimes: "Crimes" @
-.CrimeCost: "Crime Cost" @
-.FactionKillBonds: "Faction Kill Bonds" @
-.FKBValue: "FKB Value" @
-.InterdictionPlayerSucceeded: "Interdictions Player Succeeded" @
-.InterdictionPlayerFailed: "Interdictions Player Failed" @
-.InterdictionNPCSucceeded: "Interdictions NPC Succeeded" @
-.InterdictionNPCFailed: "Interdictions NPC Failed" @
-.InterdictedPlayerSucceeded: "Interdicted Player Succeeded" @
-.InterdictedPlayerFailed: "Interdicted Player Failed" @
-.InterdictedNPCSucceeded: "Interdicted NPC Succeeded" @
-.InterdictedNPCFailed: "Interdicted NPC Failed" @
-.PVPKills: "PVP Kills" @
-.TotalNoofjumps: "Total No of jumps" => "总跳跃次数"
-.FSDjumps: "FSD jumps" @
-.JumpHistory: "FSD Jump History" => "跳跃记录"
-.24hc: "24 Hours: " => "24小时内："
-.OneWeek: ", One Week: " => "，一周内："
-.30Days: ", 30 Days: " => "，30天内："
-.OneYear: ", One Year: " => "，一年内："
-.MostNorth: "Most North" => "最北"
-.MostSouth: "Most South" => "最南"
-.MostEast: "Most East" => "最东"
-.MostWest: "Most West" => "最西"
-.MostHighest: "Most Highest" => "最高"
-.MostLowest: "Most Lowest" => "最低"
-.MostVisited: "Most Visited" => "最常访问"
-.Type: "Type" @
-.Name: "Name" => "飞船名"
-.Ident: "Ident" => "飞船牌号"
-.Jumps: "Jumps" => "跳跃次数"
-.TravelledLy: "Travelled Ly" => "航行距离(ly)"
-.BodiesScanned: "Bodies Scanned" => "扫描的星体"
-.Destroyed: "Destroyed" => "被摧毁次数"
-.PremiumBoost: "Premium Boost" => "高级FSD助推剂"
-.StandardBoost: "Standard Boost" => "标准FSD助推剂"
-.BasicBoost: "Basic Boost" => "基础FSD助推剂"
-.JetConeBoost: "Jet Cone Boost" => "等离子喷流助推"
-.Scans: "Scans" => "扫描数"
-.OrganicScans: "Organic Scans Value" @
-.Mapped: "Mapped" @
-.Scanvalue: "Scan value" => "扫描价值"
-.Beltcluster: "Belt Cluster" @
-.Lastdock: "Last dock" = UserControlCombatPanel.SinceLastDock
-.All: "All" @
-.BankAccount: "Bank Account" @
-.Combat: "Combat" @
-.Crime: "Crime" @
-.Smuggling: "Smuggling" @
-.Trading: "Trading" @
-.Mining: "Mining" @
-.Exploration: "Exploration" @
-.Passengers: "Passengers" @
-.SearchandRescue: "Search and Rescue" @
-.Crafting: "Crafting" @
-.Crew: "Crew" @
-.Multi: "Multi-crew" @
-.MaterialsTrader: "Materials Trader" @
-.FLEETCARRIER: "Fleetcarrier" @
-.CQC: "CQC" @
-.Exobiology: "Exobiology" @
-.Thargoids: "Thargoids" @
-.GoodsBought: "Goods Bought" => "收购的商品"
-.GoodsSold: "Goods Sold" => "出售的商品"
-.GoodsProfit: "Goods Profit" @
+9239EE2CDA84EC: "General" => "概况"
+22FB76E46F645E: "Travel" => "航行"
+12D9C090439BAA: "In Game" => "游戏记录"
+AB2855156E832D: "By Ship" => "飞船"
+00926D0ECAABBF: "Ranks" => "Rangs"
+DD48A1149548F0: "Rank" => "Rang"
+2451A597FA5067: "At Start" => "Au départ"
+0B12D442964C13: "At End" => "À la fin"
+F230B2BCC6A6B1: "Last Promotion/Date" => "Date de dernière promotion"
+955A4E9A59BF11: "Powerplay" @
+67711E423601BA: "Squadron" => "Escadron"
+E72ED7A5BCA163: "Bounties on Thargoids" => "Primes sur des Thargoids"
+C070DE1BD06E83: "Bounties on On Foot NPC" => "Primes sur des PNJ à pied"
+6273A2A0CA35EF: "Bounties on Skimmers" => "Primes sur des drones sentinelles"
+9A18F8035AAEA1: "Ships Unknown Rank" => "Vaisseaux de rang inconnu"
+BAC11F62A1EE7D: "Ships Elite Rank" => "Vaisseaux de rang Élite"
+6ED71D543A46B5: "Ships Deadly Rank" => "Vaisseaux de rang Létal"
+C154182DA6A0EA: "Ships Dangerous Rank" => "Vaisseaux de rang Vétéran"
+366E78B1602F76: "Ships Master Rank" => "Vaisseaux de rang Maître"
+457AA8E691A5DA: "Ships Expert Rank" => "Vaisseaux de rang Expert"
+68F8A460EF2B65: "Ships Competent Rank" => "Vaisseaux de rang Compétent"
+8FAD289393971D: "Ships Novice Rank" => "Vaisseaux de rang Novice"
+8727F6D4EE824C: "Ships Harmless Rank" => "Vaisseaux de rang Bleu"
+EAF8AE7FAE1187: "PVP Elite Rank" => "Joueur de rang Élite"
+B313E7107D5C86: "PVP Deadly Rank" => "Joueur de rang Létal"
+7743458F23BEEB: "PVP Dangerous Rank" => "Joueur de rang Vétéran"
+28AF125F4DCEB4: "PVP Master Rank" => "Joueur de rang Maître"
+A6E743F4A8DA1F: "PVP Expert Rank" => "Joueur de rang Expert"
+0D4936734E146A: "PVP Competent Rank" => "Joueur de rang Compétent"
+0A7B5DB004014C: "PVP Novice Rank" => "Joueur de rang Novice"
+8BED567DC90C30: "PVP Harmless Rank" => "Joueur de rang Bleu"
+EBA0BF6D59AA23: "Bounties" => "Primes"
+6C18EAA601E281: "Bounty Value" => "Valeur des primes"
+143706EC834465: "Bounties on Ships" => "Primes sur des vaisseaux"
+5975E5601FFC4D: "Crime Cost" => "Coût des crimes"
+19DC8A5F2F52DB: "Faction Kill Bonds" => "Récompenses d'élimination de faction"
+91D7F6E6EC96DF: "FKB Value" => "Valeur des récompenses d'élimination de faction"
+5165C80A7554A6: "Interdictions Player Succeeded" => "Interdictions réussies sur des joueurs"
+2D360E69870FCA: "Interdictions Player Failed" => "Interdictions échouées sur des joueurs"
+18AD984165F69E: "Interdictions NPC Succeeded" => "Interdictions réussies sur des PNJ"
+A2F8A5F156DE50: "Interdictions NPC Failed" => "Interdictions échouées sur des PNJ"
+AA3A76881BDE68: "Interdicted Player Succeeded" => "Interdictions réussies par des joueurs"
+6CDDC5DFA392DB: "Interdicted Player Failed" => "Interdictions échouées par des joueurs"
+6A6C1A6301AB25: "Interdicted NPC Succeeded" => "Interdictions réussies par des PNJ"
+99C5998D9DBB79: "Interdicted NPC Failed" => "Interdictions échouées par des PNJ"
+D01ADD4A8CF9C6: "PVP Kills" => "JcJ 'kills'"
+20CB368601547F: "Total No of jumps" => "总跳跃次数"
+D06EC3483818A9: "FSD jumps" => "Sauts FSD"
+E13CB4A04BC34B: "FSD Jump History" => "跳跃记录"
+F6C54118BB5CD4: "24 Hours: " => "24小时内："
+2E2B3457EDF182: ", One Week: " => "，一周内："
+D3832EC86D33CE: ", 30 Days: " => "，30天内："
+1CDC174DD72EA0: ", One Year: " => "，一年内："
+50CA2C7949A7B3: "Most North" => "最北"
+FF4C48EC20A07F: "Most South" => "最南"
+ED38C3B32E9FB4: "Most East" => "最东"
+72169EB9002BA0: "Most West" => "最西"
+57160FBF8BB19A: "Most Highest" => "最高"
+742DE30108A030: "Most Lowest" => "最低"
+985904BE62860B: "Most Visited" => "最常访问"
+022AFB2A3DD28F: "Ident" => "飞船牌号"
+A42A766FB98A1B: "Travelled Ly" => "航行距离(ly)"
+A3E3727E7AC80E: "Bodies Scanned" => "扫描的星体"
+86FD480DBADC22: "Destroyed" => "被摧毁次数"
+B051CCCD8B0D67: "Premium Boost" => "高级FSD助推剂"
+4FE81F7DFC3A7B: "Standard Boost" => "标准FSD助推剂"
+744F275A75FD8F: "Basic Boost" => "基础FSD助推剂"
+BF95513D610332: "Jet Cone Boost" => "等离子喷流助推"
+80D9028EDFA54B: "Organic Scans Value" => "Valeur des scans organique"
+93C9D999CAF90E: "Scan value" => "扫描价值"
+D436FDB4D178CC: "Belt Cluster" => "Ceintures d'astéroïdes"
+785AD46ADCFC58: "Last dock" => "自最近降落后"
+6D391E1333D9E0: "Bank Account" => "Compte en banque"
+1B5A20A804DC74: "Crime" @
+6BEEE635DCA549: "Smuggling" => "Contrebande"
+49352196F6D28E: "Trading" => "Commerce"
+FAABCF8B4B60DB: "Mining" => "Minage"
+957464A0F91C56: "Exploration" @
+AB86B441AD93E7: "Passengers" => "Passagers"
+E0C47B9F787BC5: "Search and Rescue" => "Sauvetage"
+EA78B34DA11F9D: "Crafting" => "Fabrication"
+DE463BA892C2F3: "Crew" => "Équipage"
+EB6824747FE3AC: "Multi-crew" => "Équipage multiple"
+F8D07BF619AB93: "Materials Trader" => "Commerçants de matériaux"
+4EC8D6E506ED34: "Fleetcarrier" => "Porte-vaisseaux"
+B663617A36922A: "CQC" @
+E41CFBE34F8307: "Exobiology" => "Exobiologie"
+57D866D2E06189: "Thargoids" => "Rencontres"
+ED8FE7F50C291D: "Goods Bought" => "收购的商品"
+4A9BE7DFAB7DEE: "Goods Sold" => "出售的商品"
+266338DF847C39: "Goods Profit" => "Bénéfice sur les marchandises"
 
 SECTION StatsTimeUserControl
 
-.Summary: "Summary" @
-.Day: "Day" @
-.Week: "Week" @
-.Month: "Month" @
+12B71C3E0FE5F7: "Summary" => "Résumé"
+987B9CED08D4AC: "Day" => "Jour"
+F82BE68A7FB4E7: "Week" => "Semaine"
+082BC378CD60E1: "Month" => "Mois"
 
 SECTION UserControlSynthesis
 
-.UpgradeCol: "Upgrade/Mat" => "合成"
-.Level: "Level" = UserControlEngineering.LevelCol
-.MaxCol: "Max" => "最多合成次数"
-.WantedCol: "Wanted" = UserControlEngineering.WantedCol
-.Available: "Avail." = UserControlEngineering.AvailableCol
-.Notes: "Notes" = UserControlEngineering.NotesCol
-.Recipe: "Recipe" = UserControlEngineering.RecipeCol
-.buttonRecipeFilter.ToolTip: "Filter the table by the synthesis type" => "按合成筛选表格"
-.buttonFilterLevel.ToolTip: "Filter the table by the synthesis level" = UserControlEngineering.buttonFilterLevel.ToolTip
-.buttonMaterialFilter.ToolTip: "Filter the table by the material type" = UserControlEngineering.buttonFilterMaterial.ToolTip
-.buttonClear.ToolTip: "Set all wanted values to zero" => "把所有愿望单内的合成次数设为零"
-.chkNotHistoric.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.extButtonPushResources.ToolTip: "Push items wanted to Resources panel" @
+EA620860544917: "Filter the table by the synthesis type" => "按合成筛选表格"
+8D373513140E9D: "Filter the table by the synthesis level" => "按等级筛选表格"
+63ACF1721827B7: "Filter the table by the material type" => "按材料筛选表格"
 
 SECTION UserControlSysInfo
 
-.toolStripSystem: "Display System Name" => "显示星系名称"
-.toolStripEDSM: "Display EDSM Buttons" = UserControlSpanel.EDSMButtonToolStripMenuItem
-.toolStripEDSMDownLine: "EDSM buttons on separate line" => "EDSM按钮显示在另外一行"
-.toolStripVisits: "Display Visits" => "显示访问次数"
-.toolStripBody: "Display Body Name" => "显示星体名称"
-.displayStationButtonsToolStripMenuItem: "Display Station Buttons" @
-.displayStationFactionToolStripMenuItem: "Display Station Faction" @
-.toolStripPosition: "Display Position" => "显示坐标"
-.toolStripDistanceFrom: "Display Distance From" => "显示与母星和Sol之间的距离"
-.toolStripSystemState: "Display System State" => "显示星系状态"
-.displaySecurityToolStripMenuItem: "Display Security" @
-.toolStripTarget: "Display Target" => "显示目标"
-.toolStripShip: "Display Ship Information" => "显示飞船信息"
-.displayShipButtonsToolStripMenuItem: "Display Ship Buttons" @
-.toolStripFuel: "Display Fuel Level" => "显示燃料剩余量"
-.toolStripCargo: "Display Cargo Count" => "显示货舱载货数"
-.toolStripDataCount: "Display Data Count" => "显示数据数量"
-.toolStripMaterialCounts: "Display Material Count" => "显示材料数量"
-.displayMicroresourcesCountToolStripMenuItem: "Display Microresources Count" @
-.toolStripCredits: "Display Credits" => "显示账户余额"
-.toolStripGameMode: "Display Game Mode" => "显示游戏模式"
-.toolStripTravel: "Display Travel Trip Statistics" => "显示航行的统计资料"
-.toolStripMissionList: "Display Mission List" => "显示任务列表"
-.toolStripJumpRange: "Display Jump Range" => "显示飞船FSD跳跃范围"
-.toolStripSkinny: "When transparent, use skinny look" => "透明模式下使用紧凑模式"
-.toolStripReset: "Reset" => "重置"
-.toolStripRemoveAll: "Remove All" => "全部移除"
-.displayNextDestinationToolStripMenuItem: "Display Next Destination Selected" @
-.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem: "Disable copy to clipboard when clicking on text boxes" @
-.ToolTip: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "按住Ctrl键然后拖动一个项目以重新定位，有8个列可用"
-.textBoxTargetDist.ToolTip: "Distance to target" => "距离目标距离"
-.textBoxTarget.ToolTip: "Sets the target" => "设定目标"
-.labelStationFaction: "Faction" @
-.extButtonEDSMTarget: "EDSM" @
-.labelSecurity: "Security" @
-.labelJumpRange: "Range" => "FSD范围"
-.labelTarget: "Target" = UserControlCompass.labelTargetLat
-.labelSysName: "System" = SearchMaterialsCommodities.ColumnStar
-.labelGamemode: "Mode" => "模式"
-.labelTravel: "Travel" = UserControlStats.tabControlCustomStats.tabPageTravel
-.labelOpenShip: "Open" @
-.labelOpenStation: "Open" @
-.labelOpen: "Open" => "打开"
-.labelCargo: "Cargo" => "货舱"
-.labelCredits: "Credits" => "账户余额"
-.labelShip: "Ship" = UserControlModules.labelShip
-.labelMaterials: "Materials" = UserControlMaterialCommodities.Mats
-.labelVisits: "Visits" = UserControlExpedition.Visits
-.labelMR: "MR" @
-.labelData: "Data" = UserControlMaterialCommodities.Data
-.labelFuel: "Fuel" => "燃料"
-.labelBodyName: "Body" => "星体"
-.labelPosition: "Pos" => "坐标"
-.labelMissions: "Missions" => "任务"
-.labelEconomy: "Economy" => "经济"
-.labelGov: "Gov" => "政府"
-.labelAllegiance: "Allegiance" => "势力"
-.labelState: "State" => "状态"
-.labelSolDist: "Sol" => "距离Sol"
-.labelHomeDist: "Home" => "距离母星"
-.labelNextDestination: "Dest" @
-.NoMissions: "No Missions" => "当前无任务"
-.SysUnk: "System unknown to EDSM" = UserControlExpedition.EDSMUnk
-.Pos: "Position is {0:0.00},{1:0.00},{2:0.00}" => "当前坐标为 {0:0.00},{1:0.00},{2:0.00}"
-.Target: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" => "在3D星图上右键单击以创建书签，区域标记或单击标记，然后在“设置目标”上打勾，或在此处输入并按Enter键"
-.OnFoot: "On Foot" @
-.NA: "N/A" @
+C7E62EEFF61FB8: "Display System Name" => "显示星系名称"
+1CA1244CA4E274: "Display EDSM Buttons" => "显示EDSM按钮"
+9D4038B19E1FAF: "EDSM buttons on separate line" => "EDSM按钮显示在另外一行"
+E71BB3490AF666: "Display Visits" => "显示访问次数"
+16058E391CFC8A: "Display Body Name" => "显示星体名称"
+2AF8FBE0D3D1F0: "Display Station Buttons" => "Afficher les boutons pour la station"
+167364FDD294FC: "Display Station Faction" => "Afficher la faction de la station"
+859DF4F86EA274: "Display Position" => "显示坐标"
+88DC694EB1EEC5: "Display Distance From" => "显示与母星和Sol之间的距离"
+40A0D02D51569C: "Display System State" => "显示星系状态"
+9D4B4AF780F534: "Display Security" => "Afficher la sécurité"
+9443704433D76B: "Display Target" => "显示目标"
+C7BFC55F74198E: "Display Ship Information" => "显示飞船信息"
+69FFED82C302AA: "Display Ship Buttons" => "Afficher les boutons pour le vaisseau"
+60CC67D5043C1F: "Display Fuel Level" => "显示燃料剩余量"
+E16757D13AB37A: "Display Cargo Count" => "显示货舱载货数"
+0719B412DEA0BD: "Display Data Count" => "显示数据数量"
+F02F62E261A315: "Display Material Count" => "显示材料数量"
+467B1F3E0B7F4E: "Display Microresources Count" => "Afficher la quantité de Micro ressources"
+6B5FFA7F235884: "Display Credits" => "显示账户余额"
+6483F70251A314: "Display Game Mode" => "显示游戏模式"
+3CFB6CC2163B0E: "Display Travel Trip Statistics" => "显示航行的统计资料"
+6B797E5C00BD22: "Display Mission List" => "显示任务列表"
+3CDA0635013859: "Display Jump Range" => "显示飞船FSD跳跃范围"
+45E682004141E2: "When transparent, use skinny look" => "透明模式下使用紧凑模式"
+53B251F715E19A: "Display Next Destination Selected" => "Afficher la destination suivante sélectionnée"
+5B17A15D263EC5: "Disable copy to clipboard when clicking on text boxes" => "Désactiver la copie vers le presse-papier lors des clics sur les champs texte"
+31ACBB09F84846: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "按住Ctrl键然后拖动一个项目以重新定位，有8个列可用"
+A89C9CA2A96AE8: "Distance to target" => "距离目标距离"
+9FFE9E9C6D7672: "Sets the target" => "设定目标"
+F25CE1B8A399BD: "Security" => "Sécurité"
+A16C5BBE4BF996: "Range" => "FSD范围"
+A7B93D2128E820: "Mode" => "模式"
+208A402074139F: "MR" @
+0B645D1B659917: "Fuel" => "燃料"
+C9B1B30D011FE2: "Pos" => "坐标"
+7E8548C30FEF17: "Economy" => "经济"
+503335220A6476: "Gov" => "政府"
+E471FACAC24C5F: "Allegiance" => "势力"
+A7250206751868: "State" => "状态"
+DF5D4664763117: "Sol" => "距离Sol"
+70F8BB9A8A5393: "Home" => "距离母星"
+7B181F6DED4B8C: "Dest" @
+8074342446780B: "No Missions" => "当前无任务"
+32155DB2FEE95E: "System unknown to EDSM" => "该星系还未被收录到EDSM的数据库中"
+EC16F1DC33B505: "Position is {0:0.00},{1:0.00},{2:0.00}" => "当前坐标为 {0:0.00},{1:0.00},{2:0.00}"
+43AB6BF5133F6C: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" => "在3D星图上右键单击以创建书签，区域标记或单击标记，然后在“设置目标”上打勾，或在此处输入并按Enter键"
+F9D6E7C9EF5584: "On Foot" => "À pied"
+08D2E98E6754AF: "N/A" @
 
 SECTION UserControlContainerSplitter
 
-.sizeRatioToolStripMenuItem: "Set Size Ratio" => "设置尺寸比例"
-.ChangetoHorizontalSplit: "Change to Horizontal Split" => "切换至横向分屏"
-.ChangetoVerticalSplit: "Change to Vertical Split" => "切换至纵向分屏"
-.SplitLeftPanel: "Split Left Panel" => "分隔左面板"
-.SplitTopPanel: "Split Top Panel" => "分隔上面板"
-.SplitRightPanel: "Split Right Panel" => "分隔右面板"
-.SplitBottomPanel: "Split Bottom Panel" => "分隔下面板"
-.MergeLeftPanel: "Merge Left Panel" => "合并左面版"
-.MergeTopPanel: "Merge Top Panel" => "合并上面版"
-.MergeRightPanel: "Merge Right Panel" => "合并右面版"
-.MergeBottomPanel: "Merge Bottom Panel" => "合并下面版"
-.RC: "Right click on splitter bar to change orientation\nor split or merge panels" @
+536B80F7A77601: "Set Size Ratio" => "设置尺寸比例"
+1B816D5237F141: "Change to Horizontal Split" => "切换至横向分屏"
+4B8C8DA06D3F80: "Change to Vertical Split" => "切换至纵向分屏"
+BBEFF50602771F: "Split Left Panel" => "分隔左面板"
+0FD8941DF0127F: "Split Top Panel" => "分隔上面板"
+B1D75A0C63A7E9: "Split Right Panel" => "分隔右面板"
+3280EBBDB2FC8F: "Split Bottom Panel" => "分隔下面板"
+B54B57C048EF42: "Merge Left Panel" => "合并左面版"
+EEC2E2243F9659: "Merge Top Panel" => "合并上面版"
+B728CDF769CB75: "Merge Right Panel" => "合并右面版"
+8D65E9F5EF03D3: "Merge Bottom Panel" => "合并下面版"
+B8E0FB8095A05A: "Right click on splitter bar to change orientation\nor split or merge panels" => "Clic droit sur la barre de séparation pour changer l'orientation,\nscinder ou fusionner les panneaux"
 
 SECTION UserControlTravelGrid
 
-.ColumnTime: "Time" = Time
-.ColumnEvent: "Event" = UserControlCombatPanel.Event
-.ColumnDescription: "Description" = UserControlBookmarks.ColDescription
-.ColumnInformation: "Information" = SearchScans.ColumnInformation
-.ColumnNote: "Note" = UserControlEngineering.NotesCol
-.labelTime: "Time" = Time
-.labelSearch: "Search" = UserControlBookmarks.labelSearch
-.THF: "History: Filter out fields" @
-.TT1: " showing {0} original {1}" = UserControlJournalGrid.TT1
-.TTFilt1: "Filtered {0}" = UserControlJournalGrid.TTFilt1
-.TTSelAge: "Select the entries by age, " = UserControlJournalGrid.TTSelAge
-.CSTART: "Clear Start marker" => "清除起点标记"
-.CSTOP: "Clear Stop marker" => "清除终点标记"
-.SETSTOPTC: "Set Stop marker for travel calculations" => "设为航行计算的终点"
-.SETSTARTTC: "Set Start marker for travel calculations" => "设为航行计算的起点"
-.NotSynced: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
-.Remove: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "你确认要删除此项条目吗？\r\n它有可能会在重新扫描游戏日志文件的时候再次出现"
-.quickMarkToolStripMenuItem: "Marked" @
-.removeSortingOfColumnsToolStripMenuItem: "Remove Sorting of Columns" = UserControlJournalGrid.removeSortingOfColumnsToolStripMenuItem
-.gotoEntryNumberToolStripMenuItem: "Jump to Entry" = UserControlJournalGrid.jumpToEntryToolStripMenuItem
-.setNoteToolStripMenuItem: "Set Note" = UserControlStarList.setNoteToolStripMenuItem
-.createEditBookmarkToolStripMenuItem: "Create/Edit Bookmark" => "创建/编辑书签"
-.toolStripMenuItemStartStop: "Set Start/Stop point for travel calculations" = UserControlJournalGrid.toolStripMenuItemStartStop
-.gotoNextStartStopMarkerToolStripMenuItem: "Jump to next Start/Stop marker" => "跳至下一个起点/终点的标记"
-.mapGotoStartoolStripMenuItem: "Go to star on 3D Map" = DataGridViewStarResults.3d
-.viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
-.starMapColourToolStripMenuItem: "Star Map Colour..." => "星图上的颜色..."
-.addToTrilaterationToolStripMenuItem: "Add to ..." => "添加至..."
-.addToTrilaterationToolStripMenuItem.trilaterationToolStripMenuItem: "System on Trilateration Panel" => "三边测量面板里的星系"
-.addToTrilaterationToolStripMenuItem.wantedSystemsToolStripMenuItem: "Wanted Systems on Trilateration Panel" => "三边测量面板里的待测星系"
-.addToTrilaterationToolStripMenuItem.bothToolStripMenuItem: "Both of the above" => "以上两项"
-.addToTrilaterationToolStripMenuItem.expeditionToolStripMenuItem: "Expedition Panel" @
-.moveToAnotherCommanderToolStripMenuItem: "Move Entries to another Commander" => "移动当前条目至另外一个指挥官名下"
-.hideSystemToolStripMenuItem: "Hide Entries" => "隐藏此条目"
-.removeJournalEntryToolStripMenuItem: "Remove Journal Entry" => "移除此项航行记录"
-.runActionsOnThisEntryToolStripMenuItem: "Run Actions on this entry" => "对这项条目运行脚本"
-.copyJournalEntryToClipboardToolStripMenuItem: "Copy journal entry to clipboard/Log" => "复制航行日志条目到剪切板和系统日志"
-.writeEventInfoToLogDebugToolStripMenuItem: "Write event class info to Log (Debug)" @
-.viewScanDisplayToolStripMenuItem: "View Scan Display" @
-.viewOnSpanshToolStripMenuItem: "View on Spansh" @
-.runActionsAcrossSelectionToolSpeechStripMenuItem: "Run actions across selection for speech debugging (Debug)" @
-.runSelectionThroughInaraSystemToolStripMenuItem: "Run selection through Inara System (Debug)" @
-.runEntryThroughProfileSystemToolStripMenuItem: "Run entry through Profile System (Debug)" @
-.runSelectionThroughEDDNThruTestToolStripMenuItem: "Run selection through EDDN Test Server (Debug)" @
-.runSelectionThroughEDAstroDebugToolStripMenuItem: "Run selection through EDAstro (Debug)" @
-.sendJournalEntriesToDLLsToolStripMenuItem: "Send selection to DLLs (Debug)" @
-.showSystemVisitedForeColourToolStripMenuItem: "Show lines in System Visited Fore Colour" @
-.travelGridInDebugModeToolStripMenuItem: "Travel grid in Debug Mode" @
-.outliningOnOffToolStripMenuItem: "Outlining On" => "打开纲要模式"
-.scanEventsOutliningOnOffToolStripMenuItem: "Scan Events Outlining" => "收起扫描事件"
-.toolStripRollUpOlderOutlines: "Roll up older entries" => "收起旧的条目"
-.toolStripRollUpOlderOutlines.rollUpOffToolStripMenuItem: "Off" = Off
-.toolStripRollUpOlderOutlines.rollUpAfterFirstToolStripMenuItem: "After First" => "第一个游戏日志之后"
-.toolStripRollUpOlderOutlines.rollUpAfter5ToolStripMenuItem: "After 5" => "第五个游戏日志之后"
-.comboBoxTime.ToolTip: "Select the entries by age" = UserControlJournalGrid.comboBoxTime.ToolTip
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
-.buttonFilter.ToolTip: "Filter out entries based on event type" = UserControlJournalGrid.buttonFilter.ToolTip
-.buttonField.ToolTip: "Filter out entries matching the field selection" => "筛选匹配域选项的条目"
-.buttonExtExcel.ToolTip: "Send data on grid to excel" = UserControlJournalGrid.buttonExtExcel.ToolTip
-.checkBoxCursorToTop.ToolTip: "Automatically move the cursor to the latest entry when it arrives" = UserControlJournalGrid.checkBoxCursorToTop.ToolTip
-.extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" @
-.extCheckBoxOutlines.ToolTip: "Control Outlining" => "纲要模式控制"
-.extButtonTimeRanges.ToolTip: "Define new time ranges for time selector" @
-.extComboBoxQuickMarks.ToolTip: "Go to a marked journal entry. Use right click to mark an entry" @
-.SearchTerms: "system:body:station:stationfaction" => "system:body:station:stationfaction"
-.StartStopHidden: "Next start/stop marker is hidden" @
-.StartStopNotFound: "No start/stop marker found below" @
-.entryfilteredout: "Entry filtered out of grid" @
+618ED5F457C419: "History: Filter out fields" => "Historique : Filtrer les champs"
+041FA7A8EDCBCD: "Clear Start marker" => "清除起点标记"
+E3E17E3743DED0: "Clear Stop marker" => "清除终点标记"
+9045B8BC31F856: "Set Stop marker for travel calculations" => "设为航行计算的终点"
+2DEA8F5618E216: "Set Start marker for travel calculations" => "设为航行计算的起点"
+6857AC1911CEFA: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "你确认要删除此项条目吗？\r\n它有可能会在重新扫描游戏日志文件的时候再次出现"
+99A8606358921C: "Marked" => "Marqué"
+3D7BEC2A65F239: "Remove Sorting of Columns" => "取消排序"
+46D6F08522DB6C: "Create/Edit Bookmark" => "创建/编辑书签"
+A1CB43A6C382E3: "Jump to next Start/Stop marker" => "跳至下一个起点/终点的标记"
+A099AE49F4552C: "Star Map Colour..." => "星图上的颜色..."
+4D94DD4E25AEFB: "Add to ..." => "添加至..."
+1E5656B093A9A7: "System on Trilateration Panel" => "三边测量面板里的星系"
+65886B813B2541: "Wanted Systems on Trilateration Panel" => "三边测量面板里的待测星系"
+1AADA0255D587D: "Both of the above" => "以上两项"
+BCA2F73AFA4757: "Expedition Panel" => "Panneau d'expédition"
+614EC9DFB9DA9D: "Move Entries to another Commander" => "移动当前条目至另外一个指挥官名下"
+661E31218E2EE8: "Hide Entries" => "隐藏此条目"
+6D8F628DD22939: "Remove Journal Entry" => "移除此项航行记录"
+4E340D4B1C6A0B: "Copy journal entry to clipboard/Log" => "复制航行日志条目到剪切板和系统日志"
+CC0A855DF345BC: "Write event class info to Log (Debug)" => "Écrire la classe d'événement dans le log (Debug)"
+BE71EBC23A96B1: "Run actions across selection for speech debugging (Debug)" => "Exécution des actions dans la sélection pour débug vocal (Debug)"
+EF5031AC6BB79D: "Run selection through Inara System (Debug)" => "Exécution de la sélection via le système d'Inara (Debug)"
+4678C5C9A7EA0E: "Run entry through Profile System (Debug)" => "Exécuter l'entrée via le système de profil (Debug)"
+87AA55A4D8390D: "Run selection through EDDN Test Server (Debug)" => "Exécuter la sélection via les serveurs tests EDDN (Debug)"
+524BF0531AFD77: "Run selection through EDAstro (Debug)" => "Exécuter la sélection via EDAstro (Debug)"
+0F5FE8CD3D51BA: "Send selection to DLLs (Debug)" => "Envoyer la sélection aux DLLs (Debug)"
+B91F8B4B18E7EA: "Show lines in System Visited Fore Colour" => "Afficher les lignes dans la couleur d'avant-plan des systèmes visités"
+27E9DD0E266E2D: "Travel grid in Debug Mode" => "Tableau d'historique en mode Debug"
+21FE521D359452: "Outlining On" => "打开纲要模式"
+7CD3494777C5DB: "Scan Events Outlining" => "收起扫描事件"
+F66672D57338E9: "Roll up older entries" => "收起旧的条目"
+C0DDF9320E29B7: "After First" => "第一个游戏日志之后"
+2B36562B65054F: "After 5" => "第五个游戏日志之后"
+D9273536780112: "Control Outlining" => "纲要模式控制"
+41A18489F97F70: "Define new time ranges for time selector" => "Définir de nouvelles plages horaires pour le sélecteur de temps"
+10FA8B1B034219: "Go to a marked journal entry. Use right click to mark an entry" => "Accédez à une entrée de journal marquée. Faites un clic droit pour marquer une entrée"
+0128C783DB2024: "system:body:station:stationfaction" => "system:body:station:stationfaction"
+03C54D66F2DA56: "Next start/stop marker is hidden" => "Le marqueur début/fin suivant est caché"
+905A92084F2F46: "No start/stop marker found below" => "Pas de marqueur début/fin trouvé ci-dessous"
+A89F26DDCFE091: "Entry filtered out of grid" => "Entrées filtrées"
 
 SECTION UserControlCaptainsLog
 
-.Diary: "Diary" @
-.Entries: "Entries" @
+EFD742A1695D89: "Diary" => "Journal"
+F056D0D56AFCAD: "Entries" => "Entrées"
 
 SECTION CaptainsLogDiary
 
-.Daysofweek: "Sun;Mon;Tue;Wed;Thu;Fri;Sat" @
+EF78A6EC93835C: "Sun;Mon;Tue;Wed;Thu;Fri;Sat" => "Dim;Lun;Mar;Mer;Jeu;Ven;Sam"
 
 SECTION CaptainsLogEntries
 
-.DTF: "Bad/Out of Range Date Time format" @
-.Note: "Note: " @
-.EnterNote: "Enter Note" @
-.CFN: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" @
-.CF: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" @
-.SetTags: "Set Tags" @
-.SysU: "System could not be found - has not been synched or EDSM is unavailable" @
-.ColTime: "Time" @
-.ColSystem: "System" @
-.ColBodyName: "Body" @
-.ColNote: "Note" @
-.ColTags: "Tags" @
-.labelEndDate: "End Date:" @
-.labelDateStart: "Start Date:" @
-.buttonTags.ToolTip: "Edit Tags" @
-.buttonDelete.ToolTip: "Delete selected entries" @
-.buttonNew.ToolTip: "New Entry" @
-.textBoxFilter.ToolTip: "Search for Log Entries" @
-.labelSearch: "Search" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
+7B1E36DA0107B5: "Bad/Out of Range Date Time format" => "Format incorrect de la date (ou hors période)"
+AA1E8410ED98F2: "Note: " => "Note : "
+C2016469805D19: "Enter Note" => "Saisir une note"
+1DD4DD39159EAF: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" => "Voulez-vous vraiment supprimer {0} notes ?\r\nConfirmer ou Annuler"
+261A5FFA4D0D81: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" => "Voulez-vous vraiment supprimer la note pour {0} ?\r\nConfirmer ou Annuler"
+8A2F6148BCF096: "Set Tags" => "Définir les tags"
+E958459C6F2200: "Delete selected entries" => "Supprimer les entrées sélectionnées"
+1BAE251DC4BD91: "New Entry" => "Nouvelle entrée"
+1ED33E573883C3: "Search for Log Entries" => "Rechercher dans les entrées de log"
 
 SECTION UserControlTrilateration
 
-.ColumnSystem: "System" = SearchMaterialsCommodities.ColumnStar
-.ColumnDistance: "Distance" = SearchMaterialsCommodities.ColumnCurrentDistance
-.ColumnCalculated: "Calculated" => "已计算"
-.ColumnStatus: "Status" = UserControlSysInfo.labelState
-.Source: "Source" => "来源"
-.dataGridViewTextBoxColumnClosestSystemsSystem: "Wanted System" => "待测星系"
-.removeFromWantedSystemsToolStripMenuItem: "Remove from wanted systems" => "从待测星系中移除"
-.viewOnEDSMToolStripMenuItem1: "View on EDSM" = DataGridViewStarResults.EDSM
-.deleteAllWithKnownPositionToolStripMenuItem: "Delete all with known position" => "删除所有有已知位置的星系"
-.addAllLocalSystemsToolStripMenuItem: "Add all local systems" => "添加所有本地星系"
-.addAllEDSMSystemsToolStripMenuItem: "Add all EDSM systems" => "添加所有EDSM星系"
-.addToWantedSystemsToolStripMenuItem: "Add to wanted systems" => "添加至待测星系"
-.viewOnEDSMToolStripMenuItem: "View on EDSM" = DataGridViewStarResults.EDSM
-.pasteToolStripMenuItem: "Paste" = UserControlExpedition.pasteToolStripMenuItem
-.toolStripButtonSubmitDistances: "&Submit Distances" => "提交距离(&S)"
-.toolStripButtonNew: "Start New" => "新开始(&N)"
-.toolStripLabelSystem: "From System:" => "自星系："
-.toolStripLabel1: "Visited without coordinates:" => "访问过但无坐标的星系："
-.toolStripAddFromHistory: "Add 20 oldest" => "添加20个最老的"
-.toolStripAddRecentHistory: "Add 20 newest" => "添加20个最新的"
-.ToolStripText: "Press Start New" => "点击“新开始”按钮"
-.DUP: "Duplicate system entry is not allowed" => "不允许有重复的星系"
-.TP: "Trilateration Panel" => "三边测量面板"
-.CHK: "You are about to submit distances from {0}.\r\nThe most recent known location in your history is {1}.\r\nSubmit distances without changing 'From' system?" => "你即将提交与{0}间的距离。\r\n在你航行记录上的最近时间的已知位置是{1}。"
-.UPD: "Update 'From' system to current position ({0}) and submit entered distances?" @
-.Sub: "Submitting system to EDSM, please wait..." => "正在提交星系至EDSM，请稍等..."
-.NOTREM: "{0} is pushed from EDSM and cannot be removed" => "星系{0}是从EDSM那里推送过来的，不能移除"
-.NoEDSM: "System could not be found - has not been synched or EDSM is unavailable" = UserControlBookmarks.SysU
-.Cmdr: "Please enter commander name before submitting the system!" => "在提交星系前请先从设置里添加EDSM账号！"
-.Horray: "EDSM submission succeeded, trilateration successful." => "成功提交至EDSM，三边测量成功。"
-.Failed: "EDSM submission succeeded, but trilateration failed. Try adding more distances." => "成功提交至EDSM，但是三边测量失败。请添加更多的距离信息。"
-.Dead: "EDSM submission failed." => "提交至EDSM失败。"
-.Co: "Only systems with coordinates or already known to EDSM can be added" => "只能添加存在坐标或者存在于EDSM数据库里的星系"
-.PU: "Position unknown" => "位置未知"
-.PF: "Position found" => "已发现位置"
-.addAllSectorSystemsToolStripMenuItem: "Add all Sector systems" @
-.toolStripButtonSector: "Sector Systems" @
-.NotProcGen: "Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems." @
-.NoSector: "No systems with unknown coordinates were found for the current sector." @
-.SectorCount: "{0} systems with unknown coordinates found in {1} sector." @
+757D86654EDA4B: "Calculated" => "已计算"
+57A96541268342: "Wanted System" => "待测星系"
+35201A050F3AAF: "Remove from wanted systems" => "从待测星系中移除"
+C787D6ED2C9C15: "Delete all with known position" => "删除所有有已知位置的星系"
+436C9224924A17: "Add all local systems" => "添加所有本地星系"
+C4923981307F3C: "Add all EDSM systems" => "添加所有EDSM星系"
+7ABC2E762F1C11: "Add to wanted systems" => "添加至待测星系"
+47B25478D21515: "&Submit Distances" => "提交距离(&S)"
+D12B3719BBD6F1: "Start New" => "新开始(&N)"
+0E258A8C046375: "From System:" => "自星系："
+0C87234D1B2DD1: "Visited without coordinates:" => "访问过但无坐标的星系："
+6F38D28253F348: "Add 20 oldest" => "添加20个最老的"
+CD2E16EBD3BDBA: "Add 20 newest" => "添加20个最新的"
+0BF9E53A212E10: "Press Start New" => "点击“新开始”按钮"
+C268CAA16336DB: "Duplicate system entry is not allowed" => "不允许有重复的星系"
+1038B10F521092: "Trilateration Panel" => "三边测量面板"
+7768F29A8F62CB: "You are about to submit distances from {0}.\r\nThe most recent known location in your history is {1}.\r\nSubmit distances without changing 'From' system?" => "你即将提交与{0}间的距离。\r\n在你航行记录上的最近时间的已知位置是{1}。"
+E3813A7FAC1F7A: "Update 'From' system to current position ({0}) and submit entered distances?" => "Mettre à jour du système 'origine' à la position actuelle ({0}) et soumettre les distances saisies ?"
+C3F22D80EC765B: "Submitting system to EDSM, please wait..." => "正在提交星系至EDSM，请稍等..."
+3025AC0C367A57: "{0} is pushed from EDSM and cannot be removed" => "星系{0}是从EDSM那里推送过来的，不能移除"
+D822E8C1F9039E: "Please enter commander name before submitting the system!" => "在提交星系前请先从设置里添加EDSM账号！"
+ADC569B9A46FD5: "EDSM submission succeeded, trilateration successful." => "成功提交至EDSM，三边测量成功。"
+B02A742A947290: "EDSM submission succeeded, but trilateration failed. Try adding more distances." => "成功提交至EDSM，但是三边测量失败。请添加更多的距离信息。"
+183AE19E7E5DC7: "EDSM submission failed." => "提交至EDSM失败。"
+9430459228FC8E: "Only systems with coordinates or already known to EDSM can be added" => "只能添加存在坐标或者存在于EDSM数据库里的星系"
+8DE285BE18F269: "Position unknown" => "位置未知"
+16D3525290820F: "Position found" => "已发现位置"
+44DA1E80428347: "Add all Sector systems" => "Ajouter tous les systèmes du secteur"
+FFB238EB86BF11: "Sector Systems" => "Systèmes du secteur"
+C41C3AF13C07BD: "Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems." => "Le nom du secteur n'a pas pu être dérivé du nom du système (il peut ne pas être généré de manière procédurale). Ne récupère pas les systèmes du secteur."
+0F21EB2F39FE84: "No systems with unknown coordinates were found for the current sector." => "Aucun système avec des coordonnées inconnues n'a été trouvé dans le secteur actuel."
+EEBF564BAF4F90: "{0} systems with unknown coordinates found in {1} sector." => "{0} systèmes avec des coordonnées inconnues ont été trouvés dans le secteur {1}."
 
 SECTION UserControlMaterialTrader
 
-.UpgradeCol: "From" @
-.LevelCol: "Use" @
-.WantedCol: "Left" @
-.ModuleCol: "To" @
-.MaxCol: "Get" @
-.AvailableCol: "Total" @
-.buttonClear: "Clear" @
-.checkBoxCursorToTop.ToolTip: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
-.buttonClear.ToolTip: "Set all wanted values to zero" @
-.Offer: "Offer" @
-.Receive: "Receive" @
-.clearTradeToolStripMenuItem: "Clear Trade" @
-.Raw: "Raw" @
-.Encoded: "Encoded" @
-.Manufactured: "Manufactured" @
+1D4D43CC6F3A83: "Use" => "Utiliser"
+8AE1C34BD37FAD: "Left" => "Restant"
+BFFFD736CDDD08: "Get" => "Obtenir"
+719EA396AD92E0: "Clear" => "Vider"
+3898B9AA06204B: "Offer" => "Offre"
+965FB2DDF63D60: "Receive" => "Reçoit"
+127F7960FB4A8D: "Clear Trade" => "Vider la transaction"
+DA433CD41E7FB7: "Raw" => "Brut"
+58AC2F7D78D326: "Encoded" => "Encodé"
+8AB3DB9BFC3921: "Manufactured" => "Fabriqué"
 
 SECTION UserControlMiningOverlay
 
-.Proscoll: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" @
-.ref: "Ref." @
-.coll: "Coll." @
-.pros: "Prosp." @
-.ratio: "Ratio%" @
-.avg: "Avg%" @
-.min: "Min%" @
-.max: "Max%" @
-.mload: "M.Lode" @
-.hml: "HML Ct." @
-.discv: "Discv" @
-.astpros: "Asteroids Pros." @
-.content: "Content %" @
-.above: "% Above" @
-.dist: "Distribution" @
-.Limcargo: "Limpets left {0}, Cargo left {1}" @
-.extCheckBoxZeroRefined.ToolTip: "Display items with zero refined items" @
-.buttonExtExcel.ToolTip: "Export" @
-.extComboBoxChartOptions.ToolTip: "Select chart options" @
-.extCheckBoxChartBase.ToolTip: "Select chart between showing % chance for asteroids containing only this material, and % chance over all asteroids" @
-.distall: "Distribution vs All" @
+92743D7648AAD4: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" @
+3E82E468720F25: "Ref." => "Raff."
+633C0EE42BDD19: "Coll." @
+FF44397BA75466: "Prosp." @
+0BBC5D86769FF1: "Ratio%" @
+E9F6F27B0B2C27: "Avg%" => "Moy%"
+EF0DFE1169222D: "Min%" @
+E07CB141188F05: "Max%" @
+79982906F01743: "M.Lode" => "Cœur"
+6FAB4B5F335EB6: "HML Ct." @
+67B93882093149: "Discv" => "Découv."
+ACBFF454D6581B: "Asteroids Pros." => "Astéroïdes Pros."
+805723CC0E68E1: "Content %" => "% Contenu"
+98FD8A73E231A5: "% Above" => "% Au-dessus"
+1D3C457CBE3E35: "Distribution" @
+7B169F19D2E9BB: "Limpets left {0}, Cargo left {1}" => "Drones restants {0}, Cargo restant {1}"
+CA0FBEE8E26BBE: "Display items with zero refined items" => "Afficher les éléments avec zéro éléments raffinés"
+081E86CF24ED15: "Select chart options" => "Sélectionner les options du graphique"
+2A543AE1B0442B: "Select chart between showing % chance for asteroids containing only this material, and % chance over all asteroids" => "Sélectionnez le graphique entre l'affichage du % de chance pour les astéroïdes contenant uniquement ce matériau et le % de chance pour tous les astéroïdes."
+78148038EB4C3C: "Distribution vs All" => "Distribution vs Tous"
 
 SECTION UserControlFactions
 
-.colFaction: "Faction" @
-.colMissions: "Missions" @
-.colInfluence: "Inf +" @
-.colReputation: "Rep +" @
-.colMissionCredits: "Mission Credits" @
-.CBought: "Commds +" @
-.CSold: "Commds -" @
-.CProfit: "Commds Profit" @
-.MBought: "Mats +" @
-.MSold: "Mats -" @
-.CrimeCommitted: "Crimes Committed" @
-.BountyKills: "Bounty Kills" @
-.BountyValue: "Bounty Rewards" @
-.BountyRewardsValue: "Bounty Rewards Value" @
-.Interdicted: "Interdicted" @
-.Interdiction: "Interdiction" @
-.KillBondVictim: "Kill Bonds Victim" @
-.KillBondsAward: "Kill Bonds Awarded" @
-.KillBondsValue: "Kill Bonds Value" @
-.CartoValue: "Cartographic Value" @
-.colInfo: "Other Info" @
-.labelTo: "to" @
-.startDateTimePicker.ToolTip: "Include from" @
-.endDateTimePicker.ToolTip: "Include to" @
-.FactionsPlural: "Factions" @
-.MissionsFor: "Missions for " @
-.BountyBond: "Bounty/Bond" @
-.Target: "Target" @
-.TargetFaction: "Target Faction" @
-.Reward: "Reward" @
-.BountiesBondsFor: "Bounties/Bonds for " @
-.Item: "Item" @
-.MaterialCommodsFor: "Materials/Commodities for " @
-.showMissionsForFactionToolStripMenuItem: "Show missions for faction" @
-.showCommoditymaterialTradesForFactionToolStripMenuItem: "Show commodity/material trades for faction" @
-.showBountiesAndBondsForFactionToolStripMenuItem: "Show bounties and bonds for faction" @
-.MissionsInProgress: "Missions In Progress: " @
-.CapShipVictims: "Capital ship Victims: " @
-.CapShipAward: "Capital ship Award: " @
-.colRedeemVoucher: "Redeem Voucher" @
-.colFines: "Pay Fines" @
-.colBountyValue: "Pay Bounty Value" @
-.colDataLinkVictimFaction: "DL Victim" @
-.colDataLinkPayeeFaction: "DL Payee Faction" @
-.colDataLinkPayeeValue: "DL Payee Value" @
-.buttonExtExcel.ToolTip: "Send data on grid to excel" @
+A2BF9187FC85BA: "Inf +" @
+B128DA516E58BF: "Rep +" @
+697DF284DA4F67: "Mission Credits" => "Crédits de missions"
+6FF0E311B944E1: "Commds +" => "Marchandises +"
+AC18551E261653: "Commds -" => "Marchandises -"
+C1ECFEB8DEF4DC: "Commds Profit" => "Gains marchandises"
+6EA689CC53EA9A: "Mats +" @
+07FDDC35BB0E65: "Mats -" @
+6AC2053328E50A: "Crimes Committed" => "Crimes commis"
+77E2DD8141E981: "Bounty Kills" => "Tués pour primes"
+397B67A90DEC91: "Bounty Rewards" => "Récompenses de prime"
+D5965451E332A6: "Bounty Rewards Value" => "Valeur des primes"
+B83FE58DB23E57: "Interdicted" => "Interdit"
+C21AFB3EFA18AB: "Interdiction" => "Interdiction"
+5F22266A168021: "Kill Bonds Victim" => "Victimes de récompenses de combat"
+FC21DB8588503E: "Kill Bonds Awarded" => "Récompenses de combat"
+DAE2AEC9BE1018: "Kill Bonds Value" => "Valeur des récompenses de combat"
+424368E7EC512D: "Cartographic Value" => "Valeur des cartographies"
+775CBA539E85D7: "Other Info" => "Autre info"
+E28F24331D5916: "Include from" => "Inclure de"
+657AC92FA1AFD9: "Include to" => "Inclure jusqu'à"
+05EC5A8E4188D0: "Missions for " => "Missions pour "
+80046482992EB0: "Bounty/Bond" => "Prime/Récompense de combat"
+90E82138823B6D: "Bounties/Bonds for " => "Primes/Récompenses de combat pour "
+EE4A9C0F4355B9: "Materials/Commodities for " => "Matériaux/Marchandises pour "
+449B4068617074: "Show missions for faction" => "Afficher les missions pour la faction"
+4CA2AF672FCE38: "Show commodity/material trades for faction" => "Afficher les échanges de marchandises/matériaux pour la faction"
+5B997E7442275B: "Show bounties and bonds for faction" => "Afficher les primes et récompenses de combat pour la faction"
+819A8C7163E967: "Missions In Progress: " => "Missions en cours : "
+3AA9F747E12858: "Capital ship Victims: " => "Victimes de vaisseau capital : "
+A466B1F86CE710: "Capital ship Award: " => "Récompenses de vaisseau capital : "
+C7AD6F7B6831A8: "Redeem Voucher" => "Valeur des primes réclamées"
+2C60D95A352DA3: "Pay Fines" => "Valeur des amendes"
+7E2BA2DEEF4EF3: "Pay Bounty Value" @
+984FAF564D50B9: "DL Victim" => "Victimes liaison de données"
+AB2BEAA625AAC3: "DL Payee Faction" => "Récompenses liaison de données"
+91FDF90FC89C75: "DL Payee Value" => "Valeur des récompenses liaison de données"
 
-.colSystem: "System" @
-.colLastRep: "Last Known Reputation" @
-.colFactionState: "Last State" @
-.colFactionGov: "Government" @
-.colFactionAllegiance: "Allegiance" @
-.colFactionSystemInfluence: "System Influence" @
-.colFactionOtherSystemInfo: "Other System Info" @
-.colOrganicDataSold: "Organic Data Value" @
-.labelSearch: "Search" @
-.extCheckBoxShowHideSystemInfo.ToolTip: "Show/Hide System Info" @
-.extCheckBoxShowHideMission.ToolTip: "Show/Hide Mission" @
-.extCheckBoxShowHideCommodities.ToolTip: "Show/Hide Commodities" @
-.extCheckBoxShowHideMaterials.ToolTip: "Show/Hide Materials" @
-.extCheckBoxShowHideBounties.ToolTip: "Show/Hide Crimes/Bounties" @
-.extCheckBoxShowHideInterdictions.ToolTip: "Show/Hide Interdictions" @
-.extCheckBoxShowHideKillBonds.ToolTip: "Show/Hide Kill Bonds" @
-.extCheckBoxShowHideDataLink.ToolTip: "Show/Hide Datalink" @
-.extCheckBoxShowHideCartographic.ToolTip: "Show Hide Cartographic/Organic Sold" @
+01784CA8036C41: "Last Known Reputation" => "Dernière réputation connue"
+CE1FCB4A606ED1: "Last State" => "Dernier état"
+5C9CB498F540DF: "Government" => "Gouvernement"
+1DD01EBAA45EEF: "System Influence" => "Influence dans le système"
+05A55AA172DB06: "Other System Info" => "Autres infos du système"
+CB7B9C47F344FC: "Organic Data Value" => "Valeur des scans organiques"
+BDE6E14DB0426B: "Show/Hide System Info" => "Afficher/masquer les infos du système"
+0D19D7A7D356EA: "Show/Hide Mission" => "Afficher/masquer les missions"
+7039D4E6A3112F: "Show/Hide Commodities" => "Afficher/masquer les marchandises"
+20C47CB8700682: "Show/Hide Materials" => "Afficher/masquer les matériaux"
+406CC4B75DC28D: "Show/Hide Crimes/Bounties" => "Afficher/masquer les crimes/primes"
+E14A324A01BAF1: "Show/Hide Interdictions" => "Afficher/masquer les interdictions"
+FBB715DCFB4F59: "Show/Hide Kill Bonds" => "Afficher/masquer les récompenses de combat"
+0D9AC62782285E: "Show/Hide Datalink" => "Afficher/masquer les liaison de données"
+436BF2724D3231: "Show Hide Cartographic/Organic Sold" => "Afficher/masquer les cartographies/scans organiques"
 
 SECTION UserControlOrganics
 
-.extButtonShowControl.ToolTip: "Display Settings" @
-.extButtonFont.ToolTip: "Font" @
-.extCheckBoxWordWrap.ToolTip: "Word Wrap" @
-.extCheckBoxShowIncomplete.ToolTip: "Display incomplete scans" @
-.at: "At {0}" @
-.sysinfo: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
-.extButtonAlignment.ToolTip: "Alignment" @
-.ColDate: "Date" @
-.ColStarSystem: "Star System" @
-.ColBodyName: "Body Name" @
-.ColBodyType: "Body Type" @
-.ColGenus: "Genus" @
-.ColSpecies: "Species" @
-.ColVariant: "Variant" @
-.ColLastScanType: "Last Scan Type" @
-.ColValue: "Value" @
-.labelTime: "Time" @
-.labelStart: "Start" @
-.labelEnd: "End" @
-.comboBoxTime.ToolTip: "Select the entries by age" @
+20ABF8B1A35466: "Display incomplete scans" => "Afficher les scans incomplets"
+729535298F44FF: "At {0}" => "À {0}"
+023888959E33B9: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" => ", {0}, Rayon {1}, {2}, {3}, Signaux bio : {4}{5}"
+DAB5A87D199E18: "Star System" => "Système"
+48902F14E5C843: "Genus" => "Genre"
+83A7238826AB30: "Species" => "Espèce"
+CC91B1EA2C1651: "Variant" @
+E214E19943B264: "Last Scan Type" => "Type du dernier scan"
 
 SECTION ScanDisplayForm
 
-.Sys: "System" @
-.Station: "Station" @
+4CB8D8545ED6BF: "Station" @
 
 SECTION TagsForm
 
-.buttonMore.ToolTip: "Add more tags" @
-.TN: "Tag name" @
-.SI: "Select image for this tag" @
-.DE: "Delete entry" @
+6E225147D2494A: "Add more tags" => "Ajouter des tags"
+FCF2D565CE96B0: "Tag name" => "Nom du tag"
+78ADCBEFBDFDD0: "Select image for this tag" => "Sélectionner une image pour ce tag"
+CCAF752B04EA9C: "Delete entry" => "Supprimer entrée"
 
 SECTION FilterSelector
 
-.Travel: "Travel" @
-.Scan: "Scan" @
-.Missions: "Missions" @
-.Materials: "Materials" @
-.Commodities: "Commodities" @
-.Ledger: "Ledger" @
-.Ship: "Ship" @
-.Mining: "Mining" @
-.MicroResources: "Micro Resources" @
-.Suits: "Suits" @
-.Carrier: "Carrier" @
-.NewGroup: "Create new group" @
-.Newgroupname: "Enter name of new group" @
-.Confirmremoval: "Confirm removal of" @
+2A98149D995006: "Suits" => "Combinaisons"
+279E2C9DDD2C44: "Create new group" => "Créer un nouveau groupe"
+7DB7848F955BD7: "Enter name of new group" => "Entrer le nom du nouveau groupe"
+36B0FABDF83DC7: "Confirm removal of" => "Confirmer la suppression de"
 
 SECTION UserControlCommonBase
 
-.Copyingtexttoclipboardfailed: "Copying text to clipboard failed" => "复制文本到剪切板失败"
+9A9F28CAB2D108: "Copying text to clipboard failed" => "复制文本到剪切板失败"
 
 SECTION CSV
 
-.Helpers.OpenFailed: "Failed to open " @
-.Helpers.WriteFailed: "Failed to write to " @
+9EF6280386D761: "Failed to open " => "Echec d'ouverture de "
+8BDF9FDF84B40D: "Failed to write to " => "Echec d'écriture vers "
 
 SECTION InfoForm
 
-.Copyingtextfailed: "Copying text to clipboard failed" @
 
 SECTION UserControlSuitsWeapons
 
-.CSTime: "Time" @
-.CSName: "Name" @
-.CSMods: "Mods" @
-.CSPrice: "Price" @
-.CSLoadout: "Loadout" @
-.CSPrimary1: "Primary 1" @
-.CSPrimary2: "Primary 2" @
-.CSSecondary: "Secondary" @
-.CWTime: "Time" @
-.CWName: "Name" @
-.CWClass: "Class" @
-.CWMods: "Mods" @
-.CWPrice: "Price" @
-.CWPrimary: "Primary" @
-.CWWType: "Weapon Type" @
-.CWDamageType: "Damage Type" @
-.CWFireMode: "Fire Mode" @
-.CWDamage: "Damage" @
-.CWRPS: "Rate/Sec" @
-.CWClipSize: "Clip Size" @
-.CWHopper: "Hopper Size" @
-.CWRange: "Range m" @
-.CWDPS: "DPS" @
-.CWHSD: "Head Shot Mult" @
-.Confirm: "Confirm Selling of" @
-.forceSellShipToolStripMenuItem: "Force Suit Sale" @
+CC459F63A7AECD: "Mods" => "Modifications"
+9E7FD7DDAEE291: "Loadout" => "Configuration"
+EF002BCE769B96: "Primary 1" => "Principal 1"
+34CD6210189BD2: "Primary 2" => "Principal 2"
+025DE599EA0A62: "Secondary" => "Secondaire"
+A9A96EC019494D: "Primary" => "Principal"
+20874E3E8BD17C: "Weapon Type" => "Type d'arme"
+1BFD29F2F12AD0: "Damage Type" => "Type de dégâts"
+9A337CC4EF4BE3: "Fire Mode" => "Mode de tir"
+7BF6D1D3A58A22: "Damage" => "Dégâts"
+8A50D0D250AC59: "Rate/Sec" => "Cadence de tir/sec"
+97B39A3F5E9B3A: "Clip Size" => "Capacité du chargeur"
+77604466309D05: "Hopper Size" => "Capacité totale"
+D08EC89EFF37EC: "Range m" => "Portée (m)"
+F3CEC91C2F03B8: "DPS" @
+E70031EADDA4DE: "Head Shot Mult" => "Multiplicateur tir à la tête"
+2ECE6C47CFB703: "Confirm Selling of" => "Confirmer la vente de"
+D13DB38286C90C: "Force Suit Sale" => "Forcer la vente de la combinaison"
 
 SECTION UserControlCarrier
 
-.Decommissioned: "Decommissioned" @
-.DecommissionedOn: "Decommissioning on" @
-.Cargo: "Cargo: ; t;N0" @
-.Services: "Services: ; t;N0" @
-.Shippacks: "Ship Packs: ; t;N0" @
-.Modulepacks: "Module Packs: ; t;N0" @
-.Reservedspace: "Reserved Space: ; t;N0" @
-.Freespace: "Free Space: ; t;N0" @
-.Jumprange: "Jump Range: ; ly;N0" @
-.Maxjump: "Max Jump: ; ly;N0" @
-.Fuel: "Fuel: ; t;N0" @
-.DockingAccess: "Docking Access: " @
-.Notorious: "Notorious: " @
-.Balance: "Balance: ; cr;N0" @
-.Reserve: "Reserve: ; cr;N0" @
-.Available: "Available: ; cr;N0" @
-.Reservepercent: "Reserve: ; %;N0" @
-.PioneerTax: "Pioneer Tax" @
-.ShipyardTax: "Shipyard Tax" @
-.RearmTax: "Rearm Tax" @
-.OutfittingTax: "Outfitting Tax" @
-.RefuelTax: "Refuel Tax" @
-.RepairTax: "Repair Tax" @
-.Taxpercentage: ": ; %;N0" @
-.CoreCost: "Core Cost: ; cr;N0" @
-.ServicesCost: "Services Cost: ; cr;N0" @
-.NoCarrier: "No Carrier" @
-.InstallCost: "Install cost: ; cr;N0" @
-.CapacityAllocated: "Capacity Allocated: ; Units;N0" @
-.Upkeepcost: "Upkeep cost: ; cr;N0" @
-.Suspendedupkeepcost: "Suspended upkeep cost: ; cr;N0" @
-.CrewName: "Crew Name: " @
-.ServiceActive: "This Service is Active" @
-.ServiceSuspended: "This Service is Suspended" @
-.ServiceNotInstalled: "This Service is Not Installed" @
-.NoPacks: "No Module or Ship packs installed" @
-.Tier: "Tier " @
-.Cost: "Cost: ; cr;N0" @
-.Jumping: "Jumping" @
-.NetworkFailure: "No CAPI data from frontier, due to either or server/network failure" @
-.NotLoggedIn: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." @
-.OptionalService: "Optional Service" @
-.CoreService: "Core Service" @
-.extTabControl.tabPageOverall: "Overall" @
-.extTabControl.tabPageItinerary: "Itinerary" @
-.extTabControl.tabPageItinerary.colItinDate: "Date" @
-.extTabControl.tabPageItinerary.colItinSystemAlphaInt: "System" @
-.extTabControl.tabPageItinerary.colItinBodyAlphaInt: "Body" @
-.extTabControl.tabPageItinerary.colItinJumpDistNumeric: "Jump Dist" @
-.extTabControl.tabPageItinerary.colItinDistFromNumeric: "Dist From" @
-.extTabControl.tabPageItinerary.colItinInformation: "Information" @
-.extTabControl.tabPageFinances: "Finances" @
-.extTabControl.tabPageFinances.colLedgerDate: "Date" @
-.extTabControl.tabPageFinances.colLedgerStarsystemAlphaInt: "System" @
-.extTabControl.tabPageFinances.colLedgerBodyAlphaInt: "Body" @
-.extTabControl.tabPageFinances.colLedgerEvent: "Event" @
-.extTabControl.tabPageFinances.colLedgerCreditNumeric: "Credits" @
-.extTabControl.tabPageFinances.colLedgerDebitNumeric: "Debits" @
-.extTabControl.tabPageFinances.colLedgerBalanceNumeric: "Balance cr" @
-.extTabControl.tabPageFinances.colLedgerNotes: "Notes" @
-.extTabControl.tabPageServices: "Services" @
-.extTabControl.tabPagePacks: "Packs" @
-.extTabControl.tabPageOrders: "Orders" @
-.extTabControl.tabPageOrders.colOrdersDate: "Date" @
-.extTabControl.tabPageOrders.colOrdersCommodity: "Commodity" @
-.extTabControl.tabPageOrders.colOrdersType: "Type" @
-.extTabControl.tabPageOrders.colOrdersGroup: "Group" @
-.extTabControl.tabPageOrders.colOrdersPurchaseNumeric: "Purchase" @
-.extTabControl.tabPageOrders.colOrdersSaleNumeric: "Sale" @
-.extTabControl.tabPageOrders.colOrdersPriceNumeric: "Price" @
-.extTabControl.tabPageOrders.colOrdersBlackmarket: "Blackmarket" @
-.extTabControl.tabPageCAPI3: "CAPI Stats" @
-.extTabControl.tabPageCAPI3.dataGridViewTextBoxColumn1: "Name" @
-.extTabControl.tabPageCAPI3.dataGridViewTextBoxColumnValue: "Value" @
-.extTabControl.tabPageCAPI1: "CAPI Ships/Modules" @
-.extTabControl.tabPageCAPI1.colCAPIShipsName: "Name" @
-.extTabControl.tabPageCAPI1.colCAPIShipsManu: "Manufacturer" @
-.extTabControl.tabPageCAPI1.colCAPIShipsPriceNumeric: "Price" @
-.extTabControl.tabPageCAPI1.colCAPIShipsSpeedNumeric: "Speed" @
-.extTabControl.tabPageCAPI1.colCAPIShipsBoostNumeric: "Boost" @
-.extTabControl.tabPageCAPI1.colCAPIShipsMassNumeric: "Mass" @
-.extTabControl.tabPageCAPI1.colCAPIShipsLandingPadNumeric: "Landing Pad" @
-.extTabControl.tabPageCAPI1.colCAPIModulesName: "Name" @
-.extTabControl.tabPageCAPI1.colCAPIModulesCat: "Category" @
-.extTabControl.tabPageCAPI1.colCAPIModulesMassNumeric: "Mass" @
-.extTabControl.tabPageCAPI1.colCAPIModulesPowerNumeric: "Power" @
-.extTabControl.tabPageCAPI1.colCAPIModulesCostNumeric: "Cost" @
-.extTabControl.tabPageCAPI1.colCAPIModulesStockNumeric: "Stock" @
-.extTabControl.tabPageCAPI1.colCAPIModulesInfo: "Info" @
-.extTabControl.tabPageCAPI2: "CAPI Items" @
-.extTabControl.tabPageCAPI2.colCAPICargoCommodity: "Commodity" @
-.extTabControl.tabPageCAPI2.colCAPICargoType: "Type" @
-.extTabControl.tabPageCAPI2.colCAPICargoGroup: "Group" @
-.extTabControl.tabPageCAPI2.colCAPICargoQuantityNumeric: "Quantity" @
-.extTabControl.tabPageCAPI2.colCAPICargoPriceNumeric: "Price" @
-.extTabControl.tabPageCAPI2.colCAPICargoStolen: "Stolen" @
-.extTabControl.tabPageCAPI2.colCAPILockerName: "Microresource" @
-.extTabControl.tabPageCAPI2.colCAPILockerType: "Type" @
-.extTabControl.tabPageCAPI2.colCAPILockerQuantityNumeric: "Quantity" @
+3D76FD53AA0F62: "Decommissioned" => "Hors service"
+0B2AA74B1595AE: "Decommissioning on" => "Mise hors service le"
+FECCF27D8A756C: "Cargo: ; t;N0" @
+E4B184DD2B2AD1: "Services: ; t;N0" @
+B63CFA032C94BF: "Ship Packs: ; t;N0" => "Pack de vaisseaux : ; t;N0"
+EF1C1576EACED1: "Module Packs: ; t;N0" => "Pack de modules : ; t;N0"
+56B679C0A68C1B: "Reserved Space: ; t;N0" => "Espace réservé : ; t;N0"
+0456E14744E365: "Free Space: ; t;N0" => "Espace libre : ; t;N0"
+11CDC4D5D07633: "Jump Range: ; ly;N0" => "Portée de saut : ; al;N0"
+A2B7F586AACEE5: "Max Jump: ; ly;N0" => "Saut max : ; al;N0"
+A936AD07CF17C0: "Fuel: ; t;N0" => "Carburant : ; t;N0"
+B45F1101FF6819: "Docking Access: " => "Accès appontage : "
+FA0FD4EDB0C658: "Notorious: " => "Notoriété : "
+5A1731CE9C0565: "Balance: ; cr;N0" => "Solde : ; cr;N0"
+CB4849CE71609D: "Reserve: ; cr;N0" => "Allocation hebdomadaire : ; cr;N0"
+EF688A50489362: "Available: ; cr;N0" => "Disponible : ; cr;N0"
+D75DF56D16E59F: "Reserve: ; %;N0" => "Réserve : ; %;N0"
+E8F1C1B55660EB: "Pioneer Tax" => "Taxes Pioneer Supplies"
+7A6FA51ABA501E: "Shipyard Tax" => "Taxes chantier naval"
+3583018B5E8131: "Rearm Tax" => "Taxes armurerie"
+460784033FAD01: "Outfitting Tax" => "Taxes équipement"
+964A427048AAB1: "Refuel Tax" => "Taxes ravitaillement en carburant"
+7A550EE38B3E7C: "Repair Tax" => "Taxes réparation"
+1A0F5DB337EC25: ": ; %;N0" @
+5DD178DB7162A2: "Core Cost: ; cr;N0" => "Coût de base : ; cr;N0"
+FE59ED4101E466: "Services Cost: ; cr;N0" => "Coût des services : ; cr;N0"
+50E6AE8D109017: "No Carrier" => "Pas de porte-vaisseaux"
+B455B013A9CF13: "Install cost: ; cr;N0" => "Coût d'installation : ; cr;N0"
+3DF5159B0456C1: "Capacity Allocated: ; Units;N0" => "Capacité allouée : ; unités;N0"
+CB7654E3728C0A: "Upkeep cost: ; cr;N0" => "Coût d'entretien : ; cr;N0"
+9EC790B9F4E58F: "Suspended upkeep cost: ; cr;N0" => "Coût d'entretien suspendu : ; cr;N0"
+D8EC343DF22D11: "Crew Name: " => "Nom de l'équipage : "
+E2CE7274D260B9: "This Service is Active" => "Ce service est actif"
+CD7E9084A619FD: "This Service is Suspended" => "Ce service est suspendu"
+6C573682E526FF: "This Service is Not Installed" => "Ce service n'est pas installé"
+068D15FAF7392F: "No Module or Ship packs installed" => "Pas de pack de modules ou de vaisseaux installé"
+3BECD4DD96195C: "Tier " @
+8EF7B327113B48: "Cost: ; cr;N0" => "Coût : ; cr;N0"
+BB9246B17BFDFF: "Jumping" => "Saut en cours"
+334FBEB50B8D02: "No CAPI data from frontier, due to either or server/network failure" => "Pas de données CAPI de la part de Frontier, à cause d'une erreur serveur ou réseau"
+296B6B5743412B: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." => "Vous n'êtes pas connecté à CAPI.\r\nAllez dans la page des paramètres puis ouvrez la configuration du commandant, et connectez-vous à CAPI."
+0D9D81EB1483AC: "Optional Service" => "Service optionnel"
+5BB5DF1A383AE6: "Core Service" => "Service de base"
+8A528519BDABA6: "Overall" => "Général"
+B1BED287E15EFC: "Itinerary" => "Itinéraire"
+251018D2063C94: "Jump Dist" => "Distance de saut"
+9E94B37532F75D: "Dist From" => "Saut depuis"
+4F05E8FDB76807: "Finances" @
+EA50EDD2233946: "Balance cr" => "Solde (cr)"
+5CBD584046863B: "Services" @
+DB866831C3D096: "Packs" @
+CDED093321DDAA: "Orders" => "Commerce de marchandises"
+38DFC233193C18: "Commodity" => "Marchandise"
+171A0606F7C745: "Group" => "Groupe"
+160F06D4799C85: "Purchase" => "Achat"
+0028D743EB44B8: "Sale" => "Vente"
+D909428F5E2D1E: "Blackmarket" => "Marché noir"
+57218AD66361FC: "CAPI Stats" @
+9C452534CDFE1E: "CAPI Ships/Modules" => "CAPI Vaisseaux/Modules"
+2D2CB022BC3D26: "Speed" => "Vitesse"
+2DA2851FFF3935: "Boost" @
+2521738884EF95: "Landing Pad" => "Plate-forme d'atterrissage"
+7548AB52C3D1D5: "Power" => "Puissance"
+BCECF4562F1709: "Stock" @
+2011FCCFA79102: "CAPI Items" => "CAPI Éléments"
+44F6AF6945544C: "Quantity" => "Quantité"
+678DD8A69CFC99: "Stolen" => "Volé"
+3F6F257DD23224: "Microresource" => "Micro ressource"
 
 SECTION BookmarkForm
 
-.labelName: "Name" = UserControlCombatPanel.Name
-.checkBoxTarget: "Make Target" => "选择为目标"
-.labelBookmarkNotes: "Bookmark Notes" => "书签笔记"
-.labelTravelNote: "Travel History Note" => "航行记录笔记"
-.labelTimeMade: "Time Made" => "创建时间"
-.Update: "Update" => "更新"
-.SB: "New System Bookmark" => "新建星系标签"
-.UB: "Update Bookmark" => "更新标签"
-.RB: "Create Region Bookmark" => "创建区域标签"
-.RN: "Enter a region name..." => "输入一个区域名称..."
-.NSB: "New System Bookmark" = BookmarkForm.SB
-.ESN: "Enter a system name..." => "输入一个星系名称..."
+C534BFBF9D187F: "Make Target" => "选择为目标"
+FDD0B9C679C816: "Bookmark Notes" => "书签笔记"
+095B368956C6D0: "Travel History Note" => "航行记录笔记"
+5ECA49403D2379: "Time Made" => "创建时间"
+6D6AC8B5DA4FBE: "New System Bookmark" => "新建星系标签"
+4CAC4817DCC0BB: "Update Bookmark" => "更新标签"
+0929DC50D7F230: "Create Region Bookmark" => "创建区域标签"
+DF26DBDCA9929A: "Enter a region name..." => "输入一个区域名称..."
+6BACA0EF4B5908: "Enter a system name..." => "输入一个星系名称..."
 
 SECTION SurfaceBookmarkUserControl
 
-.Enter: "Enter a name" => "输入一个名称"
-.PL: "Planet: " = UserControlSysInfo.labelBodyName
-.EPN: "Enter planet name" => "输入星体名称"
-.PresstoAccept: "Press to Accept" => "点击以接受"
-.PresstoCancel: "Press to Cancel" => "点击以取消"
-.MAP: "Manually Add Planet" => "手动添加星体"
-.BodyName: "Planetary Body" = UserControlSysInfo.labelBodyName
-.SurfaceName: "Name" = UserControlCombatPanel.Name
-.SurfaceDesc: "Description" = UserControlBookmarks.ColDescription
-.Latitude: "Latitude" => "纬度"
-.Longitude: "Longitude" => "经度"
-.Valid: "Saveable" => "可保存的"
-.labelSearch: "Search" @
-.labelSurface: "Surface Bookmarks In System" => "星系中的地表标签"
-.sendToCompassToolStripMenuItem: "Send to compass" => "发送至指南针"
-.deleteToolStripMenuItem: "Delete Row" => "删除该行"
-.addPlanetManuallyToolStripMenuItem: "Manually Add Planet" = SurfaceBookmarkUserControl.MAP
-.ColTags: "Tags" @
-.textBoxFilter.ToolTip: "Search for planetary locations" @
-.buttonFilter.ToolTip: "Filter out entries based on tag" @
+7E5FE97F0E9632: "Enter a name" => "输入一个名称"
+E0FDAC5D3CB4CB: "Planet: " => "星体"
+764838B4934B32: "Enter planet name" => "输入星体名称"
+A3A26DCAD13DD3: "Manually Add Planet" => "手动添加星体"
+8ADA27931CC8B8: "Planetary Body" => "星体"
+CED3905EC8220A: "Latitude" => "纬度"
+6F9F011C5D36DF: "Longitude" => "经度"
+3D88C5A1B39BF3: "Saveable" => "可保存的"
+341D2E1FBE179E: "Surface Bookmarks In System" => "星系中的地表标签"
+CE3A622F2A43D3: "Send to compass" => "发送至指南针"
+F78A5F70C27177: "Delete Row" => "删除该行"
+18AF4B1B57E6B0: "Search for planetary locations" => "Recherche de lieu en surface"
 
 SECTION FindSystemsUserControl
 
-.labelRadMax: "Max" = UserControlStarDistance.labelExtMax
-.labelRadMin: "Radius ly Min" => "范围(ly)：最近"
-.labelFilter: "Star Name" = UserControlExpedition.SystemName
-.Cannotfindsystem: "Cannot find system " => "找不到星系"
-.EDSM: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
-.buttonExtNames: "From DB Find Names" => "从数据库查找名称"
-.buttonExtEDSM: "From EDSM" => "从EDSM搜索"
-.buttonExtDB: "From DB" => "从数据库搜索"
-.buttonExtVisited: "From Visited Systems" => "从星系访问记录里搜索"
-.checkBoxCustomCube: "Cube" = UserControlStarDistance.checkBoxCube
-.extCheckBoxExcludeVisitedSystems: "Exclude Visited Systems" @
-.extButtonFromSpansh: "From Spansh" @
-.extButtonFromSpanshFindNames: "From Spansh Find Names" @
+ECF8B0EC8407C9: "Radius ly Min" => "范围(ly)：最近"
+DEB29771D8FDD9: "Star Name" => "星系名称"
+8E8DB7C9C725EA: "Cannot find system " => "找不到星系"
+38BA068999A442: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" => "Le site web n'a retourné aucune données sur {0}\nIl s'agit peut-être d'un objet galactique qu'il ne connaît pas"
+809B1882D352CC: "From DB Find Names" => "从数据库查找名称"
+7A84B27F1A8FA2: "From EDSM" => "从EDSM搜索"
+11B2F8BC039DDB: "From DB" => "从数据库搜索"
+CB1B66B801FB67: "From Visited Systems" => "从星系访问记录里搜索"
+29151554CEF084: "Exclude Visited Systems" => "Exclure les systèmes visités"
+9CD057957A1210: "From Spansh" => "Depuis Spansh"
+E478A8A04835DC: "From Spansh Find Names" => "Trouver le nom depuis Spansh"
 
 SECTION TravelHistoryFilter
 
-.Hours: "{0} hours" => "{0}小时"
-.Days: "{0} days" => "{0}天"
-.1Week: "One Week" => "1周"
-.Weeks: "{0} weeks" => "{0}周"
-.Month: "Month" => "一个月"
-.Quarter: "Quarter" => "一季度"
-.HYear: "Half year" => "半年"
-.Year: "Year" => "一年"
-.LastN: "Last {0} entries" => "最近{0}条记录"
-.LDock: "Last dock" = UserControlCombatPanel.SinceLastDock
-.StartEnd: "Start/End Flag" => "开始/结束标记"
+6C204C8FBBB9EC: "{0} hours" => "{0}小时"
+536C16BD9FDF58: "{0} days" => "{0}天"
+D85B59C8A8549D: "One Week" => "1周"
+2985A39CF5BF9E: "{0} weeks" => "{0}周"
+0D3830748786CE: "Quarter" => "一季度"
+D0E392BB008D98: "Half year" => "半年"
+879E32326C5217: "Year" => "一年"
+1A65F8560C3DE2: "Last {0} entries" => "最近{0}条记录"
+56BDD40DDBF895: "Start/End Flag" => "开始/结束标记"
 
 SECTION Form2DMap
 
-.LastWeek: "Last Week" => "上一周"
-.LastMonth: "Last Month" => "上个月"
-.LastYear: "Last Year" => "去年"
-.All: "All" = All
-.Custom: "Custom" => "自定义"
+BC159A569313F9: "Last Week" => "上一周"
+20FE4F42D7F8DB: "Last Month" => "上个月"
+AB9F828234E9C3: "Last Year" => "去年"
 
 SECTION UserControlForm
 
-.extButtonDrawnMinimize.ToolTip: "Minimise" => "最小化"
-.extButtonDrawnOnTop.ToolTip: "Toggle window on top of others" => "切换窗口置顶"
-.extButtonDrawnClose.ToolTip: "Close" = Off
-.extButtonDrawnTaskBarIcon.ToolTip: "Toggle show taskbar icon for this window" => "切换是否显示此窗口任务栏图标"
-.extButtonDrawnShowTitle.ToolTip: "Toggle title visibility for this window when transparent" => "切换当此窗口透明时是否显示标题"
-.extButtonDrawnTransparentMode.ToolTip: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "切换四种窗口透明度模式\r\n关闭——普通窗口\r\n打开(T)——窗口透明切可用鼠标控制\r\n打开(Tc)——窗口透明按下激活窗口热键启用鼠标控制\r\n打开(Tf)——完全透明并无响应，按下激活窗口热键启用鼠标控制\r\n\r\n参照设置面板来配置激活窗口热键。\r\n鼠标必须在窗口范围内且按下热键大约500毫秒。\r\n\r\n\r\n"
+B7B2AF605BC2A9: "Minimise" => "最小化"
+13BC2BDFDEE5AF: "Toggle window on top of others" => "切换窗口置顶"
+BBFA773E5A63A5: "Close" => "关闭"
+E693FE24E8C758: "Toggle show taskbar icon for this window" => "切换是否显示此窗口任务栏图标"
+EC5BBF8310A48B: "Toggle title visibility for this window when transparent" => "切换当此窗口透明时是否显示标题"
+986BA9206E1570: "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.\r\n\r\n\r\n" => "切换四种窗口透明度模式\r\n关闭——普通窗口\r\n打开(T)——窗口透明切可用鼠标控制\r\n打开(Tc)——窗口透明按下激活窗口热键启用鼠标控制\r\n打开(Tf)——完全透明并无响应，按下激活窗口热键启用鼠标控制\r\n\r\n参照设置面板来配置激活窗口热键。\r\n鼠标必须在窗口范围内且按下热键大约500毫秒。\r\n\r\n\r\n"

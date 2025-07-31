@@ -36,9 +36,7 @@ namespace EDDiscovery.Forms
         { 
             InitializeComponent();
 
-            var enumlist = new Enum[] { EDTx.SetNoteForm, EDTx.SetNoteForm_labelTTimestamp, EDTx.SetNoteForm_buttonSave, 
-                                    EDTx.SetNoteForm_labelTSystem, EDTx.SetNoteForm_labelTSummary, EDTx.SetNoteForm_labelTDetails };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
 
             label_index.Text = this.Text;
 

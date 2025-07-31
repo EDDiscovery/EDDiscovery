@@ -30,11 +30,11 @@ public static class DataGridViewDialogs
 
         Type t = typeof(DataGridViewDialogs);
 
-        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Jump to:".TxID(EDTx.DataGridViewDialogs_Jumpto), new Point(10, 40), new Size(140, 24), ""));
-        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Entry", typeof(ExtendedControls.NumberBoxLong), initialvalue.ToString(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter number to jump to or near to".TxID(EDTx.DataGridViewDialogs_EN)) { NumberBoxDoubleMinimum = 0, NumberBoxFormat = "0" });
+        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Jump to:".Tx(), new Point(10, 40), new Size(140, 24), ""));
+        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Entry", typeof(ExtendedControls.NumberBoxLong), initialvalue.ToString(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter number to jump to or near to".Tx()) { NumberBoxDoubleMinimum = 0, NumberBoxFormat = "0" });
 
-        f.AddOK(new Point(width - 100, 70), "Press to Accept".TxID(EDTx.DataGridViewDialogs_PresstoAccept));
-        f.AddCancel(new Point(width - 200, 70), "Press to Cancel".TxID(EDTx.DataGridViewDialogs_PresstoCancel));
+        f.AddOK(new Point(width - 100, 70), "Press to Accept".Tx());
+        f.AddCancel(new Point(width - 200, 70), "Press to Cancel".Tx());
 
         f.Trigger += (dialogname, controlname, tag) =>
         {
@@ -46,7 +46,7 @@ public static class DataGridViewDialogs
                     f.ReturnResult(DialogResult.OK);
                 }
                 else
-                    ExtendedControls.MessageBoxTheme.Show(parent, "Value is not valid".TxID(EDTx.DataGridViewDialogs_VNV), "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ExtendedControls.MessageBoxTheme.Show(parent, "Value is not valid".Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             else if (controlname == "Cancel" || controlname == "Close" )
             {
@@ -54,7 +54,7 @@ public static class DataGridViewDialogs
             }
         };
 
-        DialogResult res = f.ShowDialogCentred(parent, parent.Icon,  "Jump to Entry".TxID(EDTx.DataGridViewDialogs_Jumpto), closeicon:true);
+        DialogResult res = f.ShowDialogCentred(parent, parent.Icon,  "Jump to Entry".Tx(), closeicon:true);
 
         if (res == DialogResult.OK)
         {

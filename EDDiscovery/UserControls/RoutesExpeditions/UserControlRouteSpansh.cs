@@ -210,7 +210,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                MessageBoxTheme.Show(this.FindForm(), $"No stations found at {textBox_From.Text}", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+                MessageBoxTheme.Show(this.FindForm(), $"No stations found at {textBox_From.Text}", "Warning".Tx(), MessageBoxButtons.OK);
             }
         }
 
@@ -384,7 +384,7 @@ namespace EDDiscovery.UserControls
             {
                 if (spanshjobname.StartsWith("!"))
                 {
-                    MessageBoxTheme.Show(this.FindForm(), $"Spansh returned error: {spanshjobname.Substring(1)}", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+                    MessageBoxTheme.Show(this.FindForm(), $"Spansh returned error: {spanshjobname.Substring(1)}", "Warning".Tx(), MessageBoxButtons.OK);
                 }
                 else
                 {
@@ -399,7 +399,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                MessageBoxTheme.Show(this.FindForm(), $"Spansh failed to return a job id. Try again!", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+                MessageBoxTheme.Show(this.FindForm(), $"Spansh failed to return a job id. Try again!", "Warning".Tx(), MessageBoxButtons.OK);
             }
         }
 
@@ -473,7 +473,7 @@ namespace EDDiscovery.UserControls
             }
 
             waitforspanshresulttimer.Stop();
-            MessageBoxTheme.Show(this.FindForm(), $"Spansh returned: {errstring}", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+            MessageBoxTheme.Show(this.FindForm(), $"Spansh returned: {errstring}", "Warning".Tx(), MessageBoxButtons.OK);
             System.Diagnostics.Debug.WriteLine($"Spansh failed with {errstring}");
             computing = 0;
             EnableRouteButtonsIfValid();

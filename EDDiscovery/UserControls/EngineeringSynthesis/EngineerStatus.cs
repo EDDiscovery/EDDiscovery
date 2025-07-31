@@ -83,12 +83,7 @@ namespace EDDiscovery.UserControls
             EngineerInfo = ei;
 
             ExtendedControls.Theme.Current?.ApplyStd(this);
-            var enumlist = new Enum[] { EDTx.UserControlEngineering_UpgradeCol, EDTx.UserControlEngineering_ModuleCol, EDTx.UserControlEngineering_LevelCol,
-                            EDTx.UserControlEngineering_MaxCol, EDTx.UserControlEngineering_WantedCol, EDTx.UserControlEngineering_CraftedCol,
-                            EDTx.UserControlEngineering_NotesCol, EDTx.UserControlEngineering_RecipeCol, EDTx.UserControlEngineering_EngineersCol,
-                        };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, null, new string[] { "UserControlEngineering" });    // share IDs with Engineering panel./
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
 
             dataGridViewEngineering.LoadColumnSettings(colsetting, false,
                             (a) => EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(a, int.MinValue),

@@ -81,12 +81,12 @@ namespace EDDiscovery
                 {
                     LogLine(string.Format("System data download from {0} required." + Environment.NewLine +
                                     "This will take a while, please be patient." + Environment.NewLine +
-                                    "Please continue running ED Discovery until refresh is complete.".T(EDTx.EDDiscoveryController_SyncEDSM), SystemsDatabase.Instance.DBSource));
+                                    "Please continue running ED Discovery until refresh is complete.".Tx(), SystemsDatabase.Instance.DBSource));
                 }
             }
             else
             {
-                LogLine("Star Data download is disabled. Use Settings panel to reenable".T(EDTx.EDDiscoveryController_SyncOff));
+                LogLine("Star Data download is disabled. Use Settings panel to reenable".Tx());
             }
         }
 
@@ -241,7 +241,7 @@ namespace EDDiscovery
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
             if (syncstate.fullsync_count > 0 || syncstate.updatesync_count > 0)
-                LogLine(string.Format("Systems update complete with {0:N0} systems".T(EDTx.EDDiscoveryController_EDSMU), syncstate.fullsync_count + syncstate.updatesync_count));
+                LogLine(string.Format("Systems update complete with {0:N0} systems".Tx(), syncstate.fullsync_count + syncstate.updatesync_count));
 
             OnSyncComplete?.Invoke(syncstate.fullsync_count, syncstate.updatesync_count);
 

@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
 
             HistoryEntry he = tag as HistoryEntry;                          // is tag HE?
             ISystem sys = he != null ? he.System : tag as ISystem;          // if so, sys is he.system, else its a direct sys
-            string title = "System".T(EDTx.ScanDisplayForm_Sys) + $": {sys.Name} @ {sys.X:N3}, {sys.Y:N3}, {sys.Z:N3}";
+            string title = "System".Tx()+ $": {sys.Name} @ {sys.X:N3}, {sys.Y:N3}, {sys.Z:N3}";
 
             AutoScaleMode asm = AutoScaleMode.Font;
 
@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls
                 { Anchor = AnchorStyles.Left | AnchorStyles.Top | AnchorStyles.Right | AnchorStyles.Bottom, MinimumSize = new Size(200, 200) });
 
                 JournalCommodityPricesBase jm = he.journalEntry as JournalCommodityPricesBase;
-                title += ", " +"Station".T(EDTx.ScanDisplayForm_Station) + ": " + jm.Station;
+                title += ", " +"Station".Tx()+ ": " + jm.Station;
             }
             else
             {

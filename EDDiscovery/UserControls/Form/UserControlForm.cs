@@ -88,11 +88,7 @@ namespace EDDiscovery.UserControls
                 idk = DirectInputDevices.InputDeviceKeyboard.CreateKeyboard();
             }
 
-            var enumlisttt = new Enum[] {
-                        EDTx.UserControlForm_extButtonDrawnShowTitle_ToolTip, EDTx.UserControlForm_extButtonDrawnMinimize_ToolTip, EDTx.UserControlForm_extButtonDrawnOnTop_ToolTip,
-                        EDTx.UserControlForm_extButtonDrawnTaskBarIcon_ToolTip, EDTx.UserControlForm_extButtonDrawnTransparentMode_ToolTip,
-                        EDTx.UserControlForm_extButtonDrawnClose_ToolTip};
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
 
             if (IsTransparencySupported)
                 TransparentMode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(DBRefName + "Transparent", UserControl.DefaultTransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);

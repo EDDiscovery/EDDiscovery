@@ -67,11 +67,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            var enumlisttt = new Enum[] { EDTx.UserControlEngineers_buttonFilterEngineer_ToolTip, 
-                        EDTx.UserControlEngineers_extCheckBoxWordWrap_ToolTip, EDTx.UserControlEngineers_extCheckBoxMoreInfo_ToolTip,
-                        EDTx.UserControlEngineers_buttonClear_ToolTip, EDTx.UserControlEngineers_extButtonPushResources_ToolTip, 
-                        EDTx.UserControlEngineers_chkNotHistoric_ToolTip};
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
 
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             DiscoveryForm.OnHistoryChange += RefreshData;

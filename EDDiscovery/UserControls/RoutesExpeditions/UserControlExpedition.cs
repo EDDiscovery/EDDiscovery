@@ -86,27 +86,9 @@ namespace EDDiscovery.UserControls
             autoupdate = new Timer() { Interval = 100 };
             autoupdate.Tick += Autoupdate_Tick;
 
-            var enumlist = new Enum[] { EDTx.UserControlExpedition_SystemName, EDTx.UserControlExpedition_Distance, EDTx.UserControlExpedition_Note, EDTx.UserControlExpedition_CurDist, 
-                                        EDTx.UserControlExpedition_Visits, EDTx.UserControlExpedition_Scans, EDTx.UserControlExpedition_FSSBodies, EDTx.UserControlExpedition_KnownBodies, 
-                                        EDTx.UserControlExpedition_Stars, EDTx.UserControlExpedition_Info, EDTx.UserControlExpedition_labelRouteName, EDTx.UserControlExpedition_labelDateStart, 
-                                        EDTx.UserControlExpedition_labelEndDate, EDTx.UserControlExpedition_labelCml, EDTx.UserControlExpedition_labelP2P,
-                                        EDTx.UserControlExpedition_ColumnDistStart, EDTx.UserControlExpedition_ColumnDistanceRemaining, EDTx.UserControlExpedition_ColumnHistoryNote};
-            var enumlisttt = new Enum[] { EDTx.UserControlExpedition_extButtonLoadRoute_ToolTip, EDTx.UserControlExpedition_extButtonNew_ToolTip, EDTx.UserControlExpedition_extButtonSave_ToolTip, EDTx.UserControlExpedition_extButtonDelete_ToolTip, 
-                                          EDTx.UserControlExpedition_extButtonImportFile_ToolTip, EDTx.UserControlExpedition_extButtonImportRoute_ToolTip, EDTx.UserControlExpedition_extButtonImportNavRoute_ToolTip, EDTx.UserControlExpedition_extButtonNavRouteLatest_ToolTip, 
-                                          EDTx.UserControlExpedition_extButtonAddSystems_ToolTip, 
-                                          EDTx.UserControlExpedition_buttonExtExport_ToolTip, EDTx.UserControlExpedition_extButtonShow3DMap_ToolTip, 
-                                          EDTx.UserControlExpedition_extButtonDisplayFilters_ToolTip, 
-                                         EDTx.UserControlExpedition_buttonReverseRoute_ToolTip, EDTx.UserControlExpedition_extCheckBoxWordWrap_ToolTip };
-            var enumlistcms = new Enum[] { EDTx.UserControlExpedition_copyToolStripMenuItem, EDTx.UserControlExpedition_cutToolStripMenuItem, EDTx.UserControlExpedition_pasteToolStripMenuItem,
-                                            EDTx.UserControlExpedition_insertRowAboveToolStripMenuItem,
-                                          EDTx.UserControlExpedition_setTargetToolStripMenuItem, EDTx.UserControlExpedition_editBookmarkToolStripMenuItem ,
-                                            EDTx.UserControlExpedition_viewSystemToolStripMenuItem, EDTx.UserControlExpedition_viewOnSpanshToolStripMenuItem,
-                                            EDTx.UserControlExpedition_viewOnEDSMToolStripMenuItem};
-
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuCopyPaste, enumlistcms, this);
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuCopyPaste);
             rollUpPanelTop.SetToolTip(toolTip);
 
             labelBusy.Text = "BUSY";    // in english, suck it up
@@ -506,7 +488,7 @@ namespace EDDiscovery.UserControls
                     row.Cells[FSSBodies.Index].Value =
                     row.Cells[KnownBodies.Index].Value =
                     row.Cells[Stars.Index].Value = "";
-                    row.Cells[Info.Index].Value = lookup != EliteDangerousCore.WebExternalDataLookup.None ? "No Body information found on web".T(EDTx.UserControlExpedition_EDSMUnk) : "No local scan info".T(EDTx.UserControlExpedition_NoScanInfo);
+                    row.Cells[Info.Index].Value = lookup != EliteDangerousCore.WebExternalDataLookup.None ? "No Body information found on web".Tx(): "No local scan info".Tx();
                 }
             }
 
@@ -681,7 +663,7 @@ namespace EDDiscovery.UserControls
 
             if ( loadedroute != null && loadedroute.EDSM == false && !IsDirty() )        // if loaded and unchanged, and not EDSM route
             {
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to delete this route?".T(EDTx.UserControlExpedition_Delete), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), "Are you sure you want to delete this route?".Tx(), "Warning".Tx(), MessageBoxButtons.YesNo, MessageBoxIcon.Question) == DialogResult.Yes)
                 {
                     loadedroute.Delete();
                     ClearTable();
@@ -797,7 +779,7 @@ namespace EDDiscovery.UserControls
 
             if (latestplottedroute == null || latestplottedroute.Count == 0)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please create a route on a route panel".T(EDTx.UserControlExpedition_Createroute), "Warning".T(EDTx.Warning));
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please create a route on a route panel".Tx(), "Warning".Tx());
                 return;
             }
 
@@ -865,8 +847,8 @@ namespace EDDiscovery.UserControls
             var rt = CopyGridIntoRoute();
             if (rt == null)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "There is no route to export ".T(EDTx.UserControlExpedition_NoRouteExport),
-                    "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "There is no route to export ".Tx(),
+                    "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -985,7 +967,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No route set up. Please add at least two systems.".T(EDTx.UserControlExpedition_NoRoute), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "No route set up. Please add at least two systems.".Tx(), "Warning".Tx(), MessageBoxButtons.OK);
                 return;
             }
         }
@@ -1001,6 +983,8 @@ namespace EDDiscovery.UserControls
             ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
 
             FindSystemsUserControl usc = new FindSystemsUserControl();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(usc);
+
             usc.ReturnSystems = (List<Tuple<ISystem, double>> syslist) =>
             {
                 AppendOrInsertSystems(-1, syslist.Select(r=> new SavedRouteClass.SystemEntry(r.Item1.Name.Trim(),"",r.Item1.X,r.Item1.Y,r.Item1.Z)));
@@ -1019,7 +1003,7 @@ namespace EDDiscovery.UserControls
 
             UserDatabaseSettingsSaver db = new UserDatabaseSettingsSaver(this, "Sys");
 
-            f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Add Systems".T(EDTx.UserControlExpedition_AddSys),
+            f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "Add Systems".Tx(),
                                 callback: () =>
                                 {
                                     usc.Init(db, false, DiscoveryForm);
@@ -1041,20 +1025,20 @@ namespace EDDiscovery.UserControls
             displayfilter.AllOrNoneBack = false;
 
             displayfilter.UC.AddAllNone();
-            displayfilter.UC.Add("stars", "Show All Stars".TxID(EDTx.UserControlSurveyor_showAllStarsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.UC.Add("planets", "Show All Planets".TxID(EDTx.UserControlSurveyor_showAllPlanetsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_ShowMoons);
-            displayfilter.UC.Add("beltcluster", "Show Belt Clusters".TxID(EDTx.UserControlSurveyor_showBeltClustersToolStripMenuItem), global::EDDiscovery.Icons.Controls.Belt);
-            displayfilter.UC.Add("valueables", "Show valuable bodies".T(EDTx.UserControlStarList_valueables), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
-            displayfilter.UC.Add("signals", "Has any other signals".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasSignalsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
-            displayfilter.UC.Add("volcanism", "Has volcanism".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasVolcanismToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism);
-            displayfilter.UC.Add("values", "Show values".TxID(EDTx.UserControlSurveyor_showValuesToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
-            displayfilter.UC.Add("shortinfo", "Show more information".TxID(EDTx.UserControlSurveyor_showMoreInformationToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
-            displayfilter.UC.Add("gravity", "Show gravity of landables".TxID(EDTx.UserControlSurveyor_showGravityToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
-            displayfilter.UC.Add("atmos", "Show atmospheres".TxID(EDTx.UserControlSurveyor_showAtmosToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
-            displayfilter.UC.Add("temp", "Show surface temperature".TxID(EDTx.UserControlSurveyor_showTempToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
-            displayfilter.UC.Add("rings", "Show rings".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasRingsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
-            displayfilter.UC.Add("organics", "Show organic scans".T(EDTx.UserControlStarList_scanorganics), global::EDDiscovery.Icons.Controls.Scan_Bodies_NSP);
-            displayfilter.UC.Add("gmoinfooff", "Disable showing GMO Info".T(EDTx.UserControlExpedition_GMOInfo), global::EDDiscovery.Icons.Controls.Globe);
+            displayfilter.UC.Add("stars", "Show All Stars".Tx(), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.UC.Add("planets", "Show All Planets".Tx(), global::EDDiscovery.Icons.Controls.Scan_ShowMoons);
+            displayfilter.UC.Add("beltcluster", "Show Belt Clusters".Tx(), global::EDDiscovery.Icons.Controls.Belt);
+            displayfilter.UC.Add("valueables", "Show valuable bodies".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
+            displayfilter.UC.Add("signals", "Has any other signals".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.UC.Add("volcanism", "Has volcanism".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Volcanism);
+            displayfilter.UC.Add("values", "Show values".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_HighValue);
+            displayfilter.UC.Add("shortinfo", "Show more information".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.UC.Add("gravity", "Show gravity of landables".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.UC.Add("atmos", "Show atmospheres".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Landable);
+            displayfilter.UC.Add("temp", "Show surface temperature".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.UC.Add("rings", "Show rings".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
+            displayfilter.UC.Add("organics", "Show organic scans".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_NSP);
+            displayfilter.UC.Add("gmoinfooff", "Disable showing GMO Info".Tx(), global::EDDiscovery.Icons.Controls.Globe);
             displayfilter.UC.ImageSize = new Size(24, 24);
             displayfilter.SaveSettings = (s, o) =>
             {

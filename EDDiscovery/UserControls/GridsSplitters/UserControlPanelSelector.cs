@@ -75,15 +75,15 @@ namespace EDDiscovery.UserControls
 
                 CompositeAutoScaleButton cb = CompositeAutoScaleButton.QuickInit(
                             selback,
-                            (i == 0) ? "NO ADD ONS!".T(EDTx.UserControlPanelSelector_NOADDONS) : i.ToString() + " Add Ons".T(EDTx.UserControlPanelSelector_AddOns),
+                            (i == 0) ? "NO ADD ONS!".Tx(): i.ToString() + " Add Ons".Tx(),
                             new Image[] { EDDiscovery.Icons.Controls.ManageAddOns48 },
                             new Image[] { EDDiscovery.Icons.Controls.Popout },
                             ButtonPress,
                             2);
                 cb.Name = "Add on";
                 cb.Tag = null;
-                toolTip.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons".T(EDTx.UserControlPanelSelector_TTA));
-                toolTip.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!".T(EDTx.UserControlPanelSelector_TTB));
+                toolTip.SetToolTip(cb.Buttons[0], "Click to add or remove Add Ons".Tx());
+                toolTip.SetToolTip(cb.Decals[0], "Add ons are essential additions to your EDD experience!".Tx());
 
                 panelVScroll.Controls.Add(cb);
             }
@@ -101,9 +101,9 @@ namespace EDDiscovery.UserControls
                             2);
 
                 cb.Tag = pi.PopoutID;
-                toolTip.SetToolTip(cb.Buttons[0], "Pop out in a new window".T(EDTx.UserControlPanelSelector_PP1));
+                toolTip.SetToolTip(cb.Buttons[0], "Pop out in a new window".Tx());
                 if ( cb.Buttons.Length>1)
-                    toolTip.SetToolTip(cb.Buttons[1], "Open as a new menu tab".T(EDTx.UserControlPanelSelector_MT1));
+                    toolTip.SetToolTip(cb.Buttons[1], "Open as a new menu tab".Tx());
                 toolTip.SetToolTip(cb.Decals[0], pi.Description);
 
                 panelVScroll.Controls.Add(cb);

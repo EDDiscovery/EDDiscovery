@@ -31,10 +31,12 @@ namespace EDDiscovery.UserControls
         public UserControlSurveyor()
         {
             InitializeComponent();
-            DBBaseName = "Surveyor";
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
         public override void Init()
         {
+            DBBaseName = "Surveyor";
+
             edsmSpanshButton.Init(this, "EDSMSpansh", "");
             edsmSpanshButton.ValueChanged += (s, ch) =>
             {
@@ -54,15 +56,9 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewTarget += Discoveryform_OnNewTarget;
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
-            string thisname = typeof(UserControlSurveyor).Name;
-            var enumlisttt = new Enum[] { EDTx.UserControlSurveyor_extButtonPlanets_ToolTip, EDTx.UserControlSurveyor_extButtonStars_ToolTip, EDTx.UserControlSurveyor_extButtonShowControl_ToolTip, EDTx.UserControlSurveyor_extButtonAlignment_ToolTip, 
-                            EDTx.UserControlSurveyor_extButtonFSS_ToolTip, EDTx.UserControlSurveyor_extButtonSetRoute_ToolTip, 
-                            EDTx.UserControlSurveyor_extButtonControlRoute_ToolTip, EDTx.UserControlSurveyor_extButtonFont_ToolTip, EDTx.UserControlSurveyor_extCheckBoxWordWrap_ToolTip, 
-                            EDTx.UserControlSurveyor_extButtonSearches_ToolTip };
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, new string[] { thisname });
             rollUpPanelTop.SetToolTip(toolTip);
 
-            translatednavroutename = "Nav Route".T(EDTx.UserControlSurveyor_navroute);
+            translatednavroutename = "Nav Route".Tx();
 
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);        // null if not set
 
@@ -409,9 +405,9 @@ namespace EDDiscovery.UserControls
             if (starclass.HasChars() && IsSet(CtrlList.showstarclass))
                 text += " | " + starclass;
             if (bodies_found > 0 && !all_found)
-                text += " | " + bodies_found + " bodies detected.".T(EDTx.UserControlSurveyor_bodiesdetected);
+                text += " | " + bodies_found + " bodies detected.".Tx();
             if (all_found)
-                text += " | " + "System scan complete".T(EDTx.UserControlSurveyor_Systemscancomplete) + ": " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound);
+                text += " | " + "System scan complete".Tx()+ ": " + bodies_found + " bodies found.".Tx();
 
             SetControlText(text);
             DrawTextIntoBox(extPictureBoxTitle, text);
@@ -429,14 +425,14 @@ namespace EDDiscovery.UserControls
             {
                 if (currentRoute.Systems.Count == 0)
                 {
-                    lastroutetext = "Route contains no waypoints".T(EDTx.UserControlRouteTracker_NoWay);
+                    lastroutetext = "Route contains no waypoints".Tx();
                 }
                 else
                 {
                     SavedRouteClass.ClosestInfo closest = currentRoute.ClosestTo(sys);
                     if (closest == null)  // if null, no systems found.. uh oh
                     {
-                        lastroutetext = "No systems in route have known co-ords".T(EDTx.UserControlRouteTracker_NoCo);
+                        lastroutetext = "No systems in route have known co-ords".Tx();
                     }
                     else
                     {
@@ -456,15 +452,15 @@ namespace EDDiscovery.UserControls
                                 // navroutes are precomputed, so the total jump count is from it. Else do it by distance
                                 int jumps = currentRoute.Id != -1 ? (int)Math.Ceiling(routedistance / shipfsdinfo.avgsinglejump) : currentRoute.Systems.Count - 1;
                                 if (jumps > 0)
-                                    lastroutetext += ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
+                                    lastroutetext += ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".Tx(): "jumps".Tx());
 
                                 jumps = (int)Math.Ceiling(closest.disttowaypoint / shipfsdinfo.avgsinglejump);
 
                                 if (jumps > 1 && currentRoute.Id != -1) // if more than 1 jump, and not nav route
-                                    jumpmsg = ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
+                                    jumpmsg = ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".Tx(): "jumps".Tx());
                             }
                             else
-                                jumpmsg = " No Ship FSD Information".T(EDTx.UserControlRouteTracker_NoFSD);
+                                jumpmsg = " No Ship FSD Information".Tx();
                         }
 
                         string wpposmsg = "";
@@ -474,21 +470,21 @@ namespace EDDiscovery.UserControls
                         if (closest.deviation < 0)        // if not on path
                         {
                             lastroutetext += Environment.NewLine;
-                            lastroutetext += closest.cumulativewpdist == 0 ? "From Last WP ".T(EDTx.UserControlRouteTracker_FL) : "To First WP ".T(EDTx.UserControlRouteTracker_TF);
+                            lastroutetext += closest.cumulativewpdist == 0 ? "From Last WP ".Tx(): "To First WP ".Tx();
                             lastroutetext += $" >> {closest.disttowaypoint:N1}ly >> " + closest.nextsystem.Name + wpposmsg + jumpmsg;
                         }
                         else
                         {
-                            lastroutetext += String.Format(", Left {0:N1}ly".T(EDTx.UserControlRouteTracker_LF), distleft) + Environment.NewLine;
+                            lastroutetext += String.Format(", Left {0:N1}ly".Tx(), distleft) + Environment.NewLine;
                             if (distleft == 0)
                                 lastroutetext += $"{closest.nextsystem.Name}";
                             else
                                 lastroutetext += $"{closest.lastsystem?.Name} >> {closest.disttowaypoint:N1}ly >> {closest.nextsystem.Name}";
-                            lastroutetext += " " + String.Format("(WP {0})".T(EDTx.UserControlRouteTracker_ToWP), closest.waypoint + 1);
+                            lastroutetext += " " + String.Format("(WP {0})".Tx(), closest.waypoint + 1);
                             lastroutetext += wpposmsg + jumpmsg;
 
                             if (IsSet(RouteControl.showdeviation))
-                                lastroutetext += String.Format(", Dev {0:N1}ly".T(EDTx.UserControlRouteTracker_Dev), closest.deviation);
+                                lastroutetext += String.Format(", Dev {0:N1}ly".Tx(), closest.deviation);
                         }
 
                         //System.Diagnostics.Debug.WriteLine(lastroutetext);
@@ -498,7 +494,7 @@ namespace EDDiscovery.UserControls
                         {
                             BookmarkClass bookmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sys.Name);
                             if (bookmark != null)
-                                lastroutetext += Environment.NewLine + String.Format("Note: {0}".T(EDTx.UserControlRouteTracker_Note), bookmark.Note);
+                                lastroutetext += Environment.NewLine + String.Format("Note: {0}".Tx(), bookmark.Note);
                         }
 
                         if (IsSet(RouteControl.shownotetext) && closest.nextsystemwaypointnote.HasChars())
@@ -557,7 +553,7 @@ namespace EDDiscovery.UserControls
                     {
                         int jumps = (int)Math.Ceiling(dist / shipfsdinfo.avgsinglejump);
                         if (jumps > 0)
-                            jumpstr = jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
+                            jumpstr = jumps.ToString() + " " + ((jumps == 1) ? "jump".Tx(): "jumps".Tx());
                     }
 
                     lasttargettext = $"T-> {name} {dist:N1}ly {jumpstr}";
@@ -593,7 +589,7 @@ namespace EDDiscovery.UserControls
 
                 if (shipfsdinfo != null)
                 {
-                    fueltext += string.Format(" " + "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly".T(EDTx.UserControlSurveyor_fuel), shipfsdinfo.avgsinglejump, shipfsdinfo.curfumessinglejump, shipfsdinfo.maxjumprange);
+                    fueltext += string.Format(" " + "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly".Tx(), shipfsdinfo.avgsinglejump, shipfsdinfo.curfumessinglejump, shipfsdinfo.maxjumprange);
                 }
             }
 
@@ -626,19 +622,19 @@ namespace EDDiscovery.UserControls
 
                     if (scanned > 0)
                     {
-                        scansummarytext = scansummarytext.AppendPrePad("Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : ""), Environment.NewLine);
+                        scansummarytext = scansummarytext.AppendPrePad("Scan".Tx()+ " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : ""), Environment.NewLine);
                     }
 
                     long value = systemnode.ScanValue(false);   // don't include value of web bodies
 
                     if (value > 0 && IsSet(CtrlList.showValues))
                     {
-                        scansummarytext.AppendPrePad("Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : "", Environment.NewLine));
+                        scansummarytext.AppendPrePad("Scan".Tx()+ " " + scanned.ToString() + (systemnode.FSSTotalBodies != null ? (" / " + systemnode.FSSTotalBodies.Value.ToString()) : "", Environment.NewLine));
                         scansummarytext = scansummarytext.AppendPrePad("~ " + value.ToString("N0") + " cr" + ";");                        
                     }
                     if (systemnode.FSSTotalNonBodies != null && IsSet(CtrlList.showsignalmismatch))
                     {
-                        scansummarytext = scansummarytext.AppendPrePad(systemnode.FSSTotalNonBodies.Value != clusters ? " Cluster and NonBody counts differ by ".T(EDTx.UserControlSurveyor_ShowSignalMismatch) + Math.Abs(systemnode.FSSTotalNonBodies.Value - clusters).ToString("N0") : "");
+                        scansummarytext = scansummarytext.AppendPrePad(systemnode.FSSTotalNonBodies.Value != clusters ? " Cluster and NonBody counts differ by ".Tx()+ Math.Abs(systemnode.FSSTotalNonBodies.Value - clusters).ToString("N0") : "");
                     }
                     
                 }
@@ -935,7 +931,7 @@ namespace EDDiscovery.UserControls
                             fsssignalstodisplay.Equals("*"))
                         {
                             if (pos++ == expiredpos)
-                                ldrawsystemsignallist = ldrawsystemsignallist.AppendPrePad("Expired:".T(EDTx.UserControlScan_Expired), Environment.NewLine + Environment.NewLine);
+                                ldrawsystemsignallist = ldrawsystemsignallist.AppendPrePad("Expired:".Tx(), Environment.NewLine + Environment.NewLine);
 
                             ldrawsystemsignallist = ldrawsystemsignallist.AppendPrePad(fsssig.ToString(true), Environment.NewLine);
                         }
@@ -1147,24 +1143,24 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
 
             displayfilter.UC.AddAllNone();
-            displayfilter.UC.Add(CtrlList.allplanets.ToString(), "Show All Planets".TxID(EDTx.UserControlSurveyor_showAllPlanetsToolStripMenuItem), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.HMCv10"));
-            displayfilter.UC.Add(CtrlList.showAmmonia.ToString(), "Ammonia World".TxID(EDTx.UserControlSurveyor_planetaryClassesToolStripMenuItem_ammoniaWorldToolStripMenuItem), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.AMWv1"));
-            displayfilter.UC.Add(CtrlList.showEarthlike.ToString(), "Earthlike World".TxID(EDTx.UserControlSurveyor_planetaryClassesToolStripMenuItem_earthlikeWorldToolStripMenuItem), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.ELWv5"));
-            displayfilter.UC.Add(CtrlList.showWaterWorld.ToString(), "Water World".TxID(EDTx.UserControlSurveyor_planetaryClassesToolStripMenuItem_waterWorldToolStripMenuItem), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.WTRv7"));
-            displayfilter.UC.Add(CtrlList.showHMC.ToString(), "High metal content body".TxID(EDTx.UserControlSurveyor_planetaryClassesToolStripMenuItem_highMetalContentBodyToolStripMenuItem), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.HMCv3"));
-            displayfilter.UC.Add(CtrlList.showMR.ToString(), "Metal-rich body".TxID(EDTx.UserControlSurveyor_planetaryClassesToolStripMenuItem_metalToolStripMenuItem), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.MRBv5"));
-            displayfilter.UC.Add(CtrlList.showTerraformable.ToString(), "Terraformable".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_terraformableToolStripMenuItem), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.ELWv5"));
-            displayfilter.UC.Add(CtrlList.showVolcanism.ToString(), "Has volcanism".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasVolcanismToolStripMenuItem), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.HMCv37"));
-            displayfilter.UC.Add(CtrlList.showRinged.ToString(), "Has Rings".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasRingsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
-            displayfilter.UC.Add(CtrlList.showEccentricity.ToString(), "High eccentricity".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_highEccentricityToolStripMenuItem), global::EDDiscovery.Icons.Controls.Eccentric);
-            displayfilter.UC.Add(CtrlList.lowradius.ToString(), "Tiny body".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_lowRadiusToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_SizeSmall);
-            displayfilter.UC.Add(CtrlList.GeoSignals.ToString(), "Has geological signals".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasGeologicalSignalsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
-            displayfilter.UC.Add(CtrlList.BioSignals.ToString(), "Has biological signals".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasBiologicalSignalsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
-            displayfilter.UC.Add(CtrlList.signals.ToString(), "Has any other signals".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_hasSignalsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
-            displayfilter.UC.Add(CtrlList.isLandable.ToString(), "Landable".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_landableToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
-            displayfilter.UC.Add(CtrlList.isLandableWithAtmosphere.ToString(), "Landable with atmosphere".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_landableWithAtmosphereToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
-            displayfilter.UC.Add(CtrlList.largelandable.ToString(), "Landable and large".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_landableAndLargeToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
-            displayfilter.UC.Add(CtrlList.isLandableWithVolcanism.ToString(), "Landable with volcanism".TxID(EDTx.UserControlSurveyor_bodyFeaturesToolStripMenuItem_landableWithVolcanismToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
+            displayfilter.UC.Add(CtrlList.allplanets.ToString(), "Show All Planets".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.HMCv10"));
+            displayfilter.UC.Add(CtrlList.showAmmonia.ToString(), "Ammonia World".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.AMWv1"));
+            displayfilter.UC.Add(CtrlList.showEarthlike.ToString(), "Earthlike World".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.ELWv5"));
+            displayfilter.UC.Add(CtrlList.showWaterWorld.ToString(), "Water World".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.WTRv7"));
+            displayfilter.UC.Add(CtrlList.showHMC.ToString(), "High metal content body".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.HMCv3"));
+            displayfilter.UC.Add(CtrlList.showMR.ToString(), "Metal-rich body".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.MRBv5"));
+            displayfilter.UC.Add(CtrlList.showTerraformable.ToString(), "Terraformable".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.ELWv5"));
+            displayfilter.UC.Add(CtrlList.showVolcanism.ToString(), "Has volcanism".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.HMCv37"));
+            displayfilter.UC.Add(CtrlList.showRinged.ToString(), "Has Rings".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
+            displayfilter.UC.Add(CtrlList.showEccentricity.ToString(), "High eccentricity".Tx(), global::EDDiscovery.Icons.Controls.Eccentric);
+            displayfilter.UC.Add(CtrlList.lowradius.ToString(), "Tiny body".Tx(), global::EDDiscovery.Icons.Controls.Scan_SizeSmall);
+            displayfilter.UC.Add(CtrlList.GeoSignals.ToString(), "Has geological signals".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.UC.Add(CtrlList.BioSignals.ToString(), "Has biological signals".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.UC.Add(CtrlList.signals.ToString(), "Has any other signals".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.UC.Add(CtrlList.isLandable.ToString(), "Landable".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
+            displayfilter.UC.Add(CtrlList.isLandableWithAtmosphere.ToString(), "Landable with atmosphere".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
+            displayfilter.UC.Add(CtrlList.largelandable.ToString(), "Landable and large".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
+            displayfilter.UC.Add(CtrlList.isLandableWithVolcanism.ToString(), "Landable with volcanism".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
 
             CommonCtrl(displayfilter, extButtonPlanets);
 
@@ -1177,7 +1173,7 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
             displayfilter.UC.AddAllNone(3);
-            displayfilter.UC.AddGroupItem(HistoryListQueries.Instance.DefaultSearches(SettingsSplittingChar), "Default".T(EDTx.ProfileEditor_Default),checkmap:3);
+            displayfilter.UC.AddGroupItem(HistoryListQueries.Instance.DefaultSearches(SettingsSplittingChar), "Default".Tx(),checkmap:3);
             displayfilter.UC.SettingsSplittingChar = '\u2188';     // pick a crazy one soe
 
             var searches = HistoryListQueries.Instance.Searches.Where(x => x.UserOrBuiltIn).ToList();
@@ -1209,8 +1205,8 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
 
             displayfilter.UC.AddAllNone();
-            displayfilter.UC.Add(CtrlList.allstars.ToString(), "Show All Stars".TxID(EDTx.UserControlSurveyor_showAllStarsToolStripMenuItem), global::EDDiscovery.Icons.Controls.Scan_Star);
-            displayfilter.UC.Add(CtrlList.beltclusters.ToString(), "Show Belt Clusters".TxID(EDTx.UserControlSurveyor_showBeltClustersToolStripMenuItem), global::EDDiscovery.Icons.Controls.Belt);
+            displayfilter.UC.Add(CtrlList.allstars.ToString(), "Show All Stars".Tx(), global::EDDiscovery.Icons.Controls.Scan_Star);
+            displayfilter.UC.Add(CtrlList.beltclusters.ToString(), "Show Belt Clusters".Tx(), global::EDDiscovery.Icons.Controls.Belt);
 
             CommonCtrl(displayfilter, extButtonStars);
         }
@@ -1220,21 +1216,21 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
 
             displayfilter.UC.AddAllNone();
-            displayfilter.UC.Add(CtrlList.showValues.ToString(), "Show values".TxID(EDTx.UserControlSurveyor_showValuesToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.moreinfo.ToString(), "Show more information".TxID(EDTx.UserControlSurveyor_showMoreInformationToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showGravity.ToString(), "Show gravity of landables".TxID(EDTx.UserControlSurveyor_showGravityToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.atmos.ToString(), "Show atmospheres".TxID(EDTx.UserControlSurveyor_showAtmosToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.temp.ToString(), "Show surface temperature".TxID(EDTx.UserControlSurveyor_showTempToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.volcanism.ToString(), "Show volcanism".TxID(EDTx.UserControlSurveyor_showVolcanismToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showsignals.ToString(), "Show signals".TxID(EDTx.UserControlSurveyor_showSignalsToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showsignalmismatch.ToString(), "Show signal mismatch".TxID(EDTx.UserControlSurveyor_showSignalMismatchToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.donthidefssmode.ToString(), "Don't hide in FSS Mode".TxID(EDTx.UserControlSurveyor_dontHideInFSSModeToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.hideMapped.ToString(), "Hide already mapped bodies".TxID(EDTx.UserControlSurveyor_hideAlreadyMappedBodiesToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showsysinfo.ToString(), "Show system info always".TxID(EDTx.UserControlSurveyor_showSystemInfoOnScreenWhenInTransparentModeToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showscansum.ToString(), "Show scan summary always".TxID(EDTx.UserControlSurveyor_showScanSummaryOnScreenWhenInTransparentModeToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showstarclass.ToString(), "Show star class in system info".TxID(EDTx.UserControlSurveyor_showstarclassToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showdividers.ToString(), "Show dividers".TxID(EDTx.UserControlSurveyor_showDividersToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.showValues.ToString(), "Show values".Tx());
+            displayfilter.UC.Add(CtrlList.moreinfo.ToString(), "Show more information".Tx());
+            displayfilter.UC.Add(CtrlList.showGravity.ToString(), "Show gravity of landables".Tx());
+            displayfilter.UC.Add(CtrlList.atmos.ToString(), "Show atmospheres".Tx());
+            displayfilter.UC.Add(CtrlList.temp.ToString(), "Show surface temperature".Tx());
+            displayfilter.UC.Add(CtrlList.volcanism.ToString(), "Show volcanism".Tx());
+            displayfilter.UC.Add(CtrlList.showsignals.ToString(), "Show signals".Tx());
+            displayfilter.UC.Add(CtrlList.showsignalmismatch.ToString(), "Show signal mismatch".Tx());
+            displayfilter.UC.Add(CtrlList.autohide.ToString(), "Auto Hide".Tx());
+            displayfilter.UC.Add(CtrlList.donthidefssmode.ToString(), "Don't hide in FSS Mode".Tx());
+            displayfilter.UC.Add(CtrlList.hideMapped.ToString(), "Hide already mapped bodies".Tx());
+            displayfilter.UC.Add(CtrlList.showsysinfo.ToString(), "Show system info always".Tx());
+            displayfilter.UC.Add(CtrlList.showscansum.ToString(), "Show scan summary always".Tx());
+            displayfilter.UC.Add(CtrlList.showstarclass.ToString(), "Show star class in system info".Tx());
+            displayfilter.UC.Add(CtrlList.showdividers.ToString(), "Show dividers".Tx());
 
             CommonCtrl(displayfilter, extButtonShowControl);
         }
@@ -1247,9 +1243,9 @@ namespace EDDiscovery.UserControls
             string ct = CtrlList.aligncenter.ToString();
             string rt = CtrlList.alignright.ToString();
 
-            displayfilter.UC.Add(lt, "Alignment Left".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_leftToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignLeft, exclusivetags: ct + ";" + rt, disableuncheck: true);
-            displayfilter.UC.Add(ct, "Alignment Center".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_centerToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignCentre, exclusivetags: lt + ";" + rt, disableuncheck: true);
-            displayfilter.UC.Add(rt, "Alignment Right".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_rightToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignRight, exclusivetags: lt + ";" + ct, disableuncheck: true);
+            displayfilter.UC.Add(lt, "Alignment Left".Tx(), global::EDDiscovery.Icons.Controls.AlignLeft, exclusivetags: ct + ";" + rt, disableuncheck: true);
+            displayfilter.UC.Add(ct, "Alignment Center".Tx(), global::EDDiscovery.Icons.Controls.AlignCentre, exclusivetags: lt + ";" + rt, disableuncheck: true);
+            displayfilter.UC.Add(rt, "Alignment Right".Tx(), global::EDDiscovery.Icons.Controls.AlignRight, exclusivetags: lt + ";" + ct, disableuncheck: true);
             displayfilter.CloseOnChange = true;
             CommonCtrl(displayfilter, extButtonAlignment);
         }
@@ -1319,7 +1315,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "List signals to display, semicolon seperated".T(EDTx.UserControlSurveyor_fsssignals), closeicon: true);
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "List signals to display, semicolon seperated".Tx(), closeicon: true);
             if (res == DialogResult.OK)
             {
                 fsssignalstodisplay = f.Get("Text");
@@ -1343,7 +1339,7 @@ namespace EDDiscovery.UserControls
 
             dropdown.FitImagesToItemHeight = true;
             var list = savedroutes.Select(x => x.Name).ToList();
-            list.Insert(0, "Off".T(EDTx.Off));
+            list.Insert(0, "Off".Tx());
             list.Insert(1, translatednavroutename);
             dropdown.Items = list;
             dropdown.FlatStyle = FlatStyle.Popup;
@@ -1442,15 +1438,15 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
 
             displayfilter.UC.AddAllNone();
-            displayfilter.UC.Add(RouteControl.showJumps.ToString(), "Show Jumps To Go".TxID(EDTx.UserControlRouteTracker_showJumpsToolStripMenuItem));
-            displayfilter.UC.Add(RouteControl.showwaypoints.ToString(), "Show Waypoint Coordinates".TxID(EDTx.UserControlRouteTracker_showWaypointCoordinatesToolStripMenuItem));
-            displayfilter.UC.Add(RouteControl.showdeviation.ToString(), "Show Deviation from route".TxID(EDTx.UserControlRouteTracker_showDeviationFromRouteToolStripMenuItem));
-            displayfilter.UC.Add(RouteControl.showbookmarks.ToString(), "Show Bookmark Notes".TxID(EDTx.UserControlRouteTracker_showBookmarkNotesToolStripMenuItem));
-            displayfilter.UC.Add(RouteControl.shownotetext.ToString(), "Show Route Note on waypoint".TxID(EDTx.UserControlRouteTracker_showSystemRouteNoteToolStripMenuItem));
-            displayfilter.UC.Add(RouteControl.autocopy.ToString(), "Auto copy waypoint".TxID(EDTx.UserControlRouteTracker_autoCopyWPToolStripMenuItem));
-            displayfilter.UC.Add(RouteControl.settarget.ToString(), "Auto set target".TxID(EDTx.UserControlRouteTracker_autoSetTargetToolStripMenuItem));
-            displayfilter.UC.Add(RouteControl.showtarget.ToString(), "Show Target Information".TxID(EDTx.UserControlRouteTracker_showtargetinfo));
-            displayfilter.UC.Add(RouteControl.showfuel.ToString(), "Show Fuel Information".TxID(EDTx.UserControlRouteTracker_showfuelinfo));
+            displayfilter.UC.Add(RouteControl.showJumps.ToString(), "Show Jumps To Go".Tx());
+            displayfilter.UC.Add(RouteControl.showwaypoints.ToString(), "Show Waypoint Coordinates".Tx());
+            displayfilter.UC.Add(RouteControl.showdeviation.ToString(), "Show Deviation from route".Tx());
+            displayfilter.UC.Add(RouteControl.showbookmarks.ToString(), "Show Bookmark Notes".Tx());
+            displayfilter.UC.Add(RouteControl.shownotetext.ToString(), "Show Route Note on waypoint".Tx());
+            displayfilter.UC.Add(RouteControl.autocopy.ToString(), "Auto copy waypoint".Tx());
+            displayfilter.UC.Add(RouteControl.settarget.ToString(), "Auto set target".Tx());
+            displayfilter.UC.Add(RouteControl.showtarget.ToString(), "Show Target Information".Tx());
+            displayfilter.UC.Add(RouteControl.showfuel.ToString(), "Show Fuel Information".Tx());
 
             displayfilter.AllOrNoneBack = false;
             displayfilter.UC.ImageSize = new Size(24, 24);

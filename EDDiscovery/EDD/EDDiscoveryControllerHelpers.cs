@@ -29,7 +29,7 @@ namespace EDDiscovery
         // in its own thread..
         public void DownloadExpeditions(System.Threading.CancellationToken cancel)
         {
-            LogLine("Checking for new Expedition data".T(EDTx.EDDiscoveryController_EXPD));
+            LogLine("Checking for new Expedition data".Tx());
 
             Task.Factory.StartNew(() =>
             {
@@ -84,7 +84,7 @@ namespace EDDiscovery
 
                 if (File.Exists(gmofile) && DateTime.UtcNow.Subtract(SystemsDatabase.Instance.GetEDSMGalMapLast()).TotalDays >= 7)
                 {
-                    LogLine("Get galactic mapping from EDSM.".T(EDTx.EDDiscoveryController_EDSM));
+                    LogLine("Get galactic mapping from EDSM.".Tx());
                     System.Diagnostics.Trace.WriteLine($"Download EDSM file background");
                     if (EDSMClass.DownloadGMOFileFromEDSM(gmofile,cancel))
                         SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
@@ -97,7 +97,7 @@ namespace EDDiscovery
 
                 if ( !cancel.IsCancellationRequested && File.Exists(gecfile) && DateTime.UtcNow.Subtract(SystemsDatabase.Instance.GetGECGalMapLast()).TotalDays >= 7)
                 {
-                    LogLine("Get galactic mapping from GEC.".T(EDTx.EDDiscoveryController_GEC));
+                    LogLine("Get galactic mapping from GEC.".Tx());
                     System.Diagnostics.Trace.WriteLine($"Download GEC file background");
                     if (GECClass.DownloadGECFile(gecfile, cancel))
                         SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);

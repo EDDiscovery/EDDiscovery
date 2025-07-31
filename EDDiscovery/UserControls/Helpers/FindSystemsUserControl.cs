@@ -86,16 +86,6 @@ namespace EDDiscovery.UserControls
             buttonExtExcel.Visible = showexports;
 
             ValidateEnable();
-            
-            // Dec 23 TBD missing tooltips on some of these will fix up later in next version
-
-            var enumlist = new Enum[] { EDTx.FindSystemsUserControl_extCheckBoxExcludeVisitedSystems, EDTx.FindSystemsUserControl_checkBoxCustomCube, 
-                EDTx.FindSystemsUserControl_buttonExtNames, EDTx.FindSystemsUserControl_buttonExtVisited, EDTx.FindSystemsUserControl_buttonExtDB,
-                EDTx.FindSystemsUserControl_extButtonFromSpansh,EDTx.FindSystemsUserControl_extButtonFromSpanshFindNames,
-                EDTx.FindSystemsUserControl_buttonExtEDSM, EDTx.FindSystemsUserControl_labelRadMax, EDTx.FindSystemsUserControl_labelRadMin, 
-                EDTx.FindSystemsUserControl_labelFilter };
-          
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { labelX, labelY, labelZ });
         }
 
         public void Save()
@@ -160,7 +150,7 @@ namespace EDDiscovery.UserControls
                 ReturnSystems((from x in list select new Tuple<ISystem, double>(x, x.Distance(sys))).ToList());
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".T(EDTx.FindSystemsUserControl_Cannotfindsystem) + textBoxSystemName.Text, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".Tx()+ textBoxSystemName.Text, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void buttonExtDBClick(object sender, EventArgs e)
@@ -191,7 +181,7 @@ namespace EDDiscovery.UserControls
                 })));
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".T(EDTx.FindSystemsUserControl_Cannotfindsystem) + textBoxSystemName.Text, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".Tx()+ textBoxSystemName.Text, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
 
@@ -319,8 +309,8 @@ namespace EDDiscovery.UserControls
 
             if (listsphere == null)
             {
-                string resp = String.Format("Website did not return any data on {0}\nIt may be a galactic object that it does not know about".T(EDTx.FindSystemsUserControl_EDSM), textBoxSystemName.Text);
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), resp, "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                string resp = String.Format("Website did not return any data on {0}\nIt may be a galactic object that it does not know about".Tx(), textBoxSystemName.Text);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), resp, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
             Cursor = Cursors.Default;

@@ -43,6 +43,8 @@ namespace EDDiscovery.UserControls
         public SearchScans()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -58,16 +60,6 @@ namespace EDDiscovery.UserControls
             extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, true);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
-
-            var enumlist = new Enum[] { EDTx.SearchScans_ColumnDate, EDTx.SearchScans_ColumnBody, EDTx.SearchScans_ColumnInformation, EDTx.SearchScans_ColumnCurrentDistance, 
-                EDTx.SearchScans_ColumnPosition,  EDTx.SearchScans_ColumnParent, EDTx.SearchScans_ColumnParentParent, EDTx.SearchScans_ColumnStar, EDTx.SearchScans_ColumnStarStar,EDTx.SearchScans_ColumnSystem,
-                EDTx.SearchScans_scanSortControl_labelSort};
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-
-            var enumlisttt = new Enum[] { EDTx.SearchScans_comboBoxSearches_ToolTip, EDTx.SearchScans_buttonFind_ToolTip, EDTx.SearchScans_buttonSave_ToolTip, EDTx.SearchScans_buttonDelete_ToolTip, 
-                                EDTx.SearchScans_extButtonExport_ToolTip, EDTx.SearchScans_extButtonImport_ToolTip, EDTx.SearchScans_extCheckBoxWordWrap_ToolTip, 
-                                EDTx.SearchScans_buttonExtExcel_ToolTip, EDTx.SearchScans_extCheckBoxDebug_ToolTip, EDTx.SearchScans_extButtonNew_ToolTip};
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             List<BaseUtils.TypeHelpers.PropertyNameInfo> classnames = HistoryListQueries.PropertyList();
 
@@ -111,7 +103,7 @@ namespace EDDiscovery.UserControls
             dataGridView.UserChangedColumnVisibility += ChangeColumnVisibility;
 
             UpdateComboBoxSearches();
-            comboBoxSearches.Text = "Select".T(EDTx.SearchScans_Select);
+            comboBoxSearches.Text = "Select".Tx();
             comboBoxSearches.SelectedIndexChanged += ComboBoxSearches_SelectedIndexChanged;
 
             labelCount.Visible = false;
@@ -119,7 +111,7 @@ namespace EDDiscovery.UserControls
             dataGridView.GotoEntryClicked += (he) =>
             {
                 if (ParentUCCB.RequestPanelOperation(this, new UserControlCommonBase.RequestTravelToJID() { JID = he.Journalid, MakeVisible = true }) == PanelActionState.Failed)
-                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".Tx(), "Warning".Tx());
             };
 
         }
@@ -178,7 +170,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.ConditionLists cond = Valid();
             if (cond != null)
             {
-                string name = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Name:".T(EDTx.SearchScans_Name), "", "Enter Search Name:".T(EDTx.SearchScans_SN), this.FindForm().Icon, requireinput:true);
+                string name = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Name:".Tx(), "", "Enter Search Name:".Tx(), this.FindForm().Icon, requireinput:true);
                 if (name != null)
                 {
                     HistoryListQueries.Instance.Set(name, cond.ToString(), HistoryListQueries.QueryType.User);
@@ -195,7 +187,7 @@ namespace EDDiscovery.UserControls
             string errs = conditionFilterUC.Check();
             if (errs.HasChars())
             {
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Condition is not valid".T(EDTx.SearchScans_CNV), "Condition".T(EDTx.SearchScans_CD), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Condition is not valid".Tx(), "Condition".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return null;
             }
             else
@@ -207,7 +199,7 @@ namespace EDDiscovery.UserControls
             string name = comboBoxSearches.Text;
             if (comboBoxSearches.SelectedIndex>= 0 && HistoryListQueries.Instance.Searches[comboBoxSearches.SelectedIndex].User && name.HasChars())
             {
-                if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm deletion of".T(EDTx.SearchScans_DEL) + " " + name, "Delete".T(EDTx.Delete), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm deletion of".Tx()+ " " + name, "Delete".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     HistoryListQueries.Instance.Delete(name);
                     HistoryListQueries.Instance.SaveUserQueries();
@@ -218,7 +210,7 @@ namespace EDDiscovery.UserControls
                 }
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot delete this entry".T(EDTx.SearchScans_DELNO), "Delete".T(EDTx.Delete), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot delete this entry".Tx(), "Delete".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private async void buttonFind_Click(object sender, EventArgs e)
@@ -307,7 +299,7 @@ namespace EDDiscovery.UserControls
 
                 if ( results.Count > max )
                 {
-                    object[] rowobj = { "","", "","",string.Format("Too many results to display, truncating to the first {0}".TxID(EDTx.SearchScans_TooMany), max) };
+                    object[] rowobj = { "","", "","",string.Format("Too many results to display, truncating to the first {0}".Tx(), max) };
                     dataGridView.Rows.Add(rowobj);
                 }
 
@@ -325,7 +317,7 @@ namespace EDDiscovery.UserControls
 
                 this.Cursor = Cursors.Default;
 
-                labelCount.Text = "Total".TxID(EDTx.UserControlMaterialCommodities_Total) + " " + results.Count + " / " + helist.Count.ToString();
+                labelCount.Text = "Total".Tx()+ " " + results.Count + " / " + helist.Count.ToString();
                 labelCount.Visible = true;
             }
 
@@ -380,7 +372,7 @@ namespace EDDiscovery.UserControls
                 SaveFileDialog dlg = new SaveFileDialog();
 
                 dlg.Filter = "Query| *.edduserq";
-                dlg.Title = "Export user searches".T(EDTx.SearchScans_Export);
+                dlg.Title = "Export user searches".Tx();
 
                 if (dlg.ShowDialog(this) == DialogResult.OK)
                 {
@@ -401,7 +393,7 @@ namespace EDDiscovery.UserControls
 
             OpenFileDialog dlg = new OpenFileDialog();
             dlg.Filter = "Query| *.edduserq";
-            dlg.Title = "Import user searches".T(EDTx.SearchScans_Import);
+            dlg.Title = "Import user searches".Tx();
 
             if (dlg.ShowDialog(this) == DialogResult.OK)
             {
@@ -518,7 +510,7 @@ namespace EDDiscovery.UserControls
             dataGridView.Sort(rc);
             if ( rc.InError != null )
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(),rc.InError, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(),rc.InError, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
         }
 

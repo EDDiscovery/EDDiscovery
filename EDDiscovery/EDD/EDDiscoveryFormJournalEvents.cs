@@ -145,7 +145,7 @@ namespace EDDiscovery
             if (he.IsFSDCarrierJump)
             {
                 int count = History.GetVisitsCount(he.System.Name);
-                LogLine(string.Format("Arrived at system {0} Visit No. {1}".T(EDTx.EDDiscoveryForm_Arrived), he.System.Name, count));
+                LogLine(string.Format("Arrived at system {0} Visit No. {1}".Tx(), he.System.Name, count));
                 System.Diagnostics.Trace.WriteLine("Arrived at system: " + he.System.Name + " " + count + ":th visit.");
             }
 
@@ -205,7 +205,7 @@ namespace EDDiscovery
                     ChangeToProfileId(i, true);
 
                 if (errlist.HasChars())
-                    LogLine("Profile reports errors in triggers:".T(EDTx.EDDiscoveryForm_PE1) + errlist);
+                    LogLine("Profile reports errors in triggers:".Tx()+ errlist);
 
                 try
                 {

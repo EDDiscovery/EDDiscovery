@@ -26,6 +26,7 @@ namespace EDDiscovery.UserControls
         public UserControlSpanshStations()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
         }
 
         public override void Init()

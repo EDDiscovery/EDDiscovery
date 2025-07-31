@@ -61,7 +61,7 @@ namespace EDDiscovery
 
         private void buttonExtRefresh_Click(object sender, EventArgs e)
         {
-            LogLine("Refresh History.".T(EDTx.EDDiscoveryForm_RH));
+            LogLine("Refresh History.".Tx());
             RefreshHistoryAsync();
         }
 
@@ -71,14 +71,14 @@ namespace EDDiscovery
 
             if (!edsm.ValidCredentials)
             {
-                ExtendedControls.MessageBoxTheme.Show(this, "No EDSM API key set".T(EDTx.EDDiscoveryForm_NoEDSMAPI));
+                ExtendedControls.MessageBoxTheme.Show(this, "No EDSM API key set".Tx());
                 return;
             }
 
             if (!EDCommander.Current.SyncToEdsm)
             {
-                string dlgtext = "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?".T(EDTx.EDDiscoveryForm_ConfirmSyncToEDSM);
-                string dlgcapt = "Confirm EDSM sync".T(EDTx.EDDiscoveryForm_ConfirmSyncToEDSMCaption);
+                string dlgtext = "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?".Tx();
+                string dlgcapt = "Confirm EDSM sync".Tx();
 
                 if (ExtendedControls.MessageBoxTheme.Show(this, dlgtext, dlgcapt, MessageBoxButtons.YesNo) == DialogResult.No)
                 {

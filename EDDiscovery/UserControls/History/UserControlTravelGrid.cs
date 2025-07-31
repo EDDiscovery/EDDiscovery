@@ -71,46 +71,10 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
 
-            var enumlist = new Enum[] { EDTx.UserControlTravelGrid_ColumnTime, EDTx.UserControlTravelGrid_ColumnEvent, EDTx.UserControlTravelGrid_ColumnDescription,
-                                        EDTx.UserControlTravelGrid_ColumnInformation, EDTx.UserControlTravelGrid_ColumnNote, EDTx.UserControlTravelGrid_labelTime,
-                                        EDTx.UserControlTravelGrid_labelSearch };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-
-            var enumlistcms = new Enum[] { EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem, EDTx.UserControlTravelGrid_removeSortingOfColumnsToolStripMenuItem,
-                EDTx.UserControlTravelGrid_gotoEntryNumberToolStripMenuItem, EDTx.UserControlTravelGrid_setNoteToolStripMenuItem,
-                EDTx.UserControlTravelGrid_createEditBookmarkToolStripMenuItem, EDTx.UserControlTravelGrid_toolStripMenuItemStartStop,
-                EDTx.UserControlTravelGrid_gotoNextStartStopMarkerToolStripMenuItem, EDTx.UserControlTravelGrid_mapGotoStartoolStripMenuItem,
-                EDTx.UserControlTravelGrid_viewOnEDSMToolStripMenuItem, EDTx.UserControlTravelGrid_viewScanDisplayToolStripMenuItem,
-                EDTx.UserControlTravelGrid_viewOnSpanshToolStripMenuItem, EDTx.UserControlTravelGrid_starMapColourToolStripMenuItem,
-                EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_trilaterationToolStripMenuItem,
-                EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_wantedSystemsToolStripMenuItem,
-                EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_bothToolStripMenuItem, EDTx.UserControlTravelGrid_addToTrilaterationToolStripMenuItem_expeditionToolStripMenuItem,
-                EDTx.UserControlTravelGrid_moveToAnotherCommanderToolStripMenuItem, EDTx.UserControlTravelGrid_hideSystemToolStripMenuItem,
-                EDTx.UserControlTravelGrid_removeJournalEntryToolStripMenuItem, EDTx.UserControlTravelGrid_runActionsOnThisEntryToolStripMenuItem,
-                EDTx.UserControlTravelGrid_copyJournalEntryToClipboardToolStripMenuItem, EDTx.UserControlTravelGrid_writeEventInfoToLogDebugToolStripMenuItem,
-                EDTx.UserControlTravelGrid_runActionsAcrossSelectionToolSpeechStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughInaraSystemToolStripMenuItem,
-                EDTx.UserControlTravelGrid_runEntryThroughProfileSystemToolStripMenuItem,
-                EDTx.UserControlTravelGrid_runSelectionThroughEDDNThruTestToolStripMenuItem, EDTx.UserControlTravelGrid_runSelectionThroughEDAstroDebugToolStripMenuItem,
-                EDTx.UserControlTravelGrid_sendJournalEntriesToDLLsToolStripMenuItem, EDTx.UserControlTravelGrid_showSystemVisitedForeColourToolStripMenuItem,
-                EDTx.UserControlTravelGrid_travelGridInDebugModeToolStripMenuItem };
-
-            BaseUtils.Translator.Instance.TranslateToolstrip(historyContextMenu, enumlistcms, this);
-
-            var enumlistcms2 = new Enum[] { EDTx.UserControlTravelGrid_outliningOnOffToolStripMenuItem, 
-                                    EDTx.UserControlTravelGrid_scanEventsOutliningOnOffToolStripMenuItem, EDTx.UserControlTravelGrid_toolStripRollUpOlderOutlines, 
-                                    EDTx.UserControlTravelGrid_toolStripRollUpOlderOutlines_rollUpOffToolStripMenuItem, 
-                                    EDTx.UserControlTravelGrid_toolStripRollUpOlderOutlines_rollUpAfterFirstToolStripMenuItem, 
-                                    EDTx.UserControlTravelGrid_toolStripRollUpOlderOutlines_rollUpAfter5ToolStripMenuItem };
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripOutlines, enumlistcms2, this);
-
-            var enumlisttt = new Enum[] { EDTx.UserControlTravelGrid_comboBoxTime_ToolTip, EDTx.UserControlTravelGrid_textBoxSearch_ToolTip,
-                                EDTx.UserControlTravelGrid_buttonFilter_ToolTip, EDTx.UserControlTravelGrid_buttonField_ToolTip,
-                                EDTx.UserControlTravelGrid_buttonExtExcel_ToolTip, EDTx.UserControlTravelGrid_checkBoxCursorToTop_ToolTip,
-                                EDTx.UserControlTravelGrid_extCheckBoxWordWrap_ToolTip, EDTx.UserControlTravelGrid_extCheckBoxOutlines_ToolTip,
-                                EDTx.UserControlTravelGrid_extButtonTimeRanges_ToolTip, EDTx.UserControlTravelGrid_extComboBoxQuickMarks_ToolTip,
-                                };
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
-
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(historyContextMenu);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStripOutlines);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
         }
 
         public override void Init()
@@ -181,8 +145,8 @@ namespace EDDiscovery.UserControls
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
 
-            if (TranslatorExtensions.TxDefined(EDTx.UserControlTravelGrid_SearchTerms))     // if translator has it defined, use it
-                searchterms = searchterms.TxID(EDTx.UserControlTravelGrid_SearchTerms);
+            if (BaseUtils.TranslatorMkII.Instance.IsDefined(searchterms))
+                searchterms = searchterms.Tx();
         }
 
         public override void LoadLayout()
@@ -366,8 +330,8 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlTravelGrid_TT1), dataGridViewTravel.Rows.Count, current_historylist?.Count ?? 0);
-                comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".T(EDTx.UserControlTravelGrid_TTFilt1), fdropdown + ms) : "Select the entries by age, ".T(EDTx.UserControlTravelGrid_TTSelAge) + ms);
+                string ms = string.Format(" showing {0} original {1}".Tx(), dataGridViewTravel.Rows.Count, current_historylist?.Count ?? 0);
+                comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(), fdropdown + ms) : "Select the entries by age, ".Tx() + ms);
 
                 if (dataGridViewTravel.SelectAndMove(rowsbyjournalid, ref pos, true))
                 {
@@ -873,19 +837,19 @@ namespace EDDiscovery.UserControls
             {
                 if (rightclickhe.StartMarker)
                 {
-                    toolStripMenuItemStartStop.Text = "Clear Start marker".T(EDTx.UserControlTravelGrid_CSTART);
+                    toolStripMenuItemStartStop.Text = "Clear Start marker".Tx();
                 }
                 else if (rightclickhe.StopMarker)
                 {
-                    toolStripMenuItemStartStop.Text = "Clear Stop marker".T(EDTx.UserControlTravelGrid_CSTOP);
+                    toolStripMenuItemStartStop.Text = "Clear Stop marker".Tx();
                 }
                 else if (rightclickhe.isTravelling)
                 {
-                    toolStripMenuItemStartStop.Text = "Set Stop marker for travel calculations".T(EDTx.UserControlTravelGrid_SETSTOPTC);
+                    toolStripMenuItemStartStop.Text = "Set Stop marker for travel calculations".Tx();
                 }
                 else
                 {
-                    toolStripMenuItemStartStop.Text = "Set Start marker for travel calculations".T(EDTx.UserControlTravelGrid_SETSTARTTC);
+                    toolStripMenuItemStartStop.Text = "Set Start marker for travel calculations".Tx();
                 }
             }
 
@@ -1068,7 +1032,7 @@ namespace EDDiscovery.UserControls
         {
             EDSMClass edsm = new EDSMClass();
             if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlTravelGrid_NotSynced));
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx());
         }
 
         private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1079,8 +1043,8 @@ namespace EDDiscovery.UserControls
 
         private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string warning = ("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned").T(EDTx.UserControlTravelGrid_Remove);
-            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
+            string warning = ("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned").Tx();
+            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.Delete(rightclickhe.Journalid);
                 DiscoveryForm.RefreshHistoryAsync();
@@ -1196,13 +1160,13 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Next start/stop marker is hidden".T(EDTx.UserControlTravelGrid_StartStopHidden));
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Next start/stop marker is hidden".Tx());
                     }
                     break;
                 }
             }
 
-            ExtendedControls.MessageBoxTheme.Show(FindForm(), "No start/stop marker found below".T(EDTx.UserControlTravelGrid_StartStopNotFound));
+            ExtendedControls.MessageBoxTheme.Show(FindForm(), "No start/stop marker found below".Tx());
         }
 
         // quickmarks.
@@ -1235,7 +1199,7 @@ namespace EDDiscovery.UserControls
                 }
             }
             extComboBoxQuickMarks.Tag = jids;
-            extComboBoxQuickMarks.Text = "Marked".TxID(EDTx.UserControlTravelGrid_quickMarkToolStripMenuItem);      // only works for custom
+            extComboBoxQuickMarks.Text = "Marked".Tx();      // only works for custom
         }
 
         private void extComboBoxBookmark_SelectedIndexChanged(object sender, EventArgs e)
@@ -1243,7 +1207,7 @@ namespace EDDiscovery.UserControls
             List<long> jids = extComboBoxQuickMarks.Tag as List<long>;
             long jid = jids[extComboBoxQuickMarks.SelectedIndex];
             if (!GotoPosByJID(jid))
-                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".Tx(), "Warning".Tx());
         }
 
         #endregion
@@ -1269,7 +1233,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonField_Click(object sender, EventArgs e)
         {
-            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, DiscoveryForm, "History: Filter out fields".T(EDTx.UserControlTravelGrid_THF));
+            BaseUtils.ConditionLists res = HistoryFilterHelpers.ShowDialog(FindForm(), fieldfilter, DiscoveryForm, "History: Filter out fields".Tx());
             if (res != null)
             {
                 fieldfilter = res;

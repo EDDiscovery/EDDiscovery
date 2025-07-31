@@ -92,8 +92,7 @@ namespace EDDiscovery.UserControls
             userControlSynthesis.OnDisplayComplete += Synthesis_OnWantedChange;
             userControlEngineering.OnDisplayComplete += Engineering_OnWantedChange;
 
-            var enumlistcms = new Enum[] { EDTx.UserControlShoppingList_showMaxFSDInjectionsToolStripMenuItem, EDTx.UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem, EDTx.UserControlShoppingList_showBodyMaterialsWhenLandedToolStripMenuItem_onlyCapacityToolStripMenuItem, EDTx.UserControlShoppingList_showAvailableMaterialsInListWhenLandedToolStripMenuItem, EDTx.UserControlShoppingList_showSystemAvailabilityOfMaterialsInShoppingListToolStripMenuItem, EDTx.UserControlShoppingList_useEDSMDataInSystemAvailabilityToolStripMenuItem, EDTx.UserControlShoppingList_useHistoricMaterialCountsToolStripMenuItem, EDTx.UserControlShoppingList_toggleListPositionToolStripMenuItem };
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
         }
 
         public override void Closing()
@@ -193,7 +192,7 @@ namespace EDDiscovery.UserControls
                 if (shoppinglist.Any())
                 {
                     double available;
-                    wantedList.Append("Needed Mats".T(EDTx.UserControlShoppingList_NM) + ":" + Environment.NewLine);
+                    wantedList.Append("Needed Mats".Tx()+ ":" + Environment.NewLine);
                     List<string> capExceededMats = new List<string>();
                     foreach (var c in shoppinglist)      // and add new..
                     {
@@ -249,7 +248,7 @@ namespace EDDiscovery.UserControls
 
                     if (capExceededMats.Any())
                     {
-                        wantedList.Append(Environment.NewLine + "Filling Shopping List would exceed capacity for:".T(EDTx.UserControlShoppingList_FS));
+                        wantedList.Append(Environment.NewLine + "Filling Shopping List would exceed capacity for:".Tx());
                         foreach (string mat in capExceededMats)
                         {
                             wantedList.Append($"\n  {mat}");
@@ -258,7 +257,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    wantedList.Append("No materials currently required.".T(EDTx.UserControlShoppingList_NoMat));
+                    wantedList.Append("No materials currently required.".Tx());
                 }
 
                 if (showMaxInjections)
@@ -269,12 +268,12 @@ namespace EDDiscovery.UserControls
                     var standard = MaterialCommoditiesRecipe.HowManyLeft(Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.Level == "Standard"),0, mcl, totals2);
                     var premium = MaterialCommoditiesRecipe.HowManyLeft(Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.Level == "Premium"),0, mcl, totals2);
                     wantedList.Append(Environment.NewLine +
-                        string.Format("Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium".T(EDTx.UserControlShoppingList_FSD), basic.Item1, standard.Item1, premium.Item1));
+                        string.Format("Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium".Tx(), basic.Item1, standard.Item1, premium.Item1));
                 }
 
                 if (showPlanetMats && sd != null && sd.HasMaterials)
                 {
-                    wantedList.Append(Environment.NewLine + Environment.NewLine + string.Format("Materials on {0}".T(EDTx.UserControlShoppingList_MO), last_he.WhereAmI) + Environment.NewLine);
+                    wantedList.Append(Environment.NewLine + Environment.NewLine + string.Format("Materials on {0}".Tx(), last_he.WhereAmI) + Environment.NewLine);
                     foreach (KeyValuePair<string, double> mat in sd.Materials)
                     {
                         int? onHand = mcl.Where(m => m.Details.FDName == mat.Key).FirstOrDefault()?.Count;

@@ -43,6 +43,9 @@ namespace EDDiscovery.UserControls
         public CaptainsLogEntries()
         {
             InitializeComponent();
+
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -52,20 +55,6 @@ namespace EDDiscovery.UserControls
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
             GlobalCaptainsLogList.Instance.OnLogEntryChanged += LogChanged;
-
-            var enumlist = new Enum[] { EDTx.CaptainsLogEntries_ColTime, EDTx.CaptainsLogEntries_ColSystem, EDTx.CaptainsLogEntries_ColBodyName, EDTx.CaptainsLogEntries_ColNote, EDTx.CaptainsLogEntries_ColTags, EDTx.CaptainsLogEntries_labelDateStart, EDTx.CaptainsLogEntries_labelEndDate, EDTx.CaptainsLogEntries_labelSearch };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { });
-
-            var enumlisttt = new Enum[] { EDTx.CaptainsLogEntries_textBoxFilter_ToolTip, EDTx.CaptainsLogEntries_buttonNew_ToolTip, 
-                                        EDTx.CaptainsLogEntries_buttonDelete_ToolTip, EDTx.CaptainsLogEntries_buttonTags_ToolTip,
-                                        EDTx.CaptainsLogEntries_buttonFilter_ToolTip};
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
-
-            // manually pick these up from DataGridViewStarResults as the names don't match
-            viewScanDisplayToolStripMenuItem.Text = viewScanDisplayToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Data);
-            mapGoto3StartoolStripMenuItem.Text = mapGoto3StartoolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_3d);
-            viewOnSpanshToolStripMenuItem.Text = viewOnSpanshToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Spansh);
-            viewOnEDSMToolStripMenuItem.Text = viewOnEDSMToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_EDSM);
 
             ColNote.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.AllCells;
@@ -234,7 +223,7 @@ namespace EDDiscovery.UserControls
 
             if (rows != null && rows.Length > 1)
             {
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete {0} notes?" + Environment.NewLine + "Confirm or Cancel").T(EDTx.CaptainsLogEntries_CFN), rows.Length), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete {0} notes?" + Environment.NewLine + "Confirm or Cancel").Tx(), rows.Length), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     foreach (int r in rows)
                     {
@@ -255,7 +244,7 @@ namespace EDDiscovery.UserControls
                 {
                     CaptainsLogClass entry = (CaptainsLogClass)rw.Tag;
 
-                    if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the note for {0}" + Environment.NewLine + "Confirm or Cancel").T(EDTx.CaptainsLogEntries_CF), entry.SystemName + ":" + entry.BodyName), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the note for {0}" + Environment.NewLine + "Confirm or Cancel").Tx(), entry.SystemName + ":" + entry.BodyName), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                     {
                         GlobalCaptainsLogList.Instance.Delete(entry);
                         Display();
@@ -269,7 +258,7 @@ namespace EDDiscovery.UserControls
         private void buttonTags_Click(object sender, EventArgs e)
         {
             TagsForm tg = new TagsForm();
-            tg.Init("Set Tags".T(EDTx.CaptainsLogEntries_SetTags), this.FindForm().Icon, EDDConfig.TagSplitStringCL, EDDConfig.Instance.CaptainsLogTagDictionary);
+            tg.Init("Set Tags".Tx(), this.FindForm().Icon, EDDConfig.TagSplitStringCL, EDDConfig.Instance.CaptainsLogTagDictionary);
 
             if (tg.ShowDialog() == DialogResult.OK)
             {
@@ -341,7 +330,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Bad/Out of Range Date Time format".T(EDTx.CaptainsLogEntries_DTF), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Bad/Out of Range Date Time format".Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     DateTime prevutc = (DateTime)rw.Cells[ColTime.Index].Tag;
                     rw.Cells[ColTime.Index].Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(prevutc);       // note we go back to selected
                 }
@@ -356,8 +345,8 @@ namespace EDDiscovery.UserControls
         {
             string notes = rw.Cells[ColNote.Index].Value != null ? (string)rw.Cells[ColNote.Index].Value : "";
 
-            string s = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Note:".T(EDTx.CaptainsLogEntries_Note), notes,
-                            "Enter Note".T(EDTx.CaptainsLogEntries_EnterNote), this.FindForm().Icon, multiline: true, cursoratend: true, widthboxes:400, heightboxes:400);
+            string s = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Note:".Tx(), notes,
+                            "Enter Note".Tx(), this.FindForm().Icon, multiline: true, cursoratend: true, widthboxes:400, heightboxes:400);
 
             if (s != null)
             {
@@ -558,7 +547,7 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
             
             if (!edsm.ShowSystemInEDSM(rightclickentry.SystemName))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.CaptainsLogEntries_SysU));
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx());
 
             this.Cursor = Cursors.Default;
         }

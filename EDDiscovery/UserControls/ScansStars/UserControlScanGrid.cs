@@ -43,6 +43,9 @@ namespace EDDiscovery.UserControls
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;     // NEW! appears to work https://msdn.microsoft.com/en-us/library/74b2wakt(v=vs.110).aspx
             this.dataGridView.Columns[nameof(colImage)].DefaultCellStyle.SelectionBackColor = System.Drawing.Color.Black;
+
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         #region Init
@@ -50,13 +53,6 @@ namespace EDDiscovery.UserControls
         public override void Init()
         {
             DBBaseName = "ScanGridPanel";
-
-            var enumlist = new Enum[] { EDTx.UserControlScanGrid_colName, EDTx.UserControlScanGrid_colClass, EDTx.UserControlScanGrid_colDistance, EDTx.UserControlScanGrid_colBriefing,
-            EDTx.UserControlScanGrid_ColCurValue, EDTx.UserControlScanGrid_ColMaxValue, EDTx.UserControlScanGrid_ColOrganics };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-
-            var enumlisttt = new Enum[] { EDTx.UserControlScanGrid_extButtonShowControl_ToolTip, EDTx.UserControlScanGrid_extButtonHighValue_ToolTip, EDTx.UserControlScanGrid_extButtonNewBookmark_ToolTip};
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             rollUpPanelTop.SetToolTip(toolTip);
 
@@ -70,7 +66,6 @@ namespace EDDiscovery.UserControls
             PopulateCtrlList();
 
             toolStripJumponiumProgressBar.Visible = false;
-
         }
 
         public override void LoadLayout()
@@ -125,7 +120,7 @@ namespace EDDiscovery.UserControls
                 last_he = null;
                 dataGridView.Rows.Clear();
                 toolStripJumponiumProgressBar.Visible = false;
-                SetControlText("No Scan".T(EDTx.NoScan));
+                SetControlText("No Scan".Tx());
                 return;
             }
 
@@ -219,7 +214,7 @@ namespace EDDiscovery.UserControls
                         // is the main star?
                         if (sn.ScanData.BodyName.EndsWith(" A", StringComparison.Ordinal) || sn.ScanData.BodyName == sn.SystemNode.System.Name)
                         {
-                            bdDist.Append("Main Star".T(EDTx.UserControlScanGrid_MainStar));
+                            bdDist.Append("Main Star".Tx());
                         }
                         // if not, then tell us its hierarchy leveland distance from main star
                         else if (sn.ScanData.nSemiMajorAxis.HasValue)
@@ -232,15 +227,15 @@ namespace EDDiscovery.UserControls
 
                         // display stellar bodies mass, in sols
                         if (sn.ScanData.nStellarMass.HasValue)
-                            bdDetails.Append("Mass".T(EDTx.UserControlScanGrid_Mass)).AppendColonS().Append(sn.ScanData.nStellarMass.Value.ToString("N2")).Append(" SM, ");
+                            bdDetails.Append("Mass".Tx()).AppendColonS().Append(sn.ScanData.nStellarMass.Value.ToString("N2")).Append(" SM, ");
 
                         // display stellar bodies radius in sols
                         if (sn.ScanData.nRadius.HasValue)
-                            bdDetails.Append("Radius".T(EDTx.UserControlScanGrid_Radius)).AppendColonS().Append((sn.ScanData.nRadius.Value / BodyPhysicalConstants.oneSolRadius_m).ToString("N2")).Append(" SR, ");
+                            bdDetails.Append("Radius".Tx()).AppendColonS().Append((sn.ScanData.nRadius.Value / BodyPhysicalConstants.oneSolRadius_m).ToString("N2")).Append(" SR, ");
 
                         // show the temperature
                         if (sn.ScanData.nSurfaceTemperature.HasValue)
-                            bdDetails.Append("Temperature".T(EDTx.UserControlScanGrid_Temperature)).AppendColonS().Append((sn.ScanData.nSurfaceTemperature.Value.ToString("N2"))).Append(" K.");
+                            bdDetails.Append("Temperature".Tx()).AppendColonS().Append((sn.ScanData.nSurfaceTemperature.Value.ToString("N2"))).Append(" K.");
 
                         JournalScan.HabZones hz;
                         // habitable zone for stars - do not display for black holes.  And defend against hab zones returning null due to missing data
@@ -284,7 +279,7 @@ namespace EDDiscovery.UserControls
 
                         // is terraformable? If so, prepend it to the body class
                         if (sn.ScanData.Terraformable)
-                            bdClass.Append("Terraformable".T(EDTx.UserControlScanGrid_Terraformable)).Append(", ");
+                            bdClass.Append("Terraformable".Tx()).Append(", ");
 
                         if (sn.ScanData.IsPlanet)      // Planet, not barycenter/belt
                         {
@@ -305,7 +300,7 @@ namespace EDDiscovery.UserControls
                             {
                                 moons++;
 
-                                bdClass.AppendSPC().Append("Moon".T(EDTx.UserControlScanGrid_Moon));
+                                bdClass.AppendSPC().Append("Moon".Tx());
 
                                 // moon distances from center body are measured from in SemiMajorAxis
                                 if (sn.ScanData.nSemiMajorAxis.HasValue)
@@ -318,7 +313,7 @@ namespace EDDiscovery.UserControls
                         // display non-stellar bodies radius in earth radiuses
                         if (sn.ScanData.nRadius.HasValue)
                         {
-                            bdDetails.Append("Radius".T(EDTx.UserControlScanGrid_Radius)).AppendColonS()
+                            bdDetails.Append("Radius".Tx()).AppendColonS()
                                 .Append((sn.ScanData.nRadius.Value / 1000.0).ToString("N0")).Append(" km (").
                                 Append((sn.ScanData.nRadius.Value / BodyPhysicalConstants.oneEarthRadius_m).ToString("N2")).Append(" ER), ");
                         }
@@ -326,7 +321,7 @@ namespace EDDiscovery.UserControls
                         // show the temperature, both in K and C degrees
                         if (sn.ScanData.nSurfaceTemperature.HasValue)
                         {
-                            bdDetails.Append("Temperature".T(EDTx.UserControlScanGrid_Temperature)).AppendColonS()
+                            bdDetails.Append("Temperature".Tx()).AppendColonS()
                             .Append((sn.ScanData.nSurfaceTemperature.Value).ToString("N2")).Append(" K, (")
                             .Append((sn.ScanData.nSurfaceTemperature.Value - 273.15).ToString("N2")).Append(" C).");
                         }
@@ -352,18 +347,18 @@ namespace EDDiscovery.UserControls
                                 Gg = " (G: " + g.Value.ToString("N1") + " g)";
                             }
 
-                            bdDetails.AppendCR().Append("Landable".T(EDTx.UserControlScanGrid_Landable)).Append(Gg).Append(". ");
+                            bdDetails.AppendCR().Append("Landable".Tx()).Append(Gg).Append(". ");
                         }
 
                         // tell us that there is some volcanic activity
                         if (sn.ScanData.HasMeaningfulVolcanism)
                         {
-                            bdDetails.AppendCR().Append("Geological activity".T(EDTx.UserControlScanGrid_Geologicalactivity)).AppendColonS().Append(sn.ScanData.VolcanismTranslated).Append(". ");
+                            bdDetails.AppendCR().Append("Geological activity".Tx()).AppendColonS().Append(sn.ScanData.VolcanismTranslated).Append(". ");
                         }
 
                         if (sn.ScanData.Mapped)
                         {
-                            bdDetails.AppendCR().Append("Surface mapped".T(EDTx.UserControlScanGrid_Surfacemapped)).Append(". ");
+                            bdDetails.AppendCR().Append("Surface mapped".Tx()).Append(". ");
                         }
 
                         if (sn.SurfaceFeatures != null)
@@ -404,7 +399,7 @@ namespace EDDiscovery.UserControls
 
                             if (ret.Length > 0 && IsSet(CtrlList.showMaterials))
                             {
-                                bdDetails.AppendCR().Append("This body contains: ".T(EDTx.UserControlScanGrid_BC)).Append(ret);
+                                bdDetails.AppendCR().Append("This body contains: ".Tx()).Append(ret);
                             }
                         }
                     }
@@ -419,7 +414,7 @@ namespace EDDiscovery.UserControls
                                 if (IsSet(CtrlList.showBelts))
                                 {
                                     // is a belt
-                                    bdDetails.AppendCR().Append("Belt: ".T(EDTx.UserControlScanGrid_Belt));
+                                    bdDetails.AppendCR().Append("Belt: ".Tx());
                                     var RingName = sn.ScanData.Rings[r].Name;
                                     bdDetails.Append(sn.ScanData.Rings[r].TranslatedRingClass()).AppendSPC();
                                     bdDetails.Append((sn.ScanData.Rings[r].InnerRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append(" ls to ").Append((sn.ScanData.Rings[r].OuterRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append(" ls. ");
@@ -430,7 +425,7 @@ namespace EDDiscovery.UserControls
                                 if (IsSet(CtrlList.showRings))
                                 {
                                     // is a ring
-                                    bdDetails.AppendCR().Append("Ring: ".T(EDTx.UserControlScanGrid_Ring));
+                                    bdDetails.AppendCR().Append("Ring: ".Tx());
                                     var RingName = sn.ScanData.Rings[r].Name;
                                     bdDetails.Append(sn.ScanData.Rings[r].TranslatedRingClass()).AppendSPC();
                                     bdDetails.Append((sn.ScanData.Rings[r].InnerRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append(" ls to ").Append((sn.ScanData.Rings[r].OuterRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append(" ls. ");
@@ -554,9 +549,9 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine("Jumponiums " + toolStripJumponiumProgressBar.Value + " " + toolStripJumponiumProgressBar.Visible);
 
             if (toolStripJumponiumProgressBar.Value == 8)
-                toolStripJumponiumProgressBar.ToolTipText = "This is a green system, as it has all existing jumponium materials available!".T(EDTx.UserControlScanGrid_GS);
+                toolStripJumponiumProgressBar.ToolTipText = "This is a green system, as it has all existing jumponium materials available!".Tx();
             else
-                toolStripJumponiumProgressBar.ToolTipText = toolStripJumponiumProgressBar.Value + " jumponium materials found in system.".T(EDTx.UserControlScanGrid_JS);
+                toolStripJumponiumProgressBar.ToolTipText = toolStripJumponiumProgressBar.Value + " jumponium materials found in system.".Tx();
 
             string ct = systemnode.System.Name;
             long totalv = systemnode.ScanValue(edsmSpanshButton.IsAnySet) + organicvaluetotal;
@@ -564,7 +559,7 @@ namespace EDDiscovery.UserControls
                 ct += " ~" + totalv.ToString("N0") + " cr";
             SetControlText( ct ); 
 
-            toolStripStatusTotalValue.Text = string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".T(EDTx.UserControlScanGrid_ScanSummaryfor), systemnode.System.Name, stars, planets, terrestrial, gasgiants, moons);
+            toolStripStatusTotalValue.Text = string.Format("Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons".Tx(), systemnode.System.Name, stars, planets, terrestrial, gasgiants, moons);
 
             if (dataGridView.SortedColumn != null)      // resort if sorted
             {
@@ -627,15 +622,15 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
             displayfilter.UC.AddAllNone();
-            displayfilter.UC.Add(CtrlList.showBelts.ToString(), "Show belts".TxID(EDTx.UserControlScanGrid_structuresToolStripMenuItem_beltsToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showRings.ToString(), "Show rings".TxID(EDTx.UserControlScanGrid_structuresToolStripMenuItem_ringsToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showMaterials.ToString(), "Show materials".TxID(EDTx.UserControlScanGrid_materialsToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showHabitable.ToString(), "Show Habitation Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showMetalRich.ToString(), "Show Metal Rich Planet Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showMetalRichPlanetsToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showWaterWorlds.ToString(), "Show Water World Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showWaterWorldsToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showEarthLike.ToString(), "Show Earth Like Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showEarthLikeToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showAmmonia.ToString(), "Show Ammonia Worlds Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showAmmoniaWorldsToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.showIcyBodies.ToString(), "Show Icy Planets Zone".TxID(EDTx.UserControlSpanel_showCircumstellarZonesToolStripMenuItem_showIcyPlanetsToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.showBelts.ToString(), "Show belts".Tx());
+            displayfilter.UC.Add(CtrlList.showRings.ToString(), "Show rings".Tx());
+            displayfilter.UC.Add(CtrlList.showMaterials.ToString(), "Show materials".Tx());
+            displayfilter.UC.Add(CtrlList.showHabitable.ToString(), "Show Habitation Zone".Tx());
+            displayfilter.UC.Add(CtrlList.showMetalRich.ToString(), "Show Metal Rich Planet Zone".Tx());
+            displayfilter.UC.Add(CtrlList.showWaterWorlds.ToString(), "Show Water World Zone".Tx());
+            displayfilter.UC.Add(CtrlList.showEarthLike.ToString(), "Show Earth Like Zone".Tx());
+            displayfilter.UC.Add(CtrlList.showAmmonia.ToString(), "Show Ammonia Worlds Zone".Tx());
+            displayfilter.UC.Add(CtrlList.showIcyBodies.ToString(), "Show Icy Planets Zone".Tx());
             CommonCtrl(displayfilter, extButtonShowControl);
         }
         

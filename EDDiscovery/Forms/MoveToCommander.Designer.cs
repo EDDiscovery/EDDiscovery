@@ -75,17 +75,27 @@ namespace EDDiscovery.Forms
             // 
             // buttonExtCancel
             // 
+            this.buttonExtCancel.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
+            this.buttonExtCancel.GradientDirection = 90F;
             this.buttonExtCancel.Location = new System.Drawing.Point(89, 103);
+            this.buttonExtCancel.MouseOverScaling = 1.3F;
+            this.buttonExtCancel.MouseSelectedScaling = 1.3F;
             this.buttonExtCancel.Name = "buttonExtCancel";
             this.buttonExtCancel.Size = new System.Drawing.Size(100, 23);
             this.buttonExtCancel.TabIndex = 4;
-            this.buttonExtCancel.Text = "%Cancel%";
+            this.buttonExtCancel.Text = "Cancel";
             this.buttonExtCancel.UseVisualStyleBackColor = true;
             this.buttonExtCancel.Click += new System.EventHandler(this.buttonExtCancel_Click);
             // 
             // buttonTransfer
             // 
+            this.buttonTransfer.BackColor2 = System.Drawing.Color.Red;
+            this.buttonTransfer.ButtonDisabledScaling = 0.5F;
+            this.buttonTransfer.GradientDirection = 90F;
             this.buttonTransfer.Location = new System.Drawing.Point(205, 103);
+            this.buttonTransfer.MouseOverScaling = 1.3F;
+            this.buttonTransfer.MouseSelectedScaling = 1.3F;
             this.buttonTransfer.Name = "buttonTransfer";
             this.buttonTransfer.Size = new System.Drawing.Size(100, 23);
             this.buttonTransfer.TabIndex = 3;
@@ -95,12 +105,17 @@ namespace EDDiscovery.Forms
             // 
             // comboBoxCommanders
             // 
+            this.comboBoxCommanders.BackColor2 = System.Drawing.Color.Red;
             this.comboBoxCommanders.BorderColor = System.Drawing.Color.White;
+            this.comboBoxCommanders.ControlBackground = System.Drawing.SystemColors.Control;
             this.comboBoxCommanders.DataSource = null;
             this.comboBoxCommanders.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxCommanders.DisabledScaling = 0.5F;
             this.comboBoxCommanders.DisplayMember = "";
             this.comboBoxCommanders.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxCommanders.GradientDirection = 90F;
             this.comboBoxCommanders.Location = new System.Drawing.Point(19, 58);
+            this.comboBoxCommanders.MouseOverScalingColor = 1.3F;
             this.comboBoxCommanders.Name = "comboBoxCommanders";
             this.comboBoxCommanders.SelectedIndex = -1;
             this.comboBoxCommanders.SelectedItem = null;

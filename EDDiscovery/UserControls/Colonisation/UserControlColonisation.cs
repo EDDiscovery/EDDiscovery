@@ -29,7 +29,7 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             DBBaseName = "Colonisation";
-            PutSetting(dbSelection, "");    // set to last system
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
         }
 
         public override void Init()

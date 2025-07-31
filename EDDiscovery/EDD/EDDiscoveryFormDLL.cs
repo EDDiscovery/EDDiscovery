@@ -113,8 +113,8 @@ namespace EDDiscovery
                                     string.Format(("The following application extension DLL have been found" + Environment.NewLine +
                                     "Do you wish to allow it to be used?" + Environment.NewLine + Environment.NewLine +
                                     "{0} " + Environment.NewLine
-                                    ).T(EDTx.EDDiscoveryForm_DLLW), dll),
-                                    "Warning".T(EDTx.Warning),
+                                    ).Tx(), dll),
+                                    "Warning".Tx(),
                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     {
                         DLLManager.SetDLLPermission(dll, true);
@@ -135,11 +135,11 @@ namespace EDDiscovery
             }
 
             if (dllresults.Item1.HasChars())   // ok
-                LogLine(string.Format("DLLs loaded: {0}".T(EDTx.EDDiscoveryForm_DLLL), dllresults.Item1));
+                LogLine(string.Format("DLLs loaded: {0}".Tx(), dllresults.Item1));
             if (dllresults.Item2.HasChars())   // failed
-                LogLineHighlight(string.Format("DLLs failed to load: {0}".T(EDTx.EDDiscoveryForm_DLLF), dllresults.Item2));
+                LogLineHighlight(string.Format("DLLs failed to load: {0}".Tx(), dllresults.Item2));
             if (dllresults.Item4.HasChars())   // failed
-                LogLine(string.Format("DLLs disabled: {0}".T(EDTx.EDDiscoveryForm_DLLDIS), dllresults.Item4));
+                LogLine(string.Format("DLLs disabled: {0}".Tx(), dllresults.Item4));
         }
 
 

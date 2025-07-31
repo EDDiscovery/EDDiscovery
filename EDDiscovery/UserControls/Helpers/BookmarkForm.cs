@@ -40,8 +40,7 @@ namespace EDDiscovery.UserControls
             bool winborder = ExtendedControls.Theme.Current.ApplyDialog(this);
             panelTop.Visible = !winborder;
 
-            var enumlist = new Enum[] { EDTx.BookmarkForm_labelName, EDTx.BookmarkForm_checkBoxTarget, EDTx.BookmarkForm_labelBookmarkNotes, EDTx.BookmarkForm_labelTravelNote, EDTx.BookmarkForm_labelTimeMade };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { labelX, labelY, labelZ, SurfaceBookmarks });
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this, 3);
 
             historyentry = he;
             checkBoxTarget.Visible = enabletargetsetting;
@@ -54,7 +53,7 @@ namespace EDDiscovery.UserControls
         // open an existing bookmark, region or system
         public void Bookmark(BookmarkClass bk)
         {
-            labelTitle.Text = this.Text = "Update Bookmark".T(EDTx.BookmarkForm_UB);
+            labelTitle.Text = this.Text = "Update Bookmark".Tx();
             InitialisePos(bk.X, bk.Y, bk.Z);
 
             if (!bk.IsRegion)       // Star..
@@ -83,7 +82,7 @@ namespace EDDiscovery.UserControls
             var taglist = EDDConfig.BookmarkTagArray(Tags);
             TagsForm.FillTags(taglist, EDDConfig.Instance.BookmarkTagDictionary, panelTags, panelTags_MouseDown, toolTip);
 
-            buttonOK.Text = "Update".T(EDTx.BookmarkForm_Update);
+            buttonOK.Text = "Update".Tx();
             buttonOK.Enabled = true;
 
             textBoxName.ReturnPressed += (ctrl) => { return true; };
@@ -93,8 +92,8 @@ namespace EDDiscovery.UserControls
         // create a new region bookmark
         public void NewRegionBookmark(DateTime timeutc)              // from map, a region bookmark at this time
         {
-            labelTitle.Text = this.Text = "Create Region Bookmark".T(EDTx.BookmarkForm_RB);
-            textBoxName.Text = "Enter a region name...".T(EDTx.BookmarkForm_RN);
+            labelTitle.Text = this.Text = "Create Region Bookmark".Tx();
+            textBoxName.Text = "Enter a region name...".Tx();
             textBoxName.ClearOnFirstChar = true;
             textBoxTime.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(timeutc).ToString();
             textBoxName.ReturnPressed += (ctrl) => { return true; };
@@ -111,7 +110,7 @@ namespace EDDiscovery.UserControls
         // create a new system bookmark from Isystem
         public void NewSystemBookmark(ISystem system, DateTime timeutc)    // from multipe, create a new system bookmark
         {
-            labelTitle.Text = this.Text = "New System Bookmark".T(EDTx.BookmarkForm_SB);
+            labelTitle.Text = this.Text = "New System Bookmark".Tx();
             textBoxName.Text = system.Name;
             textBoxName.ReadOnly = true;
             textBoxName.ReturnPressed += (ctrl) => { return true; };
@@ -141,8 +140,8 @@ namespace EDDiscovery.UserControls
         // New anywhere bookmark
         public void NewFreeEntrySystemBookmark(DateTime timeutc)                     // new system bookmark anywhere
         {
-            labelTitle.Text = this.Text = "New System Bookmark".T(EDTx.BookmarkForm_NSB);
-            textBoxName.Text = "Enter a system name...".T(EDTx.BookmarkForm_ESN);
+            labelTitle.Text = this.Text = "New System Bookmark".Tx();
+            textBoxName.Text = "Enter a system name...".Tx();
             textBoxName.ClearOnFirstChar = true;
             textBoxName.ReturnPressed += (ctrl) => { return true; };
             textBoxName.TextChanged += new System.EventHandler(this.textBox_TextNameChanged);       // we verify the name and see if we can co-ord

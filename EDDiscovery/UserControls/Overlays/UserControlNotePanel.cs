@@ -39,6 +39,7 @@ namespace EDDiscovery.UserControls
         public UserControlNotePanel()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
         }
 
         public override void Init()
@@ -52,8 +53,6 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += OnHistoryChange;
             DiscoveryForm.OnNoteChanged += OnNoteChange;
 
-            var enumlistcms = new Enum[] { EDTx.UserControlNotePanel_miGMPNotes, EDTx.UserControlNotePanel_miSystemNotes };
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
         }
 
         public override void LoadLayout()

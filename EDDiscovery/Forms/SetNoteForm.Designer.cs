@@ -142,13 +142,15 @@
             // textBoxNote
             // 
             this.textBoxNote.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxNote.BorderColor2 = System.Drawing.Color.Transparent;
+            this.textBoxNote.DetectUrls = true;
             this.textBoxNote.Dock = System.Windows.Forms.DockStyle.Fill;
             this.textBoxNote.HideScrollBar = true;
             this.textBoxNote.Location = new System.Drawing.Point(0, 232);
             this.textBoxNote.Name = "textBoxNote";
             this.textBoxNote.ReadOnly = false;
             this.textBoxNote.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.26100}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
             this.textBoxNote.ShowLineCount = false;
             this.textBoxNote.Size = new System.Drawing.Size(676, 218);
@@ -159,18 +161,28 @@
             // buttonCancel
             // 
             this.buttonCancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonCancel.BackColor2 = System.Drawing.Color.Red;
+            this.buttonCancel.ButtonDisabledScaling = 0.5F;
+            this.buttonCancel.GradientDirection = 90F;
             this.buttonCancel.Location = new System.Drawing.Point(441, 6);
+            this.buttonCancel.MouseOverScaling = 1.3F;
+            this.buttonCancel.MouseSelectedScaling = 1.3F;
             this.buttonCancel.Name = "buttonCancel";
             this.buttonCancel.Size = new System.Drawing.Size(100, 24);
             this.buttonCancel.TabIndex = 3;
-            this.buttonCancel.Text = "%Cancel%";
+            this.buttonCancel.Text = "Cancel";
             this.buttonCancel.UseVisualStyleBackColor = true;
             this.buttonCancel.Click += new System.EventHandler(this.buttonCancel_Click);
             // 
             // buttonSave
             // 
             this.buttonSave.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonSave.BackColor2 = System.Drawing.Color.Red;
+            this.buttonSave.ButtonDisabledScaling = 0.5F;
+            this.buttonSave.GradientDirection = 90F;
             this.buttonSave.Location = new System.Drawing.Point(561, 6);
+            this.buttonSave.MouseOverScaling = 1.3F;
+            this.buttonSave.MouseSelectedScaling = 1.3F;
             this.buttonSave.Name = "buttonSave";
             this.buttonSave.Size = new System.Drawing.Size(100, 24);
             this.buttonSave.TabIndex = 4;
@@ -195,9 +207,13 @@
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_close.AutoEllipsis = false;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.BorderColor = System.Drawing.Color.Orange;
+            this.panel_close.BorderWidth = 1;
+            this.panel_close.ButtonDisabledScaling = 0.25F;
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(653, 0);
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
@@ -215,9 +231,13 @@
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.AutoEllipsis = false;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.BorderColor = System.Drawing.Color.Orange;
+            this.panel_minimize.BorderWidth = 1;
+            this.panel_minimize.ButtonDisabledScaling = 0.25F;
             this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(623, 0);
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
@@ -271,7 +291,6 @@
             this.Name = "SetNoteForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Set Note";
-
             this.panelMain.ResumeLayout(false);
             this.panelMain.PerformLayout();
             this.panelTop.ResumeLayout(false);

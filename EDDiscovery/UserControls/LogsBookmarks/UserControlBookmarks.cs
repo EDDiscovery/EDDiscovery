@@ -36,6 +36,9 @@ namespace EDDiscovery.UserControls
         public UserControlBookmarks()
         {
             InitializeComponent();
+
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -46,26 +49,6 @@ namespace EDDiscovery.UserControls
             searchtimer.Tick += Searchtimer_Tick;
 
             GlobalBookMarkList.Instance.OnBookmarkChange += BookmarksChanged;
-
-            var enumlist = new Enum[] { EDTx.UserControlBookmarks_ColType, EDTx.UserControlBookmarks_ColBookmarkName,
-                                            EDTx.UserControlBookmarks_ColDescription, EDTx.UserControlBookmarks_ColTags,
-                                            EDTx.UserControlBookmarks_labelSearch };
-            
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { userControlSurfaceBookmarks });
-
-            var enumlisttt = new Enum[] {EDTx.UserControlBookmarks_textBoxFilter_ToolTip, EDTx.UserControlBookmarks_buttonFilter_ToolTip, EDTx.UserControlBookmarks_buttonNew_ToolTip,
-                    EDTx.UserControlBookmarks_extButtonEditSystem_ToolTip, EDTx.UserControlBookmarks_extButtonNewRegion_ToolTip, EDTx.UserControlBookmarks_buttonEdit_ToolTip,
-                    EDTx.UserControlBookmarks_buttonDelete_ToolTip, EDTx.UserControlBookmarks_buttonTags_ToolTip, EDTx.UserControlBookmarks_buttonExtExcel_ToolTip,
-                    EDTx.UserControlBookmarks_buttonExtImport_ToolTip};
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
-
-            // manually pick these up from DataGridViewStarResults as the names don't match
-            viewScanOfSystemToolStripMenuItem.Text = viewScanOfSystemToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Data);
-            mapGotoStartoolStripMenuItem.Text = mapGotoStartoolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_3d);
-            viewOnSpanshToolStripMenuItem.Text = viewOnSpanshToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Spansh);
-            viewOnEDSMToolStripMenuItem.Text = viewOnEDSMToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_EDSM);
-            addToExpeditionToolStripMenuItem.Text = addToExpeditionToolStripMenuItem.Text.TxID(EDTx.UserControlStarDistance_addToExpeditionToolStripMenuItem);
-
 
             userControlSurfaceBookmarks.TagFilter = GetSetting(dbSurfaceTags, "All");
         }
@@ -283,7 +266,7 @@ namespace EDDiscovery.UserControls
 
             if (rows != null && rows.Length > 1)
             {
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete {0} bookmarks?" + Environment.NewLine + "Confirm or Cancel").T(EDTx.UserControlBookmarks_CFN), rows.Length), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete {0} bookmarks?" + Environment.NewLine + "Confirm or Cancel").Tx(), rows.Length), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     updating_grid = true;
                     foreach (int r in rows)
@@ -301,7 +284,7 @@ namespace EDDiscovery.UserControls
             {
                 BookmarkClass bk = (BookmarkClass)currentedit.Tag;
 
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the bookmark for {0}" + Environment.NewLine + "Confirm or Cancel").T(EDTx.UserControlBookmarks_CF), bk.Name), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the bookmark for {0}" + Environment.NewLine + "Confirm or Cancel").Tx(), bk.Name), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     updating_grid = true;
                     GlobalBookMarkList.Instance.Delete(bk);
@@ -314,7 +297,7 @@ namespace EDDiscovery.UserControls
         private void buttonTags_Click(object sender, EventArgs e)
         {
             TagsForm tg = new TagsForm();
-            tg.Init("Set Tags".T(EDTx.CaptainsLogEntries_SetTags), this.FindForm().Icon, EDDConfig.TagSplitStringBK, EDDConfig.Instance.BookmarkTagDictionary);
+            tg.Init("Set Tags".Tx(), this.FindForm().Icon, EDDConfig.TagSplitStringBK, EDDConfig.Instance.BookmarkTagDictionary);
 
             if (tg.ShowDialog() == DialogResult.OK)
             {
@@ -505,7 +488,7 @@ namespace EDDiscovery.UserControls
             EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
             
             if (!edsm.ShowSystemInEDSM(rightclickbookmark.StarName))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlBookmarks_SysU));
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx());
 
             this.Cursor = Cursors.Default;
         }

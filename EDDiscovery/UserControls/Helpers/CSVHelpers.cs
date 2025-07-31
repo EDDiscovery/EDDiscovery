@@ -52,11 +52,11 @@ namespace EDDiscovery.UserControls
 
         static public void FailedToOpen(Form parent, string file)
         {
-            ExtendedControls.MessageBoxTheme.Show(parent, "Failed to open ".T(EDTx.CSV_Helpers_OpenFailed) + file, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            ExtendedControls.MessageBoxTheme.Show(parent, "Failed to open ".Tx()+ file, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
         static public void WriteFailed(Form parent, string file)
         {
-            ExtendedControls.MessageBoxTheme.Show(parent, "Failed to write to ".T(EDTx.CSV_Helpers_WriteFailed) + file, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            ExtendedControls.MessageBoxTheme.Show(parent, "Failed to write to ".Tx()+ file, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         public static bool OutputScanCSV(List<JournalScan> scans, string path, string delimiter, bool IncludeHeader, bool ShowStars, bool ShowPlanets, bool showMapped, bool ShowBeltClusters)

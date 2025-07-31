@@ -39,6 +39,9 @@ namespace EDDiscovery.UserControls
         public UserControlLedger()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -52,7 +55,7 @@ namespace EDDiscovery.UserControls
 
             cfs = new JournalFilterSelector();
             cfs.UC.AddAllNone();
-            cfs.UC.AddGroupItem(cashtype, "Cash Transactions".T(EDTx.UserControlLedger_CashTransactions),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
+            cfs.UC.AddGroupItem(cashtype, "Cash Transactions".Tx(),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
             cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
             cfs.SaveSettings += EventFilterChanged;
@@ -65,19 +68,6 @@ namespace EDDiscovery.UserControls
 
             DiscoveryForm.OnHistoryChange += Redisplay;
             DiscoveryForm.OnNewEntry += OnNewEntry;
-
-            var enumlist = new Enum[] { EDTx.UserControlLedger_TimeCol, EDTx.UserControlLedger_Type, EDTx.UserControlLedger_Notes, 
-                                    EDTx.UserControlLedger_Credits, EDTx.UserControlLedger_Debits, EDTx.UserControlLedger_Balance, 
-                                    EDTx.UserControlLedger_NormProfit, EDTx.UserControlLedger_TotalProfit, EDTx.UserControlLedger_labelTime, 
-                                    EDTx.UserControlLedger_labelSearch };
-            var enumlistcms = new Enum[] { EDTx.UserControlLedger_toolStripMenuItemGotoItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlLedger_comboBoxTime_ToolTip, EDTx.UserControlLedger_textBoxFilter_ToolTip, 
-                        EDTx.UserControlLedger_buttonFilter_ToolTip, EDTx.UserControlLedger_buttonExtExcel_ToolTip , EDTx.UserControlLedger_extCheckBoxWordWrap_ToolTip,
-                        EDTx.UserControlLedger_checkBoxCursorToTop_ToolTip};
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbHistorySave,""), false,true,false);
 
@@ -351,7 +341,7 @@ namespace EDDiscovery.UserControls
                 long v = (long)dataGridViewLedger.Rows[dataGridViewLedger.RightClickRow].Tag;
 
                 if (RequestPanelOperation(this, new UserControlCommonBase.RequestTravelToJID() { JID = v, MakeVisible = true }) == PanelActionState.Failed)
-                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".TxID(EDTx.UserControlTravelGrid_entryfilteredout), "Warning".TxID(EDTx.Warning));
+                    ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".Tx(), "Warning".Tx());
             }
         }
 
@@ -444,7 +434,7 @@ namespace EDDiscovery.UserControls
                 }
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Ledger available".T(EDTx.UserControlLedger_NOLG), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Ledger available".Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
 
         }
 

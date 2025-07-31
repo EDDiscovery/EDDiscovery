@@ -44,11 +44,11 @@ namespace EDDiscovery.UserControls
         public StatsTimeUserControl()
         {
             InitializeComponent();
-            comboBoxTimeMode.Items.Add("Summary".T(EDTx.StatsTimeUserControl_Summary));
-            comboBoxTimeMode.Items.Add("Day".T(EDTx.StatsTimeUserControl_Day));
-            comboBoxTimeMode.Items.Add("Week".T(EDTx.StatsTimeUserControl_Week));
-            comboBoxTimeMode.Items.Add("Month".T(EDTx.StatsTimeUserControl_Month));
-            comboBoxTimeMode.Items.Add("Year".T(EDTx.TravelHistoryFilter_Year));
+            comboBoxTimeMode.Items.Add("Summary".Tx());
+            comboBoxTimeMode.Items.Add("Day".Tx());
+            comboBoxTimeMode.Items.Add("Week".Tx());
+            comboBoxTimeMode.Items.Add("Month".Tx());
+            comboBoxTimeMode.Items.Add("Year".Tx());
             PreviousTimeMode = JournalStatsInfo.TimeModeType.Summary;
         }
 

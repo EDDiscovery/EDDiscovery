@@ -71,13 +71,9 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
 
-            var enumlist = new Enum[] { EDTx.UserControlMaterialTrader_UpgradeCol, EDTx.UserControlMaterialTrader_LevelCol, EDTx.UserControlMaterialTrader_WantedCol, EDTx.UserControlMaterialTrader_ModuleCol, EDTx.UserControlMaterialTrader_MaxCol, EDTx.UserControlMaterialTrader_AvailableCol, EDTx.UserControlMaterialTrader_buttonClear };
-            var enumlistcms = new Enum[] { EDTx.UserControlMaterialTrader_clearTradeToolStripMenuItem };
-            var enumlisttt = new Enum[] { EDTx.UserControlMaterialTrader_checkBoxCursorToTop_ToolTip, EDTx.UserControlMaterialTrader_buttonClear_ToolTip };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
         }
 
         public override void Init()
@@ -87,7 +83,7 @@ namespace EDDiscovery.UserControls
             dataGridViewTrades.MakeDoubleBuffered();
             dataGridViewTrades.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 
-            extComboBoxTraderType.Items.AddRange(new string[] { "Raw".T(EDTx.UserControlMaterialTrader_Raw), "Encoded".T(EDTx.UserControlMaterialTrader_Encoded), "Manufactured".T(EDTx.UserControlMaterialTrader_Manufactured) });
+            extComboBoxTraderType.Items.AddRange(new string[] { "Raw".Tx(), "Encoded".Tx(), "Manufactured".Tx()});
             extComboBoxTraderType.SelectedIndex = GetSetting(dbTraderType, 0);
             extComboBoxTraderType.SelectedIndexChanged += ExtComboBoxTraderType_SelectedIndexChanged;
 
@@ -474,7 +470,7 @@ namespace EDDiscovery.UserControls
                         butr.Image = BaseUtils.Icons.IconSet.GetIcon("Controls.MaterialTrader.RightArrow");
                         f.Add(new ExtendedControls.ConfigurableEntryList.Entry(butr, "more", "", new Point(width - margin - 32, 64), new Size(32, 32), null));
 
-                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("olabel", typeof(Label), "Offer".T(EDTx.UserControlMaterialTrader_Offer), new Point(margin, 30), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
+                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("olabel", typeof(Label), "Offer".Tx(), new Point(margin, 30), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
                         f.Add(new ExtendedControls.ConfigurableEntryList.Entry("offer", typeof(Label), "0/" + currenttotal.ToStringInvariant(), new Point(width / 2 - 12, 50), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
 
@@ -485,10 +481,10 @@ namespace EDDiscovery.UserControls
 
                         f.Add(new ExtendedControls.ConfigurableEntryList.Entry("receive", typeof(Label), "0", new Point(width / 2 - 12, 90), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
 
-                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("rlabel", typeof(Label), "Receive".T(EDTx.UserControlMaterialTrader_Receive), new Point(margin, 110), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
+                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry("rlabel", typeof(Label), "Receive".Tx(), new Point(margin, 110), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 
-                        f.AddOK(new Point(width - margin - 80, 150), "Press to Accept".T(EDTx.UserControlModules_PresstoAccept));
-                        f.AddCancel(new Point(margin, 150), "Press to Cancel".T(EDTx.UserControlModules_PresstoCancel));
+                        f.AddOK(new Point(width - margin - 80, 150), "Press to Accept".Tx());
+                        f.AddCancel(new Point(margin, 150), "Press to Cancel".Tx());
 
                         int currentoffer = 0;
                         int currentreceive = 0;

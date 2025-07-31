@@ -41,6 +41,11 @@ namespace EDDiscovery.UserControls
         public UserControlTrilateration()
         {
             InitializeComponent();
+
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(wantedContextMenu);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(trilatContextMenu);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(toolStrip);
         }
 
         public override void Init()
@@ -51,27 +56,7 @@ namespace EDDiscovery.UserControls
             FreezeTrilaterationUI();
             toolStripButtonSector.Checked = GetSetting("Sectors", false);
 
-            var enumlist = new Enum[] { EDTx.UserControlTrilateration_ColumnSystem, EDTx.UserControlTrilateration_ColumnDistance, EDTx.UserControlTrilateration_ColumnCalculated, 
-                                        EDTx.UserControlTrilateration_ColumnStatus, EDTx.UserControlTrilateration_Source, 
-                                        EDTx.UserControlTrilateration_dataGridViewTextBoxColumnClosestSystemsSystem };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-
-            var enumlistcms1 = new Enum[] { EDTx.UserControlTrilateration_removeFromWantedSystemsToolStripMenuItem, EDTx.UserControlTrilateration_viewOnEDSMToolStripMenuItem1, 
-                                            EDTx.UserControlTrilateration_deleteAllWithKnownPositionToolStripMenuItem, EDTx.UserControlTrilateration_addAllLocalSystemsToolStripMenuItem, 
-                                            EDTx.UserControlTrilateration_addAllEDSMSystemsToolStripMenuItem, EDTx.UserControlTrilateration_addAllSectorSystemsToolStripMenuItem };
-            BaseUtils.Translator.Instance.TranslateToolstrip(wantedContextMenu, enumlistcms1, this);
-
-            var enumlistcms2 = new Enum[] { EDTx.UserControlTrilateration_addToWantedSystemsToolStripMenuItem, EDTx.UserControlTrilateration_viewOnEDSMToolStripMenuItem, 
-                                            EDTx.UserControlTrilateration_pasteToolStripMenuItem };
-            BaseUtils.Translator.Instance.TranslateToolstrip(trilatContextMenu, enumlistcms2, this);
-
-            var enumlistcms3 = new Enum[] { EDTx.UserControlTrilateration_toolStripButtonSubmitDistances, EDTx.UserControlTrilateration_toolStripButtonNew, 
-                                EDTx.UserControlTrilateration_toolStripLabelSystem, 
-                                EDTx.UserControlTrilateration_toolStripLabel1, EDTx.UserControlTrilateration_toolStripAddFromHistory, 
-                                EDTx.UserControlTrilateration_toolStripAddRecentHistory, EDTx.UserControlTrilateration_toolStripButtonSector };
-            BaseUtils.Translator.Instance.TranslateToolstrip(toolStrip, enumlistcms3, this);
-
-            toolStripTextBoxSystem.Text = "Press Start New".T(EDTx.UserControlTrilateration_ToolStripText);
+            toolStripTextBoxSystem.Text = "Press Start New".Tx();
         }
 
         public override void Closing()
@@ -263,7 +248,7 @@ namespace EDDiscovery.UserControls
                 }
                 if (enteredSystems.Where(es => es.Name == value).Count() > 0)
                 {
-                    LogTextHighlight("Duplicate system entry is not allowed".T(EDTx.UserControlTrilateration_DUP) + Environment.NewLine);
+                    LogTextHighlight("Duplicate system entry is not allowed".Tx()+ Environment.NewLine);
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
                         // 2996 seen a race condition around this, row not in place, so protect
@@ -406,7 +391,7 @@ namespace EDDiscovery.UserControls
 
         private bool Query(string msg)
         {
-            return MessageBoxTheme.Show(FindForm(), msg, "Trilateration Panel".T(EDTx.UserControlTrilateration_TP), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes;
+            return MessageBoxTheme.Show(FindForm(), msg, "Trilateration Panel".Tx(), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes;
         }
 
         private void toolStripButtonSubmitDistances_Click(object sender, EventArgs e)
@@ -417,11 +402,11 @@ namespace EDDiscovery.UserControls
 
                 if (he != null && !he.System.Name.Equals(targetsystem.Name, StringComparison.OrdinalIgnoreCase))
                 {
-                    string question1 = string.Format("You are about to submit distances from {0}.\r\nThe most recent known location in your history is {1}.\r\nSubmit distances without changing 'From' system?".T(EDTx.UserControlTrilateration_CHK), targetsystem.Name , he.System.Name);
+                    string question1 = string.Format("You are about to submit distances from {0}.\r\nThe most recent known location in your history is {1}.\r\nSubmit distances without changing 'From' system?".Tx(), targetsystem.Name , he.System.Name);
 
                     if (!Query(question1))
                     {
-                        string question2 = string.Format("Update 'From' system to current position ({0}) and submit entered distances?".T(EDTx.UserControlTrilateration_UPD), he.System.Name);
+                        string question2 = string.Format("Update 'From' system to current position ({0}) and submit entered distances?".Tx(), he.System.Name);
                         if (Query(question2))
                         {
                             targetsystem = he.System;
@@ -431,7 +416,7 @@ namespace EDDiscovery.UserControls
                             return;
                     }
                 }
-                LogText("Submitting system to EDSM, please wait...".T(EDTx.UserControlTrilateration_Sub) + Environment.NewLine);
+                LogText("Submitting system to EDSM, please wait...".Tx()+ Environment.NewLine);
                 FreezeTrilaterationUI();
 
                 EDSMSubmissionThread = new Thread(SubmitToEDSM) { Name = "EDSM Submission" };
@@ -540,7 +525,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    LogText(String.Format("{0} is pushed from EDSM and cannot be removed".T(EDTx.UserControlTrilateration_NOTREM), sysName) + Environment.NewLine);
+                    LogText(String.Format("{0} is pushed from EDSM and cannot be removed".Tx(), sysName) + Environment.NewLine);
                 }
             }
         }
@@ -559,7 +544,7 @@ namespace EDDiscovery.UserControls
                 string sysName = cellVal.ToString();
                 EDSMClass edsm = new EDSMClass();
                 if (!edsm.ShowSystemInEDSM(sysName))
-                    LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlTrilateration_NoEDSM) + Environment.NewLine);
+                    LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable".Tx()+ Environment.NewLine);
             }
             this.Cursor = Cursors.Default;
         }
@@ -575,7 +560,7 @@ namespace EDDiscovery.UserControls
             string sysName = selectedRows.First<DataGridViewRow>().Cells[1].Value.ToString();
             EDSMClass edsm = new EDSMClass();
             if (!edsm.ShowSystemInEDSM(sysName))
-                LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlTrilateration_NoEDSM) + Environment.NewLine);
+                LogTextHighlight("System could not be found - has not been synched or EDSM is unavailable".Tx()+ Environment.NewLine);
 
             this.Cursor = Cursors.Default;
         }
@@ -693,7 +678,7 @@ namespace EDDiscovery.UserControls
                 {
                     this.BeginInvoke(new MethodInvoker(() =>
                     {
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please enter commander name before submitting the system!".T(EDTx.UserControlTrilateration_Cmdr));
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Please enter commander name before submitting the system!".Tx());
                         UnfreezeTrilaterationUI();
                     }));
                     return;
@@ -756,17 +741,17 @@ namespace EDDiscovery.UserControls
 
                     if (respOk && trilatOk)
                     {
-                        LogTextSuccess("EDSM submission succeeded, trilateration successful.".T(EDTx.UserControlTrilateration_Horray) + Environment.NewLine);
+                        LogTextSuccess("EDSM submission succeeded, trilateration successful.".Tx()+ Environment.NewLine);
                         DiscoveryForm.RefreshHistoryAsync();
                         checkForUnknownSystemsNowKnown();
                     }
                     else if (respOk)
                     {
-                        LogTextHighlight("EDSM submission succeeded, but trilateration failed. Try adding more distances.".T(EDTx.UserControlTrilateration_Failed) + Environment.NewLine);
+                        LogTextHighlight("EDSM submission succeeded, but trilateration failed. Try adding more distances.".Tx()+ Environment.NewLine);
                     }
                     else
                     {
-                        LogTextHighlight("EDSM submission failed.".T(EDTx.UserControlTrilateration_Dead) + Environment.NewLine);
+                        LogTextHighlight("EDSM submission failed.".Tx()+ Environment.NewLine);
                     }
                 });
             }
@@ -878,7 +863,7 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    LogTextHighlight("Only systems with coordinates or already known to EDSM can be added".T(EDTx.UserControlTrilateration_Co) + Environment.NewLine);
+                    LogTextHighlight("Only systems with coordinates or already known to EDSM can be added".Tx()+ Environment.NewLine);
                 }
             }
             return system;
@@ -902,7 +887,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                dataGridViewDistances[3, cell.RowIndex].Value = "Position unknown".T(EDTx.UserControlTrilateration_PU);
+                dataGridViewDistances[3, cell.RowIndex].Value = "Position unknown".Tx();
                 dataGridViewDistances[3, cell.RowIndex].Style.ForeColor = ExtendedControls.Theme.Current.UnknownSystemColor;
             }
         }
@@ -971,7 +956,7 @@ namespace EDDiscovery.UserControls
                 var splitName = system.Name.Split(' ');
                 if (splitName.Length < 3)
                 {
-                    BeginInvoke(new MethodInvoker(() => LogTextHighlight("Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems.".T(EDTx.UserControlTrilateration_NotProcGen) + Environment.NewLine))); 
+                    BeginInvoke(new MethodInvoker(() => LogTextHighlight("Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems.".Tx()+ Environment.NewLine))); 
                     sector = new List<string>();
                     return;
                 }
@@ -981,12 +966,12 @@ namespace EDDiscovery.UserControls
 
                 if (!sector.Any())
                 {
-                    BeginInvoke(new MethodInvoker(() => LogText("No systems with unknown coordinates were found for the current sector.".T(EDTx.UserControlTrilateration_NoSector) + Environment.NewLine)));
+                    BeginInvoke(new MethodInvoker(() => LogText("No systems with unknown coordinates were found for the current sector.".Tx()+ Environment.NewLine)));
                     return;
                 }
 
                 BeginInvoke(new MethodInvoker(() => 
-                    LogText(string.Format("{0} systems with unknown coordinates found in {1} sector.".T(EDTx.UserControlTrilateration_SectorCount) + Environment.NewLine, sector.Count(), sectorName))));
+                    LogText(string.Format("{0} systems with unknown coordinates found in {1} sector.".Tx()+ Environment.NewLine, sector.Count(), sectorName))));
 
                 foreach (string systemName in sector)
                 {
@@ -1053,7 +1038,7 @@ namespace EDDiscovery.UserControls
                     {
                         systemCell.Tag = newSystem;
                         dataGridViewDistances[3, i].Style.ForeColor = ExtendedControls.Theme.Current.KnownSystemColor;
-                        dataGridViewDistances[3, i].Value = "Position found".T(EDTx.UserControlTrilateration_PF);
+                        dataGridViewDistances[3, i].Value = "Position found".Tx();
                     }
                 }
             }

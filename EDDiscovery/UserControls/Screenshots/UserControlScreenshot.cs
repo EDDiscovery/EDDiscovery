@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2022 EDDiscovery development team
+ * Copyright 2016 - 2022 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -16,7 +16,6 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
-using ExtendedControls;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -49,7 +48,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.ScreenShotCaptured += Discoveryform_ScreenShotCaptured;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
-            autotext = "Travel History Entry".T(EDTx.UserControlModules_TravelHistoryEntry);
+            autotext = "Travel History Entry".Tx();
 
             string[] dbsaved = GetSetting(dbImages, "").Split('\u2188');
             foreach (var s in dbsaved)

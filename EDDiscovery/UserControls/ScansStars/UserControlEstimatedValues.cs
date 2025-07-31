@@ -37,6 +37,8 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             labelControlText.Text = "";     // clear label control text, only used by SetControlText if no other place is available
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -44,12 +46,6 @@ namespace EDDiscovery.UserControls
             DBBaseName = "EstimatedValue";
 
             DiscoveryForm.OnNewEntry += NewEntry;
-
-            var enumlist = new Enum[] { EDTx.UserControlEstimatedValues_BodyName, EDTx.UserControlEstimatedValues_BodyType, EDTx.UserControlEstimatedValues_EDSM, EDTx.UserControlEstimatedValues_Mapped, EDTx.UserControlEstimatedValues_WasMapped, EDTx.UserControlEstimatedValues_WasDiscovered, EDTx.UserControlEstimatedValues_EstBase, EDTx.UserControlEstimatedValues_MappedValue, EDTx.UserControlEstimatedValues_FirstMappedEff, EDTx.UserControlEstimatedValues_FirstDiscMapped, EDTx.UserControlEstimatedValues_EstValue };
-            var enumlisttt = new Enum[] { EDTx.UserControlEstimatedValues_checkBoxShowZeros_ToolTip, EDTx.UserControlEstimatedValues_extCheckBoxShowImpossible_ToolTip };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             extPanelRollUp.SetToolTip(toolTip);
 
@@ -127,7 +123,7 @@ namespace EDDiscovery.UserControls
 
             if (last_he == null)
             {
-                SetControlText("No Scan".T(EDTx.NoScan));
+                SetControlText("No Scan".Tx());
                 return;
             }
 
@@ -186,11 +182,11 @@ namespace EDDiscovery.UserControls
                 dataGridViewEstimatedValues.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
                 dataGridViewEstimatedValues.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
-                SetControlText(string.Format("Estimated Scan Values for {0}".T(EDTx.UserControlEstimatedValues_SV) + ": " + totalvalue.ToString("N0") + " cr" + " | You scanned {1} of {2} bodies in this system.".T(EDTx.UserControlEstimatedValues_SBTB), last_sn.System.Name, last_sn.StarPlanetsWithData(false).ToString(), last_sn.FSSTotalBodies?.ToString() ?? "?"));
+                SetControlText(string.Format("Estimated Scan Values for {0}".Tx()+ ": " + totalvalue.ToString("N0") + " cr" + " | You scanned {1} of {2} bodies in this system.".Tx(), last_sn.System.Name, last_sn.StarPlanetsWithData(false).ToString(), last_sn.FSSTotalBodies?.ToString() ?? "?"));
             }
             else
             {
-                SetControlText("No Scan".T(EDTx.NoScan));
+                SetControlText("No Scan".Tx());
             }
         }
 

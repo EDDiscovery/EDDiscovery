@@ -46,11 +46,14 @@ namespace EDDiscovery.UserControls
         public UserControlOrganics()
         {
             InitializeComponent();
-            DBBaseName = "Organics";
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
         {
+            DBBaseName = "Organics";
+
             PopulateCtrlList();
 
             dataGridView.MakeDoubleBuffered();
@@ -64,17 +67,6 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
-
-            var enumlist = new Enum[] {EDTx.UserControlOrganics_ColDate, EDTx.UserControlOrganics_ColStarSystem, EDTx.UserControlOrganics_ColBodyName, EDTx.UserControlOrganics_ColBodyType,
-            EDTx.UserControlOrganics_ColGenus, EDTx.UserControlOrganics_ColSpecies, EDTx.UserControlOrganics_ColVariant, EDTx.UserControlOrganics_ColLastScanType,
-            EDTx.UserControlOrganics_ColValue, EDTx.UserControlOrganics_labelTime, EDTx.UserControlOrganics_labelStart, EDTx.UserControlOrganics_labelEnd};
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-
-            var enumlisttt = new Enum[] { EDTx.UserControlOrganics_extCheckBoxShowIncomplete_ToolTip, EDTx.UserControlOrganics_extButtonShowControl_ToolTip,
-                                        EDTx.UserControlOrganics_extButtonFont_ToolTip, EDTx.UserControlOrganics_extCheckBoxWordWrap_ToolTip ,
-                                        EDTx.UserControlOrganics_comboBoxTime_ToolTip,
-                                        EDTx.UserControlOrganics_extButtonAlignment_ToolTip};
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
             rollUpPanelTop.SetToolTip(toolTip);
 
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
@@ -224,10 +216,10 @@ namespace EDDiscovery.UserControls
                     var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                     var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
 
-                    string l = string.Format("At {0}".T(EDTx.UserControlOrganics_at), node.BodyDesignator);
+                    string l = string.Format("At {0}".Tx(), node.BodyDesignator);
                     if (node.ScanData != null)
                     {
-                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}".T(EDTx.UserControlOrganics_sysinfo), node.ScanData.PlanetTypeText, node.ScanData.RadiusText,
+                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}".Tx(), node.ScanData.PlanetTypeText, node.ScanData.RadiusText,
                                                 (Math.Round(node.ScanData.nSurfaceGravityG.Value, 2, MidpointRounding.AwayFromZero).ToString() ?? "?") + " g", node.ScanData.AtmosphereTranslated, node.CountBioSignals.ToString(), ((node.Genuses != null && node.CountBioSignals > 0) ? ": " + String.Join(", ", node.Genuses?.Select(x => x.Genus_Localised).ToArray()) : ""));
                     }
 
@@ -383,7 +375,7 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
 
             // not yet until more than one displayfilter.UC.AddAllNone();
-            displayfilter.UC.Add(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
+            displayfilter.UC.Add(CtrlList.autohide.ToString(), "Auto Hide".Tx());
 
             CommonCtrl(displayfilter, extButtonShowControl);
         }
@@ -396,9 +388,9 @@ namespace EDDiscovery.UserControls
             string ct = CtrlList.aligncenter.ToString();
             string rt = CtrlList.alignright.ToString();
 
-            displayfilter.UC.Add(lt, "Alignment Left".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_leftToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignLeft, exclusivetags: ct + ";" + rt, disableuncheck: true);
-            displayfilter.UC.Add(ct, "Alignment Center".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_centerToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignCentre, exclusivetags: lt + ";" + rt, disableuncheck: true);
-            displayfilter.UC.Add(rt, "Alignment Right".TxID(EDTx.UserControlSurveyor_textAlignToolStripMenuItem_rightToolStripMenuItem), global::EDDiscovery.Icons.Controls.AlignRight, exclusivetags: lt + ";" + ct, disableuncheck: true);
+            displayfilter.UC.Add(lt, "Alignment Left".Tx(), global::EDDiscovery.Icons.Controls.AlignLeft, exclusivetags: ct + ";" + rt, disableuncheck: true);
+            displayfilter.UC.Add(ct, "Alignment Center".Tx(), global::EDDiscovery.Icons.Controls.AlignCentre, exclusivetags: lt + ";" + rt, disableuncheck: true);
+            displayfilter.UC.Add(rt, "Alignment Right".Tx(), global::EDDiscovery.Icons.Controls.AlignRight, exclusivetags: lt + ";" + ct, disableuncheck: true);
             displayfilter.CloseOnChange = true;
             CommonCtrl(displayfilter, extButtonAlignment);
         }

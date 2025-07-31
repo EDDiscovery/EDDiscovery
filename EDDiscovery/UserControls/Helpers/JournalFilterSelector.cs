@@ -36,45 +36,45 @@ namespace EDDiscovery.UserControls
 
         public void AddJournalExtraOptions()
         {
-            UC.AddGroupItem("ApproachBody;Docked;FSDJump;CarrierJump;Location;Undocked;NavRoute", "Travel".T(EDTx.FilterSelector_Travel), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
+            UC.AddGroupItem("ApproachBody;Docked;FSDJump;CarrierJump;Location;Undocked;NavRoute", "Travel".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
 
-            UC.AddGroupItem("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan;SAASignalsFound;FSSBodySignals", "Scan".T(EDTx.FilterSelector_Scan), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan]);
+            UC.AddGroupItem("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan;SAASignalsFound;FSSBodySignals", "Scan".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan]);
 
             var mile = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMissions" });
             string miltype = string.Join(";", mile.Select(x => x.Item1)) + ";";
-            UC.AddGroupItem(miltype, "Missions".T(EDTx.FilterSelector_Missions), JournalEntry.JournalTypeIcons[JournalTypeEnum.Missions]);
+            UC.AddGroupItem(miltype, "Missions".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Missions]);
 
             var mle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMaterials" });
             mle.Add(EliteDangerousCore.JournalEntry.GetNameImageOfEvent(JournalTypeEnum.MaterialDiscovered));
             string mattype = string.Join(";", mle.Select(x => x.Item1)) + ";";
-            UC.AddGroupItem(mattype, "Materials".T(EDTx.FilterSelector_Materials), JournalEntry.JournalTypeIcons[JournalTypeEnum.Materials]);
+            UC.AddGroupItem(mattype, "Materials".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Materials]);
 
             var cle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateCommodities" });
             string comtype = string.Join(";", cle.Select(x => x.Item1)) + ";";
-            UC.AddGroupItem(comtype, "Commodities".T(EDTx.FilterSelector_Commodities), JournalEntry.JournalTypeIcons[JournalTypeEnum.Market]);
+            UC.AddGroupItem(comtype, "Commodities".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Market]);
 
             var mrle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateMicroResource" });
             string mrtype = string.Join(";", mrle.Select(x => x.Item1)) + ";";
-            UC.AddGroupItem(mrtype, "Micro Resources".T(EDTx.FilterSelector_MicroResources), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuyMicroResources]);
+            UC.AddGroupItem(mrtype, "Micro Resources".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuyMicroResources]);
 
             var lle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger", "LedgerNC" });
             string legtype = string.Join(";", lle.Select(x => x.Item1)) + ";";
-            UC.AddGroupItem(legtype, "Ledger".T(EDTx.FilterSelector_Ledger), BaseUtils.Icons.IconSet.GetIcon("Controls.Ledger"));
+            UC.AddGroupItem(legtype, "Ledger".Tx(), BaseUtils.Icons.IconSet.GetIcon("Controls.Ledger"));
 
             var sle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "ShipInformation" });
             string shiptype = string.Join(";", sle.Select(x => x.Item1)) + ";";
-            UC.AddGroupItem(shiptype, "Ship".T(EDTx.FilterSelector_Ship), JournalEntry.JournalTypeIcons[JournalTypeEnum.Shipyard]);
+            UC.AddGroupItem(shiptype, "Ship".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Shipyard]);
 
             var suitle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "SuitInformation", "LoadoutInformation", "WeaponInformation" });
             string suittype = string.Join(";", suitle.Select(x => x.Item1)) + ";";
-            UC.AddGroupItem(suittype, "Suits".T(EDTx.FilterSelector_Suits), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuySuit]);
+            UC.AddGroupItem(suittype, "Suits".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.BuySuit]);
 
             var carriere = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "UpdateCarrierStats" });
             string carriertype = string.Join(";", carriere.Select(x => x.Item1)) + ";";
 
-            UC.AddGroupItem(carriertype, "Carrier".T(EDTx.FilterSelector_Carrier), JournalEntry.JournalTypeIcons[JournalTypeEnum.CarrierStats]);
+            UC.AddGroupItem(carriertype, "Carrier".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.CarrierStats]);
 
-            UC.AddGroupItem("MiningRefined;AsteroidCracked;ProspectedAsteroid;LaunchDrone","Mining".T(EDTx.FilterSelector_Mining), JournalEntry.JournalTypeIcons[JournalTypeEnum.MiningRefined]);
+            UC.AddGroupItem("MiningRefined;AsteroidCracked;ProspectedAsteroid;LaunchDrone","Mining".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.MiningRefined]);
         }
 
 
@@ -84,9 +84,12 @@ namespace EDDiscovery.UserControls
 
             UC.Add(items);
 
-            var list = JournalEntry.GetEnumOfEvents(new string[] { "FilterItems" });
+            // get any events which define FilterItems as additional filters
+
+            var list = JournalEntry.GetEnumOfEvents(new string[] { "FilterItems" });        // return list of these
             foreach( var e in list)
             {
+                // get FilterItems method handle and invoke, and then add to list
                 Type t = JournalEntry.TypeOfJournalEntry(e);
                 MethodInfo info = t.GetMethod("FilterItems", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
                 List<Tuple<string, string, Image>> retlist = info.Invoke(null, new object[] { }) as List<Tuple<string, string, Image>>;
@@ -102,7 +105,7 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine($"Group setting {GetUserGroupDefinition(1)}");
 
-            UC.AddButton("creategroup", "Create new group".TxID(EDTx.FilterSelector_NewGroup), global::EDDiscovery.Icons.Controls.AddJournals, attop:true);
+            UC.AddButton("creategroup", "Create new group".Tx(), global::EDDiscovery.Icons.Controls.AddJournals, attop:true);
 
             UC.ButtonPressed += (index,stag, text, usertag, e) => 
             {
@@ -112,7 +115,7 @@ namespace EDDiscovery.UserControls
                     {
                         Hide();
 
-                        if (ExtendedControls.MessageBoxTheme.Show($"Confirm removal of".TxID(EDTx.FilterSelector_Confirmremoval) + " " + text, "Warning".TxID(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                        if (ExtendedControls.MessageBoxTheme.Show($"Confirm removal of".Tx()+ " " + text, "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                         {
                             UC.Remove(index);
                             ForceRedrawOnNextShow();
@@ -125,7 +128,7 @@ namespace EDDiscovery.UserControls
                     {
                         Hide();
 
-                        string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(null, "", "", "Enter name of new group".TxID(EDTx.FilterSelector_Newgroupname), Properties.Resources.edlogo_3mo_icon, requireinput:true);
+                        string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(null, "", "", "Enter name of new group".Tx(), Properties.Resources.edlogo_3mo_icon, requireinput:true);
                         if (promptValue != null)
                         {
                             string cursettings = GetChecked();

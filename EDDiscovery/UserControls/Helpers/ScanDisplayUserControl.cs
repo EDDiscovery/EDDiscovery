@@ -135,7 +135,7 @@ namespace EDDiscovery.UserControls
                                         new Point(5, 30), new Size(width - 5 - 20, 24), null)
             { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 1000000000 });
 
-            cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".T(EDTx.OK),
+            cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("OK", typeof(ExtendedControls.ExtButton), "OK".Tx(),
                         new Point(width - 20 - 80, height - 40), new Size(80, 24), ""));
 
             cf.Trigger += (dialogname, controlname, tag) =>
@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            if (cf.ShowDialogCentred(form, form.Icon, "Set Valuable Minimum".T(EDTx.UserControlScan_VLMT)) == DialogResult.OK)
+            if (cf.ShowDialogCentred(form, form.Icon, "Set Valuable Minimum".Tx()) == DialogResult.OK)
             {
                 return cf.GetInt("UC").Value;
             }

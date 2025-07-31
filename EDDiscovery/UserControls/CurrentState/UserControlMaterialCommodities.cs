@@ -57,6 +57,11 @@ namespace EDDiscovery.UserControls
         public UserControlMaterialCommodities()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this,3);
+            colMType.HeaderText = "Type".Tx();     // we exclude MatView, as its mostly non translated things, and just fix type
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStripSL);
         }
 
 
@@ -71,40 +76,6 @@ namespace EDDiscovery.UserControls
             extCheckBoxWordWrap.Checked = GetSetting(dbWrapText, false);
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
-
-            // translations
-
-            var enumlist = new Enum[] { EDTx.UserControlMaterialCommodities_ColName, EDTx.UserControlMaterialCommodities_ColShortName, EDTx.UserControlMaterialCommodities_ColCategory,
-                                        EDTx.UserControlMaterialCommodities_ColType, EDTx.UserControlMaterialCommodities_ColNumber,EDTx.UserControlMaterialCommodities_ColBackPack,
-                                        EDTx.UserControlMaterialCommodities_ColPrice,
-                                        EDTx.UserControlMaterialCommodities_ColRecipes,
-                                        EDTx.UserControlMaterialCommodities_ColWanted, EDTx.UserControlMaterialCommodities_ColNeed,
-                                        };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { dataGridViewMatView }, new string[] { "UserControlMaterialCommodities" });
-            colMType.HeaderText = "Type".TxID(EDTx.UserControlMaterialCommodities_ColType);     // we exclude MatView, as its mostly non translated things, and just fix type
-
-            var enumlisttt = new Enum[] { EDTx.UserControlMaterialCommodities_buttonFilter_ToolTip, EDTx.UserControlMaterialCommodities_textBoxItems1_ToolTip,
-                                        EDTx.UserControlMaterialCommodities_textBoxItems2_ToolTip,
-                                        EDTx.UserControlMaterialCommodities_buttonClear_ToolTip,
-                                        EDTx.UserControlMaterialCommodities_checkBoxShowZeros_ToolTip,
-                                        EDTx.UserControlMaterialCommodities_extCheckBoxWordWrap_ToolTip,
-                                        EDTx.UserControlMaterialCommodities_extButtonFont_ToolTip,
-                                        EDTx.UserControlMaterialCommodities_buttonExtImport_ToolTip,
-                                        EDTx.UserControlMaterialCommodities_extCheckBoxMaterialView_ToolTip,
-                                        };
-
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, new string[] { "UserControlMaterialCommodities" });
-
-            var enumlistcms = new Enum[] {EDTx.UserControlMaterialCommodities_openRecipeInWindowToolStripMenuItem,
-                                        EDTx.UserControlMaterialCommodities_displayItemInShoppingListToolStripMenuItem,
-                                        EDTx.UserControlMaterialCommodities_clearAllDisplayItemsInShoppingListToolStripMenuItem,
-                                        EDTx.UserControlMaterialCommodities_displayAllInShoppingListToolStripMenuItem};
-
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, new string[] { "UserControlMaterialCommodities" });
-
-            var enumlistcmsSL = new Enum[] { EDTx.UserControlMaterialCommodities_toolStripMenuItemSLClearAll };
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripSL, enumlistcmsSL, new string[] { "UserControlMaterialCommodities" });
 
             // now configure grid, filter selector
 
@@ -128,9 +99,9 @@ namespace EDDiscovery.UserControls
 
             if (showall)
             {
-                cfs.UC.AddGroupItem(String.Join(";", matitems.Select(x => x.FDName)) + ";", "All Materials".T(EDTx.UserControlMaterialCommodities_AllMats));
-                cfs.UC.AddGroupItem(String.Join(";", comitems.Select(x => x.FDName)) + ";", "All Commodities".T(EDTx.UserControlMaterialCommodities_AllCommods));
-                cfs.UC.AddGroupItem(String.Join(";", mritems.Select(x => x.FDName)) + ";", "All Microresources".T(EDTx.UserControlMaterialCommodities_AllMicroresources));
+                cfs.UC.AddGroupItem(String.Join(";", matitems.Select(x => x.FDName)) + ";", "All Materials".Tx());
+                cfs.UC.AddGroupItem(String.Join(";", comitems.Select(x => x.FDName)) + ";", "All Commodities".Tx());
+                cfs.UC.AddGroupItem(String.Join(";", mritems.Select(x => x.FDName)) + ";", "All Microresources".Tx());
             }
 
             if (PanelMode == PanelType.Materials || showall)        // add materials
@@ -147,7 +118,7 @@ namespace EDDiscovery.UserControls
             if (PanelMode == PanelType.Commodities || showall)      // add commodities
             {
                 MaterialCommodityMicroResourceType[] rare = comitems.Where(x => x.IsRareCommodity).ToArray();
-                cfs.UC.AddGroupItem(String.Join(";", rare.Select(x => x.FDName).ToArray()) + ";", "Rare".T(EDTx.UserControlMaterialCommodities_Rare) + compostfix);
+                cfs.UC.AddGroupItem(String.Join(";", rare.Select(x => x.FDName).ToArray()) + ";", "Rare".Tx()+ compostfix);
 
                 AddtoCFS(comitems, comtypes, false, true);
             }
@@ -177,10 +148,10 @@ namespace EDDiscovery.UserControls
             {
                 dataGridViewMC.Columns.Remove(ColBackPack);         // do not use back pack
 
-                ColPrice.HeaderText = "Progress".T(EDTx.UserControlMaterialCommodities_Progress);     // price becomes progress bar
+                ColPrice.HeaderText = "Progress".Tx();     // price becomes progress bar
 
-                labelItems1.Text = "Data".T(EDTx.UserControlMaterialCommodities_Data);
-                labelItems2.Text = "Mats".T(EDTx.UserControlMaterialCommodities_Mats);
+                labelItems1.Text = "Data".Tx();
+                labelItems2.Text = "Mats".Tx();
 
                 extCheckBoxMaterialView.Checked = GetSetting(dbMaterialView, true);     // materials alt view selector
                 SetMatView();
@@ -191,7 +162,7 @@ namespace EDDiscovery.UserControls
                 // commodities, MRs, All
 
                 // label1 bbecome Total and label2 not used
-                labelItems1.Text = "Total".T(EDTx.UserControlMaterialCommodities_Total);
+                labelItems1.Text = "Total".Tx();
                 textBoxItems2.Visible = labelItems2.Visible = false;
 
                 extCheckBoxMaterialView.Visible = false;    // only for materials
@@ -209,7 +180,7 @@ namespace EDDiscovery.UserControls
                 {
                     dataGridViewMC.Columns.Remove(ColType);     // no type column 
                     dataGridViewMC.Columns.Remove(ColPrice);     // no type column 
-                    ColNumber.HeaderText = "Ship Locker".T(EDTx.UserControlMaterialCommodities_ShipLocker);     // number becomes ship locker
+                    ColNumber.HeaderText = "Ship Locker".Tx();     // number becomes ship locker
                 }
             }
 
@@ -284,7 +255,7 @@ namespace EDDiscovery.UserControls
                 MakeVisible();
 
                 var cmd = ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Materials list pushed from panel, set or add to this, or ignore?", "Materials list",
-                                                    new string[] { "Cancel".T(EDTx.MessageBoxTheme_Cancel), "Add".T(EDTx.MessageBoxTheme_Add), "Set".T(EDTx.MessageBoxTheme_Set) });
+                                                    new string[] { "Cancel".Tx(), "Add".Tx(), "Set".Tx()});
                 if (cmd != DialogResult.Ignore)
                 {
                     bool add = cmd == DialogResult.Retry;   // Retry is second button, add

@@ -51,6 +51,8 @@ namespace EDDiscovery.UserControls
         public UserControlCompass()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -75,13 +77,6 @@ namespace EDDiscovery.UserControls
             comboBoxBookmarks.Text = "";
 
             buttonNewBookmark.Enabled = false;
-
-            var enumlist = new Enum[] { EDTx.UserControlCompass_labelTargetLat };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            var enumlisttt = new Enum[] {EDTx.UserControlCompass_numberBoxTargetLatitude_ToolTip, EDTx.UserControlCompass_numberBoxTargetLongitude_ToolTip,
-                                        EDTx.UserControlCompass_comboBoxBookmarks_ToolTip, EDTx.UserControlCompass_extButtonBlank_ToolTip, EDTx.UserControlCompass_buttonNewBookmark_ToolTip,
-                                        EDTx.UserControlCompass_extButtonShowControl_ToolTip, EDTx.UserControlCompass_extButtonFont_ToolTip};
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             PopulateCtrlList();
 
@@ -582,13 +577,13 @@ namespace EDDiscovery.UserControls
         {
             ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
             displayfilter.UC.AddAllNone();
-            displayfilter.UC.Add(CtrlList.autohide.ToString(), "Auto Hide".TxID(EDTx.UserControlSurveyor_autoHideToolStripMenuItem));
-            displayfilter.UC.Add(CtrlList.hidewithnolatlong.ToString(), "Hide when Elite has no Lat/Long".TxID(EDTx.UserControlCompass_hidewhennolatlong)); 
-            displayfilter.UC.Add(CtrlList.hidewithnotarget.ToString(), "Hide when no Lat/Long target is set".TxID(EDTx.UserControlCompass_hidewhennotarget)); 
-            displayfilter.UC.Add(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".TxID(EDTx.UserControlCompass_hidewhenonfoot)); 
-            displayfilter.UC.Add(CtrlList.hidewheninSRV.ToString(), "Hide when in SRV".TxID(EDTx.UserControlCompass_hidewheninSRV)); 
-            displayfilter.UC.Add(CtrlList.hidewheninship.ToString(), "Hide when in ship".TxID(EDTx.UserControlCompass_hidewheninship));
-            displayfilter.UC.Add(CtrlList.clearlatlong.ToString(), "Clear target when leaving a body".TxID(EDTx.UserControlCompass_cleartargetonleavingbody)); 
+            displayfilter.UC.Add(CtrlList.autohide.ToString(), "Auto Hide".Tx());
+            displayfilter.UC.Add(CtrlList.hidewithnolatlong.ToString(), "Hide when Elite has no Lat/Long".Tx()); 
+            displayfilter.UC.Add(CtrlList.hidewithnotarget.ToString(), "Hide when no Lat/Long target is set".Tx()); 
+            displayfilter.UC.Add(CtrlList.hidewhenonfoot.ToString(), "Hide when on foot".Tx()); 
+            displayfilter.UC.Add(CtrlList.hidewheninSRV.ToString(), "Hide when in SRV".Tx()); 
+            displayfilter.UC.Add(CtrlList.hidewheninship.ToString(), "Hide when in ship".Tx());
+            displayfilter.UC.Add(CtrlList.clearlatlong.ToString(), "Clear target when leaving a body".Tx()); 
             CommonCtrl(displayfilter, extButtonShowControl);
         }
 

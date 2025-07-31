@@ -55,6 +55,7 @@ namespace EDDiscovery.UserControls
         public UserControlMissionOverlay()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
         }
 
         public override void Init()
@@ -85,9 +86,6 @@ namespace EDDiscovery.UserControls
             missionDescriptionToolStripMenuItem.Click += new System.EventHandler(this.Selection_Click);
             rewardToolStripMenuItem.Click += new System.EventHandler(this.Selection_Click);
 
-            var enumlistcms = new Enum[] { EDTx.UserControlMissionOverlay_missionNameToolStripMenuItem, EDTx.UserControlMissionOverlay_missionDescriptionToolStripMenuItem, EDTx.UserControlMissionOverlay_startDateToolStripMenuItem, EDTx.UserControlMissionOverlay_endDateToolStripMenuItem, EDTx.UserControlMissionOverlay_factionInformationToolStripMenuItem, EDTx.UserControlMissionOverlay_rewardToolStripMenuItem };
-
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
         }
 
         public override void LoadLayout()
@@ -170,7 +168,7 @@ namespace EDDiscovery.UserControls
                                         "< ", ms.Mission.KillCount?.ToString("N") ?? null,
                                         " ", ms.Mission.CommodityLocalised,
                                         "< ", ms.Mission.Count,
-                                        " Left ".T(EDTx.UserControlMissionOverlay_IL), ms.CargoDepot?.ItemsToGo
+                                        " Left ".Tx(), ms.CargoDepot?.ItemsToGo
                                         );
 
                     text = text.AppendPrePad(mainpart, ", ");

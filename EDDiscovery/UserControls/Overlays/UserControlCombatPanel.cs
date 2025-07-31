@@ -50,6 +50,8 @@ namespace EDDiscovery.UserControls
         public UserControlCombatPanel()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -99,14 +101,9 @@ namespace EDDiscovery.UserControls
 
             transparentfont = ExtendedControls.Theme.Current.GetFont;
 
-            var enumlist = new Enum[] { EDTx.UserControlCombatPanel_Time, EDTx.UserControlCombatPanel_Event, EDTx.UserControlCombatPanel_Description, EDTx.UserControlCombatPanel_Reward, EDTx.UserControlCombatPanel_labelCredits, EDTx.UserControlCombatPanel_labelTotalKills, EDTx.UserControlCombatPanel_labelFactionKills, EDTx.UserControlCombatPanel_labelBalance, EDTx.UserControlCombatPanel_labelDied, EDTx.UserControlCombatPanel_labelTotalCrimes, EDTx.UserControlCombatPanel_labelTarget, EDTx.UserControlCombatPanel_labelFaction, EDTx.UserControlCombatPanel_labelTotalReward, EDTx.UserControlCombatPanel_labelFactionReward, EDTx.UserControlCombatPanel_buttonExtEditCampaign, EDTx.UserControlCombatPanel_checkBoxCustomGridOn };
-            var enumlisttt = new Enum[] { EDTx.UserControlCombatPanel_labelCredits_ToolTip, EDTx.UserControlCombatPanel_labelTotalKills_ToolTip, EDTx.UserControlCombatPanel_labelFactionKills_ToolTip, EDTx.UserControlCombatPanel_labelBalance_ToolTip, EDTx.UserControlCombatPanel_labelTotalCrimes_ToolTip, EDTx.UserControlCombatPanel_labelFaction_ToolTip, EDTx.UserControlCombatPanel_labelTotalReward_ToolTip, EDTx.UserControlCombatPanel_labelFactionReward_ToolTip, EDTx.UserControlCombatPanel_comboBoxCustomCampaign_ToolTip, EDTx.UserControlCombatPanel_buttonExtEditCampaign_ToolTip, EDTx.UserControlCombatPanel_checkBoxCustomGridOn_ToolTip };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             labelTarget.Size = new Size(1280, 24);
-            labelTarget.Text = "No Target".T(EDTx.UserControlCombatPanel_NT);
+            labelTarget.Text = "No Target".Tx();
         }
 
         public override void LoadLayout()
@@ -424,16 +421,16 @@ namespace EDDiscovery.UserControls
         void SetLabels()
         {
             bool faction = currentcombatfilter != null ? currentcombatfilter.TargetFaction.Length > 0 : false;
-            labelTotalKills.Text = (npc_total_kills>0 || pvp_kills>0) ? ("Kills".T(EDTx.UserControlCombatPanel_Kills) + ": " + npc_total_kills.ToString() + "/" + pvp_kills.ToString()) : "";
-            labelFactionKills.Text = faction ? ("Faction".T(EDTx.UserControlCombatPanel_Faction) + ": " + npc_faction_kills.ToString()) : "";
+            labelTotalKills.Text = (npc_total_kills>0 || pvp_kills>0) ? ("Kills".Tx()+ ": " + npc_total_kills.ToString() + "/" + pvp_kills.ToString()) : "";
+            labelFactionKills.Text = faction ? ("Faction".Tx()+ ": " + npc_faction_kills.ToString()) : "";
             labelFaction.Text = faction ? (currentcombatfilter.TargetFaction) : "";
-            labelTotalCrimes.Text = (total_crimes>0) ? ("Crimes".T(EDTx.UserControlCombatPanel_Crimes) + ": " + total_crimes.ToString()) : "";
+            labelTotalCrimes.Text = (total_crimes>0) ? ("Crimes".Tx()+ ": " + total_crimes.ToString()) : "";
 
             labelCredits.Text = (DiscoveryForm.History.GetLast != null) ? (DiscoveryForm.History.GetLast.Credits.ToString("N0") + "cr") : "";
-            labelBalance.Text = (balance != 0 ) ? ("Bal".T(EDTx.UserControlCombatPanel_Bal) + ": " + balance.ToString("N0") + "cr") : "";
+            labelBalance.Text = (balance != 0 ) ? ("Bal".Tx()+ ": " + balance.ToString("N0") + "cr") : "";
             labelFactionReward.Text = (faction && faction_reward != balance) ? ("+" + faction_reward.ToString("N0") + "cr") : "";
             labelTotalReward.Text = (total_reward != balance) ? ("+" + total_reward.ToString("N0") + "cr") : "";
-            labelDied.Text = (died != 0) ? ("Died".T(EDTx.UserControlCombatPanel_labelDied) + ": " + died.ToString()) : "";
+            labelDied.Text = (died != 0) ? ("Died".Tx()+ ": " + died.ToString()) : "";
         }
 
         static JournalTypeEnum[] targetofflist = new JournalTypeEnum[]            // ones to display without any extra detail
@@ -456,7 +453,7 @@ namespace EDDiscovery.UserControls
             }
             else if (Array.IndexOf(targetofflist, he.journalEntry.EventTypeID) >= 0)
             {
-                labelTarget.Text = "No Target".T(EDTx.UserControlCombatPanel_NT);
+                labelTarget.Text = "No Target".Tx();
             }
         }
 
@@ -468,12 +465,12 @@ namespace EDDiscovery.UserControls
         {
             displayedfilterentries = new List<CombatFilterEntry>();
 
-            displayedfilterentries.Add(new CombatFilterEntry("New Campaign".T(EDTx.UserControlCombatPanel_NewCampaign), CombatFilterEntry.EntryType.NewEntry));
-            displayedfilterentries.Add(new CombatFilterEntry("Since Last Dock".T(EDTx.UserControlCombatPanel_SinceLastDock), CombatFilterEntry.EntryType.Lastdock));
-            displayedfilterentries.Add(new CombatFilterEntry("Today".T(EDTx.Today), CombatFilterEntry.EntryType.Today));
-            displayedfilterentries.Add(new CombatFilterEntry("24h".T(EDTx.t24h), CombatFilterEntry.EntryType.Oneday));
-            displayedfilterentries.Add(new CombatFilterEntry("7 days".T(EDTx.t7days), CombatFilterEntry.EntryType.Sevendays));
-            displayedfilterentries.Add(new CombatFilterEntry("All".T(EDTx.All), CombatFilterEntry.EntryType.All));
+            displayedfilterentries.Add(new CombatFilterEntry("New Campaign".Tx(), CombatFilterEntry.EntryType.NewEntry));
+            displayedfilterentries.Add(new CombatFilterEntry("Since Last Dock".Tx(), CombatFilterEntry.EntryType.Lastdock));
+            displayedfilterentries.Add(new CombatFilterEntry("Today".Tx(), CombatFilterEntry.EntryType.Today));
+            displayedfilterentries.Add(new CombatFilterEntry("24h".Tx(), CombatFilterEntry.EntryType.Oneday));
+            displayedfilterentries.Add(new CombatFilterEntry("7 days".Tx(), CombatFilterEntry.EntryType.Sevendays));
+            displayedfilterentries.Add(new CombatFilterEntry("All".Tx(), CombatFilterEntry.EntryType.All));
 
             displayedfilterentries.AddRange(savedfilterentries);
 
@@ -586,23 +583,23 @@ namespace EDDiscovery.UserControls
 
             int width = 430;
 
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Name".T(EDTx.UserControlCombatPanel_Name) + ":", new Point(10, 40), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Name", typeof(ExtendedControls.ExtTextBox), entry.Name, new Point(100, 40), new Size(width - 100 - 20, 24), "Give name to campaign".T(EDTx.UserControlCombatPanel_C1)) { TextBoxClearOnFirstChar = newentry });
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Name".Tx()+ ":", new Point(10, 40), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Name", typeof(ExtendedControls.ExtTextBox), entry.Name, new Point(100, 40), new Size(width - 100 - 20, 24), "Give name to campaign".Tx()) { TextBoxClearOnFirstChar = newentry });
 
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Faction".T(EDTx.UserControlCombatPanel_Faction) + ":", new Point(10, 70), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Faction", typeof(ExtendedControls.ExtTextBox), entry.TargetFaction, new Point(100, 70), new Size(width - 100 - 20, 24), "Optional faction to target".T(EDTx.UserControlCombatPanel_C2)) );
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Faction".Tx()+ ":", new Point(10, 70), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Faction", typeof(ExtendedControls.ExtTextBox), entry.TargetFaction, new Point(100, 70), new Size(width - 100 - 20, 24), "Optional faction to target".Tx()) );
 
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Start".T(EDTx.UserControlCombatPanel_Start) + ":", new Point(10, 100), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("DTS", typeof(ExtendedControls.ExtDateTimePicker), starttime.ToStringZulu(), new Point(100, 100), new Size(width - 100 - 20, 24), "Select Start time".T(EDTx.UserControlCombatPanel_C3)) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Start".Tx()+ ":", new Point(10, 100), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("DTS", typeof(ExtendedControls.ExtDateTimePicker), starttime.ToStringZulu(), new Point(100, 100), new Size(width - 100 - 20, 24), "Select Start time".Tx()) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
 
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "End".T(EDTx.UserControlCombatPanel_End) + ":", new Point(10, 130), new Size(80, 24), ""));
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("DTE", typeof(ExtendedControls.ExtDateTimePicker), endtime.ToStringZulu(), new Point(100, 130), new Size(width - 100 - 20, 24), "Select Start time".T(EDTx.UserControlCombatPanel_C4)) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "End".Tx()+ ":", new Point(10, 130), new Size(80, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("DTE", typeof(ExtendedControls.ExtDateTimePicker), endtime.ToStringZulu(), new Point(100, 130), new Size(width - 100 - 20, 24), "Select Start time".Tx()) { CustomDateFormat = "yyyy-MM-dd HH:mm:ss" });
 
-            f.AddOK(new Point(width - 100, 180), "Press to Accept".T(EDTx.UserControlCombatPanel_C5));
-            f.AddCancel(new Point(width - 200, 180), "Press to Cancel".T(EDTx.UserControlCombatPanel_C6));
+            f.AddOK(new Point(width - 100, 180), "Press to Accept".Tx());
+            f.AddCancel(new Point(width - 200, 180), "Press to Cancel".Tx());
 
             if ( allowdel )
-                f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Delete", typeof(ExtendedControls.ExtButton), "Delete".T(EDTx.Delete), new Point(10, 180), new Size(80, 24), "Press to Delete".T(EDTx.UserControlCombatPanel_C7)));
+                f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Delete", typeof(ExtendedControls.ExtButton), "Delete".Tx(), new Point(10, 180), new Size(80, 24), "Press to Delete".Tx()));
 
             f.Trigger += (dialogname, controlname, tag) =>
             {
@@ -611,7 +608,7 @@ namespace EDDiscovery.UserControls
                     CombatFilterEntry fe = displayedfilterentries.Find(x => x.UniqueID.Equals(f.Get("Name")));
 
                     if (fe != null && fe != entry)
-                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Name of campaign already in use, cannot overwrite".T(EDTx.UserControlCombatPanel_NoOverwrite), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Name of campaign already in use, cannot overwrite".Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     else
                     {
                         f.ReturnResult(DialogResult.OK);
@@ -621,14 +618,14 @@ namespace EDDiscovery.UserControls
                 {
                     if (f.Get("Name").Equals(entry.Name))
                     {
-                        if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), string.Format("Confirm deletion of {0}".T(EDTx.UserControlCombatPanel_Condel), entry.Name), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK )
+                        if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), string.Format("Confirm deletion of {0}".Tx(), entry.Name), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK )
                         {
                             f.ReturnResult(DialogResult.Abort);
                         }
                     }
                     else
                     {
-                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Name changed - can't delete".T(EDTx.UserControlCombatPanel_NC), "Warning".T(EDTx.Warning), MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Name changed - can't delete".Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
                 else if ( controlname == "Cancel" || controlname == "Close" )
@@ -637,7 +634,7 @@ namespace EDDiscovery.UserControls
                 }
             };
 
-            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Campaign".T(EDTx.Campaign) , closeicon:true);
+            DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon,  "Campaign".Tx(), closeicon:true);
             if (res == DialogResult.OK)
             {
                 entry.Reset(f.Get("Name"), f.Get("Faction"),

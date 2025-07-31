@@ -28,16 +28,13 @@ namespace EDDiscovery.UserControls
         public UserControlSuitsWeapons()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStripSuits);
         }
 
         public override void Init()
         {
             DBBaseName = "SuitWeapons";
-
-            var enumlist = new Enum[] { EDTx.UserControlSuitsWeapons_CSTime, EDTx.UserControlSuitsWeapons_CSName, EDTx.UserControlSuitsWeapons_CSMods, EDTx.UserControlSuitsWeapons_CSPrice, EDTx.UserControlSuitsWeapons_CSLoadout, EDTx.UserControlSuitsWeapons_CSPrimary1, EDTx.UserControlSuitsWeapons_CSPrimary2, EDTx.UserControlSuitsWeapons_CSSecondary, EDTx.UserControlSuitsWeapons_CWTime, EDTx.UserControlSuitsWeapons_CWName, EDTx.UserControlSuitsWeapons_CWClass, EDTx.UserControlSuitsWeapons_CWMods, EDTx.UserControlSuitsWeapons_CWPrice, EDTx.UserControlSuitsWeapons_CWPrimary, EDTx.UserControlSuitsWeapons_CWWType, EDTx.UserControlSuitsWeapons_CWDamageType, EDTx.UserControlSuitsWeapons_CWFireMode, EDTx.UserControlSuitsWeapons_CWDamage, EDTx.UserControlSuitsWeapons_CWRPS, EDTx.UserControlSuitsWeapons_CWDPS, EDTx.UserControlSuitsWeapons_CWClipSize, EDTx.UserControlSuitsWeapons_CWHopper, EDTx.UserControlSuitsWeapons_CWRange, EDTx.UserControlSuitsWeapons_CWHSD };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            var enumlistcms = new Enum[] { EDTx.UserControlSuitsWeapons_forceSellShipToolStripMenuItem };
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStripSuits, enumlistcms, this);
         }
 
         public override void LoadLayout()
@@ -258,7 +255,7 @@ namespace EDDiscovery.UserControls
                 Suit s = dataGridViewSuits.Rows[row].Tag as Suit;
                 System.Diagnostics.Debug.WriteLine("Force Sell Suit {0} {1} {2}", s.EventTime, s.FDName, s.FriendlyName);
 
-                if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm selling of".T(EDTx.UserControlSuitsWeapons_Confirm) + " " +s.FriendlyName, "Delete".T(EDTx.Delete), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm selling of".Tx()+ " " +s.FriendlyName, "Delete".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     var je = new EliteDangerousCore.JournalEvents.JournalSellSuit(DateTime.UtcNow, s.ID, s.FDName, s.Name_Localised, 0, EDCommander.CurrentCmdrID);
                     var jo = je.Json();

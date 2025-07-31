@@ -34,6 +34,7 @@ namespace EDDiscovery.UserControls
         public UserControlMiningOverlay()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -42,10 +43,6 @@ namespace EDDiscovery.UserControls
 
             UpdateComboBox(null);
 
-            var enumlisttt = new Enum[] { EDTx.UserControlMiningOverlay_extCheckBoxZeroRefined_ToolTip, EDTx.UserControlMiningOverlay_buttonExtExcel_ToolTip, 
-                        EDTx.UserControlMiningOverlay_extComboBoxChartOptions_ToolTip, EDTx.UserControlMiningOverlay_extCheckBoxChartBase_ToolTip, 
-                        };
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
             extPanelRollUp.SetToolTip(toolTip);
 
             buttonExtExcel.Enabled = false;
@@ -58,10 +55,6 @@ namespace EDDiscovery.UserControls
             timetimer = new Timer();
             timetimer.Interval = 1000;
             timetimer.Tick += Timetimer_Tick;
-        }
-
-        public override void LoadLayout()
-        {
         }
 
         public override void InitialDisplay()
@@ -210,9 +203,9 @@ namespace EDDiscovery.UserControls
                         lastrefined = 0;
 
                     {
-                        string text = string.Format("Limpets left {0}, Cargo left {1}".T(EDTx.UserControlMiningOverlay_Limcargo), limpetsleftdisplay, cargoleftdisplay);
+                        string text = string.Format("Limpets left {0}, Cargo left {1}".Tx(), limpetsleftdisplay, cargoleftdisplay);
                         if (collectorsused > 0 || prospectorsused > 0 || asteroidscracked > 0)
-                            text += string.Format(", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}".T(EDTx.UserControlMiningOverlay_Proscoll), prospectorsused, collectorsused, asteroidscracked);
+                            text += string.Format(", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}".Tx(), prospectorsused, collectorsused, asteroidscracked);
 
                         var ieprosp = pictureBox.AddTextAutoSize(new Point(hpos[limpetscolpos], vpos), new Size(2000, this.Height),
                                     text, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
@@ -224,22 +217,22 @@ namespace EDDiscovery.UserControls
 
                     if (displaytable)
                     {
-                        var ieheader = pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(colsw[1], this.Height), "Ref.".T(EDTx.UserControlMiningOverlay_ref), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[2], vpos), new Size(colsw[2], this.Height), "Coll.".T(EDTx.UserControlMiningOverlay_coll), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), "Prosp.".T(EDTx.UserControlMiningOverlay_pros), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        var ieheader = pictureBox.AddTextAutoSize(new Point(hpos[1], vpos), new Size(colsw[1], this.Height), "Ref.".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[2], vpos), new Size(colsw[2], this.Height), "Coll.".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), "Prosp.".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
 
-                        pictureBox.AddTextAutoSize(new Point(hpos[4], vpos), new Size(colsw[4], this.Height), "Ratio%".T(EDTx.UserControlMiningOverlay_ratio), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[5], vpos), new Size(colsw[5], this.Height), "Avg%".T(EDTx.UserControlMiningOverlay_avg), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[6], vpos), new Size(colsw[6], this.Height), "Min%".T(EDTx.UserControlMiningOverlay_min), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[7], vpos), new Size(colsw[7], this.Height), "Max%".T(EDTx.UserControlMiningOverlay_max), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), "M.Lode".T(EDTx.UserControlMiningOverlay_mload), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), "HML Ct.".T(EDTx.UserControlMiningOverlay_hml), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), "Discv".T(EDTx.UserControlMiningOverlay_discv), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[4], vpos), new Size(colsw[4], this.Height), "Ratio%".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[5], vpos), new Size(colsw[5], this.Height), "Avg%".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[6], vpos), new Size(colsw[6], this.Height), "Min%".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[7], vpos), new Size(colsw[7], this.Height), "Max%".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), "M.Lode".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), "HML Ct.".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                        pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), "Discv".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         vpos = ieheader.Location.Bottom + displayfont.ScalePixels(2);
 
                         if (prospected > 0)
                         {
-                            var ie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), "Asteroids Pros.".T(EDTx.UserControlMiningOverlay_astpros), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                            var ie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), "Asteroids Pros.".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                             pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), prospected.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                             pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), content[0].ToString("N0") + "/" + content[1].ToString("N0") + "/" + content[2].ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                             vpos = ie.Location.Bottom + displayfont.ScalePixels(2);
@@ -309,11 +302,11 @@ namespace EDDiscovery.UserControls
                         chart.EnableZoomMouseWheelX();
                         chart.ZoomMouseWheelXMinimumInterval = 1;
                         chart.SetXAxisInterval(DateTimeIntervalType.Auto, 5);
-                        chart.SetXAxisTitle("Content %".T(EDTx.UserControlMiningOverlay_content));
+                        chart.SetXAxisTitle("Content %".Tx());
                         chart.SetYAxisMaxMin(0, 100);
-                        chart.SetYAxisTitle("% Above".T(EDTx.UserControlMiningOverlay_above));
+                        chart.SetYAxisTitle("% Above".Tx());
 
-                        string title = (matdata.Count == 1 ? (matdata[0].friendlyname + " ") : "") + (extCheckBoxChartBase.Checked ? "Distribution vs All".T(EDTx.UserControlMiningOverlay_distall) : "Distribution if Contains".T(EDTx.UserControlMiningOverlay_dist));
+                        string title = (matdata.Count == 1 ? (matdata[0].friendlyname + " ") : "") + (extCheckBoxChartBase.Checked ? "Distribution vs All".Tx(): "Distribution if Contains".Tx());
                         chart.AddTitle("main", title);
 
                         if (matdata.Count > 1)

@@ -34,6 +34,9 @@ namespace EDDiscovery.UserControls
         public UserControlFactions()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -59,43 +62,6 @@ namespace EDDiscovery.UserControls
 
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;
             dataGridView.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.DisplayedCells;
-
-            var enumlist = new Enum[] { 
-                        EDTx.UserControlFactions_colFaction, EDTx.UserControlFactions_colMissions, EDTx.UserControlFactions_colInfluence, 
-                        EDTx.UserControlFactions_colReputation, EDTx.UserControlFactions_colMissionCredits, EDTx.UserControlFactions_CBought, 
-                        EDTx.UserControlFactions_CSold, EDTx.UserControlFactions_CProfit, EDTx.UserControlFactions_MBought, EDTx.UserControlFactions_MSold, 
-                        EDTx.UserControlFactions_CrimeCommitted, EDTx.UserControlFactions_BountyKills, EDTx.UserControlFactions_BountyValue, 
-                        EDTx.UserControlFactions_BountyRewardsValue, EDTx.UserControlFactions_Interdicted, EDTx.UserControlFactions_Interdiction, 
-                        EDTx.UserControlFactions_KillBondVictim, EDTx.UserControlFactions_KillBondsAward, EDTx.UserControlFactions_KillBondsValue, 
-                        EDTx.UserControlFactions_colInfo, EDTx.UserControlFactions_labelTo, EDTx.UserControlFactions_CartoValue,
-                        EDTx.UserControlFactions_colRedeemVoucher, EDTx.UserControlFactions_colFines, EDTx.UserControlFactions_colBountyValue,
-                        EDTx.UserControlFactions_colDataLinkVictimFaction, EDTx.UserControlFactions_colDataLinkPayeeFaction, EDTx.UserControlFactions_colDataLinkPayeeValue,
-                        EDTx.UserControlFactions_colLastRep,EDTx.UserControlFactions_colSystem,
-                        EDTx.UserControlFactions_labelSearch,
-                        EDTx.UserControlFactions_colFactionState, EDTx.UserControlFactions_colFactionGov,
-                        EDTx.UserControlFactions_colFactionAllegiance, EDTx.UserControlFactions_colFactionSystemInfluence, EDTx.UserControlFactions_colFactionOtherSystemInfo,
-                        EDTx.UserControlFactions_colOrganicDataSold,
-
-                        };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-
-            var enumlistcms = new Enum[] { EDTx.UserControlFactions_showMissionsForFactionToolStripMenuItem, 
-                                           EDTx.UserControlFactions_showCommoditymaterialTradesForFactionToolStripMenuItem,
-                                           EDTx.UserControlFactions_showBountiesAndBondsForFactionToolStripMenuItem,
-                };
-
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
-
-            var enumlisttt = new Enum[] { EDTx.UserControlFactions_startDateTimePicker_ToolTip, EDTx.UserControlFactions_endDateTimePicker_ToolTip, 
-                                        EDTx.UserControlFactions_buttonExtExcel_ToolTip,
-                                        EDTx.UserControlFactions_extCheckBoxShowHideSystemInfo_ToolTip, EDTx.UserControlFactions_extCheckBoxShowHideMission_ToolTip,
-                                        EDTx.UserControlFactions_extCheckBoxShowHideCommodities_ToolTip, EDTx.UserControlFactions_extCheckBoxShowHideMaterials_ToolTip,
-                                        EDTx.UserControlFactions_extCheckBoxShowHideBounties_ToolTip, EDTx.UserControlFactions_extCheckBoxShowHideInterdictions_ToolTip,
-                                        EDTx.UserControlFactions_extCheckBoxShowHideKillBonds_ToolTip, EDTx.UserControlFactions_extCheckBoxShowHideDataLink_ToolTip,
-                                        EDTx.UserControlFactions_extCheckBoxShowHideCartographic_ToolTip
-                    };
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             labelInfo.Text = "";
 
@@ -201,7 +167,7 @@ namespace EDDiscovery.UserControls
                     if (ms != null)
                     {
                         if (ms.MissionsInProgress > 0)
-                            info = info.AppendPrePad("Missions In Progress:".T(EDTx.UserControlFactions_MissionsInProgress) + " " + ms.MissionsInProgress, ", ");
+                            info = info.AppendPrePad("Missions In Progress:".Tx()+ " " + ms.MissionsInProgress, ", ");
 
                         foreach (var reward in ms.MissionRewards.Values)
                         {
@@ -212,9 +178,9 @@ namespace EDDiscovery.UserControls
                     if (fs != null)
                     {
                         if (fs.CapShipAwardAsVictimFaction > 0)
-                            info = info.AppendPrePad("Capital ship Victims: ".T(EDTx.UserControlFactions_CapShipVictims) + fs.CapShipAwardAsVictimFaction, ", ");
+                            info = info.AppendPrePad("Capital ship Victims: ".Tx()+ fs.CapShipAwardAsVictimFaction, ", ");
                         if (fs.CapShipAwardAsAwaringFaction > 0)
-                            info = info.AppendPrePad("Capital ship Award: ".T(EDTx.UserControlFactions_CapShipAward) + fs.CapShipAwardAsAwaringFaction + ":" + fs.CapShipAwardAsAwaringFactionValue.ToString("N0") + "cr", ", ");
+                            info = info.AppendPrePad("Capital ship Award: ".Tx()+ fs.CapShipAwardAsAwaringFaction + ":" + fs.CapShipAwardAsAwaringFactionValue.ToString("N0") + "cr", ", ");
                     }
 
                     System.Text.StringBuilder factionstring = new System.Text.StringBuilder();
@@ -307,7 +273,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            labelInfo.Text = laststatsfromcomputer.Count + " " + "Factions".T(EDTx.UserControlFactions_FactionsPlural);
+            labelInfo.Text = laststatsfromcomputer.Count + " " + "Factions".Tx();
         }
 
         #endregion
@@ -493,7 +459,7 @@ namespace EDDiscovery.UserControls
 
             f.AllowResize = true;
 
-            f.ShowDialogCentred(FindForm(), FindForm().Icon, "Missions for ".T(EDTx.UserControlFactions_MissionsFor) + factionname, closeicon: true);
+            f.ShowDialogCentred(FindForm(), FindForm().Icon, "Missions for ".Tx()+ factionname, closeicon: true);
 
             DGVSaveColumnLayout(mluc.dataGridView, "ShowMission");
         }
@@ -504,13 +470,13 @@ namespace EDDiscovery.UserControls
             string factionname = fr.Name;
 
             var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
-            dgvpanel.DataGrid.CreateTextColumns("Date".T(EDTx.UserControlOutfitting_Date), 100, 5,
-                                                "System".T(EDTx.CaptainsLogEntries_ColSystem), 150, 5,
-                                                "Station".T(EDTx.ScanDisplayForm_Station), 150, 5,
-                                                "Item".T(EDTx.UserControlFactions_Item), 150, 5,
-                                                "Bought".T(EDTx.UserControlStats_GoodsBought), 50, 5,
-                                                "Sold".T(EDTx.UserControlStats_GoodsSold), 50, 5,
-                                                "Profit".T(EDTx.UserControlStats_GoodsProfit), 50, 5);
+            dgvpanel.DataGrid.CreateTextColumns("Date".Tx(), 100, 5,
+                                                "System".Tx(), 150, 5,
+                                                "Station".Tx(), 150, 5,
+                                                "Item".Tx(), 150, 5,
+                                                "Bought".Tx(), 50, 5,
+                                                "Sold".Tx(), 50, 5,
+                                                "Profit".Tx(), 50, 5);
 
             dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 4) ev.SortDataGridViewColumnNumeric(); };
             dgvpanel.DataGrid.RowHeadersVisible = false;
@@ -559,7 +525,7 @@ namespace EDDiscovery.UserControls
             f.InstallStandardTriggers();
             f.AllowResize = true;
 
-            string title = "Materials/Commodities for ".T(EDTx.UserControlFactions_MaterialCommodsFor) + factionname;
+            string title = "Materials/Commodities for ".Tx()+ factionname;
             if (profit != 0)
                 title += " (" + profit.ToString("N0") + "cr)";
             f.ShowDialogCentred(FindForm(), FindForm().Icon, title, closeicon: true);
@@ -573,11 +539,11 @@ namespace EDDiscovery.UserControls
             string factionname = fr.Name;
 
             var dgvpanel = new ExtendedControls.ExtPanelDataGridViewScrollWithDGV<BaseUtils.DataGridViewColumnControl>();
-            dgvpanel.DataGrid.CreateTextColumns("Date".T(EDTx.UserControlOutfitting_Date), 100, 5,
-                                                "Bounty/Bond".T(EDTx.UserControlFactions_BountyBond), 80, 5,
-                                                "Target".T(EDTx.UserControlFactions_Target), 150, 5,
-                                                "Target Faction".T(EDTx.UserControlFactions_TargetFaction), 150, 5,
-                                                "Reward".T(EDTx.UserControlFactions_Reward), 60, 5);
+            dgvpanel.DataGrid.CreateTextColumns("Date".Tx(), 100, 5,
+                                                "Bounty/Bond".Tx(), 80, 5,
+                                                "Target".Tx(), 150, 5,
+                                                "Target Faction".Tx(), 150, 5,
+                                                "Reward".Tx(), 60, 5);
             dgvpanel.DataGrid.SortCompare += (s, ev) => { if (ev.Column.Index >= 4) ev.SortDataGridViewColumnNumeric(); };
             dgvpanel.DataGrid.RowHeadersVisible = false;
             dgvpanel.DataGrid.Columns[4].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
@@ -603,7 +569,7 @@ namespace EDDiscovery.UserControls
             f.InstallStandardTriggers();
             f.AllowResize = true;
 
-            f.ShowDialogCentred(FindForm(), FindForm().Icon, "Bounties/Bonds for ".T(EDTx.UserControlFactions_BountiesBondsFor) + factionname, closeicon: true);
+            f.ShowDialogCentred(FindForm(), FindForm().Icon, "Bounties/Bonds for ".Tx()+ factionname, closeicon: true);
 
             DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowBonds");
         }

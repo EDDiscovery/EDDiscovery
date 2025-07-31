@@ -111,7 +111,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Materials, typeof(UserControlMaterials) , "Materials", "Materials", "Materials count" ) },
             { new PanelInfo( PanelIDs.Commodities, typeof(UserControlCommodities), "Commodities", "Commodities", "Commodity count") },
             { new PanelInfo( PanelIDs.MicroResources, typeof(UserControlMicroResources), "Micro Resources", "MicroResources", "Micro resource count") },
-            { new PanelInfo( PanelIDs.Resources, typeof(UserControlAllResources), "Resources", "AllResources", "Resources: All Materials, Commodity, MicroResources") },
+            { new PanelInfo( PanelIDs.Resources, typeof(UserControlAllResources), "Resources", "AllResources", "Resources: All Materials, Commodity, Micro resources") },
             { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", "Ledger of cash related entries") },
             { new PanelInfo( PanelIDs.Missions, typeof(UserControlMissions), "Missions", "Missions", "Mission list") },
             { new PanelInfo( PanelIDs.Factions, typeof(UserControlFactions), "Factions", "Factions", "Faction rewards and trading tally") },
@@ -222,12 +222,12 @@ namespace EDDiscovery
                     if ( offset>0)
                         separs.Add(offset);
 
-                    // no point, not presented i.WindowTitle = i.WindowTitle.TxID( "PopOutInfo.Group." ,i.WindowTitle.FirstAlphaNumericText());
+                    // no point, not presented i.WindowTitle = i.WindowTitle.Tx());
                 }
                 else if ( i.Description.Length > 0 )        // if selectable, translate and update index
                 {
-                    i.WindowTitle = i.WindowTitle.TxID( "PopOutInfo",  i.PopoutID + ".Title");
-                    i.Description = i.Description.TxID( "PopOutInfo",  i.PopoutID + ".Description");
+                    i.WindowTitle = i.WindowTitle.Tx();
+                    i.Description = i.Description.Tx();
                     offset++;
                 }
             }

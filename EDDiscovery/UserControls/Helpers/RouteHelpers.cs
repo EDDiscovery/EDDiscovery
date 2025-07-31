@@ -27,8 +27,8 @@ namespace EDDiscovery.UserControls
     {
         public static void ExpeditionSave(Form frm, string exampleroutename, List<ISystem> routeSystems)
         {
-            string name = ExtendedControls.PromptSingleLine.ShowDialog(frm, "Route Name:".TxID(EDTx.UserControlExpedition_labelRouteName), exampleroutename,
-                            "Save Expedition".TxID(EDTx.UserControlExpedition_extButtonSave_ToolTip), frm.Icon, widthboxes: 400, requireinput:true);
+            string name = ExtendedControls.PromptSingleLine.ShowDialog(frm, "Route Name:".Tx(), exampleroutename,
+                            "Save Expedition".Tx(), frm.Icon, widthboxes: 400, requireinput:true);
 
             if (name != null)
             {
@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
 
                 if (overwriteroute != null)
                 {
-                    if (ExtendedControls.MessageBoxTheme.Show(frm, "Warning: route already exists. Would you like to overwrite it?".T(EDTx.UserControlExpedition_Overwrite), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo) != DialogResult.Yes)
+                    if (ExtendedControls.MessageBoxTheme.Show(frm, "Warning: route already exists. Would you like to overwrite it?".Tx(), "Warning".Tx(), MessageBoxButtons.YesNo) != DialogResult.Yes)
                         return;
 
                     overwriteroute.Delete();
@@ -76,7 +76,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                ExtendedControls.MessageBoxTheme.Show(form, "No route set up, retry".T(EDTx.UserControlRoute_NoRoute), "Warning".T(EDTx.Warning), MessageBoxButtons.OK);
+                ExtendedControls.MessageBoxTheme.Show(form, "No route set up, retry".Tx(), "Warning".Tx(), MessageBoxButtons.OK);
                 return;
             }
         }

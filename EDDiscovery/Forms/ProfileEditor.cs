@@ -60,15 +60,13 @@ namespace EDDiscovery.Forms
         public ProfileEditor()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
         }
 
         public void Init(EDDProfiles pr, Icon ic)
         {
             profiles = pr;
             Icon = ic;
-
-            var enumlist = new Enum[] { EDTx.ProfileEditor, EDTx.ProfileEditor_buttonExtGlobals };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 
             var theme = ExtendedControls.Theme.Current;
             bool winborder = theme.ApplyDialog(this);
@@ -110,7 +108,7 @@ namespace EDDiscovery.Forms
             g.stdtrigger = new ExtendedControls.ExtComboBox();
             g.stdtrigger.Location = new Point(210, vpos);      // 8 spacing, allow 8*4 to indent
             g.stdtrigger.Size = new Size(200, 24);
-            g.stdtrigger.Items.Add("Custom".T(EDTx.ProfileEditor_Custom));
+            g.stdtrigger.Items.Add("Custom".Tx());
             g.stdtrigger.Items.AddRange(EDDProfiles.StandardTriggers.Select((p1) => p1.Name));
             g.stdtrigger.SelectedIndex = EDDProfiles.FindTriggerIndex(tripcondition,backcondition) + 1;
             g.stdtrigger.SelectedIndexChanged += Stdtrigger_SelectedIndexChanged;
@@ -120,7 +118,7 @@ namespace EDDiscovery.Forms
             g.edittriggerbutton = new ExtendedControls.ExtButton();
             g.edittriggerbutton.Location = new Point(420, vpos);
             g.edittriggerbutton.Size = new Size(100, 24);
-            g.edittriggerbutton.Text = "Trigger".T(EDTx.ProfileEditor_Trigger);
+            g.edittriggerbutton.Text = "Trigger".Tx();
             g.edittriggerbutton.Tag = g;
             g.edittriggerbutton.Click += EditTrigger_Click;
             g.panel.Controls.Add(g.edittriggerbutton);
@@ -128,7 +126,7 @@ namespace EDDiscovery.Forms
             g.editbacktriggerbutton = new ExtendedControls.ExtButton();
             g.editbacktriggerbutton.Location = new Point(530, vpos);
             g.editbacktriggerbutton.Size = new Size(100, 24);
-            g.editbacktriggerbutton.Text = "Back".T(EDTx.ProfileEditor_Back);
+            g.editbacktriggerbutton.Text = "Back".Tx();
             g.editbacktriggerbutton.Tag = g;
             g.editbacktriggerbutton.Click += EditBack_Click;
             g.panel.Controls.Add(g.editbacktriggerbutton);
@@ -136,7 +134,7 @@ namespace EDDiscovery.Forms
             g.chkbox = new ExtendedControls.ExtCheckBox();
             g.chkbox.Location = new Point(640, vpos);
             g.chkbox.Size = new Size(100, 24);
-            g.chkbox.Text = "Default".T(EDTx.ProfileEditor_Default);
+            g.chkbox.Text = "Default".Tx();
             g.chkbox.Tag = g;
             g.chkbox.Checked = poweron;
             g.chkbox.Click += Chkbox_Click;
@@ -201,7 +199,7 @@ namespace EDDiscovery.Forms
         private void EditTrigger_Click(object sender, EventArgs e)
         {
             Group g = ((Control)sender).Tag as Group;
-            BaseUtils.ConditionLists res = ShowFilterDialog(g.triggercondition, string.Format("Edit Profile {0} Trigger".T(EDTx.ProfileEditor_TrigEdit), g.name.Text));
+            BaseUtils.ConditionLists res = ShowFilterDialog(g.triggercondition, string.Format("Edit Profile {0} Trigger".Tx(), g.name.Text));
             if ( res != null )
             {
                 g.triggercondition = res;
@@ -214,7 +212,7 @@ namespace EDDiscovery.Forms
         private void EditBack_Click(object sender, EventArgs e)
         {
             Group g = ((Control)sender).Tag as Group;
-            BaseUtils.ConditionLists res = ShowFilterDialog(g.backcondition, string.Format("Edit Profile {0} Back Trigger".T(EDTx.ProfileEditor_BackEdit), g.name.Text));
+            BaseUtils.ConditionLists res = ShowFilterDialog(g.backcondition, string.Format("Edit Profile {0} Back Trigger".Tx(), g.name.Text));
 
             if (res != null )
             {
@@ -277,7 +275,7 @@ namespace EDDiscovery.Forms
 
             if (ExtendedControls.MessageBoxTheme.Show(this,
                         string.Format(("Do you wish to delete profile {0}?" + Environment.NewLine + "This will remove all the profile information and" + 
-                        Environment.NewLine + "is not reversible!").T(EDTx.ProfileEditor_DeleteWarning), g.name.Text), "Warning".T(EDTx.Warning), 
+                        Environment.NewLine + "is not reversible!").Tx(), g.name.Text), "Warning".Tx(), 
                         MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
 

@@ -333,7 +333,7 @@ namespace EDDiscovery.UserControls
             }
             catch
             {
-                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".Tx());
             }
         }
         public void SetClipboardImage(Image s)
@@ -344,7 +344,7 @@ namespace EDDiscovery.UserControls
             }
             catch
             {
-                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".Tx());
             }
         }
         public void SetClipboardImage(string file)
@@ -358,7 +358,7 @@ namespace EDDiscovery.UserControls
             }
             catch
             {
-                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".Tx());
             }
         }
         public void SetClipboard(DataObject obj)

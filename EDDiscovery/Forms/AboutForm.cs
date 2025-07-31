@@ -26,7 +26,7 @@ namespace EDDiscovery.Forms
         public AboutForm()
         {
             InitializeComponent();
-            buttonOK.Text = "OK".TxID(EDTx.OK);
+            buttonOK.Text = "OK".Tx();
             labelVersion.Text = EDDApplicationContext.UserAgent;
 
             SetTipAndTag(linkLabelDeveloperChat, Resources.URLProjectDiscord);

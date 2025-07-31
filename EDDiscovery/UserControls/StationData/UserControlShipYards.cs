@@ -33,6 +33,8 @@ namespace EDDiscovery.UserControls
         public UserControlShipYards()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -44,12 +46,6 @@ namespace EDDiscovery.UserControls
 
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange; ;
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
-
-            var enumlist = new Enum[] { EDTx.UserControlShipYards_labelYardSel, EDTx.UserControlShipYards_labelYard };
-            var enumlisttt = new Enum[] { EDTx.UserControlShipYards_comboBoxYards_ToolTip };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
         public override void LoadLayout()
@@ -88,7 +84,7 @@ namespace EDDiscovery.UserControls
             ShipYardList shm = DiscoveryForm.History.Shipyards;
             string cursel = comboBoxYards.Text;
 
-            string the = "Travel History Entry".T(EDTx.UserControlShipYards_TravelHistoryEntry);
+            string the = "Travel History Entry".Tx();
 
             comboBoxYards.Items.Clear();
             comboBoxYards.Items.Add(the);
@@ -171,19 +167,19 @@ namespace EDDiscovery.UserControls
             {
                 double distance = DiscoveryForm.History.DistanceCurrentTo(i.Item1.StarSystem);
                 string dte = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(i.Item1.DateTimeUTC).ToString();
-                object[] rowobj = { dte, i.Item1.StarSystem + ":" + i.Item1.StationName, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), i.Item2.ShipPrice.ToString("N0") + "cr" };
+                object[] rowobj = { dte, i.Item1.StarSystem + ":" + i.Item1.StationName, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".Tx(), i.Item2.ShipPrice.ToString("N0") + "cr" };
                 dataGridViewShips.Rows.Add(rowobj);
             }
 
             labelYard.Text = ship;
             labelYard.Visible = true;
-            Col1.HeaderText = "Date".T(EDTx.UserControlShipYards_Date);
+            Col1.HeaderText = "Date".Tx();
             Col1.Tag = "DT";
-            Col2.HeaderText = "Yard".T(EDTx.UserControlShipYards_Yard);
+            Col2.HeaderText = "Yard".Tx();
             Col2.Tag = null;
-            Col3.HeaderText = "Distance".T(EDTx.UserControlShipYards_Distance);
+            Col3.HeaderText = "Distance".Tx();
             Col3.Tag = "ly";
-            ColPrice.HeaderText = "Price".T(EDTx.UserControlShipYards_Price);
+            ColPrice.HeaderText = "Price".Tx();
             ColPrice.Tag = "cr";
         }
 
@@ -191,7 +187,7 @@ namespace EDDiscovery.UserControls
         {
             foreach (ShipYard.ShipyardItem i in yard.Ships)
             {
-                string col2 = "Unknown".T(EDTx.Unknown), col3 = "";
+                string col2 = "Unknown".Tx(), col3 = "";
                 ItemData.ShipProperties shipprops = ItemData.GetShipProperties(i.ShipType);
                 if ( shipprops != null)
                 {
@@ -210,13 +206,13 @@ namespace EDDiscovery.UserControls
 
             labelYard.Text = yard.Ident() + (distance>-1 ? (" @ " + distance.ToString("N1") + "ly") : "");
             labelYard.Visible = true;
-            Col1.HeaderText = "Ship".T(EDTx.UserControlShipYards_Ship);
+            Col1.HeaderText = "Ship".Tx();
             Col1.Tag = null;
-            Col2.HeaderText = "Manufacturer".T(EDTx.UserControlShipYards_Manufacturer);
+            Col2.HeaderText = "Manufacturer".Tx();
             Col2.Tag = null;
-            Col3.HeaderText = "Mass/Speed".T(EDTx.UserControlShipYards_MS);
+            Col3.HeaderText = "Mass/Speed".Tx();
             Col3.Tag = null;
-            ColPrice.HeaderText = "Price".T(EDTx.UserControlShipYards_Price);
+            ColPrice.HeaderText = "Price".Tx();
             ColPrice.Tag = "cr";
         }
 

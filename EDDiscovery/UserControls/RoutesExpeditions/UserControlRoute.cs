@@ -46,36 +46,9 @@ namespace EDDiscovery.UserControls
 
             // do at init, seems to cause problems on some PCs doing after
 
-            var enumlist = new Enum[] { EDTx.UserControlRoute_SystemCol, EDTx.UserControlRoute_NoteCol, EDTx.UserControlRoute_DistanceCol, EDTx.UserControlRoute_StarClassCol, EDTx.UserControlRoute_WayPointDistCol,
-                                        EDTx.UserControlRoute_DeviationCol,
-                                        EDTx.UserControlRoute_checkBox_FsdBoost, EDTx.UserControlRoute_buttonExtTravelTo, EDTx.UserControlRoute_buttonExtTravelFrom,
-                                        EDTx.UserControlRoute_buttonExtTargetTo,  EDTx.UserControlRoute_buttonTargetFrom, EDTx.UserControlRoute_labelEDSMBut,
-                                        EDTx.UserControlRoute_labelLy2, EDTx.UserControlRoute_labelLy1, EDTx.UserControlRoute_labelTo,
-                                        EDTx.UserControlRoute_labelMaxJump, EDTx.UserControlRoute_labelDistance, EDTx.UserControlRoute_labelMetric,
-                                        EDTx.UserControlRoute_extButtonRoute, EDTx.UserControlRoute_labelFrom,
-                                        EDTx.UserControlRoute_groupBoxSpansh, EDTx.UserControlRoute_extButtonSpanshRoadToRiches, EDTx.UserControlRoute_extButtonNeutronRouter,
-                                        EDTx.UserControlRoute_extButtonFleetCarrier,EDTx.UserControlRoute_extButtonSpanshGalaxyPlotter,EDTx.UserControlRoute_extButtonExoMastery,
-                                        EDTx.UserControlRoute_extButtonSpanshAmmoniaWorlds,EDTx.UserControlRoute_extButtonSpanshEarthLikes,EDTx.UserControlRoute_extButtonSpanshTradeRouter,
-                                        EDTx.UserControlRoute_groupBoxInternal,EDTx.UserControlRoute_groupBoxPara,
-                                        EDTx.UserControlRoute_extCheckBoxPermitSystems, EDTx.UserControlRoute_labelCargo };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-
-            var enumlistcms = new Enum[] { EDTx.UserControlRoute_showInEDSMToolStripMenuItem, EDTx.UserControlRoute_copyToolStripMenuItem, EDTx.UserControlRoute_showScanToolStripMenuItem,
-                                            EDTx.UserControlRoute_viewOnSpanshToolStripMenuItem};
-            BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
-
-            var enumlisttt = new Enum[] { EDTx.UserControlRoute_checkBox_FsdBoost_ToolTip, EDTx.UserControlRoute_buttonExtExcel_ToolTip, EDTx.UserControlRoute_textBox_ToName_ToolTip,
-                                        EDTx.UserControlRoute_textBox_FromName_ToolTip, EDTx.UserControlRoute_comboBoxRoutingMetric_ToolTip, EDTx.UserControlRoute_buttonExtTravelTo_ToolTip,
-                                        EDTx.UserControlRoute_buttonExtTravelFrom_ToolTip, EDTx.UserControlRoute_buttonExtTargetTo_ToolTip, EDTx.UserControlRoute_buttonToEDSM_ToolTip,
-                                        EDTx.UserControlRoute_buttonFromEDSM_ToolTip, EDTx.UserControlRoute_buttonTargetFrom_ToolTip,
-                                        EDTx.UserControlRoute_cmd3DMap_ToolTip, EDTx.UserControlRoute_textBox_From_ToolTip, EDTx.UserControlRoute_textBox_Range_ToolTip,
-                                        EDTx.UserControlRoute_textBox_To_ToolTip, EDTx.UserControlRoute_textBox_Distance_ToolTip, EDTx.UserControlRoute_textBox_ToZ_ToolTip,
-                                        EDTx.UserControlRoute_textBox_ToY_ToolTip, EDTx.UserControlRoute_textBox_ToX_ToolTip, EDTx.UserControlRoute_textBox_FromZ_ToolTip,
-                                        EDTx.UserControlRoute_extButtonRoute_ToolTip, EDTx.UserControlRoute_textBox_FromY_ToolTip, EDTx.UserControlRoute_textBox_FromX_ToolTip,
-                                        EDTx.UserControlRoute_extButtonExpeditionSave_ToolTip,EDTx.UserControlRoute_extButtonExpeditionPush_ToolTip,
-                                        };
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
         }
 
         public override void Init()
@@ -93,12 +66,12 @@ namespace EDDiscovery.UserControls
             toupdatetimer.Tick += ToUpdateTick;
 
             string[] MetricNames = {        // synchronise with SystemCache.SystemsNearestMetric, really should be translated, but there you go.
-                "Nearest to Waypoint".T(EDTx.UserControlRoute_M1),
-                "Minimum Deviation from Path".T(EDTx.UserControlRoute_M2),
-                "Nearest to Waypoint with dev<=100ly".T(EDTx.UserControlRoute_M3),
-                "Nearest to Waypoint with dev<=250ly".T(EDTx.UserControlRoute_M4),
-                "Nearest to Waypoint with dev<=500ly".T(EDTx.UserControlRoute_M5),
-                "Nearest to Waypoint + Deviation / 2".T(EDTx.UserControlRoute_M6),
+                "Nearest to Waypoint".Tx(),
+                "Minimum Deviation from Path".Tx(),
+                "Nearest to Waypoint with dev<=100ly".Tx(),
+                "Nearest to Waypoint with dev<=250ly".Tx(),
+                "Nearest to Waypoint with dev<=500ly".Tx(),
+                "Nearest to Waypoint + Deviation / 2".Tx(),
                 };
 
             foreach (SystemCache.SystemsNearestMetric values in Enum.GetValues(typeof(SystemCache.SystemsNearestMetric)))
@@ -501,8 +474,8 @@ namespace EDDiscovery.UserControls
                 if (PossibleJumps > 100)
                 {
                     DialogResult res = MessageBoxTheme.Show(FindForm(),
-                        string.Format(("This will result in a large number ({0}) of jumps" + Environment.NewLine + "Confirm please").T(EDTx.UserControlRoute_Confirm),
-                        PossibleJumps), "Warning".T(EDTx.Warning), MessageBoxButtons.YesNo);
+                        string.Format(("This will result in a large number ({0}) of jumps" + Environment.NewLine + "Confirm please").Tx(),
+                        PossibleJumps), "Warning".Tx(), MessageBoxButtons.YesNo);
                     if (res != System.Windows.Forms.DialogResult.Yes)
                     {
                         return;
@@ -513,7 +486,7 @@ namespace EDDiscovery.UserControls
                 routingthread = new System.Threading.Thread(new System.Threading.ParameterizedThreadStart(EDDRoutingThread));
                 routingthread.Name = "Thread Route";
 
-                extButtonRoute.Text = "Cancel".T(EDTx.Cancel);
+                extButtonRoute.Text = "Cancel".Tx();
 
                 EnableOutputButtons();
                 computing = 1;
@@ -542,7 +515,7 @@ namespace EDDiscovery.UserControls
                 {
                     RequestPanelOperation(this, new PushRouteList() { Systems = routeSystems });
                     EnableOutputButtons(true);
-                    extButtonRoute.Text = "Find Route".TxID(EDTx.UserControlRoute_extButtonRoute);
+                    extButtonRoute.Text = "Find Route".Tx();
                     computing = 0;
                     EnableRouteButtonsIfValid();
                 }));

@@ -28,6 +28,10 @@ namespace EDDiscovery.UserControls.Helpers
         public SpanshStationsUserControl()
         {
             InitializeComponent();
+
+            // we do not translate ourselves, thats up to the parent control to do
+            // but we do translate our toolstrips/tooltips
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public void Init(EliteDangerousCore.DB.IUserDatabaseSettingsSaver saver, Func<bool> isClosed)
@@ -159,7 +163,7 @@ namespace EDDiscovery.UserControls.Helpers
         {
             if (si == null)
             {
-                MessageBoxTheme.Show(this.FindForm(), $"No stations returned", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+                MessageBoxTheme.Show(this.FindForm(), $"No stations returned", "Warning".Tx(), MessageBoxButtons.OK);
                 return false;
             }
             else
@@ -671,7 +675,7 @@ namespace EDDiscovery.UserControls.Helpers
                         }
                         else
                         {
-                            MessageBoxTheme.Show(this.FindForm(), $"No stations returned", "Warning".TxID(EDTx.Warning), MessageBoxButtons.OK);
+                            MessageBoxTheme.Show(this.FindForm(), $"No stations returned", "Warning".Tx(), MessageBoxButtons.OK);
                         }
                     }
 

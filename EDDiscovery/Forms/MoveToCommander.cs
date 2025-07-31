@@ -38,8 +38,7 @@ namespace EDDiscovery.Forms
             comboBoxCommanders.ValueMember = "Nr";
             comboBoxCommanders.DataSource = commanders;
 
-            var enumlist = new Enum[] { EDTx.MoveToCommander, EDTx.MoveToCommander_buttonTransfer, EDTx.MoveToCommander_label1 };
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
 
             var theme = ExtendedControls.Theme.Current;
             theme.ApplyDialog(this);

@@ -88,9 +88,13 @@
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_close.AutoEllipsis = false;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.BorderColor = System.Drawing.Color.Orange;
+            this.panel_close.BorderWidth = 1;
+            this.panel_close.ButtonDisabledScaling = 0.25F;
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(991, 6);
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
@@ -108,9 +112,13 @@
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.AutoEllipsis = false;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.BorderColor = System.Drawing.Color.Orange;
+            this.panel_minimize.BorderWidth = 1;
+            this.panel_minimize.ButtonDisabledScaling = 0.25F;
             this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(961, 6);
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
@@ -125,17 +133,27 @@
             // 
             // buttonExtCancel
             // 
+            this.buttonExtCancel.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
+            this.buttonExtCancel.GradientDirection = 90F;
             this.buttonExtCancel.Location = new System.Drawing.Point(593, 4);
+            this.buttonExtCancel.MouseOverScaling = 1.3F;
+            this.buttonExtCancel.MouseSelectedScaling = 1.3F;
             this.buttonExtCancel.Name = "buttonExtCancel";
             this.buttonExtCancel.Size = new System.Drawing.Size(75, 23);
             this.buttonExtCancel.TabIndex = 2;
-            this.buttonExtCancel.Text = "%Cancel%";
+            this.buttonExtCancel.Text = "Cancel";
             this.buttonExtCancel.UseVisualStyleBackColor = true;
             this.buttonExtCancel.Click += new System.EventHandler(this.buttonExtCancel_Click);
             // 
             // buttonExtSet
             // 
+            this.buttonExtSet.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtSet.ButtonDisabledScaling = 0.5F;
+            this.buttonExtSet.GradientDirection = 90F;
             this.buttonExtSet.Location = new System.Drawing.Point(507, 4);
+            this.buttonExtSet.MouseOverScaling = 1.3F;
+            this.buttonExtSet.MouseSelectedScaling = 1.3F;
             this.buttonExtSet.Name = "buttonExtSet";
             this.buttonExtSet.Size = new System.Drawing.Size(75, 23);
             this.buttonExtSet.TabIndex = 2;
@@ -199,12 +217,17 @@
             // 
             // comboBoxSelections
             // 
+            this.comboBoxSelections.BackColor2 = System.Drawing.Color.Red;
             this.comboBoxSelections.BorderColor = System.Drawing.Color.White;
+            this.comboBoxSelections.ControlBackground = System.Drawing.SystemColors.Control;
             this.comboBoxSelections.DataSource = null;
             this.comboBoxSelections.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxSelections.DisabledScaling = 0.5F;
             this.comboBoxSelections.DisplayMember = "";
             this.comboBoxSelections.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.comboBoxSelections.GradientDirection = 90F;
             this.comboBoxSelections.Location = new System.Drawing.Point(6, 6);
+            this.comboBoxSelections.MouseOverScalingColor = 1.3F;
             this.comboBoxSelections.Name = "comboBoxSelections";
             this.comboBoxSelections.SelectedIndex = -1;
             this.comboBoxSelections.SelectedItem = null;

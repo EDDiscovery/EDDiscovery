@@ -65,11 +65,16 @@ namespace EDDiscovery.UserControls
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOK.BackColor2 = System.Drawing.Color.Red;
+            this.buttonOK.ButtonDisabledScaling = 0.5F;
+            this.buttonOK.GradientDirection = 90F;
             this.buttonOK.Location = new System.Drawing.Point(328, 4);
+            this.buttonOK.MouseOverScaling = 1.3F;
+            this.buttonOK.MouseSelectedScaling = 1.3F;
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(75, 23);
             this.buttonOK.TabIndex = 10;
-            this.buttonOK.Text = "%OK%";
+            this.buttonOK.Text = "OK";
             this.buttonOK.UseVisualStyleBackColor = true;
             this.buttonOK.Click += new System.EventHandler(this.buttonOK_Click);
             // 
@@ -98,9 +103,13 @@ namespace EDDiscovery.UserControls
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_close.AutoEllipsis = false;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.BorderColor = System.Drawing.Color.Orange;
+            this.panel_close.BorderWidth = 1;
+            this.panel_close.ButtonDisabledScaling = 0.25F;
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(386, 0);
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
@@ -118,9 +127,13 @@ namespace EDDiscovery.UserControls
             this.panel_minimize.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_minimize.AutoEllipsis = false;
             this.panel_minimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_minimize.BorderColor = System.Drawing.Color.Orange;
+            this.panel_minimize.BorderWidth = 1;
+            this.panel_minimize.ButtonDisabledScaling = 0.25F;
             this.panel_minimize.Image = null;
             this.panel_minimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.panel_minimize.Location = new System.Drawing.Point(356, 0);
+            this.panel_minimize.MouseOverColor = System.Drawing.Color.White;
             this.panel_minimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_minimize.MouseSelectedColorEnable = true;
             this.panel_minimize.Name = "panel_minimize";
@@ -171,6 +184,7 @@ namespace EDDiscovery.UserControls
             this.panelVScroll1.FlowControlsLeftToRight = false;
             this.panelVScroll1.Location = new System.Drawing.Point(0, 0);
             this.panelVScroll1.Name = "panelVScroll1";
+            this.panelVScroll1.ScrollBarWidth = 48;
             this.panelVScroll1.Size = new System.Drawing.Size(407, 165);
             this.panelVScroll1.TabIndex = 8;
             this.panelVScroll1.VerticalScrollBarDockRight = true;
@@ -180,31 +194,43 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.AlwaysHideScrollBar = false;
             this.vScrollBarCustom2.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustom2.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustom2.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustom2.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustom2.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustom2.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustom2.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustom2.HideScrollBar = false;
             this.vScrollBarCustom2.LargeChange = 10;
-            this.vScrollBarCustom2.Location = new System.Drawing.Point(391, 0);
+            this.vScrollBarCustom2.Location = new System.Drawing.Point(359, 0);
             this.vScrollBarCustom2.Maximum = -126;
             this.vScrollBarCustom2.Minimum = 0;
             this.vScrollBarCustom2.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustom2.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustom2.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustom2.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
-            this.vScrollBarCustom2.Size = new System.Drawing.Size(16, 165);
+            this.vScrollBarCustom2.Size = new System.Drawing.Size(48, 165);
+            this.vScrollBarCustom2.SkinnyStyle = false;
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom2.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustom2.SliderDrawAngle = 90F;
             this.vScrollBarCustom2.SmallChange = 1;
             this.vScrollBarCustom2.TabIndex = 0;
             this.vScrollBarCustom2.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustom2.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustom2.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustom2.ThumbDrawAngle = 0F;
             this.vScrollBarCustom2.Value = -126;
             this.vScrollBarCustom2.ValueLimited = -126;
             // 
             // buttonMore
             // 
+            this.buttonMore.BackColor2 = System.Drawing.Color.Red;
+            this.buttonMore.ButtonDisabledScaling = 0.5F;
+            this.buttonMore.GradientDirection = 90F;
             this.buttonMore.Location = new System.Drawing.Point(6, 6);
+            this.buttonMore.MouseOverScaling = 1.3F;
+            this.buttonMore.MouseSelectedScaling = 1.3F;
             this.buttonMore.Name = "buttonMore";
             this.buttonMore.Size = new System.Drawing.Size(24, 24);
             this.buttonMore.TabIndex = 5;

@@ -44,6 +44,7 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.None;            // we are dealing with graphics.. lets turn off dialog scaling.
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
         public override void Init()
@@ -84,11 +85,6 @@ namespace EDDiscovery.UserControls
             SetSizeImage(size);
 
             DiscoveryForm.OnNewEntry += NewEntry;
-
-            var enumlisttt = new Enum[] { EDTx.UserControlScan_extCheckBoxStar_ToolTip, EDTx.UserControlScan_scanDisplayConfigureButton_ToolTip, 
-                    EDTx.UserControlScan_scanDisplayBodyFiltersButton_ToolTip, EDTx.UserControlScan_buttonSize_ToolTip, 
-                    EDTx.UserControlScan_extButtonHighValue_ToolTip, EDTx.UserControlScan_buttonExtExcel_ToolTip,EDTx.UserControlScan_extButtonNewBookmark_ToolTip};
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
             rollUpPanelTop.SetToolTip(toolTip);     // set after translater
 
@@ -206,7 +202,7 @@ namespace EDDiscovery.UserControls
 
                     if (scanned > 0)
                     {
-                        control_text += " " + "Scan".T(EDTx.UserControlSurveyor_Scan) + " " + scanned.ToString() + (data.FSSTotalBodies != null ? (" / " + data.FSSTotalBodies.Value.ToString()) : "");
+                        control_text += " " + "Scan".Tx()+ " " + scanned.ToString() + (data.FSSTotalBodies != null ? (" / " + data.FSSTotalBodies.Value.ToString()) : "");
                     }
 
                     int fsssignals = data.FSSSignalList.Count;
@@ -216,7 +212,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
                 else
-                    control_text += " " + "No Scan".T(EDTx.NoScan);
+                    control_text += " " + "No Scan".Tx();
             }
 
             var curmats = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast();
@@ -236,7 +232,7 @@ namespace EDDiscovery.UserControls
             {
                 ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
                 int width = 500;
-                f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "System:".T(EDTx.UserControlScan_System), new Point(10, 40), new Size(110, 24), null));
+                f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "System:".Tx(), new Point(10, 40), new Size(110, 24), null));
                 f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Sys", typeof(ExtendedControls.ExtTextBoxAutoComplete), "", new Point(120, 40), new Size(width - 120 - 20, 24), null));
 
                 f.AddOK(new Point(width - 20 - 80, 80));
@@ -259,7 +255,7 @@ namespace EDDiscovery.UserControls
                     }
                 };
 
-                f.InitCentred(this.FindForm(), this.FindForm().Icon, "Show System".T(EDTx.UserControlScan_EnterSys), null, null, closeicon:true);
+                f.InitCentred(this.FindForm(), this.FindForm().Icon, "Show System".Tx(), null, null, closeicon:true);
                 f.GetControl<ExtendedControls.ExtTextBoxAutoComplete>("Sys").SetAutoCompletor(SystemCache.ReturnSystemAutoCompleteList, true);
                 DialogResult res = f.ShowDialog(this.FindForm());
 

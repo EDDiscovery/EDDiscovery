@@ -32,7 +32,10 @@ namespace EDDiscovery.UserControls
         public UserControlOutfitting()
         {
             InitializeComponent();
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
+
         public override void Init()
         {
             DBBaseName = "Outfitting";
@@ -45,12 +48,6 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
 
             Col1.HeaderText = Col2.HeaderText = Col3.HeaderText = Col4.HeaderText = ColPrice.HeaderText = ""; // zero because no values until a display selected
-
-            var enumlist = new Enum[] { EDTx.UserControlOutfitting_labelYardSel, EDTx.UserControlOutfitting_labelYard };
-            var enumlisttt = new Enum[] { EDTx.UserControlOutfitting_comboBoxYards_ToolTip };
-
-            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
         public override void LoadLayout()
@@ -88,13 +85,13 @@ namespace EDDiscovery.UserControls
             OutfittingList ofl = DiscoveryForm.History.Outfitting;
             string cursel = comboBoxYards.Text;
 
-            string the = "Travel History Entry".T(EDTx.UserControlOutfitting_TravelHistoryEntry);
+            string the = "Travel History Entry".Tx();
 
             comboBoxYards.Items.Clear();
             comboBoxYards.Items.Add(the);
 
             // get ship modules, all types, including unknown, and store them into the combo box using the translated name
-            var modlist = ItemData.GetShipModules(true, true, true, true, true, true).Select(x => x.Value.TranslatedModTypeString).Distinct();
+            var modlist = ItemData.GetShipModules(true, true, true, true, true, true).Select(x => x.Value.TranslatedModTypeString()).Distinct();
             comboBoxYards.Items.AddRange(modlist); 
 
             var list = (from x in ofl.GetFilteredList() select x.Ident()).ToList();
@@ -186,22 +183,22 @@ namespace EDDiscovery.UserControls
                     if (ItemData.TryGetShipModule(item.FDName, out ItemData.ShipModule sm, false))    // find if we have it
                         itemname = itemname.AppendPrePad(sm.ToString(), ", ");
 
-                    object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".T(EDTx.Unknown), item.BuyPrice.ToString("N0") };
+                    object[] rowobj = { dte, yardname, itemname, (distance > -1) ? (distance.ToString("N1") + "ly") : "Unknown".Tx(), item.BuyPrice.ToString("N0") };
                     dataGridViewOutfitting.Rows.Add(rowobj);
                 }
             }
 
             labelYard.Text = moduletype;
             labelYard.Visible = true;
-            Col1.HeaderText = "Date".T(EDTx.UserControlOutfitting_Date);
+            Col1.HeaderText = "Date".Tx();
             Col1.Tag = "DT";
-            Col2.HeaderText = "Yard".T(EDTx.UserControlOutfitting_Yard);
+            Col2.HeaderText = "Yard".Tx();
             Col2.Tag = null;
-            Col3.HeaderText = "Item".T(EDTx.UserControlOutfitting_Item);
+            Col3.HeaderText = "Item".Tx();
             Col3.Tag = null;
-            Col4.HeaderText = "Distance".T(EDTx.UserControlOutfitting_Distance);
+            Col4.HeaderText = "Distance".Tx();
             Col4.Tag = "ly";
-            ColPrice.HeaderText = "Price".T(EDTx.UserControlOutfitting_Price);
+            ColPrice.HeaderText = "Price".Tx();
             ColPrice.Tag = "cr";
         }
 
@@ -224,15 +221,15 @@ namespace EDDiscovery.UserControls
             labelYard.Text = yard.Ident() + (distance > -1 ? (" @ " + distance.ToString("N1") + "ly") : "");
             labelYard.Visible = true;
 
-            Col1.HeaderText = "Type".T(EDTx.UserControlOutfitting_Type);
+            Col1.HeaderText = "Type".Tx();
             Col1.Tag = null;
-            Col2.HeaderText = "Item".T(EDTx.UserControlOutfitting_Item);
+            Col2.HeaderText = "Item".Tx();
             Col2.Tag = null;
-            Col3.HeaderText = "Info".T(EDTx.UserControlOutfitting_Info);
+            Col3.HeaderText = "Info".Tx();
             Col3.Tag = null;
-            Col4.HeaderText = "Mass".T(EDTx.UserControlOutfitting_Mass);
+            Col4.HeaderText = "Mass".Tx();
             Col4.Tag = "t";
-            ColPrice.HeaderText = "Price".T(EDTx.UserControlOutfitting_Price);
+            ColPrice.HeaderText = "Price".Tx();
             ColPrice.Tag = "cr";
         }
 
