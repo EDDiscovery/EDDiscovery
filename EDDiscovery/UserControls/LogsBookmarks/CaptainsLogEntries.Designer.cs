@@ -91,7 +91,7 @@
             this.labelEndDate.Name = "labelEndDate";
             this.labelEndDate.Size = new System.Drawing.Size(55, 13);
             this.labelEndDate.TabIndex = 31;
-            this.labelEndDate.Text = "End Date:";
+            this.labelEndDate.Text = "End Date";
             // 
             // dateTimePickerStartDate
             // 
@@ -120,7 +120,7 @@
             this.labelDateStart.Name = "labelDateStart";
             this.labelDateStart.Size = new System.Drawing.Size(58, 13);
             this.labelDateStart.TabIndex = 28;
-            this.labelDateStart.Text = "Start Date:";
+            this.labelDateStart.Text = "Start Date";
             // 
             // buttonTags
             // 

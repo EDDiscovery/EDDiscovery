@@ -225,7 +225,7 @@ namespace EDDiscovery.UserControls
             {
                 ExtendedControls.ConfigurableForm f = new ExtendedControls.ConfigurableForm();
                 int width = 500;
-                f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "System:".Tx(), new Point(10, 40), new Size(110, 24), null));
+                f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "System".Tx()+": ", new Point(10, 40), new Size(110, 24), null));
                 f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Sys", typeof(ExtendedControls.ExtTextBoxAutoComplete), "", new Point(120, 40), new Size(width - 120 - 20, 24), null));
 
                 f.AddOK(new Point(width - 20 - 80, 80));

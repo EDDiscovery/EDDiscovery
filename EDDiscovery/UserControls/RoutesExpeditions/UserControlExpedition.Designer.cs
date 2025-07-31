@@ -123,7 +123,7 @@ namespace EDDiscovery.UserControls
             this.labelCml.Name = "labelCml";
             this.labelCml.Size = new System.Drawing.Size(72, 13);
             this.labelCml.TabIndex = 12;
-            this.labelCml.Text = "Cml Distance:";
+            this.labelCml.Text = "Cml Distance";
             // 
             // labelP2P
             // 
@@ -133,7 +133,7 @@ namespace EDDiscovery.UserControls
             this.labelP2P.Name = "labelP2P";
             this.labelP2P.Size = new System.Drawing.Size(75, 13);
             this.labelP2P.TabIndex = 11;
-            this.labelP2P.Text = "P2P Distance:";
+            this.labelP2P.Text = "P2P Distance";
             // 
             // txtP2PDIstance
             // 
@@ -251,7 +251,7 @@ namespace EDDiscovery.UserControls
             this.labelEndDate.Name = "labelEndDate";
             this.labelEndDate.Size = new System.Drawing.Size(55, 13);
             this.labelEndDate.TabIndex = 5;
-            this.labelEndDate.Text = "End Date:";
+            this.labelEndDate.Text = "End Date";
             // 
             // dateTimePickerStartTime
             // 
@@ -298,7 +298,7 @@ namespace EDDiscovery.UserControls
             this.labelDateStart.Name = "labelDateStart";
             this.labelDateStart.Size = new System.Drawing.Size(58, 13);
             this.labelDateStart.TabIndex = 2;
-            this.labelDateStart.Text = "Start Date:";
+            this.labelDateStart.Text = "Start Date";
             // 
             // textBoxRouteName
             // 
@@ -334,7 +334,7 @@ namespace EDDiscovery.UserControls
             this.labelRouteName.Name = "labelRouteName";
             this.labelRouteName.Size = new System.Drawing.Size(70, 13);
             this.labelRouteName.TabIndex = 0;
-            this.labelRouteName.Text = "Route Name:";
+            this.labelRouteName.Text = "Route Name";
             // 
             // dataGridView
             // 

@@ -205,7 +205,7 @@ namespace EDDiscovery
                     ChangeToProfileId(i, true);
 
                 if (errlist.HasChars())
-                    LogLine("Profile reports errors in triggers:".Tx()+ errlist);
+                    LogLine("Profile reports errors in triggers".Tx()+": "+ errlist);
 
                 try
                 {

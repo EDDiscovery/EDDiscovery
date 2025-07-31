@@ -27,7 +27,7 @@ namespace EDDiscovery.UserControls
     {
         public static void ExpeditionSave(Form frm, string exampleroutename, List<ISystem> routeSystems)
         {
-            string name = ExtendedControls.PromptSingleLine.ShowDialog(frm, "Route Name:".Tx(), exampleroutename,
+            string name = ExtendedControls.PromptSingleLine.ShowDialog(frm, "Route Name".Tx()+": ", exampleroutename,
                             "Save Expedition".Tx(), frm.Icon, widthboxes: 400, requireinput:true);
 
             if (name != null)

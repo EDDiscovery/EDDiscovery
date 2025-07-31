@@ -252,7 +252,7 @@ B1B79547453735: "Insert Tab with panel.." => "添加标签页面板"
 FDB587F6AEF9FC: "Remove Tab" => "移除标签页"
 A44AD2D137232C: "Rename Tab" => "重命名标签页"
 DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "标签页启动失败。\r\n这是异常状况，请通过Discord或者Github告知开发团队。\r\n你可以尝试按住Shift键的同时双击EDDiscovery的图标进入安全模式。\r\n选择重置标签页后，点击运行程序。这样也许会解决问题。"
-B3F69F1983924E: "Name: " => "标题"
+709A23220F2C3D: "Name" => "标题"
 5365F84B9A53D9: "Enter a new name for the tab" => "请输入一个新的标题"
 FF063FC2431DAF: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "已发现以下应用扩展DLL\r\n是否允许使用？\r\n{0} \r\n如果不允许使用的话，请把该DLL从EDDiscovery的DLL文件夹中删除\r\n或者卸载包含此DLL的插件包\r\n再不然可以按住Shift键的同时双击EDDiscovery的图标进入安全模式使用移除所有扩展DLL的选项。"
 3160432B058751: "DLLs loaded: {0}" => "已加载DLL：{0}"
@@ -263,7 +263,7 @@ A7BA2B77971D8B: "Profile {0} Loaded" => "配置文件“{0}”已加载"
 E11B312BFDAE74: "New EDDiscovery installer available: {0}" => "可更新至新版本：{0}"
 2F18E849A799F4: "New Release Available!" => "发现新版本!"
 34CFE199A2E81E: "Arrived at system {0} Visit No. {1}" => "到达{0}星系，第{1}次访问"
-A44C3F341F2CE9: "Profile reports errors in triggers: " => "配置文件返回错误："
+48D867E49868E8: "Profile reports errors in triggers" => "配置文件返回错误："
 B683FA5A92D7B6: "Closing, please wait!" => "关闭中，请稍等！"
 03617D9031DCED: "Star Data download is disabled. Use Settings to reenable it" => "星系数据下载已被禁用。从设置里重新启用。"
 029E79A86E66C0: "Synchronisation to databases is in operation or pending, please wait" => "同步数据至数据库正在进行中或者即将开始，请稍等"
@@ -310,7 +310,6 @@ SECTION AddOnManagerForm
 3F827C66E7E047: "Globals" => "全局"
 0972452F39F378: "Add-On Manager" => "插件管理器"
 3DEB7456519697: "Type" => "类型"
-709A23220F2C3D: "Name" => "名称"
 2DA600BF940484: "Version" => "版本"
 55F8EBC805E65B: "Description" => "描述"
 BAE7D5BE70820E: "Status" => "状态"
@@ -360,11 +359,11 @@ C763B2138A8CAD: "Bubble" => "太阳系周边(Bubble)"
 2D91E32D25F1DF: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "星系数据同步已被禁用。\r\n若要让星系数据更新，请从设置里重新启用星系数据下载"
 B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "你移除了一些星域！\r\n这将会花上一段时间来从数据库里清除数据\r\n确认要继续吗？"
 13D60E3F37387F: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "EDDiscovery 会从 EDSM 和 EDDEB 下载数据来为你提供额外的信息。请选择你想要下载储存多少数据。你选择的星域越多就会占用越多的储存空间。"
-9312B53B772EC5: "Select: " => "选择："
+8598222918D3C6: "Select" => "选择："
 0EE93787C960CF: "Select the data set" => "选择数据集"
 D24336A365C558: "Press to Accept" => "点击以接受"
 D65DF91B92B250: "Select Galaxy Data" => "选择 EDSM 银河星图数据"
-8FE9DB16BE5170: "Area:" => "Zone :"
+2745DEBAA64A20: "Area" => "Zone "
 
 SECTION MoveToCommander
 
@@ -396,11 +395,11 @@ AA36EC39CD202E: "Edit Profile {0} Trigger" => "编辑配置文件{0}的触发器
 SECTION SetNoteForm
 
 335F5087016C3E: "Set Note" => "创建笔记"
-A9C75ED2FAFF02: "Timestamp:" => "时间："
+19EABC961735D7: "Timestamp" => "时间："
 EFC007A393F66C: "Save" => "保存"
-166616B2BA4454: "System:" => "星系："
-6ED816D75E1C95: "Summary:" => "概要："
-1DAAAD0084C260: "Details:" => "详情："
+BC0792D8DC81E8: "System" => "星系："
+12B71C3E0FE5F7: "Summary" => "概要："
+DC3DECBB938475: "Details" => "详情："
 
 SECTION MessageBoxTheme
 
@@ -413,7 +412,7 @@ SECTION MessageBoxTheme
 
 SECTION DataGridViewDialogs
 
-0C0E5051C57E26: "Jump to: " => "跳至："
+CFD6869BBED115: "Jump to" => "跳至："
 411DF1F49FCB30: "Enter number to jump to or near to" => "输入想要跳至的行"
 F8328656EF830C: "Press to Cancel" => "点击以取消"
 AA822BAACB5BCA: "Value is not valid" => "值无效"
@@ -510,7 +509,6 @@ SECTION ActionPackEditPackForm
 SECTION ActionProgramEditForm
 
 4BB0A4AF96D21C: "Action Program" @
-71DD2EFF9B4DA3: "Name:" => "Nom :"
 9A92F637264375: "As File" @
 DDCB77FF769EA5: "Load" => "Ouvrir"
 A96C6A2EC6FD15: "Text Edit" => "Editer texte"
@@ -519,7 +517,7 @@ SECTION ActionPackEditForm
 
 8774D189CE7F96: "Configuration items for installation - specialist use" => "Éléments de configuration pour l'installation - usage spécialisé"
 0878211D394E87: "Input parameters to pass to program on run" => "Paramètres d'entrée à transmettre au programme lors de l'exécution"
-4A7A920987D3AC: "Define Variable:" => "Définir une variable :"
+A45731FA87CFD4: "Define Variable" => "Définir une variable "
 E7181957BFACA6: "Variables to pass into called program" => "Variables à transmettre au programme appelé"
 
 SECTION ActionPackVariablesForm

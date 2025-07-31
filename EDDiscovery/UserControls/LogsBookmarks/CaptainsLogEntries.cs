@@ -345,7 +345,7 @@ namespace EDDiscovery.UserControls
         {
             string notes = rw.Cells[ColNote.Index].Value != null ? (string)rw.Cells[ColNote.Index].Value : "";
 
-            string s = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Note:".Tx(), notes,
+            string s = ExtendedControls.PromptSingleLine.ShowDialog(this.FindForm(), "Note".Tx()+": ", notes,
                             "Enter Note".Tx(), this.FindForm().Icon, multiline: true, cursoratend: true, widthboxes:400, heightboxes:400);
 
             if (s != null)

@@ -204,7 +204,7 @@ SECTION EDDiscoveryForm
 FAC898054B2C2B: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." => "Es gibt {0} EDSM-Ereignisse zu senden, dies kostet Zeit und Bandbreite, wähle aus dem Folgenden was zu tun ist. Einträge vor dem gewählten Datum werden als gesendet markiert."
 B61E7134EF7FDD: "Send All to EDSM" => "Sende AllES an EDSM"
 2460BB4C7A146D: "Send Last 24 Hours of entries to EDSM" => "Sende die letzten 24 Stunden an EDSM"
-AA962467914A2B: "Send From" => "Sende alles beginnend mit: "
+AA962467914A2B: "Send From" => "Sende alles beginnend mit"
 5ED64D1D56F6A0: "EDSM is up to date - send Nothing more" => "EDSM ist auf dem neuesten Stand - sende nichts"
 14D2AEDDDD40B0: "I'll decide later, do nothing" => "Ich entscheide später - mache nichts."
 542CFA5900AB5D: "Sending a large number of EDSM Entries" => "Übertrage eine große Anzahl an EDSM_Ereignissen"
@@ -252,7 +252,7 @@ B1B79547453735: "Insert Tab with panel.." => "Inserisci un pannelo come scheda"
 FDB587F6AEF9FC: "Remove Tab" => "Rimuovi scheda"
 A44AD2D137232C: "Rename Tab" => "Rinomina scheda"
 DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Problemi nel settaggio: scheda principale o gruppo di schede non pu� essere caricato.\r\nQuesta � una condizione anomala. Entra in contatto con gli sviluppatori!"
-B3F69F1983924E: "Name: " => "Nome: "
+709A23220F2C3D: "Name" => "Nome"
 5365F84B9A53D9: "Enter a new name for the tab" => "Rinomina la scheda"
 FF063FC2431DAF: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Le seguenti estensioni DLL sono state trovate\r\nVuoi darle il permesso di essere usate?\r\n{0} \r\nSe non vuoi che vengano usate, rimuovere le DLL dalla cartella DLL di EDDiscovery\r\no rimuovere l'action pack che introduce queste DLL\r\no premere shift alla partenza del programma e selezionare l'opzione Rimuovi le Estensioni DLL"
 3160432B058751: "DLLs loaded: {0}" => "DLLs caricate: {0}"
@@ -263,7 +263,7 @@ A7BA2B77971D8B: "Profile {0} Loaded" => "Profilo {0} caricato"
 E11B312BFDAE74: "New EDDiscovery installer available: {0}" => "Nuovo setup di EDDiscovery disponibile: {0}"
 2F18E849A799F4: "New Release Available!" => "Nuova versione disponibile!"
 34CFE199A2E81E: "Arrived at system {0} Visit No. {1}" => "Arrivato al sistema {0} Visita di Numero {1}"
-A44C3F341F2CE9: "Profile reports errors in triggers: " => "Errori nel profilo riportati dal trigger: "
+48D867E49868E8: "Profile reports errors in triggers" => "Errori nel profilo riportati dal trigger"
 B683FA5A92D7B6: "Closing, please wait!" => "Chiudendo, per favore aspettare!"
 03617D9031DCED: "Star Data download is disabled. Use Settings to reenable it" => "Scarico dei dati stellari disabilitato. Abilitarlo nel setup principale"
 029E79A86E66C0: "Synchronisation to databases is in operation or pending, please wait" => "Sincronizzazione al banco dati in corso, si prega di aspettare"
@@ -310,7 +310,6 @@ SECTION AddOnManagerForm
 3F827C66E7E047: "Globals" => "Globale"
 0972452F39F378: "Add-On Manager" => "Gestisci gli Add-Ons"
 3DEB7456519697: "Type" => "Tipo"
-709A23220F2C3D: "Name" => "Nome"
 2DA600BF940484: "Version" => "Versione"
 55F8EBC805E65B: "Description" => "Descrizione"
 BAE7D5BE70820E: "Status" => "Stato"
@@ -360,11 +359,11 @@ C763B2138A8CAD: "Bubble" => "Bolla"
 2D91E32D25F1DF: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Sincronizzazione dei dati stellari disabilitata nel settagio.\r\nAbilitare per impostare l'aggiornamento"
 B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Hai rimosso settori!\r\nQuesto richiede che tutti i registri siano puliti, cosa che richiede tempo\r\nSei sicuro di voler continuare?"
 13D60E3F37387F: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "ED Discovery scarica i dati stellari da EDSM/EDDB, che è usato per importare dati addizionali. Seleziona quanti dati vuoi scaricare e conservare. Quanto più settori galattici scarichi, maggiore lo spazio necessario e la memoria usata."
-9312B53B772EC5: "Select: " => "Seleziona"
+8598222918D3C6: "Select" => "Seleziona"
 0EE93787C960CF: "Select the data set" => "Seleziona il set di dati"
 D24336A365C558: "Press to Accept" => "Premi per accettare"
 D65DF91B92B250: "Select Galaxy Data" => "Seleziona dati galattici EDSM"
-8FE9DB16BE5170: "Area:" => "Gebiet"
+2745DEBAA64A20: "Area" => "Gebiet"
 
 SECTION MoveToCommander
 
@@ -396,11 +395,11 @@ AA36EC39CD202E: "Edit Profile {0} Trigger" => "Modifica la causa d'azione del pr
 SECTION SetNoteForm
 
 335F5087016C3E: "Set Note" => "Imposta Nota"
-A9C75ED2FAFF02: "Timestamp:" => "Data e ora"
+19EABC961735D7: "Timestamp" => "Data e ora"
 EFC007A393F66C: "Save" => "Salva"
-166616B2BA4454: "System:" => "Sistema"
-6ED816D75E1C95: "Summary:" => "Sommario"
-1DAAAD0084C260: "Details:" => "Dettagli"
+BC0792D8DC81E8: "System" => "Sistema"
+12B71C3E0FE5F7: "Summary" => "Sommario"
+DC3DECBB938475: "Details" => "Dettagli"
 
 SECTION MessageBoxTheme
 
@@ -413,7 +412,7 @@ SECTION MessageBoxTheme
 
 SECTION DataGridViewDialogs
 
-0C0E5051C57E26: "Jump to: " => "Va a"
+CFD6869BBED115: "Jump to" => "Va a"
 411DF1F49FCB30: "Enter number to jump to or near to" => "Inserisci il numero di salti a o vicino a"
 F8328656EF830C: "Press to Cancel" => "Premi per Cancellare"
 AA822BAACB5BCA: "Value is not valid" => "Il Valore non è valido"
@@ -510,7 +509,6 @@ SECTION ActionPackEditPackForm
 SECTION ActionProgramEditForm
 
 4BB0A4AF96D21C: "Action Program" => "Action-Programm"
-71DD2EFF9B4DA3: "Name:" => "Name:"
 9A92F637264375: "As File" => "Als Datei"
 DDCB77FF769EA5: "Load" => "Laden"
 A96C6A2EC6FD15: "Text Edit" => "Text ändern"
@@ -519,7 +517,7 @@ SECTION ActionPackEditForm
 
 8774D189CE7F96: "Configuration items for installation - specialist use" => "Konfigurationselemente für Installation - für Spezialisten"
 0878211D394E87: "Input parameters to pass to program on run" => "Eingangsparameter zur Weiterleitung an Programm im Betrieb"
-4A7A920987D3AC: "Define Variable:" => "Definiere Variable:"
+A45731FA87CFD4: "Define Variable" => "Definiere Variable"
 E7181957BFACA6: "Variables to pass into called program" => "Variablen zur Weiterleitung an aufgerufenes Programm"
 
 SECTION ActionPackVariablesForm

@@ -298,7 +298,7 @@ namespace EDDiscovery.UserControls
             this.toolStripLabelSystem.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
             this.toolStripLabelSystem.Name = "toolStripLabelSystem";
             this.toolStripLabelSystem.Size = new System.Drawing.Size(79, 27);
-            this.toolStripLabelSystem.Text = "From System:";
+            this.toolStripLabelSystem.Text = "From System";
             // 
             // toolStripTextBoxSystem
             // 
@@ -312,7 +312,7 @@ namespace EDDiscovery.UserControls
             this.toolStripLabel1.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.toolStripLabel1.Name = "toolStripLabel1";
             this.toolStripLabel1.Size = new System.Drawing.Size(154, 30);
-            this.toolStripLabel1.Text = "Visited without coordinates:";
+            this.toolStripLabel1.Text = "Visited without coordinates";
             this.toolStripLabel1.ToolTipText = "Start New to update count";
             // 
             // toolStripLabelNoCoords

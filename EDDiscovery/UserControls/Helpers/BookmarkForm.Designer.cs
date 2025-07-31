@@ -218,7 +218,7 @@ namespace EDDiscovery.UserControls
             this.labelX.Name = "labelX";
             this.labelX.Size = new System.Drawing.Size(15, 13);
             this.labelX.TabIndex = 0;
-            this.labelX.Text = "x:";
+            this.labelX.Text = "x";
             // 
             // labelY
             // 
@@ -227,7 +227,7 @@ namespace EDDiscovery.UserControls
             this.labelY.Name = "labelY";
             this.labelY.Size = new System.Drawing.Size(15, 13);
             this.labelY.TabIndex = 0;
-            this.labelY.Text = "y:";
+            this.labelY.Text = "y";
             // 
             // labelZ
             // 
@@ -236,7 +236,7 @@ namespace EDDiscovery.UserControls
             this.labelZ.Name = "labelZ";
             this.labelZ.Size = new System.Drawing.Size(15, 13);
             this.labelZ.TabIndex = 0;
-            this.labelZ.Text = "z:";
+            this.labelZ.Text = "z";
             // 
             // textBoxTime
             // 

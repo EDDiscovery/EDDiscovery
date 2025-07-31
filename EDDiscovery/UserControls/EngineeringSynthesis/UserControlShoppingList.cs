@@ -248,7 +248,7 @@ namespace EDDiscovery.UserControls
 
                     if (capExceededMats.Any())
                     {
-                        wantedList.Append(Environment.NewLine + "Filling Shopping List would exceed capacity for:".Tx());
+                        wantedList.Append(Environment.NewLine + "Filling Shopping List would exceed capacity for".Tx()+": ");
                         foreach (string mat in capExceededMats)
                         {
                             wantedList.Append($"\n  {mat}");

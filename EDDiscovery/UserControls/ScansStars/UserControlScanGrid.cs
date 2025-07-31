@@ -399,7 +399,7 @@ namespace EDDiscovery.UserControls
 
                             if (ret.Length > 0 && IsSet(CtrlList.showMaterials))
                             {
-                                bdDetails.AppendCR().Append("This body contains: ".Tx()).Append(ret);
+                                bdDetails.AppendCR().Append("This body contains".Tx()+": ").Append(ret);
                             }
                         }
                     }
@@ -414,7 +414,7 @@ namespace EDDiscovery.UserControls
                                 if (IsSet(CtrlList.showBelts))
                                 {
                                     // is a belt
-                                    bdDetails.AppendCR().Append("Belt: ".Tx());
+                                    bdDetails.AppendCR().Append("Belt".Tx()+": ");
                                     var RingName = sn.ScanData.Rings[r].Name;
                                     bdDetails.Append(sn.ScanData.Rings[r].TranslatedRingClass()).AppendSPC();
                                     bdDetails.Append((sn.ScanData.Rings[r].InnerRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append(" ls to ").Append((sn.ScanData.Rings[r].OuterRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append(" ls. ");
@@ -425,7 +425,7 @@ namespace EDDiscovery.UserControls
                                 if (IsSet(CtrlList.showRings))
                                 {
                                     // is a ring
-                                    bdDetails.AppendCR().Append("Ring: ".Tx());
+                                    bdDetails.AppendCR().Append("Ring".Tx()+": ");
                                     var RingName = sn.ScanData.Rings[r].Name;
                                     bdDetails.Append(sn.ScanData.Rings[r].TranslatedRingClass()).AppendSPC();
                                     bdDetails.Append((sn.ScanData.Rings[r].InnerRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append(" ls to ").Append((sn.ScanData.Rings[r].OuterRad / BodyPhysicalConstants.oneLS_m).ToString("N2")).Append(" ls. ");

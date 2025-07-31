@@ -252,7 +252,7 @@ B1B79547453735: "Insert Tab with panel.." => "Insertar pestaña con panel ..."
 FDB587F6AEF9FC: "Remove Tab" => "Eliminar pestaña"
 A44AD2D137232C: "Rename Tab" => "Cambiar nombre de pestaña"
 DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Fallo en la configuración de la pestaña: la pestaña principal o TG no se pudo cargar.\r\nEsta es una condición anormal - por favor, comuníquese con el equipo EDD en discord o github.\r\nPara intentar borrarlo, mantenga presionada la tecla shift y luego inicie el programa.\r\nHaga clic en las pestañas Restablecer y luego en Ejecutar programa, lo que puede solucionar el problema "
-B3F69F1983924E: "Name: " => "Nombre: "
+709A23220F2C3D: "Name" => "Nombre"
 5365F84B9A53D9: "Enter a new name for the tab" => "Introduzca un nuevo nombre para la pestaña"
 FF063FC2431DAF: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Se han encontrado las siguientes listas de distribución de extensión de la aplicación\r\n¿Desea que se utilice?\r\n\r\n {0}\r\n"
 3160432B058751: "DLLs loaded: {0}" => "DLL cargados: {0}"
@@ -263,7 +263,7 @@ A7BA2B77971D8B: "Profile {0} Loaded" => "Perfil {0} cargado"
 E11B312BFDAE74: "New EDDiscovery installer available: {0}" => "Nuevo instalador de EDDiscovery disponible: {0}"
 2F18E849A799F4: "New Release Available!" => "¡Nueva versión disponible!"
 34CFE199A2E81E: "Arrived at system {0} Visit No. {1}" => "Llegó al sistema {0} Visita nº {1}"
-A44C3F341F2CE9: "Profile reports errors in triggers: " => "El perfil informa errores en los activadores: "
+48D867E49868E8: "Profile reports errors in triggers" => "El perfil informa errores en los activadores"
 B683FA5A92D7B6: "Closing, please wait!" => "¡Cerrando, por favor espere!"
 03617D9031DCED: "Star Data download is disabled. Use Settings to reenable it" => "La descarga de Datos Estelares está inhabilitada. Usa Configuración para volver a habilitarla"
 029E79A86E66C0: "Synchronisation to databases is in operation or pending, please wait" => "La sincronización con las bases de datos está en funcionamiento o pendiente, espere"
@@ -310,7 +310,6 @@ SECTION AddOnManagerForm
 3F827C66E7E047: "Globals" => "Globales"
 0972452F39F378: "Add-On Manager" => "Administrador de complementos"
 3DEB7456519697: "Type" => "Tipo"
-709A23220F2C3D: "Name" => "Nombre"
 2DA600BF940484: "Version" => "Versión"
 55F8EBC805E65B: "Description" => "Descripción"
 BAE7D5BE70820E: "Status" => "Estado"
@@ -360,11 +359,11 @@ C763B2138A8CAD: "Bubble" => "Burbuja"
 2D91E32D25F1DF: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Sincronización con Datos Estelares inhabilitada en la configuración.\r\nHabilítelos para permitir que se actualicen los Datos Estelares"
 B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "¡Ha eliminado sectores!\r\nEsto requerirá que se limpien las entradas de la base de datos, lo que llevará tiempo\r\n¿Confirmar que desea hacer esto?"
 13D60E3F37387F: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "ED Discovery descarga Datos Estelares de EDSM o Spansh, que se utilizan para proporcionarte datos adicionales. Selecciona cuántos datos deseas almacenar. Cuanto más de la galaxia elijas, más grande será el almacenamiento necesario. Ten en cuenta que tu base de datos del sistema ubicada en la carpeta Appdata debe almacenarse en un SSD. El uso de un HDD será muy lento. Selecciona 'Ninguno' si estás utilizando un HDD."
-9312B53B772EC5: "Select: " => "Seleccione: "
+8598222918D3C6: "Select" => "Seleccione"
 0EE93787C960CF: "Select the data set" => "Seleccione el conjunto de datos"
 D24336A365C558: "Press to Accept" => "Presione para aceptar"
 D65DF91B92B250: "Select Galaxy Data" => "Seleccione datos de la galaxia"
-8FE9DB16BE5170: "Area:" => "Área"
+2745DEBAA64A20: "Area" => "Área"
 
 SECTION MoveToCommander
 
@@ -396,11 +395,11 @@ AA36EC39CD202E: "Edit Profile {0} Trigger" => "Editar perfil {0} Activador"
 SECTION SetNoteForm
 
 335F5087016C3E: "Set Note" => "Establecer nota"
-A9C75ED2FAFF02: "Timestamp:" => "Marca de tiempo:"
+19EABC961735D7: "Timestamp" => "Marca de tiempo"
 EFC007A393F66C: "Save" => "Ahorrar"
-166616B2BA4454: "System:" => "Sistema:"
-6ED816D75E1C95: "Summary:" => "Resumen:"
-1DAAAD0084C260: "Details:" => "Detalles:"
+BC0792D8DC81E8: "System" => "Sistema"
+12B71C3E0FE5F7: "Summary" => "Resumen"
+DC3DECBB938475: "Details" => "Detalles"
 
 SECTION MessageBoxTheme
 
@@ -413,7 +412,7 @@ SECTION MessageBoxTheme
 
 SECTION DataGridViewDialogs
 
-0C0E5051C57E26: "Jump to: " => "Salta a: "
+CFD6869BBED115: "Jump to" => "Salta a"
 411DF1F49FCB30: "Enter number to jump to or near to" => "Ingrese el número para saltar o cerca de"
 F8328656EF830C: "Press to Cancel" => "Presione para cancelar"
 AA822BAACB5BCA: "Value is not valid" => "El valor no es válido"
@@ -510,7 +509,6 @@ SECTION ActionPackEditPackForm
 SECTION ActionProgramEditForm
 
 4BB0A4AF96D21C: "Action Program" => "Action-Programm"
-71DD2EFF9B4DA3: "Name:" => "Nombre"
 9A92F637264375: "As File" => "Como Archivo"
 DDCB77FF769EA5: "Load" => "Cargar"
 A96C6A2EC6FD15: "Text Edit" => "Editar Texto"
@@ -519,7 +517,7 @@ SECTION ActionPackEditForm
 
 8774D189CE7F96: "Configuration items for installation - specialist use" => "Elementos de configuración para la instalación - uso especializado"
 0878211D394E87: "Input parameters to pass to program on run" => "Parámetros de entrada para pasar al programa en ejecución"
-4A7A920987D3AC: "Define Variable:" => "Definir Variable:"
+A45731FA87CFD4: "Define Variable" => "Definir Variable"
 E7181957BFACA6: "Variables to pass into called program" => "Variables para pasar al programa llamado"
 
 SECTION ActionPackVariablesForm

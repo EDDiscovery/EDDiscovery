@@ -620,7 +620,7 @@ namespace EDDiscovery.UserControls
             this.labelMass.Name = "labelMass";
             this.labelMass.Size = new System.Drawing.Size(35, 13);
             this.labelMass.TabIndex = 0;
-            this.labelMass.Text = "Mass:";
+            this.labelMass.Text = "Mass";
             // 
             // labelCost
             // 
@@ -629,7 +629,7 @@ namespace EDDiscovery.UserControls
             this.labelCost.Name = "labelCost";
             this.labelCost.Size = new System.Drawing.Size(31, 13);
             this.labelCost.TabIndex = 0;
-            this.labelCost.Text = "Cost:";
+            this.labelCost.Text = "Cost";
             // 
             // labelFSD
             // 
@@ -638,7 +638,7 @@ namespace EDDiscovery.UserControls
             this.labelFSD.Name = "labelFSD";
             this.labelFSD.Size = new System.Drawing.Size(31, 13);
             this.labelFSD.TabIndex = 0;
-            this.labelFSD.Text = "FSD:";
+            this.labelFSD.Text = "FSD";
             // 
             // labelThrusters
             // 
@@ -647,7 +647,7 @@ namespace EDDiscovery.UserControls
             this.labelThrusters.Name = "labelThrusters";
             this.labelThrusters.Size = new System.Drawing.Size(40, 13);
             this.labelThrusters.TabIndex = 0;
-            this.labelThrusters.Text = "Thrust:";
+            this.labelThrusters.Text = "Thrust";
             // 
             // labelWep
             // 
@@ -656,7 +656,7 @@ namespace EDDiscovery.UserControls
             this.labelWep.Name = "labelWep";
             this.labelWep.Size = new System.Drawing.Size(56, 13);
             this.labelWep.TabIndex = 0;
-            this.labelWep.Text = "Weapons:";
+            this.labelWep.Text = "Weapons";
             // 
             // labelShields
             // 
@@ -665,7 +665,7 @@ namespace EDDiscovery.UserControls
             this.labelShields.Name = "labelShields";
             this.labelShields.Size = new System.Drawing.Size(44, 13);
             this.labelShields.TabIndex = 0;
-            this.labelShields.Text = "Shields:";
+            this.labelShields.Text = "Shields";
             // 
             // labelArmour
             // 
@@ -674,7 +674,7 @@ namespace EDDiscovery.UserControls
             this.labelArmour.Name = "labelArmour";
             this.labelArmour.Size = new System.Drawing.Size(43, 13);
             this.labelArmour.TabIndex = 0;
-            this.labelArmour.Text = "Armour:";
+            this.labelArmour.Text = "Armour";
             // 
             // panelTop
             // 

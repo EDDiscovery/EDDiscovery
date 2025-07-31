@@ -432,8 +432,8 @@ namespace EDDiscovery.UserControls
                         BaseUtils.FieldBuilder.Build("Jump Range: ; ly;N0".Tx(), cs.State.JumpRangeCurr),
                         BaseUtils.FieldBuilder.Build("Max Jump: ; ly;N0".Tx(), cs.State.JumpRangeMax),
                         BaseUtils.FieldBuilder.Build("Fuel: ; t;N0".Tx(), cs.State.FuelLevel),
-                        BaseUtils.FieldBuilder.Build("Docking Access: ".Tx(), cs.State.DockingAccessSplittable.SplitCapsWordFull()),
-                        BaseUtils.FieldBuilder.Build("Notorious: ".Tx(), (cs.State.AllowNotorious ? "Yes".Tx(): "No".Tx())),
+                        BaseUtils.FieldBuilder.Build("Docking Access".Tx()+": ", cs.State.DockingAccessSplittable.SplitCapsWordFull()),
+                        BaseUtils.FieldBuilder.Build("Notorious".Tx()+": ", (cs.State.AllowNotorious ? "Yes".Tx(): "No".Tx())),
                     };
 
                     imageControlOverall.DrawText(new Point(rightpos, vposr + linemargin), new Size(30000, 30000), text, normfont, linemargin, color);
@@ -529,7 +529,7 @@ namespace EDDiscovery.UserControls
                                 // crewname, if either no service state or name is null, ??
                                 string crewname = servicestate?.CrewName ?? "??";
 
-                                imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name: ".Tx()+ crewname, normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name".Tx()+": "+ crewname, normfont, color);
                             }
 
                             if (active)

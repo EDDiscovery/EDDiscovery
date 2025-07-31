@@ -238,12 +238,12 @@ namespace EDDiscovery.Forms
 
             f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), text,  new Point(10, 30), new Size(width-50, 100), ""));
             
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Select:".Tx(), new Point(10, 130), new Size(130, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Select".Tx()+": ", new Point(10, 130), new Size(130, 24), ""));
             f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Source", "EDSM",
                         new Point(140, 130), new Size(width - 140 - 100, 24),
                         "Select the data source".Tx(), new List<string> { "EDSM", "SPANSH" }));
 
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Area:".Tx(), new Point(10, 200), new Size(130, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Area".Tx()+": ", new Point(10, 200), new Size(130, 24), ""));
             f.Add(new ExtendedControls.ConfigurableEntryList.Entry("Entry", DefaultGalaxyOptions[2].Item1,
                         new Point(140, 200), new Size(width - 140 - 100, 24),
                         "Select the data set".Tx(), list));

@@ -768,7 +768,7 @@ namespace EDDiscovery.UserControls
             this.labelTimeDisplay.Name = "labelTimeDisplay";
             this.labelTimeDisplay.Size = new System.Drawing.Size(33, 13);
             this.labelTimeDisplay.TabIndex = 5;
-            this.labelTimeDisplay.Text = "Time:";
+            this.labelTimeDisplay.Text = "Time";
             // 
             // extGroupBoxWebServer
             // 
@@ -970,7 +970,7 @@ namespace EDDiscovery.UserControls
             this.labelHistoryEssItems.Name = "labelHistoryEssItems";
             this.labelHistoryEssItems.Size = new System.Drawing.Size(86, 13);
             this.labelHistoryEssItems.TabIndex = 5;
-            this.labelHistoryEssItems.Text = "Essential entries:";
+            this.labelHistoryEssItems.Text = "Essential entries";
             // 
             // labelHistorySel
             // 
@@ -979,7 +979,7 @@ namespace EDDiscovery.UserControls
             this.labelHistorySel.Name = "labelHistorySel";
             this.labelHistorySel.Size = new System.Drawing.Size(78, 13);
             this.labelHistorySel.TabIndex = 5;
-            this.labelHistorySel.Text = "Entries to read:";
+            this.labelHistorySel.Text = "Entries to read";
             // 
             // groupBoxCustomScreenShots
             // 

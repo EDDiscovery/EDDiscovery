@@ -569,10 +569,10 @@ namespace EDDiscovery.UserControls
                 TravelDGV("FSD jumps".Tx(), currentstat.FSDJumps.Count.ToString());
 
                 TravelDGV("FSD Jump History".Tx(),
-                                        "24 Hours: ".Tx()+ currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddHours(-24)).Count() +
-                                        ", One Week: ".Tx()+ currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-7)).Count() +
-                                        ", 30 Days: ".Tx()+ currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-30)).Count() +
-                                        ", One Year: ".Tx()+ currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-365)).Count()
+                                        "24 Hours".Tx()+": "+ currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddHours(-24)).Count() +
+                                        ", One Week".Tx()+": "+ currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-7)).Count() +
+                                        ", 30 Days".Tx()+": "+ currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-30)).Count() +
+                                        ", One Year".Tx()+": "+ currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-365)).Count()
                                         );
 
                 TravelDGV("Most North".Tx(), GetSystemDataString(currentstat.MostNorth));

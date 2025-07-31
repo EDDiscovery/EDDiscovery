@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls.Helpers
             if (panelButtons.Visible)
             {
                 labelValue.Visible = (totalreward != 0);
-                labelValue.Text = "Value: ".Tx()+ totalreward.ToString("N0") + " C:" + completed.ToString("N0") + " A:" + abandonded.ToString("N0") + " F:" + failed.ToString("N0");
+                labelValue.Text = "Value".Tx()+": "+ totalreward.ToString("N0") + " C:" + completed.ToString("N0") + " A:" + abandonded.ToString("N0") + " F:" + failed.ToString("N0");
             }
 
             int count = dataGridView.RowCount;

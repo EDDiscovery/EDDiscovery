@@ -783,7 +783,7 @@ namespace EDDiscovery.UserControls
             int width = 430;
             int ctrlleft = 150;
 
-            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Fuel Warning:".Tx(), new Point(10, 40), new Size(140, 24), ""));
+            f.Add(new ExtendedControls.ConfigurableEntryList.Entry("L", typeof(Label), "Fuel Warning".Tx()+": ", new Point(10, 40), new Size(140, 24), ""));
             f.Add(new ExtendedControls.ConfigurableEntryList.Entry("FuelWarning", typeof(ExtendedControls.NumberBoxDouble),
                 last_si.FuelWarningPercent.ToString(), new Point(ctrlleft, 40), new Size(width - ctrlleft - 20, 24), "Enter fuel warning level in % (0 = off, 1-100%)".Tx())
             { NumberBoxDoubleMinimum = 0, NumberBoxDoubleMaximum = 100, NumberBoxFormat = "0.##" });
@@ -811,7 +811,7 @@ namespace EDDiscovery.UserControls
                 }
                 else if (controlname == "Sell")
                 {
-                    if ( ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm sell of ship:".Tx()+ Environment.NewLine + last_si.ShipNameIdentType , "Warning".Tx(), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ) 
+                    if ( ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm sell of ship".Tx()+": "+ Environment.NewLine + last_si.ShipNameIdentType , "Warning".Tx(), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ) 
                     {
                         var je = new EliteDangerousCore.JournalEvents.JournalShipyardSell(DateTime.UtcNow, last_si.ShipFD, last_si.ID, 0, EDCommander.CurrentCmdrID);
                         var jo = je.Json();

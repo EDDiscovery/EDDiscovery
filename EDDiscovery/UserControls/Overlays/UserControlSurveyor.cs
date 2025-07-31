@@ -931,7 +931,7 @@ namespace EDDiscovery.UserControls
                             fsssignalstodisplay.Equals("*"))
                         {
                             if (pos++ == expiredpos)
-                                ldrawsystemsignallist = ldrawsystemsignallist.AppendPrePad("Expired:".Tx(), Environment.NewLine + Environment.NewLine);
+                                ldrawsystemsignallist = ldrawsystemsignallist.AppendPrePad("Expired".Tx()+": ", Environment.NewLine + Environment.NewLine);
 
                             ldrawsystemsignallist = ldrawsystemsignallist.AppendPrePad(fsssig.ToString(true), Environment.NewLine);
                         }

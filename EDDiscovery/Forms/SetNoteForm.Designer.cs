@@ -58,7 +58,7 @@
             this.labelTTimestamp.Name = "labelTTimestamp";
             this.labelTTimestamp.Size = new System.Drawing.Size(61, 13);
             this.labelTTimestamp.TabIndex = 1;
-            this.labelTTimestamp.Text = "Timestamp:";
+            this.labelTTimestamp.Text = "Timestamp";
             // 
             // labelTSystem
             // 
@@ -67,7 +67,7 @@
             this.labelTSystem.Name = "labelTSystem";
             this.labelTSystem.Size = new System.Drawing.Size(44, 13);
             this.labelTSystem.TabIndex = 2;
-            this.labelTSystem.Text = "System:";
+            this.labelTSystem.Text = "System";
             // 
             // labelTSummary
             // 
@@ -76,7 +76,7 @@
             this.labelTSummary.Name = "labelTSummary";
             this.labelTSummary.Size = new System.Drawing.Size(53, 13);
             this.labelTSummary.TabIndex = 6;
-            this.labelTSummary.Text = "Summary:";
+            this.labelTSummary.Text = "Summary";
             // 
             // labelTimestamp
             // 
@@ -112,7 +112,7 @@
             this.labelTDetails.Name = "labelTDetails";
             this.labelTDetails.Size = new System.Drawing.Size(42, 13);
             this.labelTDetails.TabIndex = 10;
-            this.labelTDetails.Text = "Details:";
+            this.labelTDetails.Text = "Details";
             // 
             // labelDetails
             // 

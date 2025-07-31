@@ -84,7 +84,6 @@ SECTION UserControlWebBrowser
 E79777EDFFFA20: "Track system in history panel" @
 01F03837323AAB: "URLs" @
 58CF52A56F41EA: "Select another system to view" @
-48984F66C09441: "System: " @
 D6335B2F4D21A6: "Show System" @
 
 SECTION UserControlSearch
@@ -116,8 +115,7 @@ AA3B17BAA83D49: "Secondary material or commodity to search for" @
 
 SECTION SearchScans
 
-8598222918D3C6: "Select" @
-469CEC3C536805: "Enter Search Name: " @
+A7396032CA2935: "Enter Search Name" @
 576B5ACFD6F9E4: "Confirm deletion of" @
 0088C59DD3E567: "Cannot delete this entry" @
 37A47BD94B5C5D: "Condition is not valid" @
@@ -126,7 +124,6 @@ SECTION SearchScans
 23D692F07A3FB6: "Parent" @
 EFAAD58C837641: "Grandparent" @
 4A7891A93B7D2C: "Parent of Star" @
-BC0792D8DC81E8: "System" @
 9054FF5F5ED0C8: "Select a predefined condition" @
 E732D75B811346: "Search for condition below" @
 C199BFDEBEFCEA: "Save current condition" @
@@ -140,7 +137,7 @@ D14970EE4E27AE: "Click to enable debug log production on search" @
 450D52D3EF8975: "Searches" @
 07C3B8B498D6BD: "Export user searches" @
 F6FBA35BE4C529: "Import user searches" @
-8B335A234E4193: "Sort:" @
+ADC4E96A478BE0: "Sort" @
 5531C4FF55C5CF: "Too many results to display, truncating to the first {0}" @
 
 SECTION UserControlDiscoveries
@@ -231,11 +228,11 @@ FCBDC25ADED443: "Dist." @
 5FF07654F5C831: "Dist Start" @
 CE33081BD85857: "Dist Remaining" @
 942A8B6ED71457: "History Note" @
-6FAE50524E4FCC: "Cml Distance:" @
-907EB0BA50086A: "P2P Distance:" @
-5F0AC2A013B639: "End Date:" @
-FA4DD9CA914ECE: "Start Date:" @
-F1E28A201CEE47: "Route Name:" @
+7D12459D88715E: "Cml Distance" @
+B7A2B9728CF910: "P2P Distance" @
+84B1478125890B: "End Date" @
+9D7AB1A557965B: "Start Date" @
+A5323E433EDC1A: "Route Name" @
 5ECE584160349A: "View System" @
 AF74F7C5362AAE: "Copy" @
 DB2483000D154C: "Paste" @
@@ -347,9 +344,7 @@ SECTION UserControlMissionOverlay
 BC775B0E4D5ED0: " Left " @
 50C4713CBC3348: "Mission Name" @
 90DC27E4C3BEB4: "Mission Description" @
-9D7AB1A557965B: "Start Date" @
 7190FFD9B23765: "Faction Information" @
-84B1478125890B: "End Date" @
 
 SECTION UserControlSurveyor
 
@@ -421,7 +416,7 @@ A91D37462D4799: " Missions" @
 F8B59037B2A4AE: " Mission" @
 199EA69AF2F28C: "Value (cr):\n{0:N0}" @
 59EF5FF5CFDAFB: "Value (cr)" @
-2688E219B0D815: "Value: " @
+8DCE170DE238B1: "Value" @
 
 SECTION UserControlModules
 
@@ -429,12 +424,12 @@ ECDDA59AEA5EE6: "Item" @
 20DD0E149BA65F: "BluePrint" @
 02D2B8A95C0CDF: "P/E" @
 323D4FC7337134: "Ship" @
-FF36CBDAB65662: "Mass:" @
-24AB018B53A3D1: "Cost:" @
-7BC0F9941B91E6: "FSD:" @
-BE87DB1726CE63: "Thrust:" @
-BB75822ED5263A: "Shields:" @
-C401139400D59D: "Armour:" @
+AF0AD10B2A196B: "Mass" @
+64AE43E8FE7620: "Cost" @
+0C85DB3EB1A9A6: "FSD" @
+47071804F38EAF: "Thrust" @
+31FE17191E290C: "Shields" @
+FAB9348C4FD97F: "Armour" @
 
 
 6129EFBCDDA076: "Show full blueprint information" @
@@ -447,24 +442,21 @@ FE4704B79D6001: "Configure extra data missing from Elite Journal Output" @
 A64AB328A429FA: "Import a ship definition for display" @
 
 FE5C2531E39340: "Force Sell" @
-6274EC09200AD8: "Confirm sell of ship:" @
+122A6B402DF67D: "Confirm sell of ship" @
 CA73BB4E22EBFD: "Stored Modules" @
 D2F025FD0D6F0C: "Travel History Entry" @
 673463FDF95385: "Owned Ships" @
 44B046E04F2B04: "Tx Time" @
-64AE43E8FE7620: "Cost" @
 ECE2AC10D7266F: "Slot" @
-8DCE170DE238B1: "Value" @
 B2B53EE4FC1A90: "Stored" @
 22F4D0D2422A35: "All Modules" @
 8F325EDB2B44A3: "All Known Modules" @
 9569A6C389205D: "All Ships" @
-AF0AD10B2A196B: "Mass" @
 
 046E5CEE819C2B: "In Transit" @
 EF14AB9080E8AD: "Enter ED Shipyard URL" @
 5406A1422EA878: "Enter Coriolis URL" @
-2A39E6AA297AED: "Fuel Warning: " @
+F7E56852A21682: "Fuel Warning" @
 6915FDD1AF8A81: "Enter fuel warning level in % (0 = off, 1-100%)" @
 E613FC90158F3E: "A Value is not valid" @
 3F86F40ECFD2E5: "Ship Configure" @
@@ -478,7 +470,7 @@ E5379DCF7E564E: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" 
 C8DF6EB8BFDFCF: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
 C11EA28A729193: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
 6CC0AEA921D9CD: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
-825EC079E4368A: "Weapons:" @
+F32D0645A8333F: "Weapons" @
 
 60830556FBB8D7: "Save this loadout to the EDD loadout folder" @
 391427FC2F26EA: "Delete loadout" @
@@ -607,7 +599,7 @@ E0B7B8CC8BD7CC: "Show Classes of Stars" @
 1BC356C17D4433: "Show mass of planets" @
 FA07BE19814A99: "Show mass of stars" @
 A35655D05BB820: "Show age of stars" @
-0A78BBC3075642: "Expired:" @
+A689A999A5E620: "Expired" @
 90EAF9559AB2D2: "Show bodyless stars on separate lines" @
 79F1829F7C4ED0: "Create a new bookmark for the current system" @
 
@@ -623,9 +615,8 @@ E5AAEAAC2E19A2: "Radius" @
 846B90266CABF4: "Moon" @
 F85D3B343E0C17: "Geological activity" @
 8E140B3FB3635C: "Surface mapped" @
-A7D0680CBE63CD: "This body contains: " @
-8189F9AF9F3214: "Ring: " @
-70D78F107FF0C0: "Belt: " @
+269077C77225D6: "This body contains" @
+96DDACCF581F48: "Ring" @
 CB7305DF2F4D76: "This is a green system, as it has all existing jumponium materials available!" @
 318EF98C2276FA: " jumponium materials found in system." @
 37B1866847BAC8: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" @
@@ -644,14 +635,13 @@ A797E30923AC1B: "Theme" @
 2E150D8A081FC8: "Edit Theme" @
 3F3EC4F121D583: "Save Theme" @
 566A5EE14C22AA: "Number Rows by Date Ascending" @
-179578FE1B6B89: "Time:" @
 A030328790B9CB: "Web Server" @
 FE035157CDA20B: "Port" @
 94DC8E4A59FAFE: "Interaction" @
 C223113FF59532: "Key to activate transparent windows" @
 89C8A2851D1755: "Memory" @
-CED36555EC7260: "Essential entries:" @
-7807CC93D64789: "Entries to read:" @
+ACDE88AB2C1C2E: "Essential entries" @
+F709149E45E3DA: "Entries to read" @
 5F6928B2C259B9: "Screenshots conversion" @
 792C81A4CFDCB5: "Configure" @
 12AC0D4B1657FF: "System DB Control" @
@@ -737,7 +727,7 @@ E003047957A50D: "Include Material %age on Landed Body in Shopping List" @
 88E515DDBD6CF6: "Use EDSM data in System Availability" @
 E3E78C5A9B4B48: "Use Historic Material Counts" @
 0D1C90F01F1AC9: "Needed Mats" @
-9CAA261BEC144D: "Filling Shopping List would exceed capacity for: " @
+6C1B59B6152200: "Filling Shopping List would exceed capacity for" @
 0C17E1E2D825FF: "No materials currently required." @
 9CDB9B531A7E2C: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" @
 7D83DF15795144: "Materials on {0}" @
@@ -862,10 +852,10 @@ D01ADD4A8CF9C6: "PVP Kills" @
 20CB368601547F: "Total No of jumps" @
 D06EC3483818A9: "FSD jumps" @
 E13CB4A04BC34B: "FSD Jump History" @
-F6C54118BB5CD4: "24 Hours: " @
-2E2B3457EDF182: ", One Week: " @
-D3832EC86D33CE: ", 30 Days: " @
-1CDC174DD72EA0: ", One Year: " @
+BB3BBEC3B7BECB: "24 Hours" @
+91A4748C01B13C: ", One Week" @
+F1B5EA10F447E6: ", 30 Days" @
+FEB665354F9937: ", One Year" @
 50CA2C7949A7B3: "Most North" @
 FF4C48EC20A07F: "Most South" @
 ED38C3B32E9FB4: "Most East" @
@@ -907,7 +897,6 @@ ED8FE7F50C291D: "Goods Bought" @
 
 SECTION StatsTimeUserControl
 
-12B71C3E0FE5F7: "Summary" @
 987B9CED08D4AC: "Day" @
 F82BE68A7FB4E7: "Week" @
 082BC378CD60E1: "Month" @
@@ -1041,7 +1030,6 @@ EF78A6EC93835C: "Sun;Mon;Tue;Wed;Thu;Fri;Sat" @
 SECTION CaptainsLogEntries
 
 7B1E36DA0107B5: "Bad/Out of Range Date Time format" @
-AA1E8410ED98F2: "Note: " @
 C2016469805D19: "Enter Note" @
 1DD4DD39159EAF: "Do you really want to delete {0} notes?\r\nConfirm or Cancel" @
 261A5FFA4D0D81: "Do you really want to delete the note for {0}\r\nConfirm or Cancel" @
@@ -1061,8 +1049,8 @@ C4923981307F3C: "Add all EDSM systems" @
 7ABC2E762F1C11: "Add to wanted systems" @
 47B25478D21515: "&Submit Distances" @
 D12B3719BBD6F1: "Start New" @
-0E258A8C046375: "From System:" @
-0C87234D1B2DD1: "Visited without coordinates:" @
+46843D98B0DFDC: "From System" @
+64B737D6229A62: "Visited without coordinates" @
 6F38D28253F348: "Add 20 oldest" @
 CD2E16EBD3BDBA: "Add 20 newest" @
 0BF9E53A212E10: "Press Start New" @
@@ -1151,9 +1139,9 @@ EE4A9C0F4355B9: "Materials/Commodities for " @
 449B4068617074: "Show missions for faction" @
 4CA2AF672FCE38: "Show commodity/material trades for faction" @
 5B997E7442275B: "Show bounties and bonds for faction" @
-819A8C7163E967: "Missions In Progress: " @
-3AA9F747E12858: "Capital ship Victims: " @
-A466B1F86CE710: "Capital ship Award: " @
+F6A9D28E466A97: "Missions In Progress" @
+72E11BB738A1FB: "Capital ship Victims" @
+6F623465F6238E: "Capital ship Award" @
 C7AD6F7B6831A8: "Redeem Voucher" @
 2C60D95A352DA3: "Pay Fines" @
 7E2BA2DEEF4EF3: "Pay Bounty Value" @
@@ -1252,8 +1240,8 @@ EF1C1576EACED1: "Module Packs: ; t;N0" @
 11CDC4D5D07633: "Jump Range: ; ly;N0" @
 A2B7F586AACEE5: "Max Jump: ; ly;N0" @
 A936AD07CF17C0: "Fuel: ; t;N0" @
-B45F1101FF6819: "Docking Access: " @
-FA0FD4EDB0C658: "Notorious: " @
+0935C6C59186BC: "Docking Access" @
+059AE46E428B7C: "Notorious" @
 5A1731CE9C0565: "Balance: ; cr;N0" @
 CB4849CE71609D: "Reserve: ; cr;N0" @
 EF688A50489362: "Available: ; cr;N0" @
@@ -1272,7 +1260,7 @@ B455B013A9CF13: "Install cost: ; cr;N0" @
 3DF5159B0456C1: "Capacity Allocated: ; Units;N0" @
 CB7654E3728C0A: "Upkeep cost: ; cr;N0" @
 9EC790B9F4E58F: "Suspended upkeep cost: ; cr;N0" @
-D8EC343DF22D11: "Crew Name: " @
+311F21EEA90405: "Crew Name" @
 E2CE7274D260B9: "This Service is Active" @
 CD7E9084A619FD: "This Service is Suspended" @
 6C573682E526FF: "This Service is Not Installed" @
@@ -1325,7 +1313,7 @@ DF26DBDCA9929A: "Enter a region name..." @
 SECTION SurfaceBookmarkUserControl
 
 7E5FE97F0E9632: "Enter a name" @
-E0FDAC5D3CB4CB: "Planet: " @
+E7ABD943794547: "Planet" @
 764838B4934B32: "Enter planet name" @
 A3A26DCAD13DD3: "Manually Add Planet" @
 8ADA27931CC8B8: "Planetary Body" @

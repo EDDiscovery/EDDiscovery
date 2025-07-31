@@ -42,7 +42,7 @@ namespace EDDiscovery.UserControls.Search
             this.labelSort.Name = "labelSort";
             this.labelSort.Size = new System.Drawing.Size(29, 13);
             this.labelSort.TabIndex = 0;
-            this.labelSort.Text = "Sort:";
+            this.labelSort.Text = "Sort";
             // 
             // extTextBoxSortCondition
             // 

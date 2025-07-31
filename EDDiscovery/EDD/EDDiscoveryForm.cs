@@ -598,7 +598,7 @@ namespace EDDiscovery
             removeTabToolStripMenuItem.Click += (s, e) => tabControlMain.RemoveTab(tabControlMain.LastTabClicked);
             renameTabToolStripMenuItem.Click += (s, e) =>
             {
-                string newvalue = ExtendedControls.PromptSingleLine.ShowDialog(this,"Name:".Tx(), tabControlMain.TabPages[tabControlMain.LastTabClicked].Text,
+                string newvalue = ExtendedControls.PromptSingleLine.ShowDialog(this,"Name".Tx()+": ", tabControlMain.TabPages[tabControlMain.LastTabClicked].Text,
                                 "Rename Tab".Tx(), this.Icon, false, "Enter a new name for the tab".Tx(), requireinput:true);
                 if (newvalue != null)
                     tabControlMain.RenameTab(tabControlMain.LastTabClicked, newvalue.Replace(";", "_"));

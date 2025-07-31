@@ -167,7 +167,7 @@ namespace EDDiscovery.UserControls
                     if (ms != null)
                     {
                         if (ms.MissionsInProgress > 0)
-                            info = info.AppendPrePad("Missions In Progress:".Tx()+ " " + ms.MissionsInProgress, ", ");
+                            info = info.AppendPrePad("Missions In Progress".Tx()+": "+ " " + ms.MissionsInProgress, ", ");
 
                         foreach (var reward in ms.MissionRewards.Values)
                         {
@@ -178,9 +178,9 @@ namespace EDDiscovery.UserControls
                     if (fs != null)
                     {
                         if (fs.CapShipAwardAsVictimFaction > 0)
-                            info = info.AppendPrePad("Capital ship Victims: ".Tx()+ fs.CapShipAwardAsVictimFaction, ", ");
+                            info = info.AppendPrePad("Capital ship Victims".Tx()+": "+ fs.CapShipAwardAsVictimFaction, ", ");
                         if (fs.CapShipAwardAsAwaringFaction > 0)
-                            info = info.AppendPrePad("Capital ship Award: ".Tx()+ fs.CapShipAwardAsAwaringFaction + ":" + fs.CapShipAwardAsAwaringFactionValue.ToString("N0") + "cr", ", ");
+                            info = info.AppendPrePad("Capital ship Award".Tx()+": "+ fs.CapShipAwardAsAwaringFaction + ":" + fs.CapShipAwardAsAwaringFactionValue.ToString("N0") + "cr", ", ");
                     }
 
                     System.Text.StringBuilder factionstring = new System.Text.StringBuilder();
