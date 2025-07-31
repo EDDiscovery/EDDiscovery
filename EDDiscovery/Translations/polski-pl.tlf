@@ -1,4 +1,6 @@
-﻿E9C45563358E81: "Warning" => "Uwaga"
+﻿// File consists of SHA-1 (0..7) IDs with english text and translation, or @ if no translation
+
+E9C45563358E81: "Warning" => "Uwaga"
 24345A14377FD8: "Today" => "Dzisiaj"
 02779596113109: "24h" => "24 godz."
 0A8DD6ADCE7A0D: "7 days" => "7 Dni"
