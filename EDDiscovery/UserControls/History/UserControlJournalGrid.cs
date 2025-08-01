@@ -398,7 +398,7 @@ namespace EDDiscovery.UserControls
             {
                 var he = CurrentHE();
                 //System.Diagnostics.Debug.WriteLine($"Travel Grid position request direct send to {sender}");
-                sender.PerformPanelOperation(this, he);         // direct send back to sender so we don't wake up lots of panels
+                sender.CallPerformPanelOperation(this, he);         // direct send back to sender so we don't wake up lots of panels
                 return PanelActionState.Success;
             }
 

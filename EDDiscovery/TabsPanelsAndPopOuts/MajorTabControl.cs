@@ -107,8 +107,8 @@ namespace EDDiscovery
                 // so force size. tried perform layout to no avail
                 p.Size = TabPages[SelectedIndex].Size;
                 UserControls.UserControlCommonBase uccb = (UserControls.UserControlCommonBase)p.Controls[0];
-                uccb.LoadLayout();
-                uccb.InitialDisplay();
+                uccb.CallLoadLayout();
+                uccb.CallInitialDisplay();
             }
 
             //foreach (TabPage tp in tabControlMain.TabPages) System.Diagnostics.Debug.WriteLine("TP Size " + tp.Controls[0].DisplayRectangle);
@@ -139,7 +139,7 @@ namespace EDDiscovery
             foreach (TabPage p in TabPages)      // all main tabs, close down
             {
                 UserControls.UserControlCommonBase uccb = p.Controls[0] as UserControls.UserControlCommonBase;
-                uccb.CloseDown();
+                uccb.CallCloseDown();
                 idlist.Add(Object.ReferenceEquals(uccb, PrimarySplitterTab) ? -1 : (int)uccb.PanelID);      // primary is marked -1
                 idlist.Add(uccb.DisplayNumber);
                 tabnames += p.Text + ";";
@@ -159,8 +159,8 @@ namespace EDDiscovery
             if (page != null)
             {
                 UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
-                uccb.LoadLayout();
-                uccb.InitialDisplay();
+                uccb.CallLoadLayout();
+                uccb.CallInitialDisplay();
                 SelectedIndex = tabindex;   // and select the inserted one
             }
         }
@@ -204,7 +204,7 @@ namespace EDDiscovery
 
             if (uccb.AllowClose())              // it must allow a close to remove it
             {
-                uccb.CloseDown();
+                uccb.CallCloseDown();
                 page.Dispose();
             }
         }
@@ -254,8 +254,8 @@ namespace EDDiscovery
                 if (page != null)       // if created..
                 {
                     UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
-                    uccb.LoadLayout();
-                    uccb.InitialDisplay();
+                    uccb.CallLoadLayout();
+                    uccb.CallInitialDisplay();
                 }
             }
 
@@ -351,7 +351,7 @@ namespace EDDiscovery
             }
 
             //Init control after it is added to the form
-            uccb.Init(eddiscovery, dn);    // start the uccb up
+            uccb.CallInit(eddiscovery, dn);    // start the uccb up
 
             // the standard method is to scale then theme. Order as per the contract in UCCB. Uccb should be in AutoScaleInherit mode
             // done in splitter, grid, popout the same

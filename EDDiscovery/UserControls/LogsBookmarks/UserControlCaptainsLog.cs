@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
             tabStrip.OnPostCreateTab += (tab, ctrl, si) =>
             {
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
-                uccb.Init(DiscoveryForm, DisplayNumber);
+                uccb.CallInit(DiscoveryForm, DisplayNumber);
                 ExtendedControls.Theme.Current.ApplyStd(uccb);       // contract, in UCCB, states theming is between init and load
                 uccb.LoadLayout();
                 uccb.InitialDisplay();
@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls
             tabStrip.OnRemoving += (tab, ctrl) =>
             {
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
-                uccb.CloseDown();
+                uccb.CallCloseDown();
             };
 
             tabStrip.OnControlTextClick += (tab) =>

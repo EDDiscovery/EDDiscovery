@@ -68,14 +68,14 @@ namespace EDDiscovery.UserControls
             userControlEngineering.DBBaseName = "SLEngineering";            // makes it unique to the SL
             userControlEngineering.RequestPanelOperation += RequestPanelOperation;
 
-            userControlEngineering.Init(DiscoveryForm, DisplayNumber);
+            userControlEngineering.CallInit(DiscoveryForm, DisplayNumber);
 
             useHistoric = userControlEngineering.isHistoric;
 
             userControlSynthesis.DontShowShoppingList = true;
             userControlSynthesis.DBBaseName = "SLSynthesis";            // makes it unique to the SL
             userControlSynthesis.RequestPanelOperation += RequestPanelOperation;
-            userControlSynthesis.Init(DiscoveryForm, DisplayNumber);
+            userControlSynthesis.CallInit(DiscoveryForm, DisplayNumber);
 
             // so the way it works, if the panels ever re-display (for whatever reason) they tell us, and we redisplay
 
@@ -105,8 +105,8 @@ namespace EDDiscovery.UserControls
             PutSetting(dbShowSystemAvailability, showSystemAvailability);
             PutSetting(dbUseEDSMForSystemAvailability, useEDSMForSystemAvailability);
             PutSetting(dbToggleShoppingListPosition, HorizonalSplitContainerPos);
-            userControlEngineering.CloseDown();
-            userControlSynthesis.CloseDown();
+            userControlEngineering.CallCloseDown();
+            userControlSynthesis.CallCloseDown();
         }
 
         #endregion

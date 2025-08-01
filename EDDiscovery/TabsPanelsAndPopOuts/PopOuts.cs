@@ -138,7 +138,7 @@ namespace EDDiscovery
 
                 ucf.Init(uccb, windowtitle, ExtendedControls.Theme.Current.WindowsFrame, refname, discoveryform.TopMost);
 
-                uccb.Init(discoveryform, UserControlCommonBase.DisplayNumberPopOuts + number);
+                uccb.CallInit(discoveryform, UserControlCommonBase.DisplayNumberPopOuts + number);
 
                 System.Diagnostics.Debug.WriteLine($"UCCB Display number {ucf.PopOutNumber}");
                 ExtendedControls.Theme.Current.ApplyStd(ucf);   // apply theming/scaling to form before shown, so that it restored back to correct position (done in UCF::onLoad)

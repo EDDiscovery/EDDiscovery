@@ -239,8 +239,8 @@ namespace EDDiscovery.UserControls
             if (UserControl != null)
             {
                 UserControl.TransparencyModeChanged(IsTransparentModeOn);       
-                UserControl.LoadLayout();
-                UserControl.InitialDisplay();
+                UserControl.CallLoadLayout();
+                UserControl.CallInitialDisplay();
             }
 
             IsLoaded = true;
@@ -258,7 +258,7 @@ namespace EDDiscovery.UserControls
             {
                 IsLoaded = false;
                 checkmousepositiontimer.Stop();
-                UserControl?.CloseDown();                   // it may be null
+                UserControl?.CallCloseDown();                   // it may be null
             }
             else
                 e.Cancel = true;                            // cancel close

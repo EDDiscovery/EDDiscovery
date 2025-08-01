@@ -130,7 +130,7 @@ namespace EDDiscovery.UserControls
             {
                 //System.Diagnostics.Debug.WriteLine($"MTC PerformOp pop outs from {sender.PanelID} distribute to tab {ucf.Name}: {action}");
 
-                var res = ucf.UserControl.PerformPanelOperation(sender, action);
+                var res = ucf.UserControl.CallPerformPanelOperation(sender, action);
                 //System.Diagnostics.Debug.WriteLine($"..PerformOp pop outs result {res} panel");
 
                 if (res != UserControlCommonBase.PanelActionState.NotHandled)
