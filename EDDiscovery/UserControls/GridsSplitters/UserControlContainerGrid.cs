@@ -155,7 +155,7 @@ namespace EDDiscovery.UserControls
                 
                 //System.Diagnostics.Debug.WriteLine("  Save " + uc.GetType().Name + " at " + r.Location + " sz " + r.Size);
 
-                uc.CloseDown();
+                uc.CallCloseDown();
             }
 
             PutSetting(dbWindowNames, s);
@@ -220,7 +220,7 @@ namespace EDDiscovery.UserControls
 
             System.Diagnostics.Trace.WriteLine("Grid Make " + uccb.GetType().Name + " " + dnum + " " + numopenedinsidealready);
 
-            uccb.Init(DiscoveryForm, dnum);
+            uccb.CallInit(DiscoveryForm, dnum);
 
             return uccr;
         }
@@ -228,8 +228,8 @@ namespace EDDiscovery.UserControls
         private void LoadLayoutPanel(UserControlContainerResizable uccr, UserControlCommonBase uccb, Point pos, Size size)
         {
             //System.Diagnostics.Trace.WriteLine("GD:Cursor/Load/Init " + uccb.GetType().Name + " to " + pos + " " + size);
-            uccb.LoadLayout();
-            uccb.InitialDisplay();
+            uccb.CallLoadLayout();
+            uccb.CallInitialDisplay();
 
             uccr.Location = pos;        // must set on load layout, themeing is defined between init and load layout and can shift numbers
             uccr.Size = size;
@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
             if (uc.AllowClose())
             {
                 System.Diagnostics.Trace.WriteLine($"Grid Close {uc.PanelID} dno {DisplayNumber}");
-                uc.CloseDown();
+                uc.CallCloseDown();
                 panelPlayfield.Controls.Remove(uccr);
                 uccrlist.Remove(uccr);
                 Invalidate();
@@ -270,7 +270,7 @@ namespace EDDiscovery.UserControls
                 if (uccr.UCCB != sender)        // don't send to sender
                 {
                     //System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} perform operation {actionobj}");
-                    var state = uccr.UCCB.PerformPanelOperation(sender, actionobj);
+                    var state = uccr.UCCB.CallPerformPanelOperation(sender, actionobj);
                     //System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} perform operation {actionobj} result {state}");
 
                     if (IsPASResult(state))
@@ -310,7 +310,7 @@ namespace EDDiscovery.UserControls
             foreach (var uccr in uccrlist)
             {
                 //System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} perform action from above {actionobj}");
-                var state = uccr.UCCB.PerformPanelOperation(sender, actionobj);     // pass to it
+                var state = uccr.UCCB.CallPerformPanelOperation(sender, actionobj);     // pass to it
                 //System.Diagnostics.Debug.WriteLine($"...grid {uccr.UCCB.PanelID} perform action from above {actionobj} result {state}");
 
                 if ( state != PanelActionState.NotHandled)       // if we said something to it other than NotHandled

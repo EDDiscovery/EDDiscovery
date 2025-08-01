@@ -110,7 +110,7 @@ namespace EDDiscovery.UserControls
                 int displaynumber = DisplayNumberOfSplitter(tagid);                         // tab strip - use tag to remember display id which helps us save context.
                 //System.Diagnostics.Trace.WriteLine($"Splitter Make {uccb.PanelID} tag {tagid} dno {displaynumber}");
 
-                uccb.Init(DiscoveryForm, displaynumber);
+                uccb.CallInit(DiscoveryForm, displaynumber);
             });
 
             DiscoveryForm.OnPanelAdded += PanelAdded;
@@ -128,8 +128,8 @@ namespace EDDiscovery.UserControls
 
             RunActionOnSplitterTree((p, c, uccb) =>     // now, at load layout, do the rest of the UCCB contract.
             {
-                uccb.LoadLayout();
-                uccb.InitialDisplay();
+                uccb.CallLoadLayout();
+                uccb.CallInitialDisplay();
             });
 
             Invalidate(true);
@@ -180,7 +180,7 @@ namespace EDDiscovery.UserControls
                 UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
                 if (uccb != null)     // tab strip may not have a control set..
                 {
-                    uccb.CloseDown();
+                    uccb.CallCloseDown();
                     //System.Diagnostics.Trace.WriteLine($"Splitter Close {uccb.PanelID} dno {DisplayNumber}");
                 }
             });
@@ -282,7 +282,7 @@ namespace EDDiscovery.UserControls
                 tabstrip.OnRemoving += (tab, ctrl) =>
                 {
                     UserControlCommonBase uccb = ctrl as UserControlCommonBase;
-                    uccb.CloseDown();
+                    uccb.CallCloseDown();
                 };
 
                 tabstrip.OnCreateTab += (tab, si) =>        // called when the tab strip wants a new control for a tab. 
@@ -310,7 +310,7 @@ namespace EDDiscovery.UserControls
                     if (uccb != null)
                     {
                         //System.Diagnostics.Trace.WriteLine("Splitter Make Tab " + tabstripid + " with dno " + displaynumber );
-                        uccb.Init(DiscoveryForm, displaynumber);      // init..
+                        uccb.CallInit(DiscoveryForm, displaynumber);      // init..
 
                         var scale = this.FindForm().CurrentAutoScaleFactor();
                         //System.Diagnostics.Trace.WriteLine($"Splitter apply scaling to {uccb.Name} {scale}");
@@ -318,8 +318,8 @@ namespace EDDiscovery.UserControls
 
                         ExtendedControls.Theme.Current.ApplyStd(uccb);
 
-                        uccb.LoadLayout();
-                        uccb.InitialDisplay();
+                        uccb.CallLoadLayout();
+                        uccb.CallInitialDisplay();
                     }
                 };
 
@@ -367,7 +367,7 @@ namespace EDDiscovery.UserControls
                 {
                     //System.Diagnostics.Debug.WriteLine($"...splitter {uccb.PanelID} perform operation {actionobj}");
 
-                    var state = uccb.PerformPanelOperation(sender, actionobj);
+                    var state = uccb.CallPerformPanelOperation(sender, actionobj);
 
                     //System.Diagnostics.Debug.WriteLine($"...splitter {uccb.PanelID} perform operation {actionobj} result {state}");
 
@@ -411,7 +411,7 @@ namespace EDDiscovery.UserControls
                 if (uccb != null && !IsPASResult(retstate)) // if valid, and we have not stopped distributing because someone has claimed it
                 {
                     //System.Diagnostics.Debug.WriteLine($"...splitter perform action from above {uccb.PanelID} perform operation {actionobj}");
-                    var state = uccb.PerformPanelOperation(sender, actionobj);
+                    var state = uccb.CallPerformPanelOperation(sender, actionobj);
                     //System.Diagnostics.Debug.WriteLine($"...splitter perform action from above {uccb.PanelID} perform operation {actionobj} result {state}");
 
                     if (IsPASResult(state))

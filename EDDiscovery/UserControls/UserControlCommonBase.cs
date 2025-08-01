@@ -45,6 +45,7 @@ namespace EDDiscovery.UserControls
         public EDDiscoveryForm DiscoveryForm { get; private set; }    // set on Init    
         public UserControlCommonBase ParentUCCB { get; set; }    // only for UCCBs under UCCBs, this is set to the parent UCCB (search)
         public bool IsClosed { get; private set; }                    // set after CloseDown called. Use this if your doing await stuff which may mean your class gets called after close
+        public bool IsInitialDisplayCalled { get; private set; }      // set before InitialDisplay is called.
 
         public bool IsFloatingWindow { get { return this.FindForm() is UserControlForm; } }   // ultimately its a floating window
         public bool IsControlTextVisible()
@@ -82,24 +83,13 @@ namespace EDDiscovery.UserControls
             PanelID = p.PopoutID;
         }
 
-        // Called by form/major tab etc to create a panel
-
-        public void Init(EDDiscoveryForm ed, int dn)
-        {
-            System.Diagnostics.Debug.WriteLine($"UCCB Init {this.Name} with DN {dn}");
-            DiscoveryForm = ed;
-            DisplayNumber = dn;
-            Init();
-        }
-
+        // Virtual override ONLY - do not call
         // UCCB overrides this to initialise itself.
         // Init has a chance to make new controls if required to be autothemed/scaled.
         // contract is in majortabcontrol::CreateTab, PanelAndPopOuts::PopOut, SplitterControl::OnPostCreateTab, Grid:CreateInitPanel
-
         public virtual void Init() { }              // start up, called by above Init.  no cursor available
 
         // after init, themeing and scaling happens at this point.  Item should be in AutoScaleMode.Inherit to prevent double scaling
-
         // For popout forms, on init, it calls SetTransparency, then TransparencyModeChanged
         // The transparency key color is set by theme during UserControlForm init - you can override if required in Init()
         // everytime the transparency changes (due to user hovering etc) SetTransparency is called
@@ -108,11 +98,16 @@ namespace EDDiscovery.UserControls
         // For popout forms, on init, TransparentModeChange is called. Then called only then if the user changes the transparent major mode on/off
         public virtual void TransparencyModeChanged(bool on) { }
 
-        // then LoadLayout, InitialDisplay is called
-        public virtual void LoadLayout() { }        // then a chance to load a layout. 
-        public virtual void InitialDisplay() { }    // do the initial display
+        // Virtual override ONLY - do not call 
+        // Load a layout
+        public virtual void LoadLayout() { }
 
-        // Panel is closing, save stuff. Note to users- DO NOT USE DIRECTLY - USE CLOSEDOWN()
+        // Virtual override ONLY - do not call
+        // Do the initial display. At this point the panel should be able to handle Perform Actions
+        public virtual void InitialDisplay() { }
+
+        // Virtual override ONLY - do not call
+        // Panel is closing, save stuff.
         public virtual void Closing() { }
 
         // end calling order.
@@ -131,12 +126,6 @@ namespace EDDiscovery.UserControls
         }
         // override to prevent closure
         public virtual bool AllowClose() { return true; }
-
-        #endregion
-
-        #region Closedown
-
-        // call to request a close by the panel itself. Only for pop out windows
         public void RequestClose()
         {
             if (this.Parent is UserControlForm)
@@ -145,11 +134,46 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Debug.WriteLine($"*** Can't request close this panel type {this.GetType()}");
         }
 
+        #endregion
+
+        #region Calling the virtual functions 
+        // Creators are MajorTabControl, PopOuts, Splitter, Grid, UserControlForm.  These use the majority of these. Only CallPerformPanelOperation can be used by a panel
+
+        // call to init the panel
+        public void CallInit(EDDiscoveryForm ed, int dn)
+        {
+            System.Diagnostics.Debug.WriteLine($"UCCB Init {this.Name} with DN {dn}");
+            DiscoveryForm = ed;
+            DisplayNumber = dn;
+            Init();
+        }
+
+        // call to perform load layout
+        public void CallLoadLayout()
+        {
+            LoadLayout();
+        }
+        // call to perform initial display
+        public void CallInitialDisplay()
+        {
+            IsInitialDisplayCalled = true;
+            InitialDisplay();
+        }
+
         // Call to indicate that the panel is closing, called by Form or Tab Control/Splitter to tell panel its closing down. Calls Closing() which the panel intercepts
-        public void CloseDown()
+        public void CallCloseDown()
         {
             IsClosed = true;
             Closing();
+        }
+
+        // Use by creators, or panels, to send the perform panel operation. ONLY use this to call the panel operation
+        public PanelActionState CallPerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        {
+            if (IsInitialDisplayCalled && !IsClosed)
+                return PerformPanelOperation(sender, actionobj);
+            else
+                return PanelActionState.NotHandled;
         }
 
         protected override void Dispose(bool disposing)     // ensure closed during disposal.
@@ -158,7 +182,7 @@ namespace EDDiscovery.UserControls
             {
                 if (!IsClosed)
                 {
-                    CloseDown();
+                    CallCloseDown();
                 }
             }
 
@@ -259,11 +283,12 @@ namespace EDDiscovery.UserControls
         };
         public static bool IsPASResult(PanelActionState s) => (int)s >= 2;
 
-        // Request action. Return one of the PAS State
-        // set up before Init by MajorTabControl, UserControlContainerGrid, UserControlSplitter, PopOuts.cs
+        // Request action. Panel calls this to ask for service
+        // Return one of the PAS State
+        // set up by creators before Init by MajorTabControl, UserControlContainerGrid, UserControlSplitter, PopOuts.cs
         public Func<UserControlCommonBase, object, PanelActionState> RequestPanelOperation;        
 
-        // Request panel operation with this request, if not handled, open this type of tab and try again
+        // Request panel operation with this request, if not handled, open this type of tab and try again.
         public PanelActionState RequestPanelOperationOpen(PanelInformation.PanelIDs paneltype, object req)
         {
             if (RequestPanelOperation != null)      // not likely, but
@@ -281,8 +306,9 @@ namespace EDDiscovery.UserControls
                 return PanelActionState.NotHandled;
         }
 
+        // Virtual override ONLY - do not call
         // panel is asked for operation, return true to indicate its swallowed, or false to say pass it onto next guy. 
-        // the default implementation, because its used a lot, tries to go to a HE and if so calls the second entry point ReceiveHistoryEntry
+        // this is the default implementation, because its used a lot, tries to go to a HE and if so calls the second entry point ReceiveHistoryEntry
         // either override PerformPanelOperation for the full monty, or override ReceiveHistoryEntry if your just interested in HE receive
         public virtual PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
@@ -294,6 +320,8 @@ namespace EDDiscovery.UserControls
             else
                 return PanelActionState.NotHandled;
         } 
+
+        // virtual override if your only interested in history entries
         public virtual void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
         }

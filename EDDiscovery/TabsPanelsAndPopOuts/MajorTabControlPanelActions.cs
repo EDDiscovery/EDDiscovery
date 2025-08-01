@@ -38,7 +38,7 @@ namespace EDDiscovery
                     var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
 
                     //System.Diagnostics.Debug.WriteLine($"MTC PerformOp primary from {sender.PanelID} distribute to tab {tp.Name}: {actionobj}");
-                    var res = uccb.PerformPanelOperation(sender, actionobj);
+                    var res = uccb.CallPerformPanelOperation(sender, actionobj);
                     //System.Diagnostics.Debug.WriteLine($"..PerformOp Primary result {res} panel {tp.Text}");
 
                     if (IsPASResult(res))       // if we have a stopping result
@@ -94,7 +94,7 @@ namespace EDDiscovery
             {
                 //System.Diagnostics.Debug.WriteLine($"..Send travel grid request {actionobj} to primary tab");
                 UserControls.UserControlContainerSplitter pt = PrimarySplitterTab;
-                return pt.PerformPanelOperation(sender, actionobj);        
+                return pt.CallPerformPanelOperation(sender, actionobj);        
             }
 
             // else push to all until we get a result
@@ -107,7 +107,7 @@ namespace EDDiscovery
                         var uccb = (UserControls.UserControlCommonBase)tp.Controls[0];
 
                         //System.Diagnostics.Debug.WriteLine($"MTC PerformOp Other from {sender.PanelID} distribute to tab {tp.Name}: {actionobj}");
-                        var res = uccb.PerformPanelOperation(sender, actionobj);
+                        var res = uccb.CallPerformPanelOperation(sender, actionobj);
                         //System.Diagnostics.Debug.WriteLine($"..PerformOp Other result {res} panel {tp.Text}");
 
                         if (IsPASResult(res))
