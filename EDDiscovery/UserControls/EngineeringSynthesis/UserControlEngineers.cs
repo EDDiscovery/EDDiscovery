@@ -40,7 +40,7 @@ namespace EDDiscovery.UserControls
             DBBaseName = "Engineers";
         }
 
-        public override void Init()
+        protected override void Init()
         {
             isHistoric = GetSetting(dbHistoricMatsSave, false);
             chkNotHistoric.Checked = !isHistoric;
@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += RefreshData;
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
             DiscoveryForm.OnHistoryChange -= RefreshData;
@@ -85,7 +85,7 @@ namespace EDDiscovery.UserControls
             PutSetting(dbHistoricMatsSave, isHistoric);
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             SetupDisplay();
             RefreshData();

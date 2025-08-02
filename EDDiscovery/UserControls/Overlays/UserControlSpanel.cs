@@ -125,7 +125,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "SPanel";
 
@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
              //scantext = "kwkwkwkw qwkqwkqw qw qwkqwjjqw qwjkqwjqwj wjwhghe wwjsjsjsjw.\r\nwkwkwkwk\r\nwjqjqjw ro"; // for debug
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             dividercheck.Stop();
             scanhide.Stop();
@@ -210,13 +210,13 @@ namespace EDDiscovery.UserControls
         }
 
         public override bool SupportTransparency { get { return true; } }
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             pictureBox.BackColor = this.BackColor = curcol;
             rollUpPanelTop.Visible = !on;
         }
 
-        public override void TransparencyModeChanged(bool on)
+        protected override void TransparencyModeChanged(bool on)
         {
             Display(current_historylist);
         }
@@ -231,7 +231,7 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             Display(DiscoveryForm.History);
         }

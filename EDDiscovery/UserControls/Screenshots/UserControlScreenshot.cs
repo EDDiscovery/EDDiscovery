@@ -42,7 +42,7 @@ namespace EDDiscovery.UserControls
             rollUpPanelTop.Resize += RollUpPanelTop_Resize;
         }
 
-        public override void Init()
+        protected override void Init()
         {
             extButtonRemoveImage.Enabled = extButtonCopy.Enabled = false;
 
@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
             UpdateComboBox();
@@ -71,7 +71,7 @@ namespace EDDiscovery.UserControls
         }
 
 
-        public override void Closing()
+        protected override void Closing()
         {
             DiscoveryForm.ScreenShotCaptured -= Discoveryform_ScreenShotCaptured;
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;

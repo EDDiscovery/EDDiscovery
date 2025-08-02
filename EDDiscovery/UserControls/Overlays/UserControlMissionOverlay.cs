@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
 
         public override bool SupportTransparency { get { return true; } }
 
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             pictureBox.BackColor = this.BackColor = curcol;
             Display(currentHE);
@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "MissionOverlay";
 
@@ -90,7 +90,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -113,7 +113,7 @@ namespace EDDiscovery.UserControls
             Display(currentHE);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -123,7 +123,7 @@ namespace EDDiscovery.UserControls
 
         #region Implementation
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             Display(DiscoveryForm.History.GetLast);
         }

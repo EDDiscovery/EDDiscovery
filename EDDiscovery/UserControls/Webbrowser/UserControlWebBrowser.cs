@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls
             historychangedtimer.Tick += HistoryChangedTimer_Tick;
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             System.Diagnostics.Trace.WriteLine($"Web browser initial display");
             var wv2 = new BrowserWebView2();
@@ -109,7 +109,7 @@ namespace EDDiscovery.UserControls
 
         bool isClosing = false;     // in case we are in a middle of a lookup
 
-        public override void Closing()
+        protected override void Closing()
         {
             historychangedtimer.Stop();
             isClosing = true;

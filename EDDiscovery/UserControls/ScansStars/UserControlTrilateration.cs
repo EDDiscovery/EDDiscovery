@@ -43,7 +43,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "Trilateration";
 
@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
             toolStripTextBoxSystem.Text = "Press Start New".T(EDTx.UserControlTrilateration_ToolStripText);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             PutSetting("Sectors", toolStripButtonSector.Checked);
         }

@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             extComboBoxGameTime.Items.Add("Local".T(EDTx.UserControlSettings_Local));
             extComboBoxGameTime.Items.Add("UTC");
@@ -177,11 +177,11 @@ namespace EDDiscovery.UserControls
         }
 
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DiscoveryForm.OnRefreshCommanders -= DiscoveryForm_OnRefreshCommanders;
 

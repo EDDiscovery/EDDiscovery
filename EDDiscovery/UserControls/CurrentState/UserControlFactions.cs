@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "FactionsPanel";
 
@@ -103,19 +103,19 @@ namespace EDDiscovery.UserControls
             searchtimer.Tick += (e, s) => { searchtimer.Stop(); Display(); };
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridView);
             SetHideButtonState();
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             last_he_received = DiscoveryForm.History.GetLast;
             Display();
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             searchtimer.Stop();
 

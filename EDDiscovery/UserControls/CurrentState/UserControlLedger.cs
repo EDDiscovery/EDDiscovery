@@ -41,7 +41,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "LedgerGrid";
 
@@ -120,13 +120,13 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             dataGridViewLedger.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridViewLedger);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewLedger);
             PutSetting(dbSCLedger, splitContainerLedger.GetSplitterDistance());
@@ -144,7 +144,7 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             Display();
         }

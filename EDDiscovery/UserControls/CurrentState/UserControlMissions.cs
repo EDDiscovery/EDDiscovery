@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "Missions";
 
@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
             missionListPrevious.SearchTextChanged += () => { Display(); };
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             missionListCurrent.SetMinimumHeight(Font.ScalePixels(26));
             missionListPrevious.SetMinimumHeight(Font.ScalePixels(26));
@@ -64,7 +64,7 @@ namespace EDDiscovery.UserControls
             missionListPrevious.DateTimeChanged = () => { Display(); };
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             missionListCurrent.Closing();
             missionListPrevious.Closing();
@@ -86,7 +86,7 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }

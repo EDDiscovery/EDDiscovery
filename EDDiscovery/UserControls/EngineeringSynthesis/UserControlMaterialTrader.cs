@@ -80,7 +80,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "MaterialTrade";
 
@@ -109,13 +109,13 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             dataGridViewTrades.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridViewTrades);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewTrades);
             PutSetting(dbSplitter, splitContainer.GetSplitterDistance());
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             if (checkBoxCursorToTop.Checked)
             {

@@ -53,7 +53,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "Compass";
 
@@ -95,7 +95,7 @@ namespace EDDiscovery.UserControls
             guistate = DiscoveryForm.UIOverallStatus.Focus;
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             base.LoadLayout();
             displayfont = FontHelpers.GetFont(GetSetting(dbFont, ""), null);        // null if not set, keep selection in displayfont
@@ -103,12 +103,12 @@ namespace EDDiscovery.UserControls
                 compassControl.Font = displayfont;
         }
 
-        public override void InitialDisplay()       
+        protected override void InitialDisplay()       
         {
             Discoveryform_OnHistoryChange();
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             bool validsetting = numberBoxTargetLatitude.IsValid && numberBoxTargetLongitude.IsValid;
             PutSetting(dbLatSave, validsetting ? numberBoxTargetLatitude.Value : double.NaN);
@@ -132,7 +132,7 @@ namespace EDDiscovery.UserControls
 
         public override bool SupportTransparency { get { return true; } }
         public override bool DefaultTransparent { get { return true; } }
-        public override void SetTransparency(bool on, Color curbackcol)
+        protected override void SetTransparency(bool on, Color curbackcol)
         {
             lasttransparentmode = on;   // keep this because its the only record of transparency mode, and we may need it in history change for SetCompassForegroundColour
             BackColor = curbackcol;

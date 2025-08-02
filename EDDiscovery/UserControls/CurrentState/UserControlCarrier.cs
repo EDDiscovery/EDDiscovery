@@ -183,7 +183,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
             dataGridViewItinerary.WebLookup = EliteDangerousCore.WebExternalDataLookup.All;
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             extTabControl.TabStyle = new ExtendedControls.TabStyleSquare();        // after themeing, set to differentiate
 
@@ -212,13 +212,13 @@ namespace EDDiscovery.UserControls
                 extTabControl.SelectedIndex = index;
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             ClearDisplayFontJournalCAPI();     // do the lot
             period.Start();
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             period.Stop();
 

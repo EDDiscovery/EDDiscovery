@@ -28,22 +28,22 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "SpanshStations";
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             spanshStationsUserControl.Init(this,()=>IsClosed);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             spanshStationsUserControl.Close();
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }

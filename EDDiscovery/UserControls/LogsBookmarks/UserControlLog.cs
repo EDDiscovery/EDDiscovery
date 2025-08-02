@@ -26,7 +26,7 @@ namespace EDDiscovery.UserControls
             richTextBox_History.ContextMenuStrip = contextMenuStrip;
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DiscoveryForm.OnNewLogEntry += AppendText;
             AppendText(DiscoveryForm.LogText, ExtendedControls.Theme.Current.TextBlockForeColor);
@@ -36,11 +36,11 @@ namespace EDDiscovery.UserControls
             BaseUtils.Translator.Instance.TranslateToolstrip(contextMenuStrip, enumlistcms, this);
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DiscoveryForm.OnNewLogEntry -= AppendText;
         }

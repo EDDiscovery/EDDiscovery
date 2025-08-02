@@ -19,7 +19,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlInara : UserControlWebBrowser
     {
-        public override void Init()
+        protected override void Init()
         {
             Init("Inara", "https://inara.cz");
         }

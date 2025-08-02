@@ -55,7 +55,7 @@ namespace EDDiscovery.UserControls
             imageViewer.MaxZoom = 800;
         }
 
-        public override void Init()
+        protected override void Init()
         {
             systemlist = HistoryList.FilterByFSDCarrierJumpAndPosition(DiscoveryForm.History.EntryOrder());
 
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
             DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;

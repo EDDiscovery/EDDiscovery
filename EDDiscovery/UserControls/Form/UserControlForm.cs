@@ -125,7 +125,7 @@ namespace EDDiscovery.UserControls
                 if (lasttransparentmodereported != IsTransparentModeOn)     // if we changed major mode, inform the panel so it can redraw 
                 {
                     lasttransparentmodereported = IsTransparentModeOn;
-                    UserControl.TransparencyModeChanged(IsTransparentModeOn);
+                    UserControl.CallTransparencyModeChanged(IsTransparentModeOn);
                 }
             }
         }
@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
             // tell UC of events in UCCB order
             if (UserControl != null)
             {
-                UserControl.TransparencyModeChanged(IsTransparentModeOn);       
+                UserControl.CallTransparencyModeChanged(IsTransparentModeOn);       
                 UserControl.CallLoadLayout();
                 UserControl.CallInitialDisplay();
             }
@@ -319,7 +319,7 @@ namespace EDDiscovery.UserControls
             extButtonDrawnShowTitle.ImageSelected = DisplayTitle ? ExtendedControls.ExtButtonDrawn.ImageType.Captioned : ExtendedControls.ExtButtonDrawn.ImageType.NotCaptioned;
             extButtonDrawnOnTop.ImageSelected = TopMost ? ExtendedControls.ExtButtonDrawn.ImageType.OnTop : ExtendedControls.ExtButtonDrawn.ImageType.Floating;
 
-            UserControl?.SetTransparency(IsCurrentlyTransparent, curbackground);     // tell the UCCB about the current state
+            UserControl?.CallSetTransparency(IsCurrentlyTransparent, curbackground);     // tell the UCCB about the current state
 
             if (Environment.OSVersion.Platform == PlatformID.Win32NT)
             {

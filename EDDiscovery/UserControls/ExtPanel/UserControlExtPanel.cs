@@ -31,7 +31,7 @@ namespace EDDiscovery.UserControls
 
         #region UCCB IF
 
-        public override void Creation(PanelInformation.PanelInfo p)
+        protected override void Creation(PanelInformation.PanelInfo p)
         {
             base.Creation(p);
             System.Diagnostics.Debug.WriteLine($"Ext panel create class {p.WindowTitle}");
@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
 
         public const int PanelCallBackVersion = 1;      // explicitly,this is what we do
 
-        public override void Init()
+        protected override void Init()
         {
             System.Diagnostics.Debug.Assert(PanelCallBackVersion == EDDDLLInterfaces.EDDDLLIF.PanelCallBackVersion, "***** Updated EDD DLL IF but not updated panel callbacks");
 
@@ -99,21 +99,21 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewTarget += Discoveryform_OnNewTarget;
         }
 
-        public override void SetTransparency(bool ison, Color curcol)
+        protected override void SetTransparency(bool ison, Color curcol)
         {
             panel.SetTransparency(ison, curcol);
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             panel.LoadLayout();
         }
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             panel.InitialDisplay();
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             panel.Closing();
 
@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls
 
         public override bool SupportTransparency { get { return panel.SupportTransparency; } }  // override to say support transparency
         public override bool DefaultTransparent { get { return panel.DefaultTransparent; } }  // override to say default to be transparent
-        public override void TransparencyModeChanged( bool on) { panel.TransparencyModeChanged(on); }  // override to say default to be transparent
+        protected override void TransparencyModeChanged( bool on) { panel.TransparencyModeChanged(on); }  // override to say default to be transparent
         public override bool AllowClose() { return panel.AllowClose(); }
 
         public override string HelpKeyOrAddress()

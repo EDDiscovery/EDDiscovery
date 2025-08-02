@@ -60,7 +60,7 @@ namespace EDDiscovery.UserControls
         }
 
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = PanelMode == PanelType.Materials ? "MaterialsGrid" : PanelMode == PanelType.Commodities ? "CommoditiesGrid" : PanelMode == PanelType.All ? "ResourcesGrid" : "MicroResourcesGrid";
 
@@ -239,7 +239,7 @@ namespace EDDiscovery.UserControls
             displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);        // null if not set
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             dataGridViewMC.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             splitContainerPanel.SplitterDistance(GetSetting(dbSplitter, 0.2));
@@ -247,7 +247,7 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewMC);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             JToken tojson = JToken.FromObject(wantedamounts);
             PutSetting(dbWantedList, tojson.ToString());
@@ -261,7 +261,7 @@ namespace EDDiscovery.UserControls
         }
 
         public override bool SupportTransparency { get { return true; } }
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             splitContainerPanel.BackColor = this.BackColor =
             splitContainerPanel.Panel1.BackColor =
@@ -271,7 +271,7 @@ namespace EDDiscovery.UserControls
             extScrollBarShoppingList.AlwaysHideScrollBar = on;
         }
 
-        public override void TransparencyModeChanged(bool on)
+        protected override void TransparencyModeChanged(bool on)
         {
             Display(last_mcl, false);        // need to redraw the shopping list
         }
@@ -327,7 +327,7 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }

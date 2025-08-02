@@ -30,7 +30,7 @@ namespace EDDiscovery.UserControls
         DateTime? gotodateendutc = null;
         bool createnew = false;
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "CaptainsLog";
 
@@ -50,8 +50,8 @@ namespace EDDiscovery.UserControls
                 UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                 uccb.CallInit(DiscoveryForm, DisplayNumber);
                 ExtendedControls.Theme.Current.ApplyStd(uccb);       // contract, in UCCB, states theming is between init and load
-                uccb.LoadLayout();
-                uccb.InitialDisplay();
+                uccb.CallLoadLayout();
+                uccb.CallInitialDisplay();
 
                 if (uccb is CaptainsLogDiary)
                 {
@@ -93,14 +93,14 @@ namespace EDDiscovery.UserControls
             };
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             int seltab = GetSetting(dbSelectedSave, 0);
             seltab = seltab.Range(0, tabStrip.ImageList.Length - 1);
             tabStrip.SelectedIndex = seltab;
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             PutSetting(dbSelectedSave, tabStrip.SelectedIndex);
             tabStrip.Close();

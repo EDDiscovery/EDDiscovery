@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "MarketData";
 
@@ -65,13 +65,13 @@ namespace EDDiscovery.UserControls
             labelComparison.Text = "-";
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             dataGridView.RowTemplate.MinimumHeight= Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridView);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridView);
             PutSetting(dbBuyOnly, checkBoxBuyOnly.Checked);
@@ -90,7 +90,7 @@ namespace EDDiscovery.UserControls
         private HistoryEntry market_right;       // what we are comparing with, null means none
         private HistoryEntry last_market_displayed;       // last market displayed
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }

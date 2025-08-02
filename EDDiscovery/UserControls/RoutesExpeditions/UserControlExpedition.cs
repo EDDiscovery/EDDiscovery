@@ -56,7 +56,7 @@ namespace EDDiscovery.UserControls
             SystemName.AutoCompleteGenerator = SystemCache.ReturnSystemAutoCompleteList;
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "UserControlExpedition";
 
@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
             labelBusy.Text = "BUSY";    // in english, suck it up
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridView,"V2");
             autoupdate.Start();     // start check tick
@@ -123,7 +123,7 @@ namespace EDDiscovery.UserControls
             return PromptAndSaveIfNeeded();
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             autoupdate.Stop();
 

@@ -28,7 +28,7 @@ namespace EDDiscovery.UserControls
         private string newfiledetected;
         private HashSet<string> detectedfiles = new HashSet<string>();
 
-        public override void Init()
+        protected override void Init()
         {
             Init("Spansh", "https://spansh.co.uk");
 
@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             base.Closing();
 

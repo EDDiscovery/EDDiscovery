@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "MiningOverlay";
 
@@ -60,28 +60,28 @@ namespace EDDiscovery.UserControls
             timetimer.Tick += Timetimer_Tick;
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
         public override bool SupportTransparency { get { return true; } }
         public override bool DefaultTransparent { get { return true; } }
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             extPanelRollUp.Visible = !on;
             pictureBox.BackColor = this.BackColor = curcol;
         }
-        public override void TransparencyModeChanged(bool on)
+        protected override void TransparencyModeChanged(bool on)
         {
             Display();
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             timetimer.Stop();
             PutSetting(dbRolledUp, extPanelRollUp.PinState);

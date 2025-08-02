@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
             DBBaseName = "Organics";
         }
 
-        public override void Init()
+        protected override void Init()
         {
             PopulateCtrlList();
 
@@ -100,19 +100,19 @@ namespace EDDiscovery.UserControls
         }
 
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridView);
         }
 
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             DrawGrid();
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             PutSetting("PinState", rollUpPanelTop.PinState);
             DiscoveryForm.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
@@ -122,13 +122,13 @@ namespace EDDiscovery.UserControls
         }
 
         public override bool SupportTransparency { get { return true; } }
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             intransparent = on;
             extPictureBoxScroll.BackColor = pictureBox.BackColor = this.BackColor = curcol;
             ControlVisibility();
         }
-        public override void TransparencyModeChanged(bool on)
+        protected override void TransparencyModeChanged(bool on)
         {
             DrawAll();
         }

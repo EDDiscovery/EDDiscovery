@@ -62,7 +62,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             dataGridViewEngineering.MakeDoubleBuffered();
             extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, false);
@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             dataGridViewEngineering.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridViewEngineering);
@@ -145,7 +145,7 @@ namespace EDDiscovery.UserControls
             this.chkNotHistoric.CheckedChanged += new System.EventHandler(this.chkHistoric_CheckedChanged);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewEngineering);
 
@@ -162,7 +162,7 @@ namespace EDDiscovery.UserControls
 
         #region Display
  
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             if (isHistoric)
             {

@@ -31,7 +31,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             Draw();
             DiscoveryForm.OnAddOnsChanged += Redraw;
@@ -40,18 +40,18 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnPanelRemoved += Redraw;
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             base.LoadLayout();
             Position();
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             doresize = true;                            // now allow resizing actions, before, resizes were due to setups, now due to user interactions
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DiscoveryForm.OnAddOnsChanged -= Redraw;
             DiscoveryForm.OnThemeChanging -= Redraw;

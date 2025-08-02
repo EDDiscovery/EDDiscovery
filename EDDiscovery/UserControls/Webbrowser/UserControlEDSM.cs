@@ -19,7 +19,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlEDSM : UserControlWebBrowser
     {
-        public override void Init()
+        protected override void Init()
         {
             Init("EDSM", "https://www.edsm.net");
         }

@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "ModulesGrid";
 
@@ -111,13 +111,13 @@ namespace EDDiscovery.UserControls
             dataGridViewModules.HoverOverCell += HoverOverCell;
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             dataGridViewModules.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridViewModules);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             if ( comboBoxShips.Text != allknownmodulestext)     // we fiddle with the columns in this view, so don't save
                 DGVSaveColumnLayout(dataGridViewModules);
@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
