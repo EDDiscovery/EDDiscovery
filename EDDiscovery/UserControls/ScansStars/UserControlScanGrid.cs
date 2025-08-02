@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
 
         #region Init
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "ScanGridPanel";
 
@@ -68,18 +68,18 @@ namespace EDDiscovery.UserControls
             toolStripJumponiumProgressBar.Visible = false;
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridView);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridView);
             PutSetting(dbRolledUp, rollUpPanelTop.PinState);
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }

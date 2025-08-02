@@ -76,10 +76,8 @@ namespace EDDiscovery.UserControls
         #region Lifetime Contract
 
         // called when class is created. Override to get panel info if required
-
-        public virtual void Creation(PanelInformation.PanelInfo p)
+        protected virtual void Creation(PanelInformation.PanelInfo p)
         {
-            System.Diagnostics.Debug.WriteLine($"UCCB Create {this.Name}");
             PanelID = p.PopoutID;
         }
 
@@ -87,28 +85,28 @@ namespace EDDiscovery.UserControls
         // UCCB overrides this to initialise itself.
         // Init has a chance to make new controls if required to be autothemed/scaled.
         // contract is in majortabcontrol::CreateTab, PanelAndPopOuts::PopOut, SplitterControl::OnPostCreateTab, Grid:CreateInitPanel
-        public virtual void Init() { }              // start up, called by above Init.  no cursor available
+        protected virtual void Init() { }              // start up, called by above Init.  no cursor available
 
         // after init, themeing and scaling happens at this point.  Item should be in AutoScaleMode.Inherit to prevent double scaling
         // For popout forms, on init, it calls SetTransparency, then TransparencyModeChanged
         // The transparency key color is set by theme during UserControlForm init - you can override if required in Init()
         // everytime the transparency changes (due to user hovering etc) SetTransparency is called
-        public virtual void SetTransparency(bool ison, Color backgroundcolor) { }
+        protected virtual void SetTransparency(bool ison, Color backgroundcolor) { }
 
         // For popout forms, on init, TransparentModeChange is called. Then called only then if the user changes the transparent major mode on/off
-        public virtual void TransparencyModeChanged(bool on) { }
+        protected virtual void TransparencyModeChanged(bool on) { }
 
         // Virtual override ONLY - do not call 
         // Load a layout
-        public virtual void LoadLayout() { }
+        protected virtual void LoadLayout() { }
 
         // Virtual override ONLY - do not call
         // Do the initial display. At this point the panel should be able to handle Perform Actions
-        public virtual void InitialDisplay() { }
+        protected virtual void InitialDisplay() { }
 
         // Virtual override ONLY - do not call
         // Panel is closing, save stuff.
-        public virtual void Closing() { }
+        protected virtual void Closing() { }
 
         // end calling order.
 
@@ -126,18 +124,18 @@ namespace EDDiscovery.UserControls
         }
         // override to prevent closure
         public virtual bool AllowClose() { return true; }
-        public void RequestClose()
-        {
-            if (this.Parent is UserControlForm)
-                ((UserControlForm)(this.Parent)).Close();
-            else
-                System.Diagnostics.Debug.WriteLine($"*** Can't request close this panel type {this.GetType()}");
-        }
 
         #endregion
 
         #region Calling the virtual functions 
-        // Creators are MajorTabControl, PopOuts, Splitter, Grid, UserControlForm.  These use the majority of these. Only CallPerformPanelOperation can be used by a panel
+        // Creators are MajorTabControl, PopOuts, Splitter, Grid, UserControlForm.  These use the majority of these.
+        // Only CallPerformPanelOperation can be used by a panel, the rest are for these above to call.  Done this way so we can introduce additional code
+
+        // call the create function
+        public void CallCreation(PanelInformation.PanelInfo p)
+        {
+            Creation(p);
+        }
 
         // call to init the panel
         public void CallInit(EDDiscoveryForm ed, int dn)
@@ -167,6 +165,17 @@ namespace EDDiscovery.UserControls
             Closing();
         }
 
+        public void CallSetTransparency(bool ison, Color backgroundcolor) 
+        {
+            SetTransparency(ison, backgroundcolor);
+        }
+
+        // For popout forms, on init, TransparentModeChange is called. Then called only then if the user changes the transparent major mode on/off
+        public void CallTransparencyModeChanged(bool on) 
+        {
+            TransparencyModeChanged(on);
+        }
+
         // Use by creators, or panels, to send the perform panel operation. ONLY use this to call the panel operation
         public PanelActionState CallPerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
@@ -174,6 +183,13 @@ namespace EDDiscovery.UserControls
                 return PerformPanelOperation(sender, actionobj);
             else
                 return PanelActionState.NotHandled;
+        }
+        public void RequestClose()
+        {
+            if (this.Parent is UserControlForm)
+                ((UserControlForm)(this.Parent)).Close();
+            else
+                System.Diagnostics.Debug.WriteLine($"*** Can't request close this panel type {this.GetType()}");
         }
 
         protected override void Dispose(bool disposing)     // ensure closed during disposal.

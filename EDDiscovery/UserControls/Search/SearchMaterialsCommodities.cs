@@ -43,7 +43,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "UCSearchMC";
 
@@ -77,12 +77,12 @@ namespace EDDiscovery.UserControls
             };
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridView);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridView);
             PutSetting(dbCM1, comboBoxCustomCM1.SelectedIndex);

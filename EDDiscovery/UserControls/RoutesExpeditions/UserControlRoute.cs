@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "UCRoute";
 
@@ -163,18 +163,18 @@ namespace EDDiscovery.UserControls
             extCheckBoxPermitSystems.Enabled = permitsystems;
             extCheckBoxPermitSystems.Checked = permitsystems ? GetSetting(dbPermit, false) : false;
         }
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewRoute);
             SetPermit();
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewRoute);
 

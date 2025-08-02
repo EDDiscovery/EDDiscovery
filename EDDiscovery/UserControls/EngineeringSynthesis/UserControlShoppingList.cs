@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
             this.userControlEngineering.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "ShoppingList";
 
@@ -95,7 +95,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             RevertToNormalSize();
             PutSetting(dbShowInjectionsSave, showMaxInjections);
@@ -113,10 +113,10 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public override void InitialDisplay()       // on start up, this will have an empty history
+        protected override void InitialDisplay()       // on start up, this will have an empty history
         {
-            userControlEngineering.InitialDisplay();
-            userControlSynthesis.InitialDisplay();
+            userControlEngineering.CallInitialDisplay();
+            userControlSynthesis.CallInitialDisplay();
             showMaxFSDInjectionsToolStripMenuItem.Checked = showMaxInjections;
             showBodyMaterialsWhenLandedToolStripMenuItem.Checked = showPlanetMats;
             onlyCapacityToolStripMenuItem.Checked = hidePlanetMatsWithNoCapacity;
@@ -128,15 +128,15 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
-            userControlEngineering.LoadLayout();
-            userControlSynthesis.LoadLayout();
+            userControlEngineering.CallLoadLayout();
+            userControlSynthesis.CallLoadLayout();
         }
 
         public override bool SupportTransparency { get { return true; } }
 
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             pictureBoxList.BackColor = this.BackColor = splitContainerVertical.BackColor = splitContainerRightHorz.BackColor = curcol;
             splitContainerVertical.Panel1.BackColor = splitContainerVertical.Panel2.BackColor = curcol;

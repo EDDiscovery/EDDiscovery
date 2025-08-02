@@ -33,7 +33,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "3dMapPanel_";
 
@@ -41,7 +41,7 @@ namespace EDDiscovery.UserControls
             glwfc.EnsureCurrent = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             base.LoadLayout();
 
@@ -71,7 +71,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             System.Diagnostics.Debug.WriteLine($"3dmap {DisplayNumber} stop");
 

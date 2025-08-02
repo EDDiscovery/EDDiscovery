@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "ScanPanel";
 
@@ -95,12 +95,12 @@ namespace EDDiscovery.UserControls
 #endif
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             PutSetting("PinState", rollUpPanelTop.PinState );
             DiscoveryForm.OnNewEntry -= NewEntry;
@@ -111,7 +111,7 @@ namespace EDDiscovery.UserControls
 
         #region Transparency
         public override bool SupportTransparency { get { return true; } }
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             panelStars.SetBackground(curcol);
             this.BackColor = panelControls.BackColor = curcol;

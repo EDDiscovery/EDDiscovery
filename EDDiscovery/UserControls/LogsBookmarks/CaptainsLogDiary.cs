@@ -43,12 +43,12 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DBBaseName = "CaptainsLogPanel";
 
@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
             layoutdone = true;
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             Display();
         }
@@ -89,7 +89,7 @@ namespace EDDiscovery.UserControls
         }
 
 
-        public override void Closing()
+        protected override void Closing()
         {
             PutSetting(dbDateSave, CurrentMonthFirstDayUTC);
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;

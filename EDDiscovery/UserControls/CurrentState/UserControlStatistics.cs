@@ -68,7 +68,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "Stats";
 
@@ -219,7 +219,7 @@ namespace EDDiscovery.UserControls
         }
 
         // themeing has been performed
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             tabControlCustomStats.TabStyle = new ExtendedControls.TabStyleSquare();        // after themeing, set to differentiate
 
@@ -241,7 +241,7 @@ namespace EDDiscovery.UserControls
             KickComputer();
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             timerupdate.Stop();
             statscomputer.Stop();

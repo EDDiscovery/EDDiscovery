@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "ShipYardGrid";
 
@@ -48,13 +48,13 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             dataGridViewShips.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridViewShips);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewShips);
             DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
@@ -105,7 +105,7 @@ namespace EDDiscovery.UserControls
             comboBoxYards.Enabled = true;
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }

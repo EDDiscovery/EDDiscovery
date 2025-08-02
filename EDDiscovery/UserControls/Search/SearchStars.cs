@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "UCSearchStars";
 
@@ -75,12 +75,12 @@ namespace EDDiscovery.UserControls
             dataGridView.Init(DiscoveryForm);
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridView);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridView);
             findSystemsUserControl.Save();

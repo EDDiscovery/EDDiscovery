@@ -32,19 +32,19 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStripSuits);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "SuitWeapons";
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewSuits, "Suits");
             DGVLoadColumnLayout(dataGridViewWeapons, "Weapons");
             splitContainerSuitsWeapons.SplitterDistance(GetSetting("Splitter", 0.4));
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewSuits, "Suits");
             DGVSaveColumnLayout(dataGridViewWeapons, "Weapons");
@@ -55,7 +55,7 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }

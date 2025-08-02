@@ -25,20 +25,20 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
-        public override void Init()
+        protected override void Init()
         {
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
         }
 
         public override bool SupportTransparency => true;
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             this.BackColor = curcol;
             this.panel1.BackColor = curcol;

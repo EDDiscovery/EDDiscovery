@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
 
         #region UCCB interface
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "GridControl";
 
@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
 
         public override bool SupportTransparency { get { return true; } }
 
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             this.BackColor = curcol;
             panelPlayfield.BackColor = curcol;
@@ -86,11 +86,11 @@ namespace EDDiscovery.UserControls
             {
                 r.BorderColor = on ? Color.Transparent : ExtendedControls.Theme.Current.GridBorderLines;
                 UserControlCommonBase uc = r.UCCB;
-                uc.SetTransparency(on, curcol);
+                uc.CallSetTransparency(on, curcol);
             }
         }
 
-        public override void LoadLayout()   // init and themeing done, now we can complete the UCCB process, set positioning etc.
+        protected override void LoadLayout()   // init and themeing done, now we can complete the UCCB process, set positioning etc.
         {
             var windows = GetSavedSettings();
 
@@ -121,12 +121,12 @@ namespace EDDiscovery.UserControls
             }
         }
         
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             foreach (UserControlContainerResizable r in uccrlist)
             {
                 UserControlCommonBase uc = r.UCCB;
-                uc.InitialDisplay();
+                uc.CallInitialDisplay();
             }
         }
 
@@ -141,7 +141,7 @@ namespace EDDiscovery.UserControls
             return true;
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             //System.Diagnostics.Debug.WriteLine("Grid Saving to " + DbWindows);
             string s = "", p = "";

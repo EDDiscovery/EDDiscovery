@@ -35,8 +35,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
-
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "Outfitting";
 
@@ -50,13 +49,13 @@ namespace EDDiscovery.UserControls
             Col1.HeaderText = Col2.HeaderText = Col3.HeaderText = Col4.HeaderText = ColPrice.HeaderText = ""; // zero because no values until a display selected
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             dataGridViewOutfitting.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridViewOutfitting);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewOutfitting);
             DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
@@ -108,7 +107,7 @@ namespace EDDiscovery.UserControls
             comboBoxYards.Enabled = true;
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }

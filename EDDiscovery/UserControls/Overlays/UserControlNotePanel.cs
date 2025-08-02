@@ -42,7 +42,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "NotePanel";
 
@@ -55,11 +55,11 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DiscoveryForm.OnHistoryChange -= OnHistoryChange;
             DiscoveryForm.OnNoteChanged -= OnNoteChange;
@@ -67,13 +67,13 @@ namespace EDDiscovery.UserControls
         }
 
         public override bool SupportTransparency { get { return true; } }
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             pictureBox.BackColor = this.BackColor = curcol;
             Display(lastHE);
         }
 
-        public override void TransparencyModeChanged(bool on)
+        protected override void TransparencyModeChanged(bool on)
         {
             Display(lastHE);
         }
@@ -88,7 +88,7 @@ namespace EDDiscovery.UserControls
             Display(lastHE);
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             Display(DiscoveryForm.History.GetLast);
         }

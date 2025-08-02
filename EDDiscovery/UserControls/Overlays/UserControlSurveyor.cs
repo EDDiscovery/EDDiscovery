@@ -33,7 +33,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "Surveyor";
 
@@ -72,14 +72,14 @@ namespace EDDiscovery.UserControls
         }
 
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
             SetVisibility();
             doresize = true;                            // now allow resizing actions, before, resizes were due to setups, now due to user interactions
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             drawsystemupdatetimer.Stop();
 
@@ -162,7 +162,7 @@ namespace EDDiscovery.UserControls
         }
 
         public override bool SupportTransparency { get { return true; } }       // turn it on
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor set transparency {on} {curcol}");
 
@@ -174,7 +174,7 @@ namespace EDDiscovery.UserControls
             SetVisibility(!on);     // set our visible mode for text, but override to on if we are not transparent
         }
 
-        public override void TransparencyModeChanged(bool on)
+        protected override void TransparencyModeChanged(bool on)
         {
             DrawAll(cur_sys);
         }

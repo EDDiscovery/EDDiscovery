@@ -32,12 +32,12 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DiscoveryForm.OnHistoryChange += HistoryChange;
             DiscoveryForm.OnNewEntry += NewEntry;
         }
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             HistoryChange();
         }
@@ -191,14 +191,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DiscoveryForm.OnHistoryChange -= HistoryChange;
             DiscoveryForm.OnNewEntry -= NewEntry;
         }
 
         public override bool SupportTransparency => true;
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             this.BackColor = curcol;
         }

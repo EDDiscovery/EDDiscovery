@@ -52,7 +52,7 @@ namespace EDDiscovery.UserControls
         #region UCCB IF
 
         // called right after creation, before anything else
-        public override void Creation(PanelInformation.PanelInfo p)
+        protected override void Creation(PanelInformation.PanelInfo p)
         {
             base.Creation(p);
             System.Diagnostics.Debug.WriteLine($"MZQ panel create class {p.WindowTitle} db {DBBaseName}");
@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
             hiddeneddui = config["Panel"].I("Hidden").Bool(false);      // set if we want the EDD UI to be hidden, which may be if we are operating a python UI
         }
 
-        public override void Init()
+        protected override void Init()
         {
             System.Diagnostics.Debug.WriteLine($"ZMQ panel Init {DBBaseName}");
 
@@ -104,7 +104,7 @@ namespace EDDiscovery.UserControls
         
         // Action UI layout is done AFTER init as themeing is done between init and SetTransparency/LoadLayout
         // the UC sizes and themes itself
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             if (!configgood)     // abort in bad state
                 return; 
@@ -148,7 +148,7 @@ namespace EDDiscovery.UserControls
         }
 
         // On Initial display, start up the ZMQ system
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             if (!configgood) // abort in bad situation
                 return;
@@ -318,7 +318,7 @@ namespace EDDiscovery.UserControls
             return true;
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             //System.Diagnostics.Debug.WriteLine($"ZMQ Closing {Environment.StackTrace}");
             System.Diagnostics.Debug.WriteLine($"ZMQ {DBBaseName} Closing ");
@@ -349,7 +349,7 @@ namespace EDDiscovery.UserControls
         }
 
         // gets called before load layout, so ignore until running, called when moves from transparent or back
-        public override void SetTransparency(bool ison, Color curcol)
+        protected override void SetTransparency(bool ison, Color curcol)
         {
             if (Running)
             {
@@ -368,7 +368,7 @@ namespace EDDiscovery.UserControls
         }
 
         // gets called before load layout, so ignore until running, called when user changes mode from on->off->on
-        public override void TransparencyModeChanged(bool on)
+        protected override void TransparencyModeChanged(bool on)
         {
             if (Running)
             {

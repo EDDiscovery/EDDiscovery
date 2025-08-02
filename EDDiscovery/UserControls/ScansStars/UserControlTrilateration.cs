@@ -48,7 +48,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(toolStrip);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "Trilateration";
 
@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
             toolStripTextBoxSystem.Text = "Press Start New".Tx();
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             PutSetting("Sectors", toolStripButtonSector.Checked);
         }

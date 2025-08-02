@@ -43,7 +43,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "Discoveries";
 
@@ -85,7 +85,7 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             if ( !DGVLoadColumnLayout(dataGridView))        // in this panel, we hide some when we have no stored setting to simplify the default view
             {
@@ -95,12 +95,12 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             Draw();
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             searchtimer.Stop();
             updatetimer.Stop();

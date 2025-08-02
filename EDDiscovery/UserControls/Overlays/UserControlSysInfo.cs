@@ -136,7 +136,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "SystemInformationPanel";
 
@@ -241,7 +241,7 @@ namespace EDDiscovery.UserControls
             shiptexttranslation = labelShip.Text;
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DiscoveryForm.OnNewTarget -= RefreshTargetDisplay;
             DiscoveryForm.OnEDSMSyncComplete -= Discoveryform_OnEDSMSyncComplete;
@@ -255,7 +255,7 @@ namespace EDDiscovery.UserControls
 
         #region Display
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             UpdateViewOnSelection();  // then turn the right ones on
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
@@ -1384,7 +1384,7 @@ namespace EDDiscovery.UserControls
         }
 
         public override bool SupportTransparency { get { return true; } }
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             ExtendedControls.Theme.Current.ApplyStd(extPanelScroll);     // reset themeing
 

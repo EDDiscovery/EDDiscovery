@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "TravelHistoryControl";
 
@@ -149,12 +149,12 @@ namespace EDDiscovery.UserControls
                 searchterms = searchterms.Tx();
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewTravel,rowheaderselection:dataGridViewTravel.AllowRowHeaderVisibleSelection);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             todo.Clear();
             todotimer.Stop();
@@ -175,7 +175,7 @@ namespace EDDiscovery.UserControls
 
         #region Hooks
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             Display(DiscoveryForm.History,false);
         }

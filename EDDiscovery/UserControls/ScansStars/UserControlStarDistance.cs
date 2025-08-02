@@ -45,7 +45,7 @@ namespace EDDiscovery.UserControls
 
         private double lookup_limit = 300;      // we start with a reasonable number, because if your in the bubble, you don't want to be looking up 1000
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "StarDistancePanel";
 
@@ -59,13 +59,13 @@ namespace EDDiscovery.UserControls
             checkBoxCube.Checked = GetSetting("Behaviour", false);
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewNearest);
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewNearest);
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -75,7 +75,7 @@ namespace EDDiscovery.UserControls
             PutSetting("Behaviour", checkBoxCube.Checked);
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }

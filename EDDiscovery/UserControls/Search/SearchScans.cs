@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "UCSearchScans";
 
@@ -115,7 +115,7 @@ namespace EDDiscovery.UserControls
             };
 
         }
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             bool loaded = DGVLoadColumnLayout(dataGridView);
             
@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls
 
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridView);
             conditionFilterUC.Check();      // checks, ignore string return errors, fills in Result

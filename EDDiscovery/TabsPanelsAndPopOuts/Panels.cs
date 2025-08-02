@@ -340,7 +340,7 @@ namespace EDDiscovery
             if (pi != null)
             {
                 var uccb = (UserControls.UserControlCommonBase)Activator.CreateInstance(pi.PopoutType, null);
-                uccb.Creation(GetPanelInfoByPanelID(p));
+                uccb.CallCreation(GetPanelInfoByPanelID(p));
                 return uccb;
             }
 

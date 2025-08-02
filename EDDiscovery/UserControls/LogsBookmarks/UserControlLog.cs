@@ -27,18 +27,18 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DiscoveryForm.OnNewLogEntry += AppendText;
             AppendText(DiscoveryForm.LogText, ExtendedControls.Theme.Current.TextBlockForeColor);
             richTextBox_History.ScrollToCaret();
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DiscoveryForm.OnNewLogEntry -= AppendText;
         }

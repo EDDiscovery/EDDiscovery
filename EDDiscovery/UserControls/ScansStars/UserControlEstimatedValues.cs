@@ -41,7 +41,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "EstimatedValue";
 
@@ -69,12 +69,12 @@ namespace EDDiscovery.UserControls
             };
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewEstimatedValues);
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             PutSetting("PinState", extPanelRollUp.PinState);
             DGVSaveColumnLayout(dataGridViewEstimatedValues);
@@ -83,14 +83,14 @@ namespace EDDiscovery.UserControls
         }
 
         public override bool SupportTransparency { get { return true; } }
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             dataViewScrollerPanel.BackColor = this.BackColor = curcol;
             DGVTransparent(dataGridViewEstimatedValues, on, curcol);
             flowLayoutPanelTop.Visible = !on;
 
         }
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
         }

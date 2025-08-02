@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
         }
 
-        public override void Init()
+        protected override void Init()
         {
             DBBaseName = "CombatPanel";
 
@@ -106,12 +106,12 @@ namespace EDDiscovery.UserControls
             labelTarget.Text = "No Target".Tx();
         }
 
-        public override void LoadLayout()
+        protected override void LoadLayout()
         {
             DGVLoadColumnLayout(dataGridViewCombat);
         }
 
-        public override void InitialDisplay()
+        protected override void InitialDisplay()
         {
             if (DiscoveryForm.History.Count > 0)      // on program start, this can be called with an empty history
             {
@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             DGVSaveColumnLayout(dataGridViewCombat);
 
@@ -143,7 +143,7 @@ namespace EDDiscovery.UserControls
             PutSetting(dbSelected, currentcombatfilter?.UniqueID ?? "");
         }
 
-        public override void SetTransparency(bool on, Color curbackcol)
+        protected override void SetTransparency(bool on, Color curbackcol)
         {
             dataViewScrollerPanelCombat.Visible = !on || checkBoxCustomGridOn.Checked;
             dataViewScrollerPanelCombat.BackColor = curbackcol;

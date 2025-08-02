@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls
         // so we by design don't have a cursor at Init on any UCCB.  So we must create everything here for the primary, then we have a cursor, and
         // then load layout can finish the job
 
-        public override void Init()     
+        protected override void Init()     
         {
             DBBaseName = "SplitterControl";
         
@@ -118,7 +118,7 @@ namespace EDDiscovery.UserControls
             // contract states the PanelAndPopOuts OR the MajorTabControl will now theme and size it.
         }
 
-        public override void LoadLayout()           // cursor now set up, initial setup complete..
+        protected override void LoadLayout()           // cursor now set up, initial setup complete..
         {
             string splitctrl = GetSetting(dbWindows, "");
 
@@ -147,7 +147,7 @@ namespace EDDiscovery.UserControls
             return closeok;
         }
 
-        public override void Closing()
+        protected override void Closing()
         {
             //System.Diagnostics.Debug.WriteLine("Closing splitter " + displaynumber);
 
@@ -561,7 +561,7 @@ namespace EDDiscovery.UserControls
 
         public override bool SupportTransparency { get { return true; } }
 
-        public override void SetTransparency(bool on, Color curcol)
+        protected override void SetTransparency(bool on, Color curcol)
         {
             //System.Diagnostics.Debug.WriteLine("Splitter panel to tx " + on + " " + curcol);
 
@@ -576,7 +576,7 @@ namespace EDDiscovery.UserControls
                 UserControlCommonBase uccb = (ts != null ? (ts.CurrentControl) : c) as UserControlCommonBase;
                 if (uccb != null)     // tab strip may not have a control set..
                 {
-                    uccb.SetTransparency(on, curcol); 
+                    uccb.CallSetTransparency(on, curcol); 
                 }
             });
 
