@@ -148,6 +148,13 @@ namespace EDDiscovery
             EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlList", string.Join(",", idlist));
             EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlName", tabnames);
         }
+        public void DisposeRemoveAllTabs()
+        {
+            foreach (TabPage page in TabPages)
+            {
+                page.Dispose();
+            }
+        }
 
         public void AddTab(PanelInformation.PanelIDs id , int tabindex = 0)     // -n is from the end, else before 0,1,2
         {

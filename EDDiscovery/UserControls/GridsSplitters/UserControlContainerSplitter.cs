@@ -152,6 +152,7 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine("Closing splitter " + displaynumber);
 
+            // since the whole panel is closing, and its disposed, should be no need to dispose individual bits for UI objects
             SplitContainer sc = (SplitContainer)panelPlayfield.Controls[0];
 
             string state = ControlHelpersStaticFunc.SplitterTreeState(sc, "",
@@ -187,7 +188,6 @@ namespace EDDiscovery.UserControls
 
             DiscoveryForm.OnPanelAdded -= PanelAdded;
             DiscoveryForm.OnPanelRemoved -= PanelAdded;
-
         }
 
         public void PanelAdded(PanelInformation.PanelIDs p)
@@ -283,6 +283,7 @@ namespace EDDiscovery.UserControls
                 {
                     UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                     uccb.CallCloseDown();
+                    uccb.Dispose();
                 };
 
                 tabstrip.OnCreateTab += (tab, si) =>        // called when the tab strip wants a new control for a tab. 

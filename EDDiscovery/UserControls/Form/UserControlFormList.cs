@@ -154,6 +154,7 @@ namespace EDDiscovery.UserControls
             foreach (UserControlForm ucf in list)
             {
                 ucf.Close();        // don't change tabforms.. the FormCloseCallBack does this
+                ucf.Dispose();
             }
         }
 
@@ -163,7 +164,8 @@ namespace EDDiscovery.UserControls
 
             foreach (UserControlForm ucf in list.Where(f=>f.UserControl?.Find(p)!=null))        // if the UCCB inside the form can find the panel, close it
             {
-                ucf.Close();        
+                ucf.Close();      
+                ucf.Dispose();
             }
         }
 

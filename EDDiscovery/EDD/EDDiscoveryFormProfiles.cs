@@ -49,6 +49,8 @@ namespace EDDiscovery
 
                 PopOuts.CloseAllPopouts();
 
+                tabControlMain.DisposeRemoveAllTabs();      // dispose and remove all tabs, releasing all resources
+
                 comboBoxCustomProfiles.Enabled = false;                         // and update the selection box, making sure we don't trigger a change
                 comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(id);
                 comboBoxCustomProfiles.Enabled = true;
@@ -60,7 +62,6 @@ namespace EDDiscovery
                 tabControlMain.TabPages.Clear();
                 tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
                 tabControlMain.LoadTabs();
-                ApplyTheme();
 
                 PopOuts.LoadSavedPopouts();
 

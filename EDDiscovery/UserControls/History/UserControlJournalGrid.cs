@@ -236,6 +236,9 @@ namespace EDDiscovery.UserControls
             {
                 todo.Enqueue(() =>
                 {
+                    if (IsClosed)
+                        return;
+
                     //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
                     List<DataGridViewRow> rowstoadd = new List<DataGridViewRow>();
@@ -262,6 +265,9 @@ namespace EDDiscovery.UserControls
 
             todo.Enqueue(() =>
             {
+                if (IsClosed)
+                    return;
+
                 System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " JG TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
                 string ms = string.Format(" showing {0} original {1}".T(EDTx.UserControlJournalGrid_TT1), dataGridViewJournal.Rows.Count, current_historylist?.Count ?? 0);
