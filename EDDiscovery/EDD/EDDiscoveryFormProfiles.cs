@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2021 EDDiscovery development team
+ * Copyright 2015 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using EliteDangerousCore;
@@ -30,37 +28,41 @@ namespace EDDiscovery
             comboBoxCustomProfiles.Enabled = true;
         }
 
-        private void ChangeToProfileId(int id, bool checksavecur)
+        // Change to profile ID
+        // userchange = true we need to question if close allowed and then save the states. If false, we force it thru without saving
+        private void ChangeToProfileId(int id, bool userchange)
         {
-            if (!checksavecur || EDDProfiles.Instance.Current.Id != id)
+            if (userchange == false || EDDProfiles.Instance.Current.Id != id)
             {
                 System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCountLap("ProfT") + " *************************** CHANGE To profile " + id);
 
-                if (checksavecur)
+                if (userchange)
                 {
                     if (tabControlMain.AllowClose() == false)       // if we don't allow closing, we can't change profile
                         return;
                     else if (PopOuts.AllowClose() == false)
                         return;
 
-                    tabControlMain.CloseSaveTabs();
-                    PopOuts.SaveCurrentPopouts();
+                    tabControlMain.CloseSaveTabs();     // save the state
+                    PopOuts.SaveCurrentPopouts();       
                 }
 
-                PopOuts.CloseAllPopouts();
+                PopOuts.CloseAllPopouts();      // close and dispose all forms
+
+                tabControlMain.DisposeRemoveAllTabs();      // dispose and remove all tabs, releasing all resources
 
                 comboBoxCustomProfiles.Enabled = false;                         // and update the selection box, making sure we don't trigger a change
                 comboBoxCustomProfiles.SelectedIndex = EDDProfiles.Instance.IndexOf(id);
                 comboBoxCustomProfiles.Enabled = true;
 
+                System.Diagnostics.Debug.WriteLine($"\r\nProfile Loading! {id}");
+
                 EDDProfiles.Instance.ChangeToId(id);
 
-                UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings(false); // use a nonsense name to make sure we just get the default set if we don't have a valid save
+                UserControls.UserControlContainerSplitter.CheckPrimarySplitterControlSettings(false); // check settings
 
-                tabControlMain.TabPages.Clear();
-                tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
+                tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, EDDiscoveryForm.DefaultTabList);      // numbers from popouts, which are FIXED!
                 tabControlMain.LoadTabs();
-                ApplyTheme();
 
                 PopOuts.LoadSavedPopouts();
 

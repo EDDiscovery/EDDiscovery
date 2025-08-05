@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2024 EDDiscovery development team
+ * Copyright 2015 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -128,6 +128,8 @@ namespace EDDiscovery
             return true;
         }
 
+        // call closedown on all tabs and save the tab control list
+        // this does not dispose of the TAB
         public void CloseSaveTabs()
         {
             List<int> idlist = new List<int>();
@@ -148,6 +150,16 @@ namespace EDDiscovery
             EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlList", string.Join(",", idlist));
             EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(EDDProfiles.Instance.UserControlsPrefix + "MajorTabControlName", tabnames);
         }
+
+        // Dispose and remove all tabs
+        public void DisposeRemoveAllTabs()         
+        {
+            foreach (TabPage page in TabPages)
+            {
+                page.Dispose();
+            }
+        }
+
 
         public void AddTab(PanelInformation.PanelIDs id , int tabindex = 0)     // -n is from the end, else before 0,1,2
         {
@@ -198,7 +210,8 @@ namespace EDDiscovery
             }
         }
 
-        public void RemoveTab(TabPage page)         // from right click menu
+        // Remove tab, if allowed, release resources
+        public void RemoveTab(TabPage page)         
         {
             UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
 

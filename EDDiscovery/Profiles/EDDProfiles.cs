@@ -1,5 +1,18 @@
-﻿using BaseUtils;
-using EliteDangerousCore.DB;
+﻿/*
+ * Copyright 2015 - 2025 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+using BaseUtils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,7 +128,7 @@ namespace EDDiscovery
                 if (name != null && tripcondition != null && backcondition != null)
                 {
                     Profile p = new Profile(profileid, name, tripcondition, backcondition);
-                    System.Diagnostics.Debug.WriteLine("Profile {0} {1} {2}", name, tripcondition, backcondition);
+                    System.Diagnostics.Debug.WriteLine("Profile Load {0} {1} {2}", name, tripcondition, backcondition);
                     ProfileList.Add(p);
                 }
             }
@@ -168,7 +181,7 @@ namespace EDDiscovery
                 }
                 else
                 {                           // existing in both, update
-                    System.Diagnostics.Debug.WriteLine("Update ID " + p.Id);
+                    System.Diagnostics.Debug.WriteLine("Profile Update ID " + p.Id);
                     p.Name = c.Name;        // update name and condition
                     p.TripCondition = c.TripCondition;
                     p.BackCondition = c.BackCondition;
@@ -182,7 +195,7 @@ namespace EDDiscovery
                 if (Object.ReferenceEquals(Current, p))
                     removedcurrent = true;
 
-                System.Diagnostics.Debug.WriteLine("Delete ID " + p.Id);
+                System.Diagnostics.Debug.WriteLine("Profile Delete ID " + p.Id);
                 EliteDangerousCore.DB.UserDatabase.Instance.DeleteKey(ProfilePrefix(p.Id) + "%");       // all profiles string
                 ProfileList.Remove(p);
             }
@@ -198,7 +211,7 @@ namespace EDDiscovery
                         break;
                 }
 
-                System.Diagnostics.Debug.WriteLine("Make ID " + id);
+                System.Diagnostics.Debug.WriteLine("Profile Make ID " + id);
                 p.Id = id;
                 ProfileList.Add(p);
             }

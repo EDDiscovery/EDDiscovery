@@ -118,7 +118,9 @@ namespace EDDiscovery
 
         private BindingsFile frontierbindings;
 
-        private Dictionary<string, string> installdeinstallsettings;       
+        private Dictionary<string, string> installdeinstallsettings;
+
+        public static string DefaultTabList = "0, -1,0, 26,0, 27,0, 29,0, 34,0";      // default list at creation
 
         #endregion
 
@@ -579,7 +581,7 @@ namespace EDDiscovery
             if (!EDDOptions.Instance.NoTabs)
             {
                 tabControlMain.MinimumTabWidth = 32;
-                tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, "0, -1,0, 26,0, 27,0, 29,0, 34,0");      // numbers from popouts, which are FIXED!
+                tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, DefaultTabList);      // numbers from popouts, which are FIXED!
                 if (tabControlMain.PrimarySplitterTab == null || tabControlMain.PrimarySplitterTab.GetTravelGrid == null)  // double check we have a primary tab and tg..
                 {
                     MessageBox.Show(("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +

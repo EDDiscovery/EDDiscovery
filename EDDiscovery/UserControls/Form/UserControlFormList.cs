@@ -147,26 +147,31 @@ namespace EDDiscovery.UserControls
             return retstate;
         }
 
+        // All popups close
         public void CloseAll()
         {
             List<UserControlForm> list = new List<UserControlForm>(forms);       // so, closing it ends up calling back to FormCloseCallBack
                                                                                  // and it changes tabforms. So we need a copy to safely do this
             foreach (UserControlForm ucf in list)
             {
-                ucf.Close();        // don't change tabforms.. the FormCloseCallBack does this
+                ucf.Close();                                                     // Close form, then dispose
+                ucf.Dispose();
             }
         }
 
+        // close popups of type p
         public void CloseAll(PanelInformation.PanelIDs p)
         {
             List<UserControlForm> list = new List<UserControlForm>(forms);       
 
             foreach (UserControlForm ucf in list.Where(f=>f.UserControl?.Find(p)!=null))        // if the UCCB inside the form can find the panel, close it
             {
-                ucf.Close();        
+                ucf.Close();
+                ucf.Dispose();
             }
         }
 
+        // check all forms on permission to close
         public bool AllowClose()
         {
             foreach (var f in forms)

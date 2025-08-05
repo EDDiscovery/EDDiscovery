@@ -120,19 +120,25 @@ namespace EDDiscovery.UserControls
 
         protected override void LoadLayout()           // cursor now set up, initial setup complete..
         {
-            string splitctrl = GetSetting(dbWindows, "");
-
+            //string splitctrl = GetSetting(dbWindows, "");
             //System.Diagnostics.Debug.WriteLine("Layout loading " + displaynumber + " " + splitctrl);
             //panelPlayfield.Controls[0].DumpTree(0);
 
             RunActionOnSplitterTree((p, c, uccb) =>     // now, at load layout, do the rest of the UCCB contract.
             {
+                c.Update();
                 uccb.CallLoadLayout();
+            });
+        }
+
+        protected override void InitialDisplay()           // cursor now set up, initial setup complete..
+        {
+            RunActionOnSplitterTree((p, c, uccb) =>         // now, at load layout, do the rest of the UCCB contract.
+            {
                 uccb.CallInitialDisplay();
             });
 
-            Invalidate(true);
-            Update();        // need this to FORCE a full refresh in case there are lots of windows
+            Refresh();
         }
 
         public override bool AllowClose()                  // splitter is closing, does the consistuent panels allow close?
@@ -150,6 +156,8 @@ namespace EDDiscovery.UserControls
         protected override void Closing()
         {
             //System.Diagnostics.Debug.WriteLine("Closing splitter " + displaynumber);
+
+            // since the whole panel is closing, and its disposed, should be no need to dispose individual bits for UI objects
 
             SplitContainer sc = (SplitContainer)panelPlayfield.Controls[0];
 
@@ -243,7 +251,7 @@ namespace EDDiscovery.UserControls
                 uccb.AutoScaleMode = AutoScaleMode.Inherit;     // very very important and took 2 days to work out! UCCB, as per major tab control, should be in inherit mode
                 uccb.Dock = DockStyle.Fill;
                 uccb.Tag = tagid;
-                uccb.Name = "UC-" + tagid.ToStringInvariant();
+                uccb.Name = "UC-" + pi.PopoutID.ToString() + " " + tagid.ToStringInvariant();
                 uccb.RequestPanelOperation += SplitterRequestAction;
 
                 return uccb;
@@ -282,6 +290,7 @@ namespace EDDiscovery.UserControls
                 {
                     UserControlCommonBase uccb = ctrl as UserControlCommonBase;
                     uccb.CallCloseDown();
+                    uccb.Dispose();
                 };
 
                 tabstrip.OnCreateTab += (tab, si) =>        // called when the tab strip wants a new control for a tab. 

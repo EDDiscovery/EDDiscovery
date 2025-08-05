@@ -291,6 +291,9 @@ namespace EDDiscovery.UserControls
             {
                 todo.Enqueue(() =>
                 {
+                    if (IsClosed)
+                        return;
+
                     List<DataGridViewRow> rowstoadd = new List<DataGridViewRow>();
 
                     foreach (var he in syslistchunk)
@@ -309,6 +312,9 @@ namespace EDDiscovery.UserControls
 
             todo.Enqueue(() =>
             {
+                if (IsClosed)
+                    return;
+
                 if (dataGridViewStarList.SelectAndMove(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();
 

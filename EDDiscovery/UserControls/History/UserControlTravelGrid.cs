@@ -293,6 +293,9 @@ namespace EDDiscovery.UserControls
             {
                 todo.Enqueue(() =>
                 {
+                    if (IsClosed)
+                        return;
+
                     List<DataGridViewRow> rowstoadd = new List<DataGridViewRow>();
 
                     //System.Diagnostics.Stopwatch sw = new System.Diagnostics.Stopwatch(); sw.Start();
@@ -321,6 +324,9 @@ namespace EDDiscovery.UserControls
 
             todo.Enqueue(() =>
             {
+                if (IsClosed)
+                    return;
+
                 if (chunks.Count != 0)
                 {
                     if (outlining != null && dataGridViewTravel.Rows.Count > 0)     // if outlining, and #3317 we have rows!
@@ -356,7 +362,6 @@ namespace EDDiscovery.UserControls
                     System.Diagnostics.Debug.WriteLine("TG Dequeue paused adds");
                     AddEntry(queuedadds.Dequeue());
                 }
-
             });
 
             todotimer.Start();          // indicate the timer is going to start.. 

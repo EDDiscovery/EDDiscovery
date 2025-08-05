@@ -371,37 +371,37 @@ namespace EDDiscovery
             this.popOutPanelToolStripMenuItem,
             this.helpTabToolStripMenuItem});
             this.contextMenuStripTabs.Name = "contextMenuStripTabs";
-            this.contextMenuStripTabs.Size = new System.Drawing.Size(189, 114);
+            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 136);
             this.contextMenuStripTabs.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripTabs_Opening);
             // 
             // addTabToolStripMenuItem
             // 
             this.addTabToolStripMenuItem.Name = "addTabToolStripMenuItem";
-            this.addTabToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.addTabToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.addTabToolStripMenuItem.Text = "Insert Tab with panel..";
             // 
             // removeTabToolStripMenuItem
             // 
             this.removeTabToolStripMenuItem.Name = "removeTabToolStripMenuItem";
-            this.removeTabToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.removeTabToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.removeTabToolStripMenuItem.Text = "Remove Tab";
             // 
             // renameTabToolStripMenuItem
             // 
             this.renameTabToolStripMenuItem.Name = "renameTabToolStripMenuItem";
-            this.renameTabToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.renameTabToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.renameTabToolStripMenuItem.Text = "Rename Tab";
             // 
             // popOutPanelToolStripMenuItem
             // 
             this.popOutPanelToolStripMenuItem.Name = "popOutPanelToolStripMenuItem";
-            this.popOutPanelToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.popOutPanelToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.popOutPanelToolStripMenuItem.Text = "Pop Out Panel..";
             // 
             // helpTabToolStripMenuItem
             // 
             this.helpTabToolStripMenuItem.Name = "helpTabToolStripMenuItem";
-            this.helpTabToolStripMenuItem.Size = new System.Drawing.Size(188, 22);
+            this.helpTabToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.helpTabToolStripMenuItem.Text = "Help";
             // 
             // panelToolBar
@@ -611,7 +611,7 @@ namespace EDDiscovery
             this.menuFlowPanel.Location = new System.Drawing.Point(0, 0);
             this.menuFlowPanel.Margin = new System.Windows.Forms.Padding(0);
             this.menuFlowPanel.Name = "menuFlowPanel";
-            this.menuFlowPanel.Size = new System.Drawing.Size(376, 24);
+            this.menuFlowPanel.Size = new System.Drawing.Size(377, 24);
             this.menuFlowPanel.TabIndex = 23;
             this.menuFlowPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.menuFlowPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
@@ -628,7 +628,7 @@ namespace EDDiscovery
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Padding = new System.Windows.Forms.Padding(0);
-            this.mainMenu.Size = new System.Drawing.Size(214, 24);
+            this.mainMenu.Size = new System.Drawing.Size(215, 24);
             this.mainMenu.TabIndex = 16;
             // 
             // toolsToolStripMenuItem
@@ -638,7 +638,7 @@ namespace EDDiscovery
             this.showAllPopoutsInTaskBarToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
-            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(46, 24);
+            this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 24);
             this.toolsToolStripMenuItem.Text = "&Tools";
             // 
             // settingsToolStripMenuItem
@@ -663,7 +663,7 @@ namespace EDDiscovery
             // 
             this.showAllInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.ShowAllInTaskbar;
             this.showAllInTaskBarToolStripMenuItem.Name = "showAllInTaskBarToolStripMenuItem";
-            this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.showAllInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.showAllInTaskBarToolStripMenuItem.Text = "&Show All In Task Bar";
             this.showAllInTaskBarToolStripMenuItem.Click += new System.EventHandler(this.showAllInTaskBarToolStripMenuItem_Click);
             // 
@@ -671,7 +671,7 @@ namespace EDDiscovery
             // 
             this.turnOffAllTransparencyToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.DisableTransparency;
             this.turnOffAllTransparencyToolStripMenuItem.Name = "turnOffAllTransparencyToolStripMenuItem";
-            this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.turnOffAllTransparencyToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
             this.turnOffAllTransparencyToolStripMenuItem.Text = "&Turn Off All Transparency";
             this.turnOffAllTransparencyToolStripMenuItem.Click += new System.EventHandler(this.turnOffAllTransparencyToolStripMenuItem_Click);
             // 
@@ -714,14 +714,14 @@ namespace EDDiscovery
             // sendUnsyncedEDSMJournalsToolStripMenuItem
             // 
             this.sendUnsyncedEDSMJournalsToolStripMenuItem.Name = "sendUnsyncedEDSMJournalsToolStripMenuItem";
-            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.sendUnsyncedEDSMJournalsToolStripMenuItem.Size = new System.Drawing.Size(251, 22);
             this.sendUnsyncedEDSMJournalsToolStripMenuItem.Text = "Send Unsynced Journals To EDSM";
             this.sendUnsyncedEDSMJournalsToolStripMenuItem.Click += new System.EventHandler(this.sendUnsyncedEDSMJournalsToolStripMenuItem_Click);
             // 
             // fetchLogsAgainToolStripMenuItem
             // 
             this.fetchLogsAgainToolStripMenuItem.Name = "fetchLogsAgainToolStripMenuItem";
-            this.fetchLogsAgainToolStripMenuItem.Size = new System.Drawing.Size(250, 22);
+            this.fetchLogsAgainToolStripMenuItem.Size = new System.Drawing.Size(251, 22);
             this.fetchLogsAgainToolStripMenuItem.Text = "Fetch Logs Again";
             this.fetchLogsAgainToolStripMenuItem.Click += new System.EventHandler(this.fetchLogsAgainToolStripMenuItem_Click);
             // 
@@ -974,7 +974,7 @@ namespace EDDiscovery
             // 
             this.label_version.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label_version.AutoSize = true;
-            this.label_version.Location = new System.Drawing.Point(222, 6);
+            this.label_version.Location = new System.Drawing.Point(223, 6);
             this.label_version.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.label_version.Name = "label_version";
             this.label_version.Size = new System.Drawing.Size(43, 13);
@@ -988,7 +988,7 @@ namespace EDDiscovery
             // 
             this.labelInfoBoxTop.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelInfoBoxTop.AutoSize = true;
-            this.labelInfoBoxTop.Location = new System.Drawing.Point(276, 6);
+            this.labelInfoBoxTop.Location = new System.Drawing.Point(277, 6);
             this.labelInfoBoxTop.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelInfoBoxTop.Name = "labelInfoBoxTop";
             this.labelInfoBoxTop.Size = new System.Drawing.Size(43, 13);
@@ -1001,7 +1001,7 @@ namespace EDDiscovery
             // 
             this.labelGameDateTime.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelGameDateTime.AutoSize = true;
-            this.labelGameDateTime.Location = new System.Drawing.Point(330, 6);
+            this.labelGameDateTime.Location = new System.Drawing.Point(331, 6);
             this.labelGameDateTime.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelGameDateTime.Name = "labelGameDateTime";
             this.labelGameDateTime.Size = new System.Drawing.Size(43, 13);
@@ -1123,12 +1123,12 @@ namespace EDDiscovery
             this.debuggerNextScanToolStripMenuItem,
             this.debuggerShutdownToolStripMenuItem});
             this.contextMenuStripDebugger.Name = "contextMenuStripDebugger";
-            this.contextMenuStripDebugger.Size = new System.Drawing.Size(191, 246);
+            this.contextMenuStripDebugger.Size = new System.Drawing.Size(190, 246);
             // 
             // debuggerSingleJournalEntryToolStripMenuItem
             // 
             this.debuggerSingleJournalEntryToolStripMenuItem.Name = "debuggerSingleJournalEntryToolStripMenuItem";
-            this.debuggerSingleJournalEntryToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debuggerSingleJournalEntryToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.debuggerSingleJournalEntryToolStripMenuItem.Text = "Single Journal Entry";
             this.debuggerSingleJournalEntryToolStripMenuItem.Click += new System.EventHandler(this.debuggerSingleJournalEntryToolStripMenuItem_Click);
             // 
@@ -1149,7 +1149,7 @@ namespace EDDiscovery
             this.dayToolStripMenuItem,
             this.daysToolStripMenuItem});
             this.stepTimeToolStripMenuItem.Name = "stepTimeToolStripMenuItem";
-            this.stepTimeToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.stepTimeToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.stepTimeToolStripMenuItem.Text = "Step Time";
             // 
             // minToolStripMenuItem
@@ -1252,7 +1252,7 @@ namespace EDDiscovery
             this.toolStripMenuItem4,
             this.toolStripMenuItem5});
             this.stepEntriesToolStripMenuItem.Name = "stepEntriesToolStripMenuItem";
-            this.stepEntriesToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.stepEntriesToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.stepEntriesToolStripMenuItem.Text = "Step Entries";
             // 
             // minsToolStripMenuItem
@@ -1293,56 +1293,56 @@ namespace EDDiscovery
             // nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem
             // 
             this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem.Name = "nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem";
-            this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem.Text = "Next Colonisation*";
             this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem.Click += new System.EventHandler(this.nextEntryForColonisationDataColonisationDockedFSDJumpLocationToolStripMenuItem_Click);
             // 
             // debuggerNextFSDToolStripMenuItem
             // 
             this.debuggerNextFSDToolStripMenuItem.Name = "debuggerNextFSDToolStripMenuItem";
-            this.debuggerNextFSDToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debuggerNextFSDToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.debuggerNextFSDToolStripMenuItem.Text = "Next FSDJump";
             this.debuggerNextFSDToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
             // 
             // debuggerNextDockToolStripMenuItem
             // 
             this.debuggerNextDockToolStripMenuItem.Name = "debuggerNextDockToolStripMenuItem";
-            this.debuggerNextDockToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debuggerNextDockToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.debuggerNextDockToolStripMenuItem.Text = "Next Docked";
             this.debuggerNextDockToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
             // 
             // nextUndockToolStripMenuItem
             // 
             this.nextUndockToolStripMenuItem.Name = "nextUndockToolStripMenuItem";
-            this.nextUndockToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.nextUndockToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.nextUndockToolStripMenuItem.Text = "Next Undocked";
             this.nextUndockToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
             // 
             // nextSupercruiseEntryToolStripMenuItem
             // 
             this.nextSupercruiseEntryToolStripMenuItem.Name = "nextSupercruiseEntryToolStripMenuItem";
-            this.nextSupercruiseEntryToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.nextSupercruiseEntryToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.nextSupercruiseEntryToolStripMenuItem.Text = "Next SupercruiseEntry";
             this.nextSupercruiseEntryToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
             // 
             // nextSupercruiseExitToolStripMenuItem
             // 
             this.nextSupercruiseExitToolStripMenuItem.Name = "nextSupercruiseExitToolStripMenuItem";
-            this.nextSupercruiseExitToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.nextSupercruiseExitToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.nextSupercruiseExitToolStripMenuItem.Text = "Next SupercruiseExit";
             this.nextSupercruiseExitToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
             // 
             // debuggerNextScanToolStripMenuItem
             // 
             this.debuggerNextScanToolStripMenuItem.Name = "debuggerNextScanToolStripMenuItem";
-            this.debuggerNextScanToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debuggerNextScanToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.debuggerNextScanToolStripMenuItem.Text = "Next Scan";
             this.debuggerNextScanToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
             // 
             // debuggerShutdownToolStripMenuItem
             // 
             this.debuggerShutdownToolStripMenuItem.Name = "debuggerShutdownToolStripMenuItem";
-            this.debuggerShutdownToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.debuggerShutdownToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.debuggerShutdownToolStripMenuItem.Text = "Next Shutdown";
             this.debuggerShutdownToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
             // 

@@ -134,6 +134,7 @@ namespace EDDiscovery.UserControls
         // call the create function
         public void CallCreation(PanelInformation.PanelInfo p)
         {
+            System.Diagnostics.Debug.WriteLine($"UCCB Creation {this.Name} Panel {p}");
             Creation(p);
         }
 
@@ -149,11 +150,13 @@ namespace EDDiscovery.UserControls
         // call to perform load layout
         public void CallLoadLayout()
         {
+            System.Diagnostics.Debug.WriteLine($"UCCB Load Layout {this.Name}");
             LoadLayout();
         }
         // call to perform initial display
         public void CallInitialDisplay()
         {
+            System.Diagnostics.Debug.WriteLine($"UCCB Initial Display {this.Name}");
             IsInitialDisplayCalled = true;
             InitialDisplay();
         }

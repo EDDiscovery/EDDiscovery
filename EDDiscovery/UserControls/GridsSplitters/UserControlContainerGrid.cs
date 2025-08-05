@@ -143,6 +143,8 @@ namespace EDDiscovery.UserControls
 
         protected override void Closing()
         {
+            // since the whole panel is closing, and its disposed, should be no need to dispose individual bits for UI objects
+
             //System.Diagnostics.Debug.WriteLine("Grid Saving to " + DbWindows);
             string s = "", p = "";
             foreach (UserControlContainerResizable r in uccrlist)   // save in uccr list
