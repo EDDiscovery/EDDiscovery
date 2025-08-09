@@ -238,15 +238,20 @@ namespace EDDiscovery
             }
         }
 
-        public void RemovePanel(PanelInformation.PanelIDs p)
+        public void CloseAllRemovePanel(PanelInformation.PanelIDs p)
         {
-            tabControlMain.CloseAllTabs(p);
-            PopOuts.CloseAllPopouts(p);
+            CloseAllPanels(p);
             if (PanelInformation.RemovePanel(p))
             {
                 System.Diagnostics.Trace.WriteLine($"Removed panel {p}");
                 OnPanelRemoved?.Invoke(p);
             }
+        }
+
+        public void CloseAllPanels(PanelInformation.PanelIDs p)
+        {
+            tabControlMain.CloseAllTabs(p);
+            PopOuts.CloseAllPopouts(p);
         }
 
         #endregion
