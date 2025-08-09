@@ -497,7 +497,7 @@ namespace EDDiscovery.Actions
                     int panelid = GetPanelID(item.LocalVars);
                     if (panelid != -1)
                     {
-                        DiscoveryForm.RemovePanel((PanelInformation.PanelIDs)panelid);
+                        DiscoveryForm.CloseAllRemovePanel((PanelInformation.PanelIDs)panelid);
                     };
                 };
 

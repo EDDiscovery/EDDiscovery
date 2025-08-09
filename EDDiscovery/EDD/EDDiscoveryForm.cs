@@ -669,8 +669,8 @@ namespace EDDiscovery
                 if (pevent.Mode == PowerModes.Suspend)
                 {
                     System.Diagnostics.Trace.WriteLine("**** Power Mode suspend for sleep (3D Map panels closed)");
-                    RemovePanel(PanelInformation.PanelIDs.LocalMap3D);
-                    RemovePanel(PanelInformation.PanelIDs.Map3D);
+                    CloseAllPanels(PanelInformation.PanelIDs.LocalMap3D);
+                    CloseAllPanels(PanelInformation.PanelIDs.Map3D);
                 }
                 else if (pevent.Mode == PowerModes.Resume)
                 {
