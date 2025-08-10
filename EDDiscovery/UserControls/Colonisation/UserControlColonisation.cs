@@ -20,6 +20,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using QuickJSON;
 
 namespace EDDiscovery.UserControls
 {
@@ -29,7 +30,6 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             DBBaseName = "Colonisation";
-            PutSetting(dbSelection, "");    // set to last system
         }
 
         protected override void Init()
@@ -60,7 +60,7 @@ namespace EDDiscovery.UserControls
             // no point doing the selection if the list is empty -
             // we stay on no system but we don't clear the lastsystem selector as we may be just in the first History refresh triggered by the system
 
-            if (colonisation.Systems.Count > 0)     
+            if (colonisation.Systems.Count > 0)
             {
                 string lastsystem = GetSetting(dbSelection, "");
                 var csystems = colonisation.Systems.Values.ToList();
@@ -68,21 +68,19 @@ namespace EDDiscovery.UserControls
                 // given the db entry last system, try and find it, if found, set current.
                 int index = lastsystem.HasChars() ? csystems.FindIndex(x => x.System.Name.Equals(lastsystem)) : -1;
                 if (index >= 0)
-                    current = csystems[index];
+                    SelectSystem(csystems[index]);
                 else
                     SelectLastCreatedSystem();      // current can still be null if there are no systems
             }
+            else
+            {
+                UpdateStationComboBox();            // need to clear it
+            }
 
-            UpdateComboBox();
+            UpdateSystemComboBox();
 
             extPanelGradientFillUCCP.Controls.Clear();      // start afresh
             Display();
-        }
-
-        public void SelectLastCreatedSystem()
-        {
-            current = colonisation.LastCreatedSystem;       // this could be null - no systems
-            PutSetting(dbSelection, "");      // back to last system (empty string) as not found
         }
 
         private void NewEntry(HistoryEntry he)
@@ -106,7 +104,7 @@ namespace EDDiscovery.UserControls
             else if (extComboBoxSystemSel.SelectedIndex == 0 && ret.newsystem)     // if new system, and we are on last created system
             {
                 extPanelGradientFillUCCP.Controls.Clear();  // start afresh
-                current = ret.csd;
+                SelectSystem(ret.csd);
                 redisplay = true;
                 System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation switched to `{current.System.Name}` due to ret.newsystem");
             }
@@ -117,13 +115,13 @@ namespace EDDiscovery.UserControls
             }
 
             if (ret.newsystem)                              // if we have a change in system list, update the combo
-                UpdateComboBox();
+                UpdateSystemComboBox();
 
             if ( redisplay )
                 Display();
         }
 
-        public void UpdateComboBox()
+        public void UpdateSystemComboBox()
         {
             extComboBoxSystemSel.Items.Clear();
             var taglist = new List<ColonisationSystemData>();
@@ -172,21 +170,70 @@ namespace EDDiscovery.UserControls
 
             ignorechange = false;
         }
-           
+
+
+        public void UpdateStationComboBox()
+        {
+            extComboBoxStationSelect.Items.Clear();
+
+            extComboBoxStationSelect.Items.Add("All");
+
+            if (current != null)
+            {
+                foreach (var kvp in current.Ports)
+                {
+                    extComboBoxStationSelect.Items.Add(kvp.Value.Name);
+                }
+
+                ignorechange = true;
+
+                // objects of SystemName = stationname
+                var json = JToken.Parse(GetSetting(dbStationSelection, "{}")) ?? new JToken();
+                var name = json[current.System.Name].StrNull(); // may be null
+                var index = name != null ? extComboBoxStationSelect.Items.IndexOf(name) : -1;       // may be -1, name not found, or index 1 onwards (0 = all)
+                extComboBoxStationSelect.SelectedIndex = index>0 ? index : 0;
+
+                ignorechange = false;
+            }
+        }
+
+        public void SelectLastCreatedSystem()
+        {
+            PutSetting(dbSelection, "");      // back to last system (empty string) as not found
+            SelectSystem(colonisation.LastCreatedSystem);
+        }
+
+        public void SelectSystem(ColonisationSystemData csd)
+        {
+            current = csd;
+            UpdateStationComboBox();
+        }
 
         private void extComboBoxSystemSel_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (!ignorechange)
             {
                 if (extComboBoxSystemSel.SelectedIndex == 0)        // if last created, select
+                {
                     SelectLastCreatedSystem();
+                }
                 else
                 {
-                    current = (extComboBoxSystemSel.Tag as List<ColonisationSystemData>)[extComboBoxSystemSel.SelectedIndex];
+                    SelectSystem((extComboBoxSystemSel.Tag as List<ColonisationSystemData>)[extComboBoxSystemSel.SelectedIndex]);
                     PutSetting(dbSelection, current.System.Name);
                 }
 
                 extPanelGradientFillUCCP.Controls.Clear();
+                Display();
+            }
+        }
+        private void extComboBoxStationSelect_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (!ignorechange)
+            {
+                var json = JToken.Parse(GetSetting(dbStationSelection, "{}")) ?? new JToken();
+                json[current.System.Name] = (string)extComboBoxStationSelect.SelectedItem;
+                PutSetting(dbStationSelection, json.ToString());
                 Display();
             }
         }
@@ -331,6 +378,7 @@ namespace EDDiscovery.UserControls
         private bool ignorechange = false;
 
         private const string dbSelection = "Selection";
+        private const string dbStationSelection = "StationSelection";
 
     }
 
