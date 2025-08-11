@@ -17,7 +17,7 @@ D3D49E22353948: "New bookmark on current system" @
 848EED0FBD5429: "Tags" @
 87CA81FA83093E: "Filter out entries based on tag" @
 B15BC9CCE1BA39: "Edit Tags" @
-31992A69737FC4: "Add to Expedition" => "Ajouter à l'expédition"
+31992A69737FC4: "Add to Expedition" => "添加至远航面板"
 
 SECTION UserControlCombatPanel
 
@@ -29,7 +29,7 @@ BFAC50D6424B51: "Credits" => "金钱"
 90EEF613042C5A: "Balance" => "净收入"
 68316444B99C6B: "Died" @
 000C7B010AA15B: "Crimes" => "犯罪"
-61AD50A9B9189C: "Target" => "Cible"
+61AD50A9B9189C: "Target" => "目标派系"
 9D269517397775: "Faction" => "派系"
 A116A463F16F3B: "TotalReward" => "总报酬"
 2AD918FF81A2C4: "FactionReward" => "派系报酬"
@@ -83,8 +83,8 @@ SECTION UserControlWebBrowser
 5C4856412380E1: "Using IE11 - click here to get WebView2" @
 E79777EDFFFA20: "Track system in history panel" @
 01F03837323AAB: "URLs" @
-58CF52A56F41EA: "Select another system to view" => "Sélectionner un autre système à afficher"
-D6335B2F4D21A6: "Show System" => "Afficher système"
+58CF52A56F41EA: "Select another system to view" => "选择查看另外一个星系"
+D6335B2F4D21A6: "Show System" => "显示星系"
 
 SECTION UserControlSearch
 
@@ -120,7 +120,7 @@ A7396032CA2935: "Enter Search Name" => "输入搜索名称："
 0088C59DD3E567: "Cannot delete this entry" => "无法删除此项"
 37A47BD94B5C5D: "Condition is not valid" => "条件无效"
 2F4979324E03E4: "Condition" => "条件"
-718A7E8A582E98: "Body" => "Corps"
+718A7E8A582E98: "Body" => "星体名称"
 23D692F07A3FB6: "Parent" @
 EFAAD58C837641: "Grandparent" @
 4A7891A93B7D2C: "Parent of Star" @
@@ -137,12 +137,12 @@ D14970EE4E27AE: "Click to enable debug log production on search" @
 450D52D3EF8975: "Searches" @
 07C3B8B498D6BD: "Export user searches" @
 F6FBA35BE4C529: "Import user searches" @
-ADC4E96A478BE0: "Sort" => "Tri "
+ADC4E96A478BE0: "Sort" => "取消排序"
 5531C4FF55C5CF: "Too many results to display, truncating to the first {0}" @
 
 SECTION UserControlDiscoveries
 
-4CC658129E454D: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Saisir un texte pour rechercher dans tous les champs une correspondance. Vous pouvez aussi utiliser system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> pour filtrer les résultats ayant ces propriétés."
+4CC658129E454D: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "输入文本以搜索所有的域"
 B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" @
 
 SECTION SearchStars
@@ -157,7 +157,7 @@ CA7D47897BA965: "Go to star on 3D Map" => "跳转至3D星图"
 790C6DD0436B24: "View on EDSM" => "在EDSM网站上查看"
 BE05494B382962: "View on Spansh" @
 A99CF05BCB299B: "View Scan Display" => "查看该条目的数据"
-D4FDD27AAE7070: "View on History Grid" => "Voir sur la grille d'historique"
+D4FDD27AAE7070: "View on History Grid" => "跳转到表格中的条目"
 
 SECTION UserControlEngineering
 
@@ -227,16 +227,16 @@ FCBDC25ADED443: "Dist." => "距离(ly)"
 2C924E3088204E: "Note" => "笔记"
 5FF07654F5C831: "Dist Start" @
 CE33081BD85857: "Dist Remaining" @
-942A8B6ED71457: "History Note" => "Note d'historique"
+942A8B6ED71457: "History Note" => "航行记录笔记"
 7D12459D88715E: "Cml Distance" => "总距离："
 B7A2B9728CF910: "P2P Distance" => "直线距离："
 84B1478125890B: "End Date" => "结束日期："
 9D7AB1A557965B: "Start Date" => "开始日期："
 A5323E433EDC1A: "Route Name" => "航线名称："
-5ECE584160349A: "View System" => "Voir le système"
+5ECE584160349A: "View System" => "在EDSM网站上查看"
 AF74F7C5362AAE: "Copy" => "复制"
 DB2483000D154C: "Paste" => "粘贴"
-38D13BDA5C40AF: "Cut" => "Couper"
+38D13BDA5C40AF: "Cut" => "执行图片格式转换时发生错误，请尝试其他的截图，检查输出路径的设置（例外"
 506AD5294AD65A: "Insert row above" @
 13DA14D35B49E2: "Set Target" => "设置目标"
 D371A4A652422C: "Edit bookmark" => "编辑书签"
@@ -257,7 +257,7 @@ SECTION UserControlJournalGrid
 07A2022F0AA5BD: "Select the entries selected by age" => "安照时间顺序筛选条目"
 5F2FF95345B84E: "Send data on grid to excel" => "把表格中的数据导出到Excel中"
 1E766B1CB17AF6: "Automatically move the cursor to the latest entry when it arrives" => "选中后当事件更新时，使光标自动返回顶部。"
-4D0FFFE0C867B1: "Filter out entries matching the field selection" => "Filtrer les entrées correspondant au champ sélectionné"
+4D0FFFE0C867B1: "Filter out entries matching the field selection" => "筛选匹配域选项的条目"
 CD0FB121DB7E4E: "Filter out entries based on event type" => "根据事件类型筛选条目"
 8E5C8029D9BC99: "Remove sorting of columns" => "取消排序"
 F4DE89CE1015FB: "Jump to Entry" => "跳至行"
@@ -317,14 +317,14 @@ B7BAA1D40C4EA2: "Number" => "数量"
 0CCF90EB09D636: "Backpack" @
 6358DC846638BD: "Avg. Price" => "平均价格"
 9FB1092F32D4FC: "Recipes" @
-B18F6ADE27CF7A: "Want" => "Souhaité"
-ED4855C28D40C3: "Need" => "Besoin"
+B18F6ADE27CF7A: "Want" => "这个操作将花费很长时间并会占用很多宽带\r\n你确定要继续？"
+ED4855C28D40C3: "Need" => "EDDiscovery 会从 EDSM 和 EDDEB 下载数据来为你提供额外的信息。请选择你想要下载储存多少数据。你选择的星域越多就会占用越多的储存空间。"
 
 7B61D21566CEEC: "All Materials" @
 31BD45E1404855: "All Commodities" @
 DD6B2E81B38C70: "All Microresources" @
 
-AFF3ACED3CA75C: "Count of Items" => "Qté de marchandise"
+AFF3ACED3CA75C: "Count of Items" => "商品数量"
 2E7C22E163AEC2: "Filter out items" @
 
 4D542614DA0B16: "Green will show materials with zero counts, red means remove them" @
@@ -336,13 +336,13 @@ AFF3ACED3CA75C: "Count of Items" => "Qté de marchandise"
 BA416FBADB0F09: "Display Item in shopping list" @
 EB8E343579E999: "Clear all display items in shopping list" @
 3EE4B7555F0B02: "Display all non zero items in shopping list" @
-1B90271D66CF2D: "Progress" => "Progression"
+1B90271D66CF2D: "Progress" => "工程师进展"
 
 
 SECTION UserControlMissionOverlay
 
-BC775B0E4D5ED0: " Left " => " restant "
-50C4713CBC3348: "Mission Name" => "Titre de la mission"
+BC775B0E4D5ED0: " Left " => "右击添加/移除标签页，左键拖拽排序"
+50C4713CBC3348: "Mission Name" => "任务名称："
 90DC27E4C3BEB4: "Mission Description" @
 7190FFD9B23765: "Faction Information" @
 
@@ -356,9 +356,9 @@ C545D651351423: "System scan complete" @
 DF79D6CA8BD2F3: "Alignment Center" @
 43EF428A78F1FA: "Alignment Right" @
 0C309E8F04C0F1: "Show All Planets" @
-C310B6E9C77045: "Ammonia World" => "Monde ammoniac"
+C310B6E9C77045: "Ammonia World" => "氨质行星 (Ammonia Worlds)"
 B52BBF018CF9EC: "Earthlike World" @
-909C1B5FFD57ED: "Water World" => "Monde aquatique"
+909C1B5FFD57ED: "Water World" => "水质行星 (Water Worlds)"
 3D43FF8C48FA2C: "High metal content body" @
 EA5B349025CF82: "Metal-rich body" @
 4D8D48B5146934: "Terraformable" @
@@ -369,7 +369,7 @@ BE57FAED31951F: "High eccentricity" @
 CB270B1D277411: "Has any other signals" @
 2B332D20943805: "Has geological signals" @
 F70D62F8263274: "Has biological signals" @
-A9292825CC0CA6: "Landable" => "Atterrissable"
+A9292825CC0CA6: "Landable" => "可登陆"
 80F9887F7F5A1B: "Landable with atmosphere" @
 C269F2C820ADBB: "Landable and large" @
 3F9C411965E271: "Landable with volcanism" @
@@ -394,7 +394,7 @@ A6F528EE452953: "Show system info always" @
 7AA20A2EFC7BB6: "Star Filter" @
 274A5199553A8D: "Display Settings" @
 7F8C5176C3F03B: "Alignment" @
-B97C4D4CDDF23E: "Font" => "Police de caractère"
+B97C4D4CDDF23E: "Font" => "编辑主题改变颜色和字体"
 7E65928ECE63CA: "FSS Signal Selection" @
 23048BC1AE69FE: "Word Wrap" @
 1BB6C810B1DA16: "Select route to follow" @
@@ -420,13 +420,13 @@ F8B59037B2A4AE: " Mission" => " 任务"
 
 SECTION UserControlModules
 
-ECDDA59AEA5EE6: "Item" => "Équipement"
+ECDDA59AEA5EE6: "Item" => "查看装备信息，基于空间站访问记录的数据"
 20DD0E149BA65F: "BluePrint" @
 02D2B8A95C0CDF: "P/E" @
 323D4FC7337134: "Ship" => "飞船"
-AF0AD10B2A196B: "Mass" => "Masse "
-64AE43E8FE7620: "Cost" => "Coût "
-0C85DB3EB1A9A6: "FSD" => "FSD "
+AF0AD10B2A196B: "Mass" => "质量"
+64AE43E8FE7620: "Cost" => "净收入（收入减去弹药，维修等费用）"
+0C85DB3EB1A9A6: "FSD" => "删除重复的FSD跳跃记录"
 47071804F38EAF: "Thrust" @
 31FE17191E290C: "Shields" @
 FAB9348C4FD97F: "Armour" @
@@ -443,12 +443,12 @@ A64AB328A429FA: "Import a ship definition for display" @
 
 FE5C2531E39340: "Force Sell" @
 122A6B402DF67D: "Confirm sell of ship" @
-CA73BB4E22EBFD: "Stored Modules" => "Modules stockés"
-D2F025FD0D6F0C: "Travel History Entry" => "Historique de voyage"
+CA73BB4E22EBFD: "Stored Modules" => "飞船及其装备的模组"
+D2F025FD0D6F0C: "Travel History Entry" => "最后一项航行记录"
 673463FDF95385: "Owned Ships" @
 44B046E04F2B04: "Tx Time" => "运送时长"
 ECE2AC10D7266F: "Slot" @
-B2B53EE4FC1A90: "Stored" => "Stocké"
+B2B53EE4FC1A90: "Stored" => "飞船及其装备的模组"
 22F4D0D2422A35: "All Modules" @
 8F325EDB2B44A3: "All Known Modules" @
 9569A6C389205D: "All Ships" @
@@ -470,7 +470,7 @@ E5379DCF7E564E: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" 
 C8DF6EB8BFDFCF: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
 C11EA28A729193: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
 6CC0AEA921D9CD: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
-F32D0645A8333F: "Weapons" => "Armes "
+F32D0645A8333F: "Weapons" => "武器 (Weapons)"
 
 60830556FBB8D7: "Save this loadout to the EDD loadout folder" @
 391427FC2F26EA: "Delete loadout" @
@@ -511,7 +511,7 @@ A5B44BA4A6C532: "Dist. Waypoint" => "航点距离"
 37148FF19B7B45: "Deviation" => "偏航值"
 4219EE1EC9D603: "Neutron Router" @
 CFD4E874046B93: "Road to Riches" @
-1DF8F8D30FDD0F: "Ammonia Worlds" => "Mondes ammoniacs"
+1DF8F8D30FDD0F: "Ammonia Worlds" => "氨质行星 (Ammonia Worlds)"
 AB2A9F0D8D787B: "Earth Likes" @
 0077D22826A77F: "Trade Router" @
 0CF5E327910E74: "Fleet Carrier" @
@@ -524,7 +524,7 @@ B604A930356A28: "Find Route" => "规划航线"
 A975EEA30DB9FA: "Parameters" @
 281FA0DAFE53E1: "Use Boosts" @
 3F66052A107EAF: "From" => "从"
-EC59449017E5B6: "ly" => "al"
+EC59449017E5B6: "ly" => "停止当前运行的插件程序(&S)"
 8424A6DD977331: "Web Lookup" @
 A0E237BAC8B17A: "Max jump" => "FSD跳跃范围"
 AE79EA1E9C6391: "To" => "到"
@@ -586,13 +586,13 @@ A0BB88B66F57E8: "Set High Value Limit" => "设定高价值星体的最低标准"
 0DE266189138B6: "Show body status icons" @
 3466741E7D93DA: "Show system and value in main display" @
 028F51CCB7BAD7: "Hide materials which have reached their storage limit" @
-9F6C1D41D0D032: "Show Materials" => "Afficher les matériaux"
+9F6C1D41D0D032: "Show Materials" => "材料"
 B028A006D79224: "Show rare materials only" @
 00848F83A633FB: "Show Moons" @
-2DBDE6DD6FB541: "Belt" => "Ceinture"
+2DBDE6DD6FB541: "Belt" => "小行星带："
 17B8D69486D780: "Barycentre" @
 14E0E8D442549A: "Show G on all planets" @
-12071F4330F803: "Show Habitation Zone" => "Afficher la zone habitable"
+12071F4330F803: "Show Habitation Zone" => "显示星体出现范围"
 64E6C643FFE7E8: "Show Classes of Planets" @
 E0B7B8CC8BD7CC: "Show Classes of Stars" @
 9BD1DE0511B36C: "Show distance of bodies" @
@@ -639,7 +639,7 @@ A030328790B9CB: "Web Server" @
 FE035157CDA20B: "Port" @
 94DC8E4A59FAFE: "Interaction" @
 C223113FF59532: "Key to activate transparent windows" => "激活窗口热键"
-89C8A2851D1755: "Memory" => "Mémoire"
+89C8A2851D1755: "Memory" => "减少内存使用率。选择加载全部记录否则在指定时间范围外只有重要条目才能被加载（指定时间范围外的其余条目将会被忽略）。"
 ACDE88AB2C1C2E: "Essential entries" => "重要条目为："
 F709149E45E3DA: "Entries to read" => "仅读取重要的条目"
 5F6928B2C259B9: "Screenshots conversion" => "截图"
@@ -700,7 +700,7 @@ C552D2599FF6E0: "Remove Sectors" => "移除星域"
 66B750A2F3569C: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30 mins dep on drive type and amount of sectors).\r\nYou may continue to use EDD while this operation takes place\r\nbut it may be slow to respond. Do not close down EDD until this window says\r\nthe process has finished\r\n\r\n" => "正在移除{0}个星域。\r\n\r\n这将会花上一段时间（根据硬盘类型和星域数量至多可花上30分钟）。\r\n你也许想要在这段时间中继续使用EDDiscovery\r\n但是有可能响应会很慢。请不要关闭EDDiscovery直到这个窗口显示操作已完成！\r\n\r\n"
 39F0CD5F9474CD: "Scans,Cargo,Missions,State,Jumps etc" => "扫描，货物，任务，FSD跳跃等"
 3EEDD176CCBBA9: "Jumps and Scans" => "FSD跳跃和扫描"
-933ADEA19EEE0A: "Jumps" => "FSD跳跃"
+933ADEA19EEE0A: "Jumps" => "输入你的飞船的FSD跳跃范围"
 4481948392A884: "Nothing" => "无"
 E3AEDF672CD00D: "Do you wish to delete commander " @
 EB4FD2BBBBAACE: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
@@ -730,7 +730,7 @@ E3E78C5A9B4B48: "Use Historic Material Counts" => "使用历史材料计数"
 6C1B59B6152200: "Filling Shopping List would exceed capacity for" => "下面几项材料会超出材料容量："
 0C17E1E2D825FF: "No materials currently required." => "当前不需要任何材料。"
 9CDB9B531A7E2C: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" => "可合成FSD推进剂的最大次数：\r\n  {0} 次基础\r\n  {1} 次标准\r\n  {2} 次高级"
-7D83DF15795144: "Materials on {0}" => "{0} 上的材料"
+7D83DF15795144: "Materials on {0}" => "{0} 上的材料: "
 
 SECTION UserControlSpanel
 
@@ -792,7 +792,7 @@ SECTION UserControlStarList
 
 25229E81F3BF74: "Last Visit" => "最后访问时间"
 28442DA04B1BF3: "Body Count" @
-C90A4905639F83: "Scan Value" => "Valeur de scan"
+C90A4905639F83: "Scan Value" => "预计的星系扫描价值"
 A1E87E0BCAE241: "{0} Star(s) {1}" => "{0}个恒星 {1}"
 FB044B95FD466C: "This system has materials for FSD boost" => "这个行星存在合成FSD助推剂用的材料："
 3DC09A6F2DA211: "{0} Other bodies" => "{0}个其他星体"
@@ -808,12 +808,12 @@ SECTION UserControlStats
 12D9C090439BAA: "In Game" => "游戏记录"
 AB2855156E832D: "By Ship" => "飞船"
 00926D0ECAABBF: "Ranks" @
-DD48A1149548F0: "Rank" => "Rang"
+DD48A1149548F0: "Rank" => "NPC船员等级"
 2451A597FA5067: "At Start" @
 0B12D442964C13: "At End" @
 F230B2BCC6A6B1: "Last Promotion/Date" @
 955A4E9A59BF11: "Powerplay" @
-67711E423601BA: "Squadron" => "Escadron"
+67711E423601BA: "Squadron" => "申请加入中队"
 E72ED7A5BCA163: "Bounties on Thargoids" @
 C070DE1BD06E83: "Bounties on On Foot NPC" @
 6273A2A0CA35EF: "Bounties on Skimmers" @
@@ -834,7 +834,7 @@ A6E743F4A8DA1F: "PVP Expert Rank" @
 0D4936734E146A: "PVP Competent Rank" @
 0A7B5DB004014C: "PVP Novice Rank" @
 8BED567DC90C30: "PVP Harmless Rank" @
-EBA0BF6D59AA23: "Bounties" => "Primes"
+EBA0BF6D59AA23: "Bounties" => "支付悬赏"
 6C18EAA601E281: "Bounty Value" @
 143706EC834465: "Bounties on Ships" @
 5975E5601FFC4D: "Crime Cost" @
@@ -850,7 +850,7 @@ AA3A76881BDE68: "Interdicted Player Succeeded" @
 99C5998D9DBB79: "Interdicted NPC Failed" @
 D01ADD4A8CF9C6: "PVP Kills" @
 20CB368601547F: "Total No of jumps" => "总跳跃次数"
-D06EC3483818A9: "FSD jumps" => "Sauts FSD"
+D06EC3483818A9: "FSD jumps" => "仅在FSD跳跃事件后显示距离以及坐标"
 E13CB4A04BC34B: "FSD Jump History" => "跳跃记录"
 BB3BBEC3B7BECB: "24 Hours" => "24小时内："
 91A4748C01B13C: ", One Week" => "，一周内："
@@ -875,16 +875,16 @@ BF95513D610332: "Jet Cone Boost" => "等离子喷流助推"
 93C9D999CAF90E: "Scan value" => "扫描价值"
 D436FDB4D178CC: "Belt Cluster" @
 785AD46ADCFC58: "Last dock" => "自最近降落后"
-6D391E1333D9E0: "Bank Account" => "Compte en banque"
+6D391E1333D9E0: "Bank Account" => "\r★ 银行账户"
 1B5A20A804DC74: "Crime" @
-6BEEE635DCA549: "Smuggling" => "Contrebande"
-49352196F6D28E: "Trading" => "Commerce"
-FAABCF8B4B60DB: "Mining" => "Minage"
+6BEEE635DCA549: "Smuggling" => "\r★ 走私"
+49352196F6D28E: "Trading" => "\r★ 贸易"
+FAABCF8B4B60DB: "Mining" => "矿石精炼"
 957464A0F91C56: "Exploration" @
-AB86B441AD93E7: "Passengers" => "Passagers"
-E0C47B9F787BC5: "Search and Rescue" => "Sauvetage"
+AB86B441AD93E7: "Passengers" => "乘客"
+E0C47B9F787BC5: "Search and Rescue" => "搜寻与救援"
 EA78B34DA11F9D: "Crafting" @
-DE463BA892C2F3: "Crew" => "Équipage"
+DE463BA892C2F3: "Crew" => "更改船员职责"
 EB6824747FE3AC: "Multi-crew" @
 F8D07BF619AB93: "Materials Trader" @
 4EC8D6E506ED34: "Fleetcarrier" @
@@ -897,9 +897,9 @@ ED8FE7F50C291D: "Goods Bought" => "收购的商品"
 
 SECTION StatsTimeUserControl
 
-987B9CED08D4AC: "Day" => "Jour"
-F82BE68A7FB4E7: "Week" => "Semaine"
-082BC378CD60E1: "Month" => "Mois"
+987B9CED08D4AC: "Day" => "今天"
+F82BE68A7FB4E7: "Week" => "，一周内："
+082BC378CD60E1: "Month" => "一个月"
 
 SECTION UserControlSynthesis
 
@@ -940,7 +940,7 @@ F02F62E261A315: "Display Material Count" => "显示材料数量"
 A89C9CA2A96AE8: "Distance to target" => "距离目标距离"
 9FFE9E9C6D7672: "Sets the target" => "设定目标"
 F25CE1B8A399BD: "Security" @
-A16C5BBE4BF996: "Range" => "FSD范围"
+A16C5BBE4BF996: "Range" => "当前位置的局部三维星图"
 A7B93D2128E820: "Mode" => "模式"
 208A402074139F: "MR" @
 0B645D1B659917: "Fuel" => "燃料"
@@ -1021,7 +1021,7 @@ A89F26DDCFE091: "Entry filtered out of grid" @
 SECTION UserControlCaptainsLog
 
 EFD742A1695D89: "Diary" @
-F056D0D56AFCAD: "Entries" => "Entrées"
+F056D0D56AFCAD: "Entries" => "出入帐记录"
 
 SECTION CaptainsLogDiary
 
@@ -1075,16 +1075,16 @@ EEBF564BAF4F90: "{0} systems with unknown coordinates found in {1} sector." @
 
 SECTION UserControlMaterialTrader
 
-1D4D43CC6F3A83: "Use" => "Utiliser"
-8AE1C34BD37FAD: "Left" => "Restant"
-BFFFD736CDDD08: "Get" => "Obtenir"
-719EA396AD92E0: "Clear" => "Vider"
+1D4D43CC6F3A83: "Use" => "选择新的配置文件或更改配置文件设置"
+8AE1C34BD37FAD: "Left" => "右击添加/移除标签页，左键拖拽排序"
+BFFFD736CDDD08: "Get" => "从EDSM获取银河星图。"
+719EA396AD92E0: "Clear" => "标签页启动失败。\r\n这是异常状况，请通过Discord或者Github告知开发团队。\r\n你可以尝试按住Shift键的同时双击EDDiscovery的图标进入安全模式。\r\n选择重置标签页后，点击运行程序。这样也许会解决问题。"
 3898B9AA06204B: "Offer" @
-965FB2DDF63D60: "Receive" => "Reçoit"
+965FB2DDF63D60: "Receive" => "收到文本消息"
 127F7960FB4A8D: "Clear Trade" @
-DA433CD41E7FB7: "Raw" => "Brut"
-58AC2F7D78D326: "Encoded" => "Encodé"
-8AB3DB9BFC3921: "Manufactured" => "Fabriqué"
+DA433CD41E7FB7: "Raw" => "改变窗口大小时实时重绘窗口"
+58AC2F7D78D326: "Encoded" => "编码的："
+8AB3DB9BFC3921: "Manufactured" => "加工的："
 
 SECTION UserControlMiningOverlay
 
@@ -1123,8 +1123,8 @@ C1ECFEB8DEF4DC: "Commds Profit" @
 77E2DD8141E981: "Bounty Kills" @
 397B67A90DEC91: "Bounty Rewards" @
 D5965451E332A6: "Bounty Rewards Value" @
-B83FE58DB23E57: "Interdicted" => "Interdit"
-C21AFB3EFA18AB: "Interdiction" => "Interdiction"
+B83FE58DB23E57: "Interdicted" => "被拦截"
+C21AFB3EFA18AB: "Interdiction" => "逃脱FSD拦截"
 5F22266A168021: "Kill Bonds Victim" @
 FC21DB8588503E: "Kill Bonds Awarded" @
 DAE2AEC9BE1018: "Kill Bonds Value" @
@@ -1142,8 +1142,8 @@ EE4A9C0F4355B9: "Materials/Commodities for " @
 F6A9D28E466A97: "Missions In Progress" @
 72E11BB738A1FB: "Capital ship Victims" @
 6F623465F6238E: "Capital ship Award" @
-C7AD6F7B6831A8: "Redeem Voucher" => "Valeur des primes réclamées"
-2C60D95A352DA3: "Pay Fines" => "Valeur des amendes"
+C7AD6F7B6831A8: "Redeem Voucher" => "兑换代券"
+2C60D95A352DA3: "Pay Fines" => "支付罚款"
 7E2BA2DEEF4EF3: "Pay Bounty Value" @
 984FAF564D50B9: "DL Victim" @
 AB2BEAA625AAC3: "DL Payee Faction" @
@@ -1151,7 +1151,7 @@ AB2BEAA625AAC3: "DL Payee Faction" @
 
 01784CA8036C41: "Last Known Reputation" @
 CE1FCB4A606ED1: "Last State" @
-5C9CB498F540DF: "Government" => "Gouvernement"
+5C9CB498F540DF: "Government" => "政府类型："
 1DD01EBAA45EEF: "System Influence" @
 05A55AA172DB06: "Other System Info" @
 CB7B9C47F344FC: "Organic Data Value" @
@@ -1168,7 +1168,7 @@ FBB715DCFB4F59: "Show/Hide Kill Bonds" @
 SECTION UserControlOrganics
 
 20ABF8B1A35466: "Display incomplete scans" @
-729535298F44FF: "At {0}" => "À {0}"
+729535298F44FF: "At {0}" => "停靠在 {0}"
 023888959E33B9: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
 DAB5A87D199E18: "Star System" @
 48902F14E5C843: "Genus" @
@@ -1209,15 +1209,15 @@ SECTION InfoForm
 SECTION UserControlSuitsWeapons
 
 CC459F63A7AECD: "Mods" @
-9E7FD7DDAEE291: "Loadout" => "Configuration"
+9E7FD7DDAEE291: "Loadout" => "飞船及其装备的模组"
 EF002BCE769B96: "Primary 1" @
 34CD6210189BD2: "Primary 2" @
 025DE599EA0A62: "Secondary" @
-A9A96EC019494D: "Primary" => "Principal"
+A9A96EC019494D: "Primary" => "标签页启动失败。\r\n这是异常状况，请通过Discord或者Github告知开发团队。\r\n你可以尝试按住Shift键的同时双击EDDiscovery的图标进入安全模式。\r\n选择重置标签页后，点击运行程序。这样也许会解决问题。"
 20874E3E8BD17C: "Weapon Type" @
 1BFD29F2F12AD0: "Damage Type" @
 9A337CC4EF4BE3: "Fire Mode" @
-7BF6D1D3A58A22: "Damage" => "Dégâts"
+7BF6D1D3A58A22: "Damage" => "高温伤害"
 8A50D0D250AC59: "Rate/Sec" @
 97B39A3F5E9B3A: "Clip Size" @
 77604466309D05: "Hopper Size" @
@@ -1266,7 +1266,7 @@ CD7E9084A619FD: "This Service is Suspended" @
 6C573682E526FF: "This Service is Not Installed" @
 068D15FAF7392F: "No Module or Ship packs installed" @
 3BECD4DD96195C: "Tier " @
-8EF7B327113B48: "Cost: ; cr;N0" => "Coût : ; cr;N0"
+8EF7B327113B48: "Cost: ; cr;N0" => "花费：; Cr;N0"
 BB9246B17BFDFF: "Jumping" @
 334FBEB50B8D02: "No CAPI data from frontier, due to either or server/network failure" @
 296B6B5743412B: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." @
@@ -1281,21 +1281,21 @@ EA50EDD2233946: "Balance cr" @
 5CBD584046863B: "Services" @
 DB866831C3D096: "Packs" @
 CDED093321DDAA: "Orders" @
-38DFC233193C18: "Commodity" => "Marchandise"
-171A0606F7C745: "Group" => "Groupe"
+38DFC233193C18: "Commodity" => "商品列表"
+171A0606F7C745: "Group" => "面板列表使用字母顺序进行排序，而不是安装类别排序。注意需要重启。（目前中文界面下无效）"
 160F06D4799C85: "Purchase" @
 0028D743EB44B8: "Sale" @
-D909428F5E2D1E: "Blackmarket" => "Marché noir"
+D909428F5E2D1E: "Blackmarket" => "贸易市场;黑市"
 57218AD66361FC: "CAPI Stats" @
 9C452534CDFE1E: "CAPI Ships/Modules" @
-2D2CB022BC3D26: "Speed" => "Vitesse"
+2D2CB022BC3D26: "Speed" => "质量/速度"
 2DA2851FFF3935: "Boost" @
 2521738884EF95: "Landing Pad" @
-7548AB52C3D1D5: "Power" => "Puissance"
+7548AB52C3D1D5: "Power" => "势力斗争"
 BCECF4562F1709: "Stock" @
 2011FCCFA79102: "CAPI Items" @
-44F6AF6945544C: "Quantity" => "Quantité"
-678DD8A69CFC99: "Stolen" => "Volé"
+44F6AF6945544C: "Quantity" => "精炼矿石量：;t;N0"
+678DD8A69CFC99: "Stolen" => ";赃物"
 3F6F257DD23224: "Microresource" @
 
 SECTION BookmarkForm
@@ -1343,7 +1343,7 @@ SECTION TravelHistoryFilter
 
 6C204C8FBBB9EC: "{0} hours" => "{0}小时"
 536C16BD9FDF58: "{0} days" => "{0}天"
-D85B59C8A8549D: "One Week" => "1周"
+D85B59C8A8549D: "One Week" => "，一周内："
 2985A39CF5BF9E: "{0} weeks" => "{0}周"
 0D3830748786CE: "Quarter" => "一季度"
 D0E392BB008D98: "Half year" => "半年"

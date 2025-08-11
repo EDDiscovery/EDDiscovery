@@ -22,7 +22,7 @@ DE543B3879BD6E: "No Pos" => "无坐标"
 
 // from EDC Core
 
-E8249C664732DF: "Remove All" => "Supprimer tout"
+E8249C664732DF: "Remove All" => "你是否想要删除配置文件{0}？\r\n这将删除此配置文件的所有信息并且该操作不能撤销！"
 49CE5DE18C09AA: "Hostile" @
 C65CDEF3DEF45A: "Unfriendly" @
 4BD29139454399: "Neutral" @
@@ -32,13 +32,13 @@ BF567DC7870262: "Friendly" @
 
 // from extended controls
 
-F4F4473DF8CB59: "Disabled" => "Désactivé"
+F4F4473DF8CB59: "Disabled" => "星系数据下载已被禁用。从设置里重新启用。"
 
 // from action programs
 
 AC1627C6A55792: "To be deleted" @
 EB1BCE574038E4: "To be installed" @
-B5E77C5C02A90C: "Removed" => "Supprimé"
+B5E77C5C02A90C: "Removed" => "移除了{0}条FSD跳跃记录"
 06DB4FFA7EFB34: "Incompatible" @
 
 SECTION StartUp
@@ -47,13 +47,13 @@ SECTION StartUp
 
 SECTION DataGridView
 
-31341C6F0C7AF6: "Header" => "Entête"
+31341C6F0C7AF6: "Header" => "包含表头"
 DF04C6BCA0BCDC: "Word Wrap (Override)" @
 
 SECTION SafeModeForm
 
 11DDBF0E006302: "EDDiscovery Safe Mode" @
-B1B392607DEAF2: "Run" => "Démarrer"
+B1B392607DEAF2: "Run" => "停止当前运行的插件程序(&S)"
 FCFBF9C6671583: "Remove Journals" @
 5DCC4262C9BB58: "Remove Journal Entries && Commanders" @
 365C643F550384: "Delete/Rebuild User DB" @
@@ -121,7 +121,7 @@ D6FF8EAE6FDB7D: "Mining overlay" @
 2CB83259459C98: "3D Map of systems in range" => "当前位置的局部三维星图"
 60D12B289C0F47: "Local Map" => "局部星图"
 A7528D77703FD5: "2D Plot of systems in range" => "当前位置附近星系的二维测绘"
-142ADE7739800A: "2D Plot" => "2D绘图"
+142ADE7739800A: "2D Plot" => "当前位置附近星系的二维测绘"
 893A59853B6083: "Trilateration of stars with unknown positions" => "使用三遍测量法计算星系坐标"
 35E19316B84348: "Trilateration" => "三边测量"
 90897EA3342CFD: "Bookmarks on systems and planets" => "管理星系及星体标签"
@@ -176,13 +176,13 @@ ADAB7B122964C0: "EDDB - Automatic web view of system" @
 F12262247D08BD: "Micro resource count" @
 8BEBD95AF22662: "Suits & Weapons" @
 393A482F174DA6: "Suits, Loadouts, Weapons" @
-723E769CA8B7F1: "3D Map" => "Carte 3D"
+723E769CA8B7F1: "3D Map" => "当前位置的局部三维星图"
 4927077FF8C996: "3D Map of galaxy" @
 4F49FDDD44F492: "Local 3D Map" @
 112E4D8C9B4EEC: "Local 3D Map of systems near you" @
 92F242BD12833A: "Organic Scans" @
 092BC4115EF04D: "Organic scans of current body and historic scans" @
-C6C5065C1BFCBE: "Engineers" => "Ingénieurs"
+C6C5065C1BFCBE: "Engineers" => "工程师"
 104A3B657D7113: "Engineers List, status, recipes" @
 BE1C21D6FE0AE4: "Discoveries" @
 98A0679EBD354B: "Discoveries Observer List" @
@@ -230,7 +230,7 @@ B5CFC4E9D493BC: "Send to Inara historic data (previous ships, stored modules)" =
 CA2878BBFF0A12: "&Edit Add-On Action Files" => "编辑插件脚本文件(&E)"
 5589AA6BF97C45: "Edit Last Action Pack" => "编辑最后安装的插件包"
 B54DCF74E1F1F3: "&Stop currently running Action Program" => "停止当前运行的插件程序(&S)"
-C47AE15370CFE1: "Help" => "Aide"
+C47AE15370CFE1: "Help" => "帮助(&H)"
 50F1FB3394671C: "&Help" => "帮助(&H)"
 73D0A064C9E578: "&About" => "关于(&A)"
 5562A1E2E70DEB: "&View Help" @
@@ -333,7 +333,7 @@ SECTION ImportExportForm
 DEADB4817C6BB8: "Export data" => "导出"
 F3E4FADB9E370A: "Export" => "导出"
 D82C9379E1E7F3: "Import data" @
-D6FBC9D2BDD580: "Import" => "Importer"
+D6FBC9D2BDD580: "Import" => "导入文件"
 6D9BDC92D8C9FC: "CSV Separator" => "CSV 分隔符"
 B9EE3DEAAE2695: "Comma" => "逗号"
 727CECA929343C: "Semicolon" => "分号"
@@ -341,7 +341,7 @@ B9EE3DEAAE2695: "Comma" => "逗号"
 CF9B77061F7B31: "Open" => "导出后打开"
 BDFD4D8D695277: "UTC" @
 77D2774F81109B: "Click Paste or drag text or files to input box" @
-FE06EB6459C87F: "Tab" => "Tabulation"
+FE06EB6459C87F: "Tab" => "右击添加/移除标签页，左键拖拽排序"
 F39A80A0C4C734: "Exclude Header Row" @
 F12960ECA66A33: "Save Import As" @
 
@@ -363,7 +363,7 @@ B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cle
 0EE93787C960CF: "Select the data set" => "选择数据集"
 D24336A365C558: "Press to Accept" => "点击以接受"
 D65DF91B92B250: "Select Galaxy Data" => "选择 EDSM 银河星图数据"
-2745DEBAA64A20: "Area" => "Zone "
+2745DEBAA64A20: "Area" => "最小化到系统托盘图标"
 
 SECTION MoveToCommander
 
@@ -408,7 +408,7 @@ SECTION MessageBoxTheme
 6F3ABBE484ABD8: "Abort" => "中止"
 816C52FD2BDD94: "No" => "否"
 5397E0583F14F6: "Yes" => "是"
-61CC55AA045318: "Add" => "Ajouter"
+61CC55AA045318: "Add" => "插件(&A)"
 
 SECTION DataGridViewDialogs
 
@@ -420,10 +420,10 @@ AA822BAACB5BCA: "Value is not valid" => "值无效"
 SECTION KeyForm
 
 A6CC1735E61BA1: "Define Key Sequence" => "定义按键"
-2038BDEC921020: "Up" => "KeyUp"
-BF93E5CE8BC122: "Down" => "KeyDown"
-EA683AD616063B: "Press" => "KeyPress"
-469D5B183FDC0D: "Shift" => "MAJ"
+2038BDEC921020: "Up" => "远航考察规划助手，创建远航航线"
+BF93E5CE8BC122: "Down" => "标签页启动失败。\r\n这是异常状况，请通过Discord或者Github告知开发团队。\r\n你可以尝试按住Shift键的同时双击EDDiscovery的图标进入安全模式。\r\n选择重置标签页后，点击运行程序。这样也许会解决问题。"
+EA683AD616063B: "Press" => "EDDiscovery正在更新EDSM和EDDB的数据库\r\n现在退出请选择确认，等待更新完成请选择取消"
+469D5B183FDC0D: "Shift" => "标签页启动失败。\r\n这是异常状况，请通过Discord或者Github告知开发团队。\r\n你可以尝试按住Shift键的同时双击EDDiscovery的图标进入安全模式。\r\n选择重置标签页后，点击运行程序。这样也许会解决问题。"
 DD6A02A553DA4C: "Ctrl" @
 E30EFF925100B7: "Alt" @
 A24AEF4D03E398: "Press Key" => "按下一个键"
@@ -461,7 +461,7 @@ A5A74A6DF09278: "Device" @
 D8CBC0CB400C12: "Wait until speech completes" @
 92D53A895E2EC1: "End Trigger" @
 8CF29400C3CFF6: "Start Trigger" @
-3A9C736B3175D6: "Rate" => "Vitesse"
+3A9C736B3175D6: "Rate" => "EDSM按钮显示在另外一行"
 3091C8446F8D3A: "Voice" @
 3B18E8E332500F: "Volume" @
 84219262228FD0: "Override" @
@@ -470,7 +470,7 @@ SECTION WaveConfigureDialog
 
 72209F8C09DF0D: "Configure Wave" @
 5CB7091D05A1FB: "Select Default device, volume and effects" @
-2F3B5C55BC27CD: "Browse" => "Parcourir"
+2F3B5C55BC27CD: "Browse" => "浏览"
 2B63A06A3CF32F: "Wait until audio completes" @
 
 SECTION SoundEffectsDialog
@@ -481,12 +481,12 @@ FD7391B6720B80: "Mix" @
 6973E1FED929E5: "Chorus" @
 C26BC3C7F09EAB: "No effects" @
 052BA8E09CD155: "Reverb" @
-20063AD9053289: "Enable" => "Activer"
+20063AD9053289: "Enable" => "星系数据下载已被禁用。从设置里重新启用。"
 E73D6E899B5D7D: "Distortion" @
 C8D7677E19495F: "Feedback" @
 A6C2D09A48FE01: "Pitch" @
 8631BA97BBBDF5: "Gargle" @
-B4C200BB0D1F7B: "Delay" => "Délai"
+B4C200BB0D1F7B: "Delay" => "当前延时"
 96DD91CDCBE72F: "Gain" @
 103165A25EAB02: "Octave" @
 89836A870E44FB: "Frequency" @
@@ -510,7 +510,7 @@ SECTION ActionProgramEditForm
 
 4BB0A4AF96D21C: "Action Program" @
 9A92F637264375: "As File" @
-DDCB77FF769EA5: "Load" => "Ouvrir"
+DDCB77FF769EA5: "Load" => "飞船及其装备的模组"
 A96C6A2EC6FD15: "Text Edit" @
 
 SECTION ActionPackEditForm
