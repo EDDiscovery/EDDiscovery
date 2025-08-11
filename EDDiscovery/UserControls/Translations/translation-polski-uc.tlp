@@ -1076,6 +1076,7 @@ EEBF564BAF4F90: "{0} systems with unknown coordinates found in {1} sector." @
 SECTION UserControlMaterialTrader
 
 1D4D43CC6F3A83: "Use" @
+8AE1C34BD37FAD: "Left" @
 BFFFD736CDDD08: "Get" @
 719EA396AD92E0: "Clear" @
 3898B9AA06204B: "Offer" @
@@ -1264,7 +1265,7 @@ E2CE7274D260B9: "This Service is Active" @
 CD7E9084A619FD: "This Service is Suspended" @
 6C573682E526FF: "This Service is Not Installed" @
 068D15FAF7392F: "No Module or Ship packs installed" @
-3BECD4DD96195C: "Tier "@
+3BECD4DD96195C: "Tier " @
 8EF7B327113B48: "Cost: ; cr;N0" @
 BB9246B17BFDFF: "Jumping" @
 334FBEB50B8D02: "No CAPI data from frontier, due to either or server/network failure" @

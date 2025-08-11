@@ -730,7 +730,7 @@ E3E78C5A9B4B48: "Use Historic Material Counts" => "使用历史材料计数"
 6C1B59B6152200: "Filling Shopping List would exceed capacity for" => "下面几项材料会超出材料容量："
 0C17E1E2D825FF: "No materials currently required." => "当前不需要任何材料。"
 9CDB9B531A7E2C: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" => "可合成FSD推进剂的最大次数：\r\n  {0} 次基础\r\n  {1} 次标准\r\n  {2} 次高级"
-7D83DF15795144: "Materials on {0}" => "{0} 上的材料: "
+7D83DF15795144: "Materials on {0}" => "{0} 上的材料"
 
 SECTION UserControlSpanel
 

@@ -456,7 +456,7 @@ SECTION SpeechConfigure
 4AA6307BD004DD: "Configure Speech" @
 52F5A347177056: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" @
 A5A74A6DF09278: "Device" @
-8F25A859269CA5: "Effects" =@
+8F25A859269CA5: "Effects" @
 92E97E035F44F8: "Literal" @
 D8CBC0CB400C12: "Wait until speech completes" @
 92D53A895E2EC1: "End Trigger" @
