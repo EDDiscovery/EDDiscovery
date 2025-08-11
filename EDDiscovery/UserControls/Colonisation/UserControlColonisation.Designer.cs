@@ -46,12 +46,14 @@ namespace EDDiscovery.UserControls
             this.extPanelGradientFillToolbar = new ExtendedControls.ExtPanelGradientFill();
             this.extComboBoxSystemSel = new ExtendedControls.ExtComboBox();
             this.extPanelGradientFillUCCP = new ExtendedControls.ExtPanelGradientFill();
+            this.extComboBoxStationSelect = new ExtendedControls.ExtComboBox();
             this.extPanelGradientFillToolbar.SuspendLayout();
             this.SuspendLayout();
             // 
             // extPanelGradientFillToolbar
             // 
             this.extPanelGradientFillToolbar.ChildrenThemed = true;
+            this.extPanelGradientFillToolbar.Controls.Add(this.extComboBoxStationSelect);
             this.extPanelGradientFillToolbar.Controls.Add(this.extComboBoxSystemSel);
             this.extPanelGradientFillToolbar.Dock = System.Windows.Forms.DockStyle.Top;
             this.extPanelGradientFillToolbar.FlowDirection = null;
@@ -59,7 +61,7 @@ namespace EDDiscovery.UserControls
             this.extPanelGradientFillToolbar.Location = new System.Drawing.Point(0, 0);
             this.extPanelGradientFillToolbar.Name = "extPanelGradientFillToolbar";
             this.extPanelGradientFillToolbar.PaintTransparentColor = System.Drawing.Color.Transparent;
-            this.extPanelGradientFillToolbar.Size = new System.Drawing.Size(496, 32);
+            this.extPanelGradientFillToolbar.Size = new System.Drawing.Size(878, 32);
             this.extPanelGradientFillToolbar.TabIndex = 0;
             this.extPanelGradientFillToolbar.ThemeColors = new System.Drawing.Color[] {
         System.Drawing.SystemColors.Control,
@@ -100,7 +102,7 @@ namespace EDDiscovery.UserControls
             this.extPanelGradientFillUCCP.Location = new System.Drawing.Point(0, 32);
             this.extPanelGradientFillUCCP.Name = "extPanelGradientFillUCCP";
             this.extPanelGradientFillUCCP.PaintTransparentColor = System.Drawing.Color.Transparent;
-            this.extPanelGradientFillUCCP.Size = new System.Drawing.Size(496, 351);
+            this.extPanelGradientFillUCCP.Size = new System.Drawing.Size(878, 351);
             this.extPanelGradientFillUCCP.TabIndex = 0;
             this.extPanelGradientFillUCCP.ThemeColors = new System.Drawing.Color[] {
         System.Drawing.SystemColors.Control,
@@ -109,6 +111,29 @@ namespace EDDiscovery.UserControls
         System.Drawing.SystemColors.Control};
             this.extPanelGradientFillUCCP.ThemeColorSet = -1;
             // 
+            // extComboBoxStationSelect
+            // 
+            this.extComboBoxStationSelect.BackColor2 = System.Drawing.Color.Red;
+            this.extComboBoxStationSelect.BorderColor = System.Drawing.Color.White;
+            this.extComboBoxStationSelect.ControlBackground = System.Drawing.SystemColors.Control;
+            this.extComboBoxStationSelect.DataSource = null;
+            this.extComboBoxStationSelect.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxStationSelect.DisabledScaling = 0.5F;
+            this.extComboBoxStationSelect.DisplayMember = "";
+            this.extComboBoxStationSelect.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxStationSelect.GradientDirection = 90F;
+            this.extComboBoxStationSelect.Location = new System.Drawing.Point(246, 5);
+            this.extComboBoxStationSelect.MouseOverScalingColor = 1.3F;
+            this.extComboBoxStationSelect.Name = "extComboBoxStationSelect";
+            this.extComboBoxStationSelect.SelectedIndex = -1;
+            this.extComboBoxStationSelect.SelectedItem = null;
+            this.extComboBoxStationSelect.SelectedValue = null;
+            this.extComboBoxStationSelect.Size = new System.Drawing.Size(216, 21);
+            this.extComboBoxStationSelect.TabIndex = 1;
+            this.extComboBoxStationSelect.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extComboBoxStationSelect.ValueMember = "";
+            this.extComboBoxStationSelect.SelectedIndexChanged += new System.EventHandler(this.extComboBoxStationSelect_SelectedIndexChanged);
+            // 
             // UserControlColonisation
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -116,7 +141,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.extPanelGradientFillUCCP);
             this.Controls.Add(this.extPanelGradientFillToolbar);
             this.Name = "UserControlColonisation";
-            this.Size = new System.Drawing.Size(496, 383);
+            this.Size = new System.Drawing.Size(878, 383);
             this.extPanelGradientFillToolbar.ResumeLayout(false);
             this.ResumeLayout(false);
 
@@ -127,5 +152,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelGradientFill extPanelGradientFillToolbar;
         private ExtendedControls.ExtPanelGradientFill extPanelGradientFillUCCP;
         private ExtendedControls.ExtComboBox extComboBoxSystemSel;
+        private ExtendedControls.ExtComboBox extComboBoxStationSelect;
     }
 }
