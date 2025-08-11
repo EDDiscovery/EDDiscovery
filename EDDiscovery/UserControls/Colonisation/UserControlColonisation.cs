@@ -79,13 +79,26 @@ namespace EDDiscovery.UserControls
 
             UpdateSystemComboBox();
 
-            extPanelGradientFillUCCP.Controls.Clear();      // start afresh
-            Display();
+            Display(true);
         }
+
+        protected override void Closing()
+        {
+            DiscoveryForm.OnHistoryChange -= HistoryChange;
+            DiscoveryForm.OnNewEntry -= NewEntry;
+        }
+
+        public override bool SupportTransparency => true;
+        protected override void SetTransparency(bool on, Color curcol)
+        {
+            this.BackColor = curcol;
+        }
+
 
         private void NewEntry(HistoryEntry he)
         {
             bool redisplay = false;     // if we need a display 
+            bool cleardisplay = false;     // if we need a display clear
 
             if (he.journalEntry is IStarScan || he.journalEntry is IMaterialJournalEntry || he.journalEntry is IBodyNameAndID)
             {
@@ -97,28 +110,27 @@ namespace EDDiscovery.UserControls
 
             if (current == null && ret.newsystem)      // if no current system, but we have a new system, select it
             {
-                extPanelGradientFillUCCP.Controls.Clear();      // start afresh (not needed, but safe)
                 SelectLastCreatedSystem();
+                cleardisplay = redisplay = true;
                 System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation switched to `{current.System.Name}` due to ret.newsystem");
             }
             else if (extComboBoxSystemSel.SelectedIndex == 0 && ret.newsystem)     // if new system, and we are on last created system
             {
-                extPanelGradientFillUCCP.Controls.Clear();  // start afresh
                 SelectSystem(ret.csd);
-                redisplay = true;
+                cleardisplay = redisplay = true;
                 System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation switched to `{current.System.Name}` due to ret.newsystem");
             }
             else if (ret.csd != null && ret.csd == current)                    // if we changed something about the current system
             {
                 System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation update display due to change in `{current.System.Name}`");
-                redisplay = true;
+                redisplay = true;       // don't need to clear, but do an update
             }
 
-            if (ret.newsystem)                              // if we have a change in system list, update the combo
+            if (ret.newsystem)                                                  // if we have a change in system list, update the combo
                 UpdateSystemComboBox();
 
             if ( redisplay )
-                Display();
+                Display(cleardisplay);
         }
 
         public void UpdateSystemComboBox()
@@ -171,14 +183,13 @@ namespace EDDiscovery.UserControls
             ignorechange = false;
         }
 
-
         public void UpdateStationComboBox()
         {
             extComboBoxStationSelect.Items.Clear();
 
-            extComboBoxStationSelect.Items.Add("All");
+            extComboBoxStationSelect.Items.Add(alltext);        // add the translated all text
 
-            if (current != null)
+            if (current != null)                                // if we have a system, add all to combo
             {
                 foreach (var kvp in current.Ports)
                 {
@@ -191,7 +202,7 @@ namespace EDDiscovery.UserControls
                 var json = JToken.Parse(GetSetting(dbStationSelection, "{}")) ?? new JToken();
                 var name = json[current.System.Name].StrNull(); // may be null
                 var index = name != null ? extComboBoxStationSelect.Items.IndexOf(name) : -1;       // may be -1, name not found, or index 1 onwards (0 = all)
-                extComboBoxStationSelect.SelectedIndex = index>0 ? index : 0;
+                extComboBoxStationSelect.SelectedIndex = index>0 ? index : 0;   // select in
 
                 ignorechange = false;
             }
@@ -223,8 +234,7 @@ namespace EDDiscovery.UserControls
                     PutSetting(dbSelection, current.System.Name);
                 }
 
-                extPanelGradientFillUCCP.Controls.Clear();
-                Display();
+                Display(true);      // redisplay with clear
             }
         }
         private void extComboBoxStationSelect_SelectedIndexChanged(object sender, EventArgs e)
@@ -232,28 +242,23 @@ namespace EDDiscovery.UserControls
             if (!ignorechange)
             {
                 var json = JToken.Parse(GetSetting(dbStationSelection, "{}")) ?? new JToken();
-                json[current.System.Name] = (string)extComboBoxStationSelect.SelectedItem;
+                json[current.System.Name] = (string)extComboBoxStationSelect.SelectedItem;      // set memory of station selection for this system
                 PutSetting(dbStationSelection, json.ToString());
-                Display();
+                Display(true);      // redisplay with clear to remove non selected ports
             }
         }
 
-        protected override void Closing()
+        private void Display(bool cleardisplay)
         {
-            DiscoveryForm.OnHistoryChange -= HistoryChange;
-            DiscoveryForm.OnNewEntry -= NewEntry;
-        }
+            if ( cleardisplay )
+            {
+                extPanelGradientFillUCCP.Controls.Clear();
+            }
 
-        public override bool SupportTransparency => true;
-        protected override void SetTransparency(bool on, Color curcol)
-        {
-            this.BackColor = curcol;
-        }
-
-        private void Display()
-        {
             if ( current != null)
             {
+                string stationselection = (string)extComboBoxStationSelect.SelectedItem;
+
                 if (extPanelGradientFillUCCP.Controls.Count == 0)        // no controls in user control content panel
                 {
                     // FillContents has a ExtPanelVertScrollWithBar which has
@@ -276,14 +281,16 @@ namespace EDDiscovery.UserControls
                     csi.Dock = DockStyle.Top;
                     csi.Initialise(current, DiscoveryForm.History);
 
-
                     foreach (var kvp in current.Ports)
                     {
-                        ColonisationPortDisplay cp = new ColonisationPortDisplay();
-                        cp.Tag = kvp.Value;
-                        cp.Dock = DockStyle.Top;
-                        pscrolledcontent.Controls.Add(cp);
-                        cp.Initialise(kvp.Value);
+                        if (stationselection == alltext || stationselection == kvp.Value.Name)  // only display selected ports
+                        {
+                            ColonisationPortDisplay cp = new ColonisationPortDisplay();
+                            cp.Tag = kvp.Value;
+                            cp.Dock = DockStyle.Top;
+                            pscrolledcontent.Controls.Add(cp);
+                            cp.Initialise(kvp.Value);
+                        }
                     }
 
                     pscrolledcontent.Controls.Add(csi);
@@ -323,18 +330,21 @@ namespace EDDiscovery.UserControls
                     // find each port in current list
                     foreach (var kvp in current.Ports)
                     {
-                        ColonisationPortDisplay cp = pscrolledcontent.Controls.FindTag(kvp.Value) as ColonisationPortDisplay;
-                        if (cp == null)     // if new, add
+                        if (stationselection == alltext || stationselection == kvp.Value.Name)  // only display selected ports
                         {
-                            cp = new ColonisationPortDisplay();
-                            cp.Tag = kvp.Value;
-                            cp.Dock = DockStyle.Top;
-                            pscrolledcontent.Controls.Add(cp);
-                            pscrolledcontent.Controls.SetChildIndex(cp, 0);
-                            cp.Initialise(kvp.Value);
-                            Theme.Current.Apply(cp);
+                            ColonisationPortDisplay cp = pscrolledcontent.Controls.FindTag(kvp.Value) as ColonisationPortDisplay;
+                            if (cp == null)     // if new, add
+                            {
+                                cp = new ColonisationPortDisplay();
+                                cp.Tag = kvp.Value;
+                                cp.Dock = DockStyle.Top;
+                                pscrolledcontent.Controls.Add(cp);
+                                pscrolledcontent.Controls.SetChildIndex(cp, 0);
+                                cp.Initialise(kvp.Value);
+                                Theme.Current.Apply(cp);
+                            }
+                            cp.UpdatePort();
                         }
-                        cp.UpdatePort();
                     }
 
                     //// unlikely but remove any ports not in current list
@@ -379,7 +389,8 @@ namespace EDDiscovery.UserControls
 
         private const string dbSelection = "Selection";
         private const string dbStationSelection = "StationSelection";
-
+        
+        private string alltext = "All";
     }
 
 }
