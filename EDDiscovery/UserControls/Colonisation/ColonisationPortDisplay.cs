@@ -14,6 +14,7 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using ExtendedControls;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls.Colonisation
@@ -39,7 +40,8 @@ namespace EDDiscovery.UserControls.Colonisation
 
         public void UpdatePort()
         {
-            extLabelStationName.Text = Port.Name + " " + Port.MarketID;
+            extLabelStationName.Text = Port.Name;
+            extLabelStationName.Font = Theme.Current.GetScaledFont(1.3f);
 
             var je = Port.LastDockedOrLocation as ILocDocked; // may be null
 

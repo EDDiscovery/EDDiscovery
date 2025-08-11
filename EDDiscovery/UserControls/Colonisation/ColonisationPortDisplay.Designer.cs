@@ -31,6 +31,11 @@
             this.extPanelDataGridViewScrollRL = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarRL = new ExtendedControls.ExtScrollBar();
             this.dataGridViewRL = new System.Windows.Forms.DataGridView();
+            this.ColRLName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColRLRequired = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColRLProvided = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColRLRemaining = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColRLPayment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extPanelGradientFill1 = new ExtendedControls.ExtPanelGradientFill();
             this.extCheckBoxShowContributions = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxShowRL = new ExtendedControls.ExtCheckBox();
@@ -45,11 +50,7 @@
             this.colContributionsAmount = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extPanelDataGridViewScrollContributions = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarContributions = new ExtendedControls.ExtScrollBar();
-            this.ColRLName = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColRLRequired = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColRLProvided = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColRLRemaining = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ColRLPayment = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.extPanelGradientFillBot = new ExtendedControls.ExtPanelGradientFill();
             this.extPanelDataGridViewScrollRL.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRL)).BeginInit();
             this.extPanelGradientFill1.SuspendLayout();
@@ -123,6 +124,36 @@
             this.dataGridViewRL.Size = new System.Drawing.Size(748, 227);
             this.dataGridViewRL.TabIndex = 0;
             // 
+            // ColRLName
+            // 
+            this.ColRLName.FillWeight = 200F;
+            this.ColRLName.HeaderText = "Name";
+            this.ColRLName.Name = "ColRLName";
+            this.ColRLName.ReadOnly = true;
+            // 
+            // ColRLRequired
+            // 
+            this.ColRLRequired.HeaderText = "Required";
+            this.ColRLRequired.Name = "ColRLRequired";
+            this.ColRLRequired.ReadOnly = true;
+            // 
+            // ColRLProvided
+            // 
+            this.ColRLProvided.HeaderText = "Provided";
+            this.ColRLProvided.Name = "ColRLProvided";
+            this.ColRLProvided.ReadOnly = true;
+            // 
+            // ColRLRemaining
+            // 
+            this.ColRLRemaining.HeaderText = "Remaining";
+            this.ColRLRemaining.Name = "ColRLRemaining";
+            // 
+            // ColRLPayment
+            // 
+            this.ColRLPayment.HeaderText = "Payment";
+            this.ColRLPayment.Name = "ColRLPayment";
+            this.ColRLPayment.ReadOnly = true;
+            // 
             // extPanelGradientFill1
             // 
             this.extPanelGradientFill1.ChildrenThemed = true;
@@ -146,7 +177,7 @@
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
-            this.extPanelGradientFill1.ThemeColorSet = -1;
+            this.extPanelGradientFill1.ThemeColorSet = 1;
             // 
             // extCheckBoxShowContributions
             // 
@@ -224,7 +255,7 @@
             this.labelDataProgress.Data = null;
             this.labelDataProgress.DataFont = null;
             this.labelDataProgress.InterSpacing = 4;
-            this.labelDataProgress.Location = new System.Drawing.Point(350, 3);
+            this.labelDataProgress.Location = new System.Drawing.Point(360, 3);
             this.labelDataProgress.Name = "labelDataProgress";
             this.labelDataProgress.NoDataText = null;
             this.labelDataProgress.Size = new System.Drawing.Size(329, 23);
@@ -240,7 +271,7 @@
             this.labelDataGov.Data = null;
             this.labelDataGov.DataFont = null;
             this.labelDataGov.InterSpacing = 4;
-            this.labelDataGov.Location = new System.Drawing.Point(350, 29);
+            this.labelDataGov.Location = new System.Drawing.Point(360, 29);
             this.labelDataGov.Name = "labelDataGov";
             this.labelDataGov.NoDataText = null;
             this.labelDataGov.Size = new System.Drawing.Size(329, 23);
@@ -366,41 +397,30 @@
             this.extScrollBarContributions.Value = -1;
             this.extScrollBarContributions.ValueLimited = -1;
             // 
-            // ColRLName
+            // extPanelGradientFillBot
             // 
-            this.ColRLName.FillWeight = 200F;
-            this.ColRLName.HeaderText = "Name";
-            this.ColRLName.Name = "ColRLName";
-            this.ColRLName.ReadOnly = true;
-            // 
-            // ColRLRequired
-            // 
-            this.ColRLRequired.HeaderText = "Required";
-            this.ColRLRequired.Name = "ColRLRequired";
-            this.ColRLRequired.ReadOnly = true;
-            // 
-            // ColRLProvided
-            // 
-            this.ColRLProvided.HeaderText = "Provided";
-            this.ColRLProvided.Name = "ColRLProvided";
-            this.ColRLProvided.ReadOnly = true;
-            // 
-            // ColRLRemaining
-            // 
-            this.ColRLRemaining.HeaderText = "Remaining";
-            this.ColRLRemaining.Name = "ColRLRemaining";
-            // 
-            // ColRLPayment
-            // 
-            this.ColRLPayment.HeaderText = "Payment";
-            this.ColRLPayment.Name = "ColRLPayment";
-            this.ColRLPayment.ReadOnly = true;
+            this.extPanelGradientFillBot.ChildrenThemed = true;
+            this.extPanelGradientFillBot.Dock = System.Windows.Forms.DockStyle.Top;
+            this.extPanelGradientFillBot.FlowDirection = null;
+            this.extPanelGradientFillBot.GradientDirection = 0F;
+            this.extPanelGradientFillBot.Location = new System.Drawing.Point(0, 540);
+            this.extPanelGradientFillBot.Name = "extPanelGradientFillBot";
+            this.extPanelGradientFillBot.PaintTransparentColor = System.Drawing.Color.Transparent;
+            this.extPanelGradientFillBot.Size = new System.Drawing.Size(772, 15);
+            this.extPanelGradientFillBot.TabIndex = 36;
+            this.extPanelGradientFillBot.ThemeColors = new System.Drawing.Color[] {
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.extPanelGradientFillBot.ThemeColorSet = -1;
             // 
             // ColonisationPortDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
+            this.Controls.Add(this.extPanelGradientFillBot);
             this.Controls.Add(this.extPanelDataGridViewScrollContributions);
             this.Controls.Add(this.extPanelDataGridViewScrollRL);
             this.Controls.Add(this.extPanelGradientFill1);
@@ -440,5 +460,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColRLProvided;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColRLRemaining;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColRLPayment;
+        private ExtendedControls.ExtPanelGradientFill extPanelGradientFillBot;
     }
 }
