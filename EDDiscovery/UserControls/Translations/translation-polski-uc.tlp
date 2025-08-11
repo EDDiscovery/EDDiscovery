@@ -1075,16 +1075,15 @@ EEBF564BAF4F90: "{0} systems with unknown coordinates found in {1} sector." @
 
 SECTION UserControlMaterialTrader
 
-1D4D43CC6F3A83: "Use" => "Benutzen"
-8AE1C34BD37FAD: "Left" => "Übrig"
-BFFFD736CDDD08: "Get" => "Erhalte"
-719EA396AD92E0: "Clear" => "Leeren"
+1D4D43CC6F3A83: "Use" @
+BFFFD736CDDD08: "Get" @
+719EA396AD92E0: "Clear" @
 3898B9AA06204B: "Offer" @
-965FB2DDF63D60: "Receive" => "Erhalten"
+965FB2DDF63D60: "Receive" @
 127F7960FB4A8D: "Clear Trade" @
-DA433CD41E7FB7: "Raw" => "Roh"
-58AC2F7D78D326: "Encoded" => "Verschlüsselt"
-8AB3DB9BFC3921: "Manufactured" => "Produziert"
+DA433CD41E7FB7: "Raw" @
+58AC2F7D78D326: "Encoded" @
+8AB3DB9BFC3921: "Manufactured" @
 
 SECTION UserControlMiningOverlay
 
@@ -1170,7 +1169,7 @@ SECTION UserControlOrganics
 20ABF8B1A35466: "Display incomplete scans" @
 729535298F44FF: "At {0}" => "Bei {0}"
 023888959E33B9: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
-DAB5A87D199E18: "Star System" => "Sternensystem"
+DAB5A87D199E18: "Star System" @
 48902F14E5C843: "Genus" @
 83A7238826AB30: "Species" @
 CC91B1EA2C1651: "Variant" @
@@ -1265,8 +1264,8 @@ E2CE7274D260B9: "This Service is Active" @
 CD7E9084A619FD: "This Service is Suspended" @
 6C573682E526FF: "This Service is Not Installed" @
 068D15FAF7392F: "No Module or Ship packs installed" @
-3BECD4DD96195C: "Tier " => "Rang "
-8EF7B327113B48: "Cost: ; cr;N0" => "Kosten: ; cr;N0"
+3BECD4DD96195C: "Tier "@
+8EF7B327113B48: "Cost: ; cr;N0" @
 BB9246B17BFDFF: "Jumping" @
 334FBEB50B8D02: "No CAPI data from frontier, due to either or server/network failure" @
 296B6B5743412B: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." @
@@ -1278,24 +1277,24 @@ B1BED287E15EFC: "Itinerary" @
 9E94B37532F75D: "Dist From" @
 4F05E8FDB76807: "Finances" @
 EA50EDD2233946: "Balance cr" @
-5CBD584046863B: "Services" => "Einrichtungen"
-DB866831C3D096: "Packs" => "Pakete"
+5CBD584046863B: "Services" @
+DB866831C3D096: "Packs" @
 CDED093321DDAA: "Orders" @
-38DFC233193C18: "Commodity" => "Handelsware"
-171A0606F7C745: "Group" => "Gruppe"
+38DFC233193C18: "Commodity" @
+171A0606F7C745: "Group" @
 160F06D4799C85: "Purchase" @
 0028D743EB44B8: "Sale" @
-D909428F5E2D1E: "Blackmarket" => "Schwarzmarkt"
+D909428F5E2D1E: "Blackmarket" @
 57218AD66361FC: "CAPI Stats" @
 9C452534CDFE1E: "CAPI Ships/Modules" @
-2D2CB022BC3D26: "Speed" => "Geschwindigkeit"
-2DA2851FFF3935: "Boost" => "Boost"
+2D2CB022BC3D26: "Speed" @
+2DA2851FFF3935: "Boost" @
 2521738884EF95: "Landing Pad" @
 7548AB52C3D1D5: "Power" @
-BCECF4562F1709: "Stock" => "Lagerstand"
+BCECF4562F1709: "Stock" @
 2011FCCFA79102: "CAPI Items" @
-44F6AF6945544C: "Quantity" => "Anzahl"
-678DD8A69CFC99: "Stolen" => "Gestohlen"
+44F6AF6945544C: "Quantity" @
+678DD8A69CFC99: "Stolen" @
 3F6F257DD23224: "Microresource" @
 
 SECTION BookmarkForm

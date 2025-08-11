@@ -22,7 +22,7 @@ DE543B3879BD6E: "No Pos" => "Brak Pozycji"
 
 // from EDC Core
 
-E8249C664732DF: "Remove All" => "Alle entfernen"
+E8249C664732DF: "Remove All" @
 49CE5DE18C09AA: "Hostile" @
 C65CDEF3DEF45A: "Unfriendly" @
 4BD29139454399: "Neutral" @
@@ -38,7 +38,7 @@ F4F4473DF8CB59: "Disabled" => "Deaktiviert"
 
 AC1627C6A55792: "To be deleted" @
 EB1BCE574038E4: "To be installed" @
-B5E77C5C02A90C: "Removed" => "Entfernt"
+B5E77C5C02A90C: "Removed" @
 06DB4FFA7EFB34: "Incompatible" @
 
 SECTION StartUp
@@ -47,7 +47,7 @@ SECTION StartUp
 
 SECTION DataGridView
 
-31341C6F0C7AF6: "Header" => "Entête"
+31341C6F0C7AF6: "Header" @
 DF04C6BCA0BCDC: "Word Wrap (Override)" @
 
 SECTION SafeModeForm
@@ -189,7 +189,7 @@ BE1C21D6FE0AE4: "Discoveries" @
 91B0BA24657FE5: "Carrier" @
 42F527004E124B: "Data about your fleet carrier" @
 87DF60DE337FB5: "Resources" => "Ressourcen"
-9AE60B8B41DFAD: "Resources: All Materials, Commodity, Micro resources" => "Alle Materialien, Handelswaren, Mikroressourcen"
+9AE60B8B41DFAD: "Resources: All Materials, Commodity, Micro resources" @
 542CC34C1F691F: "Spansh Stations" @
 17DFA3A002E3D5: "Stations in the system from spansh web data" @
 4DFB01DC92677C: "Colonisation" @

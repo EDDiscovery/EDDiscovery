@@ -38,7 +38,7 @@ F4F4473DF8CB59: "Disabled" => "Отключено"
 
 AC1627C6A55792: "To be deleted" @
 EB1BCE574038E4: "To be installed" @
-B5E77C5C02A90C: "Removed" => "Entfernt"
+B5E77C5C02A90C: "Removed" @
 06DB4FFA7EFB34: "Incompatible" @
 
 SECTION StartUp
@@ -476,21 +476,21 @@ SECTION WaveConfigureDialog
 SECTION SoundEffectsDialog
 
 9C018170B60DB7: "Sound Effects" @
-E738C7D89AFB7A: "Echo" => "Echo"
+E738C7D89AFB7A: "Echo" @
 FD7391B6720B80: "Mix" @
 6973E1FED929E5: "Chorus" @
 C26BC3C7F09EAB: "No effects" @
 052BA8E09CD155: "Reverb" @
-20063AD9053289: "Enable" => "Aktivieren"
+20063AD9053289: "Enable" @
 E73D6E899B5D7D: "Distortion" @
 C8D7677E19495F: "Feedback" @
 A6C2D09A48FE01: "Pitch" @
 8631BA97BBBDF5: "Gargle" @
-B4C200BB0D1F7B: "Delay" => "Verzögerung"
-96DD91CDCBE72F: "Gain" => "Zuwachs"
+B4C200BB0D1F7B: "Delay" @
+96DD91CDCBE72F: "Gain" @
 103165A25EAB02: "Octave" @
-89836A870E44FB: "Frequency" => "Frequenz"
-8440B9EB7D0391: "Edge" => "Grenzer"
+89836A870E44FB: "Frequency" @
+8440B9EB7D0391: "Edge" @
 DF0E298E356261: "Depth" @
 AAC47B153C274D: "HF Ratio" @
 E7A1A898CC09B9: "Cent Freq" @
@@ -504,13 +504,13 @@ SECTION AudioDeviceConfigure
 SECTION ActionPackEditPackForm
 
 3B042F6CEA285B: "Install Parameters" @
-9D68007B0763CB: "Program" => "Programm"
+9D68007B0763CB: "Program" @
 
 SECTION ActionProgramEditForm
 
-4BB0A4AF96D21C: "Action Program" => "Action-Programm"
+4BB0A4AF96D21C: "Action Program" @
 9A92F637264375: "As File" @
-DDCB77FF769EA5: "Load" => "Laden"
+DDCB77FF769EA5: "Load" @
 A96C6A2EC6FD15: "Text Edit" @
 
 SECTION ActionPackEditForm
