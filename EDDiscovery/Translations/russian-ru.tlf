@@ -36,10 +36,10 @@ F4F4473DF8CB59: "Disabled" => "Отключено"
 
 // from action programs
 
-AC1627C6A55792: "To be deleted" => "Wird gelöscht werden"
-EB1BCE574038E4: "To be installed" => "Wird installiert werden"
+AC1627C6A55792: "To be deleted" @
+EB1BCE574038E4: "To be installed" @
 B5E77C5C02A90C: "Removed" => "Entfernt"
-06DB4FFA7EFB34: "Incompatible" => "Inkompatibel"
+06DB4FFA7EFB34: "Incompatible" @
 
 SECTION StartUp
 
@@ -48,14 +48,14 @@ SECTION StartUp
 SECTION DataGridView
 
 31341C6F0C7AF6: "Header" => "Entête"
-DF04C6BCA0BCDC: "Word Wrap (Override)" => "Zeilenumbruch (Überschreiben)"
+DF04C6BCA0BCDC: "Word Wrap (Override)" @
 
 SECTION SafeModeForm
 
 11DDBF0E006302: "EDDiscovery Safe Mode" => "EDDiscovery. Безопасный режим"
 B1B392607DEAF2: "Run" => "Запуск"
 FCFBF9C6671583: "Remove Journals" => "Удалить журналы"
-5DCC4262C9BB58: "Remove Journal Entries && Commanders" => "Journale && Kommandanten entfernen"
+5DCC4262C9BB58: "Remove Journal Entries && Commanders" @
 365C643F550384: "Delete/Rebuild User DB" => "Удалить/перестроить базу данных пользователя"
 01F2FBC637B7E7: "Delete/Rebuild System DB" => "Удалить/перестроить базу данных систем"
 149C06035C88FF: "Reset DB Location" => "Сбросить расположение базы данных"
@@ -70,7 +70,7 @@ CCE1690C7ECC94: "Reset Theme" => "Сбросить тему"
 
 SECTION InfoForm
 
-9BEB96DAC88F56: "Acknowledge" => "Bestätigen"
+9BEB96DAC88F56: "Acknowledge" @
 
 SECTION PopOutInfo
 
@@ -192,22 +192,22 @@ BE1C21D6FE0AE4: "Discoveries" => "Открытия"
 9AE60B8B41DFAD: "Resources: All Materials, Commodity, Micro resources" => "Все материалы, товары, микроресурсы"
 542CC34C1F691F: "Spansh Stations" => "Станции со Spansh"
 17DFA3A002E3D5: "Stations in the system from spansh web data" => "Данные с веб-сайта Spansh о станциях в системе"
-4DFB01DC92677C: "Colonisation" => "Kolonisation"
-91A4AFA2089B9F: "Colonisation statistics" => "Kolonisationsstatistiken"
-C963A786E115F9: "TestOverlay" => "TestOverlay"
-78576CE18E50B2: "Test overlay" => "Test Overlay"
+4DFB01DC92677C: "Colonisation" @
+91A4AFA2089B9F: "Colonisation statistics" @
+C963A786E115F9: "TestOverlay" @
+78576CE18E50B2: "Test overlay" @
 
 SECTION EDDiscoveryForm
 
 586CFE03DAA723: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "У этого командира отключена синхронизация с EDSM. Вы действительно хотите отправить несинхронизированные события в EDSM?"
 25C9D555A2A9B9: "Confirm EDSM sync" => "Подтвердить синхронизацию с EDSM"
-FAC898054B2C2B: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." => "Es gibt {0} EDSM-Ereignisse zu senden, dies kostet Zeit und Bandbreite, wähle aus dem Folgenden was zu tun ist. Einträge vor dem gewählten Datum werden als gesendet markiert."
+FAC898054B2C2B: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
 B61E7134EF7FDD: "Send All to EDSM" => "Отправить всё на EDSM"
-2460BB4C7A146D: "Send Last 24 Hours of entries to EDSM" => "Sende die letzten 24 Stunden an EDSM"
-AA962467914A2B: "Send From" => "Sende alles beginnend mit"
-5ED64D1D56F6A0: "EDSM is up to date - send Nothing more" => "EDSM ist auf dem neuesten Stand - sende nichts"
-14D2AEDDDD40B0: "I'll decide later, do nothing" => "Ich entscheide später - mache nichts."
-542CFA5900AB5D: "Sending a large number of EDSM Entries" => "Übertrage eine große Anzahl an EDSM_Ereignissen"
+2460BB4C7A146D: "Send Last 24 Hours of entries to EDSM" @
+AA962467914A2B: "Send From" @
+5ED64D1D56F6A0: "EDSM is up to date - send Nothing more" @
+14D2AEDDDD40B0: "I'll decide later, do nothing" @
+542CFA5900AB5D: "Sending a large number of EDSM Entries" @
 EE178B82F7FF3B: "&Tools" => "&Инструменты"
 7F24C011F1CC03: "&Pop-outs" => "Отдельные окна"
 5D0D71ACC991B2: "&Show All In Task Bar" => "Показать все в панели задач"
@@ -220,11 +220,11 @@ E3D7130BAF225D: "Read 2.1 and former log files" => "Прочитать данн�
 6C233E7A4C3485: "Force reload logs" => "Принудительно перезагрузить журнал"
 2EB4A69BC73B8C: "Re-scan all journal files" => "Перезагрузить все файлы журнала"
 ED205CB2A2E5AD: "Delete duplicate FSD Jump entries" => "Удалить дубликаты записей FSD-прыжков"
-515B067A548F55: "Send Unsynced Journals To EDSM" => "Invia dati non sincronizzati a EDSM"
+515B067A548F55: "Send Unsynced Journals To EDSM" @
 80A376F0DAEEC0: "Rebuild System DB Indexes" => "Перестроить систему индексации базы данных"
 A7BF78A5A58AF7: "Synchronise with EDSM" => "Синхронизация с EDSM"
 B5CFC4E9D493BC: "Send to Inara historic data (previous ships, stored modules)" => "Отправить записи истории (предыдущие корабли, модули в хранилище) в Inara"
-4D33F20C90DE14: "Scan Netlogs" => "Scanne Netlogs"
+4D33F20C90DE14: "Scan Netlogs" @
 990E278543811B: "&Add-Ons" => "&Дополнения"
 27F90656BEC6AA: "&Manage Add-Ons" => "&Управление дополнениями"
 CA2878BBFF0A12: "&Edit Add-On Action Files" => "Изменить Action Files дополнения"
@@ -235,7 +235,7 @@ C47AE15370CFE1: "Help" => "Помощь"
 73D0A064C9E578: "&About" => "&О программе"
 5562A1E2E70DEB: "&View Help" => "&Посмотреть справку"
 34F2CCDF930918: "View Help Videos" => "Посмотреть вспомогательное видео"
-178BFB114DDBE3: "&Discord - EDD Community Chat" => "Comunidade chat de EDD no &Discord"
+178BFB114DDBE3: "&Discord - EDD Community Chat" @
 57482767CD6F92: "&Frontier Forum Thread" => "Тема на Frontier Forum"
 15C7CE4EDE3CD9: "&Project Page (GitHub)" => "Страница проекта (GitHub)"
 A1C144022BAD54: "&Report Issue / Idea" => "Сообщить о проблеме / идее"
@@ -257,8 +257,8 @@ DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is
 FF063FC2431DAF: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Найдены следующие dll дополнений\r\nВы хотите их использовать?\r\n{0} \r\nЕсли нет, удалите dll из папки DLL программы\r\\или удалите соответствующие action pack,\r\\или удерживайте клавишу shift при запуске программы и выберите опцию «Удалить все dll дополнений»"
 3160432B058751: "DLLs loaded: {0}" => "Загруженные библиотеки (.dll): {0}"
 CCFDEF5228D48D: "DLLs failed to load: {0}" => "Не удалось загрузить библиотеки (.dll): {0}"
-5C77F5282CD58B: "Are you sure to Rebuild Indexes? It may take a long time." => "Bist du sicher, dass die Indexes neu erstellt werden sollen? Dies kann lange dauern."
-4B610F7AC3BDAA: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" => "Historie scannen und versuchen für alle Systeme mit unbekannten Koordinaten\r\ndiese aus der Systemdatenbank zu kopieren.\r\nBestätigen?"
+5C77F5282CD58B: "Are you sure to Rebuild Indexes? It may take a long time." @
+4B610F7AC3BDAA: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
 A7BA2B77971D8B: "Profile {0} Loaded" => "Профиль {0} загружен"
 E11B312BFDAE74: "New EDDiscovery installer available: {0}" => "Доступна новая версия EDDiscovery: {0}"
 2F18E849A799F4: "New Release Available!" => "Доступна новая версия!"
@@ -339,11 +339,11 @@ B9EE3DEAAE2695: "Comma" => "Запятая"
 727CECA929343C: "Semicolon" => "Точка с запятой"
 677937E33CBDF5: "Include Header" => "С заголовками"
 CF9B77061F7B31: "Open" => "Открыть в Excel"
-BDFD4D8D695277: "UTC" => "UTC"
-77D2774F81109B: "Click Paste or drag text or files to input box" => "Kopiere Text in, oder ziehe Dateien auf Eingabefeld"
+BDFD4D8D695277: "UTC" @
+77D2774F81109B: "Click Paste or drag text or files to input box" @
 FE06EB6459C87F: "Tab" => "Tabulator"
-F39A80A0C4C734: "Exclude Header Row" => "Ignoriere Headerzeile"
-F12960ECA66A33: "Save Import As" => "Speichere Import als"
+F39A80A0C4C734: "Exclude Header Row" @
+F12960ECA66A33: "Save Import As" @
 
 SECTION GalaxySectorSelect
 
@@ -360,7 +360,7 @@ C763B2138A8CAD: "Bubble" => "Пузырь"
 B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Вы удалили сектора!\r\nЭто потребует очистки БД, что займет время.\r\nВы действительно хотите это сделать?"
 13D60E3F37387F: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "Чтобы предоставить вам больше информации, ED Discovery может загрузить данные о системах из EDSM/EDDB. Выберите, сколько данных вы хотите загрузить. Чем большую часть Галактики вы выберете, тем больше места потребуется для хранения."
 8598222918D3C6: "Select" => "Выберите"
-0EE93787C960CF: "Select the data set" => "Escolhe o set de dados estelares"
+0EE93787C960CF: "Select the data set" @
 D24336A365C558: "Press to Accept" => "Нажмите для подтверждения"
 D65DF91B92B250: "Select Galaxy Data" => "Выберите EDSM Galaxy Data"
 2745DEBAA64A20: "Area" => "Gebiet"
@@ -377,14 +377,14 @@ SECTION NewReleaseForm
 BD72C633E81378: "&Close" => "Закрыть"
 7DC2B81A6BEB1A: "GitHub URL" => "Ссылка на GitHub"
 A479C9C34E878D: "Download" => "Скачать"
-2F2BC6BEC06686: "&Portable Zip" => "Arquivo &Portátil"
+2F2BC6BEC06686: "&Portable Zip" @
 762DDDD6B73A25: "&Open" => "Открыть"
-339DEB023CDECC: "&Exe Installer" => "Instalador &EXE"
+339DEB023CDECC: "&Exe Installer" @
 F7C3F17AFCEDA7: "Release info" => "О версии"
 
 SECTION ProfileEditor
 
-412FC4AB61FF0F: "ProfileEditor" => "Editor de Perfil"
+412FC4AB61FF0F: "ProfileEditor" @
 D3F06A581B2B66: "Trigger" => "Триггер"
 B52B36B7269FBF: "Back" => "Назад"
 AA36EC39CD202E: "Edit Profile {0} Trigger" => "Настроить триггер для профиля {0}"
@@ -434,95 +434,95 @@ D11F7478DD0192: "Send To" => "Передать"
 E5651C683F14C9: "Keys" => "Клавиши"
 BC981983E7F547: "Next" => "Далее"
 640AB2BAE07BED: "Test" => "Тест"
-FB2BE54FDB3408: "Name a process to test sending keys" => "Nenne einen Prozess um das Senden von Tasten zu testen"
-83FFD8A7715ED2: "Error {0} - check entry" => "Error {0} - Eintrag prüfen"
-1C4510E49E02BB: "No process names to send keys to" => "Kein Prozessname an den Tasten gesendet werden können"
+FB2BE54FDB3408: "Name a process to test sending keys" @
+83FFD8A7715ED2: "Error {0} - check entry" @
+1C4510E49E02BB: "No process names to send keys to" @
 
 SECTION ExtPanelRollUp
 
-56BDE377952CAF: "Pin to stop this menu bar disappearing automatically" => "Fixar para evitar que essa barra de menu desapareça automaticamente"
-B453A75F11D77E: "Click or hover over this to unroll the menu bar" => "Clique ou passe o mouse sobre para abrir a barra de menu"
+56BDE377952CAF: "Pin to stop this menu bar disappearing automatically" @
+B453A75F11D77E: "Click or hover over this to unroll the menu bar" @
 
 SECTION CommanderForm
 
-783F02798D5892: "Logging in" => "Einloggen"
-E43D612E11F156: "Logout" => "Ausloggen"
-75D39BFAEDAF91: "Logged in" => "Eingeloggt"
-4E5A2893BDCC7D: "Login" => "Login"
-8FB7105CC0349C: "Await Log in" => "Erwarte einloggen"
+783F02798D5892: "Logging in" @
+E43D612E11F156: "Logout" @
+75D39BFAEDAF91: "Logged in" @
+4E5A2893BDCC7D: "Login" @
+8FB7105CC0349C: "Await Log in" @
 
 SECTION SpeechConfigure
 
-4AA6307BD004DD: "Configure Speech" => "Sprache konfigurieren"
-52F5A347177056: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" => "Text zur Aussprache festlegen (benutze ; um zufällig zu wählende Phrasen zu trennen und {} um zu gruppieren)"
-A5A74A6DF09278: "Device" => "Gerät"
+4AA6307BD004DD: "Configure Speech" @
+52F5A347177056: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" @
+A5A74A6DF09278: "Device" @
 8F25A859269CA5: "Effects" => "Effekte"
-92E97E035F44F8: "Literal" => "Literal"
-D8CBC0CB400C12: "Wait until speech completes" => "Warte bis Rede endet"
-92D53A895E2EC1: "End Trigger" => "Endtrigger"
-8CF29400C3CFF6: "Start Trigger" => "Starttrigger"
+92E97E035F44F8: "Literal" @
+D8CBC0CB400C12: "Wait until speech completes" @
+92D53A895E2EC1: "End Trigger" @
+8CF29400C3CFF6: "Start Trigger" @
 3A9C736B3175D6: "Rate" => "Rate"
-3091C8446F8D3A: "Voice" => "Stimme"
-3B18E8E332500F: "Volume" => "Lautstärke"
+3091C8446F8D3A: "Voice" @
+3B18E8E332500F: "Volume" @
 84219262228FD0: "Override" => "Überschreiben"
 
 SECTION WaveConfigureDialog
 
-72209F8C09DF0D: "Configure Wave" => "Wave konfigurieren"
-5CB7091D05A1FB: "Select Default device, volume and effects" => "Wähle Standardgerät, Lautstärke und Effekte"
+72209F8C09DF0D: "Configure Wave" @
+5CB7091D05A1FB: "Select Default device, volume and effects" @
 2F3B5C55BC27CD: "Browse" => "Durchstöbern"
-2B63A06A3CF32F: "Wait until audio completes" => "Warte bis Audio zu Ende ist"
+2B63A06A3CF32F: "Wait until audio completes" @
 
 SECTION SoundEffectsDialog
 
-9C018170B60DB7: "Sound Effects" => "Soundeffekte"
+9C018170B60DB7: "Sound Effects" @
 E738C7D89AFB7A: "Echo" => "Echo"
-FD7391B6720B80: "Mix" => "Mix"
-6973E1FED929E5: "Chorus" => "Chor"
-C26BC3C7F09EAB: "No effects" => "Keine Effekte"
-052BA8E09CD155: "Reverb" => "Hall"
+FD7391B6720B80: "Mix" @
+6973E1FED929E5: "Chorus" @
+C26BC3C7F09EAB: "No effects" @
+052BA8E09CD155: "Reverb" @
 20063AD9053289: "Enable" => "Aktivieren"
-E73D6E899B5D7D: "Distortion" => "Verzerrung"
-C8D7677E19495F: "Feedback" => "Resonanz"
-A6C2D09A48FE01: "Pitch" => "Höhe"
-8631BA97BBBDF5: "Gargle" => "Gurgeln"
+E73D6E899B5D7D: "Distortion" @
+C8D7677E19495F: "Feedback" @
+A6C2D09A48FE01: "Pitch" @
+8631BA97BBBDF5: "Gargle" @
 B4C200BB0D1F7B: "Delay" => "Verzögerung"
 96DD91CDCBE72F: "Gain" => "Zuwachs"
-103165A25EAB02: "Octave" => "Oktave"
+103165A25EAB02: "Octave" @
 89836A870E44FB: "Frequency" => "Frequenz"
 8440B9EB7D0391: "Edge" => "Grenzer"
-DF0E298E356261: "Depth" => "Tiefe"
-AAC47B153C274D: "HF Ratio" => "HF-Verhältnis"
-E7A1A898CC09B9: "Cent Freq" => "Frequenzmittelpunkt"
-4A7B2D10B5A2DF: "Freq Width" => "Frequenzbreite"
+DF0E298E356261: "Depth" @
+AAC47B153C274D: "HF Ratio" @
+E7A1A898CC09B9: "Cent Freq" @
+4A7B2D10B5A2DF: "Freq Width" @
 
 SECTION AudioDeviceConfigure
 
-5B91330DCA5F99: "Audio Device Select" => "Wähle Audiogerät"
-87A47513B6B28B: "Select Device" => "Wähle Gerät"
+5B91330DCA5F99: "Audio Device Select" @
+87A47513B6B28B: "Select Device" @
 
 SECTION ActionPackEditPackForm
 
-3B042F6CEA285B: "Install Parameters" => "Installationsparameter"
+3B042F6CEA285B: "Install Parameters" @
 9D68007B0763CB: "Program" => "Programm"
 
 SECTION ActionProgramEditForm
 
 4BB0A4AF96D21C: "Action Program" => "Action-Programm"
-9A92F637264375: "As File" => "Als Datei"
+9A92F637264375: "As File" @
 DDCB77FF769EA5: "Load" => "Laden"
-A96C6A2EC6FD15: "Text Edit" => "Text ändern"
+A96C6A2EC6FD15: "Text Edit" @
 
 SECTION ActionPackEditForm
 
-8774D189CE7F96: "Configuration items for installation - specialist use" => "Konfigurationselemente für Installation - für Spezialisten"
-0878211D394E87: "Input parameters to pass to program on run" => "Eingangsparameter zur Weiterleitung an Programm im Betrieb"
-A45731FA87CFD4: "Define Variable" => "Definiere Variable"
-E7181957BFACA6: "Variables to pass into called program" => "Variablen zur Weiterleitung an aufgerufenes Programm"
+8774D189CE7F96: "Configuration items for installation - specialist use" @
+0878211D394E87: "Input parameters to pass to program on run" @
+A45731FA87CFD4: "Define Variable" @
+E7181957BFACA6: "Variables to pass into called program" @
 
 SECTION ActionPackVariablesForm
 
-EA3E71F3439195: "Global User variables to pass to program on run" => "Globale Benutzervariablen zur Weiterleitung an Programm im Betrieb"
+EA3E71F3439195: "Global User variables to pass to program on run" @
 
 include translation-russian-uc.tlp
 

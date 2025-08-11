@@ -82,7 +82,7 @@ SECTION UserControlWebBrowser
 
 5C4856412380E1: "Using IE11 - click here to get WebView2" => "Usando IE11 - haz clic aquí para obtener WebView2"
 E79777EDFFFA20: "Track system in history panel" => "Rastrear sistema en el panel de historial"
-01F03837323AAB: "URLs" => "URLs"
+01F03837323AAB: "URLs" @
 58CF52A56F41EA: "Select another system to view" => "Seleccione otro sistema para ver"
 D6335B2F4D21A6: "Show System" => "Mostrar sistema"
 
@@ -942,7 +942,7 @@ A89C9CA2A96AE8: "Distance to target" => "Distancia al objetivo"
 F25CE1B8A399BD: "Security" => "Seguridad"
 A16C5BBE4BF996: "Range" => "Salto"
 A7B93D2128E820: "Mode" => "Modo"
-208A402074139F: "MR" => "MR"
+208A402074139F: "MR" @
 0B645D1B659917: "Fuel" => "Combust."
 C9B1B30D011FE2: "Pos" => "Pos"
 7E8548C30FEF17: "Economy" => "Economía"
@@ -1208,7 +1208,7 @@ SECTION InfoForm
 
 SECTION UserControlSuitsWeapons
 
-CC459F63A7AECD: "Mods" => "Mods"
+CC459F63A7AECD: "Mods" @
 9E7FD7DDAEE291: "Loadout" => "Equipamiento"
 EF002BCE769B96: "Primary 1" => "Primario 1"
 34CD6210189BD2: "Primary 2" => "Primario 2"
@@ -1222,7 +1222,7 @@ A9A96EC019494D: "Primary" => "Primario"
 97B39A3F5E9B3A: "Clip Size" => "Tamaño del cargador"
 77604466309D05: "Hopper Size" => "Tamaño del depósito"
 D08EC89EFF37EC: "Range m" => "Alcance (m)"
-F3CEC91C2F03B8: "DPS" => "SPS"
+F3CEC91C2F03B8: "DPS" @
 E70031EADDA4DE: "Head Shot Mult" => "Multiplicador de disparo en la cabeza"
 2ECE6C47CFB703: "Confirm Selling of" => "Confirmar la venta de"
 D13DB38286C90C: "Force Suit Sale" => "Forzar venta de traje"

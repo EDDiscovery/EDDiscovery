@@ -12,10 +12,10 @@ E398338D28B496: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cance
 90DFF113AC3FB4: "System could not be found - has not been synched or EDSM is unavailable" => "Nie znaleziono układu - nie został zsynchronizowany lub EDSM jest niedostępne"
 568BA6A0FCB8CE: "Import bookmarks to EDD from CSV file" => "Importuj zakładki do EDD z pliku CSV"
 4E0D3ABD07EF26: "Export bookmarks to CSV file" => "Eksportuj zakładki do pliku CSV"
-D3D49E22353948: "New bookmark on current system" => "Bearbeite Lesezeichen des aktuellen Systems"
-0F2EFE41F3122D: "New Region Bookmark" => "Neues Regionslesezeichen"
+D3D49E22353948: "New bookmark on current system" @
+0F2EFE41F3122D: "New Region Bookmark" @
 848EED0FBD5429: "Tags" => "Marke"
-87CA81FA83093E: "Filter out entries based on tag" => "Einträge anhand von Marke filtern"
+87CA81FA83093E: "Filter out entries based on tag" @
 B15BC9CCE1BA39: "Edit Tags" => "Marken bearbeiten"
 31992A69737FC4: "Add to Expedition" => "Zur Expediton hinzufügen"
 
@@ -64,25 +64,25 @@ D57E1461B54A4D: "Tile the grid panels" => "Ułóż panele w siatce"
 
 SECTION UserControlCompass
 
-05227E10EFA617: "Latitude of target position, blank for none" => "Breitengrad der Zielposition, leer für Nichts"
-E16DC0093C54A4: "Longitude of target position, blank for none" => "Langengrad der Zielposition, leer für Nichts"
-8DAF2F1FB42A69: "Select known body feature or select bookmark" => "Wähle bekanntes Körpermerkmal oder Lesezeichen"
-4F4F73D3580988: "Clear target latitude and longitude and selection" => "Lösche Zielbreiten- und Längengrad sowie Auswahl"
-40B4BA016F2820: "Edit or create bookmark on system" => "Bearbeite oder erstelle Systemlesezeichen"
-6757DB83BE30A7: "Configure compass overlay" => "Konfiguriere Kompassoverlay"
-3147F72CFDEFED: "Configure font of compass" => "Konfiguriere Kompassschrift"
-09C3677389910F: "Hide when Elite has no Lat/Long" => "Verbergen wenn Elite keine aktive Breite/Länge sendet"
-B2C71E235D149C: "Hide when no Lat/Long target is set" => "Verbergen wenn keine Breite/Länge als Zeil gesetzt wurde"
-BCFBA399BF71D3: "Hide when on foot" => "Verbergen wenn zu Fuß"
-B2529C881FD681: "Clear target when leaving a body" => "Lösche Ziel beim Verlassen des Körpers"
-5671BE2CC4E89E: "Hide when in SRV" => "Verberge wenn im SRV"
-DBF922321BB2C4: "Hide when in ship" => "Verberge wenn im Schiff"
+05227E10EFA617: "Latitude of target position, blank for none" @
+E16DC0093C54A4: "Longitude of target position, blank for none" @
+8DAF2F1FB42A69: "Select known body feature or select bookmark" @
+4F4F73D3580988: "Clear target latitude and longitude and selection" @
+40B4BA016F2820: "Edit or create bookmark on system" @
+6757DB83BE30A7: "Configure compass overlay" @
+3147F72CFDEFED: "Configure font of compass" @
+09C3677389910F: "Hide when Elite has no Lat/Long" @
+B2C71E235D149C: "Hide when no Lat/Long target is set" @
+BCFBA399BF71D3: "Hide when on foot" @
+B2529C881FD681: "Clear target when leaving a body" @
+5671BE2CC4E89E: "Hide when in SRV" @
+DBF922321BB2C4: "Hide when in ship" @
 
 SECTION UserControlWebBrowser
 
-5C4856412380E1: "Using IE11 - click here to get WebView2" => "Benutze IE11 - hier klicken um WebView2 zu erhalten"
-E79777EDFFFA20: "Track system in history panel" => "Verfolge System im Historienpaneel"
-01F03837323AAB: "URLs" => "URLs"
+5C4856412380E1: "Using IE11 - click here to get WebView2" @
+E79777EDFFFA20: "Track system in history panel" @
+01F03837323AAB: "URLs" @
 58CF52A56F41EA: "Select another system to view" => "Wähle ein anderes System zum Anzeigen"
 D6335B2F4D21A6: "Show System" => "Zeige System"
 
@@ -99,7 +99,7 @@ C2F934CB8CAB6C: "AND" => "I"
 F579C523960AF1: "OR" => "LUB"
 E1988D908E0FDA: "Discovered at " => "Odkryto w "
 99E5A4469C78D3: "Collected at " => "Zebrano w "
-3F6D793961F187: "Mission Reward at " => "Missionsbelohnung bei"
+3F6D793961F187: "Mission Reward at " @
 18CED5C76DB797: "Item 2" => "Przedmiot 2"
 14D5C9FDE290FE: "Item 1" => "Przedmiot 1"
 EB9A4BC1C0C153: "Date" => "Data"
@@ -107,11 +107,11 @@ EB9A4BC1C0C153: "Date" => "Data"
 D219C68101F532: "Location" => "Lokalizacja"
 84C078AF3EFE1A: "Current Distance" => "Obecna Odległość"
 CF1C85ADBA548E: "Position" => "Pozycja"
-209B0897FD112F: "Output grid to CSV" => "Gitter nach CSV ausgeben"
-B366981EAEF1CF: "Find materials/commodities" => "Finde Materialien/Handelswaren"
-2FEF1A8EEACCEB: "Select the condition between Item 1 and 2" => "Wähle die Bedingung von Element 1 zu Element 2"
-376753B016814C: "Primary material or commodity to search for" => "Primäre(s) Material oder Handelsware für die Suche"
-AA3B17BAA83D49: "Secondary material or commodity to search for" => "Sekundäre(s) Material oder Handelsware für die Suche"
+209B0897FD112F: "Output grid to CSV" @
+B366981EAEF1CF: "Find materials/commodities" @
+2FEF1A8EEACCEB: "Select the condition between Item 1 and 2" @
+376753B016814C: "Primary material or commodity to search for" @
+AA3B17BAA83D49: "Secondary material or commodity to search for" @
 
 SECTION SearchScans
 
@@ -122,40 +122,40 @@ A7396032CA2935: "Enter Search Name" => "Wprowadź Szukaną Nazwę"
 2F4979324E03E4: "Condition" => "Warunek"
 718A7E8A582E98: "Body" => "Körper"
 23D692F07A3FB6: "Parent" => "Elter"
-EFAAD58C837641: "Grandparent" => "Großelter"
-4A7891A93B7D2C: "Parent of Star" => "Elter des Sterns"
-9054FF5F5ED0C8: "Select a predefined condition" => "Wähle eine vordefinierte Bedingung"
-E732D75B811346: "Search for condition below" => "Suche nach unten definierter Bedingung"
-C199BFDEBEFCEA: "Save current condition" => "Speichere gegenwärtige Bedingung"
-060F0D08DA3956: "Delete current condition" => "Lösche gegenwärtige Bedingung"
-AAD2904EE61EAE: "Output results grid to CSV" => "Ergebnisgitter nach CSV ausgeben"
-15ABFEF9649547: "Export user searches to a file" => "Exportiere Benutzersuchen in Datei"
-D1E9B89DD47EC3: "Import user queries from a file (overwrite existing queries if present)" => "Importiere Benutzersuchen aus Datei (überschreibe existierende Suchen falls vorhanden)"
-5CF3EE0A5AE568: "Enable or disable word wrap" => "Aktiviere oder deaktiviere Zeilenumbruch"
-D14970EE4E27AE: "Click to enable debug log production on search" => "Klicken um Debuglogerzeugung während der Suche zu aktivieren"
-081F88C3D6CCEA: "Clear current condition" => "Lösche gegenwärtige Bedingung"
-450D52D3EF8975: "Searches" => "Suchen"
-07C3B8B498D6BD: "Export user searches" => "Exortiere Benutzersuchen"
-F6FBA35BE4C529: "Import user searches" => "Importiere Benutzersuchen"
+EFAAD58C837641: "Grandparent" @
+4A7891A93B7D2C: "Parent of Star" @
+9054FF5F5ED0C8: "Select a predefined condition" @
+E732D75B811346: "Search for condition below" @
+C199BFDEBEFCEA: "Save current condition" @
+060F0D08DA3956: "Delete current condition" @
+AAD2904EE61EAE: "Output results grid to CSV" @
+15ABFEF9649547: "Export user searches to a file" @
+D1E9B89DD47EC3: "Import user queries from a file (overwrite existing queries if present)" @
+5CF3EE0A5AE568: "Enable or disable word wrap" @
+D14970EE4E27AE: "Click to enable debug log production on search" @
+081F88C3D6CCEA: "Clear current condition" @
+450D52D3EF8975: "Searches" @
+07C3B8B498D6BD: "Export user searches" @
+F6FBA35BE4C529: "Import user searches" @
 ADC4E96A478BE0: "Sort" => "Sortieren"
-5531C4FF55C5CF: "Too many results to display, truncating to the first {0}" => "Zu viele Ergebnisse um sie anzuzeigen, kürze auf die ersten {0}"
+5531C4FF55C5CF: "Too many results to display, truncating to the first {0}" @
 
 SECTION UserControlDiscoveries
 
 4CC658129E454D: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Spezifiziere einen Suchterm um Zelleninhalte zu filtern. Verfügbar sind system:<Platzhalter>, body:<Platzhalter>, station:<Platzhalter> und stationfaction:<Platzhalter> um Ereignisse die diesen Parametern zugewiesen sind zu filtern"
-B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" => "Wähle Entdeckungen um danach zu suchen, Liste wird aus dem Suchpanel übernommen"
+B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" @
 
 SECTION SearchStars
 
 C2DF9B932637FE: "Index" => "Index"
-30B532455535CF: "Star type" => "Sternenklasse"
+30B532455535CF: "Star type" @
 CD732FC5901D56: "Centre Distance" => "Odległość do Centrum"
 
 SECTION DataGridViewStarResults
 
 CA7D47897BA965: "Go to star on 3D Map" => "Przejdź do gwiazdy na mapie 3D"
 790C6DD0436B24: "View on EDSM" => "Pokaż w EDSM"
-BE05494B382962: "View on Spansh" => "Zeige auf Spansh"
+BE05494B382962: "View on Spansh" @
 A99CF05BCB299B: "View Scan Display" => "Pokaż Dane Wpisu"
 D4FDD27AAE7070: "View on History Grid" => "Zeige in Historie"
 
@@ -168,65 +168,65 @@ A95E85AED56318: "Max" => "Maks."
 B568B10AECDDE8: "Wanted" => "Pożądane"
 F2367E42DEFDAC: "Avail." => "Dostępne"
 1DCDA804C96DA3: "Recipe" => "Przepis"
-21467D0FE8237D: "Crafted" => "Erzeugt"
+21467D0FE8237D: "Crafted" @
 49578C008054B9: "Set all wanted values to zero" => "Ustaw wszystkie wartości pożądanych na zero"
 1D418FD622BE3F: "Filter the table by material" => "Filtruj tabelę według materiału"
 3E62F26251B4EB: "Filter the table by upgrade type" => "Filtruj tabelę według typu ulepszenia"
 55D32FC9D63E6C: "Filter the table by level" => "Filtruj tabelę według poziomu ulepszenia"
 85DCAE4F7ADF58: "Filter the table by engineer" => "Filtruj tabelę według inżyniera"
 53A4C779B6A4AD: "Filter the table by module type" => "Filtruj tabelę według typu modułu"
-80CC3E5A8D4D63: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Wenn 'rot' verwende die Materialien beim Zeiger zum Schätzen, wenn 'grün' verwende immer die letzten Materialien."
-0DDF332D4C73CA: "Push items wanted to Resources panel" => "Schiebe gewollte Gegenstände ins Ressourcenpanel"
+80CC3E5A8D4D63: "When red, use the materials at the cursor to estimate, when green always use the latest materials." @
+0DDF332D4C73CA: "Push items wanted to Resources panel" @
 
 SECTION UserControlEngineers
 
-F3045D9B6D60DE: "Select which engineers are shown" => "Wähle welche Ingenieure angezeigt werden"
-1CA9412669C134: "Turn on and off word wrap" => "Aktivere oder deaktiviere Zeilenumbruch"
-5C22155C221233: "Increase size of engineers grid and show more engineer details" => "Vergrößere das Ingenieursgitter and zeige mehr Ingenieursdetails"
+F3045D9B6D60DE: "Select which engineers are shown" @
+1CA9412669C134: "Turn on and off word wrap" @
+5C22155C221233: "Increase size of engineers grid and show more engineer details" @
 
 SECTION UserControlEstimatedValues
 
 1D68666BDF4A40: "Body Name" => "Nazwa Ciała Niebieskiego"
-D6B23A46B95CAF: "Body Type" => "Körperart"
+D6B23A46B95CAF: "Body Type" @
 6DA13ADDB000B6: "Source" => "Quelle"
 4A7C05BDEB22B3: "Mapped" => "Kartographiert"
 21B572F3D9F3E3: "Already Mapped" => "Bereits kartographiert"
 43DF814DBC5742: "Already Discovered" => "Bereits entdeckt"
-CB34D7DD05451F: "Base Value" => "Basiswert"
-EEA6FFEE027AB4: "First Mapped" => "Zuerst kartographiert"
-CB083BFF78F38B: "First Discovered Mapped" => "Zuerst entdeckt und kartographiert"
+CB34D7DD05451F: "Base Value" @
+EEA6FFEE027AB4: "First Mapped" @
+CB083BFF78F38B: "First Discovered Mapped" @
 4F993153012BCF: "Current Value" => "Szac. Wartość"
-3B2FE7700E6893: "Green will show all bodies even with zero value, red will only show bodies with value" => "Grün zeigt alle Materialien, Rot entfernt Materialien mit Lagerstand Null"
-C746EA1EC215F8: "Show all values, even ones which are impossible to get" => "Zeige alle Wete, auch jene die unerreichbar sind."
+3B2FE7700E6893: "Green will show all bodies even with zero value, red will only show bodies with value" @
+C746EA1EC215F8: "Show all values, even ones which are impossible to get" @
 AC0E083CA2C4C4: "Estimated Scan Values for {0}" => "Szacowane Wartości Skanów dla {0}"
-2A07C88E4554DD: " | You scanned {1} of {2} bodies in this system." => " | Du hast {1} von {2} Körpern in diesem System gescanned."
+2A07C88E4554DD: " | You scanned {1} of {2} bodies in this system." @
 
 SECTION UserControlExpedition
 
-499605941FE37D: "Cur. Dist" => "Akt.Entf."
+499605941FE37D: "Cur. Dist" @
 6A4BE2FAC27DAA: "Visits" => "Wizyty"
-52F10A52951678: "FSS Bodies" => "VSS Körper"
-C8A4EA417FB23E: "Known Bodies" => "Bekannte Körper"
+52F10A52951678: "FSS Bodies" @
+C8A4EA417FB23E: "Known Bodies" @
 4B631F69842530: "Info" => "Informacje"
 6571CA05AEE6A2: "Load Route" => "Wczytaj"
 9B02F8B01803D3: "New Expedition" => "Nowa Trasa"
 4990961CC3F641: "Save Expedition" => "Zapisz Trasę"
-089954DA2CE32A: "Delete Expedition" => "Elimina Itinerario"
+089954DA2CE32A: "Delete Expedition" @
 173DF362CCF8F7: "Import File" => "Importuj plik"
 0BBA82BEA5C475: "Import from Route Panel" => "Importuj trasę"
 1FA9E4E897C90D: "Import a Nav Route" => "Importuj Nav trasę"
-627110C8C10EE5: "Import Latest Nav Route" => "Importiere letzte Nav-Route"
+627110C8C10EE5: "Import Latest Nav Route" @
 A7CC24BCEE6D11: "Export to File" => "Eksportuj"
-371C4F43678BC9: "Show expedition on 3D Map" => "Mostra sulla mappa 3D"
+371C4F43678BC9: "Show expedition on 3D Map" @
 1DAE53CF1781CC: "Import Systems from EDSM/DB" => "Dodaj Układy"
-682D92FDA51262: "Select filters on Info" => "Wähle Filter für Info"
+682D92FDA51262: "Select filters on Info" @
 57F9933768794F: "Reverse" => "Odwróć"
 07303D6679BBB3: "Add Systems" => "Dodaj Układy"
 162DD0495B19B2: "System Name" => "Nazwa Układu"
 FCBDC25ADED443: "Dist." => "Odległość"
 2C924E3088204E: "Note" => "Notatka"
-5FF07654F5C831: "Dist Start" => "Dist Start"
-CE33081BD85857: "Dist Remaining" => "Dist Verbleibend"
+5FF07654F5C831: "Dist Start" @
+CE33081BD85857: "Dist Remaining" @
 942A8B6ED71457: "History Note" => "Historiennotiz"
 7D12459D88715E: "Cml Distance" => "Łącz. Dystans"
 B7A2B9728CF910: "P2P Distance" => "Dyst. P2P"
@@ -237,20 +237,20 @@ A5323E433EDC1A: "Route Name" => "Nazwa Trasy"
 AF74F7C5362AAE: "Copy" => "Kopiuj"
 DB2483000D154C: "Paste" => "Wklej"
 38D13BDA5C40AF: "Cut" => "Ausschneiden"
-506AD5294AD65A: "Insert row above" => "Zeile darüber einfügen"
+506AD5294AD65A: "Insert row above" @
 13DA14D35B49E2: "Set Target" => "Ustaw Cel"
 D371A4A652422C: "Edit bookmark" => "Edytuj Zakładki"
 4A59635C57E1C9: "No route set up. Please add at least two systems." => "Brak ustawionej trasy. Proszę dodać co najmniej dwa układy."
 2D013B428EBF32: "Are you sure you want to delete this route?" => "Czy napewno chcesz usunąć tę trasę?"
 984AB4F90B5D2B: "Please create a route on a route panel" => "Proszę utworzyć trasę w panelu trasy"
 7F9E20DBB71B41: "There is no route to export " => "Brak trasy do wyeksportowania"
-8FF9BDD201C4EA: "Disable showing GMO Info" => "Deaktivere Anzeige von GMO-Infos"
+8FF9BDD201C4EA: "Disable showing GMO Info" @
 20A543A1CE8991: "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?" => "Obecna trasa ma niezapisane zmiany.\r\nCzy chcesz zapisać obecną trasę przed kontynuowaniem?"
 638C59CA247034: "Please specify a name for the route." => "Proszę wprowadzić nazwę dla trasy."
 A6419AC5F7F3B3: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "Obecna nazwa trasy jest już używana przez znaną ekspedycję.\r\nProszę wprowadzić nową nazwę aby zapisać zmiany."
 CD249D0309B0E4: "Warning: route already exists. Would you like to overwrite it?" => "Uwaga: trasa już istnieje. Czy chcesz ją nadpisać?"
 9F6A7413561C8D: "System not known" => "Układ nie jest znany w EDSM"
-C13DDF91AFA61A: "No local scan info" => "Keine lokale Scaninformation"
+C13DDF91AFA61A: "No local scan info" @
 
 SECTION UserControlJournalGrid
 
@@ -267,7 +267,7 @@ F792127FD17C22: "Run Actions on this entry" => "Wykonaj Akcje na tym wpisie"
 E4370C63EC4290: " showing {0} original {1}" => " wyświetlanych {0}, razem {1}"
 ADE8224F6E2B20: "Filtered {0}" => "Filtrowanie: {0}"
 079B875FC72C76: "Select the entries by age, " => "Pokaż wpisy według wieku, "
-F70EA8DC6685B3: "Journal: Filter out fields" => "Journal: Felder ausfiltern"
+F70EA8DC6685B3: "Journal: Filter out fields" @
 
 SECTION UserControlLedger
 
@@ -277,8 +277,8 @@ DC12265956ECE5: "Display entries matching this event type filter" => "Wyświetl 
 B501410D1C0E50: "Search to particular items" => "Szukaj konkretnych elementów"
 61FE5EB291070D: "Select the entries by age" => "Zaznacz wpisy według wieku"
 A51F65FF7C070F: "Cash Transactions" => "Transakcje Pieniężne"
-662560B640930C: "No Ledger available" => "Kein Kassabuch verfügbar"
-45EBD38F4C641E: "Total Profit" => "Gesamter Profit"
+662560B640930C: "No Ledger available" @
+45EBD38F4C641E: "Total Profit" @
 
 
 SECTION UserControlLog
@@ -298,44 +298,44 @@ FA3CF2AD51E078: "Sell" => "Sprzedaż"
 0901A376AF18BD: "Profit From cr/t" => "Zysk Z cr/t>"
 3B406FFE94872F: "AutoSwap" => "Auto-Zamień"
 3CD1261A4B2B6E: "Buy Only" => "Tylko Kupno"
-4D2E486F643D8E: "Vs" => "gegen"
+4D2E486F643D8E: "Vs" @
 AB78A7C020BC2A: "Show items you can buy only" => "Pokazuj tylko przedmioty które pożna kupić"
 82D589FF7E4287: "Cargo only, no market data on this item" => "Tylko ładunek, brak danych rynkowych dotyczących tego przedmiotu"
 CCB827281EB7DF: "Travel History Entry Last" => "Ostatni Wpis Historii Podróży"
-BB4C560BF53C47: "Has Demand" => "Hat Bedarf"
-898844D2F6FD03: "Show items with demand" => "Zeige Elemente derer bedurft wird"
+BB4C560BF53C47: "Has Demand" @
+898844D2F6FD03: "Show items with demand" @
 
 SECTION UserControlMaterialCommodities
 
-4DA805AFD83F17: "Ship Locker" => "Schiffsspind"
+4DA805AFD83F17: "Ship Locker" @
 E5E429BCC9C2E4: "Data" => "Dane"
 BEFB21EE719272: "Mats" => "Materiały"
 B25928C6990255: "Total" => "Razem"
 CCE370D2F9781A: "Rare" => "Rzadkie"
 FE187BD4E80F7E: "Abv" => "Skr."
 B7BAA1D40C4EA2: "Number" => "Ilość"
-0CCF90EB09D636: "Backpack" => "Rucksack"
+0CCF90EB09D636: "Backpack" @
 6358DC846638BD: "Avg. Price" => "Śr. Cena"
-9FB1092F32D4FC: "Recipes" => "Rezepte"
+9FB1092F32D4FC: "Recipes" @
 B18F6ADE27CF7A: "Want" => "Gewollt"
 ED4855C28D40C3: "Need" => "Benötigt"
 
-7B61D21566CEEC: "All Materials" => "Alle Materialien"
-31BD45E1404855: "All Commodities" => "Alle Handelswaren"
-DD6B2E81B38C70: "All Microresources" => "Alle Mikroressourcen"
+7B61D21566CEEC: "All Materials" @
+31BD45E1404855: "All Commodities" @
+DD6B2E81B38C70: "All Microresources" @
 
 AFF3ACED3CA75C: "Count of Items" => "Anzahl"
 2E7C22E163AEC2: "Filter out items" => "Filtruj przedmioty"
 
-4D542614DA0B16: "Green will show materials with zero counts, red means remove them" => "Grün zeigt Einträge auf Null, Rot filtert diese"
-8B4BB0C8C3D12D: "Switch Material Views" => "Wechsle Materialansicht"
-0F67E16954DB21: "Font for shopping list" => "Schrift für Einkaufsliste"
-9D94613F7CF820: "Import materials list into panel" => "Importiere Materialienliste in Panel"
+4D542614DA0B16: "Green will show materials with zero counts, red means remove them" @
+8B4BB0C8C3D12D: "Switch Material Views" @
+0F67E16954DB21: "Font for shopping list" @
+9D94613F7CF820: "Import materials list into panel" @
 
-963A200F087C8F: "Open Recipe in Window" => "Öffne Rezept in Fenster"
-BA416FBADB0F09: "Display Item in shopping list" => "Zeige Element in Enkaufsliste"
-EB8E343579E999: "Clear all display items in shopping list" => "Lösche alle angezeigten Elemente in Einkaufsliste"
-3EE4B7555F0B02: "Display all non zero items in shopping list" => "Zeige alle 'Nicht Null'-Elemente in Einkaufsliste"
+963A200F087C8F: "Open Recipe in Window" @
+BA416FBADB0F09: "Display Item in shopping list" @
+EB8E343579E999: "Clear all display items in shopping list" @
+3EE4B7555F0B02: "Display all non zero items in shopping list" @
 1B90271D66CF2D: "Progress" => "Fortschritt"
 
 
@@ -349,59 +349,59 @@ BC775B0E4D5ED0: " Left " => " Pozostało "
 SECTION UserControlSurveyor
 
 C545D651351423: "System scan complete" => "Ukończono skan układu."
-7FBED1E5CF7C0C: " bodies detected." => " Körper erkannt."
+7FBED1E5CF7C0C: " bodies detected." @
 7B14664F50BD79: " bodies found." => " znalezionych ciał niebieskich."
-60B6BCE139DBD6: " Cluster and NonBody counts differ by " => " Gruppen- und NichtKörper-Zählungen differieren um "
+60B6BCE139DBD6: " Cluster and NonBody counts differ by " @
 1C8BA580027067: "Alignment Left" => "Lewo"
 DF79D6CA8BD2F3: "Alignment Center" => "Środek"
 43EF428A78F1FA: "Alignment Right" => "Prawo"
-0C309E8F04C0F1: "Show All Planets" => "Zeige alle Planeten"
+0C309E8F04C0F1: "Show All Planets" @
 C310B6E9C77045: "Ammonia World" => "Planeta Amoniakowa"
 B52BBF018CF9EC: "Earthlike World" => "Planeta Ziemiopodobna"
 909C1B5FFD57ED: "Water World" => "Planeta Oceaniczna"
-3D43FF8C48FA2C: "High metal content body" => "Planet mit hochwertigen Metallen"
-EA5B349025CF82: "Metal-rich body" => "Metallreicher Planet"
+3D43FF8C48FA2C: "High metal content body" @
+EA5B349025CF82: "Metal-rich body" @
 4D8D48B5146934: "Terraformable" => "Terraformowalne"
 D4617F3267AD60: "Has volcanism" => "Ma Aktywność Wulkaniczną"
 3821671BA55EA5: "Has Rings" => "Ma Pierścienie"
-BE57FAED31951F: "High eccentricity" => "Hohe Exzentrizität"
-7D6183BB46469D: "Tiny body" => "niedriger Radius"
-CB270B1D277411: "Has any other signals" => "Hat beliebige andere Signale"
-2B332D20943805: "Has geological signals" => "Hat geologische Signale"
-F70D62F8263274: "Has biological signals" => "Hat biologische Signale"
+BE57FAED31951F: "High eccentricity" @
+7D6183BB46469D: "Tiny body" @
+CB270B1D277411: "Has any other signals" @
+2B332D20943805: "Has geological signals" @
+F70D62F8263274: "Has biological signals" @
 A9292825CC0CA6: "Landable" => "landbar"
-80F9887F7F5A1B: "Landable with atmosphere" => "Landbar mit Atmosphäre"
-C269F2C820ADBB: "Landable and large" => "Landbar und groß"
-3F9C411965E271: "Landable with volcanism" => "Landbar mit Vulkanismus"
-167210938F96A8: "Show All Stars" => "Zeige alle Sterne"
-5097B5F23AD8D4: "Show Belt Clusters" => "Zeige Gürtelgruppen"
-80ABC1AA30BCD0: "Show signals" => "Zeige Signale"
-05B917D12283B7: "Show signal mismatch" => "Zeige Signaldiskrepanz"
-85A950DCA2796C: "Show values" => "Zeige Werte"
-96AF5179B25859: "Show more information" => "Zeige mehr Informationen"
-51D3D53A0D6A7E: "Show gravity of landables" => "Zeige Gravitation bei landbaren"
-B8EFA4FD4838B4: "Show atmospheres" => "Zeige Atmosphäre"
-8BB27FDBF605FF: "Show surface temperature" => "Zeige Oberflächentemperatur"
-1F599CE9A5F201: "Show volcanism" => "Zeige Vulkanismus"
-1300E34B1510AA: "Auto Hide" => "Automatisch verstecken"
-AA12356A13B1CE: "Don't hide in FSS Mode" => "Im FSS-Modus nicht verbergen"
+80F9887F7F5A1B: "Landable with atmosphere" @
+C269F2C820ADBB: "Landable and large" @
+3F9C411965E271: "Landable with volcanism" @
+167210938F96A8: "Show All Stars" @
+5097B5F23AD8D4: "Show Belt Clusters" @
+80ABC1AA30BCD0: "Show signals" @
+05B917D12283B7: "Show signal mismatch" @
+85A950DCA2796C: "Show values" @
+96AF5179B25859: "Show more information" @
+51D3D53A0D6A7E: "Show gravity of landables" @
+B8EFA4FD4838B4: "Show atmospheres" @
+8BB27FDBF605FF: "Show surface temperature" @
+1F599CE9A5F201: "Show volcanism" @
+1300E34B1510AA: "Auto Hide" @
+AA12356A13B1CE: "Don't hide in FSS Mode" @
 5E30FC90BB9E47: "Hide already mapped bodies" => "Ukryj zmapowane ciała"
-A6F528EE452953: "Show system info always" => "Systeminformation immer anzeigen"
-26B6A73ABC8985: "Show scan summary always" => "Scanzusammenfassung immer anzeigen"
-0C958474BD3F89: "Show star class in system info" => "Zeige Sternenklasse in Systeminformation"
-38F6C10BC38855: "Show dividers" => "Zeige Unterteiler"
-7CCD13400121F3: "Planet Filter" => "Planetenfilter"
-7AA20A2EFC7BB6: "Star Filter" => "Sternenfilter"
-274A5199553A8D: "Display Settings" => "Anzeigeeinstellungen"
+A6F528EE452953: "Show system info always" @
+26B6A73ABC8985: "Show scan summary always" @
+0C958474BD3F89: "Show star class in system info" @
+38F6C10BC38855: "Show dividers" @
+7CCD13400121F3: "Planet Filter" @
+7AA20A2EFC7BB6: "Star Filter" @
+274A5199553A8D: "Display Settings" @
 7F8C5176C3F03B: "Alignment" => "Ausrichtung"
 B97C4D4CDDF23E: "Font" => "Schriftart"
-7E65928ECE63CA: "FSS Signal Selection" => "VSS-Signalauswahl"
-23048BC1AE69FE: "Word Wrap" => "Zeilenumbruch"
-1BB6C810B1DA16: "Select route to follow" => "Wähle zu verfolgende Route"
-524DD2CDBBAD94: "Route Settings" => "Routeneinstellungen"
+7E65928ECE63CA: "FSS Signal Selection" @
+23048BC1AE69FE: "Word Wrap" @
+1BB6C810B1DA16: "Select route to follow" @
+524DD2CDBBAD94: "Route Settings" @
 B10CFFF10BABC0: "Nav Route" => "Nav-Route"
-9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => "Halber Tank {0:N1} Lj, Maximum {1:N1} Lj, Reichweite {2:N1} Lj"
-B37E90C8789813: "List signals to display, semicolon seperated" => "Trage anzuzeigende Signale ein, Semikolon als Trennzeichen"
+9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
+B37E90C8789813: "List signals to display, semicolon seperated" @
 
 SECTION MissionListUserControl
 
@@ -427,31 +427,31 @@ ECDDA59AEA5EE6: "Item" => "Przedmiot"
 AF0AD10B2A196B: "Mass" => "Masse"
 64AE43E8FE7620: "Cost" => "Kosten"
 0C85DB3EB1A9A6: "FSD" => "FSA"
-47071804F38EAF: "Thrust" => "Schub"
+47071804F38EAF: "Thrust" @
 31FE17191E290C: "Shields" => "Schilde"
-FAB9348C4FD97F: "Armour" => "Panzerung"
+FAB9348C4FD97F: "Armour" @
 
 
-6129EFBCDDA076: "Show full blueprint information" => "Zeige vollständige Blaupauseninformationen"
-69105EFE4137CC: "Show Engineered Values" => "Zeige verbesserte Werte"
+6129EFBCDDA076: "Show full blueprint information" @
+69105EFE4137CC: "Show Engineered Values" @
 
 D9B049A9B6DA3B: "Select ship to view" => "Wybierz statek do wyświetlenia"
 6BC3E7B6D12CF8: "Send to Coriolis" => "Prześlij do Coriolis"
 5533DAD808E457: "Send to ED Ship Yard" => "Prześlij do ED Ship Yard"
 FE4704B79D6001: "Configure extra data missing from Elite Journal Output" => "Konfiguruj dodatkowe dane brakujące w Dzienniku Elite"
-A64AB328A429FA: "Import a ship definition for display" => "Schiffsdefinition zum Anzeigen importieren"
+A64AB328A429FA: "Import a ship definition for display" @
 
-FE5C2531E39340: "Force Sell" => "Verkaufen erzwingen"
-122A6B402DF67D: "Confirm sell of ship" => "Bestätige Verkauf von Schiff"
+FE5C2531E39340: "Force Sell" @
+122A6B402DF67D: "Confirm sell of ship" @
 CA73BB4E22EBFD: "Stored Modules" => "Przechowywane Moduły"
 D2F025FD0D6F0C: "Travel History Entry" => "Wpis Historii Podróży"
-673463FDF95385: "Owned Ships" => "Schiffe in Besitz"
+673463FDF95385: "Owned Ships" @
 44B046E04F2B04: "Tx Time" => "Czas"
 ECE2AC10D7266F: "Slot" => "Przegroda"
 B2B53EE4FC1A90: "Stored" => "Gelagert"
-22F4D0D2422A35: "All Modules" => "Alle Module"
+22F4D0D2422A35: "All Modules" @
 8F325EDB2B44A3: "All Known Modules" @
-9569A6C389205D: "All Ships" => "Alle Schiffe"
+9569A6C389205D: "All Ships" @
 
 046E5CEE819C2B: "In Transit" => "W Tranzycie"
 EF14AB9080E8AD: "Enter ED Shipyard URL" => "Wprowadź URL ED Shipyard"
@@ -461,21 +461,21 @@ F7E56852A21682: "Fuel Warning" => "Uwaga - Paliwo"
 E613FC90158F3E: "A Value is not valid" => "Wartość nie jest prawidłowa"
 3F86F40ECFD2E5: "Ship Configure" => "Konfiguracja Statku"
 2A7F42E6F0BB55: "Module Information" => "Informacje o Modułach"
-5E09137F0F0012: "No Ship Information available" => "Keine Schiffsinformationen verfügbar"
+5E09137F0F0012: "No Ship Information available" @
 
-5434A871028102: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" => "Roh {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Ätz {0.#|% =|0.#}"
-AA4EDB168CAE21: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" => "Roh {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}"
-7D67DDF30E8473: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" => "Masse {0.##|t} Hülle {0.##|t} Module {0.##|t} Unbeladen {0.##|t} Fracht {0|/|0|t} Warnung bei {0.#|%}"
-E5379DCF7E564E: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" => "Kosten Hülle {N0|cr} Module {N0|cr} Total {N0|cr} Rückkauf {N0|cr}"
-C8DF6EB8BFDFCF: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" => "Dzt {0.##|ly} Reichweite {0.##|ly} Beladen {0.##|ly} Unbeladen {0.##|ly} Max {0.##|ly} MaxTStoff {0.##|t} Derzeit {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} Im Transfer nach {} Gelagert bei {}"
-C11EA28A729193: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" => "Dzt Gsw {0.#} Bst {0.#} Beladen {0.#|/|0.#} Unbeladen {0.#|/|0.#} Max {0.#|/|0.#} Nachbrenner Dzt {0.#|s} Max {0.#|s}"
-6CC0AEA921D9CD: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" => "Roh {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dau {0.#|s} DauMax {0.#|s} Ammo {0.#|s} Dzt {0.#|%} Max {0.#|%}"
-F32D0645A8333F: "Weapons" => "Waffen"
+5434A871028102: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" @
+AA4EDB168CAE21: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" @
+7D67DDF30E8473: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" @
+E5379DCF7E564E: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" @
+C8DF6EB8BFDFCF: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
+C11EA28A729193: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
+6CC0AEA921D9CD: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
+F32D0645A8333F: "Weapons" @
 
-60830556FBB8D7: "Save this loadout to the EDD loadout folder" => "Speichere diese Konfiguration im EDD-Loadout-Ordner"
-391427FC2F26EA: "Delete loadout" => "Konfiguration löschen"
+60830556FBB8D7: "Save this loadout to the EDD loadout folder" @
+391427FC2F26EA: "Delete loadout" @
 
-6E34095646ED42: "Enter loadout description to save ship with" => "Konfigurationsbeschreibung unter der das Schiff gespeichert wird eingeben"
+6E34095646ED42: "Enter loadout description to save ship with" @
 
 SECTION UserControlNotePanel
 
@@ -494,47 +494,47 @@ SECTION UserControlPanelSelector
 F195557637BC15: "NO ADD ONS!" => "BRAK DODATKÓW!"
 2CB644D01CC1F0: " Add Ons" => "Dodatki"
 F219DBFBA7E199: "Click to add or remove Add Ons" => "Kliknij aby dodać lub usunąć dodatki"
-AE0FE6B7276775: "Add ons are essential additions to your EDD experience!" => "Add-Ons sind essentielle Erweiterungen für dein EDD-Erlebnis!"
+AE0FE6B7276775: "Add ons are essential additions to your EDD experience!" @
 03B4832BADF372: "Pop out in a new window" => "Umieść panel w nowym oknie"
 CD2C44353CE1A8: "Open as a new menu tab" => "Dodaj jako nową kartę menu"
 
 SECTION UserControlRoute
 
-26FF00FE75BC12: "Nearest to Waypoint" => "Nähester Wegpunkt"
-508F66A88A61E3: "Minimum Deviation from Path" => "Geringste Abweichung vom Pfad"
-BE27456DCDC392: "Nearest to Waypoint with dev<=100ly" => "Nähester Wegpunkt mit Abw.<=100Lj"
-0B067FBCFEC659: "Nearest to Waypoint with dev<=250ly" => "Nähester Wegpunkt mit Abw.<=250Lj"
-F81B5CCC0CBA7E: "Nearest to Waypoint with dev<=500ly" => "Nähester Wegpunkt mit Abw.<=500Lj"
-A889A01619F167: "Nearest to Waypoint + Deviation / 2" => "Nähester Wegpunkt + Abweichung / 2"
-4AF0AE296CB9BC: "Star Class" => "Sternenklasse"
+26FF00FE75BC12: "Nearest to Waypoint" @
+508F66A88A61E3: "Minimum Deviation from Path" @
+BE27456DCDC392: "Nearest to Waypoint with dev<=100ly" @
+0B067FBCFEC659: "Nearest to Waypoint with dev<=250ly" @
+F81B5CCC0CBA7E: "Nearest to Waypoint with dev<=500ly" @
+A889A01619F167: "Nearest to Waypoint + Deviation / 2" @
+4AF0AE296CB9BC: "Star Class" @
 A5B44BA4A6C532: "Dist. Waypoint" => "Odległ. pkt. naw."
 37148FF19B7B45: "Deviation" => "Odstępstwo"
-4219EE1EC9D603: "Neutron Router" => "Neutronenrouter"
-CFD4E874046B93: "Road to Riches" => "Straße zum Reichtum"
+4219EE1EC9D603: "Neutron Router" @
+CFD4E874046B93: "Road to Riches" @
 1DF8F8D30FDD0F: "Ammonia Worlds" => "Ammoniakwelten"
-AB2A9F0D8D787B: "Earth Likes" => "Erdähnliche"
-0077D22826A77F: "Trade Router" => "Handelsrouter"
-0CF5E327910E74: "Fleet Carrier" => "Fleet Carrier"
-B12CDD63114BA4: "Galaxy Plotter" => "Galaxieplotter"
-B364AA8B4033FF: "Exo Mastery" => "Exo-Meisterschaft"
-07AB47C5737BA1: "Use Permit Systems" => "Benutze gesperrte Systeme"
-C596F14D22DF2A: "EDD Router" => "EDD Router"
+AB2A9F0D8D787B: "Earth Likes" @
+0077D22826A77F: "Trade Router" @
+0CF5E327910E74: "Fleet Carrier" @
+B12CDD63114BA4: "Galaxy Plotter" @
+B364AA8B4033FF: "Exo Mastery" @
+07AB47C5737BA1: "Use Permit Systems" @
+C596F14D22DF2A: "EDD Router" @
 B2BB7604C825F9: "Metric" => "Miara"
 B604A930356A28: "Find Route" => "Szukaj trasy"
-A975EEA30DB9FA: "Parameters" => "Parameter"
-281FA0DAFE53E1: "Use Boosts" => "Verwende Boosts"
+A975EEA30DB9FA: "Parameters" @
+281FA0DAFE53E1: "Use Boosts" @
 3F66052A107EAF: "From" => "Z"
 EC59449017E5B6: "ly" => "lat świetlnych"
-8424A6DD977331: "Web Lookup" => "Netzsuche"
+8424A6DD977331: "Web Lookup" @
 A0E237BAC8B17A: "Max jump" => "Maks. skok"
 AE79EA1E9C6391: "To" => "Do"
-7CF37443D567D9: "Push to expedition" => "Schiebe zu Expeditionen"
+7CF37443D567D9: "Push to expedition" @
 D5C87506FD897A: "Show route on 3D Map" => "Pokaż trasę na mapie 3D"
 2FB4DE63226EC5: "Pick the metric to use when searching for a route" => "Wybierz miarę do użycia podczas szukania trasy"
 15C8B586D75855: "Compute the route" => "Oblicz trasę"
 7CB23251C521A7: "Select system to start the route" => "Wybierz układ do rozpoczęcia trasy"
 CF2DBA7382BBC7: "X Co-ord" => "Współrzędna X"
-57F290A76CC277: "The route finder will try and use FSD injections in case a direct route could not be found." => "Der Routenfinder wird versuchen FSA-Einspeisungen zu verwenden für den Fall das ein normaler Sprung nicht ausreicht"
+57F290A76CC277: "The route finder will try and use FSD injections in case a direct route could not be found." @
 8F93A6BCCBBDE4: "Y (Vertical) Co-ord" => "Współrzędna Y (pionowa)"
 E2DB86200AEE3A: "Alternate Name" => "Alternatywna Nazwa"
 DA99EA2DAC297D: "Z Co-ord" => "Współrzędna Z"
@@ -549,21 +549,21 @@ DE6A8B4B96A80A: "Copy the target system to end route entry" => "Kopiuj układ do
 49EF07BB828D47: "Open this end route system in EDSM" => "Pokaż ten układ końca trasy w EDSM"
 9373E102BD9CCC: "Copy the target system to start route entry" => "Kopiuj układ docelowy do wpisu początku trasy"
 87C399D0E2BAD2: "Open this start route system in EDSM" => "Pokaż ten układ początku trasy w EDSM"
-681943CB0EA134: "Save as an expedition for use on expedition and surveyor panels" => "Als Expedition speichern um es im Expeditions- oder Gutachterpanel zu benutzen"
-4BB903205B7347: "This will result in a large number ({0}) of jumps\r\nConfirm please" => "Dies wird eine hohe Anzahl ({0}) an Sprüngen ergeben\r\nBitte bestätigen"
-33C5EE107CFEC3: "No route set up, retry" => "Keine Route eingerichtet, wiederholen"
+681943CB0EA134: "Save as an expedition for use on expedition and surveyor panels" @
+4BB903205B7347: "This will result in a large number ({0}) of jumps\r\nConfirm please" @
+33C5EE107CFEC3: "No route set up, retry" @
 
 SECTION UserControlRouteTracker
 
-0BA3B547C8344B: "Show Bookmark Notes" => "Zeige Lesezeichennotizen"
+0BA3B547C8344B: "Show Bookmark Notes" @
 DF44D515D3D0A7: "Show Jumps To Go" => "Pokaż Pozostałe Skoki"
 DA8C8F2A82D1B3: "Show Waypoint Coordinates" => "Pokaż Współrzędne Punktu Nawigacyjnego"
 9068E91DD59D7E: "Show Deviation from route" => "Pokaż Odstępstwo od trasy"
 0E41D824E76FFC: "Auto copy waypoint" => "Automatycznie kopiuj punkt nawigacyjny"
 47A9634A94F762: "Auto set target" => "Automatycznie ustaw cel"
-E732DB70301B2D: "Show Route Note on waypoint" => "Zeige Routennotiz am Wegpunkt"
-F01A41B43B8868: "Show Target Information" => "Zeige Zielinformation"
-79A125B4CFF3BE: "Show Fuel Information" => "Zeige Treibstoffinformation"
+E732DB70301B2D: "Show Route Note on waypoint" @
+F01A41B43B8868: "Show Target Information" @
+79A125B4CFF3BE: "Show Fuel Information" @
 271E9A568C0E9E: "jump" => "skok"
 24C1C17E2C811B: "To First WP " => "Do Pierwszego Pkt. Naw."
 EDA92612CF2474: "jumps" => "skoki"
@@ -574,41 +574,41 @@ F01632B2B22D3F: " No Ship FSD Information" => "Brak informacji o FSD statku"
 2DA19892882702: ", Dev {0:N1}ly" => "Odst. {0:N1}LŚ"
 CEE17FB4380701: "Route contains no waypoints" => "Trasa nie zawiera punktów nawigacyjnych"
 C415DA3D51A1E9: "No systems in route have known co-ords" => "Brak układów ze znanymi współrzędnymi w trasie"
-33F6E6F622B613: "Note: {0}" => "Notiz: {0}"
+33F6E6F622B613: "Note: {0}" @
 
 SECTION UserControlScan
 
-F3B7084D189898: "Configure scan display body filters" => "Konfiguriere Körperfilter für Scananzeige"
-0FE1B534E56651: "Configure scan display" => "Konfiguriere Scananzeige"
+F3B7084D189898: "Configure scan display body filters" @
+0FE1B534E56651: "Configure scan display" @
 111D3A2E729C26: "Select image size" => "Ustaw rozmiar ikon"
 A0BB88B66F57E8: "Set High Value Limit" => "Ustaw Min. Wysoką Wartość"
 2F2F42105ABA82: "Set Valuable Minimum" => "Ustaw Min. Wysoką Wartość"
-0DE266189138B6: "Show body status icons" => "Zeige Körperstatussymbole"
-3466741E7D93DA: "Show system and value in main display" => "Zeige System und Wert in der Hauptanzeige"
-028F51CCB7BAD7: "Hide materials which have reached their storage limit" => "Verbirg Materialien deren Aufbewahrungslimit erreicht ist"
+0DE266189138B6: "Show body status icons" @
+3466741E7D93DA: "Show system and value in main display" @
+028F51CCB7BAD7: "Hide materials which have reached their storage limit" @
 9F6C1D41D0D032: "Show Materials" => "Zeige Materialien"
-B028A006D79224: "Show rare materials only" => "Zeige nur seltene Materialien"
-00848F83A633FB: "Show Moons" => "Zeige Monde"
+B028A006D79224: "Show rare materials only" @
+00848F83A633FB: "Show Moons" @
 2DBDE6DD6FB541: "Belt" => "Gürtel"
 17B8D69486D780: "Barycentre" => "Baryzentrum"
-14E0E8D442549A: "Show G on all planets" => "Zeige 'G' bei allen Planeten"
+14E0E8D442549A: "Show G on all planets" @
 12071F4330F803: "Show Habitation Zone" => "Zeige habitable Zone"
-64E6C643FFE7E8: "Show Classes of Planets" => "Zeige Planetenklassen"
-E0B7B8CC8BD7CC: "Show Classes of Stars" => "Zeige Sternenklassen"
-9BD1DE0511B36C: "Show distance of bodies" => "Zeige Entfernungen der Körper"
-1BC356C17D4433: "Show mass of planets" => "Zeige Planetenmasse"
-FA07BE19814A99: "Show mass of stars" => "Zeige Sternenmasse"
-A35655D05BB820: "Show age of stars" => "Zeige Sternenalter"
-A689A999A5E620: "Expired" => "Abgelaufen"
-90EAF9559AB2D2: "Show bodyless stars on separate lines" => "Zeige körperlose Sterne auf separater Linie"
-79F1829F7C4ED0: "Create a new bookmark for the current system" => "Erstelle ein neue Lesezeichen für das aktuelle System"
+64E6C643FFE7E8: "Show Classes of Planets" @
+E0B7B8CC8BD7CC: "Show Classes of Stars" @
+9BD1DE0511B36C: "Show distance of bodies" @
+1BC356C17D4433: "Show mass of planets" @
+FA07BE19814A99: "Show mass of stars" @
+A35655D05BB820: "Show age of stars" @
+A689A999A5E620: "Expired" @
+90EAF9559AB2D2: "Show bodyless stars on separate lines" @
+79F1829F7C4ED0: "Create a new bookmark for the current system" @
 
 SECTION UserControlScanGrid
 
 41FF354B2B330B: "Class" => "Klasa"
-63289439EF0B8A: "Max Value" => "Maximaler Wert"
-ED567CF0E9AE1F: "Organics Value" => "Wert der Organismen"
-EBFEA75A0A6AC5: "Configure overall settings" => "Konfiguriere allgemeine Einstellungen"
+63289439EF0B8A: "Max Value" @
+ED567CF0E9AE1F: "Organics Value" @
+EBFEA75A0A6AC5: "Configure overall settings" @
 0498696B357E52: "Main Star" => "Główna Gwiazda"
 E5AAEAAC2E19A2: "Radius" => "Promień"
 0A9062A9CB5199: "Temperature" => "Temperatura"
@@ -630,14 +630,14 @@ B6EB402E86A9AA: "Commanders" => "Dowódcy"
 79056C7AE5C30B: "Commander" => "Dowódca"
 F5110F31C60E83: "EDSM Name" => "Nazwa w EDSM"
 DE5B4A878597E3: "Journal Folder" => "Lokalizacja Dzienników"
-9B2A9354670636: "Undelete" => "Wiederherstellen"
+9B2A9354670636: "Undelete" @
 A797E30923AC1B: "Theme" => "Motyw"
 2E150D8A081FC8: "Edit Theme" => "Edytuj Motyw"
 3F3EC4F121D583: "Save Theme" => "Zapisz Motyw"
 566A5EE14C22AA: "Number Rows by Date Ascending" => "Kolejność Wierszy Od Najnowszego Wpisu"
-A030328790B9CB: "Web Server" => "Webserver"
+A030328790B9CB: "Web Server" @
 FE035157CDA20B: "Port" => "Port"
-94DC8E4A59FAFE: "Interaction" => "Interaktion"
+94DC8E4A59FAFE: "Interaction" @
 C223113FF59532: "Key to activate transparent windows" => "Przycisk aktywacji przezroczystych okien"
 89C8A2851D1755: "Memory" => "Speicher"
 ACDE88AB2C1C2E: "Essential entries" => "Nezbędne Wpisy To"
@@ -654,7 +654,7 @@ A8BC1FAAA274A7: "Enable Star Data Download" => "Włącz Pobieranie Danych Gwiazd
 A7123DF1E1E2B7: "Minimize to notification area icon" => "Minimalizuj do ikony obszaru powiadomień"
 D6D452D0168D18: "Show notification area icon" => "Pokazuj ikonę obszaru powiadomień"
 C30412531E342C: "DLLs" => "DLLs"
-D06D55570938D1: "Permissions" => "Bewilligungen"
+D06D55570938D1: "Permissions" @
 89B86AB0E66F52: "Language" => "Język"
 4D064726954A17: "Advanced" => "Przenieś Bazę Danych Układów / Resetuj UI itp."
 00626039F3FF33: "Restart in Safe Mode" => "Uruchom ponownie w Trybie Bezpiecznym"
@@ -666,7 +666,7 @@ C5D82DE31444DF: "Select the theme to use" => "Wybierz motyw, którego chcesz uż
 3862B55B3D720A: "Edit theme and change colours fonts" => "Edytuj motyw, zmień kolory i czcionki"
 BAABF5504D96C4: "Save theme to disk" => "Zapisz motyw"
 06D37B3D46DDCA: "Number oldest entry 1, latest entry highest" => "Numeruj wpisy: najstarszy - 1, najnowszy najwyżej"
-46F5DE3952C339: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" => "Seleziona il tasto da premere per almeno 500ms\r\nper mostrare il corpo della finestra, quando\r\nin modo di trasparenza totale"
+46F5DE3952C339: "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards" @
 E0B7735E842CE8: "Select which items you consider essential to load older than the time above" => "Ustaw, które rzeczy uważasz za wymagane starsze niż czas powyżej"
 2C69938F3F03DE: "Reduce Memory use. Select either load all records, or load only essential items of records older than a set time before now" => "Wybierz: Wczytuj wszystkie wpisy, lub tylko niezbędne elementy wpisów starszych niż ustawiony czas wcześniejszy niż obecny"
 D6C9D5C40DF2C7: "Configure further screenshot options" => "Więcej opcji konfiguracji zrzutów ekranu"
@@ -680,8 +680,8 @@ BCCEBEFF588CE4: "Minimize the main window to the system notification area (syste
 5AE9F629C09614: "Show a system notification area (system tray) icon for EDDiscovery." => "Pokaż ikonę EDDiscovery w systemowym obszarze powiadomień."
 F6CB7AD3D68BFC: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." => "Tryb Bezpieczny umożliwia wykonywanie operacji specjalnych, takich jak przeniesienie baz danych, reset UI, reset paczek akcji, plików DLL itp."
 DC99D54D9990E3: "Local" => "Lokal"
-920917D62700D0: "Warning about webserver-  see english text" => "Webserverwarnung - beachte den englischen Text"
-00A0EA8208DAC7: "Did not start - click OK to configure windows" => "Hat nicht gestartet - Klicke OK um Windows zu konfigurieren"
+920917D62700D0: "Warning about webserver-  see english text" @
+00A0EA8208DAC7: "Did not start - click OK to configure windows" @
 96645A6CB7E91B: "All entries for Statistics" => "Wszystkie wpisy Statystyk"
 6A8283358AA59B: "Safe Mode" => "Tryb Bezpieczny"
 BBD0319867FC1E: "Confirm restart to safe mode" => "Potwierdź restart w trybie bezpiecznym"
@@ -702,14 +702,14 @@ C552D2599FF6E0: "Remove Sectors" => "Usuń Sektory"
 3EEDD176CCBBA9: "Jumps and Scans" => "Skoki i Skany"
 933ADEA19EEE0A: "Jumps" => "Skoki"
 4481948392A884: "Nothing" => "Nic"
-E3AEDF672CD00D: "Do you wish to delete commander " => "Willst du den Kommandanten löschen"
-EB4FD2BBBBAACE: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Die von diesem Thema verwendete Schriftart ist auf diesem System nicht verfügbar.\r\nDie benötigte Schriftart ist \"{0}\"\r\nInstalliere diese Schriftart um das Thema wie vorgesehen zu nutzen.\r\nDie Schriftart Euro Caps ist auf www.edassets.org frei verfügbar.\r\n\r\nWillst du diese Thema mit einer Ersatzschriftart laden?"
-57768403688225: "No map available!" => "Keine Karte verfügbar!"
+E3AEDF672CD00D: "Do you wish to delete commander " @
+EB4FD2BBBBAACE: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
+57768403688225: "No map available!" @
 35F9B4B074BFBC: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Ukończono, proszę zamknąć to okno.\r\nJeśli masz już otwartą mapę 3D, zmiany nie będą na niej widoczne do następnego uruchomienia EDD\r\n"
-BB75D637DC2C4D: "Reload Star Database" => "Sternendatenbank neu laden"
-CA622FCCA53890: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" => "Dies löscht die Sternendatenbank.\r\n\r\nDanach kannst du erneut die Datenquelle sowie\r\ndie Regionen wählen.\r\nDies benötigt einen erneuten Download der Daten vom Server.\r\nBenutze dies nur, wenn du die Datenbank neu erstellen willst."
-9124C85C715BCB: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" => "Willst du alle Kommandanten und Journaldaten permanent löschen (JA),\r\noder den Kommandanten nur verbergen und ihn nie wieder anzeigen (NEIN)?"
-A60B40E8AD02DD: "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned" => "Willst du alle Aufzeichnungen über die Journaldateien dieses Kommandanten löschen?(Ja)\r\nJa zu wählen bedeutet, dass die Dateien ernuet gescannt werden sofern sie noch vorhanden sind.\r\nNein zu wählen bedeutet, dass sie nicht erneut gescannt werden."
+BB75D637DC2C4D: "Reload Star Database" @
+CA622FCCA53890: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" @
+9124C85C715BCB: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" @
+A60B40E8AD02DD: "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned" @
 
 SECTION UserControlShipYards
 
@@ -718,7 +718,7 @@ BA513F9A92BA39: "Mass/Speed" => "Masa/Prędkość"
 
 SECTION UserControlShoppingList
 
-D22D741A6676D7: "Toggle Shopping List Position" => "Einkaufslistenposition umschalten"
+D22D741A6676D7: "Toggle Shopping List Position" @
 0812899125F068: "Show Max FSD Injections" => "Pokaż maks. ilość wtrysków FSD"
 E47EB539D71A8B: "Show Body Materials When Landed" => "Pokaż materiały w Obiekcie po wylądowaniu"
 EBB4F47C22800F: "Hide when storage full" => "Ukryj jeśli pełen magazyn"
@@ -767,13 +767,13 @@ EEA3CFB9910032: "Scan on top" => "Na górze"
 DD4C8476A88CC9: "Don't show information when" => "Nie pokazuj informacji, gdy"
 B250917C49B7D5: "docked or landed" => "zadokowano lub wylądowano"
 7EEA35AC162E12: "in a panel" => "w panelu Mapy Galaktyki"
-FEA2ABBFF1AA3C: "Hide the title when hidden" => "Verbirg den Titel wenn versteckt"
-DA951505B7A2B9: "Configure columns shown" => "Konfiguriere sichtbare Spalten"
-7E9B44443D446C: "Configure column order" => "Konfiguriere Spaltenreihenfolge"
-ABFD5D69CC7519: "Configure hab zone information" => "Konfiguriere Informationen der habitablen Zone"
+FEA2ABBFF1AA3C: "Hide the title when hidden" @
+DA951505B7A2B9: "Configure columns shown" @
+7E9B44443D446C: "Configure column order" @
+ABFD5D69CC7519: "Configure hab zone information" @
 A3BC8A32D0EE63: "Select what journal events to show" => "Konfiguruj Filtr Zdarzeń..."
 FE67A0163BF256: "Filter out events" => "Konfiguruj Filtr Pól..."
-3B3A8D354BD61D: "Set position of scan display" => "Position der Scananzeige festlegen"
+3B3A8D354BD61D: "Set position of scan display" @
 50B0FAEA7E4452: "View system on EDSM" => "Pokaż układ w EDSM"
 DBB6ACB5E31084: "Summary Panel: Filter out fields" => "Filtruj pola"
 
@@ -791,15 +791,15 @@ D8FA9D7408D9DC: "Minimum star distance in ly" => "Minimalna odległość gwiazdy
 SECTION UserControlStarList
 
 25229E81F3BF74: "Last Visit" => "Ostatnia Wizyta"
-28442DA04B1BF3: "Body Count" => "Körperanzahl"
+28442DA04B1BF3: "Body Count" @
 C90A4905639F83: "Scan Value" => "Scanwert"
 A1E87E0BCAE241: "{0} Star(s) {1}" => "{0} Gwiazd(a/y) {1}"
 FB044B95FD466C: "This system has materials for FSD boost" => "Ten układ zawiera materiały do doładowania FSD"
 3DC09A6F2DA211: "{0} Other bodies" => "{0} innych ciał niebieskich"
-FB90E0C92B3663: "Show/Hide presence of Jumponium Materials" => "Zeige/Verbirg die Präsenz von Sprungmaterialien"
-47D68486BBAA7E: "Show valuable bodies" => "Zeige wertvolle Körper"
-FF058EFC89FB18: "Show organic scans" => "Zeige organische Scans"
-515C004E19233A: "Show codex entries" => "Zeige Codexeinträge"
+FB90E0C92B3663: "Show/Hide presence of Jumponium Materials" @
+47D68486BBAA7E: "Show valuable bodies" @
+FF058EFC89FB18: "Show organic scans" @
+515C004E19233A: "Show codex entries" @
 
 SECTION UserControlStats
 
@@ -807,48 +807,48 @@ SECTION UserControlStats
 22FB76E46F645E: "Travel" => "Podróż"
 12D9C090439BAA: "In Game" => "W Grze"
 AB2855156E832D: "By Ship" => "Według Statku"
-00926D0ECAABBF: "Ranks" => "Ränge"
+00926D0ECAABBF: "Ranks" @
 DD48A1149548F0: "Rank" => "Rang"
-2451A597FA5067: "At Start" => "Zu Beginn"
-0B12D442964C13: "At End" => "Am Schluss"
-F230B2BCC6A6B1: "Last Promotion/Date" => "Letzte(s) Promotion/Datum"
-955A4E9A59BF11: "Powerplay" => "Machtspiel"
+2451A597FA5067: "At Start" @
+0B12D442964C13: "At End" @
+F230B2BCC6A6B1: "Last Promotion/Date" @
+955A4E9A59BF11: "Powerplay" @
 67711E423601BA: "Squadron" => "Schwadron"
-E72ED7A5BCA163: "Bounties on Thargoids" => "Kopfgelder auf Thargoiden"
-C070DE1BD06E83: "Bounties on On Foot NPC" => "Kopfgelder auf NPCs (zu Fuß)"
-6273A2A0CA35EF: "Bounties on Skimmers" => "Kopfgelder auf OF-Drohnen"
-9A18F8035AAEA1: "Ships Unknown Rank" => "Schiffe unbekannter Rang"
-BAC11F62A1EE7D: "Ships Elite Rank" => "Schiffe Rang: Elite"
-6ED71D543A46B5: "Ships Deadly Rank" => "Schiffe Rang: Tödlich"
-C154182DA6A0EA: "Ships Dangerous Rank" => "Schiffe Rang: Gefährlich"
-366E78B1602F76: "Ships Master Rank" => "Schiffe Rang: Meister"
-457AA8E691A5DA: "Ships Expert Rank" => "Schiffe Rang: Experte"
-68F8A460EF2B65: "Ships Competent Rank" => "Schiffe Rang: Kompetent"
-8FAD289393971D: "Ships Novice Rank" => "Schiffe Rang: Novize"
-8727F6D4EE824C: "Ships Harmless Rank" => "Schiffe Rang: Harmlos"
-EAF8AE7FAE1187: "PVP Elite Rank" => "PVP Rang: Elite"
-B313E7107D5C86: "PVP Deadly Rank" => "PVP Rang: Tödlich"
-7743458F23BEEB: "PVP Dangerous Rank" => "PVP Rang: Gefährlich"
-28AF125F4DCEB4: "PVP Master Rank" => "PVP Rang: Meister"
-A6E743F4A8DA1F: "PVP Expert Rank" => "PVP Rang: Experte"
-0D4936734E146A: "PVP Competent Rank" => "PVP Rang: Kompetent"
-0A7B5DB004014C: "PVP Novice Rank" => "PVP Rang: Novize"
-8BED567DC90C30: "PVP Harmless Rank" => "PVP Rang: Harmlos"
+E72ED7A5BCA163: "Bounties on Thargoids" @
+C070DE1BD06E83: "Bounties on On Foot NPC" @
+6273A2A0CA35EF: "Bounties on Skimmers" @
+9A18F8035AAEA1: "Ships Unknown Rank" @
+BAC11F62A1EE7D: "Ships Elite Rank" @
+6ED71D543A46B5: "Ships Deadly Rank" @
+C154182DA6A0EA: "Ships Dangerous Rank" @
+366E78B1602F76: "Ships Master Rank" @
+457AA8E691A5DA: "Ships Expert Rank" @
+68F8A460EF2B65: "Ships Competent Rank" @
+8FAD289393971D: "Ships Novice Rank" @
+8727F6D4EE824C: "Ships Harmless Rank" @
+EAF8AE7FAE1187: "PVP Elite Rank" @
+B313E7107D5C86: "PVP Deadly Rank" @
+7743458F23BEEB: "PVP Dangerous Rank" @
+28AF125F4DCEB4: "PVP Master Rank" @
+A6E743F4A8DA1F: "PVP Expert Rank" @
+0D4936734E146A: "PVP Competent Rank" @
+0A7B5DB004014C: "PVP Novice Rank" @
+8BED567DC90C30: "PVP Harmless Rank" @
 EBA0BF6D59AA23: "Bounties" => "Kopfgelder"
-6C18EAA601E281: "Bounty Value" => "Kopfgelder Wert"
-143706EC834465: "Bounties on Ships" => "Kopfgelder auf Schiffe"
-5975E5601FFC4D: "Crime Cost" => "Verbrechen Kosten"
-19DC8A5F2F52DB: "Faction Kill Bonds" => "Fraktions-Mord-Belohnung"
-91D7F6E6EC96DF: "FKB Value" => "FMB Wert"
-5165C80A7554A6: "Interdictions Player Succeeded" => "Unterbrechungen Spieler Erfolgreich"
-2D360E69870FCA: "Interdictions Player Failed" => "Unterbrechungen Spieler Fehlgeschlagen"
-18AD984165F69E: "Interdictions NPC Succeeded" => "Unterbrechungen NPC Erfolgreich"
-A2F8A5F156DE50: "Interdictions NPC Failed" => "Unterbrechungen NPC Fehlgeschlagen"
-AA3A76881BDE68: "Interdicted Player Succeeded" => "Unterbrochener Spieler Erfolgreich"
-6CDDC5DFA392DB: "Interdicted Player Failed" => "Unterbrochener Spieler Fehlgeschlagen"
-6A6C1A6301AB25: "Interdicted NPC Succeeded" => "Unterbrochener NPC Erfolgreich"
-99C5998D9DBB79: "Interdicted NPC Failed" => "Unterbrochener NPC Fehlgeschlagen"
-D01ADD4A8CF9C6: "PVP Kills" => "PVP Tötungen"
+6C18EAA601E281: "Bounty Value" @
+143706EC834465: "Bounties on Ships" @
+5975E5601FFC4D: "Crime Cost" @
+19DC8A5F2F52DB: "Faction Kill Bonds" @
+91D7F6E6EC96DF: "FKB Value" @
+5165C80A7554A6: "Interdictions Player Succeeded" @
+2D360E69870FCA: "Interdictions Player Failed" @
+18AD984165F69E: "Interdictions NPC Succeeded" @
+A2F8A5F156DE50: "Interdictions NPC Failed" @
+AA3A76881BDE68: "Interdicted Player Succeeded" @
+6CDDC5DFA392DB: "Interdicted Player Failed" @
+6A6C1A6301AB25: "Interdicted NPC Succeeded" @
+99C5998D9DBB79: "Interdicted NPC Failed" @
+D01ADD4A8CF9C6: "PVP Kills" @
 20CB368601547F: "Total No of jumps" => "Całkowita Ilość Skoków"
 D06EC3483818A9: "FSD jumps" => "FSA-Sprünge"
 E13CB4A04BC34B: "FSD Jump History" => "Historia Skoków"
@@ -871,9 +871,9 @@ B051CCCD8B0D67: "Premium Boost" => "Doładowania Premium"
 4FE81F7DFC3A7B: "Standard Boost" => "Doładowania Standardowe"
 744F275A75FD8F: "Basic Boost" => "Doładowań Podstawowe"
 BF95513D610332: "Jet Cone Boost" => "Doładowania Pulsarowe"
-80D9028EDFA54B: "Organic Scans Value" => "Wert der organischen Scans"
+80D9028EDFA54B: "Organic Scans Value" @
 93C9D999CAF90E: "Scan value" => "Wartość skanów"
-D436FDB4D178CC: "Belt Cluster" => "Gürtelgruppen"
+D436FDB4D178CC: "Belt Cluster" @
 785AD46ADCFC58: "Last dock" => "Ostatnie dokowanie"
 6D391E1333D9E0: "Bank Account" => "Konto Bankowe"
 1B5A20A804DC74: "Crime" => "Przestępstwa"
@@ -885,15 +885,15 @@ AB86B441AD93E7: "Passengers" => "Pasażerowie"
 E0C47B9F787BC5: "Search and Rescue" => "Poszukiwania i Ratunek"
 EA78B34DA11F9D: "Crafting" => "Wytwarzanie"
 DE463BA892C2F3: "Crew" => "Załoga"
-EB6824747FE3AC: "Multi-crew" => "Multicrew"
+EB6824747FE3AC: "Multi-crew" @
 F8D07BF619AB93: "Materials Trader" => "Handel Materiałami"
-4EC8D6E506ED34: "Fleetcarrier" => "Carrier"
+4EC8D6E506ED34: "Fleetcarrier" @
 B663617A36922A: "CQC" => "CQC"
-E41CFBE34F8307: "Exobiology" => "Exobiologie"
-57D866D2E06189: "Thargoids" => "Thargoiden"
+E41CFBE34F8307: "Exobiology" @
+57D866D2E06189: "Thargoids" @
 ED8FE7F50C291D: "Goods Bought" => "Kupiono Towarów"
 4A9BE7DFAB7DEE: "Goods Sold" => "Sprzedano Towarów"
-266338DF847C39: "Goods Profit" => "Warenprofit"
+266338DF847C39: "Goods Profit" @
 
 SECTION StatsTimeUserControl
 
@@ -914,35 +914,35 @@ C7E62EEFF61FB8: "Display System Name" => "Wyświetl Nazwę Układu"
 9D4038B19E1FAF: "EDSM buttons on separate line" => "Przyciski EDSM w osobnej linii"
 E71BB3490AF666: "Display Visits" => "Wskaźnik Ilości Wizyt"
 16058E391CFC8A: "Display Body Name" => "Wskaźnik Nazwy Obiektu"
-2AF8FBE0D3D1F0: "Display Station Buttons" => "Zeige Stationsknöpfe"
-167364FDD294FC: "Display Station Faction" => "Zeige Stationsfraktion"
+2AF8FBE0D3D1F0: "Display Station Buttons" @
+167364FDD294FC: "Display Station Faction" @
 859DF4F86EA274: "Display Position" => "Wskaźnik Pozycji"
 88DC694EB1EEC5: "Display Distance From" => "Wskaźnik Odległości"
 40A0D02D51569C: "Display System State" => "Wskaźnik Stanu Układu"
-9D4B4AF780F534: "Display Security" => "Zeige Sicherheit"
+9D4B4AF780F534: "Display Security" @
 9443704433D76B: "Display Target" => "Wskaźnik Celu"
 C7BFC55F74198E: "Display Ship Information" => "Wskaźnik Informacji o Statku"
-69FFED82C302AA: "Display Ship Buttons" => "Zeige Schiffsknöpfe"
+69FFED82C302AA: "Display Ship Buttons" @
 60CC67D5043C1F: "Display Fuel Level" => "Wskaźnik Poziomu Paliwa"
 E16757D13AB37A: "Display Cargo Count" => "Wskaźnik Ładunku"
 0719B412DEA0BD: "Display Data Count" => "Wskaźnik Zebranych Danych"
 F02F62E261A315: "Display Material Count" => "Wskaźnik Zebranych Materiałów"
-467B1F3E0B7F4E: "Display Microresources Count" => "Zeige Anzahl der Mikroressourcen"
+467B1F3E0B7F4E: "Display Microresources Count" @
 6B5FFA7F235884: "Display Credits" => "Wskaźnik Kredytów"
 6483F70251A314: "Display Game Mode" => "Wskaźnik Trybu Gry"
 3CFB6CC2163B0E: "Display Travel Trip Statistics" => "Wskaźnik Statystyk Podróźy"
 6B797E5C00BD22: "Display Mission List" => "Wskaźnik Listy Misji"
 3CDA0635013859: "Display Jump Range" => "Wyświetl Zasięg Skoku"
 45E682004141E2: "When transparent, use skinny look" => "Używaj trybu zwężonego gdy przezroczyste"
-53B251F715E19A: "Display Next Destination Selected" => "Zeige nächste gewählte Destination"
-5B17A15D263EC5: "Disable copy to clipboard when clicking on text boxes" => "Deaktiviere das Kopieren in die Zwischenablage bei einem Klick auf Textboxen"
+53B251F715E19A: "Display Next Destination Selected" @
+5B17A15D263EC5: "Disable copy to clipboard when clicking on text boxes" @
 31ACBB09F84846: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Przytrzymaj klawisz Ctrl i przeciągnij element lewym przyciskiem myszki aby zmienić jego pozycję. Dostępne 8 kolumn"
 A89C9CA2A96AE8: "Distance to target" => "Odległość do Celu"
 9FFE9E9C6D7672: "Sets the target" => "Ustawia Cel"
 F25CE1B8A399BD: "Security" => "Sicherheit"
 A16C5BBE4BF996: "Range" => "Skok"
 A7B93D2128E820: "Mode" => "Tryb"
-208A402074139F: "MR" => "MR"
+208A402074139F: "MR" @
 0B645D1B659917: "Fuel" => "Paliwo"
 C9B1B30D011FE2: "Pos" => "Pozycja"
 7E8548C30FEF17: "Economy" => "Ekonomia"
@@ -956,8 +956,8 @@ DF5D4664763117: "Sol" => "Sole"
 32155DB2FEE95E: "System unknown to EDSM" => "Układ nie jest znany w EDSM"
 EC16F1DC33B505: "Position is {0:0.00},{1:0.00},{2:0.00}" => "Pozycja to {0:0.00}, {1:0.00}, {2:0.00}"
 43AB6BF5133F6C: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" => "Na Mapie 3D, kliknij prawym przyciskiem myszki aby utworzyć zakładkę, znacznik regionu, lub kliknij na znaczniku notatki i zaznacz 'Ustaw Cel' lub wpisz tutaj i naciśnij Enter"
-F9D6E7C9EF5584: "On Foot" => "Zu Fuß"
-08D2E98E6754AF: "N/A" => "N/V"
+F9D6E7C9EF5584: "On Foot" @
+08D2E98E6754AF: "N/A" @
 
 SECTION UserControlContainerSplitter
 
@@ -972,17 +972,17 @@ B54B57C048EF42: "Merge Left Panel" => "Połącz Lewy Panel"
 EEC2E2243F9659: "Merge Top Panel" => "Połącz Górny Panel"
 B728CDF769CB75: "Merge Right Panel" => "Połącz Prawy Panel"
 8D65E9F5EF03D3: "Merge Bottom Panel" => "Połącz Dolny Panel"
-B8E0FB8095A05A: "Right click on splitter bar to change orientation\nor split or merge panels" => "Rechtsklick auf Teilungsleiste um Orientierung zu ändern\noder Paneele zu teilen oder zu verschmelzen"
+B8E0FB8095A05A: "Right click on splitter bar to change orientation\nor split or merge panels" @
 
 SECTION UserControlTravelGrid
 
-618ED5F457C419: "History: Filter out fields" => "Historie: Felder ausfiltern"
+618ED5F457C419: "History: Filter out fields" @
 041FA7A8EDCBCD: "Clear Start marker" => "Wyczyść znacznik Start"
 E3E17E3743DED0: "Clear Stop marker" => "Wyczyść znacznik Stop"
 9045B8BC31F856: "Set Stop marker for travel calculations" => "Ustaw znacznik Stop do obliczeń podróży"
 2DEA8F5618E216: "Set Start marker for travel calculations" => "Ustaw znacznik Start do obliczeń podróży"
 6857AC1911CEFA: "Confirm you wish to remove this entry\r\nIt may reappear if the logs are rescanned" => "Potwierdź, że chcesz usunąć ten wpis\r\nMoże pojawić się ponownie, jeśli dzienniki zostaną przeskanowane od nowa"
-99A8606358921C: "Marked" => "Markiert"
+99A8606358921C: "Marked" @
 3D7BEC2A65F239: "Remove Sorting of Columns" => "Wyczyść Sortowanie Kolumn"
 46D6F08522DB6C: "Create/Edit Bookmark" => "Utwórz/Edytuj Zakładkę"
 A1CB43A6C382E3: "Jump to next Start/Stop marker" => "Przejdź do następnego znacznika Start/Stop"
@@ -991,32 +991,32 @@ A099AE49F4552C: "Star Map Colour..." => "Kolor Mapy Gwiazd..."
 1E5656B093A9A7: "System on Trilateration Panel" => "Układ na Panelu Trilateracji"
 65886B813B2541: "Wanted Systems on Trilateration Panel" => "Pożądane Układy na Panelu Trilateracji"
 1AADA0255D587D: "Both of the above" => "Oba powyższe"
-BCA2F73AFA4757: "Expedition Panel" => "Expeditionspanel"
+BCA2F73AFA4757: "Expedition Panel" @
 614EC9DFB9DA9D: "Move Entries to another Commander" => "Przenieś Wpisy do innego Dowódcy"
 661E31218E2EE8: "Hide Entries" => "Ukryj Wpisy"
 6D8F628DD22939: "Remove Journal Entry" => "Usuń Wpis Dziennika"
 4E340D4B1C6A0B: "Copy journal entry to clipboard/Log" => "Kopiuj wpis dziennika do schowka/Dziennika Sys."
 CC0A855DF345BC: "Write event class info to Log (Debug)" => "Wypisz informacje klasy zdarzenia w dzienniku systemowym (Debug)"
 BE71EBC23A96B1: "Run actions across selection for speech debugging (Debug)" => "Wykonaj Akcje na zaznaczeniu w celu debugowania interf. głos. (Debug)"
-EF5031AC6BB79D: "Run selection through Inara System (Debug)" => "Avvia la selezione su Inara (Debug)"
-4678C5C9A7EA0E: "Run entry through Profile System (Debug)" => "Avvia il registro attraverso il Profilo di Sistema (Debug)"
-87AA55A4D8390D: "Run selection through EDDN Test Server (Debug)" => "Führe Auswahl über EDDN-Testserver aus (Debug)"
-524BF0531AFD77: "Run selection through EDAstro (Debug)" => "Führe Auswahl über EDAstro aus (Debug)"
-0F5FE8CD3D51BA: "Send selection to DLLs (Debug)" => "Sende Auswahl an DLLs (Debug)"
-B91F8B4B18E7EA: "Show lines in System Visited Fore Colour" => "Zeige Linien in 'besuchtes System'-Vordergrundfarbe"
-27E9DD0E266E2D: "Travel grid in Debug Mode" => "Reisegitter im Debugmodus"
+EF5031AC6BB79D: "Run selection through Inara System (Debug)" @
+4678C5C9A7EA0E: "Run entry through Profile System (Debug)" @
+87AA55A4D8390D: "Run selection through EDDN Test Server (Debug)" @
+524BF0531AFD77: "Run selection through EDAstro (Debug)" @
+0F5FE8CD3D51BA: "Send selection to DLLs (Debug)" @
+B91F8B4B18E7EA: "Show lines in System Visited Fore Colour" @
+27E9DD0E266E2D: "Travel grid in Debug Mode" @
 21FE521D359452: "Outlining On" => "Zwijanie Wł."
 7CD3494777C5DB: "Scan Events Outlining" => "Zwijanie Zdarzeń Skanu"
 F66672D57338E9: "Roll up older entries" => "Zwijaj starsze wpisy"
 C0DDF9320E29B7: "After First" => "Po Pierwszym"
 2B36562B65054F: "After 5" => "Po Pięciu"
 D9273536780112: "Control Outlining" => "Kontrola Zwijania"
-41A18489F97F70: "Define new time ranges for time selector" => "Definiere neue Zeitspanne für den Zeitselektor"
-10FA8B1B034219: "Go to a marked journal entry. Use right click to mark an entry" => "Gehe zu einem markierten Journaleintrag. Klicke rechts um einen Eintrag zu markieren."
+41A18489F97F70: "Define new time ranges for time selector" @
+10FA8B1B034219: "Go to a marked journal entry. Use right click to mark an entry" @
 0128C783DB2024: "system:body:station:stationfaction" => "system:body:station:stationfaction"
-03C54D66F2DA56: "Next start/stop marker is hidden" => "Nächste Start/Stopp-Markierung ist versteckt"
-905A92084F2F46: "No start/stop marker found below" => "Weiter unten keine Start/Stopp-Markierung gefunden"
-A89F26DDCFE091: "Entry filtered out of grid" => "Eintrag in Historie ausgefiltert"
+03C54D66F2DA56: "Next start/stop marker is hidden" @
+905A92084F2F46: "No start/stop marker found below" @
+A89F26DDCFE091: "Entry filtered out of grid" @
 
 SECTION UserControlCaptainsLog
 
@@ -1067,11 +1067,11 @@ B02A742A947290: "EDSM submission succeeded, but trilateration failed. Try adding
 9430459228FC8E: "Only systems with coordinates or already known to EDSM can be added" => "Tylko układy ze współrzędnymi lub znane już w EDSM mogą zostać dodane"
 8DE285BE18F269: "Position unknown" => "Pozycja nieznana"
 16D3525290820F: "Position found" => "Pozycja znaleziona"
-44DA1E80428347: "Add all Sector systems" => "Füge alle Sektorsysteme hinzu"
-FFB238EB86BF11: "Sector Systems" => "Sektorsysteme"
-C41C3AF13C07BD: "Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems." => "Sektorname konnte vom Systemnamen nicht abgeleitet werden (möglicherweise ist es nicht prozedural generiert).   Bekomme keine Sektorsysteme."
-0F21EB2F39FE84: "No systems with unknown coordinates were found for the current sector." => "Keine Systeme mit unbekannten Koordinaten für den derzeitigen Sektor gefunden."
-EEBF564BAF4F90: "{0} systems with unknown coordinates found in {1} sector." => "{0} Systeme mit unbekannten Koordinaten im {1}-Sektor gefunden."
+44DA1E80428347: "Add all Sector systems" @
+FFB238EB86BF11: "Sector Systems" @
+C41C3AF13C07BD: "Sector name could not be derived from system name (it may not be procedurally generated).  Not getting sector systems." @
+0F21EB2F39FE84: "No systems with unknown coordinates were found for the current sector." @
+EEBF564BAF4F90: "{0} systems with unknown coordinates found in {1} sector." @
 
 SECTION UserControlMaterialTrader
 
@@ -1079,102 +1079,102 @@ SECTION UserControlMaterialTrader
 8AE1C34BD37FAD: "Left" => "Übrig"
 BFFFD736CDDD08: "Get" => "Erhalte"
 719EA396AD92E0: "Clear" => "Leeren"
-3898B9AA06204B: "Offer" => "Angebot"
+3898B9AA06204B: "Offer" @
 965FB2DDF63D60: "Receive" => "Erhalten"
-127F7960FB4A8D: "Clear Trade" => "Handel leeren"
+127F7960FB4A8D: "Clear Trade" @
 DA433CD41E7FB7: "Raw" => "Roh"
 58AC2F7D78D326: "Encoded" => "Verschlüsselt"
 8AB3DB9BFC3921: "Manufactured" => "Produziert"
 
 SECTION UserControlMiningOverlay
 
-92743D7648AAD4: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" => ", Erzsucher abgefeuert {0}, Sammler ausgebracht {1}, geknackt {2}"
-3E82E468720F25: "Ref." => "Raf."
-633C0EE42BDD19: "Coll." => "Samm."
-FF44397BA75466: "Prosp." => "Erzs."
-0BBC5D86769FF1: "Ratio%" => "Anteil%"
-E9F6F27B0B2C27: "Avg%" => "Dsn%"
-EF0DFE1169222D: "Min%" => "Min%"
-E07CB141188F05: "Max%" => "Max%"
-79982906F01743: "M.Lode" => "Hauptader"
-6FAB4B5F335EB6: "HML Ct." => "HMN Zl"
-67B93882093149: "Discv" => "Entd."
-ACBFF454D6581B: "Asteroids Pros." => "Asteroiden prospektiert"
-805723CC0E68E1: "Content %" => "Inhalt %"
-98FD8A73E231A5: "% Above" => "% Über"
-1D3C457CBE3E35: "Distribution" => "Verteilung"
-7B169F19D2E9BB: "Limpets left {0}, Cargo left {1}" => "Drohnen übrig {0}, Fracht übrig {1}"
-CA0FBEE8E26BBE: "Display items with zero refined items" => "Zeige Objekte mit null raffinierten Gegenständen"
-081E86CF24ED15: "Select chart options" => "Wähle Tabellenoptionen"
-2A543AE1B0442B: "Select chart between showing % chance for asteroids containing only this material, and % chance over all asteroids" => "Wechsle Diagramm von 'Basierend auf Asteroiden, die dieses Material enthalten.' zu 'Basierend auf allen Asteroiden.'"
-78148038EB4C3C: "Distribution vs All" => "Verteilung gegen Alles"
+92743D7648AAD4: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" @
+3E82E468720F25: "Ref." @
+633C0EE42BDD19: "Coll." @
+FF44397BA75466: "Prosp." @
+0BBC5D86769FF1: "Ratio%" @
+E9F6F27B0B2C27: "Avg%" @
+EF0DFE1169222D: "Min%" @
+E07CB141188F05: "Max%" @
+79982906F01743: "M.Lode" @
+6FAB4B5F335EB6: "HML Ct." @
+67B93882093149: "Discv" @
+ACBFF454D6581B: "Asteroids Pros." @
+805723CC0E68E1: "Content %" @
+98FD8A73E231A5: "% Above" @
+1D3C457CBE3E35: "Distribution" @
+7B169F19D2E9BB: "Limpets left {0}, Cargo left {1}" @
+CA0FBEE8E26BBE: "Display items with zero refined items" @
+081E86CF24ED15: "Select chart options" @
+2A543AE1B0442B: "Select chart between showing % chance for asteroids containing only this material, and % chance over all asteroids" @
+78148038EB4C3C: "Distribution vs All" @
 
 SECTION UserControlFactions
 
-A2BF9187FC85BA: "Inf +" => "Einfl. +"
-B128DA516E58BF: "Rep +" => "Ruf +"
-697DF284DA4F67: "Mission Credits" => "Mission Credits"
-6FF0E311B944E1: "Commds +" => "Waren +"
-AC18551E261653: "Commds -" => "Waren -"
-C1ECFEB8DEF4DC: "Commds Profit" => "Warenprofit"
-6EA689CC53EA9A: "Mats +" => "Mats +"
-07FDDC35BB0E65: "Mats -" => "Mats -"
-6AC2053328E50A: "Crimes Committed" => "Verbrechen begangen"
-77E2DD8141E981: "Bounty Kills" => "Kopfgeld"
-397B67A90DEC91: "Bounty Rewards" => "Kopfgeldbelohnungen"
-D5965451E332A6: "Bounty Rewards Value" => "Wert der Kopfgeldbelohnungen"
+A2BF9187FC85BA: "Inf +" @
+B128DA516E58BF: "Rep +" @
+697DF284DA4F67: "Mission Credits" @
+6FF0E311B944E1: "Commds +" @
+AC18551E261653: "Commds -" @
+C1ECFEB8DEF4DC: "Commds Profit" @
+6EA689CC53EA9A: "Mats +" @
+07FDDC35BB0E65: "Mats -" @
+6AC2053328E50A: "Crimes Committed" @
+77E2DD8141E981: "Bounty Kills" @
+397B67A90DEC91: "Bounty Rewards" @
+D5965451E332A6: "Bounty Rewards Value" @
 B83FE58DB23E57: "Interdicted" => "Unterbrochen"
 C21AFB3EFA18AB: "Interdiction" => "Unterbrechungen"
-5F22266A168021: "Kill Bonds Victim" => "Tötungsbelohnungen Opfer"
-FC21DB8588503E: "Kill Bonds Awarded" => "Tötungsbelohnungen erhalten"
-DAE2AEC9BE1018: "Kill Bonds Value" => "Tötungsbelohnungen Wert"
-424368E7EC512D: "Cartographic Value" => "Kartographischer Wert"
-775CBA539E85D7: "Other Info" => "Andere Info"
-E28F24331D5916: "Include from" => "Inkludiere von"
-657AC92FA1AFD9: "Include to" => "Inkludiere bis"
-05EC5A8E4188D0: "Missions for " => "Missionen für "
-80046482992EB0: "Bounty/Bond" => "Kopfgeld/Belohnung"
-90E82138823B6D: "Bounties/Bonds for " => "Kopfgelder/Belohnungen für "
-EE4A9C0F4355B9: "Materials/Commodities for " => "Materialien/Waren für "
-449B4068617074: "Show missions for faction" => "Zeige Missionen für Fraktion"
-4CA2AF672FCE38: "Show commodity/material trades for faction" => "Zeige Waren-/Materialienhandel für Fraktion"
-5B997E7442275B: "Show bounties and bonds for faction" => "Zeige Kopfgelder und Belohnungen für Fraktion"
-F6A9D28E466A97: "Missions In Progress" => "Misionen in Arbeit"
-72E11BB738A1FB: "Capital ship Victims" => "Großkampfschiff Opfer"
-6F623465F6238E: "Capital ship Award" => "Großkampfschiff Belohnung"
+5F22266A168021: "Kill Bonds Victim" @
+FC21DB8588503E: "Kill Bonds Awarded" @
+DAE2AEC9BE1018: "Kill Bonds Value" @
+424368E7EC512D: "Cartographic Value" @
+775CBA539E85D7: "Other Info" @
+E28F24331D5916: "Include from" @
+657AC92FA1AFD9: "Include to" @
+05EC5A8E4188D0: "Missions for " @
+80046482992EB0: "Bounty/Bond" @
+90E82138823B6D: "Bounties/Bonds for " @
+EE4A9C0F4355B9: "Materials/Commodities for " @
+449B4068617074: "Show missions for faction" @
+4CA2AF672FCE38: "Show commodity/material trades for faction" @
+5B997E7442275B: "Show bounties and bonds for faction" @
+F6A9D28E466A97: "Missions In Progress" @
+72E11BB738A1FB: "Capital ship Victims" @
+6F623465F6238E: "Capital ship Award" @
 C7AD6F7B6831A8: "Redeem Voucher" => "Gutschein eingelöst"
 2C60D95A352DA3: "Pay Fines" => "Bezahlte Strafen"
-7E2BA2DEEF4EF3: "Pay Bounty Value" => "Wert bezahlter Kopfgelder"
-984FAF564D50B9: "DL Victim" => "DL Opfer"
-AB2BEAA625AAC3: "DL Payee Faction" => "DL auszahlende Fraktion"
-91FDF90FC89C75: "DL Payee Value" => "DL Auszahlungswert"
+7E2BA2DEEF4EF3: "Pay Bounty Value" @
+984FAF564D50B9: "DL Victim" @
+AB2BEAA625AAC3: "DL Payee Faction" @
+91FDF90FC89C75: "DL Payee Value" @
 
-01784CA8036C41: "Last Known Reputation" => "Letzter bekannter Ruf"
-CE1FCB4A606ED1: "Last State" => "Letzter Zustand"
+01784CA8036C41: "Last Known Reputation" @
+CE1FCB4A606ED1: "Last State" @
 5C9CB498F540DF: "Government" => "Regierung"
-1DD01EBAA45EEF: "System Influence" => "Systemeinfluss"
-05A55AA172DB06: "Other System Info" => "Andere Systeminfos"
-CB7B9C47F344FC: "Organic Data Value" => "Wert der organischen Daten"
-BDE6E14DB0426B: "Show/Hide System Info" => "Zeige/Verstecke Systeminformationen"
-0D19D7A7D356EA: "Show/Hide Mission" => "Zeige/Verstecke Missionen"
-7039D4E6A3112F: "Show/Hide Commodities" => "Zeige/Verstecke Handelswaren"
-20C47CB8700682: "Show/Hide Materials" => "Zeige/Verstecke Materialien"
-406CC4B75DC28D: "Show/Hide Crimes/Bounties" => "Zeige/Verstecke Verbrechen/Kopfgelder"
-E14A324A01BAF1: "Show/Hide Interdictions" => "Zeige/Verstecke Unterbrechungen"
-FBB715DCFB4F59: "Show/Hide Kill Bonds" => "Zeige/Verstecke Tötungsbelohnungen"
-0D9AC62782285E: "Show/Hide Datalink" => "Zeige/Verstecke Datenverbindungen"
-436BF2724D3231: "Show Hide Cartographic/Organic Sold" => "Zeige/Verstecke verkaufte Kartographie/Organismen"
+1DD01EBAA45EEF: "System Influence" @
+05A55AA172DB06: "Other System Info" @
+CB7B9C47F344FC: "Organic Data Value" @
+BDE6E14DB0426B: "Show/Hide System Info" @
+0D19D7A7D356EA: "Show/Hide Mission" @
+7039D4E6A3112F: "Show/Hide Commodities" @
+20C47CB8700682: "Show/Hide Materials" @
+406CC4B75DC28D: "Show/Hide Crimes/Bounties" @
+E14A324A01BAF1: "Show/Hide Interdictions" @
+FBB715DCFB4F59: "Show/Hide Kill Bonds" @
+0D9AC62782285E: "Show/Hide Datalink" @
+436BF2724D3231: "Show Hide Cartographic/Organic Sold" @
 
 SECTION UserControlOrganics
 
-20ABF8B1A35466: "Display incomplete scans" => "Zeige unvollständige Scans"
+20ABF8B1A35466: "Display incomplete scans" @
 729535298F44FF: "At {0}" => "Bei {0}"
-023888959E33B9: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" => ", {0}, Radius {1}, {2}, {3}, Biosignale: {4}{5}"
+023888959E33B9: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
 DAB5A87D199E18: "Star System" => "Sternensystem"
-48902F14E5C843: "Genus" => "Gattung"
-83A7238826AB30: "Species" => "Spezies"
-CC91B1EA2C1651: "Variant" => "Variante"
-E214E19943B264: "Last Scan Type" => "Letzter Scantyp"
+48902F14E5C843: "Genus" @
+83A7238826AB30: "Species" @
+CC91B1EA2C1651: "Variant" @
+E214E19943B264: "Last Scan Type" @
 
 SECTION ScanDisplayForm
 
@@ -1189,10 +1189,10 @@ CCAF752B04EA9C: "Delete entry" => "Usuń wpis"
 
 SECTION FilterSelector
 
-2A98149D995006: "Suits" => "Anzüge"
-279E2C9DDD2C44: "Create new group" => "Erstelle neue Gruppe"
-7DB7848F955BD7: "Enter name of new group" => "Namen der neuen Gruppe eingeben"
-36B0FABDF83DC7: "Confirm removal of" => "Bestätige Entfernung von"
+2A98149D995006: "Suits" @
+279E2C9DDD2C44: "Create new group" @
+7DB7848F955BD7: "Enter name of new group" @
+36B0FABDF83DC7: "Confirm removal of" @
 
 SECTION UserControlCommonBase
 
@@ -1200,103 +1200,103 @@ SECTION UserControlCommonBase
 
 SECTION CSV
 
-9EF6280386D761: "Failed to open " => "Fehler beim Öffnen von "
-8BDF9FDF84B40D: "Failed to write to " => "Fehler beim Schreiben von "
+9EF6280386D761: "Failed to open " @
+8BDF9FDF84B40D: "Failed to write to " @
 
 SECTION InfoForm
 
 
 SECTION UserControlSuitsWeapons
 
-CC459F63A7AECD: "Mods" => "Mods"
+CC459F63A7AECD: "Mods" @
 9E7FD7DDAEE291: "Loadout" => "Konfiguration"
-EF002BCE769B96: "Primary 1" => "Primäre 1"
-34CD6210189BD2: "Primary 2" => "Primäre 2"
-025DE599EA0A62: "Secondary" => "Sekundäre"
+EF002BCE769B96: "Primary 1" @
+34CD6210189BD2: "Primary 2" @
+025DE599EA0A62: "Secondary" @
 A9A96EC019494D: "Primary" => "Primäre"
-20874E3E8BD17C: "Weapon Type" => "Waffenart"
-1BFD29F2F12AD0: "Damage Type" => "Schadensart"
-9A337CC4EF4BE3: "Fire Mode" => "Feuermodus"
+20874E3E8BD17C: "Weapon Type" @
+1BFD29F2F12AD0: "Damage Type" @
+9A337CC4EF4BE3: "Fire Mode" @
 7BF6D1D3A58A22: "Damage" => "Schaden"
-8A50D0D250AC59: "Rate/Sec" => "Rate/Sek"
-97B39A3F5E9B3A: "Clip Size" => "Magazingröße"
-77604466309D05: "Hopper Size" => "Behältergröße"
-D08EC89EFF37EC: "Range m" => "Reichweite m"
-F3CEC91C2F03B8: "DPS" => "SPS"
-E70031EADDA4DE: "Head Shot Mult" => "Kopfschussmulti"
-2ECE6C47CFB703: "Confirm Selling of" => "Bestätige Verkauf von"
-D13DB38286C90C: "Force Suit Sale" => "Erzwinge Anzugsverkauf"
+8A50D0D250AC59: "Rate/Sec" @
+97B39A3F5E9B3A: "Clip Size" @
+77604466309D05: "Hopper Size" @
+D08EC89EFF37EC: "Range m" @
+F3CEC91C2F03B8: "DPS" @
+E70031EADDA4DE: "Head Shot Mult" @
+2ECE6C47CFB703: "Confirm Selling of" @
+D13DB38286C90C: "Force Suit Sale" @
 
 SECTION UserControlCarrier
 
-3D76FD53AA0F62: "Decommissioned" => "Dekommissioniert"
-0B2AA74B1595AE: "Decommissioning on" => "Dekommissionierung am"
-FECCF27D8A756C: "Cargo: ; t;N0" => "Fracht: ; t;N0"
-E4B184DD2B2AD1: "Services: ; t;N0" => "Einrichtungen: ; t;N0"
-B63CFA032C94BF: "Ship Packs: ; t;N0" => "Schiffspakete: ; t;N0"
-EF1C1576EACED1: "Module Packs: ; t;N0" => "Modulpakete: ; t;N0"
-56B679C0A68C1B: "Reserved Space: ; t;N0" => "Reservierter Platz: ; t;N0"
-0456E14744E365: "Free Space: ; t;N0" => "Freier Platz: ; t;N0"
-11CDC4D5D07633: "Jump Range: ; ly;N0" => "Sprungreichweite: ; ly;N0"
-A2B7F586AACEE5: "Max Jump: ; ly;N0" => "Max. Sprung: ; ly;N0"
-A936AD07CF17C0: "Fuel: ; t;N0" => "Treibstoff: ; t;N0"
-0935C6C59186BC: "Docking Access" => "Andockzugang"
-059AE46E428B7C: "Notorious" => "Berüchtigt"
-5A1731CE9C0565: "Balance: ; cr;N0" => "Kontostand: : ; cr;N0"
-CB4849CE71609D: "Reserve: ; cr;N0" => "Reserve: ; cr;N0"
-EF688A50489362: "Available: ; cr;N0" => "Verfügbar: ; cr;N0"
-D75DF56D16E59F: "Reserve: ; %;N0" => "Reserve: ; %;N0"
-E8F1C1B55660EB: "Pioneer Tax" => "Pioniersteuer"
-7A6FA51ABA501E: "Shipyard Tax" => "Werftsteuer"
-3583018B5E8131: "Rearm Tax" => "Nachladesteuer"
-460784033FAD01: "Outfitting Tax" => "Ausrüstungssteuer"
-964A427048AAB1: "Refuel Tax" => "Auftanksteuer"
-7A550EE38B3E7C: "Repair Tax" => "Reparatursteuer"
-1A0F5DB337EC25: ": ; %;N0" => ": ; %;N0"
-5DD178DB7162A2: "Core Cost: ; cr;N0" => "Kernkosten: ; cr;N0"
-FE59ED4101E466: "Services Cost: ; cr;N0" => "Einrichtungskosten: ; cr;N0"
-50E6AE8D109017: "No Carrier" => "Kein Carrier"
-B455B013A9CF13: "Install cost: ; cr;N0" => "Installationskosten: ; cr;N0"
-3DF5159B0456C1: "Capacity Allocated: ; Units;N0" => "Zugewiesene Kapazität: ; Einheiten;N0"
-CB7654E3728C0A: "Upkeep cost: ; cr;N0" => "Instandhaltungskosten: ; cr;N0"
-9EC790B9F4E58F: "Suspended upkeep cost: ; cr;N0" => "Eingestellte Instandhaltungskosten: ; cr;N0"
-311F21EEA90405: "Crew Name" => "Crewname"
-E2CE7274D260B9: "This Service is Active" => "Diese Einrichtung ist aktiv"
-CD7E9084A619FD: "This Service is Suspended" => "Dieser Service ist beurlaubt"
-6C573682E526FF: "This Service is Not Installed" => "Dieser Service ist nicht installiert"
-068D15FAF7392F: "No Module or Ship packs installed" => "Kein Modul- oder Schiffspaket installiert"
+3D76FD53AA0F62: "Decommissioned" @
+0B2AA74B1595AE: "Decommissioning on" @
+FECCF27D8A756C: "Cargo: ; t;N0" @
+E4B184DD2B2AD1: "Services: ; t;N0" @
+B63CFA032C94BF: "Ship Packs: ; t;N0" @
+EF1C1576EACED1: "Module Packs: ; t;N0" @
+56B679C0A68C1B: "Reserved Space: ; t;N0" @
+0456E14744E365: "Free Space: ; t;N0" @
+11CDC4D5D07633: "Jump Range: ; ly;N0" @
+A2B7F586AACEE5: "Max Jump: ; ly;N0" @
+A936AD07CF17C0: "Fuel: ; t;N0" @
+0935C6C59186BC: "Docking Access" @
+059AE46E428B7C: "Notorious" @
+5A1731CE9C0565: "Balance: ; cr;N0" @
+CB4849CE71609D: "Reserve: ; cr;N0" @
+EF688A50489362: "Available: ; cr;N0" @
+D75DF56D16E59F: "Reserve: ; %;N0" @
+E8F1C1B55660EB: "Pioneer Tax" @
+7A6FA51ABA501E: "Shipyard Tax" @
+3583018B5E8131: "Rearm Tax" @
+460784033FAD01: "Outfitting Tax" @
+964A427048AAB1: "Refuel Tax" @
+7A550EE38B3E7C: "Repair Tax" @
+1A0F5DB337EC25: ": ; %;N0" @
+5DD178DB7162A2: "Core Cost: ; cr;N0" @
+FE59ED4101E466: "Services Cost: ; cr;N0" @
+50E6AE8D109017: "No Carrier" @
+B455B013A9CF13: "Install cost: ; cr;N0" @
+3DF5159B0456C1: "Capacity Allocated: ; Units;N0" @
+CB7654E3728C0A: "Upkeep cost: ; cr;N0" @
+9EC790B9F4E58F: "Suspended upkeep cost: ; cr;N0" @
+311F21EEA90405: "Crew Name" @
+E2CE7274D260B9: "This Service is Active" @
+CD7E9084A619FD: "This Service is Suspended" @
+6C573682E526FF: "This Service is Not Installed" @
+068D15FAF7392F: "No Module or Ship packs installed" @
 3BECD4DD96195C: "Tier " => "Rang "
 8EF7B327113B48: "Cost: ; cr;N0" => "Kosten: ; cr;N0"
-BB9246B17BFDFF: "Jumping" => "Springend"
-334FBEB50B8D02: "No CAPI data from frontier, due to either or server/network failure" => "KEine CAPI-Daten von Frontier, entweder Server- oder Netzwerkfehler"
-296B6B5743412B: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." => "Du bist nicht im CAPI angemeldet.\r\nGehe zum Einstellungspanel, öffne deine Kommandanteneinstellungen und logge dich ein."
-0D9D81EB1483AC: "Optional Service" => "Optionale Einrichtung"
-5BB5DF1A383AE6: "Core Service" => "Kerneinrichtung"
-8A528519BDABA6: "Overall" => "Insgesamt"
-B1BED287E15EFC: "Itinerary" => "Reiseverlauf"
-251018D2063C94: "Jump Dist" => "Sprungentfernung"
-9E94B37532F75D: "Dist From" => "Entfernungn von"
-4F05E8FDB76807: "Finances" => "Finanzen"
-EA50EDD2233946: "Balance cr" => "Kontostand Cr"
+BB9246B17BFDFF: "Jumping" @
+334FBEB50B8D02: "No CAPI data from frontier, due to either or server/network failure" @
+296B6B5743412B: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." @
+0D9D81EB1483AC: "Optional Service" @
+5BB5DF1A383AE6: "Core Service" @
+8A528519BDABA6: "Overall" @
+B1BED287E15EFC: "Itinerary" @
+251018D2063C94: "Jump Dist" @
+9E94B37532F75D: "Dist From" @
+4F05E8FDB76807: "Finances" @
+EA50EDD2233946: "Balance cr" @
 5CBD584046863B: "Services" => "Einrichtungen"
 DB866831C3D096: "Packs" => "Pakete"
-CDED093321DDAA: "Orders" => "Aufträge"
+CDED093321DDAA: "Orders" @
 38DFC233193C18: "Commodity" => "Handelsware"
 171A0606F7C745: "Group" => "Gruppe"
-160F06D4799C85: "Purchase" => "Einkauf"
-0028D743EB44B8: "Sale" => "Verkauf"
+160F06D4799C85: "Purchase" @
+0028D743EB44B8: "Sale" @
 D909428F5E2D1E: "Blackmarket" => "Schwarzmarkt"
-57218AD66361FC: "CAPI Stats" => "CAPI Statistiken"
-9C452534CDFE1E: "CAPI Ships/Modules" => "CAPI Schiffe/Module"
+57218AD66361FC: "CAPI Stats" @
+9C452534CDFE1E: "CAPI Ships/Modules" @
 2D2CB022BC3D26: "Speed" => "Geschwindigkeit"
 2DA2851FFF3935: "Boost" => "Boost"
-2521738884EF95: "Landing Pad" => "Landeplattform"
-7548AB52C3D1D5: "Power" => "Leistung"
+2521738884EF95: "Landing Pad" @
+7548AB52C3D1D5: "Power" @
 BCECF4562F1709: "Stock" => "Lagerstand"
-2011FCCFA79102: "CAPI Items" => "CAPI Gegenstände"
+2011FCCFA79102: "CAPI Items" @
 44F6AF6945544C: "Quantity" => "Anzahl"
 678DD8A69CFC99: "Stolen" => "Gestohlen"
-3F6F257DD23224: "Microresource" => "Mikroressource"
+3F6F257DD23224: "Microresource" @
 
 SECTION BookmarkForm
 
@@ -1323,21 +1323,21 @@ CED3905EC8220A: "Latitude" => "Szerokość Geogr."
 341D2E1FBE179E: "Surface Bookmarks In System" => "Zakładki Powierzchniowe w Układzie"
 CE3A622F2A43D3: "Send to compass" => "Przekaż do Kompasu"
 F78A5F70C27177: "Delete Row" => "Usuń Wiersz"
-18AF4B1B57E6B0: "Search for planetary locations" => "Suche nach planetarischen Standorten"
+18AF4B1B57E6B0: "Search for planetary locations" @
 
 SECTION FindSystemsUserControl
 
 ECF8B0EC8407C9: "Radius ly Min" => "Min.Promień LŚw"
 DEB29771D8FDD9: "Star Name" => "Nazwa Gwiazdy"
 8E8DB7C9C725EA: "Cannot find system " => "Nie można znaleźć układu "
-38BA068999A442: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" => "Webseite sendete keine Daten von {0} zurück\nEs könnte ein galaktisches Objekt sein das es nicht kennt."
+38BA068999A442: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
 809B1882D352CC: "From DB Find Names" => "Szukaj Nazwy w Bazie Danych"
 7A84B27F1A8FA2: "From EDSM" => "Z EDSM"
 11B2F8BC039DDB: "From DB" => "Z Bazy Danych"
 CB1B66B801FB67: "From Visited Systems" => "Z Odwiedzonych Układów"
-29151554CEF084: "Exclude Visited Systems" => "Escludi sistemi visitati"
-9CD057957A1210: "From Spansh" => "Von Spansh"
-E478A8A04835DC: "From Spansh Find Names" => "Finde Namen mit Spansh"
+29151554CEF084: "Exclude Visited Systems" @
+9CD057957A1210: "From Spansh" @
+E478A8A04835DC: "From Spansh Find Names" @
 
 SECTION TravelHistoryFilter
 

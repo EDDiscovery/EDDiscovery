@@ -457,7 +457,7 @@ SECTION SpeechConfigure
 52F5A347177056: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" => "Establecer texto a decir (usar ; para separar frases seleccionables al azar y {} para agrupar)"
 A5A74A6DF09278: "Device" => "Dispositivo"
 8F25A859269CA5: "Effects" => "Efectos"
-92E97E035F44F8: "Literal" => "Literal"
+92E97E035F44F8: "Literal" @
 D8CBC0CB400C12: "Wait until speech completes" => "Esperar hasta que termine el habla"
 92D53A895E2EC1: "End Trigger" => "Finalizar Desencadenador"
 8CF29400C3CFF6: "Start Trigger" => "Iniciar Desencadenador"
