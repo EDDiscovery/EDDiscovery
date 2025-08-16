@@ -12,9 +12,12 @@
  * governing permissions and limitations under the License.
  */
 
+using BaseUtils.WebServer;
+using ExtendedControls;
 using System;
 using System.Data;
 using System.Drawing;
+using System.Drawing.Text;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -72,6 +75,8 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
         }
 
+        #region UCCB Contract
+
         // no cursor..  
         // Since splitter is used as the primary history window, we need to be more careful due to this being used as the primary cursor
         // so we by design don't have a cursor at Init on any UCCB.  So we must create everything here for the primary, then we have a cursor, and
@@ -112,8 +117,8 @@ namespace EDDiscovery.UserControls
                 uccb.CallInit(DiscoveryForm, displaynumber);
             });
 
-            DiscoveryForm.OnPanelAdded += PanelAdded;
-            DiscoveryForm.OnPanelRemoved += PanelAdded;
+            DiscoveryForm.OnPanelAdded += UpdateListOfPanels;
+            DiscoveryForm.OnPanelRemoved += UpdateListOfPanels;
 
             // contract states the PanelAndPopOuts OR the MajorTabControl will now theme and size it.
         }
@@ -141,18 +146,6 @@ namespace EDDiscovery.UserControls
             Refresh();
         }
 
-        public override bool AllowClose()                  // splitter is closing, does the consistuent panels allow close?
-        {
-            bool closeok = true;
-            RunActionOnSplitterTree((p, c, uccb) =>        // check for close, uccb is set otherwise not called
-            {
-                if (uccb.AllowClose() == false)
-                    closeok = false;
-            });
-
-            return closeok;
-        }
-
         protected override void Closing()
         {
             //System.Diagnostics.Debug.WriteLine("Closing splitter " + displaynumber);
@@ -160,6 +153,8 @@ namespace EDDiscovery.UserControls
             // since the whole panel is closing, and its disposed, should be no need to dispose individual bits for UI objects
 
             SplitContainer sc = (SplitContainer)panelPlayfield.Controls[0];
+
+            // get the splitter tree state. the function itself fills in H/V and the split distance, and calls back to get the configstring
 
             string state = ControlHelpersStaticFunc.SplitterTreeState(sc, "",
                 (c) =>          // S is either a TabStrip, or a direct UCCB. See the 
@@ -170,7 +165,11 @@ namespace EDDiscovery.UserControls
                     {
                         // pick out the uccb, if currentcontrol is null it will be null. Then using that pick out the panelid from it, which is the definitive one used to create it
                         UserControlCommonBase uccb = ((c as ExtendedControls.TabStrip).CurrentControl) as UserControlCommonBase;
-                        return tagid.ToStringInvariant() + "," + (uccb != null ? (int)uccb.PanelID : NoTabPanelSelected).ToStringInvariant();
+                        string ctrlstring = tagid.ToStringInvariant() + 
+                                            "," + (uccb != null ? (int)uccb.PanelID : NoTabPanelSelected).ToStringInvariant() +
+                                            "," + ts.ThemeColorSet.ToStringInvariant();
+
+                        return ctrlstring;
                     }
                     else
                     {
@@ -192,27 +191,26 @@ namespace EDDiscovery.UserControls
                 }
             });
 
-            DiscoveryForm.OnPanelAdded -= PanelAdded;
-            DiscoveryForm.OnPanelRemoved -= PanelAdded;
+            DiscoveryForm.OnPanelAdded -= UpdateListOfPanels;
+            DiscoveryForm.OnPanelRemoved -= UpdateListOfPanels;
 
         }
 
-        public void PanelAdded(PanelInformation.PanelIDs p)
+        public override bool AllowClose()                  // splitter is closing, does the consistuent panels allow close?
         {
-            RunActionOnSplitterTree((sp, c, uccb) =>
+            bool closeok = true;
+            RunActionOnSplitterTree((p, c, uccb) =>        // check for close, uccb is set otherwise not called
             {
-                ExtendedControls.TabStrip tabstrip = c as ExtendedControls.TabStrip;
-                if (tabstrip != null)       // reset the tab strip list. This will affect the order of SelectedIndex, but won't cause a change in panel type.
-                {
-                    var list = PanelInformation.GetUserSelectablePanelInfo(TabListSortAlpha, true);
-
-                    tabstrip.ImageList = list.Select(x => x.TabIcon).ToArray();
-                    tabstrip.TextList = list.Select(x => x.Description).ToArray();
-                    tabstrip.TagList = list.Select(x => (object)x.PopoutID).ToArray();
-                    tabstrip.ListSelectionItemSeparators = PanelInformation.GetUserSelectableSeperatorIndex(TabListSortAlpha, true);
-                }
+                if (uccb.AllowClose() == false)
+                    closeok = false;
             });
+
+            return closeok;
         }
+
+        #endregion
+
+        #region Find
 
         public override UserControlCommonBase Find(PanelInformation.PanelIDs p)              // find UCCB of this type in
         {
@@ -222,24 +220,21 @@ namespace EDDiscovery.UserControls
             return found;
         }
 
-        private void RunActionOnSplitterTree(Action<SplitterPanel, Control, UserControlCommonBase> action)
-        {
-            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly, does not run if splitter is empty.
-            {
-                UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
-                if (uccb != null)     // tab strip may not have a control set..
-                {
-                    action(p, c, uccb);
-                }
-            });
-        }
+        #endregion
 
-        private Control MakeNode(string s)
+        #region Splitter Node creation
+
+        // Make a node, given the control string
+        // ctrl string is tag,panelid enum number [,Themecolorset]
+        private Control MakeNode(string ctrlstring)
         {
-            BaseUtils.StringParser sp = new BaseUtils.StringParser(s);      // ctrl string is tag,panelid enum number
-            int tagid = sp.NextInt(",") ?? 0;      // enum id
+            // the config string contains a set of fields
+            
+            BaseUtils.StringParser sp = new BaseUtils.StringParser(ctrlstring);      
+            int enumid = sp.NextInt(",") ?? 0;      // enum id of panel
             sp.IsCharMoveOn(',');
             int panelid = sp.NextInt(",") ?? NoTabPanelSelected;  // if not valid, we get an empty tab control
+            int colorset = sp.IsCharMoveOn(',') ? (sp.NextInt(",") ?? 0) : 0;   // why 0 = tabstrip selector (1..N = panel)
 
             if (panelid >= FixedPanelOffsetLow && panelid <= FixedPanelOffsetHigh)           // this range of ids are UCCB directly in the splitter, so are not changeable
             {
@@ -250,8 +245,8 @@ namespace EDDiscovery.UserControls
                 UserControlCommonBase uccb = PanelInformation.Create(pi.PopoutID);      // must return as we made sure pi is valid
                 uccb.AutoScaleMode = AutoScaleMode.Inherit;     // very very important and took 2 days to work out! UCCB, as per major tab control, should be in inherit mode
                 uccb.Dock = DockStyle.Fill;
-                uccb.Tag = tagid;
-                uccb.Name = "UC-" + pi.PopoutID.ToString() + " " + tagid.ToStringInvariant();
+                uccb.Tag = enumid;
+                uccb.Name = "UC-" + pi.PopoutID.ToString() + " " + enumid.ToStringInvariant();
                 uccb.RequestPanelOperation += SplitterRequestAction;
 
                 return uccb;
@@ -269,10 +264,20 @@ namespace EDDiscovery.UserControls
                 tabstrip.Dock = DockStyle.Fill;
                 tabstrip.StripMode = ExtendedControls.TabStrip.StripModeType.ListSelection;
                 tabstrip.DropDownFitImagesToItemHeight = true;
-                tabstrip.ThemeColorSet = 0;     // use theme from tab strip
+                tabstrip.ThemeColorSet = colorset;     // use theme from tab strip
 
-                tabstrip.Tag = tagid;                         // Tag stores the ID index of this view
-                tabstrip.Name = Name + "." + tagid.ToStringInvariant();
+                tabstrip.Tag = enumid;                         // Tag stores the ID index of this view
+                tabstrip.Name = Name + "." + enumid.ToStringInvariant();
+
+                tabstrip.ContextMenuStrip = ExtPanelGradientFill.RightClickThemeColorSetSelector((s) =>
+                    {
+                        tabstrip.ThemeColorSet = s;
+                        tabstrip.Theme(Theme.Current, Theme.Current.GetFont);
+                    },
+                    "Default".Tx()
+                );
+
+                //TBD
 
                 // we need to theme the tabstrip since we added it..
 
@@ -346,6 +351,8 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        // Make a new split container
+
         private SplitContainer MakeSplitContainer(Orientation ori, int lv)
         {
             SplitContainer sc = new SplitContainer() { Orientation = ori, Width = 1000, Height = 1000 };    // set width big to provide some res to splitter dist
@@ -360,6 +367,10 @@ namespace EDDiscovery.UserControls
             toolTip.SetToolTip(sc, "Right click on splitter bar to change orientation\nor split or merge panels".Tx());
             return sc;
         }
+
+        #endregion
+
+        #region Panel Actions
 
         // called by the panels to do something - pass to siblings, and then work out if we should pass upwards
         // a panel may claim the event, in which case its not sent up
@@ -433,6 +444,7 @@ namespace EDDiscovery.UserControls
             return retstate;
         }
 
+        #endregion
 
         #region Clicks
 
@@ -551,7 +563,7 @@ namespace EDDiscovery.UserControls
             currentsplitter.SplitterDistance = (int)psize;
         }
 
-        int GetFreeTag()            // find a free tag number in all of the TagStrips around.. Tag holds the number allocated.
+        private int GetFreeTag()            // find a free tag number in all of the TagStrips around.. Tag holds the number allocated.
         {
             byte[] tagsinuse = new byte[100];      // will be zero
 
@@ -593,7 +605,43 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Default
+        #region Helpers
+
+        // handle panel added or removed and update the tabstrip
+        private void UpdateListOfPanels(PanelInformation.PanelIDs p)
+        {
+            RunActionOnSplitterTree((sp, c, uccb) =>
+            {
+                ExtendedControls.TabStrip tabstrip = c as ExtendedControls.TabStrip;
+                if (tabstrip != null)       // reset the tab strip list. This will affect the order of SelectedIndex, but won't cause a change in panel type.
+                {
+                    var list = PanelInformation.GetUserSelectablePanelInfo(TabListSortAlpha, true);
+
+                    tabstrip.ImageList = list.Select(x => x.TabIcon).ToArray();
+                    tabstrip.TextList = list.Select(x => x.Description).ToArray();
+                    tabstrip.TagList = list.Select(x => (object)x.PopoutID).ToArray();
+                    tabstrip.ListSelectionItemSeparators = PanelInformation.GetUserSelectableSeperatorIndex(TabListSortAlpha, true);
+                }
+            });
+        }
+
+        // run code on splitter tree, if each node contains a UCCB
+        private void RunActionOnSplitterTree(Action<SplitterPanel, Control, UserControlCommonBase> action)
+        {
+            (panelPlayfield.Controls[0] as SplitContainer).RunActionOnSplitterTree((p, c) =>        // runs on each split panel node exactly, does not run if splitter is empty.
+            {
+                UserControlCommonBase uccb = ((c is ExtendedControls.TabStrip) ? ((c as ExtendedControls.TabStrip).CurrentControl) : c) as UserControlCommonBase;
+                if (uccb != null)     // tab strip may not have a control set..
+                {
+                    action(p, c, uccb);
+                }
+            });
+        }
+
+        #endregion
+
+
+        #region Check State to try and avoid strange crashes due to incorrect settings
 
         public static void CheckPrimarySplitterControlSettings(bool reset )
         {

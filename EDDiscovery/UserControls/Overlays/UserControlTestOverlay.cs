@@ -42,7 +42,6 @@ namespace EDDiscovery.UserControls
         {
             this.BackColor = curcol;
             this.panel1.BackColor = curcol;
-            extTabControl1.ForceUpdate();    
             tabPage1.BackColor = curcol;
             tabPage2.BackColor = curcol;
             extCheckBox1.BackColor = curcol;        // note if in groupbox, you'd use the groupbox colour when on

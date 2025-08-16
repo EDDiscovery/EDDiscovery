@@ -182,7 +182,7 @@ namespace EDDiscovery.UserControls
 
 
         // Called by pop out forms when theme has changed, to give us a chance to retheme
-        public void OnThemeChanged()
+        public void ReTheme()
         {
             Font = Theme.Current.GetFont;
             ExtendedControls.Theme.Current.ApplyStd(UserControl);

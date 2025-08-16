@@ -16,6 +16,7 @@ using ActionLanguage.Manager;
 using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using ExtendedControls;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -308,7 +309,7 @@ namespace EDDiscovery
             System.Diagnostics.Debug.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load Commanders");
             EDCommander.LoadCommanders();
 
-            // STAGE 2 themeing the main interface (not the tab pages)
+            //----------------------------------------------------------------- STAGE 2 themeing the main interface (not the tab pages)
 
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load popouts, themes, init controls");
             msg.Invoke("Applying Themes");
@@ -344,7 +345,13 @@ namespace EDDiscovery
             if (EDDOptions.Instance.Font.HasChars())
                 ExtendedControls.Theme.Current.FontName = EDDOptions.Instance.Font;
 
+            // set up anything which needs top level themeing
+
+            panelToolBar.ThemeColorSet = UserDatabase.Instance.GetSetting("Theme_MainToolbarColorset", 1);      // panel set 1
+            tabControlMain.ThemeColorSet = UserDatabase.Instance.GetSetting("Theme_TabBarColorset", 0); // main tab control colour
+
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Apply theme");
+
             ApplyTheme();                       // we apply and scale (because its being applied to Form) before any tabs parts are setup.
 
             this.TopMost = EDDConfig.Instance.KeepOnTop;
@@ -464,6 +471,22 @@ namespace EDDiscovery
 
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStripTabs);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(notifyIconContextMenuStrip);
+
+            //------------------------------------------------------------------ After translation, add some toolbars for theming
+
+            panelToolBar.ContextMenuStrip = ExtPanelGradientFill.RightClickThemeColorSetSelector((s) =>
+            {
+                panelToolBar.ThemeColorSet = s;
+                UserDatabase.Instance.PutSetting("Theme_MainToolbarColorset", s);
+                panelToolBar.Theme(Theme.Current, Theme.Current.GetFont);
+            });
+
+            ExtPanelGradientFill.RightClickThemeColorSetSelector(panelColourToolStripMenuItem.DropDownItems,(s) => 
+            { 
+                tabControlMain.ThemeColorSet = s;
+                UserDatabase.Instance.PutSetting("Theme_TabBarColorset", s);
+                tabControlMain.Theme(Theme.Current, Theme.Current.GetFont); 
+            }, "Default".Tx()); 
 
             // ---------------------------------------------------------------- DLL Load
 
@@ -983,6 +1006,10 @@ namespace EDDiscovery
             tabControlMain.EnsureMajorTabIsPresent(PanelInformation.PanelIDs.Settings, true);
         }
 
+        private void editThemeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EditTheme();
+        }
 
         private void showAllInTaskBarToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1348,6 +1375,7 @@ namespace EDDiscovery
 
 
         #endregion
+
     }
 }
 

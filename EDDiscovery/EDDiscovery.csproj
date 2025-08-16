@@ -164,8 +164,8 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QuickJSON, Version=2.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\RJKJSoft.QuickJSON.2.8.0\lib\net48\QuickJSON.dll</HintPath>
+    <Reference Include="QuickJSON, Version=2.9.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.QuickJSON.2.9.0\lib\net48\QuickJSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -200,6 +200,9 @@
     <Compile Include="EDD\EDDiscoveryControllerHelpers.cs" />
     <Compile Include="EDD\EDDiscoveryControllerCAPI.cs" />
     <Compile Include="EDD\EDDiscoveryFormDebug.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="EDD\EDDiscoveryFormTheme.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="EDD\EDDiscoveryFormToolbar.cs">

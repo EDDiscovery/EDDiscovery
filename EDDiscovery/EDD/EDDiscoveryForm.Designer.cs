@@ -82,6 +82,7 @@ namespace EDDiscovery
             this.showAllPopoutsInTaskBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showAllInTaskBarToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.turnOffAllTransparencyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.editThemeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.adminToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.syncEDSMSystemsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -155,6 +156,7 @@ namespace EDDiscovery
             this.nextSupercruiseExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debuggerNextScanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debuggerShutdownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconContextMenuStrip.SuspendLayout();
             this.contextMenuStripTabs.SuspendLayout();
             this.panelToolBar.SuspendLayout();
@@ -206,7 +208,6 @@ namespace EDDiscovery
             // tabControlMain
             // 
             this.tabControlMain.AllowDragReorder = true;
-            this.tabControlMain.AutoForceUpdate = true;
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.tabControlMain.Location = new System.Drawing.Point(0, 61);
@@ -369,9 +370,10 @@ namespace EDDiscovery
             this.removeTabToolStripMenuItem,
             this.renameTabToolStripMenuItem,
             this.popOutPanelToolStripMenuItem,
+            this.panelColourToolStripMenuItem,
             this.helpTabToolStripMenuItem});
             this.contextMenuStripTabs.Name = "contextMenuStripTabs";
-            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 136);
+            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 158);
             this.contextMenuStripTabs.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripTabs_Opening);
             // 
             // addTabToolStripMenuItem
@@ -636,6 +638,7 @@ namespace EDDiscovery
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.settingsToolStripMenuItem,
             this.showAllPopoutsInTaskBarToolStripMenuItem,
+            this.editThemeToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.toolsToolStripMenuItem.Name = "toolsToolStripMenuItem";
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(47, 24);
@@ -645,7 +648,7 @@ namespace EDDiscovery
             // 
             this.settingsToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Settings;
             this.settingsToolStripMenuItem.Name = "settingsToolStripMenuItem";
-            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.settingsToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.settingsToolStripMenuItem.Text = "Settings";
             this.settingsToolStripMenuItem.Click += new System.EventHandler(this.settingsToolStripMenuItem_Click);
             // 
@@ -656,7 +659,7 @@ namespace EDDiscovery
             this.turnOffAllTransparencyToolStripMenuItem});
             this.showAllPopoutsInTaskBarToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Menu;
             this.showAllPopoutsInTaskBarToolStripMenuItem.Name = "showAllPopoutsInTaskBarToolStripMenuItem";
-            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.showAllPopoutsInTaskBarToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.showAllPopoutsInTaskBarToolStripMenuItem.Text = "&Pop-outs";
             // 
             // showAllInTaskBarToolStripMenuItem
@@ -675,11 +678,18 @@ namespace EDDiscovery
             this.turnOffAllTransparencyToolStripMenuItem.Text = "&Turn Off All Transparency";
             this.turnOffAllTransparencyToolStripMenuItem.Click += new System.EventHandler(this.turnOffAllTransparencyToolStripMenuItem_Click);
             // 
+            // editThemeToolStripMenuItem
+            // 
+            this.editThemeToolStripMenuItem.Name = "editThemeToolStripMenuItem";
+            this.editThemeToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.editThemeToolStripMenuItem.Text = "Edit Theme";
+            this.editThemeToolStripMenuItem.Click += new System.EventHandler(this.editThemeToolStripMenuItem_Click);
+            // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Exit;
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.exitToolStripMenuItem.Text = "E&xit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -1346,6 +1356,12 @@ namespace EDDiscovery
             this.debuggerShutdownToolStripMenuItem.Text = "Next Shutdown";
             this.debuggerShutdownToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
             // 
+            // panelColourToolStripMenuItem
+            // 
+            this.panelColourToolStripMenuItem.Name = "panelColourToolStripMenuItem";
+            this.panelColourToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.panelColourToolStripMenuItem.Text = "Panel Colour";
+            // 
             // EDDiscoveryForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1495,5 +1511,7 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem minToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem minToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem minToolStripMenuItem2;
+        private System.Windows.Forms.ToolStripMenuItem editThemeToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem panelColourToolStripMenuItem;
     }
 }

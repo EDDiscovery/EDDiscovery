@@ -92,7 +92,7 @@
             this.extScrollBarRL.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarRL.Name = "extScrollBarRL";
             this.extScrollBarRL.Size = new System.Drawing.Size(24, 227);
-            this.extScrollBarRL.SkinnyStyle = false;
+            this.extScrollBarRL.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarRL.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarRL.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarRL.SliderDrawAngle = 90F;
@@ -177,7 +177,7 @@
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
-            this.extPanelGradientFill1.ThemeColorSet = 1;
+            this.extPanelGradientFill1.ThemeColorSet = 2;
             // 
             // extCheckBoxShowContributions
             // 
@@ -384,7 +384,7 @@
             this.extScrollBarContributions.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarContributions.Name = "extScrollBarContributions";
             this.extScrollBarContributions.Size = new System.Drawing.Size(24, 227);
-            this.extScrollBarContributions.SkinnyStyle = false;
+            this.extScrollBarContributions.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarContributions.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarContributions.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarContributions.SliderDrawAngle = 90F;

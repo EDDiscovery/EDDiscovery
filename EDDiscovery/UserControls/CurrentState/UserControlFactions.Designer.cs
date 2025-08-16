@@ -546,7 +546,6 @@
             this.scrollBarFactions.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.scrollBarFactions.Name = "scrollBarFactions";
             this.scrollBarFactions.Size = new System.Drawing.Size(24, 589);
-            this.scrollBarFactions.SkinnyStyle = false;
             this.scrollBarFactions.SliderColor = System.Drawing.Color.DarkGray;
             this.scrollBarFactions.SliderColor2 = System.Drawing.Color.DarkGray;
             this.scrollBarFactions.SliderDrawAngle = 90F;

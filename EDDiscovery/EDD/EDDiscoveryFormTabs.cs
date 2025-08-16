@@ -96,7 +96,8 @@ namespace EDDiscovery
             return uch || sel;
         }
 
-        private void panelTabControlBack_MouseDown(object sender, MouseEventArgs e)     // click on the empty space of the tabs.. backed up by the panel
+        // click on the tab
+        private void panelTabControlBack_MouseDown(object sender, MouseEventArgs e)     
         {
             if (e.Button == MouseButtons.Right)
             {
@@ -104,6 +105,19 @@ namespace EDDiscovery
                 contextMenuStripTabs.Show(tabControlMain.PointToScreen(e.Location));
             }
         }
+
+        // use the form to detect the click on the empty tab area.. it passes thru up to the form, and we detect
+        private void EDDiscoveryForm_MouseDown(object sender, MouseEventArgs e)     
+        {
+            if (e.Button == MouseButtons.Right && e.Y >= tabControlMain.Top)
+            {
+                tabControlMain.ClearLastTab();      // this sets LastTab to -1, which thankfully means insert at last but one position to the AddTab function
+                Point p = this.PointToScreen(e.Location);
+                p.Offset(0, -8);
+                contextMenuStripTabs.Show(p);
+            }
+        }
+
 
         private void tabControlMain_MouseClick(object sender, MouseEventArgs e)     // click on one of the tab buttons
         {
@@ -152,16 +166,6 @@ namespace EDDiscovery
         }
 
 
-        private void EDDiscoveryForm_MouseDown(object sender, MouseEventArgs e)     // use the form to detect the click on the empty tab area.. it passes thru
-        {
-            if (e.Button == MouseButtons.Right && e.Y >= tabControlMain.Top)
-            {
-                tabControlMain.ClearLastTab();      // this sets LastTab to -1, which thankfully means insert at last but one position to the AddTab function
-                Point p = this.PointToScreen(e.Location);
-                p.Offset(0, -8);
-                contextMenuStripTabs.Show(p);
-            }
-        }
 
     }
 }

@@ -14,6 +14,7 @@
 
 using EDDiscovery.UserControls.Colonisation;
 using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using ExtendedControls;
 using QuickJSON;
 using System;
@@ -292,7 +293,7 @@ namespace EDDiscovery.UserControls
                             cp.Tag = kvp.Value;
                             cp.Dock = DockStyle.Top;
                             pscrolledcontent.Controls.Add(cp);
-                            cp.Initialise(kvp.Value);
+                            cp.Initialise(kvp.Value, EliteDangerousCore.DB.UserDatabase.Instance);
                         }
                     }
 
@@ -343,7 +344,7 @@ namespace EDDiscovery.UserControls
                                 cp.Dock = DockStyle.Top;
                                 pscrolledcontent.Controls.Add(cp);
                                 pscrolledcontent.Controls.SetChildIndex(cp, 0);
-                                cp.Initialise(kvp.Value);
+                                cp.Initialise(kvp.Value, EliteDangerousCore.DB.UserDatabase.Instance); 
                                 Theme.Current.Apply(cp);
                             }
                             cp.UpdatePort();

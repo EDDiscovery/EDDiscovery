@@ -478,7 +478,7 @@ namespace EDDiscovery.UserControls
 
                 DiscoveryForm.ThemeList.SetThemeByName(themename);             // given the name, go to it, if possible. if not, its not there, it should be
                 ResetThemeList();
-                DiscoveryForm.ApplyTheme(true);
+                DiscoveryForm.ApplyTheme();
             }
         }
 
@@ -503,36 +503,14 @@ namespace EDDiscovery.UserControls
 
         public void button_edittheme_Click(object sender, EventArgs e)
         {
-            var themeeditor = new ThemeEditor() { TopMost = FindForm().TopMost };
-
-            var curtheme = Theme.Current;
-
-            themeeditor.ApplyChanges = (theme) => { Theme.Current = theme; DiscoveryForm.ApplyTheme(true); };
-
             buttonSaveTheme.Enabled = comboBoxTheme.Enabled = button_edittheme.Enabled = false;
 
-            themeeditor.InitForm(curtheme);     // makes a copy
-            themeeditor.FormClosing += (sa, ea) =>
-            {
-                buttonSaveTheme.Enabled = comboBoxTheme.Enabled = button_edittheme.Enabled = true;
+            DiscoveryForm.EditTheme();
 
-                if (themeeditor.DialogResult == DialogResult.OK)
-                {
-                    Theme.Current = themeeditor.Theme;
-                }
-                else
-                {
-                    if (curtheme != Theme.Current)
-                    {
-                        Theme.Current = curtheme;
-                        DiscoveryForm.ApplyTheme(true);
-                    }
-                }
+            buttonSaveTheme.Enabled = comboBoxTheme.Enabled = button_edittheme.Enabled = true;
 
-                ResetThemeList();
-            };
+            ResetThemeList();
 
-            themeeditor.Show(FindForm());
         }
 
         private void extButtonDrawnHelp_Click(object sender, EventArgs e)

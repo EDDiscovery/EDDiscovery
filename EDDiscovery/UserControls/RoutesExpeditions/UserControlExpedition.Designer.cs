@@ -653,7 +653,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarDGV.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarDGV.Name = "extScrollBarDGV";
             this.extScrollBarDGV.Size = new System.Drawing.Size(24, 565);
-            this.extScrollBarDGV.SkinnyStyle = false;
             this.extScrollBarDGV.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarDGV.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarDGV.SliderDrawAngle = 90F;

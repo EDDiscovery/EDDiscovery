@@ -114,7 +114,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
             this.vScrollBarCustomMC.Size = new System.Drawing.Size(24, 572);
-            this.vScrollBarCustomMC.SkinnyStyle = false;
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SliderColor2 = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SliderDrawAngle = 90F;
@@ -343,7 +342,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
             this.vScrollBarCustom.Size = new System.Drawing.Size(48, 370);
-            this.vScrollBarCustom.SkinnyStyle = false;
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SliderColor2 = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SliderDrawAngle = 90F;
@@ -433,7 +431,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarDGVTrades.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarDGVTrades.Name = "extScrollBarDGVTrades";
             this.extScrollBarDGVTrades.Size = new System.Drawing.Size(24, 143);
-            this.extScrollBarDGVTrades.SkinnyStyle = false;
             this.extScrollBarDGVTrades.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarDGVTrades.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarDGVTrades.SliderDrawAngle = 90F;

@@ -428,7 +428,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom1.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
             this.vScrollBarCustom1.Size = new System.Drawing.Size(24, 675);
-            this.vScrollBarCustom1.SkinnyStyle = false;
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SliderColor2 = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SliderDrawAngle = 90F;
@@ -548,7 +547,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom2.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom2.Name = "vScrollBarCustom2";
             this.vScrollBarCustom2.Size = new System.Drawing.Size(24, 820);
-            this.vScrollBarCustom2.SkinnyStyle = false;
             this.vScrollBarCustom2.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SliderColor2 = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom2.SliderDrawAngle = 90F;

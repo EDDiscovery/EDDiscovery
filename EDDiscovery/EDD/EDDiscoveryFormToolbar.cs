@@ -156,6 +156,8 @@ namespace EDDiscovery
 
             //if (FrontierCAPI.Active && !EDCommander.Current.ConsoleCommander)
             //  Controller.DoCAPI(history.GetLast.Status.StationName, history.GetLast.System.Name, false, history.Shipyards.AllowCobraMkIV);
+
+            //load all debug foreach( int id in Enum.GetValues(typeof(PanelInformation.PanelIDs)) ) { if ( id>=0 )  tabControlMain.EnsureMajorTabIsPresent((PanelInformation.PanelIDs)id,false);           }
         }
 
         private void extButtonCAPI_Click(object sender, EventArgs e)

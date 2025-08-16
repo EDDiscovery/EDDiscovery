@@ -238,7 +238,6 @@ namespace EDDiscovery.UserControls
             this.vScrollBarGeneral.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarGeneral.Name = "vScrollBarGeneral";
             this.vScrollBarGeneral.Size = new System.Drawing.Size(48, 300);
-            this.vScrollBarGeneral.SkinnyStyle = false;
             this.vScrollBarGeneral.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarGeneral.SliderColor2 = System.Drawing.Color.DarkGray;
             this.vScrollBarGeneral.SliderDrawAngle = 90F;
@@ -254,7 +253,6 @@ namespace EDDiscovery.UserControls
             // tabControlCustomStats
             // 
             this.tabControlCustomStats.AllowDragReorder = false;
-            this.tabControlCustomStats.AutoForceUpdate = true;
             this.tabControlCustomStats.Controls.Add(this.tabPageGeneral);
             this.tabControlCustomStats.Controls.Add(this.tabPageRanks);
             this.tabControlCustomStats.Controls.Add(this.tabPageLedger);
@@ -439,7 +437,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarRanks.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarRanks.Name = "extScrollBarRanks";
             this.extScrollBarRanks.Size = new System.Drawing.Size(48, 505);
-            this.extScrollBarRanks.SkinnyStyle = false;
             this.extScrollBarRanks.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarRanks.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarRanks.SliderDrawAngle = 90F;
@@ -554,7 +551,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarLedger.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarLedger.Name = "extScrollBarLedger";
             this.extScrollBarLedger.Size = new System.Drawing.Size(48, 300);
-            this.extScrollBarLedger.SkinnyStyle = false;
             this.extScrollBarLedger.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarLedger.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarLedger.SliderDrawAngle = 90F;
@@ -629,7 +625,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarTravel.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarTravel.Name = "extScrollBarTravel";
             this.extScrollBarTravel.Size = new System.Drawing.Size(48, 485);
-            this.extScrollBarTravel.SkinnyStyle = false;
             this.extScrollBarTravel.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarTravel.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarTravel.SliderDrawAngle = 90F;
@@ -759,7 +754,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarScan.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarScan.Name = "extScrollBarScan";
             this.extScrollBarScan.Size = new System.Drawing.Size(48, 238);
-            this.extScrollBarScan.SkinnyStyle = false;
             this.extScrollBarScan.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarScan.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarScan.SliderDrawAngle = 90F;
@@ -863,7 +857,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarCombatDGV.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCombatDGV.Name = "extScrollBarCombatDGV";
             this.extScrollBarCombatDGV.Size = new System.Drawing.Size(48, 239);
-            this.extScrollBarCombatDGV.SkinnyStyle = false;
             this.extScrollBarCombatDGV.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarCombatDGV.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarCombatDGV.SliderDrawAngle = 90F;
@@ -1049,7 +1042,6 @@ namespace EDDiscovery.UserControls
             this.extScrollBarByShip.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarByShip.Name = "extScrollBarByShip";
             this.extScrollBarByShip.Size = new System.Drawing.Size(48, 252);
-            this.extScrollBarByShip.SkinnyStyle = false;
             this.extScrollBarByShip.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarByShip.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarByShip.SliderDrawAngle = 90F;

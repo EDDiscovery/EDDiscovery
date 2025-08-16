@@ -24,8 +24,6 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlPanelSelector : UserControlCommonBase
     {
-        private bool doresize = false;
-
         public UserControlPanelSelector()
         {
             InitializeComponent();
@@ -34,10 +32,13 @@ namespace EDDiscovery.UserControls
         protected override void Init()
         {
             Draw();
-            DiscoveryForm.OnAddOnsChanged += Redraw;
-            DiscoveryForm.OnThemeChanging += Redraw;     // because we pick the image for the composite button based on theme
-            DiscoveryForm.OnPanelAdded += Redraw;
-            DiscoveryForm.OnPanelRemoved += Redraw;
+            DiscoveryForm.OnAddOnsChanged += Draw;
+
+            // We need to remove and redraw based on theme, before the theme is applyed at ApplyTheme
+            // This is the thing which paints the initial set
+            DiscoveryForm.OnThemeChanging += Draw;     
+            DiscoveryForm.OnPanelAdded += Draw;
+            DiscoveryForm.OnPanelRemoved += Draw;
         }
 
         protected override void LoadLayout()
@@ -46,18 +47,19 @@ namespace EDDiscovery.UserControls
             Position();
         }
 
-        protected override void InitialDisplay()
-        {
-            doresize = true;                            // now allow resizing actions, before, resizes were due to setups, now due to user interactions
-        }
-
         protected override void Closing()
         {
-            DiscoveryForm.OnAddOnsChanged -= Redraw;
-            DiscoveryForm.OnThemeChanging -= Redraw;
-            DiscoveryForm.OnPanelAdded -= Redraw;
-            DiscoveryForm.OnPanelRemoved -= Redraw;
+            DiscoveryForm.OnAddOnsChanged -= Draw;
+            DiscoveryForm.OnThemeChanging -= Draw;
+            DiscoveryForm.OnPanelAdded -= Draw;
+            DiscoveryForm.OnPanelRemoved -= Draw;
         }
+
+        private void Draw(PanelInformation.PanelIDs p)
+        {
+            Draw();
+        }
+
         public void Draw()
         {
             panelVScroll.RemoveAllControls();
@@ -108,6 +110,8 @@ namespace EDDiscovery.UserControls
 
                 panelVScroll.Controls.Add(cb);
             }
+
+            Position();
         }
 
         public void Position()
@@ -153,7 +157,7 @@ namespace EDDiscovery.UserControls
 
         private void panelVScroll_Resize(object sender, EventArgs e)
         {
-            if (!IsClosed && doresize)
+            if (!IsClosed && IsInitialDisplayCalled)
                 Position();
         }
 
@@ -176,17 +180,6 @@ namespace EDDiscovery.UserControls
 
         }
 
-        private void Redraw()
-        {
-            Draw();
-            ExtendedControls.Theme.Current.ApplyStd(this);
-            Position();
-        }
-        private void Redraw(PanelInformation.PanelIDs p)
-        {
-            Draw();
-            ExtendedControls.Theme.Current.ApplyStd(this);
-            Position();
-        }
+
     }
 }

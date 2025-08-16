@@ -204,7 +204,6 @@
             // extTabControl
             // 
             this.extTabControl.AllowDragReorder = false;
-            this.extTabControl.AutoForceUpdate = true;
             this.extTabControl.Controls.Add(this.tabPageOverall);
             this.extTabControl.Controls.Add(this.tabPageItinerary);
             this.extTabControl.Controls.Add(this.tabPageFinances);

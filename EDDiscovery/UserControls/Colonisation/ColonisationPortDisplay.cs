@@ -13,6 +13,7 @@
  */
 
 using EliteDangerousCore;
+using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
 using System.Windows.Forms;
@@ -29,13 +30,25 @@ namespace EDDiscovery.UserControls.Colonisation
             extLabelFailed.Visible = false;
         }
 
-        public void Initialise(ColonisationPortData port)
+        public void Initialise(ColonisationPortData port, IUserDatabaseSettingsSaver saver)
         {
             Port = port;
             extCheckBoxShowContributions.CheckedChanged += (s, e) => { extPanelDataGridViewScrollContributions.Visible = extCheckBoxShowContributions.Checked; };
             extCheckBoxShowRL.CheckedChanged += (s, e) => { extPanelDataGridViewScrollRL.Visible = extCheckBoxShowRL.Checked; };
             dataGridViewContributions.SortCompare += DataGridViewContributions_SortCompare;
             dataGridViewRL.SortCompare += DataGridViewRL_SortCompare;
+            
+            // right click theme select
+            string dbname = "Colonisation_PortTheme";
+            extPanelGradientFill1.ThemeColorSet = saver.GetSetting(dbname, 2);
+            extPanelGradientFill1.ContextMenuStrip = ExtPanelGradientFill.RightClickThemeColorSetSelector((s) =>
+                {
+                    extPanelGradientFill1.ThemeColorSet = s;
+                    extPanelGradientFill1.Theme(Theme.Current, Theme.Current.GetFont);
+                    extPanelGradientFill1.Invalidate();
+                    saver.PutSetting(dbname, s);
+                }
+                );
         }
 
         public void UpdatePort()

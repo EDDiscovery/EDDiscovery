@@ -153,8 +153,8 @@ namespace EDDiscovery
 
         public void OnThemeChanged()        // called when themes have changed
         {
-            for( int i = 0; i < usercontrolsforms.Count; i++ )
-                usercontrolsforms[i].OnThemeChanged();
+            for (int i = 0; i < usercontrolsforms.Count; i++)
+                usercontrolsforms[i].ReTheme();
         }
 
         public UserControlCommonBase.PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)

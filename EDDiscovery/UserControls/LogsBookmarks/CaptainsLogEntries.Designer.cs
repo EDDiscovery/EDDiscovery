@@ -246,7 +246,6 @@
             this.vScrollBarCustom1.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
             this.vScrollBarCustom1.Size = new System.Drawing.Size(24, 598);
-            this.vScrollBarCustom1.SkinnyStyle = false;
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SliderColor2 = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SliderDrawAngle = 90F;

@@ -36,7 +36,7 @@ namespace EDDiscovery
             }
         }
 
-        //EDDiscovery Init calls this
+        //EDDiscovery Init and Profiles calls this
         public void CreateTabs(EDDiscoveryForm edf, bool resettabs, string resetsettings)
         {
             eddiscovery = edf;
