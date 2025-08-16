@@ -15,6 +15,10 @@ for:
     project: EDDiscovery.sln
   before_build:
     - nuget restore
+    - nuget restore ActionLanguage/ActionLanguage.sln
+    - nuget restore BaseUtilities/BaseUtilities.sln
+    - nuget restore CAPI/CAPI.sln
+    - nuget restore ExtendedControls/ExtendedControls.sln
   after_build:
     - cmd: copy EDDiscovery\bin\Release\EDDiscovery.Portable.zip EDDiscovery.Portable.zip
   artifacts:
