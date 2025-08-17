@@ -833,6 +833,16 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void extButtonSpanshTarget_Click(object sender, EventArgs e)
+        {
+            TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z);
+            if (name.HasChars())
+            {
+                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(name);
+            }
+        }
+
+
         private void clickTextBox(object sender, EventArgs e)
         {
             if ( (Selection & (1L<<(int)(ControlBits.BitSelDisableCopyToClipboardWhenClickingOnTextBoxes))) == 0)
@@ -1042,9 +1052,9 @@ namespace EDDiscovery.UserControls
 
                                     if (!selEDSMonNextLine && (Selection & (1L << (int)ControlBits.BitSelEDSM)) != 0)
                                     {
-                                        extButtonEDSMSystem.Location = new Point(panelFD.Right + hspacing, datapos.Y);
-                                        extButtonInaraSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonSpanshSystem.Location = new Point(panelFD.Right + hspacing, datapos.Y);
+                                        extButtonInaraSystem.Location = new Point(extButtonSpanshSystem.Right + hspacing, extButtonSpanshSystem.Top);
+                                        extButtonEDSMSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonSpanshSystem.Top);
                                         extButtonEDSMSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
                                         extButtonEDSMSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
                                         itembottom = Math.Max(extButtonEDSMSystem.Bottom, itembottom);
@@ -1055,9 +1065,9 @@ namespace EDDiscovery.UserControls
                                     if (selEDSMonNextLine)
                                     {
                                         labelOpen.Location = labpos;
-                                        extButtonEDSMSystem.Location = new Point(datapos.X, datapos.Y);
-                                        extButtonInaraSystem.Location = new Point(extButtonEDSMSystem.Right + hspacing, extButtonEDSMSystem.Top);
-                                        extButtonSpanshSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonEDSMSystem.Top);
+                                        extButtonSpanshSystem.Location = new Point(datapos.X, datapos.Y);
+                                        extButtonInaraSystem.Location = new Point(extButtonSpanshSystem.Right + hspacing, extButtonSpanshSystem.Top);
+                                        extButtonEDSMSystem.Location = new Point(extButtonInaraSystem.Right + hspacing, extButtonSpanshSystem.Top);
                                         labelOpen.Tag = extButtonEDSMSystem.Tag = extButtonInaraSystem.Tag = extButtonSpanshSystem.Tag = si;
                                         extButtonEDSMSystem.Visible = extButtonInaraSystem.Visible = extButtonSpanshSystem.Visible = true;
                                         labelOpen.Visible = true;
@@ -1079,8 +1089,8 @@ namespace EDDiscovery.UserControls
 
                                 case ControlBits.BitSelStationButtons:
                                     labelOpenStation.Location = labpos;
-                                    extButtonInaraStation.Location = new Point(datapos.X, datapos.Y); 
-                                    extButtonSpanshStation.Location = new Point(extButtonInaraStation.Right + hspacing, extButtonInaraStation.Top);
+                                    extButtonSpanshStation.Location = new Point(datapos.X, datapos.Y);
+                                    extButtonInaraStation.Location = new Point(extButtonSpanshStation.Right + hspacing, extButtonSpanshStation.Top); 
                                     labelOpenStation.Tag = extButtonInaraStation.Tag = extButtonSpanshStation.Tag = si;
                                     extButtonInaraStation.Visible = extButtonSpanshStation.Visible = true;
                                     labelOpenStation.Visible = true;
@@ -1127,9 +1137,10 @@ namespace EDDiscovery.UserControls
                                 case ControlBits.BitSelTarget:
                                     itembottom = this.SetPos(labpos, labelTarget, datapos, textBoxTarget, si);
                                     textBoxTargetDist.Location = new Point(textBoxTarget.Right + hspacing, datapos.Y);
-                                    extButtonEDSMTarget.Location = new Point(textBoxTargetDist.Right + hspacing, datapos.Y);
-                                    textBoxTargetDist.Tag = extButtonEDSMTarget.Tag = si;
-                                    textBoxTargetDist.Visible = extButtonEDSMTarget.Visible = true;
+                                    extButtonSpanshTarget.Location = new Point(textBoxTargetDist.Right + hspacing, datapos.Y);
+                                    extButtonEDSMTarget.Location = new Point(extButtonSpanshTarget.Right+ hspacing, datapos.Y);
+                                    textBoxTargetDist.Tag = extButtonEDSMTarget.Tag = extButtonSpanshTarget.Tag = si;
+                                    textBoxTargetDist.Visible = extButtonEDSMTarget.Visible = extButtonSpanshTarget.Visible = true;
                                     break;
 
                                 case ControlBits.BitSelGameMode:

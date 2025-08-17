@@ -88,7 +88,8 @@ namespace EDDiscovery.UserControls
             this.extTextBoxStationFaction = new ExtendedControls.ExtTextBox();
             this.labelStationFaction = new System.Windows.Forms.Label();
             this.textBoxSystem = new ExtendedControls.ExtTextBox();
-            this.extButtonEDSMTarget = new ExtendedControls.ExtButtonDrawn();
+            this.extButtonSpanshTarget = new ExtendedControls.ExtButton();
+            this.extButtonEDSMTarget = new ExtendedControls.ExtButton();
             this.extTextBoxSecurity = new ExtendedControls.ExtTextBox();
             this.textBoxJumpRange = new ExtendedControls.ExtTextBox();
             this.labelSecurity = new System.Windows.Forms.Label();
@@ -183,7 +184,7 @@ namespace EDDiscovery.UserControls
             this.toolStripRemoveAll,
             this.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip1";
-            this.contextMenuStrip.Size = new System.Drawing.Size(359, 642);
+            this.contextMenuStrip.Size = new System.Drawing.Size(357, 642);
             // 
             // toolStripSystem
             // 
@@ -191,7 +192,7 @@ namespace EDDiscovery.UserControls
             this.toolStripSystem.CheckOnClick = true;
             this.toolStripSystem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripSystem.Name = "toolStripSystem";
-            this.toolStripSystem.Size = new System.Drawing.Size(358, 22);
+            this.toolStripSystem.Size = new System.Drawing.Size(356, 22);
             this.toolStripSystem.Text = "Display System Name";
             this.toolStripSystem.Click += new System.EventHandler(this.toolStripSystem_Click);
             // 
@@ -201,7 +202,7 @@ namespace EDDiscovery.UserControls
             this.displayNextDestinationToolStripMenuItem.CheckOnClick = true;
             this.displayNextDestinationToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.displayNextDestinationToolStripMenuItem.Name = "displayNextDestinationToolStripMenuItem";
-            this.displayNextDestinationToolStripMenuItem.Size = new System.Drawing.Size(358, 22);
+            this.displayNextDestinationToolStripMenuItem.Size = new System.Drawing.Size(356, 22);
             this.displayNextDestinationToolStripMenuItem.Text = "Display Next Destination Selected";
             this.displayNextDestinationToolStripMenuItem.Click += new System.EventHandler(this.displayNextDestinationToolStripMenuItem_Click);
             // 
@@ -211,7 +212,7 @@ namespace EDDiscovery.UserControls
             this.toolStripEDSM.CheckOnClick = true;
             this.toolStripEDSM.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripEDSM.Name = "toolStripEDSM";
-            this.toolStripEDSM.Size = new System.Drawing.Size(358, 22);
+            this.toolStripEDSM.Size = new System.Drawing.Size(356, 22);
             this.toolStripEDSM.Text = "Display EDSM Buttons";
             this.toolStripEDSM.Click += new System.EventHandler(this.toolStripEDSM_Click);
             // 
@@ -221,7 +222,7 @@ namespace EDDiscovery.UserControls
             this.toolStripEDSMDownLine.CheckOnClick = true;
             this.toolStripEDSMDownLine.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripEDSMDownLine.Name = "toolStripEDSMDownLine";
-            this.toolStripEDSMDownLine.Size = new System.Drawing.Size(358, 22);
+            this.toolStripEDSMDownLine.Size = new System.Drawing.Size(356, 22);
             this.toolStripEDSMDownLine.Text = "EDSM buttons on separate line";
             this.toolStripEDSMDownLine.Click += new System.EventHandler(this.toolStripEDSMButtons_Click);
             // 
@@ -231,7 +232,7 @@ namespace EDDiscovery.UserControls
             this.toolStripVisits.CheckOnClick = true;
             this.toolStripVisits.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripVisits.Name = "toolStripVisits";
-            this.toolStripVisits.Size = new System.Drawing.Size(358, 22);
+            this.toolStripVisits.Size = new System.Drawing.Size(356, 22);
             this.toolStripVisits.Text = "Display Visits";
             this.toolStripVisits.Click += new System.EventHandler(this.toolStripVisits_Click);
             // 
@@ -241,7 +242,7 @@ namespace EDDiscovery.UserControls
             this.toolStripBody.CheckOnClick = true;
             this.toolStripBody.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripBody.Name = "toolStripBody";
-            this.toolStripBody.Size = new System.Drawing.Size(358, 22);
+            this.toolStripBody.Size = new System.Drawing.Size(356, 22);
             this.toolStripBody.Text = "Display Body Name";
             this.toolStripBody.Click += new System.EventHandler(this.toolStripBody_Click);
             // 
@@ -251,7 +252,7 @@ namespace EDDiscovery.UserControls
             this.displayStationButtonsToolStripMenuItem.CheckOnClick = true;
             this.displayStationButtonsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.displayStationButtonsToolStripMenuItem.Name = "displayStationButtonsToolStripMenuItem";
-            this.displayStationButtonsToolStripMenuItem.Size = new System.Drawing.Size(358, 22);
+            this.displayStationButtonsToolStripMenuItem.Size = new System.Drawing.Size(356, 22);
             this.displayStationButtonsToolStripMenuItem.Text = "Display Station Buttons";
             this.displayStationButtonsToolStripMenuItem.Click += new System.EventHandler(this.displayStationButtonsToolStripMenuItem_Click);
             // 
@@ -261,7 +262,7 @@ namespace EDDiscovery.UserControls
             this.displayStationFactionToolStripMenuItem.CheckOnClick = true;
             this.displayStationFactionToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.displayStationFactionToolStripMenuItem.Name = "displayStationFactionToolStripMenuItem";
-            this.displayStationFactionToolStripMenuItem.Size = new System.Drawing.Size(358, 22);
+            this.displayStationFactionToolStripMenuItem.Size = new System.Drawing.Size(356, 22);
             this.displayStationFactionToolStripMenuItem.Text = "Display Station Faction";
             this.displayStationFactionToolStripMenuItem.Click += new System.EventHandler(this.displayStationFactionToolStripMenuItem_Click);
             // 
@@ -271,7 +272,7 @@ namespace EDDiscovery.UserControls
             this.toolStripPosition.CheckOnClick = true;
             this.toolStripPosition.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripPosition.Name = "toolStripPosition";
-            this.toolStripPosition.Size = new System.Drawing.Size(358, 22);
+            this.toolStripPosition.Size = new System.Drawing.Size(356, 22);
             this.toolStripPosition.Text = "Display Position";
             this.toolStripPosition.Click += new System.EventHandler(this.toolStripPosition_Click);
             // 
@@ -281,7 +282,7 @@ namespace EDDiscovery.UserControls
             this.toolStripDistanceFrom.CheckOnClick = true;
             this.toolStripDistanceFrom.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripDistanceFrom.Name = "toolStripDistanceFrom";
-            this.toolStripDistanceFrom.Size = new System.Drawing.Size(358, 22);
+            this.toolStripDistanceFrom.Size = new System.Drawing.Size(356, 22);
             this.toolStripDistanceFrom.Text = "Display Distance From";
             this.toolStripDistanceFrom.Click += new System.EventHandler(this.enableDistanceFromToolStripMenuItem_Click);
             // 
@@ -291,7 +292,7 @@ namespace EDDiscovery.UserControls
             this.toolStripSystemState.CheckOnClick = true;
             this.toolStripSystemState.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripSystemState.Name = "toolStripSystemState";
-            this.toolStripSystemState.Size = new System.Drawing.Size(358, 22);
+            this.toolStripSystemState.Size = new System.Drawing.Size(356, 22);
             this.toolStripSystemState.Text = "Display System State";
             this.toolStripSystemState.Click += new System.EventHandler(this.toolStripSystemState_Click);
             // 
@@ -301,7 +302,7 @@ namespace EDDiscovery.UserControls
             this.displaySecurityToolStripMenuItem.CheckOnClick = true;
             this.displaySecurityToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.displaySecurityToolStripMenuItem.Name = "displaySecurityToolStripMenuItem";
-            this.displaySecurityToolStripMenuItem.Size = new System.Drawing.Size(358, 22);
+            this.displaySecurityToolStripMenuItem.Size = new System.Drawing.Size(356, 22);
             this.displaySecurityToolStripMenuItem.Text = "Display Security";
             this.displaySecurityToolStripMenuItem.Click += new System.EventHandler(this.displaySecurityToolStripMenuItem_Click);
             // 
@@ -311,7 +312,7 @@ namespace EDDiscovery.UserControls
             this.toolStripTarget.CheckOnClick = true;
             this.toolStripTarget.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripTarget.Name = "toolStripTarget";
-            this.toolStripTarget.Size = new System.Drawing.Size(358, 22);
+            this.toolStripTarget.Size = new System.Drawing.Size(356, 22);
             this.toolStripTarget.Text = "Display Target";
             this.toolStripTarget.Click += new System.EventHandler(this.toolStripTarget_Click);
             // 
@@ -321,7 +322,7 @@ namespace EDDiscovery.UserControls
             this.toolStripShip.CheckOnClick = true;
             this.toolStripShip.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripShip.Name = "toolStripShip";
-            this.toolStripShip.Size = new System.Drawing.Size(358, 22);
+            this.toolStripShip.Size = new System.Drawing.Size(356, 22);
             this.toolStripShip.Text = "Display Ship Information";
             this.toolStripShip.Click += new System.EventHandler(this.toolStripShip_Click);
             // 
@@ -331,7 +332,7 @@ namespace EDDiscovery.UserControls
             this.displayShipButtonsToolStripMenuItem.CheckOnClick = true;
             this.displayShipButtonsToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.displayShipButtonsToolStripMenuItem.Name = "displayShipButtonsToolStripMenuItem";
-            this.displayShipButtonsToolStripMenuItem.Size = new System.Drawing.Size(358, 22);
+            this.displayShipButtonsToolStripMenuItem.Size = new System.Drawing.Size(356, 22);
             this.displayShipButtonsToolStripMenuItem.Text = "Display Ship Buttons";
             this.displayShipButtonsToolStripMenuItem.Click += new System.EventHandler(this.displayShipButtonsToolStripMenuItem_Click);
             // 
@@ -340,7 +341,7 @@ namespace EDDiscovery.UserControls
             this.toolStripFuel.Checked = true;
             this.toolStripFuel.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripFuel.Name = "toolStripFuel";
-            this.toolStripFuel.Size = new System.Drawing.Size(358, 22);
+            this.toolStripFuel.Size = new System.Drawing.Size(356, 22);
             this.toolStripFuel.Text = "Display Fuel Level";
             this.toolStripFuel.Click += new System.EventHandler(this.toolStripFuel_Click);
             // 
@@ -350,7 +351,7 @@ namespace EDDiscovery.UserControls
             this.toolStripCargo.CheckOnClick = true;
             this.toolStripCargo.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripCargo.Name = "toolStripCargo";
-            this.toolStripCargo.Size = new System.Drawing.Size(358, 22);
+            this.toolStripCargo.Size = new System.Drawing.Size(356, 22);
             this.toolStripCargo.Text = "Display Cargo Count";
             this.toolStripCargo.Click += new System.EventHandler(this.toolStripCargo_Click);
             // 
@@ -359,7 +360,7 @@ namespace EDDiscovery.UserControls
             this.toolStripDataCount.Checked = true;
             this.toolStripDataCount.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripDataCount.Name = "toolStripDataCount";
-            this.toolStripDataCount.Size = new System.Drawing.Size(358, 22);
+            this.toolStripDataCount.Size = new System.Drawing.Size(356, 22);
             this.toolStripDataCount.Text = "Display Data Count";
             this.toolStripDataCount.Click += new System.EventHandler(this.toolStripDataCount_Click);
             // 
@@ -368,7 +369,7 @@ namespace EDDiscovery.UserControls
             this.toolStripMaterialCounts.Checked = true;
             this.toolStripMaterialCounts.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripMaterialCounts.Name = "toolStripMaterialCounts";
-            this.toolStripMaterialCounts.Size = new System.Drawing.Size(358, 22);
+            this.toolStripMaterialCounts.Size = new System.Drawing.Size(356, 22);
             this.toolStripMaterialCounts.Text = "Display Material Count";
             this.toolStripMaterialCounts.Click += new System.EventHandler(this.toolStripMaterialCount_Click);
             // 
@@ -378,7 +379,7 @@ namespace EDDiscovery.UserControls
             this.displayMicroresourcesCountToolStripMenuItem.CheckOnClick = true;
             this.displayMicroresourcesCountToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.displayMicroresourcesCountToolStripMenuItem.Name = "displayMicroresourcesCountToolStripMenuItem";
-            this.displayMicroresourcesCountToolStripMenuItem.Size = new System.Drawing.Size(358, 22);
+            this.displayMicroresourcesCountToolStripMenuItem.Size = new System.Drawing.Size(356, 22);
             this.displayMicroresourcesCountToolStripMenuItem.Text = "Display Microresources Count";
             this.displayMicroresourcesCountToolStripMenuItem.Click += new System.EventHandler(this.displayMicroresourcesCountToolStripMenuItem_Click);
             // 
@@ -388,7 +389,7 @@ namespace EDDiscovery.UserControls
             this.toolStripCredits.CheckOnClick = true;
             this.toolStripCredits.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripCredits.Name = "toolStripCredits";
-            this.toolStripCredits.Size = new System.Drawing.Size(358, 22);
+            this.toolStripCredits.Size = new System.Drawing.Size(356, 22);
             this.toolStripCredits.Text = "Display Credits";
             this.toolStripCredits.Click += new System.EventHandler(this.toolStripCredits_Click);
             // 
@@ -398,7 +399,7 @@ namespace EDDiscovery.UserControls
             this.toolStripGameMode.CheckOnClick = true;
             this.toolStripGameMode.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripGameMode.Name = "toolStripGameMode";
-            this.toolStripGameMode.Size = new System.Drawing.Size(358, 22);
+            this.toolStripGameMode.Size = new System.Drawing.Size(356, 22);
             this.toolStripGameMode.Text = "Display Game Mode";
             this.toolStripGameMode.Click += new System.EventHandler(this.toolStripGameMode_Click);
             // 
@@ -408,7 +409,7 @@ namespace EDDiscovery.UserControls
             this.toolStripTravel.CheckOnClick = true;
             this.toolStripTravel.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripTravel.Name = "toolStripTravel";
-            this.toolStripTravel.Size = new System.Drawing.Size(358, 22);
+            this.toolStripTravel.Size = new System.Drawing.Size(356, 22);
             this.toolStripTravel.Text = "Display Travel Trip Statistics";
             this.toolStripTravel.Click += new System.EventHandler(this.toolStripTravel_Click);
             // 
@@ -418,7 +419,7 @@ namespace EDDiscovery.UserControls
             this.toolStripMissionList.CheckOnClick = true;
             this.toolStripMissionList.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripMissionList.Name = "toolStripMissionList";
-            this.toolStripMissionList.Size = new System.Drawing.Size(358, 22);
+            this.toolStripMissionList.Size = new System.Drawing.Size(356, 22);
             this.toolStripMissionList.Text = "Display Mission List";
             this.toolStripMissionList.Click += new System.EventHandler(this.toolStripMissionsList_Click);
             // 
@@ -428,7 +429,7 @@ namespace EDDiscovery.UserControls
             this.toolStripJumpRange.CheckOnClick = true;
             this.toolStripJumpRange.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripJumpRange.Name = "toolStripJumpRange";
-            this.toolStripJumpRange.Size = new System.Drawing.Size(358, 22);
+            this.toolStripJumpRange.Size = new System.Drawing.Size(356, 22);
             this.toolStripJumpRange.Text = "Display Jump Range";
             this.toolStripJumpRange.Click += new System.EventHandler(this.displayJumpRangeToolStripMenuItem_Click);
             // 
@@ -438,21 +439,21 @@ namespace EDDiscovery.UserControls
             this.toolStripSkinny.CheckOnClick = true;
             this.toolStripSkinny.CheckState = System.Windows.Forms.CheckState.Checked;
             this.toolStripSkinny.Name = "toolStripSkinny";
-            this.toolStripSkinny.Size = new System.Drawing.Size(358, 22);
+            this.toolStripSkinny.Size = new System.Drawing.Size(356, 22);
             this.toolStripSkinny.Text = "When transparent, use skinny look";
             this.toolStripSkinny.Click += new System.EventHandler(this.whenTransparentUseSkinnyLookToolStripMenuItem_Click);
             // 
             // toolStripReset
             // 
             this.toolStripReset.Name = "toolStripReset";
-            this.toolStripReset.Size = new System.Drawing.Size(358, 22);
+            this.toolStripReset.Size = new System.Drawing.Size(356, 22);
             this.toolStripReset.Text = "Reset";
             this.toolStripReset.Click += new System.EventHandler(this.resetToolStripMenuItem_Click);
             // 
             // toolStripRemoveAll
             // 
             this.toolStripRemoveAll.Name = "toolStripRemoveAll";
-            this.toolStripRemoveAll.Size = new System.Drawing.Size(358, 22);
+            this.toolStripRemoveAll.Size = new System.Drawing.Size(356, 22);
             this.toolStripRemoveAll.Text = "Remove All";
             this.toolStripRemoveAll.Click += new System.EventHandler(this.toolStripRemoveAll_Click);
             // 
@@ -461,7 +462,7 @@ namespace EDDiscovery.UserControls
             this.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem.Checked = true;
             this.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem.Name = "disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem";
-            this.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem.Size = new System.Drawing.Size(358, 22);
+            this.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem.Size = new System.Drawing.Size(356, 22);
             this.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem.Text = "Disable copy to clipboard when clicking on text boxes";
             this.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem.Click += new System.EventHandler(this.disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem_Click);
             // 
@@ -471,10 +472,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxTargetDist
             // 
-            this.textBoxTargetDist.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxTargetDist.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxTargetDist.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTargetDist.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTargetDist.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxTargetDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTargetDist.ClearOnFirstChar = false;
             this.textBoxTargetDist.ControlBackground = System.Drawing.SystemColors.Control;
@@ -506,11 +506,10 @@ namespace EDDiscovery.UserControls
             // textBoxTarget
             // 
             this.textBoxTarget.AutoCompleteCommentMarker = null;
-            this.textBoxTarget.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
-            this.textBoxTarget.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
             this.textBoxTarget.AutoCompleteTimeout = 200;
             this.textBoxTarget.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTarget.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTarget.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxTarget.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTarget.ClearOnFirstChar = false;
             this.textBoxTarget.ControlBackground = System.Drawing.SystemColors.Control;
@@ -551,6 +550,7 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.Controls.Add(this.extTextBoxStationFaction);
             this.extPanelScroll.Controls.Add(this.labelStationFaction);
             this.extPanelScroll.Controls.Add(this.textBoxSystem);
+            this.extPanelScroll.Controls.Add(this.extButtonSpanshTarget);
             this.extPanelScroll.Controls.Add(this.extButtonEDSMTarget);
             this.extPanelScroll.Controls.Add(this.extTextBoxSecurity);
             this.extPanelScroll.Controls.Add(this.textBoxJumpRange);
@@ -615,6 +615,7 @@ namespace EDDiscovery.UserControls
             this.extPanelScroll.FlowControlsLeftToRight = false;
             this.extPanelScroll.Location = new System.Drawing.Point(0, 0);
             this.extPanelScroll.Name = "extPanelScroll";
+            this.extPanelScroll.ScrollBarWidth = 24;
             this.extPanelScroll.Size = new System.Drawing.Size(1024, 832);
             this.extPanelScroll.TabIndex = 49;
             this.extPanelScroll.VerticalScrollBarDockRight = true;
@@ -624,34 +625,40 @@ namespace EDDiscovery.UserControls
             this.extScrollBar1.AlwaysHideScrollBar = false;
             this.extScrollBar1.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.extScrollBar1.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBar1.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.extScrollBar1.ArrowDownDrawAngle = 270F;
             this.extScrollBar1.ArrowUpDrawAngle = 90F;
             this.extScrollBar1.BorderColor = System.Drawing.Color.White;
             this.extScrollBar1.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBar1.HideScrollBar = true;
             this.extScrollBar1.LargeChange = 10;
-            this.extScrollBar1.Location = new System.Drawing.Point(1005, 0);
+            this.extScrollBar1.Location = new System.Drawing.Point(1000, 0);
             this.extScrollBar1.Maximum = -303;
             this.extScrollBar1.Minimum = 0;
             this.extScrollBar1.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBar1.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.extScrollBar1.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBar1.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBar1.Name = "extScrollBar1";
-            this.extScrollBar1.Size = new System.Drawing.Size(19, 832);
+            this.extScrollBar1.Size = new System.Drawing.Size(24, 832);
+            this.extScrollBar1.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBar1.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBar1.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBar1.SliderDrawAngle = 90F;
             this.extScrollBar1.SmallChange = 1;
             this.extScrollBar1.TabIndex = 49;
             this.extScrollBar1.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBar1.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBar1.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBar1.ThumbDrawAngle = 0F;
             this.extScrollBar1.Value = -303;
             this.extScrollBar1.ValueLimited = -303;
             // 
             // extTextBoxNextDestinationPosition
             // 
-            this.extTextBoxNextDestinationPosition.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.extTextBoxNextDestinationPosition.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxNextDestinationPosition.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxNextDestinationPosition.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBoxNextDestinationPosition.BorderColor2 = System.Drawing.Color.Transparent;
             this.extTextBoxNextDestinationPosition.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxNextDestinationPosition.ClearOnFirstChar = false;
             this.extTextBoxNextDestinationPosition.ControlBackground = System.Drawing.SystemColors.Control;
@@ -679,10 +686,9 @@ namespace EDDiscovery.UserControls
             // 
             // extTextBoxNextDestinationDistance
             // 
-            this.extTextBoxNextDestinationDistance.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.extTextBoxNextDestinationDistance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxNextDestinationDistance.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxNextDestinationDistance.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBoxNextDestinationDistance.BorderColor2 = System.Drawing.Color.Transparent;
             this.extTextBoxNextDestinationDistance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxNextDestinationDistance.ClearOnFirstChar = false;
             this.extTextBoxNextDestinationDistance.ControlBackground = System.Drawing.SystemColors.Control;
@@ -710,10 +716,9 @@ namespace EDDiscovery.UserControls
             // 
             // extTextBox1
             // 
-            this.extTextBox1.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.extTextBox1.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBox1.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBox1.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBox1.BorderColor2 = System.Drawing.Color.Transparent;
             this.extTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBox1.ClearOnFirstChar = false;
             this.extTextBox1.ControlBackground = System.Drawing.SystemColors.Control;
@@ -741,10 +746,9 @@ namespace EDDiscovery.UserControls
             // 
             // extTextBoxNextDestination
             // 
-            this.extTextBoxNextDestination.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.extTextBoxNextDestination.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxNextDestination.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxNextDestination.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBoxNextDestination.BorderColor2 = System.Drawing.Color.Transparent;
             this.extTextBoxNextDestination.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxNextDestination.ClearOnFirstChar = false;
             this.extTextBoxNextDestination.ControlBackground = System.Drawing.SystemColors.Control;
@@ -784,10 +788,9 @@ namespace EDDiscovery.UserControls
             // 
             // extTextBoxStationFaction
             // 
-            this.extTextBoxStationFaction.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.extTextBoxStationFaction.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxStationFaction.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxStationFaction.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBoxStationFaction.BorderColor2 = System.Drawing.Color.Transparent;
             this.extTextBoxStationFaction.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxStationFaction.ClearOnFirstChar = false;
             this.extTextBoxStationFaction.ControlBackground = System.Drawing.SystemColors.Control;
@@ -828,10 +831,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxSystem
             // 
-            this.textBoxSystem.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxSystem.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxSystem.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxSystem.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxSystem.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxSystem.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSystem.ClearOnFirstChar = false;
             this.textBoxSystem.ControlBackground = System.Drawing.SystemColors.Control;
@@ -858,25 +860,39 @@ namespace EDDiscovery.UserControls
             this.textBoxSystem.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
             this.textBoxSystem.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
             // 
+            // extButtonSpanshTarget
+            // 
+            this.extButtonSpanshTarget.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonSpanshTarget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonSpanshTarget.ButtonDisabledScaling = 0.5F;
+            this.extButtonSpanshTarget.GradientDirection = 90F;
+            this.extButtonSpanshTarget.Image = global::EDDiscovery.Icons.Controls.spansh;
+            this.extButtonSpanshTarget.Location = new System.Drawing.Point(443, 327);
+            this.extButtonSpanshTarget.MouseOverScaling = 1.3F;
+            this.extButtonSpanshTarget.MouseSelectedScaling = 1.3F;
+            this.extButtonSpanshTarget.Name = "extButtonSpanshTarget";
+            this.extButtonSpanshTarget.Padding = new System.Windows.Forms.Padding(2);
+            this.extButtonSpanshTarget.Size = new System.Drawing.Size(35, 20);
+            this.extButtonSpanshTarget.TabIndex = 23;
+            this.extButtonSpanshTarget.Click += new System.EventHandler(this.extButtonSpanshTarget_Click);
+            this.extButtonSpanshTarget.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
+            this.extButtonSpanshTarget.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
+            this.extButtonSpanshTarget.MouseUp += new System.Windows.Forms.MouseEventHandler(this.controlMouseUp);
+            // 
             // extButtonEDSMTarget
             // 
-            this.extButtonEDSMTarget.AutoEllipsis = false;
+            this.extButtonEDSMTarget.BackColor2 = System.Drawing.Color.Red;
             this.extButtonEDSMTarget.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.extButtonEDSMTarget.BorderColor = System.Drawing.Color.Orange;
-            this.extButtonEDSMTarget.BorderWidth = 1;
-            this.extButtonEDSMTarget.Image = null;
-            this.extButtonEDSMTarget.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.InverseText;
+            this.extButtonEDSMTarget.ButtonDisabledScaling = 0.5F;
+            this.extButtonEDSMTarget.GradientDirection = 90F;
+            this.extButtonEDSMTarget.Image = global::EDDiscovery.Icons.Controls.EDSM;
             this.extButtonEDSMTarget.Location = new System.Drawing.Point(393, 327);
-            this.extButtonEDSMTarget.MouseSelectedColor = System.Drawing.Color.Green;
-            this.extButtonEDSMTarget.MouseSelectedColorEnable = true;
+            this.extButtonEDSMTarget.MouseOverScaling = 1.3F;
+            this.extButtonEDSMTarget.MouseSelectedScaling = 1.3F;
             this.extButtonEDSMTarget.Name = "extButtonEDSMTarget";
             this.extButtonEDSMTarget.Padding = new System.Windows.Forms.Padding(2);
-            this.extButtonEDSMTarget.Selectable = true;
-            this.extButtonEDSMTarget.Size = new System.Drawing.Size(44, 20);
+            this.extButtonEDSMTarget.Size = new System.Drawing.Size(35, 20);
             this.extButtonEDSMTarget.TabIndex = 23;
-            this.extButtonEDSMTarget.Text = "EDSM";
-            this.extButtonEDSMTarget.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.extButtonEDSMTarget.UseMnemonic = true;
             this.extButtonEDSMTarget.Click += new System.EventHandler(this.buttonEDSMTarget_Click);
             this.extButtonEDSMTarget.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
             this.extButtonEDSMTarget.MouseMove += new System.Windows.Forms.MouseEventHandler(this.controlMouseMove);
@@ -884,10 +900,9 @@ namespace EDDiscovery.UserControls
             // 
             // extTextBoxSecurity
             // 
-            this.extTextBoxSecurity.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.extTextBoxSecurity.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxSecurity.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxSecurity.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBoxSecurity.BorderColor2 = System.Drawing.Color.Transparent;
             this.extTextBoxSecurity.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxSecurity.ClearOnFirstChar = false;
             this.extTextBoxSecurity.ControlBackground = System.Drawing.SystemColors.Control;
@@ -915,10 +930,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxJumpRange
             // 
-            this.textBoxJumpRange.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxJumpRange.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxJumpRange.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxJumpRange.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxJumpRange.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxJumpRange.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxJumpRange.ClearOnFirstChar = false;
             this.textBoxJumpRange.ControlBackground = System.Drawing.SystemColors.Control;
@@ -972,11 +986,20 @@ namespace EDDiscovery.UserControls
             // 
             this.panelFD.BackgroundImage = global::EDDiscovery.Icons.Controls.firstdiscover;
             this.panelFD.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.panelFD.Location = new System.Drawing.Point(430, 18);
             this.panelFD.ChildrenThemed = false;
+            this.panelFD.FlowDirection = null;
+            this.panelFD.GradientDirection = 0F;
+            this.panelFD.Location = new System.Drawing.Point(430, 18);
             this.panelFD.Name = "panelFD";
+            this.panelFD.PaintTransparentColor = System.Drawing.Color.Transparent;
             this.panelFD.Size = new System.Drawing.Size(24, 24);
             this.panelFD.TabIndex = 9090;
+            this.panelFD.ThemeColors = new System.Drawing.Color[] {
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.panelFD.ThemeColorSet = -1;
             // 
             // labelTarget
             // 
@@ -1076,9 +1099,14 @@ namespace EDDiscovery.UserControls
             // 
             // extButtonSpanshStation
             // 
+            this.extButtonSpanshStation.BackColor2 = System.Drawing.Color.Red;
             this.extButtonSpanshStation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonSpanshStation.ButtonDisabledScaling = 0.5F;
+            this.extButtonSpanshStation.GradientDirection = 90F;
             this.extButtonSpanshStation.Image = global::EDDiscovery.Icons.Controls.spansh;
             this.extButtonSpanshStation.Location = new System.Drawing.Point(274, 98);
+            this.extButtonSpanshStation.MouseOverScaling = 1.3F;
+            this.extButtonSpanshStation.MouseSelectedScaling = 1.3F;
             this.extButtonSpanshStation.Name = "extButtonSpanshStation";
             this.extButtonSpanshStation.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonSpanshStation.Size = new System.Drawing.Size(44, 20);
@@ -1090,9 +1118,14 @@ namespace EDDiscovery.UserControls
             // 
             // extButtonSpanshSystem
             // 
+            this.extButtonSpanshSystem.BackColor2 = System.Drawing.Color.Red;
             this.extButtonSpanshSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonSpanshSystem.ButtonDisabledScaling = 0.5F;
+            this.extButtonSpanshSystem.GradientDirection = 90F;
             this.extButtonSpanshSystem.Image = global::EDDiscovery.Icons.Controls.spansh;
             this.extButtonSpanshSystem.Location = new System.Drawing.Point(318, 38);
+            this.extButtonSpanshSystem.MouseOverScaling = 1.3F;
+            this.extButtonSpanshSystem.MouseSelectedScaling = 1.3F;
             this.extButtonSpanshSystem.Name = "extButtonSpanshSystem";
             this.extButtonSpanshSystem.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonSpanshSystem.Size = new System.Drawing.Size(44, 20);
@@ -1104,9 +1137,14 @@ namespace EDDiscovery.UserControls
             // 
             // extButtonCoriolis
             // 
+            this.extButtonCoriolis.BackColor2 = System.Drawing.Color.Red;
             this.extButtonCoriolis.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonCoriolis.ButtonDisabledScaling = 0.5F;
+            this.extButtonCoriolis.GradientDirection = 90F;
             this.extButtonCoriolis.Image = global::EDDiscovery.Icons.Controls.Coriolis;
             this.extButtonCoriolis.Location = new System.Drawing.Point(228, 378);
+            this.extButtonCoriolis.MouseOverScaling = 1.3F;
+            this.extButtonCoriolis.MouseSelectedScaling = 1.3F;
             this.extButtonCoriolis.Name = "extButtonCoriolis";
             this.extButtonCoriolis.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonCoriolis.Size = new System.Drawing.Size(44, 20);
@@ -1118,9 +1156,14 @@ namespace EDDiscovery.UserControls
             // 
             // extButtonInaraStation
             // 
+            this.extButtonInaraStation.BackColor2 = System.Drawing.Color.Red;
             this.extButtonInaraStation.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonInaraStation.ButtonDisabledScaling = 0.5F;
+            this.extButtonInaraStation.GradientDirection = 90F;
             this.extButtonInaraStation.Image = global::EDDiscovery.Icons.Controls.Inara;
             this.extButtonInaraStation.Location = new System.Drawing.Point(228, 98);
+            this.extButtonInaraStation.MouseOverScaling = 1.3F;
+            this.extButtonInaraStation.MouseSelectedScaling = 1.3F;
             this.extButtonInaraStation.Name = "extButtonInaraStation";
             this.extButtonInaraStation.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonInaraStation.Size = new System.Drawing.Size(44, 20);
@@ -1132,9 +1175,14 @@ namespace EDDiscovery.UserControls
             // 
             // extButtonInaraSystem
             // 
+            this.extButtonInaraSystem.BackColor2 = System.Drawing.Color.Red;
             this.extButtonInaraSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonInaraSystem.ButtonDisabledScaling = 0.5F;
+            this.extButtonInaraSystem.GradientDirection = 90F;
             this.extButtonInaraSystem.Image = global::EDDiscovery.Icons.Controls.Inara;
             this.extButtonInaraSystem.Location = new System.Drawing.Point(274, 38);
+            this.extButtonInaraSystem.MouseOverScaling = 1.3F;
+            this.extButtonInaraSystem.MouseSelectedScaling = 1.3F;
             this.extButtonInaraSystem.Name = "extButtonInaraSystem";
             this.extButtonInaraSystem.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonInaraSystem.Size = new System.Drawing.Size(44, 20);
@@ -1146,9 +1194,14 @@ namespace EDDiscovery.UserControls
             // 
             // extButtonEDSMSystem
             // 
+            this.extButtonEDSMSystem.BackColor2 = System.Drawing.Color.Red;
             this.extButtonEDSMSystem.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonEDSMSystem.ButtonDisabledScaling = 0.5F;
+            this.extButtonEDSMSystem.GradientDirection = 90F;
             this.extButtonEDSMSystem.Image = global::EDDiscovery.Icons.Controls.EDSM;
             this.extButtonEDSMSystem.Location = new System.Drawing.Point(230, 38);
+            this.extButtonEDSMSystem.MouseOverScaling = 1.3F;
+            this.extButtonEDSMSystem.MouseSelectedScaling = 1.3F;
             this.extButtonEDSMSystem.Name = "extButtonEDSMSystem";
             this.extButtonEDSMSystem.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonEDSMSystem.Size = new System.Drawing.Size(44, 20);
@@ -1172,10 +1225,15 @@ namespace EDDiscovery.UserControls
             // 
             // extButtonEDSY
             // 
+            this.extButtonEDSY.BackColor2 = System.Drawing.Color.Red;
             this.extButtonEDSY.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonEDSY.ButtonDisabledScaling = 0.5F;
             this.extButtonEDSY.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.extButtonEDSY.GradientDirection = 90F;
             this.extButtonEDSY.Image = global::EDDiscovery.Icons.Controls.EDShipYard;
             this.extButtonEDSY.Location = new System.Drawing.Point(278, 379);
+            this.extButtonEDSY.MouseOverScaling = 1.3F;
+            this.extButtonEDSY.MouseSelectedScaling = 1.3F;
             this.extButtonEDSY.Name = "extButtonEDSY";
             this.extButtonEDSY.Padding = new System.Windows.Forms.Padding(2);
             this.extButtonEDSY.Size = new System.Drawing.Size(44, 20);
@@ -1248,10 +1306,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxVisits
             // 
-            this.textBoxVisits.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxVisits.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxVisits.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxVisits.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxVisits.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxVisits.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxVisits.ClearOnFirstChar = false;
             this.textBoxVisits.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1304,10 +1361,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxBody
             // 
-            this.textBoxBody.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxBody.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxBody.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxBody.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxBody.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxBody.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxBody.ClearOnFirstChar = false;
             this.textBoxBody.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1337,13 +1393,14 @@ namespace EDDiscovery.UserControls
             // richTextBoxScrollMissions
             // 
             this.richTextBoxScrollMissions.BorderColor = System.Drawing.Color.Transparent;
+            this.richTextBoxScrollMissions.BorderColor2 = System.Drawing.Color.Transparent;
             this.richTextBoxScrollMissions.DetectUrls = true;
             this.richTextBoxScrollMissions.HideScrollBar = true;
             this.richTextBoxScrollMissions.Location = new System.Drawing.Point(549, 107);
             this.richTextBoxScrollMissions.Name = "richTextBoxScrollMissions";
             this.richTextBoxScrollMissions.ReadOnly = false;
             this.richTextBoxScrollMissions.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.26100}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
             this.richTextBoxScrollMissions.ShowLineCount = false;
             this.richTextBoxScrollMissions.Size = new System.Drawing.Size(225, 50);
@@ -1369,10 +1426,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxTravelJumps
             // 
-            this.textBoxTravelJumps.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxTravelJumps.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxTravelJumps.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTravelJumps.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTravelJumps.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxTravelJumps.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTravelJumps.ClearOnFirstChar = false;
             this.textBoxTravelJumps.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1413,10 +1469,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxTravelTime
             // 
-            this.textBoxTravelTime.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxTravelTime.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxTravelTime.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTravelTime.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTravelTime.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxTravelTime.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTravelTime.ClearOnFirstChar = false;
             this.textBoxTravelTime.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1445,10 +1500,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxEconomy
             // 
-            this.textBoxEconomy.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxEconomy.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxEconomy.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxEconomy.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxEconomy.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxEconomy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxEconomy.ClearOnFirstChar = false;
             this.textBoxEconomy.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1477,10 +1531,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxFuel
             // 
-            this.textBoxFuel.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxFuel.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxFuel.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxFuel.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxFuel.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxFuel.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxFuel.ClearOnFirstChar = false;
             this.textBoxFuel.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1522,10 +1575,9 @@ namespace EDDiscovery.UserControls
             // 
             // extTextBoxMR
             // 
-            this.extTextBoxMR.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.extTextBoxMR.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxMR.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxMR.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBoxMR.BorderColor2 = System.Drawing.Color.Transparent;
             this.extTextBoxMR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.extTextBoxMR.ClearOnFirstChar = false;
             this.extTextBoxMR.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1554,10 +1606,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxData
             // 
-            this.textBoxData.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxData.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxData.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxData.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxData.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxData.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxData.ClearOnFirstChar = false;
             this.textBoxData.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1586,10 +1637,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxGovernment
             // 
-            this.textBoxGovernment.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxGovernment.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxGovernment.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxGovernment.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxGovernment.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxGovernment.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxGovernment.ClearOnFirstChar = false;
             this.textBoxGovernment.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1618,10 +1668,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxMaterials
             // 
-            this.textBoxMaterials.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxMaterials.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxMaterials.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxMaterials.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxMaterials.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxMaterials.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxMaterials.ClearOnFirstChar = false;
             this.textBoxMaterials.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1663,10 +1712,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxCredits
             // 
-            this.textBoxCredits.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxCredits.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxCredits.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxCredits.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxCredits.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxCredits.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxCredits.ClearOnFirstChar = false;
             this.textBoxCredits.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1695,10 +1743,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxAllegiance
             // 
-            this.textBoxAllegiance.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxAllegiance.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxAllegiance.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxAllegiance.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxAllegiance.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxAllegiance.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxAllegiance.ClearOnFirstChar = false;
             this.textBoxAllegiance.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1727,10 +1774,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxCargo
             // 
-            this.textBoxCargo.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxCargo.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxCargo.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxCargo.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxCargo.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxCargo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxCargo.ClearOnFirstChar = false;
             this.textBoxCargo.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1772,10 +1818,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxTravelDist
             // 
-            this.textBoxTravelDist.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxTravelDist.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxTravelDist.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxTravelDist.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxTravelDist.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxTravelDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxTravelDist.ClearOnFirstChar = false;
             this.textBoxTravelDist.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1804,10 +1849,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxState
             // 
-            this.textBoxState.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxState.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxState.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxState.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxState.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxState.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxState.ClearOnFirstChar = false;
             this.textBoxState.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1836,10 +1880,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxShip
             // 
-            this.textBoxShip.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxShip.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxShip.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxShip.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxShip.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxShip.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxShip.ClearOnFirstChar = false;
             this.textBoxShip.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1881,10 +1924,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxGameMode
             // 
-            this.textBoxGameMode.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxGameMode.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxGameMode.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxGameMode.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxGameMode.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxGameMode.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxGameMode.ClearOnFirstChar = false;
             this.textBoxGameMode.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1913,10 +1955,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxSolDist
             // 
-            this.textBoxSolDist.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxSolDist.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxSolDist.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxSolDist.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxSolDist.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxSolDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxSolDist.ClearOnFirstChar = false;
             this.textBoxSolDist.ControlBackground = System.Drawing.SystemColors.Control;
@@ -1945,10 +1986,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxPosition
             // 
-            this.textBoxPosition.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxPosition.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxPosition.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxPosition.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxPosition.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxPosition.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxPosition.ClearOnFirstChar = false;
             this.textBoxPosition.ControlBackground = System.Drawing.SystemColors.Control;
@@ -2003,10 +2043,9 @@ namespace EDDiscovery.UserControls
             // 
             // textBoxHomeDist
             // 
-            this.textBoxHomeDist.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxHomeDist.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxHomeDist.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxHomeDist.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxHomeDist.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxHomeDist.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxHomeDist.ClearOnFirstChar = false;
             this.textBoxHomeDist.ControlBackground = System.Drawing.SystemColors.Control;
@@ -2072,7 +2111,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtTextBox textBoxSolDist;
         private System.Windows.Forms.Label labelSolDist;
         private System.Windows.Forms.Label labelTarget;
-        private ExtendedControls.ExtButtonDrawn extButtonEDSMTarget;
+        private ExtendedControls.ExtButton extButtonEDSMTarget;
         private ExtendedControls.ExtTextBoxAutoComplete textBoxTarget;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtTextBox textBoxTargetDist;
@@ -2152,5 +2191,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtTextBox extTextBoxNextDestinationDistance;
         private ExtendedControls.ExtTextBox extTextBox1;
         private System.Windows.Forms.ToolStripMenuItem disableCopyToClipboardWhenClickingOnTextBoxesToolStripMenuItem;
+        private ExtendedControls.ExtButton extButtonSpanshTarget;
     }
 }
