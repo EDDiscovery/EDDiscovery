@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
 
-            ResetThemeList();
+            UpdateThemeComboBox();
 
             btnDeleteCommander.Enabled = EDCommander.GetListActiveCommanders().Count > 1;
             extButtonUnDelete.Enabled = EDCommander.GetListDeletedCommanders().Count > 0;
@@ -432,14 +432,16 @@ namespace EDDiscovery.UserControls
         #region Theme
 
         bool themeprogchange = false;
-        private void ResetThemeList()
+        private void UpdateThemeComboBox()
         {
             themeprogchange = true;
+
             comboBoxTheme.Items = DiscoveryForm.ThemeList.GetThemeNames();
+
             int i = DiscoveryForm.ThemeList.FindThemeIndex(ExtendedControls.Theme.Current.Name);
             if (i == -1)        // if not found
             {
-                ExtendedControls.Theme.Current.SetCustom();     // not in list, must be custom, force name
+                Theme.Current.SetCustom();     // not in list, must be custom, force name
                 comboBoxTheme.Items.Add("Custom");
                 comboBoxTheme.SelectedItem = "Custom";
             }
@@ -462,7 +464,6 @@ namespace EDDiscovery.UserControls
                           "The font needed is \"{0}\"." + Environment.NewLine +
                           "Install this font to fully use this theme." + Environment.NewLine +
                           "Euro Caps font is freely available from www.edassets.org." + Environment.NewLine +
-                          "and is in your install folder " + Path.GetDirectoryName(Application.ExecutablePath) + " - install it manually" + Environment.NewLine +
                           Environment.NewLine +
                           "Would you like to load this theme using a replacement font?").Tx(), fontwanted);
 
@@ -471,14 +472,23 @@ namespace EDDiscovery.UserControls
                     if (res != DialogResult.Yes)
                     {
                         // Reset the combo box to the previous theme name and don't change anything else.
-                        ResetThemeList();
+                        UpdateThemeComboBox();
                         return;
                     }
                 }
 
-                DiscoveryForm.ThemeList.SetThemeByName(themename);             // given the name, go to it, if possible. if not, its not there, it should be
-                ResetThemeList();
-                DiscoveryForm.ApplyTheme();
+                // select theme and update the combo box selection
+
+                DiscoveryForm.ThemeList.SetThemeByName(themename);             
+                UpdateThemeComboBox();
+
+                // apply the change. Due to the tab control doing the multiline off/on procedure, with the this control active, it can crash the program (aug 25)
+                // as the multiline procedure disconnects the tab pages and recreates the tab control
+                // by invoking, we are delaying the execution of this until this function completes
+
+                DiscoveryForm.BeginInvoke(new Action(() => {
+                    DiscoveryForm.ApplyTheme();
+                }));
             }
         }
 
@@ -496,7 +506,7 @@ namespace EDDiscovery.UserControls
                 {
                     DiscoveryForm.ThemeList.Load(EDDOptions.Instance.ThemeAppDirectory(),"*.eddtheme");          // make sure up to data - we added a theme, reload them all
                     ExtendedControls.Theme.Current.Name = Path.GetFileNameWithoutExtension(dlg.FileName);   // we set the name here, if its not in the theme list on reset, it will go to custom
-                    ResetThemeList();
+                    UpdateThemeComboBox();
                 }
             }
         }
@@ -509,8 +519,7 @@ namespace EDDiscovery.UserControls
 
             buttonSaveTheme.Enabled = comboBoxTheme.Enabled = button_edittheme.Enabled = true;
 
-            ResetThemeList();
-
+            UpdateThemeComboBox();
         }
 
         private void extButtonDrawnHelp_Click(object sender, EventArgs e)

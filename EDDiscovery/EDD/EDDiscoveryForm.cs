@@ -520,7 +520,6 @@ namespace EDDiscovery
 
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(edsmgmofile))        // if allowed to load, and no gmo file, fetch immediately
                 {
-                    LogLine("Get galactic mapping from EDSM.".Tx());
                     if (EliteDangerousCore.EDSM.EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile, new System.Threading.CancellationToken()))
                         SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
                 }
@@ -529,7 +528,6 @@ namespace EDDiscovery
 
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(gecfile))        // if allowed to load, and no gec file, fetch immediately
                 {
-                    LogLine("Get galactic mapping from GEC.".Tx());
                     if (EliteDangerousCore.GEC.GECClass.DownloadGECFile(gecfile, new System.Threading.CancellationToken()))
                         SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
                 }
@@ -603,7 +601,6 @@ namespace EDDiscovery
 
             if (!EDDOptions.Instance.NoTabs)
             {
-                tabControlMain.MinimumTabWidth = 32;
                 tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, DefaultTabList);      // numbers from popouts, which are FIXED!
                 if (tabControlMain.PrimarySplitterTab == null || tabControlMain.PrimarySplitterTab.GetTravelGrid == null)  // double check we have a primary tab and tg..
                 {
@@ -934,7 +931,7 @@ namespace EDDiscovery
 
             if (!Controller.PendingClose.IsCancellationRequested)       // if not shutting down..
             {
-                bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the system database\r\nPress OK to close now, Cancel to wait until update is complete".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
+                bool goforit = !in_system_sync || ExtendedControls.MessageBoxTheme.Show("EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK;
 
                 if (goforit)
                 {
