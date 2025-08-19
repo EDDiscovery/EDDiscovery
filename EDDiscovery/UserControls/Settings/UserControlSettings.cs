@@ -504,7 +504,8 @@ namespace EDDiscovery.UserControls
 
                 DiscoveryForm.ThemeList.SetThemeByName(themename);             // given the name, go to it, if possible. if not, its not there, it should be
                 ResetThemeList();
-                DiscoveryForm.ApplyTheme(true);
+                DiscoveryForm.BeginInvoke(new Action(() => { DiscoveryForm.ApplyTheme(true); }));
+                
             }
         }
 
