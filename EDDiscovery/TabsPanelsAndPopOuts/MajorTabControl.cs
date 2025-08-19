@@ -338,6 +338,7 @@ namespace EDDiscovery
 
             uccb.Name = title;              // for debugging use
 
+
             TabPage page = new TabPage(title);
             page.Name = "MajorTabPage " + title;
             page.Location = new System.Drawing.Point(4, 22);    // copied from normal tab creation code
@@ -350,7 +351,14 @@ namespace EDDiscovery
 
             page.Controls.Add(uccb);
 
-            TabPages.Insert(posindex, page);        // with inherit above, no font autoscale
+            // because we get called before shown, we may not be created with a windows handle. And Insert fails if so
+            // previously the tab control OnFontControl would trigger a creation by accessing a property.
+            // lets do it explicitly so we know its needed
+
+            if (!this.IsHandleCreated)      
+                CreateHandle();
+
+            TabPages.Insert(posindex, page);        // with inherit above, no font autoscale. It will fail SILENTLY (bastard) if the tabcontrol handle is not there
 
             if (primary)                            // hook up the request system
                 uccb.RequestPanelOperation = RequestPanelOperationPrimaryTab;

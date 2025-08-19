@@ -63,6 +63,7 @@ namespace EDDiscovery
             this.removeTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.renameTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.popOutPanelToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.panelColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpTabToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelToolBar = new ExtendedControls.ExtPanelRollUp();
             this.buttonReloadActions = new ExtendedControls.ExtButton();
@@ -156,7 +157,6 @@ namespace EDDiscovery
             this.nextSupercruiseExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debuggerNextScanToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debuggerShutdownToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.panelColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.notifyIconContextMenuStrip.SuspendLayout();
             this.contextMenuStripTabs.SuspendLayout();
             this.panelToolBar.SuspendLayout();
@@ -210,9 +210,11 @@ namespace EDDiscovery
             this.tabControlMain.AllowDragReorder = true;
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.tabControlMain.ItemSize = new System.Drawing.Size(1, 21);
             this.tabControlMain.Location = new System.Drawing.Point(0, 61);
             this.tabControlMain.Multiline = true;
             this.tabControlMain.Name = "tabControlMain";
+            this.tabControlMain.Padding = new System.Drawing.Point(8, 8);
             this.tabControlMain.PaintTransparentColor = System.Drawing.Color.Transparent;
             this.tabControlMain.SelectedIndex = 0;
             this.tabControlMain.Size = new System.Drawing.Size(984, 628);
@@ -373,7 +375,7 @@ namespace EDDiscovery
             this.panelColourToolStripMenuItem,
             this.helpTabToolStripMenuItem});
             this.contextMenuStripTabs.Name = "contextMenuStripTabs";
-            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 158);
+            this.contextMenuStripTabs.Size = new System.Drawing.Size(190, 136);
             this.contextMenuStripTabs.Opening += new System.ComponentModel.CancelEventHandler(this.ContextMenuStripTabs_Opening);
             // 
             // addTabToolStripMenuItem
@@ -399,6 +401,12 @@ namespace EDDiscovery
             this.popOutPanelToolStripMenuItem.Name = "popOutPanelToolStripMenuItem";
             this.popOutPanelToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.popOutPanelToolStripMenuItem.Text = "Pop Out Panel..";
+            // 
+            // panelColourToolStripMenuItem
+            // 
+            this.panelColourToolStripMenuItem.Name = "panelColourToolStripMenuItem";
+            this.panelColourToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
+            this.panelColourToolStripMenuItem.Text = "Panel Colour";
             // 
             // helpTabToolStripMenuItem
             // 
@@ -448,6 +456,7 @@ namespace EDDiscovery
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
             this.panelToolBar.ThemeColorSet = 1;
+            this.panelToolBar.ThisThemed = true;
             this.panelToolBar.UnrollHoverDelay = 1000;
             // 
             // buttonReloadActions
@@ -1117,6 +1126,7 @@ namespace EDDiscovery
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
             this.extPanelTopResizer.ThemeColorSet = -1;
+            this.extPanelTopResizer.ThisThemed = true;
             // 
             // contextMenuStripDebugger
             // 
@@ -1355,12 +1365,6 @@ namespace EDDiscovery
             this.debuggerShutdownToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
             this.debuggerShutdownToolStripMenuItem.Text = "Next Shutdown";
             this.debuggerShutdownToolStripMenuItem.Click += new System.EventHandler(this.debuggerNextToolStripMenuItem_Click);
-            // 
-            // panelColourToolStripMenuItem
-            // 
-            this.panelColourToolStripMenuItem.Name = "panelColourToolStripMenuItem";
-            this.panelColourToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.panelColourToolStripMenuItem.Text = "Panel Colour";
             // 
             // EDDiscoveryForm
             // 
