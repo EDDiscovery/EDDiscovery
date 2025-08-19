@@ -1158,6 +1158,7 @@ namespace EDDiscovery.UserControls
                 AddTreeList("N16", "Fleetcarrier".Tx(), stats.FLEETCARRIER.Format("").Split(Environment.NewLine), collapseExpand[15]);
                 AddTreeList("N17", "Exobiology".Tx(), stats.Exobiology.Format("").Split(Environment.NewLine), collapseExpand[16]);
                 AddTreeList("N18", "Thargoids".Tx(), stats.Thargoids.Format("",true).Split(Environment.NewLine), collapseExpand[17]);
+                AddTreeList("N19", "Squadron".Tx(), stats.Squadron.Format("").Split(Environment.NewLine), collapseExpand[18]);
             }
             else
                 treeViewStats.Nodes.Clear();
