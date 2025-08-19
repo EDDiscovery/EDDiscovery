@@ -210,11 +210,11 @@ namespace EDDiscovery
             this.tabControlMain.AllowDragReorder = true;
             this.tabControlMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControlMain.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.tabControlMain.ItemSize = new System.Drawing.Size(1, 21);
+            this.tabControlMain.ItemSize = new System.Drawing.Size(100, 20);
             this.tabControlMain.Location = new System.Drawing.Point(0, 61);
             this.tabControlMain.Multiline = true;
             this.tabControlMain.Name = "tabControlMain";
-            this.tabControlMain.Padding = new System.Drawing.Point(8, 8);
+            this.tabControlMain.Padding = new System.Drawing.Point(8, 4);
             this.tabControlMain.PaintTransparentColor = System.Drawing.Color.Transparent;
             this.tabControlMain.SelectedIndex = 0;
             this.tabControlMain.Size = new System.Drawing.Size(984, 628);
