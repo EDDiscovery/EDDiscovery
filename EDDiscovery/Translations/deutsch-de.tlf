@@ -41,6 +41,10 @@ EB1BCE574038E4: "To be installed" => "Wird installiert werden"
 B5E77C5C02A90C: "Removed" => "Entfernt"
 06DB4FFA7EFB34: "Incompatible" => "Inkompatibel"
 
+// misc
+
+1090044535D1EA: "Panel Colour" @
+
 SECTION StartUp
 
 3823500F8FE072: "EDDiscovery is already running. Launch anyway?" => "EDDiscovery läuft bereits, trotzdem starten?"
