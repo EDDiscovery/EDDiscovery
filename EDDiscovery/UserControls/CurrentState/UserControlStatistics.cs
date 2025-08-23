@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
         private string dbStatsTreeStateSave = "TreeExpanded";
         private string dbScan = "Scan";     // these have with Summary or DWM on end
         private string dbTravel = "Travel";
-        private string dbCombat = "Combat";
+        private string dbCombat = "Combat";     
         private string dbShip = "Ship";
         private string dbSCCombat = "SCCombat";
         private string dbSCGeneral = "SCGeneral";
@@ -65,7 +65,6 @@ namespace EDDiscovery.UserControls
         public UserControlStats()
         {
             InitializeComponent();
-            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
         }
 
         protected override void Init()
@@ -75,8 +74,23 @@ namespace EDDiscovery.UserControls
             tabControlCustomStats.SelectedIndex = GetSetting(dbSelectedTabSave, 0);
             userControlStatsTimeScan.DisplayStarsPlanetSelector(true);
 
+            var enumlist = new Enum[] { EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral, EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral_ItemName,
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageGeneral_Information, EDTx.UserControlStats_tabControlCustomStats_tabPageTravel,
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageScan,
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageRanks, EDTx.UserControlStats_tabControlCustomStats_tabPageRanks_dataGridViewTextBoxColumnRank, EDTx.UserControlStats_tabControlCustomStats_tabPageRanks_dataGridViewTextBoxColumnAtStart, EDTx.UserControlStats_tabControlCustomStats_tabPageRanks_dataGridViewTextBoxAtEnd, 
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageRanks_dataGridViewTextBoxColumnLastPromotionDate,EDTx.UserControlStats_tabControlCustomStats_tabPageRanks_dataGridViewTextColumnRankProgressNumeric,
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageGameStats,
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageByShip, EDTx.UserControlStats_labelStart, EDTx.UserControlStats_labelEndDate,
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageCombat,
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageLedger, EDTx.UserControlStats_tabControlCustomStats_tabPageLedger_dataGridViewTextBoxColumnLedgerDate,
+                                        EDTx.UserControlStats_tabControlCustomStats_tabPageLedger_dataGridViewTextBoxColumnNumericCredits
+            };
+
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
             DiscoveryForm.OnNewEntry += AddNewEntry;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
+
 
             // datetime picker kind is not used
             dateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(EliteDangerousCore.EliteReleaseDates.GameRelease));
@@ -110,7 +124,7 @@ namespace EDDiscovery.UserControls
             {
                 extChartTravelDest.AddChartArea("TravelCA1");
                 extChartTravelDest.AddSeries("TravelS1", "TravelCA1", SeriesChartType.Column);
-                extChartTravelDest.AddTitle("MV1", "Most Visited".Tx(), dockingpos: Docking.Top);
+                extChartTravelDest.AddTitle("MV1", "Most Visited".T(EDTx.UserControlStats_MostVisited), dockingpos: Docking.Top);
             }
 
             {
@@ -200,16 +214,16 @@ namespace EDDiscovery.UserControls
                 const int ch = 96;
                 extChartShips.AddChartArea("SH-CA1", new ElementPosition(c1l, ct, cw, ch));
                 extChartShips.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
-                extChartShips.AddLegend("SH-L1", position: new ElementPosition(0, ct, c1l - 1, ch));
+                extChartShips.AddLegend("SH-L1", position: new ElementPosition(0, ct, c1l-1, ch));
                 extChartShips.AddSeries("SH-S1", "SH-CA1", SeriesChartType.Pie, legend: "SH-L1");
-                extChartShips.AddTitle("SH-T1", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l + 1f, 3f, 8, 5), bordercolor: ExtendedControls.ExtSafeChart.Disable);
+                extChartShips.AddTitle("SH-T1", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l+1f, 3f, 8, 5), bordercolor: ExtendedControls.ExtSafeChart.Disable);
 
-                extChartShips.AddChartArea("SH-CA2", new ElementPosition(c1l + cw + 0.5f, ct, cw, ch));
+                extChartShips.AddChartArea("SH-CA2", new ElementPosition(c1l+cw+0.5f, ct, cw, ch));
                 extChartShips.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
                 extChartShips.AddSeries("SH-S2", "SH-CA2", SeriesChartType.Pie);      // setting legend blank means don't show
                 extChartShips.AddTitle("SH-T2", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l + cw + 1f, 3f, 10, 5), bordercolor: ExtendedControls.ExtSafeChart.Disable);
 
-                extChartShips.AddChartArea("SH-CA3", new ElementPosition(c1l + cw + cw + 1f, ct, cw, ch));
+                extChartShips.AddChartArea("SH-CA3", new ElementPosition(c1l+cw+cw+1f, ct, cw, ch));
                 extChartShips.SetChartArea3DStyle(new ChartArea3DStyle() { Inclination = 15, Enable3D = true, Rotation = -90, LightStyle = LightStyle.Simplistic });
                 extChartShips.AddSeries("SH-S3", "SH-CA3", SeriesChartType.Pie);
                 extChartShips.AddTitle("SH-T3", "", alignment: ContentAlignment.MiddleLeft, position: new ElementPosition(c1l + cw + cw + 1.5f, 3f, 10, 5), bordercolor: ExtendedControls.ExtSafeChart.Disable);
@@ -229,7 +243,7 @@ namespace EDDiscovery.UserControls
                         dataGridViewByShip.RowTemplate.MinimumHeight =
                         dataGridViewGeneral.RowTemplate.MinimumHeight = Font.ScalePixels(24);
 
-            if (DiscoveryForm.History.Count > 0)        // if we loaded a history, this is a new panel, so work
+            if ( DiscoveryForm.History.Count>0 )        // if we loaded a history, this is a new panel, so work
                 KickComputer();
 
             timerupdate.Start();
@@ -251,7 +265,7 @@ namespace EDDiscovery.UserControls
             if (dataGridViewTravel.Columns.Count > 0)
                 DGVSaveColumnLayout(dataGridViewTravel, dbTravel + userControlStatsTimeTravel.TimeMode.ToString());
 
-            if (dataGridViewScan.Columns.Count > 0)
+            if (dataGridViewScan.Columns.Count > 0)    
                 DGVSaveColumnLayout(dataGridViewScan, dbScan + userControlStatsTimeScan.TimeMode.ToString());
 
             if (dataGridViewCombat.Columns.Count > 0)
@@ -346,14 +360,14 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void DateTimeRangeDialog(Control button, List<Tuple<DateTime, DateTime>> times)
+        private void DateTimeRangeDialog(Control button, List<Tuple<DateTime,DateTime>> times)
         {
             ExtendedControls.CheckedIconNewListBoxForm startstopsel = new ExtendedControls.CheckedIconNewListBoxForm();
 
             for (int i = 0; i < times.Count; i++)
             {
                 string s = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[i].Item1).ToStringYearFirst() + " - ";
-                if (times[i].Item2 != DateTime.MaxValue)
+                if ( times[i].Item2 != DateTime.MaxValue)
                 {
                     s += EDDConfig.Instance.ConvertTimeToSelectedFromUTC(times[i].Item2).ToStringYearFirst() + " \u0394 " + (times[i].Item2 - times[i].Item1).ToString(@"d\:hh\:mm\:ss");
                 }
@@ -416,9 +430,9 @@ namespace EDDiscovery.UserControls
                 statscomputer.Start(EDCommander.CurrentCmdrID,
                                                 dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value) : default(DateTime?),
                                                 dateTimePickerEndDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerEndDate.Value) : default(DateTime?),
-                                                (rs) =>
+                                                (rs) => 
                                                 {
-                                                    BeginInvoke((MethodInvoker)(() => { EndComputation(rs); }));
+                                                    BeginInvoke((MethodInvoker)(() => { EndComputation(rs); })); 
                                                 });
 
                 labelStatus.Text = "Working..";
@@ -455,7 +469,7 @@ namespace EDDiscovery.UserControls
 
             //  System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Tick {newstats} {enqueued} {redisplay}");
 
-            if (newstats || enqueued || redisplay)                      // redisplay is due to tab change or time mode change
+            if ( newstats || enqueued || redisplay)                      // redisplay is due to tab change or time mode change
             {
                 timerupdate.Stop();     // in case we take a long time, stop the timer, so we don't reenter
 
@@ -463,7 +477,7 @@ namespace EDDiscovery.UserControls
 
                 System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap("Display", true)} Stats display starts {tabControlCustomStats.SelectedIndex}");
 
-                if (newstats)                                         // new kick computation
+                if ( newstats )                                         // new kick computation
                 {
                     currentstats = pendingstats;                        // swap stats structure
                     pendingstats = null;
@@ -476,11 +490,11 @@ namespace EDDiscovery.UserControls
                         currentstats.Process(result);
                     }
 
-                    if (newstats || enqueued)     // if we did newstate, or enqueued, all of the below can now be out of date
+                    if ( newstats || enqueued )     // if we did newstate, or enqueued, all of the below can now be out of date
                     {                               // we may not be currently displaying them, but we will need to refresh if we select them again
                         System.Diagnostics.Debug.WriteLine($"{BaseUtils.AppTicks.TickCount} Stats clear flags due to ns{newstats} eq{enqueued} ");
                         lasttraveltimemode = lastscantimemode = lastcombattimemode = JournalStatsInfo.TimeModeType.NotSet;
-                        laststatsgeneraldisplayed = laststatsbyshipdisplayed = laststatsledgerdisplayed = laststatsrankdisplayed = false;
+                        laststatsgeneraldisplayed = laststatsbyshipdisplayed = laststatsledgerdisplayed = laststatsrankdisplayed= false;
                     }
 
                     DateTime starttimeutc = dateTimePickerStartDate.Checked ? EDDConfig.Instance.ConvertTimeToUTCFromPicker(dateTimePickerStartDate.Value) :
@@ -506,7 +520,7 @@ namespace EDDiscovery.UserControls
                     }
                     else if (tabControlCustomStats.SelectedTab == tabPageTravel)
                     {
-                        if (lasttraveltimemode != userControlStatsTimeTravel.TimeMode)
+                        if ( lasttraveltimemode != userControlStatsTimeTravel.TimeMode)
                         {
                             turnontimer = false;
                             StatsTravel(currentstats, starttimeutc, endtimeutc);
@@ -535,7 +549,7 @@ namespace EDDiscovery.UserControls
                     }
                     else if (tabControlCustomStats.SelectedTab == tabPageByShip)
                     {
-                        if (laststatsbyshipdisplayed == false)
+                        if ( laststatsbyshipdisplayed == false)
                             StatsByShip(currentstats);
                     }
                 }
@@ -560,27 +574,27 @@ namespace EDDiscovery.UserControls
         private bool laststatsgeneraldisplayed = false;
         private void StatsGeneral(JournalStats currentstat, DateTime endtimeutc)
         {
-            TravelDGV("Total No of jumps".Tx(), currentstat.fsdcarrierjumps.ToString());
+            TravelDGV("Total No of jumps".T(EDTx.UserControlStats_TotalNoofjumps), currentstat.fsdcarrierjumps.ToString());
 
             extChartTravelDest.ClearSeriesPoints();
 
             if (currentstat.FSDJumps.Count > 0)        // these will be null unless there are jumps
             {
-                TravelDGV("FSD jumps".Tx(), currentstat.FSDJumps.Count.ToString());
+                TravelDGV("FSD jumps".T(EDTx.UserControlStats_FSDjumps), currentstat.FSDJumps.Count.ToString());
 
-                TravelDGV("FSD Jump History".Tx(),
-                                        "24 Hours".Tx() + ": " + currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddHours(-24)).Count() +
-                                        ", One Week".Tx() + ": " + currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-7)).Count() +
-                                        ", 30 Days".Tx() + ": " + currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-30)).Count() +
-                                        ", One Year".Tx() + ": " + currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-365)).Count()
+                TravelDGV("FSD Jump History".T(EDTx.UserControlStats_JumpHistory),
+                                        "24 Hours: ".T(EDTx.UserControlStats_24hc) + currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddHours(-24)).Count() +
+                                        ", One Week: ".T(EDTx.UserControlStats_OneWeek) + currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-7)).Count() +
+                                        ", 30 Days: ".T(EDTx.UserControlStats_30Days) + currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-30)).Count() +
+                                        ", One Year: ".T(EDTx.UserControlStats_OneYear) + currentstat.FSDJumps.Where(x => x.utc >= endtimeutc.AddDays(-365)).Count()
                                         );
 
-                TravelDGV("Most North".Tx(), GetSystemDataString(currentstat.MostNorth));
-                TravelDGV("Most South".Tx(), GetSystemDataString(currentstat.MostSouth));
-                TravelDGV("Most East".Tx(), GetSystemDataString(currentstat.MostEast));
-                TravelDGV("Most West".Tx(), GetSystemDataString(currentstat.MostWest));
-                TravelDGV("Most Highest".Tx(), GetSystemDataString(currentstat.MostUp));
-                TravelDGV("Most Lowest".Tx(), GetSystemDataString(currentstat.MostDown));
+                TravelDGV("Most North".T(EDTx.UserControlStats_MostNorth), GetSystemDataString(currentstat.MostNorth));
+                TravelDGV("Most South".T(EDTx.UserControlStats_MostSouth), GetSystemDataString(currentstat.MostSouth));
+                TravelDGV("Most East".T(EDTx.UserControlStats_MostEast), GetSystemDataString(currentstat.MostEast));
+                TravelDGV("Most West".T(EDTx.UserControlStats_MostWest), GetSystemDataString(currentstat.MostWest));
+                TravelDGV("Most Highest".T(EDTx.UserControlStats_MostHighest), GetSystemDataString(currentstat.MostUp));
+                TravelDGV("Most Lowest".T(EDTx.UserControlStats_MostLowest), GetSystemDataString(currentstat.MostDown));
 
                 if (extChartTravelDest.Active)
                 {
@@ -590,7 +604,7 @@ namespace EDDiscovery.UserControls
                     // charts themed by themer has X and Y series label color set so they will show
 
                     int i = 0;
-                    foreach (var data in fsdbodies.Take(12))
+                    foreach (var data in fsdbodies.Take(12))      
                     {
                         extChartTravelDest.AddXY(i, data.Value, data.Key);
                         i++;
@@ -630,14 +644,14 @@ namespace EDDiscovery.UserControls
             JournalPromotion pcombat = currentstat.Promotions.FindLast(x => x.Combat.HasValue);
             JournalPromotion ptrade = currentstat.Promotions.FindLast(x => x.Trade.HasValue);
             JournalPromotion pexplore = currentstat.Promotions.FindLast(x => x.Explore.HasValue);
-            JournalPromotion psoldier = currentstat.Promotions.FindLast(x => x.Soldier.HasValue);
+            JournalPromotion psoldier= currentstat.Promotions.FindLast(x => x.Soldier.HasValue);
             JournalPromotion pexobiologist = currentstat.Promotions.FindLast(x => x.ExoBiologist.HasValue);
             JournalPromotion pempire = currentstat.Promotions.FindLast(x => x.Empire.HasValue);
             JournalPromotion pfederation = currentstat.Promotions.FindLast(x => x.Federation.HasValue);
             JournalPromotion pcqc = currentstat.Promotions.FindLast(x => x.CQC.HasValue);
 
             // so we may have been promoted after lastrank, so horribly, fix it up
-            if (lastrank != null)
+            if ( lastrank != null )
             {
                 if (pcombat?.EventTimeUTC > lastrank.EventTimeUTC)
                     lastrank = new JournalRank(pcombat.EventTimeUTC, pcombat.Combat.Value, lastrank.Trade, lastrank.Explore, lastrank.Soldier, lastrank.ExoBiologist, lastrank.Empire, lastrank.Federation, lastrank.CQC);
@@ -714,14 +728,14 @@ namespace EDDiscovery.UserControls
             string pptime = currentstat.LastPowerplay != null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(currentstat.LastPowerplay.TimeJoinedUTC).ToString() : "";
             dataGridViewRanks.Rows.Add(new string[]
             {
-                "Powerplay".Tx(), "", pp,"",pptime,
+                "Powerplay".TxID(EDTx.UserControlStats_Powerplay), "", pp,"",pptime,
             });
 
             string ss = currentstat.LastSquadronStartup != null ? $"{currentstat.LastSquadronStartup.Name} - {currentstat.LastSquadronStartup.CurrentRank.ToString()}" : "-";
             string sstime = currentstat.LastSquadronPromotion != null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(currentstat.LastSquadronPromotion.EventTimeUTC).ToString() : "";
             dataGridViewRanks.Rows.Add(new string[]
             {
-                "Squadron".Tx(), "", ss,"",sstime,
+                "Squadron".TxID(EDTx.UserControlStats_Squadron), "", ss,"",sstime,
             });
 
 
@@ -742,11 +756,11 @@ namespace EDDiscovery.UserControls
             extChartLedger.BeginInit();
             dataGridViewLedger.Rows.Clear();
 
-            foreach (var kvp in currentstat.Credits)
+            foreach( var kvp in currentstat.Credits)
             {
                 DateTime seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(kvp.Key);
                 object[] coldata = new object[] { seltime.ToString(), kvp.Value.ToString("N0") };
-                int row = dataGridViewLedger.Rows.Add(coldata);
+                int row =dataGridViewLedger.Rows.Add(coldata);
                 dataGridViewLedger.Rows[row].Tag = seltime;
                 extChartLedger.AddXY(seltime, kvp.Value);   // no tip, since the grid responds to a click on a point 
             }
@@ -764,7 +778,7 @@ namespace EDDiscovery.UserControls
             {
                 var row = dataGridViewLedger.Rows[e.RowIndex];
                 var datetime = (DateTime)row.Tag;
-                //  System.Diagnostics.Debug.WriteLine($"Stats Selected Graph cursor position {datetime}");
+              //  System.Diagnostics.Debug.WriteLine($"Stats Selected Graph cursor position {datetime}");
                 extChartLedger.SetXCursorPosition(datetime);
             }
         }
@@ -809,16 +823,16 @@ namespace EDDiscovery.UserControls
                 return;
 
             int row = 0;
-            StatToDGV(dataGridViewTravel, "Jumps".Tx(), res[row++]);
-            StatToDGV(dataGridViewTravel, "Travelled Ly".Tx(), res[row++]);
-            StatToDGV(dataGridViewTravel, "Basic Boost".Tx(), res[row++]);
-            StatToDGV(dataGridViewTravel, "Standard Boost".Tx(), res[row++]);
-            StatToDGV(dataGridViewTravel, "Premium Boost".Tx(), res[row++]);
-            StatToDGV(dataGridViewTravel, "Jet Cone Boost".Tx(), res[row++]);
-            StatToDGV(dataGridViewTravel, "Scans".Tx(), res[row++]);
-            StatToDGV(dataGridViewTravel, "Mapped".Tx(), res[row++]);
-            StatToDGV(dataGridViewTravel, "Scan value".Tx(), res[row++]);
-            StatToDGV(dataGridViewTravel, "Organic Scans Value".Tx(), res[row++]);
+            StatToDGV(dataGridViewTravel, "Jumps".T(EDTx.UserControlStats_Jumps), res[row++]);
+            StatToDGV(dataGridViewTravel, "Travelled Ly".T(EDTx.UserControlStats_TravelledLy), res[row++]);
+            StatToDGV(dataGridViewTravel, "Basic Boost".T(EDTx.UserControlStats_BasicBoost), res[row++]);
+            StatToDGV(dataGridViewTravel, "Standard Boost".T(EDTx.UserControlStats_StandardBoost), res[row++]);
+            StatToDGV(dataGridViewTravel, "Premium Boost".T(EDTx.UserControlStats_PremiumBoost), res[row++]);
+            StatToDGV(dataGridViewTravel, "Jet Cone Boost".T(EDTx.UserControlStats_JetConeBoost), res[row++]);
+            StatToDGV(dataGridViewTravel, "Scans".T(EDTx.UserControlStats_Scans), res[row++]);
+            StatToDGV(dataGridViewTravel, "Mapped".T(EDTx.UserControlStats_Mapped), res[row++]);
+            StatToDGV(dataGridViewTravel, "Scan value".T(EDTx.UserControlStats_Scanvalue), res[row++]);
+            StatToDGV(dataGridViewTravel, "Organic Scans Value".T(EDTx.UserControlStats_OrganicScans), res[row++]);
 
             if (sortcol < dataGridViewTravel.Columns.Count)
             {
@@ -853,7 +867,7 @@ namespace EDDiscovery.UserControls
         private JournalStatsInfo.TimeModeType lastscantimemode = JournalStatsInfo.TimeModeType.NotSet;
         private bool lastscanstarmode = false;
 
-        async void StatsScan(JournalStats currentstat, DateTime starttimeutc, DateTime endtimeutc)
+        async void StatsScan(JournalStats currentstat, DateTime starttimeutc, DateTime endtimeutc )
         {
             userControlStatsTimeScan.Enabled = false;
             int sortcol = dataGridViewScan.SortedColumn?.Index ?? 0;
@@ -873,7 +887,7 @@ namespace EDDiscovery.UserControls
             if (IsClosed)
                 return;
 
-            for (int i = 0; i < cres.chart1labels.Length; i++)
+            for( int i = 0; i < cres.chart1labels.Length; i++)
             {
                 StatToDGV(dataGridViewScan, cres.chart1labels[i], cres.griddata[i]);
             }
@@ -997,29 +1011,29 @@ namespace EDDiscovery.UserControls
                 return;
 
             int row = 0;
-            StatToDGV(dataGridViewCombat, "Bounties".Tx(), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Bounty Value".Tx(), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Bounties on Ships".Tx(), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Bounties".T(EDTx.UserControlStats_Bounties), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Bounty Value".T(EDTx.UserControlStats_Bountyvalue), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Bounties on Ships".T(EDTx.UserControlStats_Bountiesonships), cres.griddata[row++]);
 
             foreach (var lab in cres.chart1labels)
                 StatToDGV(dataGridViewCombat, lab, cres.griddata[row++]);
 
-            StatToDGV(dataGridViewCombat, "Crimes".Tx(), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Crime Cost".Tx(), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Faction Kill Bonds".Tx(), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "FKB Value".Tx(), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Crimes".T(EDTx.UserControlStats_Crimes), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Crime Cost".T(EDTx.UserControlStats_CrimeCost), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Faction Kill Bonds".T(EDTx.UserControlStats_FactionKillBonds), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "FKB Value".T(EDTx.UserControlStats_FKBValue), cres.griddata[row++]);
 
-            StatToDGV(dataGridViewCombat, "Interdictions Player Succeeded".Tx(), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdictions Player Failed".Tx(), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdictions NPC Succeeded".Tx(), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdictions NPC Failed".Tx(), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdictions Player Succeeded".T(EDTx.UserControlStats_InterdictionPlayerSucceeded), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdictions Player Failed".T(EDTx.UserControlStats_InterdictionPlayerFailed), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdictions NPC Succeeded".T(EDTx.UserControlStats_InterdictionNPCSucceeded), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdictions NPC Failed".T(EDTx.UserControlStats_InterdictionNPCFailed), cres.griddata[row++]);
 
-            StatToDGV(dataGridViewCombat, "Interdicted Player Succeeded".Tx(), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdicted Player Failed".Tx(), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdicted NPC Succeeded".Tx(), cres.griddata[row++]);
-            StatToDGV(dataGridViewCombat, "Interdicted NPC Failed".Tx(), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdicted Player Succeeded".T(EDTx.UserControlStats_InterdictedPlayerSucceeded), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdicted Player Failed".T(EDTx.UserControlStats_InterdictedPlayerFailed), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdicted NPC Succeeded".T(EDTx.UserControlStats_InterdictedNPCSucceeded), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "Interdicted NPC Failed".T(EDTx.UserControlStats_InterdictedNPCFailed), cres.griddata[row++]);
 
-            StatToDGV(dataGridViewCombat, "PVP Kills".Tx(), cres.griddata[row++]);
+            StatToDGV(dataGridViewCombat, "PVP Kills".T(EDTx.UserControlStats_PVPKills), cres.griddata[row++]);
             foreach (var lab in cres.chart2labels)
                 StatToDGV(dataGridViewCombat, lab, cres.griddata[row++]);
 
@@ -1068,7 +1082,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            extChartCombat.SetChartAreaVisible(0, npcdata.Sum() > 0);
+            extChartCombat.SetChartAreaVisible(0,npcdata.Sum() > 0);
 
             extChartCombat.SetCurrentSeries(1); // PVP
 
@@ -1090,7 +1104,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            extChartCombat.SetChartAreaVisible(1, pvpdata.Sum() > 0);
+            extChartCombat.SetChartAreaVisible(1,pvpdata.Sum() > 0);
 
             bool showing = npcdata.Sum() > 0 || pvpdata.Sum() > 0;      // see if anything is displayed. We should have selected a filled area
 
@@ -1138,27 +1152,27 @@ namespace EDDiscovery.UserControls
 
                 AddTreeList("N1", "@", new string[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(stats.EventTimeUTC).ToString() }, collapseExpand[0]);
 
-                AddTreeList("N2", "Bank Account".Tx(), stats.BankAccount.Format("").Split(Environment.NewLine), collapseExpand[1]);
-                AddTreeList("N3", "Combat".Tx(), stats.Combat.Format("").Split(Environment.NewLine), collapseExpand[2]);
-                AddTreeList("N4", "Crime".Tx(), stats.Crime.Format("").Split(Environment.NewLine), collapseExpand[3]);
-                AddTreeList("N5", "Smuggling".Tx(), stats.Smuggling.Format("").Split(Environment.NewLine), collapseExpand[4]);
+                AddTreeList("N2", "Bank Account".T(EDTx.UserControlStats_BankAccount), stats.BankAccount.Format("").Split(Environment.NewLine),collapseExpand[1]);
+                AddTreeList("N3", "Combat".T(EDTx.UserControlStats_Combat), stats.Combat.Format("").Split(Environment.NewLine), collapseExpand[2]);
+                AddTreeList("N4", "Crime".T(EDTx.UserControlStats_Crime), stats.Crime.Format("").Split(Environment.NewLine), collapseExpand[3]);
+                AddTreeList("N5", "Smuggling".T(EDTx.UserControlStats_Smuggling), stats.Smuggling.Format("").Split(Environment.NewLine),collapseExpand[4]);
 
-                AddTreeList("N6", "Trading".Tx(), stats.Trading.Format("").Split(Environment.NewLine), collapseExpand[5]);
-                AddTreeList("N7", "Mining".Tx(), stats.Mining.Format("").Split(Environment.NewLine), collapseExpand[6]);
-                AddTreeList("N8", "Exploration".Tx(), stats.Exploration.Format("").Split(Environment.NewLine), collapseExpand[7]);
-                AddTreeList("N9", "Passengers".Tx(), stats.PassengerMissions.Format("").Split(Environment.NewLine), collapseExpand[8]);
+                AddTreeList("N6", "Trading".T(EDTx.UserControlStats_Trading), stats.Trading.Format("").Split(Environment.NewLine), collapseExpand[5]);
+                AddTreeList("N7", "Mining".T(EDTx.UserControlStats_Mining), stats.Mining.Format("").Split(Environment.NewLine),collapseExpand[6]);
+                AddTreeList("N8", "Exploration".T(EDTx.UserControlStats_Exploration), stats.Exploration.Format("").Split(Environment.NewLine),collapseExpand[7]);
+                AddTreeList("N9", "Passengers".T(EDTx.UserControlStats_Passengers), stats.PassengerMissions.Format("").Split(Environment.NewLine), collapseExpand[8]);
 
-                AddTreeList("N10", "Search and Rescue".Tx(), stats.SearchAndRescue.Format("").Split(Environment.NewLine), collapseExpand[9]);
-                AddTreeList("N11", "Crafting".Tx(), stats.Crafting.Format("").Split(Environment.NewLine), collapseExpand[10]);
-                AddTreeList("N12", "Crew".Tx(), stats.Crew.Format("").Split(Environment.NewLine), collapseExpand[11]);
-                AddTreeList("N13", "Multi-crew".Tx(), stats.Multicrew.Format("").Split(Environment.NewLine), collapseExpand[12]);
+                AddTreeList("N10", "Search and Rescue".T(EDTx.UserControlStats_SearchandRescue), stats.SearchAndRescue.Format("").Split(Environment.NewLine), collapseExpand[9]);
+                AddTreeList("N11", "Crafting".T(EDTx.UserControlStats_Crafting), stats.Crafting.Format("").Split(Environment.NewLine), collapseExpand[10]);
+                AddTreeList("N12", "Crew".T(EDTx.UserControlStats_Crew), stats.Crew.Format("").Split(Environment.NewLine), collapseExpand[11]);
+                AddTreeList("N13", "Multi-crew".T(EDTx.UserControlStats_Multi), stats.Multicrew.Format("").Split(Environment.NewLine), collapseExpand[12]);
 
-                AddTreeList("N14", "Materials Trader".Tx(), stats.MaterialTraderStats.Format("").Split(Environment.NewLine), collapseExpand[13]);
-                AddTreeList("N15", "CQC".Tx(), stats.CQC.Format("").Split(Environment.NewLine), collapseExpand[14]);
-                AddTreeList("N16", "Fleetcarrier".Tx(), stats.FLEETCARRIER.Format("").Split(Environment.NewLine), collapseExpand[15]);
-                AddTreeList("N17", "Exobiology".Tx(), stats.Exobiology.Format("").Split(Environment.NewLine), collapseExpand[16]);
-                AddTreeList("N18", "Thargoids".Tx(), stats.Thargoids.Format("", true).Split(Environment.NewLine), collapseExpand[17]);
-                AddTreeList("N19", "Squadron".Tx(), stats.Squadron.Format("").Split(Environment.NewLine), collapseExpand[18]);
+                AddTreeList("N14", "Materials Trader".T(EDTx.UserControlStats_MaterialsTrader), stats.MaterialTraderStats.Format("").Split(Environment.NewLine), collapseExpand[13]);
+                AddTreeList("N15", "CQC".T(EDTx.UserControlStats_CQC), stats.CQC.Format("").Split(Environment.NewLine), collapseExpand[14]);
+                AddTreeList("N16", "Fleetcarrier".T(EDTx.UserControlStats_FLEETCARRIER), stats.FLEETCARRIER.Format("").Split(Environment.NewLine), collapseExpand[15]);
+                AddTreeList("N17", "Exobiology".T(EDTx.UserControlStats_Exobiology), stats.Exobiology.Format("").Split(Environment.NewLine), collapseExpand[16]);
+                AddTreeList("N18", "Thargoids".T(EDTx.UserControlStats_Thargoids), stats.Thargoids.Format("",true).Split(Environment.NewLine), collapseExpand[17]);
+                AddTreeList("N19", "Squadron", stats.Squadron.Format("").Split(Environment.NewLine), collapseExpand[18]);
             }
             else
                 treeViewStats.Nodes.Clear();
@@ -1173,7 +1187,7 @@ namespace EDDiscovery.UserControls
         TreeNode AddTreeList(string parentid, string parenttext, string[] children, char ce)
         {
             TreeNode[] parents = treeViewStats.Nodes.Find(parentid, false);                     // find parent id in tree
-            TreeNode pnode = (parents.Length == 0) ? (treeViewStats.Nodes.Add(parentid, parenttext)) : parents[0];  // if not found, add it, else get it
+            TreeNode pnode = (parents.Length == 0) ? (treeViewStats.Nodes.Add(parentid,parenttext)) : parents[0];  // if not found, add it, else get it
 
             if (pnode.Nodes.Count > 0)          // defend against nodes coming and going so we don't show bad data from previous searches
             {
@@ -1184,10 +1198,10 @@ namespace EDDiscovery.UserControls
                 else
                 {
                     int exno = 0;
-                    foreach (TreeNode cn in pnode.Nodes)        // check IDs are in the same order
+                    foreach( TreeNode cn in pnode.Nodes)        // check IDs are in the same order
                     {
                         string childid = parentid + "-" + (exno++).ToString();       // make up a child id
-                        if (cn.Name != childid)
+                        if ( cn.Name != childid)
                         {
                             pnode.Nodes.Clear();
                             break;
@@ -1197,7 +1211,7 @@ namespace EDDiscovery.UserControls
             }
 
             int eno = 0;
-            foreach (var childtext in children)
+            foreach( var childtext in children)
             {
                 string childid = parentid + "-" + (eno++).ToString();       // make up a child id
                 TreeNode[] childs = pnode.Nodes.Find(childid, false);       // find it..
@@ -1243,17 +1257,17 @@ namespace EDDiscovery.UserControls
 
             if (dataGridViewByShip.Columns.Count == 0)
             {
-                string jumpscolh = "Jumps".Tx();
-                string travelledcolh = "Travelled Ly".Tx();
-                string bodiesscannedcolh = "Bodies Scanned".Tx();
+                string jumpscolh = "Jumps".T(EDTx.UserControlStats_Jumps);
+                string travelledcolh = "Travelled Ly".T(EDTx.UserControlStats_TravelledLy);
+                string bodiesscannedcolh = "Bodies Scanned".T(EDTx.UserControlStats_BodiesScanned);
 
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha1", HeaderText = "Type".Tx(), ReadOnly = true });
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha2", HeaderText = "Name".Tx(), ReadOnly = true });
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha3", HeaderText = "Ident".Tx(), ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha1", HeaderText = "Type".T(EDTx.UserControlStats_Type), ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha2", HeaderText = "Name".T(EDTx.UserControlStats_Name), ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Alpha3", HeaderText = "Ident".T(EDTx.UserControlStats_Ident), ReadOnly = true });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric1", HeaderText = jumpscolh, ReadOnly = true });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric2", HeaderText = travelledcolh, ReadOnly = true });
                 dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric3", HeaderText = bodiesscannedcolh, ReadOnly = true });
-                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric4", HeaderText = "Destroyed".Tx(), ReadOnly = true });
+                dataGridViewByShip.Columns.Add(new DataGridViewTextBoxColumn() { Name = "Numeric4", HeaderText = "Destroyed".T(EDTx.UserControlStats_Destroyed), ReadOnly = true });
                 DGVLoadColumnLayout(dataGridViewByShip, dbShip);
 
                 extChartShips.SetCurrentTitle(0);
@@ -1277,7 +1291,7 @@ namespace EDDiscovery.UserControls
             {
                 var fsd = currentstat.FSDJumps.Where(x => x.shipid == kvp.Key);
                 var scans = currentstat.Scans.Values.Where(x => x.ShipIDForStatsOnly == kvp.Key);
-                strarr[0] = kvp.Value.Name ?? "-";
+                strarr[0] = kvp.Value.Name?? "-";
                 strarr[1] = kvp.Value.Ident ?? "-";
 
                 piefsdjumps[row] = fsd.Count();
@@ -1348,16 +1362,16 @@ namespace EDDiscovery.UserControls
         }
 
         // set up a time date array with the limit times in utc, and set up the grid view columns
-        private Tuple<DateTime[], DateTime[]> SetupSummary(DateTime starttimeutc, DateTime endtimeutc, DateTime lastdockedutc, DataGridView gridview, string dbname)
+        private Tuple<DateTime[],DateTime[]> SetupSummary(DateTime starttimeutc, DateTime endtimeutc, DateTime lastdockedutc, DataGridView gridview, string dbname)
         {
             var ret = JournalStatsInfo.SetupSummary(starttimeutc, endtimeutc, lastdockedutc);
 
             if (gridview.Columns.Count == 0)
             {
-                gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name = "AlphaCol", HeaderText = "Type".Tx(), ReadOnly = true });
-
+                gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name="AlphaCol", HeaderText = "Type".T(EDTx.UserControlStats_Type), ReadOnly = true});
+               
                 for (int i = 0; i < ret.Item1.Length; i++)
-                    gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NumericCol" + i, ReadOnly = true });          // Name is important
+                    gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NumericCol"+i , ReadOnly = true});          // Name is important
 
                 DGVLoadColumnLayout(gridview, dbname + "Summary");           // changed mode, therefore load layout
             }
@@ -1365,8 +1379,8 @@ namespace EDDiscovery.UserControls
             gridview.Columns[1].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ret.Item1[0]).ToShortDateString() + "..";
             gridview.Columns[2].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ret.Item1[1]).ToShortDateString() + "..";
             gridview.Columns[3].HeaderText = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ret.Item1[2]).ToShortDateString() + "..";
-            gridview.Columns[4].HeaderText = "Last dock".Tx();
-            gridview.Columns[5].HeaderText = "All".Tx();
+            gridview.Columns[4].HeaderText = "Last dock".T(EDTx.UserControlStats_Lastdock);
+            gridview.Columns[5].HeaderText = "All".T(EDTx.UserControlStats_All);
 
             //for (int i = 0; i < starttimeutc.Length; i++)  System.Diagnostics.Debug.WriteLine($"Time {starttimeutc[i].ToString()} - {endtimeutc[i].ToString()} {starttimeutc[i].Kind}");
 
@@ -1382,7 +1396,7 @@ namespace EDDiscovery.UserControls
 
             if (gridview.Columns.Count == 0)
             {
-                var Col1 = new DataGridViewTextBoxColumn() { Name = "AlphaCol", HeaderText = "Type".Tx(), ReadOnly = true };
+                var Col1 = new DataGridViewTextBoxColumn() { Name="AlphaCol", HeaderText = "Type".T(EDTx.UserControlStats_Type), ReadOnly = true };
                 gridview.Columns.Add(Col1);
                 for (int i = 0; i < intervals; i++)
                     gridview.Columns.Add(new DataGridViewTextBoxColumn() { Name = "NumericCol" + i, ReadOnly = true });          //Name is important for autosorting
