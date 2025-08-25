@@ -300,8 +300,8 @@ SECTION EDDiscoveryController
 .CD: "Closing down, please wait.." => "Chiudendo, per favore aspettare..."
 .EDSM: "Get galactic mapping from EDSM." => "Richiedendo dati galattici da EDSM."
 .GEC: "Get galactic mapping from GEC." @
-.LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Caricando note, favoriti e dati di mappa galattici."
-.RTH: "Reading travel history" => "Leggiendo lo storico di viaggio"
+.LN: "Loaded Notes, Bookmarks and Galactic mapping." => "Note, Preferiti e Mappa Galattica caricati."
+.RTH: "Reading travel history" => "Lettura dello storico di viaggio"
 .SyncEDSM: "Please continue running ED Discovery until refresh is complete." => "Per favore, continua a usare EDDiscovery fino al completamento del rinnovo."
 .SyncOff: "Star Data download is disabled. Use Settings panel to reenable" => "Sincronizzazione a EDSM e EDDB disabilitati. Abilitarli nel setup del comandante"
 .EDSMU: "Systems update complete with {0:N0} systems" => "Attualizzazione EDSM completata com {0:N0} sistemi"
