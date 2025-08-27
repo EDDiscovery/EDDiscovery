@@ -54,6 +54,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             DiscoveryForm.OnNewTarget += Discoveryform_OnNewTarget;
+            DiscoveryForm.OnThemeChanged += DiscoveryForm_OnThemeChanged;
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
             rollUpPanelTop.SetToolTip(toolTip);
@@ -70,7 +71,6 @@ namespace EDDiscovery.UserControls
             drawsystemupdatetimer = new Timer() { Interval = 500 };
             drawsystemupdatetimer.Tick += DrawSystemUpdatetimer_Tick;
         }
-
 
         protected override void InitialDisplay()
         {
@@ -89,6 +89,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
             DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
             DiscoveryForm.OnNewTarget -= Discoveryform_OnNewTarget;
+            DiscoveryForm.OnThemeChanged -= DiscoveryForm_OnThemeChanged;
             GlobalBookMarkList.Instance.OnBookmarkChange -= GlobalBookMarkList_OnBookmarkChange;
         }
 
@@ -131,6 +132,11 @@ namespace EDDiscovery.UserControls
         private void GlobalBookMarkList_OnBookmarkChange(BookmarkClass bk, bool deleted)
         {
             CalculateThenDrawSystemSignals(cur_sys);
+        }
+
+        private void DiscoveryForm_OnThemeChanged()
+        {
+            DrawAll(cur_sys);
         }
 
         private void Discoveryform_OnNewUIEvent(UIEvent uievent)

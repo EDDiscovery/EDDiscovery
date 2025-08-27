@@ -177,6 +177,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry += NewEntry;
             DiscoveryForm.OnNewTarget += NewTarget;
             DiscoveryForm.OnNewUIEvent += OnNewUIEvent;
+            DiscoveryForm.OnThemeChanged += DiscoveryForm_OnThemeChanged;
 
             rollUpPanelTop.SetToolTip(toolTip);
 
@@ -194,6 +195,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry -= NewEntry;
             DiscoveryForm.OnNewTarget -= NewTarget;
             DiscoveryForm.OnNewUIEvent -= OnNewUIEvent;
+            DiscoveryForm.OnThemeChanged -= DiscoveryForm_OnThemeChanged;
             scanhide.Tick -= HideScanData;
             dividercheck.Tick -= DividerCheck;
             scanhide.Dispose();
@@ -239,6 +241,12 @@ namespace EDDiscovery.UserControls
         {
             Display(DiscoveryForm.History);
         }
+
+        private void DiscoveryForm_OnThemeChanged()
+        {
+            Display(DiscoveryForm.History);
+        }
+
 
         private async void Display(HistoryList hl)            
         {
