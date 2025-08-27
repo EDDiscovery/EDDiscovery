@@ -304,7 +304,7 @@ namespace EDDiscovery
         {
             var list = userselectablepanellist.Where(x => x.PopOutOnly == false || ignorepopoutonly == false);
             if (sortbyname)
-                return list.OrderBy(x=>x.Description).ToArray();        // sort by window title.
+                return list.OrderBy(x=>x.WindowTitle).ToArray();        // sort by window title.
             else
                 return list.ToArray();
         }
