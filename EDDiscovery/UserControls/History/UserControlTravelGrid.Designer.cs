@@ -84,7 +84,6 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughEDDNThruTestToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughEDAstroDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.sendJournalEntriesToDLLsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showSystemVisitedForeColourToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.travelGridInDebugModeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
@@ -336,7 +335,6 @@ namespace EDDiscovery.UserControls
             this.runSelectionThroughEDDNThruTestToolStripMenuItem,
             this.runSelectionThroughEDAstroDebugToolStripMenuItem,
             this.sendJournalEntriesToDLLsToolStripMenuItem,
-            this.showSystemVisitedForeColourToolStripMenuItem,
             this.travelGridInDebugModeToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
             this.historyContextMenu.Size = new System.Drawing.Size(388, 598);
@@ -552,15 +550,6 @@ namespace EDDiscovery.UserControls
             this.sendJournalEntriesToDLLsToolStripMenuItem.Text = "Send selection to DLLs (Debug)";
             this.sendJournalEntriesToDLLsToolStripMenuItem.Click += new System.EventHandler(this.sendJournalEntriesToDLLsToolStripMenuItem_Click);
             // 
-            // showSystemVisitedForeColourToolStripMenuItem
-            // 
-            this.showSystemVisitedForeColourToolStripMenuItem.Checked = true;
-            this.showSystemVisitedForeColourToolStripMenuItem.CheckOnClick = true;
-            this.showSystemVisitedForeColourToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.showSystemVisitedForeColourToolStripMenuItem.Name = "showSystemVisitedForeColourToolStripMenuItem";
-            this.showSystemVisitedForeColourToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.showSystemVisitedForeColourToolStripMenuItem.Text = "Show lines in System Visited Fore Colour";
-            // 
             // travelGridInDebugModeToolStripMenuItem
             // 
             this.travelGridInDebugModeToolStripMenuItem.Checked = true;
@@ -693,6 +682,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
             this.vScrollBarCustom.Size = new System.Drawing.Size(24, 616);
+            this.vScrollBarCustom.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SliderColor2 = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SliderDrawAngle = 90F;
@@ -955,7 +945,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughEDDNThruTestToolStripMenuItem;
         private ExtendedControls.ExtButtonDrawn extButtonDrawnHelp;
-        private System.Windows.Forms.ToolStripMenuItem showSystemVisitedForeColourToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem runSelectionThroughEDAstroDebugToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem travelGridInDebugModeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sendJournalEntriesToDLLsToolStripMenuItem;

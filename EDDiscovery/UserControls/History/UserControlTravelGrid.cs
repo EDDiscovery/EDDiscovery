@@ -41,7 +41,6 @@ namespace EDDiscovery.UserControls
         private const string dbFieldFilter = "FieldFilter";
         private const string dbOutlines = "Outlines";
         private const string dbWordWrap = "WordWrap";
-        private const string dbVisitedColour = "VisitedColour";
         private const string dbDebugMode = "DebugMode";
         private const string dbBookmarks = "Bookmarks";
         private const string dbUserGroups = "UserGroups";
@@ -109,9 +108,6 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += HistoryChanged;
             DiscoveryForm.OnNewEntry += AddNewEntry;
             DiscoveryForm.OnNoteChanged += OnNoteChanged;
-
-            this.showSystemVisitedForeColourToolStripMenuItem.Checked = GetSetting(dbVisitedColour, false);
-            this.showSystemVisitedForeColourToolStripMenuItem.Click += new System.EventHandler(this.showSystemVisitedForeColourToolStripMenuItem_Click);
 
             contextMenuStripOutlines.SetToolStripState(GetSetting(dbOutlines, "rollUpOffToolStripMenuItem;"));
             this.rollUpOffToolStripMenuItem.Click += new System.EventHandler(this.rolluplimitToolStripMenuItem_Click);
@@ -497,11 +493,6 @@ namespace EDDiscovery.UserControls
             rw.CreateCells(dataGridViewTravel, colTime, colIcon, colDescription, colInformation, colNote);
 
             rw.Tag = he;  //tag on row
-
-            if ( showSystemVisitedForeColourToolStripMenuItem.Checked )
-                rw.DefaultCellStyle.ForeColor = (he.System.HasCoordinate) ? ExtendedControls.Theme.Current.KnownSystemColor : ExtendedControls.Theme.Current.UnknownSystemColor;
-            else if ( he.EntryType == JournalTypeEnum.FSDJump || he.EntryType == JournalTypeEnum.CarrierJump)
-                rw.Cells[2].Style.ForeColor = (he.System.HasCoordinate) ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
 
 // tbd tooltip
             //string tip = he.EventSummary + Environment.NewLine + colInformation + Environment.NewLine + eventDetailedInfo;
@@ -1280,12 +1271,6 @@ namespace EDDiscovery.UserControls
         {
             dataGridViewTravel.SetWordWrap(extCheckBoxWordWrap.Checked);
             dataViewScrollerPanel.UpdateScroll();
-        }
-
-        private void showSystemVisitedForeColourToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            PutSetting(dbVisitedColour, showSystemVisitedForeColourToolStripMenuItem.Checked);
-            Display(current_historylist, false);
         }
 
         #endregion

@@ -256,7 +256,6 @@ namespace EDDiscovery.UserControls
                                 System.Diagnostics.Debug.WriteLine($"Expedition Grid row {rowindex} position lost {systemtag} -> {gridsys}");
                                 row.Tag = gridsys;
                                 forcetotalsupdate = true;
-                                row.Cells[0].Style.ForeColor = ExtendedControls.Theme.Current.UnknownSystemColor;
                             }
                         }
                     }
@@ -438,8 +437,6 @@ namespace EDDiscovery.UserControls
                         sys = new SystemClass(syslookup);
                     }
                 }
-
-                row.Cells[0].Style.ForeColor = sys.HasCoordinate ? Color.Empty : ExtendedControls.Theme.Current.UnknownSystemColor;
 
                 double? disttocur = sys.HasCoordinate && historySystem != null ? sys.Distance(historySystem) : default(double?);
                 row.Cells[CurDist.Index].Value = disttocur.HasValue ? disttocur.Value.ToString("N2") : "";

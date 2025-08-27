@@ -888,7 +888,6 @@ namespace EDDiscovery.UserControls
             else
             {
                 dataGridViewDistances[3, cell.RowIndex].Value = "Position unknown".Tx();
-                dataGridViewDistances[3, cell.RowIndex].Style.ForeColor = ExtendedControls.Theme.Current.UnknownSystemColor;
             }
         }
 
@@ -1037,7 +1036,6 @@ namespace EDDiscovery.UserControls
                     if (newSystem != null && newSystem.HasCoordinate)
                     {
                         systemCell.Tag = newSystem;
-                        dataGridViewDistances[3, i].Style.ForeColor = ExtendedControls.Theme.Current.KnownSystemColor;
                         dataGridViewDistances[3, i].Value = "Position found".Tx();
                     }
                 }
