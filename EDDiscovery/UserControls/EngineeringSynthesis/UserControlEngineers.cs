@@ -296,7 +296,7 @@ namespace EDDiscovery.UserControls
             Dictionary<MaterialCommodityMicroResourceType, int> resourcelist = new Dictionary<MaterialCommodityMicroResourceType, int>();
             foreach (var p in engineerpanels)
             {
-                foreach( var kvp in p.NeededResources )
+                foreach( var kvp in p.NeededResources.EmptyIfNull() )
                 {
                     if (resourcelist.TryGetValue(kvp.Key, out int value))
                     {
@@ -307,8 +307,11 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            var req = new UserControlCommonBase.PushResourceWantedList() { Resources = resourcelist };
-            RequestPanelOperationOpen(PanelInformation.PanelIDs.Resources, req);
+            if (resourcelist.Count > 0)
+            {
+                var req = new UserControlCommonBase.PushResourceWantedList() { Resources = resourcelist };
+                RequestPanelOperationOpen(PanelInformation.PanelIDs.Resources, req);
+            }
         }
 
         private void buttonClear_Click(object sender, EventArgs e)
