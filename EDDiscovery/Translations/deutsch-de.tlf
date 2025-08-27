@@ -102,7 +102,7 @@ SECTION PopOutInfo
 .Synthesis.Description: "Synthesis planner" => "Syntheseplaner"
 .Synthesis.Title: "Synthesis" => "Synthese"
 .Engineering.Description: "Engineering planner" => "Aufrüstungsplaner"
-.Engineering.Title: "Engineering" => "Ingenieure"
+.Engineering.Title: "Engineering" => "Ingenieurskunst"
 .ShoppingList.Description: "Shopping list planner combining synthesis and engineering" => "Einkaufslistenplaner der Synthese und Ingenieursaufrüstungen kombiniert"
 .ShoppingList.Title: "Shopping List" => "Einkaufsliste"
 .Scan.Description: "Scan data on system" => "Scandaten eines Systems"
@@ -183,7 +183,7 @@ SECTION PopOutInfo
 .LocalMap3D.Description: "Local 3D Map of systems near you" => "3D-Karte der lokalen Systeme in deiner Umgebung"
 .Organics.Title: "Organic Scans" => "Organische Scans"
 .Organics.Description: "Organic scans of current body and historic scans" => "Informationen über organische Scans des aktuellen Planeten sowie Scanhistorie"
-.Engineers.Title: "Engineers" = PopOutInfo.Engineering.Title
+.Engineers.Title: "Engineers" => "Ingenieure"
 .Engineers.Description: "Engineers List, status, recipes" => "Liste der Ingenieure, Status, Blaupausen"
 .Discoveries.Title: "Discoveries" => "Entdeckungen"
 .Discoveries.Description: "Discoveries Observer List" => "Discoveries Observer-Liste"
