@@ -299,8 +299,8 @@ SECTION EDDiscoveryController
 9BA9842C1C8616: "Closing down, please wait.." => "Chiudendo, per favore aspettare..."
 DB2578F4000025: "Get galactic mapping from EDSM." => "Richiedendo dati galattici da EDSM."
 B916383C5DCECE: "Get galactic mapping from GEC." @
-855115699D49D3: "Loaded Notes, Bookmarks and Galactic mapping." => "Caricando note, favoriti e dati di mappa galattici."
-D080CC813B189E: "Reading travel history" => "Leggiendo lo storico di viaggio"
+855115699D49D3: "Loaded Notes, Bookmarks and Galactic mapping." => "Note, Preferiti e Mappa Galattica caricati."
+D080CC813B189E: "Reading travel history" => "Lettura dello storico di viaggio"
 AF6F80B989BC53: "Please continue running ED Discovery until refresh is complete." => "Per favore, continua a usare EDDiscovery fino al completamento del rinnovo."
 592A7473F32418: "Star Data download is disabled. Use Settings panel to reenable" => "Sincronizzazione a EDSM e EDDB disabilitati. Abilitarli nel setup del comandante"
 FC6E2FB62C5980: "Systems update complete with {0:N0} systems" => "Attualizzazione EDSM completata com {0:N0} sistemi"
