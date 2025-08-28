@@ -199,7 +199,7 @@ CB083BFF78F38B: "First Discovered Mapped" => "Première découverte carto."
 3B2FE7700E6893: "Green will show all bodies even with zero value, red will only show bodies with value" => "Lorsque vert, affiche tous les corps même avec les valeurs à 0. Lorsque rouge, ne les affiches pas."
 C746EA1EC215F8: "Show all values, even ones which are impossible to get" => "Affiche toutes les valeurs, même celles impossible à obtenir"
 AC0E083CA2C4C4: "Estimated Scan Values for {0}" => "Valeur estimée du scan de {0}"
-2A07C88E4554DD: " | You scanned {1} of {2} bodies in this system." @
+2A07C88E4554DD: " | You scanned {1} of {2} bodies in this system." => " | Vous avez scanné {1} des {2} corps dans ce système."
 
 SECTION UserControlExpedition
 
@@ -445,13 +445,13 @@ FE5C2531E39340: "Force Sell" => "Forcer la vente"
 122A6B402DF67D: "Confirm sell of ship" => "Confirmer la vente du vaisseau"
 CA73BB4E22EBFD: "Stored Modules" => "Modules stockés"
 D2F025FD0D6F0C: "Travel History Entry" => "Historique de voyage"
-673463FDF95385: "Owned Ships" @
+673463FDF95385: "Owned Ships" => "Vaisseaux possédés"
 44B046E04F2B04: "Tx Time" @
 ECE2AC10D7266F: "Slot" => "Emplacement"
 B2B53EE4FC1A90: "Stored" => "Stocké"
 22F4D0D2422A35: "All Modules" => "Tous les modules"
-8F325EDB2B44A3: "All Known Modules" @
-9569A6C389205D: "All Ships" @
+8F325EDB2B44A3: "All Known Modules" => "Tous les modules connus"
+9569A6C389205D: "All Ships" => "Tous les vaisseaux"
 
 046E5CEE819C2B: "In Transit" => "En transit"
 EF14AB9080E8AD: "Enter ED Shipyard URL" => "Entrer l'URL ED Shipyard"

@@ -193,11 +193,11 @@ BE1C21D6FE0AE4: "Discoveries" => "Découvertes"
 91B0BA24657FE5: "Carrier" => "Porte-vaisseaux"
 42F527004E124B: "Data about your fleet carrier" => "Données de votre porte-vaisseaux"
 87DF60DE337FB5: "Resources" @
-9AE60B8B41DFAD: "Resources: All Materials, Commodity, Micro resources" => "Tous les matériaux, marchandises, micro ressources"
+9AE60B8B41DFAD: "Resources: All Materials, Commodity, Micro resources" => "Ressources : Tous les matériaux, marchandises, micro ressources"
 542CC34C1F691F: "Spansh Stations" => "Spansh - Stations"
 17DFA3A002E3D5: "Stations in the system from spansh web data" => "Les stations du système depuis le site web Spansh"
 4DFB01DC92677C: "Colonisation" @
-91A4AFA2089B9F: "Colonisation statistics" @
+91A4AFA2089B9F: "Colonisation statistics" => "Statistiques de colonisation"
 C963A786E115F9: "TestOverlay" @
 78576CE18E50B2: "Test overlay" @
 
@@ -267,7 +267,7 @@ A7BA2B77971D8B: "Profile {0} Loaded" => "Profil {0} chargé"
 E11B312BFDAE74: "New EDDiscovery installer available: {0}" => "Nouvelle installation d'EDDiscovery disponible : {0}"
 2F18E849A799F4: "New Release Available!" => "Nouvelle version disponible !"
 34CFE199A2E81E: "Arrived at system {0} Visit No. {1}" => "Arrivée dans le système {0} Visite No. {1}"
-48D867E49868E8: "Profile reports errors in triggers" => "Le profil signale des erreurs dans les déclencheurs "
+48D867E49868E8: "Profile reports errors in triggers" => "Le profil signale des erreurs dans les déclencheurs"
 B683FA5A92D7B6: "Closing, please wait!" => "Fermeture en cours, merci de patienter"
 03617D9031DCED: "Star Data download is disabled. Use Settings to reenable it" => "Téléchargement des données stellaires désactivé. Vérifier les paramètres pour le réactiver"
 029E79A86E66C0: "Synchronisation to databases is in operation or pending, please wait" => "Synchronisation des bases de données en cours ou en attente, merci de patienter"
@@ -363,11 +363,11 @@ C763B2138A8CAD: "Bubble" => "Bulle"
 2D91E32D25F1DF: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Synchronisation des données stellaires désactivée dans les paramètres.\r\nRéactiver pour permettre la mise à jour des données."
 B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Vous avez supprimé des secteurs !\r\nCeci nécessite un nettoyage de la base de données, ce qui prend un certain temps.\r\nÊtes-vous sûr ?"
 13D60E3F37387F: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "ED Discovery télécharge les données stellaires depuis EDSM/EDDB pour vous permettre d'avoir des informations supplémentaires. Sélectionnez les données que vous voulez stocker : plus vous en sélectionnez, plus l'espace disque nécessaire sera important."
-8598222918D3C6: "Select" => "Choisissez "
+8598222918D3C6: "Select" => "Choisissez"
 0EE93787C960CF: "Select the data set" => "Choisissez le jeu de données"
 D24336A365C558: "Press to Accept" => "Cliquer pour accepter"
 D65DF91B92B250: "Select Galaxy Data" => "Sélectionner les données galactiques EDSM"
-2745DEBAA64A20: "Area" => "Zone "
+2745DEBAA64A20: "Area" => "Zone"
 
 SECTION MoveToCommander
 
@@ -399,11 +399,11 @@ AA36EC39CD202E: "Edit Profile {0} Trigger" => "Editer le déclencheur de profil 
 SECTION SetNoteForm
 
 335F5087016C3E: "Set Note" => "Définir une note"
-19EABC961735D7: "Timestamp" => "Timestamp "
+19EABC961735D7: "Timestamp" => "Timestamp"
 EFC007A393F66C: "Save" => "Sauvegarder"
-BC0792D8DC81E8: "System" => "Système "
-12B71C3E0FE5F7: "Summary" => "Résumé "
-DC3DECBB938475: "Details" => "Détails "
+BC0792D8DC81E8: "System" => "Système"
+12B71C3E0FE5F7: "Summary" => "Résumé"
+DC3DECBB938475: "Details" => "Détails"
 
 SECTION MessageBoxTheme
 
@@ -416,7 +416,7 @@ SECTION MessageBoxTheme
 
 SECTION DataGridViewDialogs
 
-CFD6869BBED115: "Jump to" => "Sauter vers "
+CFD6869BBED115: "Jump to" => "Sauter vers"
 411DF1F49FCB30: "Enter number to jump to or near to" => "Entrer un nombre de saut pour aller à ou à côté"
 F8328656EF830C: "Press to Cancel" => "Cliquer pour annuler"
 AA822BAACB5BCA: "Value is not valid" => "Valeur invalide"
@@ -521,7 +521,7 @@ SECTION ActionPackEditForm
 
 8774D189CE7F96: "Configuration items for installation - specialist use" => "Éléments de configuration pour l'installation - usage spécialisé"
 0878211D394E87: "Input parameters to pass to program on run" => "Paramètres d'entrée à transmettre au programme lors de l'exécution"
-A45731FA87CFD4: "Define Variable" => "Définir une variable "
+A45731FA87CFD4: "Define Variable" => "Définir une variable"
 E7181957BFACA6: "Variables to pass into called program" => "Variables à transmettre au programme appelé"
 
 SECTION ActionPackVariablesForm
