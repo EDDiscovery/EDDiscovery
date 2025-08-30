@@ -90,7 +90,7 @@ namespace EDDiscovery.UserControls
             cfs.UC.AddAllNone();
             cfs.AddJournalExtraOptions();
             cfs.AddJournalEntries();
-            cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
+            cfs.AddUserGroups(GetSetting(dbUserGroups, ""), this);
             cfs.SaveSettings += EventFilterChanged;
 
             checkBoxCursorToTop.Checked = true;

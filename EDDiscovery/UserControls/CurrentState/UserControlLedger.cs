@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls
             cfs.UC.AddAllNone();
             cfs.UC.AddGroupItem(cashtype, "Cash Transactions".Tx(),  JournalEntry.JournalTypeIcons[JournalTypeEnum.Bounty]);
             cfs.AddJournalEntries(new string[] { "Ledger", "LedgerNC" });
-            cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
+            cfs.AddUserGroups(GetSetting(dbUserGroups, ""),this);
             cfs.SaveSettings += EventFilterChanged;
 
             extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, true);

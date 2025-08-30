@@ -99,7 +99,7 @@ namespace EDDiscovery.UserControls
             UC.Sort();  // sorted by text
         }
 
-        public void AddUserGroups(string groupswithids)
+        public void AddUserGroups(string groupswithids, Control refctrl)
         {
             UC.AddStringListDefinitions(groupswithids, 1, true, global::EDDiscovery.Icons.Controls.RescanJournals);      // create with a usertag of int
 
@@ -115,7 +115,7 @@ namespace EDDiscovery.UserControls
                     {
                         Hide();
 
-                        if (ExtendedControls.MessageBoxTheme.Show($"Confirm removal of".Tx()+ " " + text, "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                        if (ExtendedControls.MessageBoxTheme.Show(refctrl, $"Confirm removal of".Tx()+ " " + text, "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                         {
                             UC.Remove(index);
                             ForceRedrawOnNextShow();
@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls
                     {
                         Hide();
 
-                        string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(null, "", "", "Enter name of new group".Tx(), Properties.Resources.edlogo_3mo_icon, requireinput:true);
+                        string promptValue = ExtendedControls.PromptSingleLine.ShowDialog(refctrl, "", "", "Enter name of new group".Tx(), Properties.Resources.edlogo_3mo_icon, requireinput: true);
                         if (promptValue != null)
                         {
                             string cursettings = GetChecked();
