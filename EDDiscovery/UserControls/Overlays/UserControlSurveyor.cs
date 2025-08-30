@@ -32,11 +32,11 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "SPanel";
         }
         protected override void Init()
         {
-            DBBaseName = "Surveyor";
-
             edsmSpanshButton.Init(this, "EDSMSpansh", "");
             edsmSpanshButton.ValueChanged += (s, ch) =>
             {

@@ -64,11 +64,14 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStripSL);
         }
 
+        protected override void Creation(PanelInformation.PanelInfo p)
+        {
+            base.Creation(p);
+            DBBaseName = PanelMode == PanelType.Materials ? "MaterialsGrid" : PanelMode == PanelType.Commodities ? "CommoditiesGrid" : PanelMode == PanelType.All ? "ResourcesGrid" : "MicroResourcesGrid";
+        }
 
         protected override void Init()
         {
-            DBBaseName = PanelMode == PanelType.Materials ? "MaterialsGrid" : PanelMode == PanelType.Commodities ? "CommoditiesGrid" : PanelMode == PanelType.All ? "ResourcesGrid" : "MicroResourcesGrid";
-
             dataGridViewMC.MakeDoubleBuffered();
             
             //set up word wrap for main grid

@@ -27,12 +27,12 @@ namespace EDDiscovery.UserControls
         public UserControlSearch()
         {
             InitializeComponent();
+
+            DBBaseName = "UCSearch";
         }
 
         protected override void Init()
         {
-            DBBaseName = "UCSearch";
-
             tabStrip.ImageList = new Image[] { EDDiscovery.Icons.Controls.SearchStars, EDDiscovery.Icons.Controls.SearchMaterials, EDDiscovery.Icons.Controls.Scan};
             tabStrip.TextList = new string[] { "Stars".Tx(), "Materials Commodities".Tx(), "Scans".Tx()};
             tabStrip.TagList = new Type[] { typeof(SearchStars), typeof(SearchMaterialsCommodities), typeof(SearchScans)};

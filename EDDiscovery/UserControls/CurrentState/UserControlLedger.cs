@@ -42,12 +42,11 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+            DBBaseName = "LedgerGrid";
         }
 
         protected override void Init()
         {
-            DBBaseName = "LedgerGrid";
-
             dataGridViewLedger.MakeDoubleBuffered();
 
             var jes = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger" });

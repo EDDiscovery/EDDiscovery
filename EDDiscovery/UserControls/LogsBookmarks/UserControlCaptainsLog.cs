@@ -24,6 +24,8 @@ namespace EDDiscovery.UserControls
         public UserControlCaptainsLog()
         {
             InitializeComponent();
+
+            DBBaseName = "CaptainsLog";
         }
 
         DateTime? gotodatestartutc = null;
@@ -32,7 +34,6 @@ namespace EDDiscovery.UserControls
 
         protected override void Init()
         {
-            DBBaseName = "CaptainsLog";
 
             tabStrip.ImageList = new Image[] { EDDiscovery.Icons.Controls.Diary, EDDiscovery.Icons.Controls.Entries};
             tabStrip.TextList = new string[] { "Diary".Tx(), "Entries".Tx()};

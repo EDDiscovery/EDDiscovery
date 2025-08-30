@@ -57,12 +57,13 @@ namespace EDDiscovery.UserControls
             // on a tab page because when you attach this control inside a tab, the scaling occurs.  See MajorTabControl
             this.userControlSynthesis.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
             this.userControlEngineering.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Inherit;
+
+            DBBaseName = "ShoppingList";
         }
 
         protected override void Init()
         {
-            DBBaseName = "ShoppingList";
-
+            
             //Can use display number for it, because their names for db save are unique between engineering and synthesis.
             userControlEngineering.DontShowShoppingList = true;
             userControlEngineering.DBBaseName = "SLEngineering";            // makes it unique to the SL

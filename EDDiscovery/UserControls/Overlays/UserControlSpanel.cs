@@ -124,11 +124,12 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "SPanel";
         }
 
         protected override void Init()
         {
-            DBBaseName = "SPanel";
 
             config = (long)(GetSetting("Config", (int)config)) | ((long)(GetSetting("ConfigH", (int)(config >> 32))) << 32);
             System.Diagnostics.Debug.WriteLine($"spanel config start {config}");

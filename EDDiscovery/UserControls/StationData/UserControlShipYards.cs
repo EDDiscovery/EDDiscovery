@@ -35,12 +35,12 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "ShipYardGrid";
         }
 
         protected override void Init()
         {
-            DBBaseName = "ShipYardGrid";
-
             dataGridViewShips.MakeDoubleBuffered();
             dataGridViewShips.DefaultCellStyle.WrapMode = DataGridViewTriState.False;
 

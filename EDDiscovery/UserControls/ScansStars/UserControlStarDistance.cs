@@ -34,6 +34,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "StarDistancePanel";
         }
 
         private StarDistanceComputer computer = null;
@@ -47,8 +49,6 @@ namespace EDDiscovery.UserControls
 
         protected override void Init()
         {
-            DBBaseName = "StarDistancePanel";
-
             computer = new StarDistanceComputer();
 
             textMinRadius.ValueNoChange = GetSetting("Min", defaultMinRadius);

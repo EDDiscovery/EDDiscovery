@@ -45,12 +45,12 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "UCSearchScans";
         }
 
         protected override void Init()
         {
-            DBBaseName = "UCSearchScans";
-
             dataGridView.WebLookup = EliteDangerousCore.WebExternalDataLookup.None; // for this, only our data is shown
             dataGridView.MakeDoubleBuffered();
             dataGridView.DefaultCellStyle.WrapMode = DataGridViewTriState.True;

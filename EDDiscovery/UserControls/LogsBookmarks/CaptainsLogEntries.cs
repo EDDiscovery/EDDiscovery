@@ -46,12 +46,12 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "CaptainsLogPanel";
         }
 
         protected override void Init()
         {
-            DBBaseName = "CaptainsLogPanel";
-
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
             GlobalCaptainsLogList.Instance.OnLogEntryChanged += LogChanged;

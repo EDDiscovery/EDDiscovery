@@ -37,12 +37,12 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+            DBBaseName = "FactionsPanel";
         }
 
         protected override void Init()
         {
-            DBBaseName = "FactionsPanel";
-
+            
             dataGridView.MakeDoubleBuffered();
 
             for (int col = colMissions.Index; col < colInfo.Index; col++)

@@ -74,12 +74,11 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(historyContextMenu);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
+            DBBaseName = "JournalGrid";
         }
 
         protected override void Init()
         {
-            DBBaseName = "JournalGrid";
-
             dataGridViewJournal.MakeDoubleBuffered();
             dataGridViewJournal.RowTemplate.MinimumHeight = 26;      // enough for the icon
             dataGridViewJournal.DefaultCellStyle.WrapMode = DataGridViewTriState.True;

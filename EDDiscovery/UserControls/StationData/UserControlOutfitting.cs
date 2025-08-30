@@ -34,11 +34,11 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "Outfitting";
         }
         protected override void Init()
         {
-            DBBaseName = "Outfitting";
-
             dataGridViewOutfitting.MakeDoubleBuffered();
 
             dataGridViewOutfitting.SetWordWrap(true);

@@ -52,11 +52,12 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "CombatPanel";
         }
 
         protected override void Init()
         {
-            DBBaseName = "CombatPanel";
 
             string filter = GetSetting(dbCampaign, "");
             List<string> filtarray = BaseUtils.StringParser.ParseWordList(filter);

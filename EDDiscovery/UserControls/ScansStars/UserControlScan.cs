@@ -45,12 +45,12 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             this.AutoScaleMode = AutoScaleMode.None;            // we are dealing with graphics.. lets turn off dialog scaling.
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "ScanPanel";
         }
 
         protected override void Init()
         {
-            DBBaseName = "ScanPanel";
-
             edsmSpanshButton.Init(this, "EDSMSpansh", "");
             edsmSpanshButton.ValueChanged += (s,ch) =>
             {

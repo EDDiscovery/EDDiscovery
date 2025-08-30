@@ -58,8 +58,8 @@ namespace EDDiscovery.UserControls
 
         public UserControlEngineering()
         {
-            DBBaseName = "Engineering";
             InitializeComponent();
+            DBBaseName = "Engineering";
         }
 
         protected override void Init()

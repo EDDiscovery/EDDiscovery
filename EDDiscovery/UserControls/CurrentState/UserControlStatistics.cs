@@ -66,11 +66,11 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            DBBaseName = "Stats";
         }
 
         protected override void Init()
         {
-            DBBaseName = "Stats";
 
             tabControlCustomStats.SelectedIndex = GetSetting(dbSelectedTabSave, 0);
             userControlStatsTimeScan.DisplayStarsPlanetSelector(true);

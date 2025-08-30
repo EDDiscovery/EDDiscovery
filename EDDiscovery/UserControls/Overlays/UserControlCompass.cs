@@ -53,11 +53,12 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "Compass";
         }
 
         protected override void Init()
         {
-            DBBaseName = "Compass";
 
             double lat = GetSetting(dbLatSave, double.NaN);     // pick up target, it will be Nan if not set
             double lon = GetSetting(dbLongSave, double.NaN);

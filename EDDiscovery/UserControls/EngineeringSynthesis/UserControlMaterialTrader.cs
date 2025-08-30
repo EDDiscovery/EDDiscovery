@@ -74,11 +74,12 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
+
+            DBBaseName = "MaterialTrade";
         }
 
         protected override void Init()
         {
-            DBBaseName = "MaterialTrade";
 
             dataGridViewTrades.MakeDoubleBuffered();
             dataGridViewTrades.DefaultCellStyle.WrapMode = DataGridViewTriState.False;

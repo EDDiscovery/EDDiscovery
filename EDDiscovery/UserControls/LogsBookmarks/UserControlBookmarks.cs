@@ -39,12 +39,12 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "UCBookmarks";
         }
 
         protected override void Init()
         {
-            DBBaseName = "UCBookmarks";
-
             searchtimer = new Timer() { Interval = 500 };
             searchtimer.Tick += Searchtimer_Tick;
 

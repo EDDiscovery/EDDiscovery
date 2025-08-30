@@ -46,14 +46,14 @@ namespace EDDiscovery.UserControls
 
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "ScanGridPanel";
         }
 
         #region Init
 
         protected override void Init()
         {
-            DBBaseName = "ScanGridPanel";
-
             rollUpPanelTop.SetToolTip(toolTip);
 
             edsmSpanshButton.Init(this, "EDSMSpansh", "");

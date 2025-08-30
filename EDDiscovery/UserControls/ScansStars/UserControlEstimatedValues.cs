@@ -39,12 +39,11 @@ namespace EDDiscovery.UserControls
             labelControlText.Text = "";     // clear label control text, only used by SetControlText if no other place is available
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+            DBBaseName = "EstimatedValue";
         }
 
         protected override void Init()
         {
-            DBBaseName = "EstimatedValue";
-
             DiscoveryForm.OnNewEntry += NewEntry;
 
             extPanelRollUp.SetToolTip(toolTip);

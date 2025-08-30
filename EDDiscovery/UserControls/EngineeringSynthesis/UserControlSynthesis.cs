@@ -53,8 +53,8 @@ namespace EDDiscovery.UserControls
 
         public UserControlSynthesis()
         {
-            DBBaseName = "Synthesis";
             InitializeComponent();
+            DBBaseName = "Synthesis";
         }
 
         protected override void Init()

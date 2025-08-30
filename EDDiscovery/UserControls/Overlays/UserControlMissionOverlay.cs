@@ -56,11 +56,11 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
+            DBBaseName = "MissionOverlay";
         }
 
         protected override void Init()
         {
-            DBBaseName = "MissionOverlay";
 
             SelectionBits sel = (SelectionBits)GetSetting(dbSelections, (int)SelectionBits.Default);
 

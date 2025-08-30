@@ -73,6 +73,7 @@ namespace EDDiscovery.UserControls
         public UserControlContainerSplitter()
         {
             InitializeComponent();
+            DBBaseName = "SplitterControl";
         }
 
         #region UCCB Contract
@@ -84,8 +85,6 @@ namespace EDDiscovery.UserControls
 
         protected override void Init()     
         {
-            DBBaseName = "SplitterControl";
-        
             TabListSortAlpha = EDDConfig.Instance.SortPanelsByName;     // held constant, because we store in each tab splitter the implicit order, can't change it half way thru
 
             string defaultview = "H(0.50, U'0,-1', U'1,-1')";       // default is a splitter without any selected panels

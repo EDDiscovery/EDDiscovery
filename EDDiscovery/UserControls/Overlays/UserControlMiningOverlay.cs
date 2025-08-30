@@ -35,12 +35,11 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+            DBBaseName = "MiningOverlay";
         }
 
         protected override void Init()
         {
-            DBBaseName = "MiningOverlay";
-
             UpdateComboBox(null);
 
             extPanelRollUp.SetToolTip(toolTip);

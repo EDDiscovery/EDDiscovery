@@ -70,12 +70,12 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
+
+            DBBaseName = "StarListControl";
         }
 
         protected override void Init()
         {
-            DBBaseName = "StarListControl";
-
             checkBoxCursorToTop.Checked = true;
 
             dataGridViewStarList.MakeDoubleBuffered();

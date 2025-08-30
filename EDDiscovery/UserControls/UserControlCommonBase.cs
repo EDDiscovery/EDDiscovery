@@ -537,7 +537,8 @@ namespace EDDiscovery.UserControls
 
         #region Data base helpers
 
-        public string DBBaseName { get; set; } = null;          // constructor or init must set this to indicate DB Base name
+        // constructor or create function must set this to indicate DB Base name (can't enforce unfort)
+        public string DBBaseName { get; set; } = null;          
 
         // this makes up the name. This is the backwards compatible naming. We may change this in future.
 

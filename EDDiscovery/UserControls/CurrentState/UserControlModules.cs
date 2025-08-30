@@ -51,11 +51,11 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+            DBBaseName = "ModulesGrid";
         }
 
         protected override void Init()
         {
-            DBBaseName = "ModulesGrid";
 
             ownedshipstext = "Owned Ships".Tx();
             allshipstext = "All Ships".Tx();

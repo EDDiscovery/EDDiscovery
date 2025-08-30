@@ -54,12 +54,11 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             SystemName.AutoCompleteGenerator = SystemCache.ReturnSystemAutoCompleteList;
+            DBBaseName = "SystemInformationPanel";
         }
 
         protected override void Init()
         {
-            DBBaseName = "UserControlExpedition";
-
             dateTimePickerEndDate.Value = dateTimePickerEndTime.Value = dateTimePickerStartTime.Value = dateTimePickerStartDate.Value = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow);
 
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;

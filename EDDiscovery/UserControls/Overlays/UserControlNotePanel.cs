@@ -40,12 +40,11 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
+            DBBaseName = "NotePanel";
         }
 
         protected override void Init()
         {
-            DBBaseName = "NotePanel";
-
             config = (Configuration)GetSetting("Config", (int)config);
 
             displayfont = ExtendedControls.Theme.Current.GetFont;

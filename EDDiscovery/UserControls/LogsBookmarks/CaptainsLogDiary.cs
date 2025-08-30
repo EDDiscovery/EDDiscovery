@@ -41,6 +41,7 @@ namespace EDDiscovery.UserControls
         public CaptainsLogDiary()
         {
             InitializeComponent();
+            DBBaseName = "CaptainsLogPanel";
         }
 
         protected override void Init()
@@ -50,8 +51,6 @@ namespace EDDiscovery.UserControls
 
         protected override void LoadLayout()
         {
-            DBBaseName = "CaptainsLogPanel";
-
             // get setting in utc
             CurrentMonthFirstDayUTC = GetSetting(dbDateSave, DateTime.UtcNow.StartOfMonth());     
 

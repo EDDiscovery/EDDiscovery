@@ -46,11 +46,12 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(wantedContextMenu);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(trilatContextMenu);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(toolStrip);
+
+            DBBaseName = "Trilateration";
         }
 
         protected override void Init()
         {
-            DBBaseName = "Trilateration";
 
             ColumnSystem.AutoCompleteGenerator = SystemCache.ReturnSystemAutoCompleteList;
             FreezeTrilaterationUI();

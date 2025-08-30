@@ -40,13 +40,13 @@ namespace EDDiscovery.UserControls
         public UserControlContainerGrid()
         {
             InitializeComponent();
+            DBBaseName = "GridControl";
         }
 
         #region UCCB interface
 
         protected override void Init()
         {
-            DBBaseName = "GridControl";
 
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
             rollUpPanelMenu.SetToolTip(toolTip);    // use the defaults

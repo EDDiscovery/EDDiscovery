@@ -32,12 +32,12 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(missionListCurrent);
             BaseUtils.TranslatorMkII.Instance.TranslateControls(missionListPrevious);
+            DBBaseName = "Missions";
         }
 
         protected override void Init()
         {
-            DBBaseName = "Missions";
-
+            
             missionListPrevious.SetDateTime(GetSetting("StartDate", DateTime.UtcNow),       // set up by picker
                                             GetSetting("StartDateChecked", false),
                                             GetSetting("EndDate", DateTime.UtcNow),

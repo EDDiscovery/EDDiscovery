@@ -41,11 +41,12 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+
+            DBBaseName = "Discoveries";
         }
 
         protected override void Init()
         {
-            DBBaseName = "Discoveries";
 
             dataGridView.WebLookup = EliteDangerousCore.WebExternalDataLookup.None; // for this, only our data is shown
             dataGridView.MakeDoubleBuffered();

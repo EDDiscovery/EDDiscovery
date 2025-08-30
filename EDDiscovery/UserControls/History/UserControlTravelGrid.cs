@@ -74,11 +74,12 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(historyContextMenu);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStripOutlines);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
+
+            DBBaseName = "TravelHistoryControl";
         }
 
         protected override void Init()
         {
-            DBBaseName = "TravelHistoryControl";
 
             //System.Diagnostics.Debug.WriteLine("Travel grid is " + this.GetHashCode());
 

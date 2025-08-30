@@ -31,11 +31,11 @@ namespace EDDiscovery.UserControls
         public UserControl3DMap() 
         {
             InitializeComponent();
+            DBBaseName = "3dMapPanel_";
         }
 
         protected override void Init()
         {
-            DBBaseName = "3dMapPanel_";
 
             glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter,null,4,6);
             glwfc.EnsureCurrent = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it

@@ -30,10 +30,6 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStripSuits);
-        }
-
-        protected override void Init()
-        {
             DBBaseName = "SuitWeapons";
         }
 

@@ -49,11 +49,12 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
+
+            DBBaseName = "UCRoute";
         }
 
         protected override void Init()
         {
-            DBBaseName = "UCRoute";
 
             EnableOutputButtons();
 
