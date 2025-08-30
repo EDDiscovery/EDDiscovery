@@ -218,7 +218,7 @@ namespace EDDiscovery.UserControls
             checkBoxShowZeros.Checked = !GetSetting(dbClearZero, true); // used to be clear zeros, now its show zeros, invert
             checkBoxShowZeros.CheckedChanged += CheckBoxClear_CheckedChanged;
 
-            cfs.AddUserGroups(GetSetting(dbUserGroups, ""));
+            cfs.AddUserGroups(GetSetting(dbUserGroups, ""),this);
             cfs.SaveSettings += FilterChanged;
 
             // from the wanted list, set wanted amounts
