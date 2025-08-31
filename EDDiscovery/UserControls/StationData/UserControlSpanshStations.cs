@@ -28,7 +28,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
 
-            DBBaseName = "ShipYardGrid";
+            DBBaseName = "SpanshStations";
         }
 
         protected override void LoadLayout()

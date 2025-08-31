@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             SystemName.AutoCompleteGenerator = SystemCache.ReturnSystemAutoCompleteList;
-            DBBaseName = "SystemInformationPanel";
+            DBBaseName = "UserControlExpedition";
         }
 
         protected override void Init()

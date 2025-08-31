@@ -33,7 +33,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
 
-            DBBaseName = "SPanel";
+            DBBaseName = "Surveyor";
         }
         protected override void Init()
         {
