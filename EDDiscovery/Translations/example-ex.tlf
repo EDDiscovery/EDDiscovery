@@ -44,6 +44,8 @@ B5E77C5C02A90C: "Removed" @
 // misc
 
 1090044535D1EA: "Panel Colour" @
+96FCC783071DFD: "Current Key Delay String" @
+3CD8E99F3C4143: "Default Down Delay (0=Default)" @
 
 SECTION StartUp
 

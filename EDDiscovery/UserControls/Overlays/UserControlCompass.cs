@@ -15,6 +15,7 @@
 using EDDiscovery.Forms;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using EliteDangerousCore.UIEvents;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
@@ -87,7 +88,7 @@ namespace EDDiscovery.UserControls
             GlobalBookMarkList.Instance.OnBookmarkChange += GlobalBookMarkList_OnBookmarkChange;
 
             // new! april23 pick up last major mode ad uistate.  Need to do this now, before load/initial display, as set transparent uses it
-            elitemode = new EliteDangerousCore.UIEvents.UIMode(DiscoveryForm.UIOverallStatus.Mode, DiscoveryForm.UIOverallStatus.MajorMode);
+            elitemode = DiscoveryForm.UIOverallStatus.UIMode;
             guistate = DiscoveryForm.UIOverallStatus.Focus;
         }
 
@@ -256,7 +257,7 @@ namespace EDDiscovery.UserControls
                     visible = false;
                 }
                             // if in mainship, or srv, or we are on foot planet, we can show
-                else if ((!IsSet(CtrlList.hidewheninship) && elitemode.InFlight) ||
+                else if ((!IsSet(CtrlList.hidewheninship) && elitemode.InFlight ) ||
                          (!IsSet(CtrlList.hidewheninSRV) && elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.SRV ) ||
                          (!IsSet(CtrlList.hidewhenonfoot) && ( elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootPlanet ||
                                                                 elitemode.Mode == EliteDangerousCore.UIEvents.UIMode.ModeType.OnFootInstallationInside )) 

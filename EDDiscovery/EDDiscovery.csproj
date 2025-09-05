@@ -363,6 +363,12 @@
     <Compile Include="UserControls\ExtPanel\UserControlExtPanel.Designer.cs">
       <DependentUpon>UserControlExtPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Overlays\AutoPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Overlays\AutoPanel.Designer.cs">
+      <DependentUpon>AutoPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Overlays\UserControlTestOverlay.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -992,6 +998,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlCompass.resx">
       <DependentUpon>UserControlCompass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\AutoPanel.resx">
+      <DependentUpon>AutoPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlTestOverlay.resx">
       <DependentUpon>UserControlTestOverlay.cs</DependentUpon>

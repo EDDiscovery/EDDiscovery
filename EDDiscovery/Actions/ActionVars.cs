@@ -52,8 +52,8 @@ namespace EDDiscovery.Actions
                 vars[prefix + "ShipType"] = he.Status.ShipType ?? "";
                 vars[prefix + "ShipTypeFD"] = he.Status.ShipTypeFD ?? "";
                 vars[prefix + "OnFoot"] = he.Status.OnFoot.ToStringIntValue();
-                vars[prefix + "IsSRV"] = he.Status.IsSRV.ToStringIntValue();
-                vars[prefix + "IsFighter"] = he.Status.IsFighter.ToStringIntValue();
+                vars[prefix + "IsSRV"] = he.Status.IsShipSRV.ToStringIntValue();
+                vars[prefix + "IsFighter"] = he.Status.IsShipFighter.ToStringIntValue();
                 vars[prefix + "BodyApproached"] = he.Status.BodyApproached.ToStringIntValue();
                 vars[prefix + "BookedDropship"] = he.Status.BookedDropship.ToStringIntValue();
                 vars[prefix + "BookedTaxi"] = he.Status.BookedTaxi.ToStringIntValue();

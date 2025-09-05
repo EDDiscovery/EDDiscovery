@@ -88,6 +88,7 @@ namespace EDDiscovery
             SpanshStations=60,
             TestOverlay = 61,
             Colonisation = 62,
+            AutoPanel = 63,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -171,7 +172,8 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.MiningOverlay, typeof(UserControlMiningOverlay), "Mining Overlay", "MiningOV", "Mining overlay") },
 
 #if DEBUG
-            { new PanelInfo( PanelIDs.TestOverlay, typeof(UserControlTestOverlay), "TestOverlay", "TestOverlay", "Test overlay" ) },
+            { new PanelInfo( PanelIDs.TestOverlay, typeof(UserControlTestOverlay), "Test Overlay", "TestOverlay", "Test overlay" ) },
+            { new PanelInfo( PanelIDs.AutoPanel, typeof(AutoPanel), "Auto Panel", "AutoPanel", "Auto Panel" ) },
 #endif
 
             { new PanelInfo( "Settings") },
