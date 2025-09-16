@@ -200,8 +200,10 @@ BE1C21D6FE0AE4: "Discoveries" @
 17DFA3A002E3D5: "Stations in the system from spansh web data" @
 4DFB01DC92677C: "Colonisation" @
 91A4AFA2089B9F: "Colonisation statistics" @
-C963A786E115F9: "TestOverlay" @
-78576CE18E50B2: "Test overlay" @
+5A016BA9B95236: "Test Overlay" @
+52A1B9A52B8BFE: "Auto Panel" @
+42EA6768A9E951: "Docking Panel" @
+C722A22DF80446: "Docking Panel shows pad location" @
 
 SECTION EDDiscoveryForm
 

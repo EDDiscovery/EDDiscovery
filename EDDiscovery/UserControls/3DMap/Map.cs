@@ -362,7 +362,7 @@ namespace EDDiscovery.UserControls.Map3D
             GLStorageBlock findresults = items.NewStorageBlock(findblock);
 
             var starimagearray = new GLTexture2DArray();
-            Bitmap[] starcroppedbitmaps = BodyToImages.StarBitmaps(new RectangleF(16, 16, 68, 68));     // we own these
+            Bitmap[] starcroppedbitmaps = BodyDefinitions.StarBitmaps(new RectangleF(16, 16, 68, 68));     // we own these
             if ( !EliteDangerousCore.DB.SystemsDatabase.Instance.HasStarType )
             {
                 starcroppedbitmaps[(int)EDStar.Unknown] = starcroppedbitmaps[(int)EDStar.G];        // no star info, use G type.

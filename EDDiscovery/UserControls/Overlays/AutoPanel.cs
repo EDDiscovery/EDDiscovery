@@ -18,6 +18,7 @@ using OpenTK.Graphics.OpenGL;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.DataVisualization.Charting;
 
 namespace EDDiscovery.UserControls
 {
@@ -29,11 +30,13 @@ namespace EDDiscovery.UserControls
             DBBaseName = "AutoPanel";
         }
 
-        enum PanelMode { Unknown, Supercruising, FSDJump,
+        private enum PanelMode { Unknown, Supercruising, FSDJump,
                     Surveying, Compass, NormalSpace, Combat, Landed , Docked, OnFootInterior, Mining, 
-                    GlideMode, Organics, OnGroundCombat };
+                    GlideMode, Organics, OnGroundCombat, Docking };
 
         private PanelMode mode = PanelMode.Unknown;
+        private bool hidden = true;
+
 
         UIOverallStatus uistatus;
         HistoryEntry lasthe;
@@ -41,7 +44,7 @@ namespace EDDiscovery.UserControls
         protected override void Init()
         {
             DiscoveryForm.OnNewUIEvent += DiscoveryForm_OnNewUIEvent;
-            DiscoveryForm.OnNewHistoryEntryUnfiltered += DiscoveryForm_OnNewHistoryEntryUnfiltered;
+            DiscoveryForm.OnNewEntry += DiscoveryForm_OnNewEntry;
             DiscoveryForm.OnHistoryChange += DiscoveryForm_OnHistoryChange;
 
             // if opened after start, we need to pick up state from discoveryform
@@ -60,7 +63,7 @@ namespace EDDiscovery.UserControls
         {
             DiscoveryForm.OnNewUIEvent -= DiscoveryForm_OnNewUIEvent;
             DiscoveryForm.OnHistoryChange -= DiscoveryForm_OnHistoryChange;
-            DiscoveryForm.OnNewHistoryEntryUnfiltered -= DiscoveryForm_OnNewHistoryEntryUnfiltered;
+            DiscoveryForm.OnNewEntry -= DiscoveryForm_OnNewEntry;
         }
 
         private void DiscoveryForm_OnHistoryChange()
@@ -69,11 +72,24 @@ namespace EDDiscovery.UserControls
             UpdateState();
         }
 
-        private void DiscoveryForm_OnNewHistoryEntryUnfiltered(EliteDangerousCore.HistoryEntry he)
+        private void DiscoveryForm_OnNewEntry(HistoryEntry he)
         {
+            System.Diagnostics.Debug.WriteLine($"Autopanel NewHistory {he.EventTimeUTC}");
             lasthe = DiscoveryForm.History.GetLast;
             UpdateState();
         }
+
+
+        private void DiscoveryForm_OnNewUIEvent(EliteDangerousCore.UIEvent ui)
+        {
+            if (ui is UIOverallStatus os)      // if opened at start we get this, and we get it every time flags changes
+            {
+                System.Diagnostics.Debug.WriteLine($"AutoPanel UI {ui.EventTypeID} : {ui.ToString()}");
+                uistatus = os;
+                UpdateState();
+            }
+        }
+
 
         void UpdateState()
         {
@@ -88,18 +104,36 @@ namespace EDDiscovery.UserControls
 
             // in the order of enum ModeType:
 
+            if ( uistatus.Focus != 0)
+            {
+                hidden = true;
+            }
+            else
+            {
+                hidden = false;
+            }
+
+
             if (mt == UIMode.ModeType.MainShipNormalSpace)
             {
                 bool glidemode = uistatus.Flags.Contains(UITypeEnum.GlideMode);
                 bool hardpointdeployed = uistatus.Flags.Contains(UITypeEnum.HardpointsDeployed);
                 bool hasminingequipment = ship?.HasMiningEquipment() ?? false;
                 bool hasweapons = ship?.HasWeapons() ?? false;
+                bool docking = lasthe?.Status.DockingPad>0;
+                bool isinmininglocation = BodyDefinitions.IsBodyNameRing(uistatus.BodyName); 
+
+                System.Diagnostics.Debug.WriteLine($"Autopanel UpdateState Docking: {docking}");
 
                 newmode = PanelMode.NormalSpace;
 
-                if ( glidemode)
+                if (glidemode)
                 {
                     newmode = PanelMode.GlideMode;
+                }
+                else if ( docking )
+                {
+                    newmode = PanelMode.Docking;
                 }
                 else if (uistatus.Pos.ValidPosition) // above planet
                 {
@@ -110,10 +144,14 @@ namespace EDDiscovery.UserControls
                 }
                 else if (hardpointdeployed)
                 {
-                    if (hasminingequipment)
+                    if (hasminingequipment && isinmininglocation)           // mining location, and mining equipment
                         newmode = PanelMode.Mining;
                     else if (hasweapons)
                         newmode = PanelMode.NormalSpace;
+                }
+                else if (isinmininglocation)        // mining location, no hardpoints, mining screen
+                {
+                    newmode = PanelMode.Mining;
                 }
             }
             else if (mt == UIMode.ModeType.MainShipDockedPlanet || mt == UIMode.ModeType.MainShipDockedStarPort)
@@ -124,7 +162,7 @@ namespace EDDiscovery.UserControls
             {
                 bool injump = uistatus.Flags.Contains(UITypeEnum.FsdJump);
 
-                if ( injump )
+                if (injump)
                 {
                     newmode = PanelMode.FSDJump;
                 }
@@ -154,7 +192,7 @@ namespace EDDiscovery.UserControls
                 newmode = PanelMode.Combat;
             }
             else if (mt == UIMode.ModeType.OnFootPlanet)
-            { 
+            {
                 if (uistatus.HandItem?.Name == "Genetic Sampler")
                 {
                     newmode = PanelMode.Organics;
@@ -163,17 +201,17 @@ namespace EDDiscovery.UserControls
                 {
                     newmode = PanelMode.OnGroundCombat;
                 }
-                else 
+                else
                 {
                     newmode = PanelMode.Compass;
                 }
             }
-            else if ( uistatus.UIMode.OnFoot)
+            else if (uistatus.UIMode.OnFoot)
             {
                 newmode = PanelMode.OnFootInterior;
             }
             else
-            {    
+            {
                 // UI status not valid, probably due to running without elite active
 
                 if (lasthe?.Status.IsDocked == true)
@@ -212,20 +250,11 @@ namespace EDDiscovery.UserControls
 
             mode = newmode;
 
-            labelMode.Text = "Panel Mode: " + mode.ToString();
+            labelMode.Text = "Panel Mode: " + mode.ToString() + (hidden ? " (Hidden) " :"");
             label2.Text = "UIMode: " + uistatus.UIMode.ToString();
             label3.Text = "HETS:" + lasthe?.Status.TravelState.ToString();
         }
 
-        private void DiscoveryForm_OnNewUIEvent(EliteDangerousCore.UIEvent ui)
-        {
-            if (ui is UIOverallStatus os)      // if opened at start we get this, and we get it every time flags changes
-            {
-                System.Diagnostics.Debug.WriteLine($"AutoPanel UI {ui.EventTypeID} : {ui.ToString()}");
-                uistatus = os;
-                UpdateState();
-            }
-        }
 
 
         public override bool SupportTransparency => true;

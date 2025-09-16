@@ -363,6 +363,12 @@
     <Compile Include="UserControls\ExtPanel\UserControlExtPanel.Designer.cs">
       <DependentUpon>UserControlExtPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Overlays\DockingPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Overlays\DockingPanel.Designer.cs">
+      <DependentUpon>DockingPanel.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Overlays\AutoPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -950,6 +956,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlLog.resx">
       <DependentUpon>UserControlLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\DockingPanel.resx">
+      <DependentUpon>DockingPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlCombatPanel.resx">
       <DependentUpon>UserControlCombatPanel.cs</DependentUpon>

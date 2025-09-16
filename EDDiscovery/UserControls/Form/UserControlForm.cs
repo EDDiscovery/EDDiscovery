@@ -31,7 +31,7 @@ namespace EDDiscovery.UserControls
         public TransparencyMode TransparentMode { get; private set; } = TransparencyMode.Off;
 
         public bool IsTransparentModeOn { get { return TransparentMode != TransparencyMode.Off; } }
-
+        public bool IsInPanelShow { get { return inpanelshow; } }
         public bool IsCurrentlyTransparent {  get { return IsTransparentModeOn && !inpanelshow; } }
 
         public bool IsClickThruOn { get { return TransparentMode == TransparencyMode.OnClickThru || TransparentMode == TransparencyMode.OnFullyTransparent; } }

@@ -267,7 +267,7 @@ namespace EDDiscovery.UserControls
                 capiclearloginButton.Visible = false;
                 capiButton.Enabled = true;
                 capiButton.Text = "Logout".Tx();
-                capiStateLabel.Text = "Logged In".Tx();
+                capiStateLabel.Text = "Logged in".Tx();
             }
             else
             {                                                   // no cred, or logged out..

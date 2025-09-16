@@ -195,7 +195,7 @@ namespace EDDiscovery.UserControls
 
                         texttoadd = new string[] { sn.ScanData.BodyDesignationOrName, bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() };
 
-                        pc.Add(new ExtPictureBox.ImageElement(new Rectangle(0, 0, imagesize.Width, imagesize.Height), BodyToImages.GetBeltImage(),
+                        pc.Add(new ExtPictureBox.ImageElement(new Rectangle(0, 0, imagesize.Width, imagesize.Height), BodyDefinitions.GetBeltImage(),
                                     imgowned:false)); // NOTE the picture box does not own the image
                     }
                 }
@@ -441,7 +441,7 @@ namespace EDDiscovery.UserControls
 
                     texttoadd = new string[] { sn.ScanData.BodyDesignationOrName, bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() };
 
-                    sd.DrawNode(pc, sn, null, null, BodyToImages.GetPlanetImageNotScanned(), new Point(imagesize.Width, imagesize.Height), true, false, out Rectangle _, out int _, imagesize,
+                    sd.DrawNode(pc, sn, null, null, BodyDefinitions.GetPlanetImageNotScanned(), new Point(imagesize.Width, imagesize.Height), true, false, out Rectangle _, out int _, imagesize,
                         SystemDisplay.DrawLevel.NoText, new Random(), null,null);
                 }
                 else if (!sn.WebCreatedNode)             // rejected above, due no scan data or its EDSM and not EDSM selected.. present what we have if its ours
@@ -469,9 +469,9 @@ namespace EDDiscovery.UserControls
 
                     texttoadd = new string[] { sn.BodyDesignator, "", "", bdDetails.ToString() };
                     pc.Add(new ExtPictureBox.ImageElement(new Rectangle(0, 0, imagesize.Width, imagesize.Height),
-                            sn.NodeType == StarScan.ScanNodeType.toplevelstar ? BodyToImages.GetStarImageNotScanned() :
-                            sn.NodeType == StarScan.ScanNodeType.belt ? BodyToImages.GetBeltImage() :
-                            BodyToImages.GetPlanetImageNotScanned(),
+                            sn.NodeType == StarScan.ScanNodeType.toplevelstar ? BodyDefinitions.GetStarImageNotScanned() :
+                            sn.NodeType == StarScan.ScanNodeType.belt ? BodyDefinitions.GetBeltImage() :
+                            BodyDefinitions.GetPlanetImageNotScanned(),
                             imgowned:false));       // NOTE the picture box does not own the image
                 }
 

@@ -60,6 +60,9 @@ namespace EDDiscovery.UserControls
         // this means the transparent mode is on, not that its currently transparent. SetTransparency tells you that.
         public bool IsTransparentModeOn => (this.Parent is UserControlForm) ? ((UserControlForm)(this.Parent)).IsTransparentModeOn : false;
 
+        // this means the form is being shown, even if transparency mode is on, and the user is over it
+        public bool IsInPanelShow => (this.Parent is UserControlForm) ? ((UserControlForm)(this.Parent)).IsInPanelShow : false;
+
         // this gives you the transparent mode
         public UserControlForm.TransparencyMode TransparentMode => (this.Parent is UserControlForm) ? ((UserControlForm)(this.Parent)).TransparentMode : UserControlForm.TransparencyMode.Off;
 

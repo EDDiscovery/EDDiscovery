@@ -89,6 +89,7 @@ namespace EDDiscovery
             TestOverlay = 61,
             Colonisation = 62,
             AutoPanel = 63,
+            DockingPanel = 64,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -170,9 +171,10 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Compass overlay to show bearing to planetary coordinates") },
             { new PanelInfo( PanelIDs.MissionOverlay, typeof(UserControlMissionOverlay), "Mission Overlay", "MissionOV", "Mission List overlay") },
             { new PanelInfo( PanelIDs.MiningOverlay, typeof(UserControlMiningOverlay), "Mining Overlay", "MiningOV", "Mining overlay") },
+            { new PanelInfo( PanelIDs.DockingPanel, typeof(DockingPanel), "Docking Panel", "DockingPanel", "Docking Panel shows pad location" ) },
 
 #if DEBUG
-            { new PanelInfo( PanelIDs.TestOverlay, typeof(UserControlTestOverlay), "Test Overlay", "TestOverlay", "Test overlay" ) },
+            { new PanelInfo( PanelIDs.TestOverlay, typeof(UserControlTestOverlay), "Test Overlay", "TestOverlay", "Test Overlay" ) },
             { new PanelInfo( PanelIDs.AutoPanel, typeof(AutoPanel), "Auto Panel", "AutoPanel", "Auto Panel" ) },
 #endif
 
