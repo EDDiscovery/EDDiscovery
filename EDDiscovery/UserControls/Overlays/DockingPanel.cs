@@ -99,12 +99,15 @@ namespace EDDiscovery.UserControls
         public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
             // use for debug purposes, follows history cursor
-            //lasthe = he; UpdateDisplay();
+           // lasthe = he; UpdateDisplay();
         }
 
         void UpdateDisplay()
         {
             int currentpad = lasthe?.Status.DockingPad ?? 0;
+
+            if (lasthe?.Status.IsDockingStationTypeCoriolisEtc == false)        // if its not coriolis, ignore
+                currentpad = 0;
 
             if ( uistatus.Focus != 0 || currentpad == 0)
             {
