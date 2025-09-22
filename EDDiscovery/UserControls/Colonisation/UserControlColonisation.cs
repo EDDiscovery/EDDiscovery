@@ -14,15 +14,13 @@
 
 using EDDiscovery.UserControls.Colonisation;
 using EliteDangerousCore;
-using EliteDangerousCore.DB;
 using ExtendedControls;
-using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml;
+using QuickJSON;
 
 namespace EDDiscovery.UserControls
 {
@@ -32,13 +30,15 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             DBBaseName = "Colonisation";
-            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
         }
 
         protected override void Init()
         {
             DiscoveryForm.OnHistoryChange += HistoryChange;
             DiscoveryForm.OnNewEntry += NewEntry;
+
+            JToken tk = JToken.Parse(GetSetting(dbDisplayState, "{}"));     // may fail if corrupted
+            displaysettings = tk != null ? tk.Object() : new JObject();
         }
         protected override void InitialDisplay()
         {
@@ -47,16 +47,16 @@ namespace EDDiscovery.UserControls
 
         private void HistoryChange()
         {
-            var colonisationevents = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(),
-                            new HashSet<JournalTypeEnum> { JournalTypeEnum.ColonisationBeaconDeployed, JournalTypeEnum.ColonisationConstructionDepot, JournalTypeEnum.ColonisationContribution,
+            var colonisationevents = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(), 
+                            new HashSet<JournalTypeEnum> { JournalTypeEnum.ColonisationBeaconDeployed, JournalTypeEnum.ColonisationConstructionDepot, JournalTypeEnum.ColonisationContribution, 
                                 JournalTypeEnum.ColonisationSystemClaim, JournalTypeEnum.ColonisationSystemClaimRelease,
                                 JournalTypeEnum.Docked , JournalTypeEnum.FSDJump, JournalTypeEnum.Location, JournalTypeEnum.CarrierJump},
-                            mindatetime: EliteReleaseDates.Trailblazers);
+                            mindatetime:EliteReleaseDates.Trailblazers);
 
             colonisation.Clear();
 
             foreach (var he in colonisationevents.EmptyIfNull())
-                colonisation.Add(he, colonisationevents);
+                colonisation.Add( he, colonisationevents);
 
             current = null;     // no system
 
@@ -89,6 +89,7 @@ namespace EDDiscovery.UserControls
         {
             DiscoveryForm.OnHistoryChange -= HistoryChange;
             DiscoveryForm.OnNewEntry -= NewEntry;
+            PutSetting(dbDisplayState, displaysettings.ToString(true));   
         }
 
         public override bool SupportTransparency => true;
@@ -96,6 +97,7 @@ namespace EDDiscovery.UserControls
         {
             this.BackColor = curcol;
         }
+
 
         private void NewEntry(HistoryEntry he)
         {
@@ -131,10 +133,9 @@ namespace EDDiscovery.UserControls
             if (ret.newsystem)                                                  // if we have a change in system list, update the combo
                 UpdateSystemComboBox();
 
-            if (redisplay)
+            if ( redisplay )
                 Display(cleardisplay);
         }
-
 
         public void UpdateSystemComboBox()
         {
@@ -205,7 +206,7 @@ namespace EDDiscovery.UserControls
                 var json = JToken.Parse(GetSetting(dbStationSelection, "{}")) ?? new JToken();
                 var name = json[current.System.Name].StrNull(); // may be null
                 var index = name != null ? extComboBoxStationSelect.Items.IndexOf(name) : -1;       // may be -1, name not found, or index 1 onwards (0 = all)
-                extComboBoxStationSelect.SelectedIndex = index > 0 ? index : 0;   // select in
+                extComboBoxStationSelect.SelectedIndex = index>0 ? index : 0;   // select in
 
                 ignorechange = false;
             }
@@ -253,7 +254,7 @@ namespace EDDiscovery.UserControls
 
         private void Display(bool cleardisplay)
         {
-            if (cleardisplay)
+            if ( cleardisplay )
             {
                 extPanelGradientFillUCCP.Controls.Clear();
             }
@@ -283,7 +284,11 @@ namespace EDDiscovery.UserControls
                     csi.Tag = current;          // we tag mark it to find it
                     csi.Dock = DockStyle.Top;
                     csi.Initialise(current, DiscoveryForm.History);
-
+                    csi.ShowSystemState = DisplayState("SystemDisplay", null);
+                    csi.ChangedDisplayState += () =>
+                    {
+                        DisplayState("SystemDisplay", null, csi.ShowSystemState);
+                    };
 
                     foreach (var kvp in current.Ports)
                     {
@@ -293,7 +298,7 @@ namespace EDDiscovery.UserControls
                             cp.Tag = kvp.Value;
                             cp.Dock = DockStyle.Top;
                             pscrolledcontent.Controls.Add(cp);
-                            cp.Initialise(kvp.Value, EliteDangerousCore.DB.UserDatabase.Instance);
+                            SetupPort(cp, kvp.Value);
                         }
                     }
 
@@ -344,7 +349,7 @@ namespace EDDiscovery.UserControls
                                 cp.Dock = DockStyle.Top;
                                 pscrolledcontent.Controls.Add(cp);
                                 pscrolledcontent.Controls.SetChildIndex(cp, 0);
-                                cp.Initialise(kvp.Value, EliteDangerousCore.DB.UserDatabase.Instance); 
+                                SetupPort(cp, kvp.Value);
                                 Theme.Current.Apply(cp);
                             }
                             cp.UpdatePort();
@@ -387,15 +392,54 @@ namespace EDDiscovery.UserControls
             pinner.Recalcuate();        // update scroll bar.
         }
 
+        // Helper to set up new port init and callbacks
+        private void SetupPort(ColonisationPortDisplay cp, ColonisationPortData pd)
+        {
+            cp.Initialise(pd);
+            cp.ShowState = DisplayState("State",pd);
+            cp.ShowContributions = DisplayState("Contributions", pd);
+            cp.ShowZeros = DisplayState("ShowZeros", pd);
+            cp.ChangedDisplayState += () =>
+            {
+                DisplayState("State", pd, cp.ShowState);
+                DisplayState("Contributions", pd, cp.ShowContributions);
+                DisplayState("ShowZeros", pd, cp.ShowZeros);
+            };
+        }
+
+        private bool DisplayState(string part, ColonisationPortData port = null, bool? setit = null)
+        {
+            JObject sysobj = displaysettings[current.System.Name].Object();
+            if ( sysobj == null)
+                displaysettings[current.System.Name] = sysobj = new JObject();
+
+            JObject partobj = port != null ? sysobj[port.Name].Object() : sysobj;
+
+            if ( partobj == null )
+                sysobj[port.Name] = partobj= new JObject();  
+
+            if (!partobj[part].TryGetBool(out bool value))        // if it fails, value is true
+                value = true;
+
+            if (setit != null)
+            {
+                partobj[part] = value = setit.Value;
+            }
+
+            return value;
+        }
+
         private ColonisationData colonisation = new ColonisationData();
         private ColonisationSystemData current = null;
         private bool ignorechange = false;
 
         private const string dbSelection = "Selection";
         private const string dbStationSelection = "StationSelection";
+        private const string dbDisplayState = "DisplayState";
+
+        JObject displaysettings;
 
         private string alltext = "All";
-
     }
 
 }

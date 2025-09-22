@@ -13,9 +13,11 @@
  */
 
 using EliteDangerousCore;
-using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
+using GLOFC.GL4.Controls;
+using System;
+using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls.Colonisation
@@ -30,25 +32,19 @@ namespace EDDiscovery.UserControls.Colonisation
             extLabelFailed.Visible = false;
         }
 
-        public void Initialise(ColonisationPortData port, IUserDatabaseSettingsSaver saver)
+        public Action ChangedDisplayState;
+        public bool ShowState { get { return extCheckBoxShowRL.Checked; } set { extCheckBoxShowRL.Checked = value; } }
+        public bool ShowContributions { get { return extCheckBoxShowContributions.Checked; } set { extCheckBoxShowContributions.Checked = value; } }
+        public bool ShowZeros { get { return extCheckBoxShowZeros.Checked; } set { extCheckBoxShowZeros.Checked = value; } }
+
+        public void Initialise(ColonisationPortData port)
         {
             Port = port;
-            extCheckBoxShowContributions.CheckedChanged += (s, e) => { extPanelDataGridViewScrollContributions.Visible = extCheckBoxShowContributions.Checked; };
-            extCheckBoxShowRL.CheckedChanged += (s, e) => { extPanelDataGridViewScrollRL.Visible = extCheckBoxShowRL.Checked; };
+            extCheckBoxShowRL.CheckedChanged += (s, e) => { extCheckBoxShowZeros.Visible = extPanelDataGridViewScrollRL.Visible = extCheckBoxShowRL.Checked; ChangedDisplayState?.Invoke(); };
+            extCheckBoxShowContributions.CheckedChanged += (s, e) => { extPanelDataGridViewScrollContributions.Visible = extCheckBoxShowContributions.Checked; ChangedDisplayState?.Invoke(); };
+            extCheckBoxShowZeros.CheckedChanged += (s, e) => { ChangedDisplayState?.Invoke(); UpdatePort();  };
             dataGridViewContributions.SortCompare += DataGridViewContributions_SortCompare;
             dataGridViewRL.SortCompare += DataGridViewRL_SortCompare;
-            
-            // right click theme select
-            string dbname = "Colonisation_PortTheme";
-            extPanelGradientFill1.ThemeColorSet = saver.GetSetting(dbname, 2);
-            extPanelGradientFill1.ContextMenuStrip = ExtPanelGradientFill.RightClickThemeColorSetSelector((s) =>
-                {
-                    extPanelGradientFill1.ThemeColorSet = s;
-                    extPanelGradientFill1.Theme(Theme.Current, Theme.Current.GetFont);
-                    extPanelGradientFill1.Invalidate();
-                    saver.PutSetting(dbname, s);
-                }
-                );
         }
 
         public void UpdatePort()
@@ -71,36 +67,74 @@ namespace EDDiscovery.UserControls.Colonisation
                                                je?.StationEconomyList != null ? EconomyDefinitions.ToLocalisedLanguage(je.StationEconomyList[0].Name) : null,
             };
 
-            dataGridViewRL.Rows.Clear();
-
-            if (Port.State != null)
             {
-                foreach (JournalColonisationConstructionDepot.ResourcesList p in Port.State.ResourcesRequired.EmptyIfNull())
+
+                var selposrl = dataGridViewRL.GetSelectedRowOrCellPosition();                       // returns row/cell (if cell set) null if not
+                var posrltag = selposrl != null ? dataGridViewRL.Rows[selposrl.Item1].Tag : null;      // keep tag of selected
+                var cursort = dataGridViewRL.GetCurrentSort();
+
+                dataGridViewRL.Rows.Clear();
+
+                if (Port.State != null)
                 {
-                    dataGridViewRL.Rows.Add(new object[] {MaterialCommodityMicroResourceType.GetTranslatedNameByFDName(p.Name),
-                                                            p.RequiredAmount.ToString("N0"),
-                                                            p.ProvidedAmount.ToString("N0"),
-                                                            (p.RequiredAmount-p.ProvidedAmount).ToString("N0"),
-                                                            p.Payment.ToString("N0")});
+                    foreach (JournalColonisationConstructionDepot.ResourcesList p in Port.State.ResourcesRequired.EmptyIfNull())
+                    {
+                        if (extCheckBoxShowZeros.Checked || p.RequiredAmount != p.ProvidedAmount)
+                        {
+                            var rowindex = dataGridViewRL.Rows.Add(new object[] {MaterialCommodityMicroResourceType.GetTranslatedNameByFDName(p.Name),
+                                                                p.RequiredAmount.ToString("N0"),
+                                                                p.ProvidedAmount.ToString("N0"),
+                                                                (p.RequiredAmount-p.ProvidedAmount).ToString("N0"),
+                                                                p.Payment.ToString("N0")});
+                            dataGridViewRL.Rows[rowindex].Tag = p;
+                        }
+                    }
+
+                    if (posrltag != null)       // if FindRowWithTag fails due to postltag disappearing, won't matter, SetCUrrentSelOnRow copes with -1
+                    {
+                        dataGridViewRL.SetCurrentSelOnRow(dataGridViewRL.FindRowWithTag(posrltag), selposrl.Item2);
+                    }
+
+                    dataGridViewRL.RestoreSort(cursort);
                 }
+
+
+                extCheckBoxShowZeros.Visible = extPanelDataGridViewScrollRL.Visible = dataGridViewRL.Rows.Count > 0 && extCheckBoxShowRL.Checked;     // don't show if nothing or hidden
+                extCheckBoxShowRL.Visible = dataGridViewRL.Rows.Count > 0;      // no button if nothing
+                
             }
 
-            extPanelDataGridViewScrollRL.Visible = dataGridViewRL.Rows.Count > 0 && extCheckBoxShowRL.Checked;     // don't show if nothing
-            extCheckBoxShowRL.Visible = dataGridViewRL.Rows.Count > 0;      // no button if nothing
-
-            dataGridViewContributions.Rows.Clear();
-            foreach(JournalColonisationContribution ct in Port.Contributions )
             {
-                foreach( var c in ct.Contributions.EmptyIfNull() )
-                {
-                    dataGridViewContributions.Rows.Add(new object[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ct.EventTimeUTC),
-                        MaterialCommodityMicroResourceType.GetTranslatedNameByFDName(c.Name),
-                        c.Amount.ToString("N0") });
-                }
-            }
+                var selposrl = dataGridViewContributions.GetSelectedRowOrCellPosition();                       // returns row/cell (if cell set) null if not
+                var posrltag = selposrl != null ? dataGridViewContributions.Rows[selposrl.Item1].Tag : null;      // keep tag of selected
+                var cursort = dataGridViewContributions.GetCurrentSort();
 
-            extPanelDataGridViewScrollContributions.Visible = dataGridViewContributions.Rows.Count > 0 && extCheckBoxShowContributions.Checked; // don't show if nothing
-            extCheckBoxShowContributions.Visible = dataGridViewContributions.Rows.Count > 0;      // no button if nothing
+                DataGridViewColumn sortcol = dataGridViewContributions.SortedColumn != null ? dataGridViewContributions.SortedColumn : dataGridViewContributions.Columns[0];
+                SortOrder sortorder = dataGridViewContributions.SortOrder;
+
+                dataGridViewContributions.Rows.Clear();
+
+                foreach (JournalColonisationContribution ct in Port.Contributions)
+                {
+                    foreach (var c in ct.Contributions.EmptyIfNull())
+                    {
+                        var rowindex = dataGridViewContributions.Rows.Add(new object[] { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ct.EventTimeUTC),
+                            MaterialCommodityMicroResourceType.GetTranslatedNameByFDName(c.Name),
+                            c.Amount.ToString("N0") });
+                        dataGridViewContributions.Rows[rowindex].Tag = c;
+                    }
+                }
+
+                if (posrltag != null )
+                {
+                    dataGridViewContributions.SetCurrentSelOnRow(dataGridViewContributions.FindRowWithTag(posrltag), selposrl.Item2);
+                }
+
+                dataGridViewContributions.RestoreSort(cursort);
+
+                extPanelDataGridViewScrollContributions.Visible = dataGridViewContributions.Rows.Count > 0 && extCheckBoxShowContributions.Checked; // don't show if nothing
+                extCheckBoxShowContributions.Visible = dataGridViewContributions.Rows.Count > 0;      // no button if nothing
+            }
         }
 
         private void DataGridViewRL_SortCompare(object sender, DataGridViewSortCompareEventArgs e)

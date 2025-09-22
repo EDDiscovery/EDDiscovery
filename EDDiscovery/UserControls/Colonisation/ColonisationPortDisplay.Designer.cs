@@ -51,6 +51,7 @@
             this.extPanelDataGridViewScrollContributions = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarContributions = new ExtendedControls.ExtScrollBar();
             this.extPanelGradientFillBot = new ExtendedControls.ExtPanelGradientFill();
+            this.extCheckBoxShowZeros = new ExtendedControls.ExtCheckBox();
             this.extPanelDataGridViewScrollRL.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRL)).BeginInit();
             this.extPanelGradientFill1.SuspendLayout();
@@ -64,10 +65,10 @@
             this.extPanelDataGridViewScrollRL.Controls.Add(this.dataGridViewRL);
             this.extPanelDataGridViewScrollRL.Dock = System.Windows.Forms.DockStyle.Top;
             this.extPanelDataGridViewScrollRL.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScrollRL.Location = new System.Drawing.Point(0, 86);
+            this.extPanelDataGridViewScrollRL.Location = new System.Drawing.Point(0, 60);
             this.extPanelDataGridViewScrollRL.Name = "extPanelDataGridViewScrollRL";
             this.extPanelDataGridViewScrollRL.ScrollBarWidth = 24;
-            this.extPanelDataGridViewScrollRL.Size = new System.Drawing.Size(780, 227);
+            this.extPanelDataGridViewScrollRL.Size = new System.Drawing.Size(1117, 227);
             this.extPanelDataGridViewScrollRL.TabIndex = 4;
             this.extPanelDataGridViewScrollRL.VerticalScrollBarDockRight = true;
             // 
@@ -83,7 +84,7 @@
             this.extScrollBarRL.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarRL.HideScrollBar = false;
             this.extScrollBarRL.LargeChange = 0;
-            this.extScrollBarRL.Location = new System.Drawing.Point(756, 0);
+            this.extScrollBarRL.Location = new System.Drawing.Point(1093, 0);
             this.extScrollBarRL.Maximum = -1;
             this.extScrollBarRL.Minimum = 0;
             this.extScrollBarRL.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -92,7 +93,6 @@
             this.extScrollBarRL.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarRL.Name = "extScrollBarRL";
             this.extScrollBarRL.Size = new System.Drawing.Size(24, 227);
-            this.extScrollBarRL.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarRL.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarRL.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarRL.SliderDrawAngle = 90F;
@@ -121,7 +121,7 @@
             this.dataGridViewRL.Name = "dataGridViewRL";
             this.dataGridViewRL.RowHeadersVisible = false;
             this.dataGridViewRL.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewRL.Size = new System.Drawing.Size(756, 227);
+            this.dataGridViewRL.Size = new System.Drawing.Size(1093, 227);
             this.dataGridViewRL.TabIndex = 0;
             // 
             // ColRLName
@@ -157,6 +157,7 @@
             // extPanelGradientFill1
             // 
             this.extPanelGradientFill1.ChildrenThemed = true;
+            this.extPanelGradientFill1.Controls.Add(this.extCheckBoxShowZeros);
             this.extPanelGradientFill1.Controls.Add(this.extCheckBoxShowContributions);
             this.extPanelGradientFill1.Controls.Add(this.extCheckBoxShowRL);
             this.extPanelGradientFill1.Controls.Add(this.labelDataProgress);
@@ -170,14 +171,14 @@
             this.extPanelGradientFill1.Location = new System.Drawing.Point(0, 0);
             this.extPanelGradientFill1.Name = "extPanelGradientFill1";
             this.extPanelGradientFill1.PaintTransparentColor = System.Drawing.Color.Transparent;
-            this.extPanelGradientFill1.Size = new System.Drawing.Size(780, 86);
+            this.extPanelGradientFill1.Size = new System.Drawing.Size(1117, 60);
             this.extPanelGradientFill1.TabIndex = 3;
             this.extPanelGradientFill1.ThemeColors = new System.Drawing.Color[] {
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
-            this.extPanelGradientFill1.ThemeColorSet = 2;
+            this.extPanelGradientFill1.ThemeColorSet = 1;
             // 
             // extCheckBoxShowContributions
             // 
@@ -203,7 +204,7 @@
             this.extCheckBoxShowContributions.ImageIndeterminate = null;
             this.extCheckBoxShowContributions.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowContributions.ImageUnchecked = null;
-            this.extCheckBoxShowContributions.Location = new System.Drawing.Point(39, 54);
+            this.extCheckBoxShowContributions.Location = new System.Drawing.Point(39, 28);
             this.extCheckBoxShowContributions.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxShowContributions.MouseOverScaling = 1.3F;
             this.extCheckBoxShowContributions.MouseSelectedScaling = 1.3F;
@@ -237,7 +238,7 @@
             this.extCheckBoxShowRL.ImageIndeterminate = null;
             this.extCheckBoxShowRL.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxShowRL.ImageUnchecked = null;
-            this.extCheckBoxShowRL.Location = new System.Drawing.Point(3, 54);
+            this.extCheckBoxShowRL.Location = new System.Drawing.Point(3, 28);
             this.extCheckBoxShowRL.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxShowRL.MouseOverScaling = 1.3F;
             this.extCheckBoxShowRL.MouseSelectedScaling = 1.3F;
@@ -255,10 +256,10 @@
             this.labelDataProgress.Data = null;
             this.labelDataProgress.DataFont = null;
             this.labelDataProgress.InterSpacing = 4;
-            this.labelDataProgress.Location = new System.Drawing.Point(360, 3);
+            this.labelDataProgress.Location = new System.Drawing.Point(127, 32);
             this.labelDataProgress.Name = "labelDataProgress";
             this.labelDataProgress.NoDataText = null;
-            this.labelDataProgress.Size = new System.Drawing.Size(329, 23);
+            this.labelDataProgress.Size = new System.Drawing.Size(151, 23);
             this.labelDataProgress.TabIndex = 2;
             this.labelDataProgress.TabSpacingData = 0;
             this.labelDataProgress.Text = "Progress: {N2}%";
@@ -271,7 +272,7 @@
             this.labelDataGov.Data = null;
             this.labelDataGov.DataFont = null;
             this.labelDataGov.InterSpacing = 4;
-            this.labelDataGov.Location = new System.Drawing.Point(360, 29);
+            this.labelDataGov.Location = new System.Drawing.Point(400, 32);
             this.labelDataGov.Name = "labelDataGov";
             this.labelDataGov.NoDataText = null;
             this.labelDataGov.Size = new System.Drawing.Size(329, 23);
@@ -287,10 +288,10 @@
             this.labelDataFaction.Data = null;
             this.labelDataFaction.DataFont = null;
             this.labelDataFaction.InterSpacing = 4;
-            this.labelDataFaction.Location = new System.Drawing.Point(4, 29);
+            this.labelDataFaction.Location = new System.Drawing.Point(400, 3);
             this.labelDataFaction.Name = "labelDataFaction";
             this.labelDataFaction.NoDataText = null;
-            this.labelDataFaction.Size = new System.Drawing.Size(329, 23);
+            this.labelDataFaction.Size = new System.Drawing.Size(319, 23);
             this.labelDataFaction.TabIndex = 2;
             this.labelDataFaction.TabSpacingData = 0;
             this.labelDataFaction.Text = "Faction: {} State: {} ";
@@ -298,7 +299,7 @@
             // extLabelFailed
             // 
             this.extLabelFailed.AutoSize = true;
-            this.extLabelFailed.Location = new System.Drawing.Point(695, 4);
+            this.extLabelFailed.Location = new System.Drawing.Point(339, 32);
             this.extLabelFailed.Name = "extLabelFailed";
             this.extLabelFailed.Size = new System.Drawing.Size(35, 13);
             this.extLabelFailed.TabIndex = 0;
@@ -328,7 +329,7 @@
             this.dataGridViewContributions.Name = "dataGridViewContributions";
             this.dataGridViewContributions.RowHeadersVisible = false;
             this.dataGridViewContributions.ScrollBars = System.Windows.Forms.ScrollBars.None;
-            this.dataGridViewContributions.Size = new System.Drawing.Size(756, 227);
+            this.dataGridViewContributions.Size = new System.Drawing.Size(1093, 227);
             this.dataGridViewContributions.TabIndex = 0;
             // 
             // colContributionsTime
@@ -356,10 +357,10 @@
             this.extPanelDataGridViewScrollContributions.Controls.Add(this.dataGridViewContributions);
             this.extPanelDataGridViewScrollContributions.Dock = System.Windows.Forms.DockStyle.Top;
             this.extPanelDataGridViewScrollContributions.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScrollContributions.Location = new System.Drawing.Point(0, 313);
+            this.extPanelDataGridViewScrollContributions.Location = new System.Drawing.Point(0, 287);
             this.extPanelDataGridViewScrollContributions.Name = "extPanelDataGridViewScrollContributions";
             this.extPanelDataGridViewScrollContributions.ScrollBarWidth = 24;
-            this.extPanelDataGridViewScrollContributions.Size = new System.Drawing.Size(780, 227);
+            this.extPanelDataGridViewScrollContributions.Size = new System.Drawing.Size(1117, 227);
             this.extPanelDataGridViewScrollContributions.TabIndex = 5;
             this.extPanelDataGridViewScrollContributions.VerticalScrollBarDockRight = true;
             // 
@@ -375,7 +376,7 @@
             this.extScrollBarContributions.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarContributions.HideScrollBar = false;
             this.extScrollBarContributions.LargeChange = 0;
-            this.extScrollBarContributions.Location = new System.Drawing.Point(756, 0);
+            this.extScrollBarContributions.Location = new System.Drawing.Point(1093, 0);
             this.extScrollBarContributions.Maximum = -1;
             this.extScrollBarContributions.Minimum = 0;
             this.extScrollBarContributions.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -384,7 +385,6 @@
             this.extScrollBarContributions.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarContributions.Name = "extScrollBarContributions";
             this.extScrollBarContributions.Size = new System.Drawing.Size(24, 227);
-            this.extScrollBarContributions.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarContributions.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarContributions.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarContributions.SliderDrawAngle = 90F;
@@ -403,17 +403,43 @@
             this.extPanelGradientFillBot.Dock = System.Windows.Forms.DockStyle.Top;
             this.extPanelGradientFillBot.FlowDirection = null;
             this.extPanelGradientFillBot.GradientDirection = 0F;
-            this.extPanelGradientFillBot.Location = new System.Drawing.Point(0, 540);
+            this.extPanelGradientFillBot.Location = new System.Drawing.Point(0, 514);
             this.extPanelGradientFillBot.Name = "extPanelGradientFillBot";
             this.extPanelGradientFillBot.PaintTransparentColor = System.Drawing.Color.Transparent;
-            this.extPanelGradientFillBot.Size = new System.Drawing.Size(780, 15);
-            this.extPanelGradientFillBot.TabIndex = 35;
+            this.extPanelGradientFillBot.Size = new System.Drawing.Size(1117, 15);
+            this.extPanelGradientFillBot.TabIndex = 36;
             this.extPanelGradientFillBot.ThemeColors = new System.Drawing.Color[] {
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
             this.extPanelGradientFillBot.ThemeColorSet = -1;
+            // 
+            // extCheckBoxShowZeros
+            // 
+            this.extCheckBoxShowZeros.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowZeros.ButtonGradientDirection = 90F;
+            this.extCheckBoxShowZeros.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxShowZeros.CheckBoxGradientDirection = 225F;
+            this.extCheckBoxShowZeros.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowZeros.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowZeros.CheckColor2 = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowZeros.Checked = true;
+            this.extCheckBoxShowZeros.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.extCheckBoxShowZeros.DisabledScaling = 0.5F;
+            this.extCheckBoxShowZeros.Image = global::EDDiscovery.Icons.Controls.greenzero;
+            this.extCheckBoxShowZeros.ImageIndeterminate = null;
+            this.extCheckBoxShowZeros.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowZeros.ImageUnchecked = global::EDDiscovery.Icons.Controls.redzero;
+            this.extCheckBoxShowZeros.Location = new System.Drawing.Point(73, 28);
+            this.extCheckBoxShowZeros.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extCheckBoxShowZeros.MouseOverScaling = 1.3F;
+            this.extCheckBoxShowZeros.MouseSelectedScaling = 1.3F;
+            this.extCheckBoxShowZeros.Name = "extCheckBoxShowZeros";
+            this.extCheckBoxShowZeros.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowZeros.TabIndex = 35;
+            this.extCheckBoxShowZeros.TickBoxReductionRatio = 0.75F;
+            this.extCheckBoxShowZeros.UseVisualStyleBackColor = true;
             // 
             // ColonisationPortDisplay
             // 
@@ -425,7 +451,7 @@
             this.Controls.Add(this.extPanelDataGridViewScrollRL);
             this.Controls.Add(this.extPanelGradientFill1);
             this.Name = "ColonisationPortDisplay";
-            this.Size = new System.Drawing.Size(780, 657);
+            this.Size = new System.Drawing.Size(1117, 671);
             this.extPanelDataGridViewScrollRL.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRL)).EndInit();
             this.extPanelGradientFill1.ResumeLayout(false);
@@ -461,5 +487,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColRLRemaining;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColRLPayment;
         private ExtendedControls.ExtPanelGradientFill extPanelGradientFillBot;
+        private ExtendedControls.ExtCheckBox extCheckBoxShowZeros;
     }
 }

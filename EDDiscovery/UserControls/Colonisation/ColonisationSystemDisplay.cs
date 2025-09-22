@@ -14,6 +14,7 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using System;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls.Colonisation
@@ -22,7 +23,8 @@ namespace EDDiscovery.UserControls.Colonisation
     {
         public ColonisationSystemData SystemData { get; set; }
 
-        public bool ScanDisplayVisible { get { return scanDisplayUserControl.Visible; } }
+        public Action ChangedDisplayState;
+        public bool ShowSystemState { get { return extCheckBoxSystemShow.Checked; } set { extCheckBoxSystemShow.Checked = value; } }
 
         public ColonisationSystemDisplay()
         {
@@ -38,9 +40,10 @@ namespace EDDiscovery.UserControls.Colonisation
 
             labelDataName.Data0 = SystemData.System.Name;
 
-            extCheckBoxSystemShow.CheckedChanged += (s, e) => {
-                scanDisplayConfigureButton.Visible =
-                    edsmSpanshButton.Visible = scanDisplayBodyFiltersButton.Visible = scanDisplayUserControl.Visible = extCheckBoxSystemShow.Checked;
+            extCheckBoxSystemShow.CheckedChanged += (s, e) => 
+            {
+                scanDisplayConfigureButton.Visible = edsmSpanshButton.Visible = scanDisplayBodyFiltersButton.Visible = scanDisplayUserControl.Visible = extCheckBoxSystemShow.Checked;
+                ChangedDisplayState?.Invoke();
             };
 
             var sd = scanDisplayUserControl;               // done to keep the code the same as scandisplayform

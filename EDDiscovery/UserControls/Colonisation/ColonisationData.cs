@@ -99,7 +99,7 @@ namespace EDDiscovery.UserControls.Colonisation
                         bool newport = MakePort(sys, hl, ld.MarketID.Value, he.WhereAmI, out ColonisationPortData port);    // make the port..
 
                         port.LastDockedOrLocation = ld;
-                        //global::System.Diagnostics.Debug.WriteLine($"Colonisation LocDock on Port {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} {port.Name} {port.MarketID}");
+                        global::System.Diagnostics.Debug.WriteLine($"Colonisation LocDock on Port {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} {port.Name} {port.MarketID}");
                         return new Ret(newsystem, sys, port);
                     }
                 }
@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls.Colonisation
                 else
                 {
                     // if it disagrees, its due to the renaming of the station and market ID on progress  = 1
-                    if (cd.ConstructionProgress < 1)                        
+                    if (cd.ConstructionProgress < 1)
                         global::System.Diagnostics.Debug.WriteLine($"Colonisation Depot ERROR Rename without progress=1 {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cd.MarketID} {cd.ConstructionProgress}");
 
                     bool newsystem = MakeSystem(hl, he.System, out ColonisationSystemData sys);     // make the system
