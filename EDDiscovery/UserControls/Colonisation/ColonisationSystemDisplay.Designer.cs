@@ -29,13 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            EliteDangerousCore.SystemDisplay systemDisplay1 = new EliteDangerousCore.SystemDisplay();
+            EliteDangerousCore.SystemDisplay systemDisplay2 = new EliteDangerousCore.SystemDisplay();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extCheckBoxSystemShow = new ExtendedControls.ExtCheckBox();
             this.scanDisplayBodyFiltersButton = new EDDiscovery.UserControls.ScanDisplayBodyFiltersButton();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.scanDisplayConfigureButton = new EDDiscovery.UserControls.ScanDisplayConfigureButton();
             this.extPanelGradientFill1 = new ExtendedControls.ExtPanelGradientFill();
+            this.labelDataName = new ExtendedControls.LabelData();
             this.labelDataPosition = new ExtendedControls.LabelData();
             this.labelDataGov = new ExtendedControls.LabelData();
             this.labelDataFaction = new ExtendedControls.LabelData();
@@ -43,7 +44,6 @@
             this.extLabelBeaconDeployed = new ExtendedControls.ExtLabel();
             this.edsmSpanshButton = new EDDiscovery.UserControls.EDSMSpanshButton();
             this.scanDisplayUserControl = new EDDiscovery.UserControls.ScanDisplayUserControl();
-            this.labelDataName = new ExtendedControls.LabelData();
             this.extPanelGradientFill1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -78,7 +78,7 @@
             this.extCheckBoxSystemShow.ImageIndeterminate = null;
             this.extCheckBoxSystemShow.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxSystemShow.ImageUnchecked = null;
-            this.extCheckBoxSystemShow.Location = new System.Drawing.Point(4, 51);
+            this.extCheckBoxSystemShow.Location = new System.Drawing.Point(3, 28);
             this.extCheckBoxSystemShow.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxSystemShow.MouseOverScaling = 1.3F;
             this.extCheckBoxSystemShow.MouseSelectedScaling = 1.3F;
@@ -95,7 +95,7 @@
             this.scanDisplayBodyFiltersButton.ButtonDisabledScaling = 0.5F;
             this.scanDisplayBodyFiltersButton.GradientDirection = 90F;
             this.scanDisplayBodyFiltersButton.Image = global::EDDiscovery.Icons.Controls.EventFilter;
-            this.scanDisplayBodyFiltersButton.Location = new System.Drawing.Point(40, 51);
+            this.scanDisplayBodyFiltersButton.Location = new System.Drawing.Point(39, 28);
             this.scanDisplayBodyFiltersButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.scanDisplayBodyFiltersButton.MouseOverScaling = 1.3F;
             this.scanDisplayBodyFiltersButton.MouseSelectedScaling = 1.3F;
@@ -120,7 +120,7 @@
             this.scanDisplayConfigureButton.Cursor = System.Windows.Forms.Cursors.Default;
             this.scanDisplayConfigureButton.GradientDirection = 90F;
             this.scanDisplayConfigureButton.Image = global::EDDiscovery.Icons.Controls.DisplayFilters;
-            this.scanDisplayConfigureButton.Location = new System.Drawing.Point(76, 51);
+            this.scanDisplayConfigureButton.Location = new System.Drawing.Point(75, 28);
             this.scanDisplayConfigureButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.scanDisplayConfigureButton.MouseOverScaling = 1.3F;
             this.scanDisplayConfigureButton.MouseSelectedScaling = 1.3F;
@@ -150,7 +150,7 @@
             this.extPanelGradientFill1.Location = new System.Drawing.Point(0, 0);
             this.extPanelGradientFill1.Name = "extPanelGradientFill1";
             this.extPanelGradientFill1.PaintTransparentColor = System.Drawing.Color.Transparent;
-            this.extPanelGradientFill1.Size = new System.Drawing.Size(973, 112);
+            this.extPanelGradientFill1.Size = new System.Drawing.Size(973, 60);
             this.extPanelGradientFill1.TabIndex = 3;
             this.extPanelGradientFill1.ThemeColors = new System.Drawing.Color[] {
         System.Drawing.SystemColors.Control,
@@ -158,123 +158,6 @@
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
             this.extPanelGradientFill1.ThemeColorSet = -1;
-            // 
-            // labelDataPosition
-            // 
-            this.labelDataPosition.BorderColor = System.Drawing.Color.Orange;
-            this.labelDataPosition.BorderWidth = 1;
-            this.labelDataPosition.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
-            this.labelDataPosition.Data = null;
-            this.labelDataPosition.DataFont = null;
-            this.labelDataPosition.InterSpacing = 4;
-            this.labelDataPosition.Location = new System.Drawing.Point(325, 3);
-            this.labelDataPosition.Name = "labelDataPosition";
-            this.labelDataPosition.NoDataText = null;
-            this.labelDataPosition.Size = new System.Drawing.Size(315, 23);
-            this.labelDataPosition.TabIndex = 1;
-            this.labelDataPosition.TabSpacingData = 0;
-            this.labelDataPosition.Text = "Position: X:{N4}, Y:{N4}, Z:{N4}";
-            // 
-            // labelDataGov
-            // 
-            this.labelDataGov.BorderColor = System.Drawing.Color.Orange;
-            this.labelDataGov.BorderWidth = 1;
-            this.labelDataGov.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
-            this.labelDataGov.Data = null;
-            this.labelDataGov.DataFont = null;
-            this.labelDataGov.InterSpacing = 4;
-            this.labelDataGov.Location = new System.Drawing.Point(325, 28);
-            this.labelDataGov.Name = "labelDataGov";
-            this.labelDataGov.NoDataText = null;
-            this.labelDataGov.Size = new System.Drawing.Size(410, 23);
-            this.labelDataGov.TabIndex = 1;
-            this.labelDataGov.TabSpacingData = 0;
-            this.labelDataGov.Text = "Gov: {} Allegiance: {} Economy: {} Sec: {}";
-            // 
-            // labelDataFaction
-            // 
-            this.labelDataFaction.BorderColor = System.Drawing.Color.Orange;
-            this.labelDataFaction.BorderWidth = 1;
-            this.labelDataFaction.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
-            this.labelDataFaction.Data = null;
-            this.labelDataFaction.DataFont = null;
-            this.labelDataFaction.InterSpacing = 4;
-            this.labelDataFaction.Location = new System.Drawing.Point(4, 27);
-            this.labelDataFaction.Name = "labelDataFaction";
-            this.labelDataFaction.NoDataText = null;
-            this.labelDataFaction.Size = new System.Drawing.Size(315, 23);
-            this.labelDataFaction.TabIndex = 1;
-            this.labelDataFaction.TabSpacingData = 0;
-            this.labelDataFaction.Text = "System Faction: {} State: {}";
-            // 
-            // extLabelClaimReleased
-            // 
-            this.extLabelClaimReleased.AutoSize = true;
-            this.extLabelClaimReleased.Location = new System.Drawing.Point(446, 54);
-            this.extLabelClaimReleased.Name = "extLabelClaimReleased";
-            this.extLabelClaimReleased.Size = new System.Drawing.Size(80, 13);
-            this.extLabelClaimReleased.TabIndex = 0;
-            this.extLabelClaimReleased.Text = "Claim Released";
-            // 
-            // extLabelBeaconDeployed
-            // 
-            this.extLabelBeaconDeployed.AutoSize = true;
-            this.extLabelBeaconDeployed.Location = new System.Drawing.Point(322, 54);
-            this.extLabelBeaconDeployed.Name = "extLabelBeaconDeployed";
-            this.extLabelBeaconDeployed.Size = new System.Drawing.Size(92, 13);
-            this.extLabelBeaconDeployed.TabIndex = 0;
-            this.extLabelBeaconDeployed.Text = "Beacon Deployed";
-            // 
-            // edsmSpanshButton
-            // 
-            this.edsmSpanshButton.BackColor2 = System.Drawing.Color.Red;
-            this.edsmSpanshButton.ButtonDisabledScaling = 0.5F;
-            this.edsmSpanshButton.GradientDirection = 90F;
-            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
-            this.edsmSpanshButton.Location = new System.Drawing.Point(112, 51);
-            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.edsmSpanshButton.MouseOverScaling = 1.3F;
-            this.edsmSpanshButton.MouseSelectedScaling = 1.3F;
-            this.edsmSpanshButton.Name = "edsmSpanshButton";
-            this.edsmSpanshButton.SettingsSplittingChar = ';';
-            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
-            this.edsmSpanshButton.TabIndex = 30;
-            this.edsmSpanshButton.UseVisualStyleBackColor = true;
-            // 
-            // scanDisplayUserControl
-            // 
-            this.scanDisplayUserControl.Dock = System.Windows.Forms.DockStyle.Top;
-            this.scanDisplayUserControl.Location = new System.Drawing.Point(0, 112);
-            this.scanDisplayUserControl.Name = "scanDisplayUserControl";
-            this.scanDisplayUserControl.Size = new System.Drawing.Size(973, 361);
-            systemDisplay1.BackColor = System.Drawing.Color.Black;
-            systemDisplay1.ContextMenuStripBelts = null;
-            systemDisplay1.ContextMenuStripMats = null;
-            systemDisplay1.ContextMenuStripPlanetsMoons = null;
-            systemDisplay1.ContextMenuStripSignals = null;
-            systemDisplay1.ContextMenuStripStars = null;
-            systemDisplay1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            systemDisplay1.FontUnderlined = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            systemDisplay1.HideFullMaterials = false;
-            systemDisplay1.LabelColor = System.Drawing.Color.DarkOrange;
-            systemDisplay1.LargerFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            systemDisplay1.NoPlanetStarsOnSameLine = true;
-            systemDisplay1.ShowAllG = true;
-            systemDisplay1.ShowDist = true;
-            systemDisplay1.ShowHabZone = true;
-            systemDisplay1.ShowMaterials = true;
-            systemDisplay1.ShowMoons = true;
-            systemDisplay1.ShowOnlyMaterialsRare = false;
-            systemDisplay1.ShowOverlays = true;
-            systemDisplay1.ShowPlanetClasses = true;
-            systemDisplay1.ShowPlanetMass = true;
-            systemDisplay1.ShowStarAge = true;
-            systemDisplay1.ShowStarClasses = true;
-            systemDisplay1.ShowStarMass = true;
-            systemDisplay1.ShowWebBodies = false;
-            systemDisplay1.ValueLimit = 50000;
-            this.scanDisplayUserControl.SystemDisplay = systemDisplay1;
-            this.scanDisplayUserControl.TabIndex = 2;
             // 
             // labelDataName
             // 
@@ -292,14 +175,131 @@
             this.labelDataName.TabSpacingData = 0;
             this.labelDataName.Text = "Name: {}";
             // 
-            // ColonisationSystem
+            // labelDataPosition
+            // 
+            this.labelDataPosition.BorderColor = System.Drawing.Color.Orange;
+            this.labelDataPosition.BorderWidth = 1;
+            this.labelDataPosition.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
+            this.labelDataPosition.Data = null;
+            this.labelDataPosition.DataFont = null;
+            this.labelDataPosition.InterSpacing = 4;
+            this.labelDataPosition.Location = new System.Drawing.Point(734, 3);
+            this.labelDataPosition.Name = "labelDataPosition";
+            this.labelDataPosition.NoDataText = null;
+            this.labelDataPosition.Size = new System.Drawing.Size(236, 23);
+            this.labelDataPosition.TabIndex = 1;
+            this.labelDataPosition.TabSpacingData = 0;
+            this.labelDataPosition.Text = "Position: X:{N4}, Y:{N4}, Z:{N4}";
+            // 
+            // labelDataGov
+            // 
+            this.labelDataGov.BorderColor = System.Drawing.Color.Orange;
+            this.labelDataGov.BorderWidth = 1;
+            this.labelDataGov.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
+            this.labelDataGov.Data = null;
+            this.labelDataGov.DataFont = null;
+            this.labelDataGov.InterSpacing = 4;
+            this.labelDataGov.Location = new System.Drawing.Point(400, 32);
+            this.labelDataGov.Name = "labelDataGov";
+            this.labelDataGov.NoDataText = null;
+            this.labelDataGov.Size = new System.Drawing.Size(501, 23);
+            this.labelDataGov.TabIndex = 1;
+            this.labelDataGov.TabSpacingData = 0;
+            this.labelDataGov.Text = "Gov: {} Allegiance: {} Economy: {} Sec: {}";
+            // 
+            // labelDataFaction
+            // 
+            this.labelDataFaction.BorderColor = System.Drawing.Color.Orange;
+            this.labelDataFaction.BorderWidth = 1;
+            this.labelDataFaction.BoxStyle = ExtendedControls.LabelData.DataBoxStyle.AllAround;
+            this.labelDataFaction.Data = null;
+            this.labelDataFaction.DataFont = null;
+            this.labelDataFaction.InterSpacing = 4;
+            this.labelDataFaction.Location = new System.Drawing.Point(400, 3);
+            this.labelDataFaction.Name = "labelDataFaction";
+            this.labelDataFaction.NoDataText = null;
+            this.labelDataFaction.Size = new System.Drawing.Size(315, 23);
+            this.labelDataFaction.TabIndex = 1;
+            this.labelDataFaction.TabSpacingData = 0;
+            this.labelDataFaction.Text = "System Faction: {} State: {}";
+            // 
+            // extLabelClaimReleased
+            // 
+            this.extLabelClaimReleased.AutoSize = true;
+            this.extLabelClaimReleased.Location = new System.Drawing.Point(260, 32);
+            this.extLabelClaimReleased.Name = "extLabelClaimReleased";
+            this.extLabelClaimReleased.Size = new System.Drawing.Size(80, 13);
+            this.extLabelClaimReleased.TabIndex = 0;
+            this.extLabelClaimReleased.Text = "Claim Released";
+            // 
+            // extLabelBeaconDeployed
+            // 
+            this.extLabelBeaconDeployed.AutoSize = true;
+            this.extLabelBeaconDeployed.Location = new System.Drawing.Point(162, 32);
+            this.extLabelBeaconDeployed.Name = "extLabelBeaconDeployed";
+            this.extLabelBeaconDeployed.Size = new System.Drawing.Size(92, 13);
+            this.extLabelBeaconDeployed.TabIndex = 0;
+            this.extLabelBeaconDeployed.Text = "Beacon Deployed";
+            // 
+            // edsmSpanshButton
+            // 
+            this.edsmSpanshButton.BackColor2 = System.Drawing.Color.Red;
+            this.edsmSpanshButton.ButtonDisabledScaling = 0.5F;
+            this.edsmSpanshButton.GradientDirection = 90F;
+            this.edsmSpanshButton.Image = global::EDDiscovery.Icons.Controls.EDSMSpansh;
+            this.edsmSpanshButton.Location = new System.Drawing.Point(111, 28);
+            this.edsmSpanshButton.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.edsmSpanshButton.MouseOverScaling = 1.3F;
+            this.edsmSpanshButton.MouseSelectedScaling = 1.3F;
+            this.edsmSpanshButton.Name = "edsmSpanshButton";
+            this.edsmSpanshButton.SettingsSplittingChar = ';';
+            this.edsmSpanshButton.Size = new System.Drawing.Size(28, 28);
+            this.edsmSpanshButton.TabIndex = 30;
+            this.edsmSpanshButton.UseVisualStyleBackColor = true;
+            // 
+            // scanDisplayUserControl
+            // 
+            this.scanDisplayUserControl.Dock = System.Windows.Forms.DockStyle.Top;
+            this.scanDisplayUserControl.Location = new System.Drawing.Point(0, 60);
+            this.scanDisplayUserControl.Name = "scanDisplayUserControl";
+            this.scanDisplayUserControl.Size = new System.Drawing.Size(973, 361);
+            systemDisplay2.BackColor = System.Drawing.Color.Black;
+            systemDisplay2.ContextMenuStripBelts = null;
+            systemDisplay2.ContextMenuStripMats = null;
+            systemDisplay2.ContextMenuStripPlanetsMoons = null;
+            systemDisplay2.ContextMenuStripSignals = null;
+            systemDisplay2.ContextMenuStripStars = null;
+            systemDisplay2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            systemDisplay2.FontUnderlined = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            systemDisplay2.HideFullMaterials = false;
+            systemDisplay2.LabelColor = System.Drawing.Color.DarkOrange;
+            systemDisplay2.LargerFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            systemDisplay2.NoPlanetStarsOnSameLine = true;
+            systemDisplay2.ShowAllG = true;
+            systemDisplay2.ShowDist = true;
+            systemDisplay2.ShowHabZone = true;
+            systemDisplay2.ShowMaterials = true;
+            systemDisplay2.ShowMoons = true;
+            systemDisplay2.ShowOnlyMaterialsRare = false;
+            systemDisplay2.ShowOverlays = true;
+            systemDisplay2.ShowPlanetClasses = true;
+            systemDisplay2.ShowPlanetMass = true;
+            systemDisplay2.ShowStarAge = true;
+            systemDisplay2.ShowStarClasses = true;
+            systemDisplay2.ShowStarMass = true;
+            systemDisplay2.ShowWebBodies = false;
+            systemDisplay2.ValueLimit = 50000;
+            this.scanDisplayUserControl.SystemDisplay = systemDisplay2;
+            this.scanDisplayUserControl.TabIndex = 2;
+            // 
+            // ColonisationSystemDisplay
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.Controls.Add(this.scanDisplayUserControl);
             this.Controls.Add(this.extPanelGradientFill1);
-            this.Name = "ColonisationSystem";
+            this.Name = "ColonisationSystemDisplay";
             this.Size = new System.Drawing.Size(973, 473);
             this.extPanelGradientFill1.ResumeLayout(false);
             this.extPanelGradientFill1.PerformLayout();
