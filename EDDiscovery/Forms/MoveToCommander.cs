@@ -30,7 +30,7 @@ namespace EDDiscovery.Forms
         }
 
 
-        public bool Init()
+        public bool Init(string title = null)
         {
             List<EDCommander> commanders = EDCommander.GetListActiveCommanders();
 
@@ -40,6 +40,9 @@ namespace EDDiscovery.Forms
 
             var enumlist = new Enum[] { EDTx.MoveToCommander, EDTx.MoveToCommander_buttonTransfer, EDTx.MoveToCommander_label1 };
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
+
+            if (title != null)
+                this.Text = label1.Text = title;
 
             var theme = ExtendedControls.Theme.Current;
             theme.ApplyDialog(this);

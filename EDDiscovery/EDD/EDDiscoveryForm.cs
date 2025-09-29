@@ -552,7 +552,8 @@ namespace EDDiscovery
             var enumlistcms3 = new Enum[] { EDTx.EDDiscoveryForm_toolsToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_settingsToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_showAllInTaskBarToolStripMenuItem, 
                 EDTx.EDDiscoveryForm_toolsToolStripMenuItem_showAllPopoutsInTaskBarToolStripMenuItem_turnOffAllTransparencyToolStripMenuItem, EDTx.EDDiscoveryForm_toolsToolStripMenuItem_exitToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem, 
-                EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_sendUnsyncedEDSMJournalsToolStripMenuItem, 
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_sendUnsyncedEDSMJournalsToolStripMenuItem,
+                EDTx.EDDiscoveryForm_adminToolStripMenuItem_moveAllEntriesFromAnotherCommanderToThisCommanderToolStripMenuItem,
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_syncEDSMSystemsToolStripMenuItem_fetchLogsAgainToolStripMenuItem,
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_fetchStarDataAgainToolStripMenuItem,
                 EDTx.EDDiscoveryForm_adminToolStripMenuItem_rescanAllJournalFilesToolStripMenuItem, EDTx.EDDiscoveryForm_adminToolStripMenuItem_sendHistoricDataToInaraToolStripMenuItem, 
@@ -1099,7 +1100,7 @@ namespace EDDiscovery
             if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset all history entries to the current commander".T(EDTx.EDDiscoveryForm_ResetCMDR), "Warning".T(EDTx.Warning), MessageBoxButtons.OKCancel) == DialogResult.OK)
             {
                 JournalEntry.ResetCommanderID(-1, EDCommander.CurrentCmdrID);
-                Controller.RefreshHistoryAsync();
+                RefreshHistoryAsync();
             }
         }
 
@@ -1169,9 +1170,24 @@ namespace EDDiscovery
             }
         }
 
-#endregion
 
-#region Add Ons Menu
+        private void moveAllEntriesFromAnotherCommanderToThisCommanderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EDDiscovery.Forms.MoveToCommander movefrm = new EDDiscovery.Forms.MoveToCommander();
+
+            movefrm.Init("Move all entries from below commander");
+
+            DialogResult red = movefrm.ShowDialog(FindForm());
+            if (red == DialogResult.OK)
+            {
+                JournalEntry.ResetCommanderID(movefrm.selectedCommander.Id, EDCommander.CurrentCmdrID);
+                RefreshHistoryAsync();
+            }
+        }
+
+        #endregion
+
+        #region Add Ons Menu
 
         public void manageAddOnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1376,6 +1392,7 @@ namespace EDDiscovery
 
 
         #endregion
+
     }
 }
 

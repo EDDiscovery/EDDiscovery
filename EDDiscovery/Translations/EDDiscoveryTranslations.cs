@@ -102,6 +102,7 @@ namespace EDDiscovery
         EDDiscoveryForm_adminToolStripMenuItem_read21AndFormerLogFilesToolStripMenuItem, // ToolStrip control 'Read 2.1 and former log files'
         EDDiscoveryForm_adminToolStripMenuItem_read21AndFormerLogFilesToolStripMenuItem_load21ToolStripMenuItem, // ToolStrip control 'Scan Netlogs'
         EDDiscoveryForm_adminToolStripMenuItem_read21AndFormerLogFilesToolStripMenuItem_read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem, // ToolStrip control 'Force reload logs'
+        EDDiscoveryForm_adminToolStripMenuItem_moveAllEntriesFromAnotherCommanderToThisCommanderToolStripMenuItem,
         EDDiscoveryForm_addOnsToolStripMenuItem, // ToolStrip control '&Add-Ons'
         EDDiscoveryForm_addOnsToolStripMenuItem_manageAddOnsToolStripMenuItem, // ToolStrip control '&Manage Add-Ons'
         EDDiscoveryForm_addOnsToolStripMenuItem_configureAddOnActionsToolStripMenuItem, // ToolStrip control '&Edit Add-On Action Files'
