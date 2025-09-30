@@ -61,9 +61,12 @@ namespace EDDiscovery.UserControls
         {
             base.Closing();
 
-            m_Watcher.EnableRaisingEvents = false;
-            m_Watcher.Dispose();
-            m_Watcher = null;
+            if (m_Watcher != null)
+            {
+                m_Watcher.EnableRaisingEvents = false;
+                m_Watcher.Dispose();
+                m_Watcher = null;
+            }
 
             waitforaccesstimer.Stop();
         }

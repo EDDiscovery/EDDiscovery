@@ -22,7 +22,7 @@ namespace EDDiscovery.Forms
 {
     public partial class MoveToCommander : Form
     {
-        public EDCommander selectedCommander;
+        public EDCommander SelectedCommander { get; set; }
 
         public MoveToCommander()
         {
@@ -30,13 +30,18 @@ namespace EDDiscovery.Forms
         }
 
 
-        public bool Init()
+        public bool Init(string title = null, string question = null)
         {
             List<EDCommander> commanders = EDCommander.GetListActiveCommanders();
 
             comboBoxCommanders.DisplayMember = "Name";
             comboBoxCommanders.ValueMember = "Nr";
             comboBoxCommanders.DataSource = commanders;
+
+            if (title != null)
+                this.Text = title;
+            if (question != null)
+                this.label1.Text = question;
 
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
 
@@ -54,7 +59,7 @@ namespace EDDiscovery.Forms
 
         private void comboBoxCommanders_SelectedIndexChanged(object sender, EventArgs e)
         {
-            selectedCommander = (EDCommander)comboBoxCommanders.SelectedItem;
+            SelectedCommander = (EDCommander)comboBoxCommanders.SelectedItem;
         }
 
         private void buttonExtCancel_Click(object sender, EventArgs e)

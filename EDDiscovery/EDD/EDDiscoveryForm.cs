@@ -1090,14 +1090,6 @@ namespace EDDiscovery
             }
         }
 
-        private void debugResetAllHistoryToFirstCommanderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm you wish to reset all history entries to the current commander".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
-            {
-                JournalEntry.ResetCommanderID(-1, EDCommander.CurrentCmdrID);
-                Controller.RefreshHistoryAsync();
-            }
-        }
 
         private void rescanAllJournalFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1115,6 +1107,20 @@ namespace EDDiscovery
             else
             {
                 ExtendedControls.MessageBoxTheme.Show(this,"No new release found".Tx(), "Warning".Tx(), MessageBoxButtons.OK);
+            }
+        }
+
+        private void moveAnotherCommandersHistoryToThisCommanderToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Forms.MoveToCommander movefrm = new Forms.MoveToCommander();
+
+            movefrm.Init(null,"Pick commander to move all their history to current commander:");
+
+            DialogResult red = movefrm.ShowDialog(FindForm());
+            if (red == DialogResult.OK)
+            {
+                JournalEntry.ResetCommanderID(movefrm.SelectedCommander.Id, EDCommander.CurrentCmdrID);
+                RefreshHistoryAsync();
             }
         }
 
@@ -1372,6 +1378,7 @@ namespace EDDiscovery
 
 
         #endregion
+
 
     }
 }

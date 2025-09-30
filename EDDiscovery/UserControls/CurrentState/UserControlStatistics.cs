@@ -13,6 +13,7 @@
  */
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using ExtendedControls;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -115,7 +116,15 @@ namespace EDDiscovery.UserControls
 
             {
                 extChartLedger.AddChartArea("LedgerCA1");
-                extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
+
+                extChartLedger.AddLegend("legend");
+                extChartLedger.SetCustomLegendItems(new LegendItem("Credits".Tx() + " \u2714", Theme.Current.Chart1, ""), new LegendItem("Assets".Tx() + " \u2714", Theme.Current.Chart2, ""));
+
+                extChartLedger.AddSeries("Credits", "LedgerCA1", SeriesChartType.Line);
+                extChartLedger.ShowSeriesMarkers(MarkerStyle.Diamond);
+
+                extChartLedger.AddSeries("Assets", "LedgerCA1", SeriesChartType.Line);
+
                 extChartLedger.EnableZoomMouseWheelX();
                 extChartLedger.ZoomMouseWheelXMinimumInterval = 5.0 / 60.0 / 24.0;
 
@@ -130,8 +139,6 @@ namespace EDDiscovery.UserControls
                 extChartLedger.SetYAxisFormat("N0");
                 extChartLedger.IsStartedFromZeroY = false;
 
-                extChartLedger.ShowSeriesMarkers(MarkerStyle.Diamond);
-
                 extChartLedger.AddContextMenu(new string[] { "Zoom out by 1", "Reset Zoom" },
                                     new Action<ToolStripMenuItem>[]
                                         { new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomOutX(); } ),
@@ -144,6 +151,20 @@ namespace EDDiscovery.UserControls
                                     );
 
                 extChartLedger.CursorPositionChanged = LedgerCursorPositionChanged;
+
+                extChartLedger.ReportOnMouseDown((ht, fp, e) =>
+                {
+                    //System.Diagnostics.Debug.WriteLine($"Mouse hit {ht.ChartArea} {fp} {e.Location} {chart.CurrentLegend.Position.X} {chart.CurrentLegend.Position.Y}");
+                    PointF? lclick = extChartLedger.ReportLegendClickPosition(fp);
+                    if (lclick != null)
+                    {
+                        int series = lclick.Value.Y < 50 ? 0 : 1;
+                        bool enabled = !extChartLedger.IsSeriesEnabled(series);
+                        extChartLedger.SetSeriesEnabled(enabled, series);
+                        extChartLedger.ChangeSetCustomLegendItemsText( (series == 0 ? "Credits".Tx() : "Assets".Tx()) + (enabled ? " \u2714" : " \u274c"), series);
+
+                    }
+                });
             }
 
             {
@@ -738,17 +759,20 @@ namespace EDDiscovery.UserControls
             DataGridViewColumn sortcol = dataGridViewLedger.SortedColumn != null ? dataGridViewLedger.SortedColumn : dataGridViewLedger.Columns[0];
             SortOrder sortorder = dataGridViewLedger.SortOrder != SortOrder.None ? dataGridViewLedger.SortOrder : SortOrder.Descending;
 
-            extChartLedger.ClearSeriesPoints();
+            extChartLedger.ClearAllSeriesPoints();
             extChartLedger.BeginInit();
             dataGridViewLedger.Rows.Clear();
 
-            foreach( var kvp in currentstat.Credits)
+            foreach( var kvp in currentstat.CreditsAssets)
             {
+                //string asserttext = currentstat.Assets.TryGetValue(kvp.Key, out long assetvalue) ? assetvalue.ToString("N0") :"";
                 DateTime seltime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(kvp.Key);
-                object[] coldata = new object[] { seltime.ToString(), kvp.Value.ToString("N0") };
+                object[] coldata = new object[] { seltime.ToString(), kvp.Value.Item1.ToString("N0") , kvp.Value.Item2!=0 ? kvp.Value.Item2.ToString("N0"): "" };
                 int row =dataGridViewLedger.Rows.Add(coldata);
                 dataGridViewLedger.Rows[row].Tag = seltime;
-                extChartLedger.AddXY(seltime, kvp.Value);   // no tip, since the grid responds to a click on a point 
+                extChartLedger.AddXY(seltime, kvp.Value.Item1,series:0);   // no tip, since the grid responds to a click on a point 
+                if ( kvp.Value.Item2 != 0)
+                    extChartLedger.AddXY(seltime, kvp.Value.Item2, series:1);   // no tip, since the grid responds to a click on a point 
             }
 
             extChartLedger.EndInit();

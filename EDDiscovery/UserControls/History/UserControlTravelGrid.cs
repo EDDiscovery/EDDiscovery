@@ -959,7 +959,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach (HistoryEntry sp in listsyspos)
                 {
-                    sp.journalEntry.UpdateCommanderID(movefrm.selectedCommander.Id);
+                    sp.journalEntry.UpdateCommanderID(movefrm.SelectedCommander.Id);
                 }
 
                 foreach (DataGridViewRow row in selectedRows)

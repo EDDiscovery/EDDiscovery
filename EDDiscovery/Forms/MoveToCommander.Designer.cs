@@ -70,7 +70,7 @@ namespace EDDiscovery.Forms
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(322, 139);
+            this.panel1.Size = new System.Drawing.Size(443, 139);
             this.panel1.TabIndex = 4;
             // 
             // buttonExtCancel
@@ -78,7 +78,7 @@ namespace EDDiscovery.Forms
             this.buttonExtCancel.BackColor2 = System.Drawing.Color.Red;
             this.buttonExtCancel.ButtonDisabledScaling = 0.5F;
             this.buttonExtCancel.GradientDirection = 90F;
-            this.buttonExtCancel.Location = new System.Drawing.Point(89, 103);
+            this.buttonExtCancel.Location = new System.Drawing.Point(213, 103);
             this.buttonExtCancel.MouseOverScaling = 1.3F;
             this.buttonExtCancel.MouseSelectedScaling = 1.3F;
             this.buttonExtCancel.Name = "buttonExtCancel";
@@ -93,7 +93,7 @@ namespace EDDiscovery.Forms
             this.buttonTransfer.BackColor2 = System.Drawing.Color.Red;
             this.buttonTransfer.ButtonDisabledScaling = 0.5F;
             this.buttonTransfer.GradientDirection = 90F;
-            this.buttonTransfer.Location = new System.Drawing.Point(205, 103);
+            this.buttonTransfer.Location = new System.Drawing.Point(329, 103);
             this.buttonTransfer.MouseOverScaling = 1.3F;
             this.buttonTransfer.MouseSelectedScaling = 1.3F;
             this.buttonTransfer.Name = "buttonTransfer";
@@ -120,7 +120,7 @@ namespace EDDiscovery.Forms
             this.comboBoxCommanders.SelectedIndex = -1;
             this.comboBoxCommanders.SelectedItem = null;
             this.comboBoxCommanders.SelectedValue = null;
-            this.comboBoxCommanders.Size = new System.Drawing.Size(290, 21);
+            this.comboBoxCommanders.Size = new System.Drawing.Size(411, 21);
             this.comboBoxCommanders.TabIndex = 0;
             this.comboBoxCommanders.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxCommanders.ValueMember = "";
@@ -130,7 +130,7 @@ namespace EDDiscovery.Forms
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(322, 139);
+            this.ClientSize = new System.Drawing.Size(443, 139);
             this.Controls.Add(this.panel1);
             this.Icon = global::EDDiscovery.Properties.Resources.edlogo_3mo_icon;
             this.Name = "MoveToCommander";

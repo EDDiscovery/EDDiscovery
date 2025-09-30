@@ -77,8 +77,6 @@ namespace EDDiscovery.UserControls
             this.splitContainerLedger = new System.Windows.Forms.SplitContainer();
             this.extPanelDataGridViewScrollLedger = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewLedger = new BaseUtils.DataGridViewBaseEnhancements();
-            this.dataGridViewTextBoxColumnLedgerDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.dataGridViewTextBoxColumnNumericCredits = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extScrollBarLedger = new ExtendedControls.ExtScrollBar();
             this.extChartLedger = new ExtendedControls.ExtSafeChart();
             this.tabPageTravel = new System.Windows.Forms.TabPage();
@@ -116,6 +114,9 @@ namespace EDDiscovery.UserControls
             this.extButtonStartStop = new ExtendedControls.ExtButton();
             this.dateTimePickerEndDate = new ExtendedControls.ExtDateTimePicker();
             this.labelStart = new System.Windows.Forms.Label();
+            this.dataGridViewTextBoxColumnLedgerDate = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnNumericCredits = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewTextBoxColumnLedgerAssets = new System.Windows.Forms.DataGridViewTextBoxColumn();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewGeneral)).BeginInit();
             this.tabControlCustomStats.SuspendLayout();
             this.tabPageGeneral.SuspendLayout();
@@ -238,6 +239,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarGeneral.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarGeneral.Name = "vScrollBarGeneral";
             this.vScrollBarGeneral.Size = new System.Drawing.Size(48, 300);
+            this.vScrollBarGeneral.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.vScrollBarGeneral.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarGeneral.SliderColor2 = System.Drawing.Color.DarkGray;
             this.vScrollBarGeneral.SliderDrawAngle = 90F;
@@ -437,6 +439,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarRanks.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarRanks.Name = "extScrollBarRanks";
             this.extScrollBarRanks.Size = new System.Drawing.Size(48, 505);
+            this.extScrollBarRanks.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarRanks.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarRanks.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarRanks.SliderDrawAngle = 90F;
@@ -502,7 +505,8 @@ namespace EDDiscovery.UserControls
             this.dataGridViewLedger.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridViewLedger.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.dataGridViewTextBoxColumnLedgerDate,
-            this.dataGridViewTextBoxColumnNumericCredits});
+            this.dataGridViewTextBoxColumnNumericCredits,
+            this.dataGridViewTextBoxColumnLedgerAssets});
             this.dataGridViewLedger.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridViewLedger.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewLedger.Name = "dataGridViewLedger";
@@ -515,20 +519,6 @@ namespace EDDiscovery.UserControls
             this.dataGridViewLedger.TabIndex = 2;
             this.dataGridViewLedger.TopLeftHeaderMenuStrip = null;
             this.dataGridViewLedger.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewLedger_CellClick);
-            // 
-            // dataGridViewTextBoxColumnLedgerDate
-            // 
-            this.dataGridViewTextBoxColumnLedgerDate.HeaderText = "Date";
-            this.dataGridViewTextBoxColumnLedgerDate.Name = "dataGridViewTextBoxColumnLedgerDate";
-            this.dataGridViewTextBoxColumnLedgerDate.ReadOnly = true;
-            // 
-            // dataGridViewTextBoxColumnNumericCredits
-            // 
-            this.dataGridViewTextBoxColumnNumericCredits.FillWeight = 400F;
-            this.dataGridViewTextBoxColumnNumericCredits.HeaderText = "Credits";
-            this.dataGridViewTextBoxColumnNumericCredits.MinimumWidth = 50;
-            this.dataGridViewTextBoxColumnNumericCredits.Name = "dataGridViewTextBoxColumnNumericCredits";
-            this.dataGridViewTextBoxColumnNumericCredits.ReadOnly = true;
             // 
             // extScrollBarLedger
             // 
@@ -551,6 +541,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarLedger.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarLedger.Name = "extScrollBarLedger";
             this.extScrollBarLedger.Size = new System.Drawing.Size(48, 300);
+            this.extScrollBarLedger.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarLedger.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarLedger.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarLedger.SliderDrawAngle = 90F;
@@ -597,10 +588,10 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollTravel.Controls.Add(this.dataGridViewTravel);
             this.extPanelDataGridViewScrollTravel.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extPanelDataGridViewScrollTravel.InternalMargin = new System.Windows.Forms.Padding(0);
-            this.extPanelDataGridViewScrollTravel.Location = new System.Drawing.Point(0, 26);
+            this.extPanelDataGridViewScrollTravel.Location = new System.Drawing.Point(0, 23);
             this.extPanelDataGridViewScrollTravel.Name = "extPanelDataGridViewScrollTravel";
             this.extPanelDataGridViewScrollTravel.ScrollBarWidth = 48;
-            this.extPanelDataGridViewScrollTravel.Size = new System.Drawing.Size(1065, 485);
+            this.extPanelDataGridViewScrollTravel.Size = new System.Drawing.Size(1065, 488);
             this.extPanelDataGridViewScrollTravel.TabIndex = 4;
             this.extPanelDataGridViewScrollTravel.VerticalScrollBarDockRight = true;
             // 
@@ -624,7 +615,8 @@ namespace EDDiscovery.UserControls
             this.extScrollBarTravel.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarTravel.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarTravel.Name = "extScrollBarTravel";
-            this.extScrollBarTravel.Size = new System.Drawing.Size(48, 485);
+            this.extScrollBarTravel.Size = new System.Drawing.Size(48, 488);
+            this.extScrollBarTravel.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarTravel.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarTravel.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarTravel.SliderDrawAngle = 90F;
@@ -656,7 +648,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewTravel.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewTravel.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewTravel.SingleRowSelect = true;
-            this.dataGridViewTravel.Size = new System.Drawing.Size(1017, 485);
+            this.dataGridViewTravel.Size = new System.Drawing.Size(1017, 488);
             this.dataGridViewTravel.TabIndex = 3;
             // 
             // userControlStatsTimeTravel
@@ -665,7 +657,7 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeTravel.Dock = System.Windows.Forms.DockStyle.Top;
             this.userControlStatsTimeTravel.Location = new System.Drawing.Point(0, 0);
             this.userControlStatsTimeTravel.Name = "userControlStatsTimeTravel";
-            this.userControlStatsTimeTravel.Size = new System.Drawing.Size(1065, 26);
+            this.userControlStatsTimeTravel.Size = new System.Drawing.Size(1065, 23);
             this.userControlStatsTimeTravel.TabIndex = 0;
             this.userControlStatsTimeTravel.TimeMode = EliteDangerousCore.JournalStatsInfo.TimeModeType.Summary;
             // 
@@ -683,7 +675,7 @@ namespace EDDiscovery.UserControls
             // splitContainerScan
             // 
             this.splitContainerScan.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerScan.Location = new System.Drawing.Point(0, 26);
+            this.splitContainerScan.Location = new System.Drawing.Point(0, 23);
             this.splitContainerScan.Name = "splitContainerScan";
             this.splitContainerScan.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -694,8 +686,8 @@ namespace EDDiscovery.UserControls
             // splitContainerScan.Panel2
             // 
             this.splitContainerScan.Panel2.Controls.Add(this.extChartScan);
-            this.splitContainerScan.Size = new System.Drawing.Size(1065, 485);
-            this.splitContainerScan.SplitterDistance = 238;
+            this.splitContainerScan.Size = new System.Drawing.Size(1065, 488);
+            this.splitContainerScan.SplitterDistance = 239;
             this.splitContainerScan.TabIndex = 10;
             // 
             // extPanelDataGridViewScrollScan
@@ -707,7 +699,7 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollScan.Location = new System.Drawing.Point(0, 0);
             this.extPanelDataGridViewScrollScan.Name = "extPanelDataGridViewScrollScan";
             this.extPanelDataGridViewScrollScan.ScrollBarWidth = 48;
-            this.extPanelDataGridViewScrollScan.Size = new System.Drawing.Size(1065, 238);
+            this.extPanelDataGridViewScrollScan.Size = new System.Drawing.Size(1065, 239);
             this.extPanelDataGridViewScrollScan.TabIndex = 5;
             this.extPanelDataGridViewScrollScan.VerticalScrollBarDockRight = true;
             // 
@@ -730,7 +722,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewScan.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewScan.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewScan.SingleRowSelect = true;
-            this.dataGridViewScan.Size = new System.Drawing.Size(1017, 238);
+            this.dataGridViewScan.Size = new System.Drawing.Size(1017, 239);
             this.dataGridViewScan.TabIndex = 4;
             // 
             // extScrollBarScan
@@ -753,7 +745,8 @@ namespace EDDiscovery.UserControls
             this.extScrollBarScan.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarScan.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarScan.Name = "extScrollBarScan";
-            this.extScrollBarScan.Size = new System.Drawing.Size(48, 238);
+            this.extScrollBarScan.Size = new System.Drawing.Size(48, 239);
+            this.extScrollBarScan.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarScan.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarScan.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarScan.SliderDrawAngle = 90F;
@@ -778,7 +771,7 @@ namespace EDDiscovery.UserControls
             this.extChartScan.Name = "extChartScan";
             this.extChartScan.RightArrowEnable = true;
             this.extChartScan.RightArrowPosition = elementPosition6;
-            this.extChartScan.Size = new System.Drawing.Size(1065, 243);
+            this.extChartScan.Size = new System.Drawing.Size(1065, 245);
             this.extChartScan.TabIndex = 0;
             this.extChartScan.ZoomMouseWheelXMinimumInterval = 5D;
             this.extChartScan.ZoomMouseWheelXZoomFactor = 1.5D;
@@ -789,7 +782,7 @@ namespace EDDiscovery.UserControls
             this.userControlStatsTimeScan.Dock = System.Windows.Forms.DockStyle.Top;
             this.userControlStatsTimeScan.Location = new System.Drawing.Point(0, 0);
             this.userControlStatsTimeScan.Name = "userControlStatsTimeScan";
-            this.userControlStatsTimeScan.Size = new System.Drawing.Size(1065, 26);
+            this.userControlStatsTimeScan.Size = new System.Drawing.Size(1065, 23);
             this.userControlStatsTimeScan.TabIndex = 1;
             this.userControlStatsTimeScan.TimeMode = EliteDangerousCore.JournalStatsInfo.TimeModeType.Summary;
             // 
@@ -808,7 +801,7 @@ namespace EDDiscovery.UserControls
             // splitContainerCombat
             // 
             this.splitContainerCombat.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerCombat.Location = new System.Drawing.Point(3, 29);
+            this.splitContainerCombat.Location = new System.Drawing.Point(3, 26);
             this.splitContainerCombat.Name = "splitContainerCombat";
             this.splitContainerCombat.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -819,8 +812,8 @@ namespace EDDiscovery.UserControls
             // splitContainerCombat.Panel2
             // 
             this.splitContainerCombat.Panel2.Controls.Add(this.extChartCombat);
-            this.splitContainerCombat.Size = new System.Drawing.Size(1059, 479);
-            this.splitContainerCombat.SplitterDistance = 239;
+            this.splitContainerCombat.Size = new System.Drawing.Size(1059, 482);
+            this.splitContainerCombat.SplitterDistance = 240;
             this.splitContainerCombat.TabIndex = 7;
             // 
             // extPanelDataGridViewScrollCombat
@@ -832,7 +825,7 @@ namespace EDDiscovery.UserControls
             this.extPanelDataGridViewScrollCombat.Location = new System.Drawing.Point(0, 0);
             this.extPanelDataGridViewScrollCombat.Name = "extPanelDataGridViewScrollCombat";
             this.extPanelDataGridViewScrollCombat.ScrollBarWidth = 48;
-            this.extPanelDataGridViewScrollCombat.Size = new System.Drawing.Size(1059, 239);
+            this.extPanelDataGridViewScrollCombat.Size = new System.Drawing.Size(1059, 240);
             this.extPanelDataGridViewScrollCombat.TabIndex = 6;
             this.extPanelDataGridViewScrollCombat.VerticalScrollBarDockRight = true;
             // 
@@ -856,13 +849,13 @@ namespace EDDiscovery.UserControls
             this.extScrollBarCombatDGV.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarCombatDGV.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCombatDGV.Name = "extScrollBarCombatDGV";
-            this.extScrollBarCombatDGV.Size = new System.Drawing.Size(48, 239);
+            this.extScrollBarCombatDGV.Size = new System.Drawing.Size(48, 240);
+            this.extScrollBarCombatDGV.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarCombatDGV.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarCombatDGV.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarCombatDGV.SliderDrawAngle = 90F;
             this.extScrollBarCombatDGV.SmallChange = 1;
             this.extScrollBarCombatDGV.TabIndex = 6;
-            this.extScrollBarCombatDGV.Text = "";
             this.extScrollBarCombatDGV.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCombatDGV.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarCombatDGV.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -889,7 +882,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewCombat.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCombat.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewCombat.SingleRowSelect = true;
-            this.dataGridViewCombat.Size = new System.Drawing.Size(1011, 239);
+            this.dataGridViewCombat.Size = new System.Drawing.Size(1011, 240);
             this.dataGridViewCombat.TabIndex = 5;
             // 
             // extChartCombat
@@ -904,7 +897,7 @@ namespace EDDiscovery.UserControls
             this.extChartCombat.Name = "extChartCombat";
             this.extChartCombat.RightArrowEnable = true;
             this.extChartCombat.RightArrowPosition = elementPosition8;
-            this.extChartCombat.Size = new System.Drawing.Size(1059, 236);
+            this.extChartCombat.Size = new System.Drawing.Size(1059, 238);
             this.extChartCombat.TabIndex = 1;
             this.extChartCombat.ZoomMouseWheelXMinimumInterval = 5D;
             this.extChartCombat.ZoomMouseWheelXZoomFactor = 1.5D;
@@ -915,7 +908,7 @@ namespace EDDiscovery.UserControls
             this.statsTimeUserControlCombat.Dock = System.Windows.Forms.DockStyle.Top;
             this.statsTimeUserControlCombat.Location = new System.Drawing.Point(3, 3);
             this.statsTimeUserControlCombat.Name = "statsTimeUserControlCombat";
-            this.statsTimeUserControlCombat.Size = new System.Drawing.Size(1059, 26);
+            this.statsTimeUserControlCombat.Size = new System.Drawing.Size(1059, 23);
             this.statsTimeUserControlCombat.TabIndex = 4;
             this.statsTimeUserControlCombat.TimeMode = EliteDangerousCore.JournalStatsInfo.TimeModeType.Summary;
             // 
@@ -1042,6 +1035,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarByShip.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarByShip.Name = "extScrollBarByShip";
             this.extScrollBarByShip.Size = new System.Drawing.Size(48, 252);
+            this.extScrollBarByShip.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarByShip.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarByShip.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarByShip.SliderDrawAngle = 90F;
@@ -1141,6 +1135,7 @@ namespace EDDiscovery.UserControls
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
             this.extPanelRollUp.ThemeColorSet = -1;
+            this.extPanelRollUp.ThisThemed = true;
             this.extPanelRollUp.UnrollHoverDelay = 1000;
             // 
             // extButtonUndocked
@@ -1205,6 +1200,28 @@ namespace EDDiscovery.UserControls
             this.labelStart.Size = new System.Drawing.Size(29, 13);
             this.labelStart.TabIndex = 0;
             this.labelStart.Text = "Start";
+            // 
+            // dataGridViewTextBoxColumnLedgerDate
+            // 
+            this.dataGridViewTextBoxColumnLedgerDate.HeaderText = "Date";
+            this.dataGridViewTextBoxColumnLedgerDate.Name = "dataGridViewTextBoxColumnLedgerDate";
+            this.dataGridViewTextBoxColumnLedgerDate.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumnNumericCredits
+            // 
+            this.dataGridViewTextBoxColumnNumericCredits.FillWeight = 400F;
+            this.dataGridViewTextBoxColumnNumericCredits.HeaderText = "Credits";
+            this.dataGridViewTextBoxColumnNumericCredits.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumnNumericCredits.Name = "dataGridViewTextBoxColumnNumericCredits";
+            this.dataGridViewTextBoxColumnNumericCredits.ReadOnly = true;
+            // 
+            // dataGridViewTextBoxColumnLedgerAssets
+            // 
+            this.dataGridViewTextBoxColumnLedgerAssets.FillWeight = 400F;
+            this.dataGridViewTextBoxColumnLedgerAssets.HeaderText = "Assets";
+            this.dataGridViewTextBoxColumnLedgerAssets.MinimumWidth = 50;
+            this.dataGridViewTextBoxColumnLedgerAssets.Name = "dataGridViewTextBoxColumnLedgerAssets";
+            this.dataGridViewTextBoxColumnLedgerAssets.ReadOnly = true;
             // 
             // UserControlStats
             // 
@@ -1304,8 +1321,6 @@ namespace EDDiscovery.UserControls
         private BaseUtils.DataGridViewBaseEnhancements dataGridViewLedger;
         private ExtendedControls.ExtScrollBar extScrollBarLedger;
         private ExtendedControls.ExtSafeChart extChartLedger;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnLedgerDate;
-        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnNumericCredits;
         private System.Windows.Forms.SplitContainer splitContainerGeneral;
         private System.Windows.Forms.SplitContainer splitContainerLedger;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollCombat;
@@ -1329,5 +1344,8 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnLastPromotionDate;
         private ExtendedControls.ExtButton extButtonStartStop;
         private ExtendedControls.ExtButton extButtonUndocked;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnLedgerDate;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnNumericCredits;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumnLedgerAssets;
     }
 }

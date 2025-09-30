@@ -95,7 +95,7 @@ namespace EDDiscovery
             this.rebuildSystemDBIndexesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showLogfilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.moveAnotherCommandersHistoryToThisCommanderToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fetchStarDataAgainToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.read21AndFormerLogFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -622,7 +622,7 @@ namespace EDDiscovery
             this.menuFlowPanel.Location = new System.Drawing.Point(0, 0);
             this.menuFlowPanel.Margin = new System.Windows.Forms.Padding(0);
             this.menuFlowPanel.Name = "menuFlowPanel";
-            this.menuFlowPanel.Size = new System.Drawing.Size(377, 24);
+            this.menuFlowPanel.Size = new System.Drawing.Size(497, 24);
             this.menuFlowPanel.TabIndex = 23;
             this.menuFlowPanel.MouseDown += new System.Windows.Forms.MouseEventHandler(this.MouseDownCAPTION);
             this.menuFlowPanel.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MouseUpCAPTION);
@@ -639,7 +639,7 @@ namespace EDDiscovery
             this.mainMenu.Location = new System.Drawing.Point(0, 0);
             this.mainMenu.Name = "mainMenu";
             this.mainMenu.Padding = new System.Windows.Forms.Padding(0);
-            this.mainMenu.Size = new System.Drawing.Size(215, 24);
+            this.mainMenu.Size = new System.Drawing.Size(335, 24);
             this.mainMenu.TabIndex = 16;
             // 
             // toolsToolStripMenuItem
@@ -712,7 +712,7 @@ namespace EDDiscovery
             this.rebuildSystemDBIndexesToolStripMenuItem,
             this.updateUnknownSystemCoordsWithDataFromSystemDBToolStripMenuItem,
             this.showLogfilesToolStripMenuItem,
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem,
+            this.moveAnotherCommandersHistoryToThisCommanderToolStripMenuItem,
             this.fetchStarDataAgainToolStripMenuItem,
             this.deleteDuplicateFSDJumpEntriesToolStripMenuItem,
             this.read21AndFormerLogFilesToolStripMenuItem});
@@ -792,13 +792,13 @@ namespace EDDiscovery
             this.showLogfilesToolStripMenuItem.Text = "Show journal files directory of current commander";
             this.showLogfilesToolStripMenuItem.Click += new System.EventHandler(this.showLogfilesToolStripMenuItem_Click);
             // 
-            // dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem
+            // moveAnotherCommandersHistoryToThisCommanderToolStripMenuItem
             // 
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Warning;
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Name = "dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem";
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Text = "Reset all history to current commander";
-            this.dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem.Click += new System.EventHandler(this.debugResetAllHistoryToFirstCommanderToolStripMenuItem_Click);
+            this.moveAnotherCommandersHistoryToThisCommanderToolStripMenuItem.Image = global::EDDiscovery.Icons.Controls.Warning;
+            this.moveAnotherCommandersHistoryToThisCommanderToolStripMenuItem.Name = "moveAnotherCommandersHistoryToThisCommanderToolStripMenuItem";
+            this.moveAnotherCommandersHistoryToThisCommanderToolStripMenuItem.Size = new System.Drawing.Size(385, 22);
+            this.moveAnotherCommandersHistoryToThisCommanderToolStripMenuItem.Text = "Move another commanders history to this commander";
+            this.moveAnotherCommandersHistoryToThisCommanderToolStripMenuItem.Click += new System.EventHandler(this.moveAnotherCommandersHistoryToThisCommanderToolStripMenuItem_Click);
             // 
             // fetchStarDataAgainToolStripMenuItem
             // 
@@ -993,7 +993,7 @@ namespace EDDiscovery
             // 
             this.label_version.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.label_version.AutoSize = true;
-            this.label_version.Location = new System.Drawing.Point(223, 6);
+            this.label_version.Location = new System.Drawing.Point(343, 6);
             this.label_version.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.label_version.Name = "label_version";
             this.label_version.Size = new System.Drawing.Size(43, 13);
@@ -1007,7 +1007,7 @@ namespace EDDiscovery
             // 
             this.labelInfoBoxTop.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelInfoBoxTop.AutoSize = true;
-            this.labelInfoBoxTop.Location = new System.Drawing.Point(277, 6);
+            this.labelInfoBoxTop.Location = new System.Drawing.Point(397, 6);
             this.labelInfoBoxTop.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelInfoBoxTop.Name = "labelInfoBoxTop";
             this.labelInfoBoxTop.Size = new System.Drawing.Size(43, 13);
@@ -1020,7 +1020,7 @@ namespace EDDiscovery
             // 
             this.labelGameDateTime.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.labelGameDateTime.AutoSize = true;
-            this.labelGameDateTime.Location = new System.Drawing.Point(331, 6);
+            this.labelGameDateTime.Location = new System.Drawing.Point(451, 6);
             this.labelGameDateTime.Margin = new System.Windows.Forms.Padding(8, 1, 3, 0);
             this.labelGameDateTime.Name = "labelGameDateTime";
             this.labelGameDateTime.Size = new System.Drawing.Size(43, 13);
@@ -1442,7 +1442,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem fetchLogsAgainToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem sendUnsyncedEDSMJournalsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem showLogfilesToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem dEBUGResetAllHistoryToFirstCommandeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem read21AndFormerLogFilesToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem read21AndFormerLogFiles_forceReloadLogsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem rescanAllJournalFilesToolStripMenuItem;
@@ -1517,5 +1516,6 @@ namespace EDDiscovery
         private System.Windows.Forms.ToolStripMenuItem minToolStripMenuItem2;
         private System.Windows.Forms.ToolStripMenuItem editThemeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem panelColourToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem moveAnotherCommandersHistoryToThisCommanderToolStripMenuItem;
     }
 }

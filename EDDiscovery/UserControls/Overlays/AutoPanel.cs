@@ -12,11 +12,13 @@
  * governing permissions and limitations under the License.
  */
 
+using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.UIEvents;
 using OpenTK.Graphics.OpenGL;
 using System;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Forms.DataVisualization.Charting;
 
@@ -30,16 +32,20 @@ namespace EDDiscovery.UserControls
             DBBaseName = "AutoPanel";
         }
 
-        private enum PanelMode { Unknown, Supercruising, FSDJump,
-                    Surveying, Compass, NormalSpace, Combat, Landed , Docked, OnFootInterior, Mining, 
-                    GlideMode, Organics, OnGroundCombat, Docking };
+        private enum PanelMode
+        {
+            Unknown, Supercruising, FSDJump,
+            Surveying, Compass, NormalSpace, Combat, Landed, Docked, OnFootInterior, Mining,
+            GlideMode, Organics, OnGroundCombat, Docking
+        };
 
         private PanelMode mode = PanelMode.Unknown;
         private bool hidden = true;
+        private UserControlCommonBase panel = null;
 
 
-        UIOverallStatus uistatus;
-        HistoryEntry lasthe;
+        private UIOverallStatus uistatus;
+        private HistoryEntry lasthe;
 
         protected override void Init()
         {
@@ -104,7 +110,7 @@ namespace EDDiscovery.UserControls
 
             // in the order of enum ModeType:
 
-            if ( uistatus.Focus != 0)
+            if (uistatus.Focus != 0)
             {
                 hidden = true;
             }
@@ -120,8 +126,8 @@ namespace EDDiscovery.UserControls
                 bool hardpointdeployed = uistatus.Flags.Contains(UITypeEnum.HardpointsDeployed);
                 bool hasminingequipment = ship?.HasMiningEquipment() ?? false;
                 bool hasweapons = ship?.HasWeapons() ?? false;
-                bool docking = lasthe?.Status.DockingPad>0;
-                bool isinmininglocation = BodyDefinitions.IsBodyNameRing(uistatus.BodyName); 
+                bool docking = lasthe?.Status.DockingPad > 0;
+                bool isinmininglocation = BodyDefinitions.IsBodyNameRing(uistatus.BodyName);
 
                 System.Diagnostics.Debug.WriteLine($"Autopanel UpdateState Docking: {docking}");
 
@@ -131,7 +137,7 @@ namespace EDDiscovery.UserControls
                 {
                     newmode = PanelMode.GlideMode;
                 }
-                else if ( docking )
+                else if (docking)
                 {
                     newmode = PanelMode.Docking;
                 }
@@ -248,20 +254,66 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            mode = newmode;
+            if (newmode != mode)
+            {
+                mode = newmode;
 
-            labelMode.Text = "Panel Mode: " + mode.ToString() + (hidden ? " (Hidden) " :"");
-            label2.Text = "UIMode: " + uistatus.UIMode.ToString();
-            label3.Text = "HETS:" + lasthe?.Status.TravelState.ToString();
+                //labelMode.Text = "Panel Mode: " + mode.ToString() + (hidden ? " (Hidden) " :"");
+                //  label2.Text = "UIMode: " + uistatus.UIMode.ToString();
+                // label3.Text = "HETS:" + lasthe?.Status.TravelState.ToString();
+            }
         }
-
 
 
         public override bool SupportTransparency => true;
         protected override void SetTransparency(bool on, Color curcol)
         {
             this.BackColor = curcol;
-            this.panel1.BackColor = curcol;
+            panel?.CallSetTransparency(on, curcol);
+        }
+
+        protected override void TransparencyModeChanged(bool on)
+        {
+            panel?.CallTransparencyModeChanged(on);
+        }
+
+        public override bool AllowClose()
+        {
+            return panel?.AllowClose() ?? true;
+        }
+
+        public override string HelpKeyOrAddress()
+        {
+            return panel?.HelpKeyOrAddress() ?? base.HelpKeyOrAddress();
+        }
+
+        public override void onControlTextVisibilityChanged(bool newvalue)
+        {
+            panel?.onControlTextVisibilityChanged(newvalue);
+        }
+
+        public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
+        {
+            if (panel != null)
+            {
+                if ( panel.GetType().IsDeclared("PerformPanelOperation"))           // if class has declared this, it handles it in full. We have to check because we can't assume that it has
+                {
+                    return panel.PerformPanelOperation(sender, actionobj);
+                }
+                else
+                {
+                    panel.ReceiveHistoryEntry((EliteDangerousCore.HistoryEntry)actionobj);         // it may override this.. 
+                    return PanelActionState.HandledContinue;
+                }
+            }
+            else
+                return PanelActionState.NotHandled;
         }
     }
+
+    public class DefaultPanel : UserControlCommonBase
+    {
+
+    }
 }
+
