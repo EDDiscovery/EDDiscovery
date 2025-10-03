@@ -10,7 +10,7 @@ E9C45563358E81: "Warning" => "警告"
 F6FDBE48DC54DD: "Delete" => "删除"
 69390E166570E5: "Campaign" => "战役"
 86C16821B16226: "No Scan" => "无扫描"
-515FAD8593999E: "Game Time" => "游戏事件"
+515FAD8593999E: "Game Time" => "游戏时间"
 6C82E6DD86807E: "Time" => "时间"
 4276E6AB2A3146: "No Data" => "无数据"
 6EEF6648406C33: "None" => "无"
@@ -22,13 +22,13 @@ DE543B3879BD6E: "No Pos" => "无坐标"
 
 // from EDC Core
 
-E8249C664732DF: "Remove All" => "你是否想要删除配置文件{0}？\r\n这将删除此配置文件的所有信息并且该操作不能撤销！"
-49CE5DE18C09AA: "Hostile" @
-C65CDEF3DEF45A: "Unfriendly" @
-4BD29139454399: "Neutral" @
-713DB5C16D862F: "Cordial" @
-BF567DC7870262: "Friendly" @
-81F1B69D074090: "Allied" @
+E8249C664732DF: "Remove All" => "移除所有"
+49CE5DE18C09AA: "Hostile" => "敌对"
+C65CDEF3DEF45A: "Unfriendly" => "恶意"
+4BD29139454399: "Neutral" => "中立"
+713DB5C16D862F: "Cordial" => "善意"
+BF567DC7870262: "Friendly" => "友好"
+81F1B69D074090: "Allied" =>  "盟友"
 
 // from extended controls
 
@@ -36,10 +36,10 @@ F4F4473DF8CB59: "Disabled" => "星系数据下载已被禁用。从设置里重�
 
 // from action programs
 
-AC1627C6A55792: "To be deleted" @
-EB1BCE574038E4: "To be installed" @
-B5E77C5C02A90C: "Removed" => "移除了{0}条FSD跳跃记录"
-06DB4FFA7EFB34: "Incompatible" @
+AC1627C6A55792: "To be deleted" => "待删除"
+EB1BCE574038E4: "To be installed" => "待安装"
+B5E77C5C02A90C: "Removed" => "移除"
+06DB4FFA7EFB34: "Incompatible" => "不兼容"
 
 // misc
 
@@ -47,42 +47,42 @@ B5E77C5C02A90C: "Removed" => "移除了{0}条FSD跳跃记录"
 
 SECTION StartUp
 
-3823500F8FE072: "EDDiscovery is already running. Launch anyway?" @
+3823500F8FE072: "EDDiscovery is already running. Launch anyway?" => "EDDiscovery 已在运行。仍要启动吗？"
 
 SECTION DataGridView
 
 31341C6F0C7AF6: "Header" => "包含表头"
-DF04C6BCA0BCDC: "Word Wrap (Override)" @
+DF04C6BCA0BCDC: "Word Wrap (Override)" => "自动换行(覆盖)"
 
 SECTION SafeModeForm
 
-11DDBF0E006302: "EDDiscovery Safe Mode" @
-B1B392607DEAF2: "Run" => "停止当前运行的插件程序(&S)"
-FCFBF9C6671583: "Remove Journals" @
-5DCC4262C9BB58: "Remove Journal Entries && Commanders" @
-365C643F550384: "Delete/Rebuild User DB" @
-01F2FBC637B7E7: "Delete/Rebuild System DB" @
-149C06035C88FF: "Reset DB Location" @
-6B295419D3023F: "Backup Database" @
-81DE8C10D7B389: "Move Databases" @
-BF259EDBD80CA0: "Reset Language to English" @
-C5A8F7E7256EF2: "Remove all Action Packs" @
-1B678DD8E0190A: "Remove all Extension DLLs" @
-C6F0F038107FD6: "Reset Tabs, Remove PopOuts" @
-52280A445F2276: "Reset Window Positions" @
-CCE1690C7ECC94: "Reset Theme" @
+11DDBF0E006302: "EDDiscovery Safe Mode" => "EDDiscovery安全模式"
+B1B392607DEAF2: "Run" => "运行"
+FCFBF9C6671583: "Remove Journals" => "删除日志"
+5DCC4262C9BB58: "Remove Journal Entries && Commanders" => "删除日志条目与指挥官"
+365C643F550384: "Delete/Rebuild User DB" => "删除并重建用户数据库"
+01F2FBC637B7E7: "Delete/Rebuild System DB" => "删除并重建星系数据库"
+149C06035C88FF: "Reset DB Location" => "重设数据库位置"
+6B295419D3023F: "Backup Database" => "备份数据库"
+81DE8C10D7B389: "Move Databases" => "转移数据库"
+BF259EDBD80CA0: "Reset Language to English" => "重置语言为英语"
+C5A8F7E7256EF2: "Remove all Action Packs" => "移除所有动作包(Action Packs)"
+1B678DD8E0190A: "Remove all Extension DLLs" => "移除所有扩展DLL文件"
+C6F0F038107FD6: "Reset Tabs, Remove PopOuts" => "重置标签页，移除弹出窗口"
+52280A445F2276: "Reset Window Positions" => "重置窗口位置"
+CCE1690C7ECC94: "Reset Theme" => "重置主题"
 
 SECTION InfoForm
 
-9BEB96DAC88F56: "Acknowledge" @
+9BEB96DAC88F56: "Acknowledge" => "确认"
 
 SECTION PopOutInfo
 
 76FB040C270F12: "Log of program information" => "EDDiscovery的程序日志"
 8BF95EA372568C: "Log" => "系统日志"
-A09BA3EA152A4C: "Journal grid" => "航行日志（表格模式）"
+A09BA3EA152A4C: "Journal grid" => "航行日志(表格模式)"
 57D7F743BBD1A2: "Journal" => "航行日志"
-5C4D4F216D8BF4: "History grid" => "航行历史记录（表格模式）"
+5C4D4F216D8BF4: "History grid" => "航行历史记录(表格模式)"
 90CCD6497400B5: "History" => "航行记录"
 8AE3AF9C3B3CDF: "Visited Star list" => "访问过的星系列表"
 0184AA8A46AF1D: "Visited Stars" => "星系访问记录"
@@ -112,16 +112,16 @@ D7B22A6928D409: "Synthesis" => "合成"
 6160F4C2D06317: "Shopping List" => "购物清单"
 844922E5491066: "Scan data on system" => "星系扫描数据"
 28CBA55D2AADF5: "Scan" => "扫描"
-FB45D404829E9E: "Scan data on system in a grid" => "星系扫描数据（表格模式）"
+FB45D404829E9E: "Scan data on system in a grid" => "星系扫描数据(表格模式)"
 AFAC1D100B4A2C: "Scan Grid" => "扫描列表"
 5698E21A28B5F8: "Nearest stars from current position" => "距离当前位置最近的星系列表"
 34D42F419DF1E1: "Nearest Stars" => "附近的星系"
 CB92E6CAAAB685: "Estimated Scan values of bodies in system" => "预计的星系扫描价值"
 18163829DCDD6E: "Estimated Values" => "预计价值"
-6DA68A5C45C3B6: "2D Map" @
-9C4EE43BE8AD56: "2D Map of galaxy" @
-3C6489B3276EF3: "Mining Overlay" @
-D6FF8EAE6FDB7D: "Mining overlay" @
+6DA68A5C45C3B6: "2D Map" => "二维星图"
+9C4EE43BE8AD56: "2D Map of galaxy" => "银河系二维星图"
+3C6489B3276EF3: "Mining Overlay" => "采矿悬浮窗"
+D6FF8EAE6FDB7D: "Mining overlay" => "采矿悬浮窗"
 2CB83259459C98: "3D Map of systems in range" => "当前位置的局部三维星图"
 60D12B289C0F47: "Local Map" => "局部星图"
 A7528D77703FD5: "2D Plot of systems in range" => "当前位置附近星系的二维测绘"
@@ -155,63 +155,63 @@ C999A758A64A62: "Grid (allows other panels to be placed in it)" => "自定义布
 701C483F813CF1: "Grid" => "自定义布局"
 C05916255EB1DC: "Splitter (allows other panels to be placed in it)" => "分屏布局 (可自定义想要分屏显示的面板，右击分隔栏可用更多选项)"
 3C9A6D76F1CED5: "Splitter" => "分屏布局"
-DA39A3EE5E6B4B: "" @
-A979EF10CC6F6A: "+" @
+DA39A3EE5E6B4B: "" => ""
+A979EF10CC6F6A: "+" => "+"
 BCE06414177F72: "Search" => "搜索"
-F69D2C0C04A8EE: "Captain's Log" @
-FE3AF2D4889AE0: "Captain's Log - notes on your travels" @
-412258D43710F2: "Surveyor" @
-AF2B2B3C3B9D55: "Surveyor - Exploration and route overlay" @
+F69D2C0C04A8EE: "Captain's Log" => "舰长日记"
+FE3AF2D4889AE0: "Captain's Log - notes on your travels" => "舰长日记 - 记录您的旅途"
+412258D43710F2: "Surveyor" => "测绘者"
+AF2B2B3C3B9D55: "Surveyor - Exploration and route overlay" => "测绘者 - 探索与路线(遮罩)"
 F0DAFF585A132F: "Mission Overlay" => "任务遮罩"
 4AC7AEC325927E: "Mission List overlay" => "任务列表(遮罩)"
-86896507A6ED88: "Material Trader" @
-471574D885158A: "Material trader" @
-E0A8D47F3E9219: "EDSM" @
-ED52705FDF6D29: "EDSM - Automatic web view of system" @
-973EF779DB2CF3: "Inara" @
-981781CF8B1E4F: "Inara - Automatic web view of system" @
-C992AAD4B16F58: "Factions" @
-A404D2CFE41408: "Faction rewards and trading tally" @
-A9A440245EE992: "Spansh" @
-DAD92F257D7828: "Spansh - Automatic web view of system" @
-72F20C151227D8: "EDDB" @
-ADAB7B122964C0: "EDDB - Automatic web view of system" @
-55E85562E3BB89: "Micro Resources" @
-F12262247D08BD: "Micro resource count" @
-8BEBD95AF22662: "Suits & Weapons" @
-393A482F174DA6: "Suits, Loadouts, Weapons" @
-723E769CA8B7F1: "3D Map" => "当前位置的局部三维星图"
-4927077FF8C996: "3D Map of galaxy" @
-4F49FDDD44F492: "Local 3D Map" @
-112E4D8C9B4EEC: "Local 3D Map of systems near you" @
-92F242BD12833A: "Organic Scans" @
-092BC4115EF04D: "Organic scans of current body and historic scans" @
+86896507A6ED88: "Material Trader" => "材料交易商"
+471574D885158A: "Material trader" => "材料交易商"
+E0A8D47F3E9219: "EDSM" => "EDSM"
+ED52705FDF6D29: "EDSM - Automatic web view of system" => "EDSM - 网页浏览器"
+973EF779DB2CF3: "Inara" => "Inara"
+981781CF8B1E4F: "Inara - Automatic web view of system" => "Inara - 网页浏览器"
+C992AAD4B16F58: "Factions" => "势力"
+A404D2CFE41408: "Faction rewards and trading tally" => "势力奖励与贸易统计"
+A9A440245EE992: "Spansh" => "Spansh"
+DAD92F257D7828: "Spansh - Automatic web view of system" => "Spansh - 网页浏览器"
+72F20C151227D8: "EDDB" => "EDDB"
+ADAB7B122964C0: "EDDB - Automatic web view of system" => "EDDB - 网页浏览器"
+55E85562E3BB89: "Micro Resources" => "微资源"
+F12262247D08BD: "Micro resource count" => "微资源数量"
+8BEBD95AF22662: "Suits & Weapons" => "套装与武器"
+393A482F174DA6: "Suits, Loadouts, Weapons" => "套装,装备与武器"
+723E769CA8B7F1: "3D Map" => "三维星图"
+4927077FF8C996: "3D Map of galaxy" => "银河系三维星图"
+4F49FDDD44F492: "Local 3D Map" => "本地三维星图"
+112E4D8C9B4EEC: "Local 3D Map of systems near you" => "附近星系的三维星图"
+92F242BD12833A: "Organic Scans" => "有机物扫描"
+092BC4115EF04D: "Organic scans of current body and historic scans" => "当前星体生物扫描与历史扫描记录"
 C6C5065C1BFCBE: "Engineers" => "工程师"
-104A3B657D7113: "Engineers List, status, recipes" @
-BE1C21D6FE0AE4: "Discoveries" @
-98A0679EBD354B: "Discoveries Observer List" @
-91B0BA24657FE5: "Carrier" @
-42F527004E124B: "Data about your fleet carrier" @
-87DF60DE337FB5: "Resources" @
-9AE60B8B41DFAD: "Resources: All Materials, Commodity, Micro resources" => "Tous les matériaux, marchandises, micro ressources"
-542CC34C1F691F: "Spansh Stations" @
-17DFA3A002E3D5: "Stations in the system from spansh web data" @
-4DFB01DC92677C: "Colonisation" @
-91A4AFA2089B9F: "Colonisation statistics" @
-C963A786E115F9: "TestOverlay" @
-78576CE18E50B2: "Test overlay" @
+104A3B657D7113: "Engineers List, status, recipes" => "工程师列表,状态与配方"
+BE1C21D6FE0AE4: "Discoveries" => "探索"
+98A0679EBD354B: "Discoveries Observer List" => "探索与发现列表"
+91B0BA24657FE5: "Carrier" => "航母"
+42F527004E124B: "Data about your fleet carrier" => "您的航母舰队数据"
+87DF60DE337FB5: "Resources" => "资源"
+9AE60B8B41DFAD: "Resources: All Materials, Commodity, Micro resources" => "所有材料,商品,微资源"
+542CC34C1F691F: "Spansh Stations" => "Spansh"
+17DFA3A002E3D5: "Stations in the system from spansh web data" => "该系统内的空间站(数据来自Spansh网站)"
+4DFB01DC92677C: "Colonisation" => "殖民地"
+91A4AFA2089B9F: "Colonisation statistics" => "殖民地统计"
+C963A786E115F9: "TestOverlay" => "测试遮罩"
+78576CE18E50B2: "Test overlay" => "测试遮罩"
 
 SECTION EDDiscoveryForm
 
-586CFE03DAA723: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" @
-25C9D555A2A9B9: "Confirm EDSM sync" @
-FAC898054B2C2B: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
-B61E7134EF7FDD: "Send All to EDSM" @
-2460BB4C7A146D: "Send Last 24 Hours of entries to EDSM" @
-AA962467914A2B: "Send From" @
-5ED64D1D56F6A0: "EDSM is up to date - send Nothing more" @
-14D2AEDDDD40B0: "I'll decide later, do nothing" @
-542CFA5900AB5D: "Sending a large number of EDSM Entries" @
+586CFE03DAA723: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "您已为该指挥官禁用与EDSM的同步功能.确定要将未同步的事件发送至EDSM吗?"
+25C9D555A2A9B9: "Confirm EDSM sync" => "确认EDSM同步"
+FAC898054B2C2B: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." => "当前有{0}份EDSM报告待发送,此操作将消耗时间与带宽,请从以下选项中选择处理方式.此时间点之前的记录将标记为已发送"
+B61E7134EF7FDD: "Send All to EDSM" => "将所有报告发送至EDSM"
+2460BB4C7A146D: "Send Last 24 Hours of entries to EDSM" => "发送近24小时内的报告"
+AA962467914A2B: "Send From" => "发送自"
+5ED64D1D56F6A0: "EDSM is up to date - send Nothing more" => "EDSM数据已是最新 - 无需发送更多内容"
+14D2AEDDDD40B0: "I'll decide later, do nothing" => "我稍后再决定，暂不执行任何操作"
+542CFA5900AB5D: "Sending a large number of EDSM Entries" => "正在发送大量EDSM数据条目"
 EE178B82F7FF3B: "&Tools" => "工具(&T)"
 7F24C011F1CC03: "&Pop-outs" => "弹窗(&P)"
 5D0D71ACC991B2: "&Show All In Task Bar" => "显示所有弹窗的任务栏图标(&S)"
@@ -224,11 +224,11 @@ E3D7130BAF225D: "Read 2.1 and former log files" => "读取2.1和之前版本的�
 6C233E7A4C3485: "Force reload logs" => "强制重新读取日志"
 2EB4A69BC73B8C: "Re-scan all journal files" => "重新扫描全部游戏日志文件"
 ED205CB2A2E5AD: "Delete duplicate FSD Jump entries" => "删除重复的FSD跳跃记录"
-515B067A548F55: "Send Unsynced Journals To EDSM" @
-80A376F0DAEEC0: "Rebuild System DB Indexes" @
+515B067A548F55: "Send Unsynced Journals To EDSM" => "将未同步的飞行日志发送至EDSM"
+80A376F0DAEEC0: "Rebuild System DB Indexes" => "重建星系数据库索引"
 A7BF78A5A58AF7: "Synchronise with EDSM" => "手动与EDSM同步获取星系数据"
-B5CFC4E9D493BC: "Send to Inara historic data (previous ships, stored modules)" => "向Inara发送历史数据（之前的飞船，储存的飞船模块）"
-4D33F20C90DE14: "Scan Netlogs" @
+B5CFC4E9D493BC: "Send to Inara historic data (previous ships, stored modules)" => "向Inara发送历史数据(之前的飞船，储存的飞船模块)"
+4D33F20C90DE14: "Scan Netlogs" => "扫描网络日志(Netlogs)"
 990E278543811B: "&Add-Ons" => "插件(&A)"
 27F90656BEC6AA: "&Manage Add-Ons" => "管理插件(&M)"
 CA2878BBFF0A12: "&Edit Add-On Action Files" => "编辑插件脚本文件(&E)"
@@ -237,14 +237,14 @@ B54DCF74E1F1F3: "&Stop currently running Action Program" => "停止当前运行�
 C47AE15370CFE1: "Help" => "帮助(&H)"
 50F1FB3394671C: "&Help" => "帮助(&H)"
 73D0A064C9E578: "&About" => "关于(&A)"
-5562A1E2E70DEB: "&View Help" @
-34F2CCDF930918: "View Help Videos" @
+5562A1E2E70DEB: "&View Help" => "查看帮助(&V)"
+34F2CCDF930918: "View Help Videos" => "查看帮助视频"
 178BFB114DDBE3: "&Discord - EDD Community Chat" => "Discord群 - EDD社区群聊"
 57482767CD6F92: "&Frontier Forum Thread" => "&Frontier论坛"
 15C7CE4EDE3CD9: "&Project Page (GitHub)" => "项目GitHub页面(&P)"
 A1C144022BAD54: "&Report Issue / Idea" => "反馈问题/提供建议(&R)"
 76222168EA3E4A: "&Check for Updates" => "检查更新(&C)"
-C845BB199650AE: "List Elite Bindings" @
+C845BB199650AE: "List Elite Bindings" => "显示Elite键位布局"
 BBFD0BF677ABD7: "Right click to add/remove tabs, Left click drag to reorder" => "右击添加/移除标签页，左键拖拽排序"
 0F5C6BE9C1D03B: "Use to select new profile or edit profile settings" => "选择新的配置文件或更改配置文件设置"
 965A14401B157E: "Select the commander to view" => "选择要查看的指挥官"
@@ -261,8 +261,8 @@ DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is
 FF063FC2431DAF: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "已发现以下应用扩展DLL\r\n是否允许使用？\r\n{0} \r\n如果不允许使用的话，请把该DLL从EDDiscovery的DLL文件夹中删除\r\n或者卸载包含此DLL的插件包\r\n再不然可以按住Shift键的同时双击EDDiscovery的图标进入安全模式使用移除所有扩展DLL的选项。"
 3160432B058751: "DLLs loaded: {0}" => "已加载DLL：{0}"
 CCFDEF5228D48D: "DLLs failed to load: {0}" => "DLL加载失败：{0}"
-5C77F5282CD58B: "Are you sure to Rebuild Indexes? It may take a long time." @
-4B610F7AC3BDAA: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
+5C77F5282CD58B: "Are you sure to Rebuild Indexes? It may take a long time." => "确认要重建索引?该操作将会非常耗时"
+4B610F7AC3BDAA: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" => "是否扫描历史记录,\r\n并为缺失坐标的星系尝试从系统数据库中补充坐标?\r\n请确认"
 A7BA2B77971D8B: "Profile {0} Loaded" => "配置文件“{0}”已加载"
 E11B312BFDAE74: "New EDDiscovery installer available: {0}" => "可更新至新版本：{0}"
 2F18E849A799F4: "New Release Available!" => "发现新版本!"
@@ -286,19 +286,19 @@ F2C6773DD29948: "&Open EDDiscovery" => "打开EDDiscovery(O)"
 E9E8D3707EA8A5: "&Hide Tray Icon" => "隐藏托盘图标(&H)"
 2E90DDA55C63D8: "Fetch Logs Again" => "重新获取日志"
 DE5CFD5A00795F: "Fetch Star Data Again" => "重新获取星系数据"
-3E1DCD88E16D3F: "Rebuild User DB Indexes" @
-8CE317851DDE98: "Update systems with unknown co-ordinates" @
-4B8237A3EF2696: "Web server enabled" @
-7279E939048432: "Web server failed to start" @
-683617E8B53C1F: "Web server disabled due to incorrect folder or missing zip file" @
-37F51D0860E8D7: "*** Web server is disabled ***" @
-AEA794CB1D04DB: "DLLs disabled: {0}" @
+3E1DCD88E16D3F: "Rebuild User DB Indexes" => "重建用户数据库索引"
+8CE317851DDE98: "Update systems with unknown co-ordinates" => "更新未知坐标的星系数据"
+4B8237A3EF2696: "Web server enabled" => "网页服务器启用"
+7279E939048432: "Web server failed to start" => "网页服务器启动失败"
+683617E8B53C1F: "Web server disabled due to incorrect folder or missing zip file" => "因文件夹路径错误或缺少压缩文件,网页服务器功能已禁用"
+37F51D0860E8D7: "*** Web server is disabled ***" => "*** 网页服务器已禁用 ***"
+AEA794CB1D04DB: "DLLs disabled: {0}" => "DLL文件禁用:{0}"
 
 SECTION EDDiscoveryController
 
 9BA9842C1C8616: "Closing down, please wait.." => "正在关闭中，请稍后..."
 DB2578F4000025: "Get galactic mapping from EDSM." => "从EDSM获取银河星图。"
-B916383C5DCECE: "Get galactic mapping from GEC." @
+B916383C5DCECE: "Get galactic mapping from GEC." => "从GEC获取银河星图"
 855115699D49D3: "Loaded Notes, Bookmarks and Galactic mapping." => "笔记，书签以及银河星图已加载。"
 D080CC813B189E: "Reading travel history" => "读取航行记录中"
 AF6F80B989BC53: "Please continue running ED Discovery until refresh is complete." => "请在刷新完成之前不要关闭EDDiscovery"
@@ -336,18 +336,18 @@ SECTION ImportExportForm
 
 DEADB4817C6BB8: "Export data" => "导出"
 F3E4FADB9E370A: "Export" => "导出"
-D82C9379E1E7F3: "Import data" @
+D82C9379E1E7F3: "Import data" => "导入数据"
 D6FBC9D2BDD580: "Import" => "导入文件"
 6D9BDC92D8C9FC: "CSV Separator" => "CSV 分隔符"
 B9EE3DEAAE2695: "Comma" => "逗号"
 727CECA929343C: "Semicolon" => "分号"
 677937E33CBDF5: "Include Header" => "包含表头"
 CF9B77061F7B31: "Open" => "导出后打开"
-BDFD4D8D695277: "UTC" @
-77D2774F81109B: "Click Paste or drag text or files to input box" @
-FE06EB6459C87F: "Tab" => "右击添加/移除标签页，左键拖拽排序"
-F39A80A0C4C734: "Exclude Header Row" @
-F12960ECA66A33: "Save Import As" @
+BDFD4D8D695277: "UTC" => "世界标准(UTC)"
+77D2774F81109B: "Click Paste or drag text or files to input box" => "点击粘贴或将文本/文件拖拽至输入框"
+FE06EB6459C87F: "Tab" => "标签页"
+F39A80A0C4C734: "Exclude Header Row" => "排除标题行"
+F12960ECA66A33: "Save Import As" => "保存导入..."
 
 SECTION GalaxySectorSelect
 
@@ -424,12 +424,12 @@ AA822BAACB5BCA: "Value is not valid" => "值无效"
 SECTION KeyForm
 
 A6CC1735E61BA1: "Define Key Sequence" => "定义按键"
-2038BDEC921020: "Up" => "远航考察规划助手，创建远航航线"
-BF93E5CE8BC122: "Down" => "标签页启动失败。\r\n这是异常状况，请通过Discord或者Github告知开发团队。\r\n你可以尝试按住Shift键的同时双击EDDiscovery的图标进入安全模式。\r\n选择重置标签页后，点击运行程序。这样也许会解决问题。"
-EA683AD616063B: "Press" => "EDDiscovery正在更新EDSM和EDDB的数据库\r\n现在退出请选择确认，等待更新完成请选择取消"
-469D5B183FDC0D: "Shift" => "标签页启动失败。\r\n这是异常状况，请通过Discord或者Github告知开发团队。\r\n你可以尝试按住Shift键的同时双击EDDiscovery的图标进入安全模式。\r\n选择重置标签页后，点击运行程序。这样也许会解决问题。"
-DD6A02A553DA4C: "Ctrl" @
-E30EFF925100B7: "Alt" @
+2038BDEC921020: "Up" => "Up"
+BF93E5CE8BC122: "Down" => "Down"
+EA683AD616063B: "Press" => "按下"
+469D5B183FDC0D: "Shift" => "Shift"
+DD6A02A553DA4C: "Ctrl" => "Ctrl"
+E30EFF925100B7: "Alt" => "Alt"
 A24AEF4D03E398: "Press Key" => "按下一个键"
 D54FFCD418FB39: "Current Delay" => "当前延时"
 5606C23DCD17C1: "Select Key" => "选择按键"
@@ -438,95 +438,95 @@ D11F7478DD0192: "Send To" => "发送至"
 E5651C683F14C9: "Keys" => "按键"
 BC981983E7F547: "Next" => "下一个"
 640AB2BAE07BED: "Test" => "测试"
-FB2BE54FDB3408: "Name a process to test sending keys" @
-83FFD8A7715ED2: "Error {0} - check entry" @
-1C4510E49E02BB: "No process names to send keys to" @
+FB2BE54FDB3408: "Name a process to test sending keys" => "命名一个测试按键发送的进程"
+83FFD8A7715ED2: "Error {0} - check entry" => "错误: {0} - 请检查输入"
+1C4510E49E02BB: "No process names to send keys to" => "当前没有可接收按键指令的进程名称"
 
 SECTION ExtPanelRollUp
 
-56BDE377952CAF: "Pin to stop this menu bar disappearing automatically" @
-B453A75F11D77E: "Click or hover over this to unroll the menu bar" @
+56BDE377952CAF: "Pin to stop this menu bar disappearing automatically" => "固定此菜单栏防止其自动隐藏"
+B453A75F11D77E: "Click or hover over this to unroll the menu bar" => "点击或悬停此处展开菜单栏"
 
 SECTION CommanderForm
 
-783F02798D5892: "Logging in" @
-E43D612E11F156: "Logout" @
-75D39BFAEDAF91: "Logged in" @
-4E5A2893BDCC7D: "Login" @
-8FB7105CC0349C: "Await Log in" @
+783F02798D5892: "Logging in" => "登录"
+E43D612E11F156: "Logout" => "登出"
+75D39BFAEDAF91: "Logged in" => "已登录"
+4E5A2893BDCC7D: "Login" => "登录"
+8FB7105CC0349C: "Await Log in" => "等待登录中"
 
 SECTION SpeechConfigure
 
-4AA6307BD004DD: "Configure Speech" @
-52F5A347177056: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" @
-A5A74A6DF09278: "Device" @
-8F25A859269CA5: "Effects" @
-92E97E035F44F8: "Literal" @
-D8CBC0CB400C12: "Wait until speech completes" @
-92D53A895E2EC1: "End Trigger" @
-8CF29400C3CFF6: "Start Trigger" @
-3A9C736B3175D6: "Rate" => "EDSM按钮显示在另外一行"
-3091C8446F8D3A: "Voice" @
-3B18E8E332500F: "Volume" @
-84219262228FD0: "Override" @
+4AA6307BD004DD: "Configure Speech" => "设置语音"
+52F5A347177056: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" => "设置文本内容(用分号“;”分隔可随机选择的短语,用大括号“{}”分组)"
+A5A74A6DF09278: "Device" => "设备"
+8F25A859269CA5: "Effects" => "音效"
+92E97E035F44F8: "Literal" => "字面值(Literal)"
+D8CBC0CB400C12: "Wait until speech completes" => "等待语音播报完成"
+92D53A895E2EC1: "End Trigger" => "结束触发"
+8CF29400C3CFF6: "Start Trigger" => "开始触发"
+3A9C736B3175D6: "Rate" => "比率(Rate)"
+3091C8446F8D3A: "Voice" => "语音"
+3B18E8E332500F: "Volume" => "音量"
+84219262228FD0: "Override" => "覆盖"
 
 SECTION WaveConfigureDialog
 
-72209F8C09DF0D: "Configure Wave" @
-5CB7091D05A1FB: "Select Default device, volume and effects" @
+72209F8C09DF0D: "Configure Wave" => "波形设置"
+5CB7091D05A1FB: "Select Default device, volume and effects" => "选择默认设备,音量和音效"
 2F3B5C55BC27CD: "Browse" => "浏览"
-2B63A06A3CF32F: "Wait until audio completes" @
+2B63A06A3CF32F: "Wait until audio completes" => "等待音频播放完成"
 
 SECTION SoundEffectsDialog
 
-9C018170B60DB7: "Sound Effects" @
-E738C7D89AFB7A: "Echo" @
-FD7391B6720B80: "Mix" @
-6973E1FED929E5: "Chorus" @
-C26BC3C7F09EAB: "No effects" @
-052BA8E09CD155: "Reverb" @
-20063AD9053289: "Enable" => "星系数据下载已被禁用。从设置里重新启用。"
-E73D6E899B5D7D: "Distortion" @
-C8D7677E19495F: "Feedback" @
-A6C2D09A48FE01: "Pitch" @
-8631BA97BBBDF5: "Gargle" @
-B4C200BB0D1F7B: "Delay" => "当前延时"
-96DD91CDCBE72F: "Gain" @
-103165A25EAB02: "Octave" @
-89836A870E44FB: "Frequency" @
-8440B9EB7D0391: "Edge" @
-DF0E298E356261: "Depth" @
-AAC47B153C274D: "HF Ratio" @
-E7A1A898CC09B9: "Cent Freq" @
-4A7B2D10B5A2DF: "Freq Width" @
+9C018170B60DB7: "Sound Effects" => "音效"
+E738C7D89AFB7A: "Echo" => "回声(Echo)"
+FD7391B6720B80: "Mix" => "混合(Mix)"
+6973E1FED929E5: "Chorus" => "合唱"
+C26BC3C7F09EAB: "No effects" => "无效果"
+052BA8E09CD155: "Reverb" => "混响"
+20063AD9053289: "Enable" => "启用"
+E73D6E899B5D7D: "Distortion" => "失真"
+C8D7677E19495F: "Feedback" => "反馈"
+A6C2D09A48FE01: "Pitch" => "音高"
+8631BA97BBBDF5: "Gargle" => "喉音"
+B4C200BB0D1F7B: "Delay" => "延时"
+96DD91CDCBE72F: "Gain" => "增益"
+103165A25EAB02: "Octave" => "八度"
+89836A870E44FB: "Frequency" => "频率"
+8440B9EB7D0391: "Edge" => "边缘"
+DF0E298E356261: "Depth" => "深度"
+AAC47B153C274D: "HF Ratio" => "高频比"
+E7A1A898CC09B9: "Cent Freq" => "中心频率"
+4A7B2D10B5A2DF: "Freq Width" => "频率宽度"
 
 SECTION AudioDeviceConfigure
 
-5B91330DCA5F99: "Audio Device Select" @
-87A47513B6B28B: "Select Device" @
+5B91330DCA5F99: "Audio Device Select" => "选择语言设备"
+87A47513B6B28B: "Select Device" => "选择设备"
 
 SECTION ActionPackEditPackForm
 
-3B042F6CEA285B: "Install Parameters" @
-9D68007B0763CB: "Program" @
+3B042F6CEA285B: "Install Parameters" => "安装参数"
+9D68007B0763CB: "Program" => "程序(Program)"
 
 SECTION ActionProgramEditForm
 
-4BB0A4AF96D21C: "Action Program" @
-9A92F637264375: "As File" @
-DDCB77FF769EA5: "Load" => "飞船及其装备的模组"
-A96C6A2EC6FD15: "Text Edit" @
+4BB0A4AF96D21C: "Action Program" => "动作程序"
+9A92F637264375: "As File" => "作为文件"
+DDCB77FF769EA5: "Load" => "载入"
+A96C6A2EC6FD15: "Text Edit" => "文本编辑"
 
 SECTION ActionPackEditForm
 
-8774D189CE7F96: "Configuration items for installation - specialist use" @
-0878211D394E87: "Input parameters to pass to program on run" @
-A45731FA87CFD4: "Define Variable" @
-E7181957BFACA6: "Variables to pass into called program" @
+8774D189CE7F96: "Configuration items for installation - specialist use" => "安装配置项 - 用于专业人士"
+0878211D394E87: "Input parameters to pass to program on run" => "运行程序时传递的输入参数"
+A45731FA87CFD4: "Define Variable" => "定义变量"
+E7181957BFACA6: "Variables to pass into called program" => "传递给被调用程序的变量"
 
 SECTION ActionPackVariablesForm
 
-EA3E71F3439195: "Global User variables to pass to program on run" @
+EA3E71F3439195: "Global User variables to pass to program on run" => "传递给被调用程序的全局变量"
 
 include translation-chinese-uc.tlp
 
