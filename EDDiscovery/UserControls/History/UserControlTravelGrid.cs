@@ -500,7 +500,7 @@ namespace EDDiscovery.UserControls
             rw.CreateCells(dataGridViewTravel, colTime, colIcon, colDescription, colInformation, colNote);
             if (eventcolours.Colors.TryGetValue(he.journalEntry.EventTypeID, out var color))
             {
-                rw.Cells[2].Style.ForeColor = rw.Cells[3].Style.ForeColor = color;
+                rw.Cells[0].Style.ForeColor = rw.Cells[2].Style.ForeColor = rw.Cells[3].Style.ForeColor = rw.Cells[4].Style.ForeColor = color;
             }
 
             rw.Tag = he;  //tag on row

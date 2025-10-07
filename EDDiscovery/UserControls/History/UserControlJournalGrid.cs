@@ -376,7 +376,7 @@ namespace EDDiscovery.UserControls
 
             if (eventcolours.Colors.TryGetValue(he.journalEntry.EventTypeID, out var color))
             {
-                rw.Cells[2].Style.ForeColor = color;
+                rw.Cells[0].Style.ForeColor = rw.Cells[2].Style.ForeColor = rw.Cells[3].Style.ForeColor = color;
             }
 
             rw.Tag = he;
