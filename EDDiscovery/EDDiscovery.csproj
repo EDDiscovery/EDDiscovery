@@ -164,8 +164,8 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="QuickJSON, Version=2.9.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\RJKJSoft.QuickJSON.2.9.0\lib\net48\QuickJSON.dll</HintPath>
+    <Reference Include="QuickJSON, Version=2.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\RJKJSoft.QuickJSON.2.10.0\lib\net48\QuickJSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -327,6 +327,7 @@
       <DependentUpon>UserControlZMQPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Form\UserControlFormList.cs" />
+    <Compile Include="UserControls\Helpers\EventColours.cs" />
     <Compile Include="UserControls\Helpers\RouteHelpers.cs" />
     <Compile Include="UserControls\Helpers\ScanDisplayBodyFiltersButton.cs">
       <SubType>Component</SubType>
@@ -362,6 +363,12 @@
     </Compile>
     <Compile Include="UserControls\ExtPanel\UserControlExtPanel.Designer.cs">
       <DependentUpon>UserControlExtPanel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Overlays\TravelPanel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Overlays\TravelPanel.Designer.cs">
+      <DependentUpon>TravelPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Overlays\DockingPanel.cs">
       <SubType>UserControl</SubType>
@@ -956,6 +963,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlLog.resx">
       <DependentUpon>UserControlLog.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Overlays\TravelPanel.resx">
+      <DependentUpon>TravelPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\DockingPanel.resx">
       <DependentUpon>DockingPanel.cs</DependentUpon>

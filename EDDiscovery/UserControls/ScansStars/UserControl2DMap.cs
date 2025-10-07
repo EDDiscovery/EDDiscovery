@@ -53,6 +53,7 @@ namespace EDDiscovery.UserControls
             controltooltip.IsBalloon = true;
             imageViewer.MouseMove += ImageViewer_MouseMove;
             imageViewer.MaxZoom = 800;
+            DBBaseName = "2DMap";
         }
 
         protected override void Init()

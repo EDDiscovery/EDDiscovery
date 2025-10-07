@@ -23,6 +23,7 @@ namespace EDDiscovery.UserControls
         public UserControlTestOverlay()
         {
             InitializeComponent();
+            DBBaseName = "TestOverlay";
         }
 
         protected override void Init()

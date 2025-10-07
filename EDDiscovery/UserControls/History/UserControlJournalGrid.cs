@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2024 EDDiscovery development team
+ * Copyright 2016 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -12,7 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
-
+using EDDiscovery.UserControls.Helpers;
 using EliteDangerousCore;
 using EliteDangerousCore.EDSM;
 using System;
@@ -37,6 +37,7 @@ namespace EDDiscovery.UserControls
         private const string dbUserGroups = "UserGroups";
         private const string dbTimeDates = "TimeDates";
         private const string dbBookmarks = "Bookmarks";
+        private const string dbEventColours = "EventColours";
 
         public delegate void PopOut();
         public PopOut OnPopOut;
@@ -45,7 +46,7 @@ namespace EDDiscovery.UserControls
 
         private string searchterms = "system:body:station:stationfaction";
 
-        #region Init
+        private EventColours eventcolours;
 
         private class Columns
         {
@@ -64,6 +65,9 @@ namespace EDDiscovery.UserControls
         private int fdropdown;     // filter totals
 
         private HashSet<long> quickMarkJIDs = new HashSet<long>();
+
+
+        #region Init
 
         public UserControlJournalGrid()
         {
@@ -107,13 +111,13 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnHistoryChange += HistoryChanged;
             DiscoveryForm.OnNewEntry += AddNewEntry;
 
-
             // set up the combo box, and if we can't find the setting, reset the setting
             if ( TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), true,true,true, GetSetting(dbTimeDates, "")) == false)
             {
                 PutSetting(dbTimeSelector, comboBoxTime.Text);
             }
 
+            eventcolours = new EventColours(GetSetting(dbEventColours, "{}"));
 
             if (BaseUtils.TranslatorMkII.Instance.IsDefined(searchterms))
                 searchterms = searchterms.Tx();
@@ -127,13 +131,14 @@ namespace EDDiscovery.UserControls
 
         protected override void Closing()
         {
+            DiscoveryForm.OnHistoryChange -= HistoryChanged;
+            DiscoveryForm.OnNewEntry -= AddNewEntry;
+
             todo.Clear();
             todotimer.Stop();
             searchtimer.Stop();
             DGVSaveColumnLayout(dataGridViewJournal);
             PutSetting(dbUserGroups, cfs.GetUserGroups());
-            DiscoveryForm.OnHistoryChange -= HistoryChanged;
-            DiscoveryForm.OnNewEntry -= AddNewEntry;
             searchtimer.Dispose();
         }
 
@@ -165,7 +170,7 @@ namespace EDDiscovery.UserControls
             todotimer.Stop();
 
             this.dataGridViewJournal.Cursor = Cursors.WaitCursor;
-            buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = false;
+            buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = extButtonEventColours.Enabled = false; 
 
             current_historylist = hl;       // we cache this in case it changes during sorting
 
@@ -262,7 +267,7 @@ namespace EDDiscovery.UserControls
                 UpdateQuickMarkComboBox();
 
                 this.dataGridViewJournal.Cursor = Cursors.Default;
-                buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = true;
+                buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = extButtonEventColours.Enabled = true;
 
                 while (queuedadds.Count > 0)              // finally, dequeue any adds added
                 {
@@ -368,6 +373,11 @@ namespace EDDiscovery.UserControls
             var rw = dataGridViewJournal.RowTemplate.Clone() as DataGridViewRow;
             rw.CreateCells(dataGridViewJournal, colTime, "", he.EventSummary, cuttext);
             rw.Cells[ColumnInformation.Index].ToolTipText = colDetailed;
+
+            if (eventcolours.Colors.TryGetValue(he.journalEntry.EventTypeID, out var color))
+            {
+                rw.Cells[2].Style.ForeColor = color;
+            }
 
             rw.Tag = he;
 
@@ -561,6 +571,18 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".Tx(), "Warning".Tx());
         }
 
+        private void extButtonEventColours_Click(object sender, EventArgs e)
+        {
+            eventcolours.Edit(this.FindForm(), extButtonEventColours, (changed) =>
+            {
+                System.Diagnostics.Debug.WriteLine($"Event colours changed {changed}");
+                if (changed)
+                {
+                    PutSetting(dbEventColours, eventcolours.ToString());
+                    Display(current_historylist, false);
+                }
+            });
+        }
 
         #endregion
 

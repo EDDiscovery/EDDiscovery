@@ -232,5 +232,6 @@ namespace EDDiscovery.Icons
         public static Image FactionKillBond { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.FactionKillBond"); } }
         public static Image DatalinkScan { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.DataLinkScan"); } }
         public static Image SellExplorationData { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.SellExplorationData"); } }
+        public static Image ColourSelector { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.ColourSelector"); } }
     }
 }

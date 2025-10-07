@@ -19,6 +19,11 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlEDSM : UserControlWebBrowser
     {
+        public UserControlEDSM() : base()
+        {
+            DBBaseName = "EDSMAutoView";
+        }
+
         protected override void Init()
         {
             Init("EDSM", "https://www.edsm.net");

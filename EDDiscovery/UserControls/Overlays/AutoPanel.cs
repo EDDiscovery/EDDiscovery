@@ -17,6 +17,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.UIEvents;
 using OpenTK.Graphics.OpenGL;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Reflection;
 using System.Windows.Forms;
@@ -34,9 +35,40 @@ namespace EDDiscovery.UserControls
 
         private enum PanelMode
         {
-            Unknown, Supercruising, FSDJump,
-            Surveying, Compass, NormalSpace, Combat, Landed, Docked, OnFootInterior, Mining,
-            GlideMode, Organics, OnGroundCombat, Docking
+            Unknown, 
+            Supercruising,  
+            FSDJump,        
+            NormalSpace,    
+            Surveying,      
+            Compass,        
+            Combat,         
+            Landed,         
+            Docked,         
+            OnFootInterior, 
+            Mining,         
+            GlideMode,      
+            Organics,       
+            OnGroundCombat, 
+            Docking         
+        };
+
+        static Dictionary<PanelMode, PanelInformation.PanelIDs> modetopanels = new Dictionary<PanelMode, PanelInformation.PanelIDs>
+        {
+            [PanelMode.Unknown] = PanelInformation.PanelIDs.TravelPanel,
+            [PanelMode.Supercruising] = PanelInformation.PanelIDs.TravelPanel,
+            [PanelMode.FSDJump] = PanelInformation.PanelIDs.TravelPanel,
+            [PanelMode.NormalSpace] = PanelInformation.PanelIDs.TravelPanel,
+            [PanelMode.Landed] = PanelInformation.PanelIDs.TravelPanel,
+            [PanelMode.Surveying] = PanelInformation.PanelIDs.Surveyor,
+            [PanelMode.Compass] = PanelInformation.PanelIDs.Compass,
+            [PanelMode.Combat] = PanelInformation.PanelIDs.CombatPanel,
+            [PanelMode.Docked] = PanelInformation.PanelIDs.TravelPanel,
+            [PanelMode.OnFootInterior] = PanelInformation.PanelIDs.Log,
+            [PanelMode.Mining] = PanelInformation.PanelIDs.MiningOverlay,
+            [PanelMode.GlideMode] = PanelInformation.PanelIDs.TravelPanel,
+            [PanelMode.Organics] = PanelInformation.PanelIDs.Organics,
+            [PanelMode.OnGroundCombat] = PanelInformation.PanelIDs.CombatPanel,
+            [PanelMode.Docking] = PanelInformation.PanelIDs.DockingPanel,
         };
 
         private PanelMode mode = PanelMode.Unknown;
@@ -256,11 +288,44 @@ namespace EDDiscovery.UserControls
 
             if (newmode != mode)
             {
-                mode = newmode;
+                System.Diagnostics.Debug.WriteLine("Panel Mode: " + mode.ToString() + (hidden ? " Hidden" : "") + " UIMode: " + uistatus.UIMode.ToString()
+                    + " HETS:" + lasthe?.Status.TravelState.ToString());
 
-                //labelMode.Text = "Panel Mode: " + mode.ToString() + (hidden ? " (Hidden) " :"");
-                //  label2.Text = "UIMode: " + uistatus.UIMode.ToString();
-                // label3.Text = "HETS:" + lasthe?.Status.TravelState.ToString();
+                EDDiscovery.PanelInformation.PanelIDs pid = modetopanels[newmode];
+
+                if ( panel == null || panel.PanelID != pid )        // wanna change
+                {
+                    bool allowedtochange = panel == null || panel.AllowClose();
+
+                    if (allowedtochange)
+                    {
+                        if (panel != null)
+                        {
+                            panel.CallCloseDown();
+                            Controls.Remove(panel);
+                            panel.Dispose();
+                            panel = null;
+                        }
+                        PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(pid);
+                        UserControlCommonBase uccb = PanelInformation.Create(pid);
+                        uccb.Dock = DockStyle.Fill;
+                        Controls.Add(uccb);
+                        System.Diagnostics.Debug.Assert(uccb.DBBaseName != null);
+                        uccb.DBBaseName = "Autopanel_" + uccb.DBBaseName;
+                        uccb.CallInit(DiscoveryForm, DisplayNumber);
+                        ExtendedControls.Theme.Current.ApplyStd(uccb);
+                        uccb.CallLoadLayout();
+                        uccb.CallInitialDisplay();
+
+                        panel = uccb;
+                        mode = newmode;
+                    }
+                    else
+                    {
+                        System.Diagnostics.Debug.WriteLine("Autopanel Panel denied close");
+                    }
+
+                }
             }
         }
 
@@ -309,11 +374,6 @@ namespace EDDiscovery.UserControls
             else
                 return PanelActionState.NotHandled;
         }
-    }
-
-    public class DefaultPanel : UserControlCommonBase
-    {
-
     }
 }
 

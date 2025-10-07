@@ -86,15 +86,9 @@ namespace EDDiscovery.UserControls
 
             // get any events which define FilterItems as additional filters
 
-            var list = JournalEntry.GetEnumOfEvents(new string[] { "FilterItems" });        // return list of these
-            foreach( var e in list)
-            {
-                // get FilterItems method handle and invoke, and then add to list
-                Type t = JournalEntry.TypeOfJournalEntry(e);
-                MethodInfo info = t.GetMethod("FilterItems", BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Static | BindingFlags.FlattenHierarchy);
-                List<Tuple<string, string, Image>> retlist = info.Invoke(null, new object[] { }) as List<Tuple<string, string, Image>>;
-                UC.Add(retlist);
-            }
+            var itemsfilter = JournalEntry.GetNameImageOfEventsFilterItems();
+
+            UC.Add(itemsfilter);
 
             UC.Sort();  // sorted by text
         }

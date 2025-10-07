@@ -28,6 +28,11 @@ namespace EDDiscovery.UserControls
         private string newfiledetected;
         private HashSet<string> detectedfiles = new HashSet<string>();
 
+        public UserControlSpansh() : base()
+        {
+            DBBaseName = "SpanshAutoView";
+        }
+
         protected override void Init()
         {
             Init("Spansh", "https://spansh.co.uk");

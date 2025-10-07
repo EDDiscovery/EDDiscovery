@@ -44,15 +44,12 @@ namespace EDDiscovery.UserControls
             toolTip.ShowAlways = true;
 
             BaseUtils.BrowserInfo.FixIECompatibility(System.Diagnostics.Process.GetCurrentProcess().ProcessName + ".exe");
-
         }
 
         public void Init(string source, string urlallowed)
         {
             this.source = source;
             this.urlallowed = urlallowed;
-
-            DBBaseName = source + "AutoView";
 
             rollUpPanelTop.PinState = GetSetting("PinState", true);
 

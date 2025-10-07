@@ -89,6 +89,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
             this.extButtonTimeRanges = new ExtendedControls.ExtButton();
             this.extComboBoxQuickMarks = new ExtendedControls.ExtComboBox();
+            this.extButtonEventColours = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.panelOutlining = new ExtendedControls.ExtPanelDataGridViewScrollOutlining();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
@@ -136,7 +137,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxOutlines.ImageIndeterminate = null;
             this.extCheckBoxOutlines.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxOutlines.ImageUnchecked = null;
-            this.extCheckBoxOutlines.Location = new System.Drawing.Point(695, 1);
+            this.extCheckBoxOutlines.Location = new System.Drawing.Point(729, 1);
             this.extCheckBoxOutlines.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxOutlines.MouseOverScaling = 1.3F;
             this.extCheckBoxOutlines.MouseSelectedScaling = 1.3F;
@@ -170,7 +171,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.ImageIndeterminate = null;
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
-            this.checkBoxCursorToTop.Location = new System.Drawing.Point(627, 1);
+            this.checkBoxCursorToTop.Location = new System.Drawing.Point(661, 1);
             this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.checkBoxCursorToTop.MouseOverScaling = 1.3F;
             this.checkBoxCursorToTop.MouseSelectedScaling = 1.3F;
@@ -188,7 +189,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.GradientDirection = 90F;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(593, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(627, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonExtExcel.MouseOverScaling = 1.3F;
             this.buttonExtExcel.MouseSelectedScaling = 1.3F;
@@ -337,7 +338,7 @@ namespace EDDiscovery.UserControls
             this.sendJournalEntriesToDLLsToolStripMenuItem,
             this.travelGridInDebugModeToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 598);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 576);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // quickMarkToolStripMenuItem
@@ -586,7 +587,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(661, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(695, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.extCheckBoxWordWrap.MouseOverScaling = 1.3F;
             this.extCheckBoxWordWrap.MouseSelectedScaling = 1.3F;
@@ -638,6 +639,23 @@ namespace EDDiscovery.UserControls
             this.toolTip.SetToolTip(this.extComboBoxQuickMarks, "Go to a marked journal entry. Use right click to mark an entry");
             this.extComboBoxQuickMarks.ValueMember = "";
             this.extComboBoxQuickMarks.SelectedIndexChanged += new System.EventHandler(this.extComboBoxBookmark_SelectedIndexChanged);
+            // 
+            // extButtonEventColours
+            // 
+            this.extButtonEventColours.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonEventColours.ButtonDisabledScaling = 0.5F;
+            this.extButtonEventColours.GradientDirection = 90F;
+            this.extButtonEventColours.Image = global::EDDiscovery.Icons.Controls.ColourSelector;
+            this.extButtonEventColours.Location = new System.Drawing.Point(593, 1);
+            this.extButtonEventColours.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonEventColours.MouseOverScaling = 1.3F;
+            this.extButtonEventColours.MouseSelectedScaling = 1.3F;
+            this.extButtonEventColours.Name = "extButtonEventColours";
+            this.extButtonEventColours.Size = new System.Drawing.Size(28, 28);
+            this.extButtonEventColours.TabIndex = 25;
+            this.toolTip.SetToolTip(this.extButtonEventColours, "Colour events by type");
+            this.extButtonEventColours.UseVisualStyleBackColor = true;
+            this.extButtonEventColours.Click += new System.EventHandler(this.extButtonEventColours_Click);
             // 
             // dataViewScrollerPanel
             // 
@@ -840,6 +858,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.extComboBoxQuickMarks);
             this.panelTop.Controls.Add(this.buttonFilter);
             this.panelTop.Controls.Add(this.buttonField);
+            this.panelTop.Controls.Add(this.extButtonEventColours);
             this.panelTop.Controls.Add(this.buttonExtExcel);
             this.panelTop.Controls.Add(this.checkBoxCursorToTop);
             this.panelTop.Controls.Add(this.extCheckBoxWordWrap);
@@ -862,7 +881,7 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelp.ButtonDisabledScaling = 0.25F;
             this.extButtonDrawnHelp.Image = null;
             this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
-            this.extButtonDrawnHelp.Location = new System.Drawing.Point(729, 3);
+            this.extButtonDrawnHelp.Location = new System.Drawing.Point(763, 3);
             this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
@@ -958,5 +977,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem viewScanDisplayToolStripMenuItem;
         private ExtendedControls.ExtButton extButtonTimeRanges;
+        private ExtendedControls.ExtButton extButtonEventColours;
     }
 }

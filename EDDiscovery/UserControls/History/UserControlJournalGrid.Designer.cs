@@ -75,6 +75,7 @@ namespace EDDiscovery.UserControls
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.labelTime = new System.Windows.Forms.Label();
             this.labelSearch = new System.Windows.Forms.Label();
+            this.extButtonEventColours = new ExtendedControls.ExtButton();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).BeginInit();
@@ -315,7 +316,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.buttonExtExcel.GradientDirection = 90F;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(593, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(627, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.buttonExtExcel.MouseOverScaling = 1.3F;
             this.buttonExtExcel.MouseSelectedScaling = 1.3F;
@@ -348,7 +349,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.ImageIndeterminate = null;
             this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
-            this.checkBoxCursorToTop.Location = new System.Drawing.Point(627, 1);
+            this.checkBoxCursorToTop.Location = new System.Drawing.Point(661, 1);
             this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.checkBoxCursorToTop.MouseOverScaling = 1.3F;
             this.checkBoxCursorToTop.MouseSelectedScaling = 1.3F;
@@ -393,6 +394,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
             this.vScrollBarCustom.Size = new System.Drawing.Size(24, 686);
+            this.vScrollBarCustom.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SliderColor2 = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SliderDrawAngle = 90F;
@@ -478,6 +480,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Controls.Add(this.extComboBoxQuickMarks);
             this.panelTop.Controls.Add(this.buttonFilter);
             this.panelTop.Controls.Add(this.buttonField);
+            this.panelTop.Controls.Add(this.extButtonEventColours);
             this.panelTop.Controls.Add(this.buttonExtExcel);
             this.panelTop.Controls.Add(this.checkBoxCursorToTop);
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
@@ -505,6 +508,23 @@ namespace EDDiscovery.UserControls
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
             this.labelSearch.TabIndex = 24;
             this.labelSearch.Text = "Search";
+            // 
+            // extButtonEventColours
+            // 
+            this.extButtonEventColours.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonEventColours.ButtonDisabledScaling = 0.5F;
+            this.extButtonEventColours.GradientDirection = 90F;
+            this.extButtonEventColours.Image = global::EDDiscovery.Icons.Controls.ColourSelector;
+            this.extButtonEventColours.Location = new System.Drawing.Point(593, 1);
+            this.extButtonEventColours.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonEventColours.MouseOverScaling = 1.3F;
+            this.extButtonEventColours.MouseSelectedScaling = 1.3F;
+            this.extButtonEventColours.Name = "extButtonEventColours";
+            this.extButtonEventColours.Size = new System.Drawing.Size(28, 28);
+            this.extButtonEventColours.TabIndex = 32;
+            this.toolTip.SetToolTip(this.extButtonEventColours, "Colour events by type");
+            this.extButtonEventColours.UseVisualStyleBackColor = true;
+            this.extButtonEventColours.Click += new System.EventHandler(this.extButtonEventColours_Click);
             // 
             // UserControlJournalGrid
             // 
@@ -556,5 +576,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton extButtonTimeRanges;
         internal ExtendedControls.ExtComboBox extComboBoxQuickMarks;
         private System.Windows.Forms.ToolStripMenuItem quickMarkToolStripMenuItem;
+        private ExtendedControls.ExtButton extButtonEventColours;
     }
 }

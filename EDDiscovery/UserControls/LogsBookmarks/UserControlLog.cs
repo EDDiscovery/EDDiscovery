@@ -22,6 +22,7 @@ namespace EDDiscovery.UserControls
         public UserControlLog()
         {
             InitializeComponent();
+            DBBaseName = "LogWindow";
             richTextBox_History.ReadOnly = true;
             richTextBox_History.ContextMenuStrip = contextMenuStrip;
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);

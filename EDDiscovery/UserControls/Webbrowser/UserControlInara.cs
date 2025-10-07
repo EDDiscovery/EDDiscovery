@@ -19,6 +19,11 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlInara : UserControlWebBrowser
     {
+        public UserControlInara() : base()
+        {
+            DBBaseName = "InaraAutoView";
+        }
+
         protected override void Init()
         {
             Init("Inara", "https://inara.cz");

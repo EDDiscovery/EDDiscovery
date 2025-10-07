@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2023 EDDiscovery development team
+ * Copyright 2016 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -12,6 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
+using EDDiscovery.UserControls.Helpers;
 using EliteDangerousCore;
 using EliteDangerousCore.EDDN;
 using EliteDangerousCore.EDSM;
@@ -45,6 +46,7 @@ namespace EDDiscovery.UserControls
         private const string dbBookmarks = "Bookmarks";
         private const string dbUserGroups = "UserGroups";
         private const string dbTimeDates = "TimeDates";
+        private const string dbEventColours = "EventColours";
 
         private string searchterms = "system:body:station:stationfaction";
 
@@ -65,6 +67,8 @@ namespace EDDiscovery.UserControls
         private int fdropdown;     // filter total
 
         private HashSet<long> quickMarkJIDs = new HashSet<long>();
+
+        private EventColours eventcolours;
 
         public UserControlTravelGrid()
         {
@@ -142,6 +146,8 @@ namespace EDDiscovery.UserControls
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
 
+            eventcolours = new EventColours(GetSetting(dbEventColours, "{}"));
+
             if (BaseUtils.TranslatorMkII.Instance.IsDefined(searchterms))
                 searchterms = searchterms.Tx();
         }
@@ -153,6 +159,10 @@ namespace EDDiscovery.UserControls
 
         protected override void Closing()
         {
+            DiscoveryForm.OnHistoryChange -= HistoryChanged;
+            DiscoveryForm.OnNewEntry -= AddNewEntry;
+            DiscoveryForm.OnNoteChanged -= OnNoteChanged;
+
             todo.Clear();
             todotimer.Stop();
             searchtimer.Stop();
@@ -160,10 +170,6 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewTravel);
 
             PutSetting(dbUserGroups, cfs.GetUserGroups());
-
-            DiscoveryForm.OnHistoryChange -= HistoryChanged;
-            DiscoveryForm.OnNewEntry -= AddNewEntry;
-            DiscoveryForm.OnNoteChanged -= OnNoteChanged;
 
             searchtimer.Dispose();
         }
@@ -198,7 +204,7 @@ namespace EDDiscovery.UserControls
             current_historylist = hl;
             this.dataGridViewTravel.Cursor = Cursors.WaitCursor;
 
-            extComboBoxQuickMarks.Enabled = extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = false;
+            extComboBoxQuickMarks.Enabled = extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = extButtonEventColours.Enabled = false;
 
             var selpos = dataGridViewTravel.GetSelectedRowOrCellPosition();
             Tuple<long, int> pos = selpos != null ? new Tuple<long, int>(((HistoryEntry)(dataGridViewTravel.Rows[selpos.Item1].Tag)).Journalid, selpos.Item2) : new Tuple<long, int>(-1, 0);
@@ -350,7 +356,7 @@ namespace EDDiscovery.UserControls
                 UpdateQuickMarkComboBox();
 
                 this.dataGridViewTravel.Cursor = Cursors.Arrow;
-                extComboBoxQuickMarks.Enabled = extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = true;
+                extComboBoxQuickMarks.Enabled = extCheckBoxOutlines.Enabled = extCheckBoxWordWrap.Enabled = buttonExtExcel.Enabled = buttonFilter.Enabled = buttonField.Enabled = extButtonEventColours.Enabled = true;
 
                 System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount + " TG TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
@@ -492,6 +498,10 @@ namespace EDDiscovery.UserControls
 
             var rw = dataGridViewTravel.RowTemplate.Clone() as DataGridViewRow;
             rw.CreateCells(dataGridViewTravel, colTime, colIcon, colDescription, colInformation, colNote);
+            if (eventcolours.Colors.TryGetValue(he.journalEntry.EventTypeID, out var color))
+            {
+                rw.Cells[2].Style.ForeColor = rw.Cells[3].Style.ForeColor = color;
+            }
 
             rw.Tag = he;  //tag on row
 
@@ -820,6 +830,21 @@ namespace EDDiscovery.UserControls
             if (outliningOnOffToolStripMenuItem.Checked )
                 Display(current_historylist, true);
         }
+
+        private void extButtonEventColours_Click(object sender, EventArgs e)
+        {
+            eventcolours.Edit(this.FindForm(), extButtonEventColours, (changed) =>
+            {
+                System.Diagnostics.Debug.WriteLine($"Event colours changed {changed}");
+                if (changed)
+                {
+                    PutSetting(dbEventColours, eventcolours.ToString());
+                    Display(current_historylist, false);
+                }
+            });
+        }
+
+
 
         #endregion
 
@@ -1399,8 +1424,8 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        #endregion
 
+        #endregion
 
     }
 }

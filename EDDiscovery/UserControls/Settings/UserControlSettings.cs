@@ -34,6 +34,7 @@ namespace EDDiscovery.UserControls
         public UserControlSettings()
         {
             InitializeComponent();
+            DBBaseName = "SettingsPanel";
         }
 
         protected override void Init()

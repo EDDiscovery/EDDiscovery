@@ -263,6 +263,16 @@ namespace EDDiscovery.Icons {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        public static System.Drawing.Bitmap ColourSelector {
+            get {
+                object obj = ResourceManager.GetObject("ColourSelector", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         public static System.Drawing.Bitmap ColumnOrder {
             get {
                 object obj = ResourceManager.GetObject("ColumnOrder", resourceCulture);

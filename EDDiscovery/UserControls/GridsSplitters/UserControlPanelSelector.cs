@@ -27,6 +27,7 @@ namespace EDDiscovery.UserControls
         public UserControlPanelSelector()
         {
             InitializeComponent();
+            DBBaseName = "SelectorPanel";
         }
 
         protected override void Init()

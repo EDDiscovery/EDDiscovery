@@ -144,6 +144,8 @@ namespace EDDiscovery.UserControls
         // call to init the panel
         public void CallInit(EDDiscoveryForm ed, int dn)
         {
+            System.Diagnostics.Debug.Assert(DBBaseName != null);            // constructor should have assigned it, or even Creation
+
             System.Diagnostics.Debug.WriteLine($"UCCB Init {this.Name} with DN {dn}");
             DiscoveryForm = ed;
             DisplayNumber = dn;
