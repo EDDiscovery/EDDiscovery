@@ -208,6 +208,7 @@ namespace EDDiscovery.UserControls
 
             var selpos = dataGridViewTravel.GetSelectedRowOrCellPosition();
             Tuple<long, int> pos = selpos != null ? new Tuple<long, int>(((HistoryEntry)(dataGridViewTravel.Rows[selpos.Item1].Tag)).Journalid, selpos.Item2) : new Tuple<long, int>(-1, 0);
+//            System.Diagnostics.Debug.WriteLine($"TravelGrid recorded pos {pos.Item1} {pos.Item2}");
 
             SortOrder sortorder = dataGridViewTravel.SortOrder;
             int sortcol = dataGridViewTravel.SortedColumn?.Index ?? -1;
@@ -423,7 +424,7 @@ namespace EDDiscovery.UserControls
                 {
                     //System.Diagnostics.Trace.WriteLine("TG Auto selected top row on new entry");
                     dataGridViewTravel.ClearSelection();
-                    dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(0);       // its the current cell which needs to be set, moves the row marker as well
+                    dataGridViewTravel.SetCurrentSelOnRow(0,0);       // its the current cell which needs to be set, moves the row marker as well
                     FireChangeSelection();
                 }
             }
