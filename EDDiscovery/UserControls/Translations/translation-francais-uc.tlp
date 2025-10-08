@@ -115,7 +115,7 @@ AA3B17BAA83D49: "Secondary material or commodity to search for" => "Matériau ou
 
 SECTION SearchScans
 
-A7396032CA2935: "Enter Search Name" => "Entrer le nom de la recherche "
+A7396032CA2935: "Enter Search Name" => "Entrer le nom de la recherche"
 576B5ACFD6F9E4: "Confirm deletion of" => "Confirmer la suppression de"
 0088C59DD3E567: "Cannot delete this entry" => "Impossible de supprimer l'entrée"
 37A47BD94B5C5D: "Condition is not valid" => "Condition invalide"
@@ -137,7 +137,7 @@ D14970EE4E27AE: "Click to enable debug log production on search" => "Cliquer pou
 450D52D3EF8975: "Searches" => "Recherches"
 07C3B8B498D6BD: "Export user searches" => "Exporter les conditions de recherches"
 F6FBA35BE4C529: "Import user searches" => "Importer les conditions de recherches"
-ADC4E96A478BE0: "Sort" => "Tri "
+ADC4E96A478BE0: "Sort" => "Tri"
 5531C4FF55C5CF: "Too many results to display, truncating to the first {0}" => "Trop de résultats à afficher, tronque aux {0} premiers"
 
 SECTION UserControlDiscoveries
@@ -176,7 +176,7 @@ F2367E42DEFDAC: "Avail." => "Dispo."
 85DCAE4F7ADF58: "Filter the table by engineer" => "Filtrer le tableau par ingénieur"
 53A4C779B6A4AD: "Filter the table by module type" => "Filtrer le tableau par type de module"
 80CC3E5A8D4D63: "When red, use the materials at the cursor to estimate, when green always use the latest materials." => "Lorsque rouge, utilise les matériaux à la position du curseur pour estimer. Lorsque vert, utilise toujours les derniers matériaux"
-0DDF332D4C73CA: "Push items wanted to Resources panel" @
+0DDF332D4C73CA: "Push items wanted to Resources panel" => "Envoyer les éléments souhaités dans le panneau des ressources"
 
 SECTION UserControlEngineers
 
@@ -228,11 +228,11 @@ FCBDC25ADED443: "Dist." @
 5FF07654F5C831: "Dist Start" => "Dist. départ"
 CE33081BD85857: "Dist Remaining" => "Dist. restante"
 942A8B6ED71457: "History Note" => "Note d'historique"
-7D12459D88715E: "Cml Distance" => "Distance cumulée "
-B7A2B9728CF910: "P2P Distance" => "P2P Distance "
-84B1478125890B: "End Date" => "Date de fin "
-9D7AB1A557965B: "Start Date" => "Date de début "
-A5323E433EDC1A: "Route Name" => "Nom de l'itinéraire "
+7D12459D88715E: "Cml Distance" => "Distance cumulée"
+B7A2B9728CF910: "P2P Distance" => "P2P Distance"
+84B1478125890B: "End Date" => "Date de fin"
+9D7AB1A557965B: "Start Date" => "Date de début"
+A5323E433EDC1A: "Route Name" => "Nom de l'itinéraire"
 5ECE584160349A: "View System" => "Voir le système"
 AF74F7C5362AAE: "Copy" => "Copier"
 DB2483000D154C: "Paste" => "Coller"
@@ -416,7 +416,7 @@ A91D37462D4799: " Missions" @
 F8B59037B2A4AE: " Mission" @
 199EA69AF2F28C: "Value (cr):\n{0:N0}" => "Valeur (cr) :\n{0:N0}"
 59EF5FF5CFDAFB: "Value (cr)" => "Valeur (cr)"
-8DCE170DE238B1: "Value" => "Valeur "
+8DCE170DE238B1: "Value" => "Valeur"
 
 SECTION UserControlModules
 
@@ -424,12 +424,12 @@ ECDDA59AEA5EE6: "Item" => "Équipement"
 20DD0E149BA65F: "BluePrint" => "Plan"
 02D2B8A95C0CDF: "P/E" => "P/A"
 323D4FC7337134: "Ship" => "Vaisseau"
-AF0AD10B2A196B: "Mass" => "Masse "
-64AE43E8FE7620: "Cost" => "Coût "
-0C85DB3EB1A9A6: "FSD" => "FSD "
-47071804F38EAF: "Thrust" => "Poussée "
-31FE17191E290C: "Shields" => "Boucliers "
-FAB9348C4FD97F: "Armour" => "Armure "
+AF0AD10B2A196B: "Mass" => "Masse"
+64AE43E8FE7620: "Cost" => "Coût"
+0C85DB3EB1A9A6: "FSD" => "FSD"
+47071804F38EAF: "Thrust" => "Poussée"
+31FE17191E290C: "Shields" => "Boucliers"
+FAB9348C4FD97F: "Armour" => "Armure"
 
 
 6129EFBCDDA076: "Show full blueprint information" => "Afficher les informations complètes du plan"
@@ -456,7 +456,7 @@ B2B53EE4FC1A90: "Stored" => "Stocké"
 046E5CEE819C2B: "In Transit" => "En transit"
 EF14AB9080E8AD: "Enter ED Shipyard URL" => "Entrer l'URL ED Shipyard"
 5406A1422EA878: "Enter Coriolis URL" => "Entrer l'URL Coriolis"
-F7E56852A21682: "Fuel Warning" => "Alerte carburant "
+F7E56852A21682: "Fuel Warning" => "Alerte carburant"
 6915FDD1AF8A81: "Enter fuel warning level in % (0 = off, 1-100%)" => "Définir un niveau d'alerte carburant en % (0 = pas d'alerte, 1-100%)"
 E613FC90158F3E: "A Value is not valid" => "Une valeur est invalide"
 3F86F40ECFD2E5: "Ship Configure" => "Configuration de vaisseau"
@@ -470,7 +470,7 @@ E5379DCF7E564E: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" 
 C8DF6EB8BFDFCF: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" => "Actu {0.##|ly} Porté {0.##|ly} Plein {0.##|ly} Vide {0.##|ly} Max {0.##|ly} Max Carbu {0.##|t} Actu {0.#|/|0.#|t} Réserve {0.#|/|0.#|t} En transfert vers {} Stocké à {}"
 C11EA28A729193: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" => "Vit actu {0.#} Boost {0.#} Plein {0.#|/|0.#} Vide {0.#|/|0.#} Max {0.#|/|0.#} Boost Actu {0.#|s} Max {0.#|s}"
 6CC0AEA921D9CD: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" => "Brut {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Munitions {0.#|s} Actu {0.#|%} Max {0.#|%}"
-F32D0645A8333F: "Weapons" => "Armes "
+F32D0645A8333F: "Weapons" => "Armes"
 
 60830556FBB8D7: "Save this loadout to the EDD loadout folder" => "Sauvegarder cette configuration dans le dossier des configurations de EDD"
 391427FC2F26EA: "Delete loadout" => "Supprimer la configuration"
@@ -599,7 +599,7 @@ E0B7B8CC8BD7CC: "Show Classes of Stars" => "Afficher les classes d'étoile"
 1BC356C17D4433: "Show mass of planets" => "Afficher la masse des planètes"
 FA07BE19814A99: "Show mass of stars" => "Afficher la masse des étoiles"
 A35655D05BB820: "Show age of stars" => "Afficher l'age des étoiles"
-A689A999A5E620: "Expired" => "Expiré "
+A689A999A5E620: "Expired" => "Expiré"
 90EAF9559AB2D2: "Show bodyless stars on separate lines" => "Afficher les étoiles sans corps sur des lignes séparées"
 79F1829F7C4ED0: "Create a new bookmark for the current system" => "Créer un nouveau marque-page pour le système actuel"
 
@@ -615,8 +615,8 @@ E5AAEAAC2E19A2: "Radius" => "Rayon"
 846B90266CABF4: "Moon" => "Lune"
 F85D3B343E0C17: "Geological activity" => "Activité géologique"
 8E140B3FB3635C: "Surface mapped" => "Surface cartographiée"
-269077C77225D6: "This body contains" => "Ce corps contient "
-96DDACCF581F48: "Ring" => "Anneau "
+269077C77225D6: "This body contains" => "Ce corps contient"
+96DDACCF581F48: "Ring" => "Anneau"
 CB7305DF2F4D76: "This is a green system, as it has all existing jumponium materials available!" => "Ceci est un système écologique, tous les matériaux existants pour le Jumponium sont disponibles !"
 318EF98C2276FA: " jumponium materials found in system." => " matériaux pour le Jumponium trouvés dans le système."
 37B1866847BAC8: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Résumé de scan de {0} : {1} étoiles; {2} planètes ({3} telluriques, {4} géantes gazeuses), {5} lunes"
@@ -640,8 +640,8 @@ FE035157CDA20B: "Port" @
 94DC8E4A59FAFE: "Interaction" @
 C223113FF59532: "Key to activate transparent windows" => "Touche pour activer les fenêtres transparentes"
 89C8A2851D1755: "Memory" => "Mémoire"
-ACDE88AB2C1C2E: "Essential entries" => "Entrées essentielles "
-F709149E45E3DA: "Entries to read" => "Entrées à lire "
+ACDE88AB2C1C2E: "Essential entries" => "Entrées essentielles"
+F709149E45E3DA: "Entries to read" => "Entrées à lire"
 5F6928B2C259B9: "Screenshots conversion" => "Conversion de capture d'écran"
 792C81A4CFDCB5: "Configure" => "Configurer"
 12AC0D4B1657FF: "System DB Control" => "Contrôle d'EDSM/EDDB"
@@ -727,7 +727,7 @@ E003047957A50D: "Include Material %age on Landed Body in Shopping List" => "Incl
 88E515DDBD6CF6: "Use EDSM data in System Availability" => "Utiliser les données EDSM pour la disponibilité dans le système"
 E3E78C5A9B4B48: "Use Historic Material Counts" => "Utiliser les comptages de matériaux historiques"
 0D1C90F01F1AC9: "Needed Mats" => "Matériaux recherchés"
-6C1B59B6152200: "Filling Shopping List would exceed capacity for" => "Remplir la liste de course dépasserait la capacité de stockage de "
+6C1B59B6152200: "Filling Shopping List would exceed capacity for" => "Remplir la liste de course dépasserait la capacité de stockage de"
 0C17E1E2D825FF: "No materials currently required." => "Aucuns matériaux recherchés pour le moment"
 9CDB9B531A7E2C: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" => "Injections FSD max\r\n   {0} Basique\r\n   {1} Standard\r\n   {2} Premium"
 7D83DF15795144: "Materials on {0}" => "Matériaux sur {0}"
@@ -794,7 +794,7 @@ SECTION UserControlStarList
 28442DA04B1BF3: "Body Count" => "Nombre de corps"
 C90A4905639F83: "Scan Value" => "Valeur de scan"
 A1E87E0BCAE241: "{0} Star(s) {1}" => "{0} étoile(s) {1}"
-FB044B95FD466C: "This system has materials for FSD boost" => "Ce système contient les matériaux pour des boost FSD "
+FB044B95FD466C: "This system has materials for FSD boost" => "Ce système contient les matériaux pour des boost FSD"
 3DC09A6F2DA211: "{0} Other bodies" => "{0} autres corps"
 FB90E0C92B3663: "Show/Hide presence of Jumponium Materials" => "Afficher/Masquer la présence de matériaux pour le Jumponium"
 47D68486BBAA7E: "Show valuable bodies" => "Afficher les corps de valeurs"
@@ -849,13 +849,13 @@ AA3A76881BDE68: "Interdicted Player Succeeded" => "Interdictions réussies par d
 6A6C1A6301AB25: "Interdicted NPC Succeeded" => "Interdictions réussies par des PNJ"
 99C5998D9DBB79: "Interdicted NPC Failed" => "Interdictions échouées par des PNJ"
 D01ADD4A8CF9C6: "PVP Kills" => "JcJ 'kills'"
-20CB368601547F: "Total No of jumps" => "Nb total de sauts "
+20CB368601547F: "Total No of jumps" => "Nb total de sauts"
 D06EC3483818A9: "FSD jumps" => "Sauts FSD"
 E13CB4A04BC34B: "FSD Jump History" => "Historique de sauts"
-BB3BBEC3B7BECB: "24 Hours" => "24 heures "
-91A4748C01B13C: ", One Week" => ", une semaine "
-F1B5EA10F447E6: ", 30 Days" => ", 30 jours "
-FEB665354F9937: ", One Year" => ", 1 an "
+BB3BBEC3B7BECB: "24 Hours" => "24 heures"
+91A4748C01B13C: ", One Week" => ", une semaine"
+F1B5EA10F447E6: ", 30 Days" => ", 30 jours"
+FEB665354F9937: ", One Year" => ", 1 an"
 50CA2C7949A7B3: "Most North" => "Le plus au nord"
 FF4C48EC20A07F: "Most South" => "Le plus au sud"
 ED38C3B32E9FB4: "Most East" => "Le plus à l'est"
@@ -1049,8 +1049,8 @@ C4923981307F3C: "Add all EDSM systems" => "Ajouter tous les systèmes EDSM"
 7ABC2E762F1C11: "Add to wanted systems" => "Ajouter aux systèmes recherchés"
 47B25478D21515: "&Submit Distances" => "&Soumettre les distances"
 D12B3719BBD6F1: "Start New" => "Démarrer &nouveau"
-46843D98B0DFDC: "From System" => "Système d'origine "
-64B737D6229A62: "Visited without coordinates" => "Visité sans coordonnées "
+46843D98B0DFDC: "From System" => "Système d'origine"
+64B737D6229A62: "Visited without coordinates" => "Visité sans coordonnées"
 6F38D28253F348: "Add 20 oldest" => "Ajouter les 20 plus anciens"
 CD2E16EBD3BDBA: "Add 20 newest" => "Ajouter les 20 plus récents"
 0BF9E53A212E10: "Press Start New" => "Appuyer sur Démarrer nouveau"
@@ -1139,9 +1139,9 @@ EE4A9C0F4355B9: "Materials/Commodities for " => "Matériaux/Marchandises pour "
 449B4068617074: "Show missions for faction" => "Afficher les missions pour la faction"
 4CA2AF672FCE38: "Show commodity/material trades for faction" => "Afficher les échanges de marchandises/matériaux pour la faction"
 5B997E7442275B: "Show bounties and bonds for faction" => "Afficher les primes et récompenses de combat pour la faction"
-F6A9D28E466A97: "Missions In Progress" => "Missions en cours "
-72E11BB738A1FB: "Capital ship Victims" => "Victimes de vaisseau capital "
-6F623465F6238E: "Capital ship Award" => "Récompenses de vaisseau capital "
+F6A9D28E466A97: "Missions In Progress" => "Missions en cours"
+72E11BB738A1FB: "Capital ship Victims" => "Victimes de vaisseau capital"
+6F623465F6238E: "Capital ship Award" => "Récompenses de vaisseau capital"
 C7AD6F7B6831A8: "Redeem Voucher" => "Valeur des primes réclamées"
 2C60D95A352DA3: "Pay Fines" => "Valeur des amendes"
 7E2BA2DEEF4EF3: "Pay Bounty Value" @
@@ -1240,8 +1240,8 @@ EF1C1576EACED1: "Module Packs: ; t;N0" => "Pack de modules : ; t;N0"
 11CDC4D5D07633: "Jump Range: ; ly;N0" => "Portée de saut : ; al;N0"
 A2B7F586AACEE5: "Max Jump: ; ly;N0" => "Saut max : ; al;N0"
 A936AD07CF17C0: "Fuel: ; t;N0" => "Carburant : ; t;N0"
-0935C6C59186BC: "Docking Access" => "Accès appontage "
-059AE46E428B7C: "Notorious" => "Notoriété "
+0935C6C59186BC: "Docking Access" => "Accès appontage"
+059AE46E428B7C: "Notorious" => "Notoriété"
 5A1731CE9C0565: "Balance: ; cr;N0" => "Solde : ; cr;N0"
 CB4849CE71609D: "Reserve: ; cr;N0" => "Allocation hebdomadaire : ; cr;N0"
 EF688A50489362: "Available: ; cr;N0" => "Disponible : ; cr;N0"
@@ -1260,7 +1260,7 @@ B455B013A9CF13: "Install cost: ; cr;N0" => "Coût d'installation : ; cr;N0"
 3DF5159B0456C1: "Capacity Allocated: ; Units;N0" => "Capacité allouée : ; unités;N0"
 CB7654E3728C0A: "Upkeep cost: ; cr;N0" => "Coût d'entretien : ; cr;N0"
 9EC790B9F4E58F: "Suspended upkeep cost: ; cr;N0" => "Coût d'entretien suspendu : ; cr;N0"
-311F21EEA90405: "Crew Name" => "Nom de l'équipage "
+311F21EEA90405: "Crew Name" => "Nom de l'équipage"
 E2CE7274D260B9: "This Service is Active" => "Ce service est actif"
 CD7E9084A619FD: "This Service is Suspended" => "Ce service est suspendu"
 6C573682E526FF: "This Service is Not Installed" => "Ce service n'est pas installé"
@@ -1368,37 +1368,37 @@ EC5BBF8310A48B: "Toggle title visibility for this window when transparent" => "B
 
 SECTION SpanshStations
 
-0A893ECE8E469A: "Misc" @
-476C8FAAA21417: "Filter on station type" @
-80F2D8E63516EC: "Filter on commodities that you can buy and has stock" @
-0EBE4FB84835D6: "Filter on commodities that the station wants which has a price and demand" @
-FA9C92492503CF: "Filter on services offered" @
-2E6632C117E2E2: "Filter on economy" @
-341D9BF3694526: "Filter on ships for sale" @
-D4882B7DD46466: "Filter on outfitting" @
-E1E3895622ED9B: "Maximum station distance" @
-D2EA1BF4726CD7: "Show up to three commodities, either buy or sell price" @
-D386669629955B: "Type in system name and hit return" @
-FA8F6D42C6B406: "Press to go back to current travel history system" @
-106A40C2866B09: "Search for stations with commodities across systems" @
-0948A4AACCF4D9: "Search for stations with services across systems" @
-96D953B770B65B: "Search for stations with economies across systems" @
-CB6477E67C121C: "Search for stations with ships across systems" @
-574B162C164ED3: "Search for stations with outfitting modules across systems" @
-A369535C35A528: "Output grid to excel" @
+0A893ECE8E469A: "Misc" => "Divers"
+476C8FAAA21417: "Filter on station type" => "Filtrer sur le type de station"
+80F2D8E63516EC: "Filter on commodities that you can buy and has stock" => "Filtrer sur les marchandises que vous pouvez acheter et ayant du stock"
+0EBE4FB84835D6: "Filter on commodities that the station wants which has a price and demand" => "Filtrer sur les marchandises que la station veut et ayant un prix et de la demande"
+FA9C92492503CF: "Filter on services offered" => "Filtrer sur les services offerts"
+2E6632C117E2E2: "Filter on economy" => "Filtrer sur l'économie"
+341D9BF3694526: "Filter on ships for sale" => "Filtrer sur les vaisseaux en vente"
+D4882B7DD46466: "Filter on outfitting" => "Filtrer sur les équipements"
+E1E3895622ED9B: "Maximum station distance" => "Distance maximum de la station"
+D2EA1BF4726CD7: "Show up to three commodities, either buy or sell price" => "Affiche jusqu'à trois marchandises, aussi bien le prix d'achat que le prix de vente"
+D386669629955B: "Type in system name and hit return" => "Tapez le nom du système et appuyez sur Entrée"
+FA8F6D42C6B406: "Press to go back to current travel history system" => "Appuyez pour revenir au système d'historique de voyage actuel"
+106A40C2866B09: "Search for stations with commodities across systems" => "Rechercher des stations avec des marchandises dans tous les systèmes"
+0948A4AACCF4D9: "Search for stations with services across systems" => "Rechercher des stations avec des services dans tous les systèmes"
+96D953B770B65B: "Search for stations with economies across systems" => "Rechercher des stations avec des économies dans tous les systèmes"
+CB6477E67C121C: "Search for stations with ships across systems" => "Rechercher des stations avec des vaisseaux dans tous les systèmes"
+574B162C164ED3: "Search for stations with outfitting modules across systems" => "Rechercher des stations avec des équipements dans tous les systèmes"
+A369535C35A528: "Output grid to excel" => "Exporter la grille vers Excel"
 
-F06FC9B08C6AE1: "LY Distance" @
-4EFE75D6EB0078: "Price 1" @
+F06FC9B08C6AE1: "LY Distance" => "Distance AL"
+4EFE75D6EB0078: "Price 1" => "Prix 1"
 F33B503B1A195E: "S/D 1" @
-606BB56FD9280F: "Price 2" @
+606BB56FD9280F: "Price 2" => "Prix 2"
 D9796972CCCEFC: "S/D 2" @
-92AB2B177847F1: "Price 3" @
+92AB2B177847F1: "Price 3" => "Prix 3"
 AA198A34E74B30: "S/D 3" @
 18301E1F358F4D: "SPad" @
 2D53706E25BD61: "MPad" @
 140E78CB855A9A: "LPad" @
 
-966866808D21F3: "Max Ls" @
-D7DECF1AA22B02: "Filter" @
-D97D1EE339E4EE: "Show" @
+966866808D21F3: "Max Ls" => "Sl max"
+D7DECF1AA22B02: "Filter" => "Filtrer"
+D97D1EE339E4EE: "Show" => "Afficher"
 
