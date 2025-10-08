@@ -14,6 +14,7 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.UIEvents;
+using ExtendedControls;
 using System.Drawing;
 
 namespace EDDiscovery.UserControls
@@ -24,6 +25,9 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             DBBaseName = "DockingPanel";
+            fleetCarrierDockingPads.Dock = System.Windows.Forms.DockStyle.Fill;
+            orbisDockingPads.Dock = System.Windows.Forms.DockStyle.Fill;
+            fleetCarrierDockingPads.Visible = false;
         }
 
         private int lastdockingpad = 0;
@@ -63,8 +67,10 @@ namespace EDDiscovery.UserControls
 
             if ( IsInPanelShow )
             {
-                dockingPads.Visible = true;
-                dockingPads.SelectedIndex = 0;
+                fleetCarrierDockingPads.Visible = (lasthe?.Status.IsDockingStationTypeCarrier == true);
+                orbisDockingPads.Visible = !fleetCarrierDockingPads.Visible;
+                orbisDockingPads.SelectedIndex = 0;
+                fleetCarrierDockingPads.SelectedIndex = 0;
             }
             else
             {
@@ -106,19 +112,31 @@ namespace EDDiscovery.UserControls
         {
             int currentpad = lasthe?.Status.DockingPad ?? 0;
 
-            if (lasthe?.Status.IsDockingStationTypeCoriolisEtc == false)        // if its not coriolis, ignore
-                currentpad = 0;
-
-            if ( uistatus.Focus != 0 || currentpad == 0)
+            if ( uistatus.Focus != 0 || currentpad == 0 )
             {
-                dockingPads.Visible = false;
+                fleetCarrierDockingPads.Visible = orbisDockingPads.Visible = false;
+            }
+            else if (lasthe?.Status.IsDockingStationTypeCarrier == true)
+            {
+                orbisDockingPads.Visible = false;
+                fleetCarrierDockingPads.Visible = true;
+                fleetCarrierDockingPads.SelectedIndex = currentpad;
+            }
+            else if (lasthe?.Status.IsDockingStationTypeCoriolisEtc == true)
+            {
+                orbisDockingPads.Visible = true;
+                fleetCarrierDockingPads.Visible = false;
+                orbisDockingPads.SelectedIndex = currentpad;
             }
             else
             {
-                dockingPads.Visible = true;
+                fleetCarrierDockingPads.Visible = orbisDockingPads.Visible = false;
             }
+        }
 
-            dockingPads.SelectedIndex = currentpad;
+        private void flipToolStripMenuItem_Click(object sender, System.EventArgs e)
+        {
+            fleetCarrierDockingPads.SetOrientation(!fleetCarrierDockingPads.IsVertical);
         }
     }
 }

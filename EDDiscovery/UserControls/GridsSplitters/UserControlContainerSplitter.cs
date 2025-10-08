@@ -268,13 +268,13 @@ namespace EDDiscovery.UserControls
                 tabstrip.Tag = enumid;                         // Tag stores the ID index of this view
                 tabstrip.Name = Name + "." + enumid.ToStringInvariant();
 
-                tabstrip.ContextMenuStrip = ExtPanelGradientFill.RightClickThemeColorSetSelector((s) =>
+                tabstrip.SetSelectorCMS(ExtPanelGradientFill.RightClickThemeColorSetSelector((s) =>
                     {
                         tabstrip.ThemeColorSet = s;
                         tabstrip.Theme(Theme.Current, Theme.Current.GetFont);
                     },
                     "Default".Tx()
-                );
+                ));
 
                 //TBD
 

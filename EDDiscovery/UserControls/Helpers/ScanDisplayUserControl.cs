@@ -23,7 +23,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class ScanDisplayUserControl : UserControl
     {
-        public SystemDisplay SystemDisplay { get; set; } = new SystemDisplay();
+        public SystemDisplay SystemDisplay { get; private set; }
 
         public int WidthAvailable { get { return this.Width - vScrollBarCustom.Width; } }   // available display width
 
@@ -31,6 +31,7 @@ namespace EDDiscovery.UserControls
         public ScanDisplayUserControl()
         {
             InitializeComponent();
+            SystemDisplay = new SystemDisplay();
             this.AutoScaleMode = AutoScaleMode.None;            // we are dealing with graphics.. lets turn off dialog scaling.
             rtbNodeInfo.Visible = false;
             toolTip.ShowAlways = true;
@@ -38,7 +39,7 @@ namespace EDDiscovery.UserControls
             SystemDisplay.Font = ExtendedControls.Theme.Current?.GetDialogFont ?? Font;
             SystemDisplay.FontUnderlined = ExtendedControls.Theme.Current?.GetScaledFont(1f, underline:true) ?? Font;
             SystemDisplay.LargerFont = ExtendedControls.Theme.Current?.GetFont ?? Font;
-            SystemDisplay.ContextMenuStripStars = contextMenuStripBodies;
+        // tbd    SystemDisplay.ContextMenuStripStars = contextMenuStripBodies;
         }
 
         #endregion

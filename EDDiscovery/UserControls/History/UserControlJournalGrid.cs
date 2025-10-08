@@ -327,7 +327,7 @@ namespace EDDiscovery.UserControls
                 if (checkBoxCursorToTop.Checked) // Move focus to first row
                 {
                     dataGridViewJournal.ClearSelection();
-                    dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(0);       // its the current cell which needs to be set, moves the row marker as well
+                    dataGridViewJournal.SetCurrentSelOnRow(0, 0);       // its the current cell which needs to be set, moves the row marker as well
                     FireChangeSelection();
                 }
             }

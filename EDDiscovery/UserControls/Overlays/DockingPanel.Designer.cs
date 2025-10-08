@@ -43,32 +43,75 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            this.dockingPads = new ExtendedControls.DockingPads();
+            this.components = new System.ComponentModel.Container();
+            this.orbisDockingPads = new ExtendedControls.OrbisDockingPads();
+            this.fleetCarrierDockingPads = new ExtendedControls.FleetCarrierDockingPads();
+            this.contextMenuStripCarrier = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.flipToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextMenuStripCarrier.SuspendLayout();
             this.SuspendLayout();
             // 
-            // dockingPads
+            // orbisDockingPads
             // 
-            this.dockingPads.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dockingPads.Location = new System.Drawing.Point(0, 0);
-            this.dockingPads.Name = "dockingPads";
-            this.dockingPads.SelectedIndex = 0;
-            this.dockingPads.Size = new System.Drawing.Size(684, 666);
-            this.dockingPads.TabIndex = 0;
-            this.dockingPads.Text = "";
+            this.orbisDockingPads.BorderColor = System.Drawing.Color.Black;
+            this.orbisDockingPads.ForeColor = System.Drawing.Color.Black;
+            this.orbisDockingPads.LargePad = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(1)))), ((int)(((byte)(1)))));
+            this.orbisDockingPads.Location = new System.Drawing.Point(0, 0);
+            this.orbisDockingPads.MediumPad = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.orbisDockingPads.Name = "orbisDockingPads";
+            this.orbisDockingPads.NonSelectedIntensity = 0.4F;
+            this.orbisDockingPads.SelectedIndex = 0;
+            this.orbisDockingPads.Size = new System.Drawing.Size(243, 279);
+            this.orbisDockingPads.SmallPad = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.orbisDockingPads.TabIndex = 0;
+            // 
+            // fleetCarrierDockingPads
+            // 
+            this.fleetCarrierDockingPads.ContextMenuStrip = this.contextMenuStripCarrier;
+            this.fleetCarrierDockingPads.ForeColor = System.Drawing.Color.Black;
+            this.fleetCarrierDockingPads.LargePad = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(1)))), ((int)(((byte)(1)))));
+            this.fleetCarrierDockingPads.Location = new System.Drawing.Point(318, 33);
+            this.fleetCarrierDockingPads.MediumPad = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.fleetCarrierDockingPads.Name = "fleetCarrierDockingPads";
+            this.fleetCarrierDockingPads.NonSelected = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.fleetCarrierDockingPads.SelectedIndex = 0;
+            this.fleetCarrierDockingPads.Size = new System.Drawing.Size(321, 213);
+            this.fleetCarrierDockingPads.SmallPad = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
+            this.fleetCarrierDockingPads.TabIndex = 1;
+            this.fleetCarrierDockingPads.Text = "fleetCarrierDockingPads1";
+            // 
+            // contextMenuStripCarrier
+            // 
+            this.contextMenuStripCarrier.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.flipToolStripMenuItem});
+            this.contextMenuStripCarrier.Name = "contextMenuStripCarrier";
+            this.contextMenuStripCarrier.Size = new System.Drawing.Size(94, 26);
+            // 
+            // flipToolStripMenuItem
+            // 
+            this.flipToolStripMenuItem.Name = "flipToolStripMenuItem";
+            this.flipToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
+            this.flipToolStripMenuItem.Text = "Flip";
+            this.flipToolStripMenuItem.Click += new System.EventHandler(this.flipToolStripMenuItem_Click);
             // 
             // DockingPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.dockingPads);
+            this.Controls.Add(this.fleetCarrierDockingPads);
+            this.Controls.Add(this.orbisDockingPads);
             this.Name = "DockingPanel";
             this.Size = new System.Drawing.Size(684, 666);
+            this.contextMenuStripCarrier.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private ExtendedControls.DockingPads dockingPads;
+        private ExtendedControls.OrbisDockingPads orbisDockingPads;
+        private ExtendedControls.FleetCarrierDockingPads fleetCarrierDockingPads;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripCarrier;
+        private System.Windows.Forms.ToolStripMenuItem flipToolStripMenuItem;
     }
 }

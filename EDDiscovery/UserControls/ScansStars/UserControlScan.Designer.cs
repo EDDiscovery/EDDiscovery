@@ -250,7 +250,6 @@ namespace EDDiscovery.UserControls
             systemDisplay1.ShowStarMass = true;
             systemDisplay1.ShowWebBodies = false;
             systemDisplay1.ValueLimit = 50000;
-            this.panelStars.SystemDisplay = systemDisplay1;
             this.panelStars.TabIndex = 5;
             // 
             // UserControlScan

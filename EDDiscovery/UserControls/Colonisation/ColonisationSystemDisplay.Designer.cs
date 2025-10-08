@@ -289,7 +289,6 @@
             systemDisplay2.ShowStarMass = true;
             systemDisplay2.ShowWebBodies = false;
             systemDisplay2.ValueLimit = 50000;
-            this.scanDisplayUserControl.SystemDisplay = systemDisplay2;
             this.scanDisplayUserControl.TabIndex = 2;
             // 
             // ColonisationSystemDisplay
