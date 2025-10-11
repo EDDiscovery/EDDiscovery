@@ -450,7 +450,7 @@ D2F025FD0D6F0C: "Travel History Entry" => "Entrada del historial de viajes"
 ECE2AC10D7266F: "Slot" => "Ranura"
 B2B53EE4FC1A90: "Stored" => "Almacenado"
 22F4D0D2422A35: "All Modules" => "Todos los módulos"
-8F325EDB2B44A3: "All Known Modules" @
+8F325EDB2B44A3: "All Known Modules" => "Todos los módulos conocidos"
 9569A6C389205D: "All Ships" => "Todas las naves"
 
 046E5CEE819C2B: "In Transit" => "En tránsito"
@@ -1369,36 +1369,36 @@ EC5BBF8310A48B: "Toggle title visibility for this window when transparent" => "A
 SECTION SpanshStations
 
 0A893ECE8E469A: "Misc" @
-476C8FAAA21417: "Filter on station type" @
-80F2D8E63516EC: "Filter on commodities that you can buy and has stock" @
-0EBE4FB84835D6: "Filter on commodities that the station wants which has a price and demand" @
-FA9C92492503CF: "Filter on services offered" @
-2E6632C117E2E2: "Filter on economy" @
-341D9BF3694526: "Filter on ships for sale" @
-D4882B7DD46466: "Filter on outfitting" @
-E1E3895622ED9B: "Maximum station distance" @
-D2EA1BF4726CD7: "Show up to three commodities, either buy or sell price" @
-D386669629955B: "Type in system name and hit return" @
-FA8F6D42C6B406: "Press to go back to current travel history system" @
-106A40C2866B09: "Search for stations with commodities across systems" @
-0948A4AACCF4D9: "Search for stations with services across systems" @
-96D953B770B65B: "Search for stations with economies across systems" @
-CB6477E67C121C: "Search for stations with ships across systems" @
-574B162C164ED3: "Search for stations with outfitting modules across systems" @
-A369535C35A528: "Output grid to excel" @
+476C8FAAA21417: "Filter on station type" => "Filtrar por tipo de estación"
+80F2D8E63516EC: "Filter on commodities that you can buy and has stock" => "Filtrar por mercancías que puedes comprar y que tienen existencias"
+0EBE4FB84835D6: "Filter on commodities that the station wants which has a price and demand" => "Filtrar por mercancías que la estación desea y que tienen un precio y demanda"
+FA9C92492503CF: "Filter on services offered" => "Filtrar por servicios ofrecidos"
+2E6632C117E2E2: "Filter on economy" => "Filtrar por economía"
+341D9BF3694526: "Filter on ships for sale" => "Filtrar por naves en venta"
+D4882B7DD46466: "Filter on outfitting" => "Filtrar por equipamiento"
+E1E3895622ED9B: "Maximum station distance" => "Distancia máxima de la estación"
+D2EA1BF4726CD7: "Show up to three commodities, either buy or sell price" => "Mostrar hasta tres mercancías, ya sea el precio de compra o venta"
+D386669629955B: "Type in system name and hit return" => "Escriba el nombre del sistema y presione enter"
+FA8F6D42C6B406: "Press to go back to current travel history system" => "Presione para volver al sistema de historial de viajes actual"
+106A40C2866B09: "Search for stations with commodities across systems" => "Buscar estaciones con mercancías en todos los sistemas"
+0948A4AACCF4D9: "Search for stations with services across systems" => "Buscar estaciones con servicios en todos los sistemas"
+96D953B770B65B: "Search for stations with economies across systems" => "Buscar estaciones con economías en todos los sistemas"
+CB6477E67C121C: "Search for stations with ships across systems" => "Buscar estaciones con naves en todos los sistemas"
+574B162C164ED3: "Search for stations with outfitting modules across systems" => "Buscar estaciones con módulos de equipamiento en todos los sistemas"
+A369535C35A528: "Output grid to excel" => "Exportar cuadrícula a Excel"
 
-F06FC9B08C6AE1: "LY Distance" @
-4EFE75D6EB0078: "Price 1" @
+F06FC9B08C6AE1: "LY Distance" => "Distancia (al)"
+4EFE75D6EB0078: "Price 1" => "Precio 1"
 F33B503B1A195E: "S/D 1" @
-606BB56FD9280F: "Price 2" @
+606BB56FD9280F: "Price 2" => "Precio 2"
 D9796972CCCEFC: "S/D 2" @
-92AB2B177847F1: "Price 3" @
+92AB2B177847F1: "Price 3" => "Precio 3"
 AA198A34E74B30: "S/D 3" @
-18301E1F358F4D: "SPad" @
-2D53706E25BD61: "MPad" @
-140E78CB855A9A: "LPad" @
+18301E1F358F4D: "SPad" => "Plataforma P"
+2D53706E25BD61: "MPad" => "Plataforma M"
+140E78CB855A9A: "LPad" => "Plataforma G"
 
-966866808D21F3: "Max Ls" @
-D7DECF1AA22B02: "Filter" @
-D97D1EE339E4EE: "Show" @
+966866808D21F3: "Max Ls" => "Max sL"
+D7DECF1AA22B02: "Filter" => "Filtrar"
+D97D1EE339E4EE: "Show" => "Mostrar"
 
