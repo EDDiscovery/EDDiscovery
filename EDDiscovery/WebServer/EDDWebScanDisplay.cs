@@ -91,10 +91,10 @@ namespace EDDiscovery.WebServer
                         sd.ShowWebBodies = checkEDSM;
                         sd.SetSize(starsize);
                         sd.Font = new Font("MS Sans Serif", 8.25f);
-                        sd.LargerFont = new Font("MS Sans Serif", 10f);
+                        sd.FontLarge = new Font("MS Sans Serif", 10f);
                         sd.FontUnderlined = new Font("MS Sans Serif", 8.25f, FontStyle.Underline);
                         ExtendedControls.ExtPictureBox imagebox = new ExtendedControls.ExtPictureBox();
-                        sd.DrawSystem(imagebox, width, sn, null, null);
+                        sd.DrawSystemRender(imagebox, width, sn, null, null);
                         //imagebox.AddTextAutoSize(new Point(10, 10), new Size(1000, 48), "Generated on " + DateTime.UtcNow.ToString(), new Font("MS Sans Serif", 8.25f), Color.Red, Color.Black, 0);
                         imagebox.Render();
 

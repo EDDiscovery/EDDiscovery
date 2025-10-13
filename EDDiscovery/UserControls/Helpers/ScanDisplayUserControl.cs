@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
             imagebox.ClickElement += ClickElement;
             SystemDisplay.Font = ExtendedControls.Theme.Current?.GetDialogFont ?? Font;
             SystemDisplay.FontUnderlined = ExtendedControls.Theme.Current?.GetScaledFont(1f, underline:true) ?? Font;
-            SystemDisplay.LargerFont = ExtendedControls.Theme.Current?.GetFont ?? Font;
+            SystemDisplay.FontLarge = ExtendedControls.Theme.Current?.GetFont ?? Font;
         // tbd    SystemDisplay.ContextMenuStripStars = contextMenuStripBodies;
         }
 
@@ -54,7 +54,7 @@ namespace EDDiscovery.UserControls
             HideInfo();
             SystemDisplay.BackColor = this.BackColor;
             SystemDisplay.LabelColor = ExtendedControls.Theme.Current.LabelColor;
-            SystemDisplay.DrawSystem(imagebox, WidthAvailable, systemnode, historicmats, curmats, opttext, filter);
+            SystemDisplay.DrawSystemRender(imagebox, WidthAvailable, systemnode, historicmats, curmats, opttext, filter);
             imagebox.Render();      // replaces image..
         }
 

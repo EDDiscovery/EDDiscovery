@@ -680,14 +680,23 @@ namespace EDDiscovery.UserControls
                     // all entries related to sys.  Can't really limit the pick up as tried before using the afterlastevent option in this call
                     // due to being able to browse back in history. We may not be at the end of the list the system we are displaying. For now, just do a blind whole history search
 
-                    var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(), HistoryListQueries.AllSearchableJournalTypes, sys);
+                    //System.Diagnostics.Debug.WriteLine($"Find He's for system {sys}");
+
+                    // for FSSsignal discovered (oct 25) we need to check the signals address is right, can't rely on the He.System as it may have been written in previous system
+
+                    var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(), HistoryListQueries.AllSearchableJournalTypes,
+                        (x) => x.EntryType == JournalTypeEnum.FSSSignalDiscovered ? (x.journalEntry as JournalFSSSignalDiscovered).IsSignalsOfSystem(sys.SystemAddress) : x.System.SystemAddress == sys.SystemAddress);
 
                     if (helist.Count > 0)        // no point executing if nothing in helist
                     {
+                        foreach (var h in helist) { if (h.journalEntry is JournalFSSSignalDiscovered sd) { System.Diagnostics.Debug.WriteLine($"FSS Signal {sd.Signals[0].SystemAddress} vs {sys.SystemAddress}, {sd.GetDetailed(null)}"); } }
+
                         var defaultvars = new BaseUtils.Variables();
                         defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10, ensuredoublerep: true);
 
                         System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} ... Surveyor runs {searchesactivetext.Length} searches");
+
+                        // check all voice and text actives
 
                         var allsearches = searchesactivetext.Union(searchesactivevoice).ToArray();
 
@@ -856,10 +865,10 @@ namespace EDDiscovery.UserControls
 
                                 foreach ( HistoryListQueries.ResultEntry hrentry in searchresultfornode)
                                 {
-                                    if (searchesactivetext.Contains(hrentry.FilterPassed))   // if its a text entry
+                                    if (searchesactivetext.Contains(hrentry.FilterPassed))   // if its a text entry search
                                         searchpasslist = searchpasslist.AppendPrePad(hrentry.FilterPassed, ", ");
 
-                                    if (producesearchtriggers && searchesactivevoice.Contains(hrentry.FilterPassed))   // if its a text entry
+                                    if (producesearchtriggers && searchesactivevoice.Contains(hrentry.FilterPassed))   // if its a voice entry
                                         cursystriggersalias.Add(TTDiscovery + hrentry.FilterPassed);       // add a trigger which is called discovery:filter name
                                 }
 
@@ -886,12 +895,12 @@ namespace EDDiscovery.UserControls
                 {
                     string searchpasslist = "";
 
-                    foreach(HistoryListQueries.ResultEntry hrentry in kvp.Value)
+                    foreach (HistoryListQueries.ResultEntry hrentry in kvp.Value)
                     {
                         if (searchesactivetext.Contains(hrentry.FilterPassed))   // if its a text entry
                             searchpasslist = searchpasslist.AppendPrePad(hrentry.FilterPassed, ", ");
 
-                        if (producesearchtriggers && searchesactivevoice.Contains(hrentry.FilterPassed))   // if its a text entry
+                        if (producesearchtriggers && searchesactivevoice.Contains(hrentry.FilterPassed))   // if its a voice entry
                         {
                             if (!cursystriggers.TryGetValue(kvp.Key, out HashSet<string> list))     // if we did not make the body above, make it..
                                 cursystriggers.Add(kvp.Key, new HashSet<string>());
@@ -899,7 +908,7 @@ namespace EDDiscovery.UserControls
                             cursystriggers[kvp.Key].Add(TTDiscovery + hrentry.FilterPassed);       // add a trigger
                         }
                     }
-                            
+
                     if ( searchpasslist.HasChars())
                     {
                         ldrawsystemtext[kvp.Key] = $"{kvp.Key.ReplaceIfStartsWith(sys.Name)}: {searchpasslist}";
@@ -1124,6 +1133,7 @@ namespace EDDiscovery.UserControls
             return ctrlset[(int)v];
         }
 
+        // The searches selected and active from the DB setting
         private string[] searchesactivetext;
         private string[] searchesactivevoice;
 

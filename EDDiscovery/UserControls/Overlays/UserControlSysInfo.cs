@@ -579,7 +579,7 @@ namespace EDDiscovery.UserControls
                     //bool sysinfoincurrentsystem = he.System.Name == (discoveryform.history.LastOrDefault?.System.Name ?? "xx");
 
                     // decide on time which one to present..  if lastdestination is newer..
-                    if (lastdestination != null && (lasttarget == null || lastdestination.EventTimeUTC >= lasttarget.EventTimeUTC))
+                    if (lastdestination.Name != null && (lasttarget == null || lastdestination.EventTimeUTC >= lasttarget.EventTimeUTC))
                     {
                         if (lastdestination.BodyID == 0)    // if its a star..
                         {
@@ -587,19 +587,19 @@ namespace EDDiscovery.UserControls
                             starclass = lasttarget != null && lasttarget.StarSystem == lastdestination.Name ? ": " + lasttarget.StarClass : "";
                           //  System.Diagnostics.Debug.WriteLine($"Destination select star {lastdestination.Name} {lastdestination.BodyID}");
                         }
-                        else
+                        else 
                         {
                             // else body name destination or $POI $MULTIPLAYER etc
-                            // Its not localised, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
+                            // Now (oct 25) its localised, but if not, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
 
-                            destname = JournalFieldNaming.SignalBodyName(lastdestination.Name);   
+                            destname = lastdestination.Name_Localised.Alt(JournalFieldNaming.SignalBodyName(lastdestination.Name));   
 
                             //System.Diagnostics.Debug.WriteLine($"Sysinfo destination {lastdestination.Name} -> {destname}");
 
                             ss = DiscoveryForm.History.StarScan.FindSystemSynchronous(DiscoveryForm.History.GetLast.System);
 
-                            // with a found system, see if we can get the body name so we know what body its on
-                            if (ss != null && ss.NodesByID.TryGetValue(lastdestination.BodyID, out StarScan.ScanNode body))
+                            // with a found system, see if we can get the body name so we know what body its on (defensive -1 in case bodyid = null)
+                            if (ss != null && ss.NodesByID.TryGetValue(lastdestination.BodyID ?? -1, out StarScan.ScanNode body))
                             {
                                 onbody = body.BodyDesignator.ReplaceIfStartsWith(he.System.Name).Trim();
 

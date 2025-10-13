@@ -149,9 +149,9 @@ namespace EDDiscovery.UserControls
 
             HashSet<string> jumponiums = new HashSet<string>();     // accumulate jumponium in a hash set to prevent repeats
 
-            SystemDisplay sd = new SystemDisplay();                 // drawing planet image class
-            sd.ValueLimit = GetSetting(dbValueLimit, 50000);
-            sd.Font = Theme.Current.GetFont;
+            SystemDisplay systemdisplay = new SystemDisplay();                 // drawing planet image class
+            systemdisplay.ValueLimit = GetSetting(dbValueLimit, 50000);
+            systemdisplay.Font = Theme.Current.GetFont;
             Size imagesize = new Size(48, 48);
 
             long organicvaluetotal = 0;     // total of organic values
@@ -441,7 +441,7 @@ namespace EDDiscovery.UserControls
 
                     texttoadd = new string[] { sn.ScanData.BodyDesignationOrName, bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() };
 
-                    sd.DrawNode(pc, sn, null, null, BodyDefinitions.GetPlanetImageNotScanned(), new Point(imagesize.Width, imagesize.Height), true, false, out Rectangle _, out int _, imagesize,
+                    systemdisplay.DrawNode(pc, sn, null, null, BodyDefinitions.GetPlanetImageNotScanned(), new Point(imagesize.Width, imagesize.Height), true, false, out Rectangle _, out int _, imagesize,
                         SystemDisplay.DrawLevel.NoText, new Random(), null,null);
                 }
                 else if (!sn.WebCreatedNode)             // rejected above, due no scan data or its EDSM and not EDSM selected.. present what we have if its ours

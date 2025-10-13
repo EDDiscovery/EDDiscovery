@@ -44,7 +44,6 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            EliteDangerousCore.SystemDisplay systemDisplay1 = new EliteDangerousCore.SystemDisplay();
             this.extCheckBoxStar = new ExtendedControls.ExtCheckBox();
             this.buttonSize = new ExtendedControls.ExtButton();
             this.extButtonHighValue = new ExtendedControls.ExtButton();
@@ -229,27 +228,6 @@ namespace EDDiscovery.UserControls
             this.panelStars.Location = new System.Drawing.Point(0, 34);
             this.panelStars.Name = "panelStars";
             this.panelStars.Size = new System.Drawing.Size(748, 648);
-            systemDisplay1.BackColor = System.Drawing.Color.Black;
-            systemDisplay1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            systemDisplay1.FontUnderlined = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline);
-            systemDisplay1.HideFullMaterials = false;
-            systemDisplay1.LabelColor = System.Drawing.Color.DarkOrange;
-            systemDisplay1.LargerFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F);
-            systemDisplay1.NoPlanetStarsOnSameLine = true;
-            systemDisplay1.ShowAllG = true;
-            systemDisplay1.ShowDist = true;
-            systemDisplay1.ShowHabZone = true;
-            systemDisplay1.ShowMaterials = true;
-            systemDisplay1.ShowMoons = true;
-            systemDisplay1.ShowOnlyMaterialsRare = false;
-            systemDisplay1.ShowOverlays = true;
-            systemDisplay1.ShowPlanetClasses = true;
-            systemDisplay1.ShowPlanetMass = true;
-            systemDisplay1.ShowStarAge = true;
-            systemDisplay1.ShowStarClasses = true;
-            systemDisplay1.ShowStarMass = true;
-            systemDisplay1.ShowWebBodies = false;
-            systemDisplay1.ValueLimit = 50000;
             this.panelStars.TabIndex = 5;
             // 
             // UserControlScan

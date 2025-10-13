@@ -14,7 +14,10 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.UIEvents;
+using ExtendedControls;
 using System.Drawing;
+using System.Linq;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
 namespace EDDiscovery.UserControls
 {
@@ -89,42 +92,141 @@ namespace EDDiscovery.UserControls
             // lasthe = he; UpdateDisplay();
         }
 
-        void UpdateDisplay()
+        async void UpdateDisplay()
         {
             string text = "";
-            if (uistatus.Mode == UIMode.ModeType.MainShipNormalSpace)
+            if (uistatus.MajorMode == UIMode.MajorModeType.MainShip)
             {
-                text = "Normal space";
-                // show destination if set, if approach body show that, get body info from scan data
+                if (uistatus.Mode == UIMode.ModeType.MainShipNormalSpace)
+                {
+                    text = "Normal space";
+                    // show destination if set, if approach body show that, get body info from scan data
+                }
+                else if (uistatus.Mode == UIMode.ModeType.MainShipDockedStarPort)
+                {
+                    text = "Docked Starport";
+                    // show information about the station, economy, etc
+                }
+                else if (uistatus.Mode == UIMode.ModeType.MainShipDockedPlanet)
+                {
+                    text = "Docked Planet";
+                    // show information about the station, economy, etc
+                }
+                else if (uistatus.Mode == UIMode.ModeType.MainShipSupercruise)
+                {
+                    bool injump = uistatus.Flags.Contains(UITypeEnum.FsdJump);
+                    if (injump)
+                        text = "Jumping to ";
+                    else
+                        text = "Supercruising"; // tbd to?
 
+                    // show destination if set, if approach body show that, get body info from scan data
+                }
+                else if (uistatus.Mode == UIMode.ModeType.MainShipLanded)
+                {
+                    text = "Landed";
+                    // show destination if set, if approach body show that, get body info from scan data
+                }
             }
-            else if (uistatus.Mode == UIMode.ModeType.MainShipSupercruise)
+            else if (uistatus.MajorMode == UIMode.MajorModeType.SRV)
             {
-                bool injump = uistatus.Flags.Contains(UITypeEnum.FsdJump);
-                if (injump)
-                    text = "Jumping to ";
-                else
-                    text = "Supercruising"; // tbd to?
-
-                // show destination if set, if approach body show that, get body info from scan data
-            }
-            else if (uistatus.Mode == UIMode.ModeType.MainShipLanded)
-            {
-                text = "Landed";
-                // show destination if set, if approach body show that, get body info from scan data
-            }
-            else if (uistatus.Mode == UIMode.ModeType.MainShipDockedPlanet)
-            {
-                text = "Docked Planet";
+                text = "SRV";
                 // show information about the station, economy, etc
             }
-            else if (uistatus.Mode == UIMode.ModeType.MainShipDockedStarPort)
+            else if (uistatus.MajorMode == UIMode.MajorModeType.Fighter)
             {
-                text = "Docked Starport";
+                text = "Fighter";
                 // show information about the station, economy, etc
+            }
+            if (uistatus.MajorMode == UIMode.MajorModeType.OnFoot)
+            {
+                text = "OnFoot";
+                // show information about planet or station
             }
 
             label1.Text = text;
+
+            if (uistatus.DestinationName.HasChars() && uistatus.DestinationSystemAddress.HasValue)
+            {
+                ISystem sys = DiscoveryForm.History.StarScan.FindByAddressWithCache(uistatus.DestinationSystemAddress.Value, WebExternalDataLookup.SpanshThenEDSM);
+
+                if (sys != null)
+                {
+                    var ss = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, WebExternalDataLookup.Spansh);
+                    if (IsClosed)
+                        return;
+
+                    System.Diagnostics.Debug.WriteLine($"Travel Panel Dest found system  {sys.Name} {uistatus.DestinationSystemAddress} -> {ss?.System.Name}");
+
+                    if (uistatus.DestinationBodyID == 0)    // if its a star..
+                    {
+                        System.Diagnostics.Debug.WriteLine($".. Travel Destination select star {sys.Name} {uistatus.DestinationSystemAddress}");
+                    }
+                    else
+                    {
+                        // else body name destination or $POI $MULTIPLAYER etc
+                        // Now (oct 25) its localised, but if not, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
+
+                        string destname = uistatus.DestinationName_Localised.Alt(JournalFieldNaming.SignalBodyName(uistatus.DestinationName));
+
+                        System.Diagnostics.Debug.WriteLine($".. Travel Destination non star {destname}");
+
+                        // with a found system, see if we can get the body name so we know what body its on (defensive -1 in case bodyid = null)
+                        if (ss != null)
+                        {
+                            SystemDisplay sd = new SystemDisplay();
+                            sd.SetSize(48);
+                            sd.Font = this.Font;
+                            sd.BackColor = Color.Transparent;
+                            ExtPictureBox pb = new ExtPictureBox();
+                            sd.DrawSystemRender(pb, 800, ss);
+
+                            System.Diagnostics.Debug.Write("Dumping images");
+                            pb.Image.Save(@"c:\code\dump\systemdisplay.png");
+
+                            var bodylist = ss.Bodies().ToList();
+                            int count = 0;
+                            foreach (var bodys in bodylist)
+                            {
+                                sd.DrawSingleObject( pb, ss, bodys);
+                                if (pb.Image != null)
+                                {
+                                    pb.Image.Save($"c:\\code\\dump\\image_{count}_{bodys.BodyDesignator}.png");
+                                    System.Diagnostics.Debug.WriteLine($"dump {count} {bodys.BodyDesignator} parent `{bodys.Parent?.BodyDesignator}` scan data `{bodys.ScanData?.BodyName}`");
+                                    count++;
+                                }
+                            }
+                            System.Diagnostics.Debug.Write("End dump");
+
+
+
+
+
+
+                            // if we find it, we are targetting a body (note orbiting stations are not added to the nodesbyid even though they get bodyids)
+
+                            ss.NodesByID.TryGetValue(uistatus.DestinationBodyID ?? -1, out StarScan.ScanNode body);     // may be null if Dest ID not found
+
+                            if (body != null)
+                            {
+                                System.Diagnostics.Debug.WriteLine($".. body found  {body.OwnName} {body.BodyName} {body.BodyDesignator}");
+
+                                if (body.ScanData != null)
+                                {
+                                    System.Diagnostics.Debug.WriteLine($".. body dist {body.ScanData.DistanceFromArrivalLS.ToString("N0")} ls");
+                                }
+                            }
+
+                            IBodyFeature feature = ss.FindFeature(destname);
+                            if (feature != null)
+                            {
+                                System.Diagnostics.Debug.WriteLine($".. feature found {feature.Name} {feature.Body} {feature.BodyType}");
+                            }
+                        }
+                    }
+                }
+
+            }
 
             // all the stuff about the station
         }

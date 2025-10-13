@@ -240,7 +240,7 @@ namespace EDDiscovery.UserControls.Helpers
                         {
                             station.System.Name,
                             station.DistanceRefSystem.ToString("N1"),
-                            station.BodyName?.ReplaceIfStartsWith(station.System.Name) ?? "",
+                            station.Body?.ReplaceIfStartsWith(station.System.Name) ?? "",
                             station.StationName,
                             station.DistanceToArrival > 0 ? station.DistanceToArrival.ToString("N1") : "",
                             StationDefinitions.ToLocalisedLanguage(station.FDStationType),
