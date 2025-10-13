@@ -105,10 +105,9 @@ namespace EDDiscovery.UserControls
             scanSortControl.SortDirectionClicked += (chk) => { if (scanSortControl.Condition.HasChars()) SortGridBySortCriteria(); };
 
             dataGridView.Init(DiscoveryForm);
-            dataGridView.Columns[4].Tag = "TooltipPopOut;TextPopOut";
-            dataGridView.Columns[5].Tag = "TextPopOut";  // these two double click are text popouts
+            dataGridView.Columns[5].Tag = dataGridView.Columns[6].Tag = dataGridView.Columns[7].Tag = dataGridView.Columns[8].Tag = dataGridView.Columns[9].Tag = "TooltipPopOut;TextPopOut";
 
-            dataGridView.UserChangedColumnVisibility += ChangeColumnVisibility;
+            //dataGridView.UserChangedColumnVisibility += ChangeColumnVisibility;
 
             UpdateComboBoxSearches();
             comboBoxSearches.Text = "Select".T(EDTx.SearchScans_Select);
@@ -302,7 +301,7 @@ namespace EDDiscovery.UserControls
                     int row = dataGridView.Rows.Add(rowobj);
                     dataGridView.Rows[row].Tag = he;
                     dataGridView.Rows[row].Cells[0].Tag = kvp.Value;
-                    dataGridView.Rows[row].Cells[4].ToolTipText = infotooltip;
+                    dataGridView.Rows[row].Cells[5].ToolTipText = infotooltip;
                 }
 
                 if ( results.Count > max )
@@ -522,18 +521,18 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void ChangeColumnVisibility(int c)
-        {
-            if (c >= ColumnParent.Index)    // parent onwards is optional
-            {
-                DataGridViewColumn col = dataGridView.Columns[c];
-                if (col.Visible == true)    // if gone visible, then we need to clear the grid and make the user refind
-                {
-                    labelCount.Visible = false;
-                    dataGridView.Rows.Clear();
-                }
-            }
-        }
+        //private void ChangeColumnVisibility(int c)
+        //{
+        //    if (c >= ColumnParent.Index)    // parent onwards is optional
+        //    {
+        //        DataGridViewColumn col = dataGridView.Columns[c];
+        //        if (col.Visible == true)    // if gone visible, then we need to clear the grid and make the user refind
+        //        {
+        //            labelCount.Visible = false;
+        //            dataGridView.Rows.Clear();
+        //        }
+        //    }
+        //}
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
