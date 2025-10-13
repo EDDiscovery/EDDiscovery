@@ -678,7 +678,9 @@ namespace EDDiscovery.UserControls
                     // all entries related to sys.  Can't really limit the pick up as tried before using the afterlastevent option in this call
                     // due to being able to browse back in history. We may not be at the end of the list the system we are displaying. For now, just do a blind whole history search
 
-                    var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(), HistoryListQueries.AllSearchableJournalTypes, sys);
+                    //System.Diagnostics.Debug.WriteLine($"Find He's for system {sys}");
+                    var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(), HistoryListQueries.AllSearchableJournalTypes,
+                        (x) => x.EntryType == JournalTypeEnum.FSSSignalDiscovered ? (x.journalEntry as JournalFSSSignalDiscovered).IsSignalsOfSystem(sys.SystemAddress) : x.System.SystemAddress == sys.SystemAddress);
 
                     if (helist.Count > 0)        // no point executing if nothing in helist
                     {
