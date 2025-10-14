@@ -161,13 +161,11 @@ namespace EDDiscovery.UserControls.Search
 
                 if (textpopout)
                 {
+                    text = cell.Value as string;
+
                     if (tooltippopout)
                     {
-                        text = cell.ToolTipText.HasChars() ? cell.ToolTipText : cell.Value as string;
-                    }
-                    else
-                    {
-                        text = cell.Value as string;
+                        text += cell.ToolTipText.HasChars() ? (Environment.NewLine + cell.ToolTipText) : "";
                     }
                 }
                 else if ( tooltippopout)

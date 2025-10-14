@@ -300,7 +300,10 @@ namespace EDDiscovery.UserControls
             if (obj is EliteDangerousCore.UIEvents.UIDestination)
             {
                 var j = (EliteDangerousCore.UIEvents.UIDestination)obj;
-                if (lastdestination == null || j.Name != lastdestination.Name || j.BodyID != lastdestination.BodyID)        // if name or bodyid has changed
+                
+                // if name or bodyid has changed, for the better or for worse (null)
+
+                if (lastdestination == null || j.Name != lastdestination.Name || j.BodyID != lastdestination.BodyID)        
                 {
                     //System.Diagnostics.Debug.WriteLine($"Sysinfo - Destination got");
                     lastdestination = j;
@@ -579,7 +582,7 @@ namespace EDDiscovery.UserControls
                     //bool sysinfoincurrentsystem = he.System.Name == (discoveryform.history.LastOrDefault?.System.Name ?? "xx");
 
                     // decide on time which one to present..  if lastdestination is newer..
-                    if (lastdestination.Name != null && (lasttarget == null || lastdestination.EventTimeUTC >= lasttarget.EventTimeUTC))
+                    if (lastdestination?.Name != null && (lasttarget == null || lastdestination.EventTimeUTC >= lasttarget.EventTimeUTC))
                     {
                         if (lastdestination.BodyID == 0)    // if its a star..
                         {

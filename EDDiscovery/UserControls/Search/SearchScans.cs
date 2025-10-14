@@ -97,10 +97,9 @@ namespace EDDiscovery.UserControls
             scanSortControl.SortDirectionClicked += (chk) => { if (scanSortControl.Condition.HasChars()) SortGridBySortCriteria(); };
 
             dataGridView.Init(DiscoveryForm);
-            dataGridView.Columns[4].Tag = "TooltipPopOut;TextPopOut";
-            dataGridView.Columns[5].Tag = "TextPopOut";  // these two double click are text popouts
+            dataGridView.Columns[5].Tag = dataGridView.Columns[6].Tag = dataGridView.Columns[7].Tag = dataGridView.Columns[8].Tag = dataGridView.Columns[9].Tag = "TooltipPopOut;TextPopOut";
 
-            dataGridView.UserChangedColumnVisibility += ChangeColumnVisibility;
+            //dataGridView.UserChangedColumnVisibility += ChangeColumnVisibility;
 
             UpdateComboBoxSearches();
             comboBoxSearches.Text = "Select".Tx();
@@ -251,7 +250,7 @@ namespace EDDiscovery.UserControls
 
                 var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
-                lastresultlog = await HistoryListQueries.Find(helist, results, "", cond, defaultvars, DiscoveryForm.History.StarScan, extCheckBoxDebug.Checked);
+                lastresultlog = await HistoryListQueries.Find(helist, results, "ScanSearch", cond, defaultvars, DiscoveryForm.History.StarScan, extCheckBoxDebug.Checked);
 
                 if (IsClosed)       // may be closing during async process
                     return;
@@ -282,8 +281,8 @@ namespace EDDiscovery.UserControls
                     object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
                                             he.System.Name,
                                             name,
-                                            he.System.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##"),
-                                            (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
+                                            he.System.HasCoordinate ? (he.System.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##")) : "",
+                                            (cursystem != null && he.System.HasCoordinate)? cursystem.Distance(sys).ToString("0.#") : "",
                                             info,  
                                             pinfo,
                                             ppinfo,
@@ -294,7 +293,7 @@ namespace EDDiscovery.UserControls
                     int row = dataGridView.Rows.Add(rowobj);
                     dataGridView.Rows[row].Tag = he;
                     dataGridView.Rows[row].Cells[0].Tag = kvp.Value;
-                    dataGridView.Rows[row].Cells[4].ToolTipText = infotooltip;
+                    dataGridView.Rows[row].Cells[5].ToolTipText = infotooltip;
                 }
 
                 if ( results.Count > max )
@@ -514,18 +513,19 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void ChangeColumnVisibility(int c)
-        {
-            if (c >= ColumnParent.Index)    // parent onwards is optional
-            {
-                DataGridViewColumn col = dataGridView.Columns[c];
-                if (col.Visible == true)    // if gone visible, then we need to clear the grid and make the user refind
-                {
-                    labelCount.Visible = false;
-                    dataGridView.Rows.Clear();
-                }
-            }
-        }
+        // disabled - no idea why this was needed
+        //private void ChangeColumnVisibility(int c)
+        //{
+        //    if (c >= ColumnParent.Index)    // parent onwards is optional
+        //    {
+        //        DataGridViewColumn col = dataGridView.Columns[c];
+        //        if (col.Visible == true)    // if gone visible, then we need to clear the grid and make the user refind
+        //        {
+        //            labelCount.Visible = false;
+        //            dataGridView.Rows.Clear();
+        //        }
+        //    }
+        //}
 
         private void dataGridView_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {

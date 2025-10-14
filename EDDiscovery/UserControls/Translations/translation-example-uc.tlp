@@ -515,6 +515,7 @@ CFD4E874046B93: "Road to Riches" @
 AB2A9F0D8D787B: "Earth Likes" @
 0077D22826A77F: "Trade Router" @
 0CF5E327910E74: "Fleet Carrier" @
+7F0950D59B1A34: "Squadron Carrier" @
 B12CDD63114BA4: "Galaxy Plotter" @
 B364AA8B4033FF: "Exo Mastery" @
 07AB47C5737BA1: "Use Permit Systems" @
@@ -1017,6 +1018,7 @@ D9273536780112: "Control Outlining" @
 03C54D66F2DA56: "Next start/stop marker is hidden" @
 905A92084F2F46: "No start/stop marker found below" @
 A89F26DDCFE091: "Entry filtered out of grid" @
+A070027FDED89B: "Colour events by type" @
 
 SECTION UserControlCaptainsLog
 

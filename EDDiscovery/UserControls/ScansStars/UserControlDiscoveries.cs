@@ -67,8 +67,7 @@ namespace EDDiscovery.UserControls
             PopulateCtrlList();
 
             dataGridView.Init(DiscoveryForm);
-            dataGridView.Columns[4].Tag = "TooltipPopOut;TextPopOut";
-            dataGridView.Columns[5].Tag = "TextPopOut";       // these two double click are text popouts
+            dataGridView.Columns[4].Tag = dataGridView.Columns[5].Tag = dataGridView.Columns[6].Tag = dataGridView.Columns[7].Tag = dataGridView.Columns[8].Tag = "TooltipPopOut;TextPopOut";
 
             dataGridView.UserChangedColumnVisibility += ChangeColumnVisibility;
 
