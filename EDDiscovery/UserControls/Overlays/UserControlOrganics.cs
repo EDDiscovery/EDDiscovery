@@ -198,7 +198,7 @@ namespace EDDiscovery.UserControls
 
             pictureBox.ClearImageList();
 
-            if (lasthe != null && lasthe.Status.HasBodyID && lasthe.Status.BodyType == "Planet")
+            if (lasthe != null && lasthe.Status.HasBodyID && lasthe.Status.BodyType == BodyDefinitions.BodyType.Planet)
             {
                 StarScan.SystemNode data = DiscoveryForm.History.StarScan.FindSystemSynchronous(lasthe.System);
 

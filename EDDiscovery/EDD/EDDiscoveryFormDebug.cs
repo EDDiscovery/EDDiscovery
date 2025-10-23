@@ -32,10 +32,8 @@ namespace EDDiscovery
             EngineeringUnitTest.UnitTest();
             //EngineeringUnitTest.ScanLoadouts();
 
-     //       FileHelpers.ReadWriteTextFile(@"c:\code\chatconsole.act", @"c:\code\o1.act");//, outlf:"\n");
-     //       FileHelpers.ReadWriteTextFile(@"c:\code\EDDCanonnPanel.act", @"c:\code\o2.act");//, outlf:"\n");
-
-
+            //       FileHelpers.ReadWriteTextFile(@"c:\code\chatconsole.act", @"c:\code\o1.act");//, outlf:"\n");
+            //       FileHelpers.ReadWriteTextFile(@"c:\code\EDDCanonnPanel.act", @"c:\code\o2.act");//, outlf:"\n");
         }
 
         public void PostInitDebug()
@@ -110,6 +108,14 @@ namespace EDDiscovery
             }
 
             //FactionDefinitions.IDSTx();
+
+            // DEBUGGING starscan2
+            string file = @"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\Prieluia QI-Q c19-31.json";
+            string outputdir = @"c:\code";
+            EliteDangerousCore.StarScan2.StarScan.ProcessFromFile(file, outputdir, 800);
+
+
+
         }
 
         public void PostShownDebug()

@@ -180,7 +180,9 @@ namespace EDDiscovery.UserControls
             //   showing_system = new SystemClass("Borann");
             //showing_system = new SystemClass("Skaudai AM-B d14-138");
             //showing_system = new SystemClass("Eorgh Prou JH-V e2-1979");
-           //  showing_system = new SystemClass("HYPAA FLYIAE CB-O D6-8");
+            // showing_system = new SystemClass("HYPAA FLYIAE CB-O D6-8");
+            //showing_system = new SystemClass("Scheau Prao ME-M c22-21");
+            showing_system = new SystemClass("Epsilon Indi");
 
 #if PLAYTHRU
             StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, false, byname: true) : null;

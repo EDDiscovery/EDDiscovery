@@ -689,7 +689,7 @@ namespace EDDiscovery.UserControls
 
                     if (helist.Count > 0)        // no point executing if nothing in helist
                     {
-                        foreach (var h in helist) { if (h.journalEntry is JournalFSSSignalDiscovered sd) { System.Diagnostics.Debug.WriteLine($"FSS Signal {sd.Signals[0].SystemAddress} vs {sys.SystemAddress}, {sd.GetDetailed(null)}"); } }
+                        //foreach (var h in helist) { if (h.journalEntry is JournalFSSSignalDiscovered sd) { System.Diagnostics.Debug.WriteLine($"FSS Signal {sd.Signals[0].SystemAddress} vs {sys.SystemAddress}, {sd.GetDetailed(null)}"); } }
 
                         var defaultvars = new BaseUtils.Variables();
                         defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10, ensuredoublerep: true);
