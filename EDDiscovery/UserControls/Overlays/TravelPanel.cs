@@ -148,80 +148,71 @@ namespace EDDiscovery.UserControls
 
             if (uistatus.DestinationName.HasChars() && uistatus.DestinationSystemAddress.HasValue)
             {
-                ISystem sys = DiscoveryForm.History.StarScan.FindByAddressWithCache(uistatus.DestinationSystemAddress.Value, WebExternalDataLookup.SpanshThenEDSM);
+                var uis = uistatus;     // async below may result in a change to this, protect, found during debugging! This async stuff is evil
 
-                if (sys != null)
+                // lookup system..
+
+                ISystem sys = DiscoveryForm.History.StarScan2.GetISystemWithCache(uis.DestinationSystemAddress.Value, WebExternalDataLookup.SpanshThenEDSM);
+                    
+                if (sys != null)    // we have it, find info on system
                 {
-                    var ss = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, WebExternalDataLookup.Spansh);
+                    var ss = await DiscoveryForm.History.StarScan2.FindSystemAsync(sys, WebExternalDataLookup.Spansh);
+
                     if (IsClosed)
                         return;
 
-                    System.Diagnostics.Debug.WriteLine($"Travel Panel Dest found system  {sys.Name} {uistatus.DestinationSystemAddress} -> {ss?.System.Name}");
+                    System.Diagnostics.Debug.WriteLine($"Travel Panel Dest found system  {sys.Name} {uis.DestinationSystemAddress} -> {ss?.System.Name}");
 
-                    if (uistatus.DestinationBodyID == 0)    // if its a star..
+                    //  body name destination or $POI $MULTIPLAYER etc
+                    // Now (oct 25) its localised, but if not, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
+
+                    string destname = uis.DestinationName_Localised.Alt(JournalFieldNaming.SignalBodyName(uis.DestinationName));
+
+                    System.Diagnostics.Debug.WriteLine($".. Travel Destination non star {destname}");
+
+                    // with a found system, see if we can get the body name so we know what body its on (defensive -1 in case bodyid = null)
+                    if (ss != null)
                     {
-                        System.Diagnostics.Debug.WriteLine($".. Travel Destination select star {sys.Name} {uistatus.DestinationSystemAddress}");
-                    }
-                    else
-                    {
-                        // else body name destination or $POI $MULTIPLAYER etc
-                        // Now (oct 25) its localised, but if not, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
+                        var sd = new EliteDangerousCore.StarScan2.SystemDisplay();
+                        sd.SetSize(48);
+                        sd.Font = this.Font;
+                        sd.TextBackColor = Color.Transparent;
+                        ExtPictureBox pb = new ExtPictureBox();
+                        sd.DrawSystemRender(pb, 800, ss);
 
-                        string destname = uistatus.DestinationName_Localised.Alt(JournalFieldNaming.SignalBodyName(uistatus.DestinationName));
+                        //System.Diagnostics.Debug.Write("Dumping images");
+                        //pb.Image.Save(@"c:\code\dump\systemdisplay.png");
 
-                        System.Diagnostics.Debug.WriteLine($".. Travel Destination non star {destname}");
-
-                        // with a found system, see if we can get the body name so we know what body its on (defensive -1 in case bodyid = null)
-                        if (ss != null)
+                        int count = 0;
+                        foreach (var bodys in ss.Bodies())
                         {
-                            SystemDisplay sd = new SystemDisplay();
-                            sd.SetSize(48);
-                            sd.Font = this.Font;
-                            sd.BackColor = Color.Transparent;
-                            ExtPictureBox pb = new ExtPictureBox();
-                            sd.DrawSystemRender(pb, 800, ss);
-
-                            System.Diagnostics.Debug.Write("Dumping images");
-                            pb.Image.Save(@"c:\code\dump\systemdisplay.png");
-
-                            var bodylist = ss.Bodies().ToList();
-                            int count = 0;
-                            foreach (var bodys in bodylist)
+                            sd.DrawSingleObject( pb, bodys);
+                            if (pb.Image != null)
                             {
-                                sd.DrawSingleObject( pb, ss, bodys);
-                                if (pb.Image != null)
-                                {
-                                    pb.Image.Save($"c:\\code\\dump\\image_{count}_{bodys.BodyDesignator}.png");
-                                    System.Diagnostics.Debug.WriteLine($"dump {count} {bodys.BodyDesignator} parent `{bodys.Parent?.BodyDesignator}` scan data `{bodys.ScanData?.BodyName}`");
-                                    count++;
-                                }
+                                //pb.Image.Save($"c:\\code\\dump\\image_{count}_{bodys.Name()}.png");
+                                System.Diagnostics.Debug.WriteLine($"dump {count} {bodys.OwnName} parent `{bodys.Parent?.OwnName}` scan data `{bodys.Scan?.BodyName}`");
+                                count++;
                             }
-                            System.Diagnostics.Debug.Write("End dump");
+                        }
+                        System.Diagnostics.Debug.Write("End dump");
 
+                        // if we find it, we are targetting a body (note orbiting stations are not added to the nodesbyid even though they get bodyids)
 
+                        EliteDangerousCore.StarScan2.BodyNode body = uis.DestinationBodyID.HasValue ? ss.FindBody(uis.DestinationBodyID.Value) : null;
+                        if (body != null)
+                        {
+                            System.Diagnostics.Debug.WriteLine($".. body found  {body.OwnName} {body.CanonicalName}");
 
-
-
-
-                            // if we find it, we are targetting a body (note orbiting stations are not added to the nodesbyid even though they get bodyids)
-
-                            ss.NodesByID.TryGetValue(uistatus.DestinationBodyID ?? -1, out StarScan.ScanNode body);     // may be null if Dest ID not found
-
-                            if (body != null)
+                            if (body.Scan != null)
                             {
-                                System.Diagnostics.Debug.WriteLine($".. body found  {body.OwnName} {body.BodyName} {body.BodyDesignator}");
-
-                                if (body.ScanData != null)
-                                {
-                                    System.Diagnostics.Debug.WriteLine($".. body dist {body.ScanData.DistanceFromArrivalLS.ToString("N0")} ls");
-                                }
+                                System.Diagnostics.Debug.WriteLine($".. body dist {body.Scan.DistanceFromArrivalLS.ToString("N0")} ls");
                             }
+                        }
 
-                            IBodyFeature feature = ss.FindFeature(destname);
-                            if (feature != null)
-                            {
-                                System.Diagnostics.Debug.WriteLine($".. feature found {feature.Name} {feature.Body} {feature.BodyType}");
-                            }
+                        IBodyFeature feature = ss.GetFeature(destname);
+                        if (feature != null)
+                        {
+                            System.Diagnostics.Debug.WriteLine($".. feature found {feature.Name} {feature.BodyName} {feature.BodyType}");
                         }
                     }
                 }

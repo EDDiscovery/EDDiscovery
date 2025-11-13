@@ -19,7 +19,9 @@ using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using EliteDangerousCore.Spansh;
 using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -107,15 +109,18 @@ namespace EDDiscovery
                 File.WriteAllText(fn, s);
             }
 
-            //FactionDefinitions.IDSTx();
+            FactionDefinitions.IDSTx();
 
-            // DEBUGGING starscan2
-            string file = @"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\Prieluia QI-Q c19-31.json";
-            string outputdir = @"c:\code";
-            EliteDangerousCore.StarScan2.StarScan.ProcessFromFile(file, outputdir, 800);
+            //string system = "Shrogaei YG-L d8-5499";
+            //system = "LHS w3447";
+            //string system = "Shumbeia KD-I d10-15";
+            //string system = "Dryeae Brai ZR-A d14-24";
+            // string system = "Leesti";
+            // EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests", @"c:\code\AA");
+        //     string system = "MY Apodis";
+         //    EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests", @"c:\code\AA");
 
-
-
+            //   EliteDangerousCore.StarScan2.Tests.TestScans();
         }
 
         public void PostShownDebug()
@@ -132,12 +137,17 @@ namespace EDDiscovery
             //JournalEntry.WriteJournals(new DateTime(2021, 1, 10), new DateTime(2021, 1, 12), @"c:\code\dump.json");
 
             // JournalEntry.WriteJournals(35,new DateTime(2014, 1, 1), new DateTime(2099, 1, 1), @"c:\code\logs\lens larque");
-
-
         }
 
         public void PostHistoryLoadDebug()  // on UI thread
         {
+           // History.StarScan2.DrawAllSystemsToFolder(null);
+
+            // Dump a systems entried to a debug file. Then use StarScan2.ProcessFromFile / Tests file to check the star scanner
+            //string sysname = "MY Apodis";
+            //var mhs = History.EntryOrder().Where(x => (x.System.Name.EqualsIIC(sysname)) && (x.journalEntry is IStarScan || x.journalEntry is IBodyFeature || x.journalEntry is JournalFSDJump)).ToList();
+            //var jsonlines = mhs.Select(x => x.journalEntry.GetJsonString());
+            //BaseUtils.FileHelpers.TryWriteAllLinesToFile($@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{sysname}.json", jsonlines.ToArray());
         }
 
 

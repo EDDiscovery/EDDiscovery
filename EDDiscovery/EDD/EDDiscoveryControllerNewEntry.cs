@@ -17,6 +17,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
+using BaseUtils;
 using EliteDangerousCore;
 
 namespace EDDiscovery
@@ -97,6 +98,9 @@ namespace EDDiscovery
                 OnNewJournalEntryUnfiltered?.Invoke(current);         // Called before any removal or merging, so this is the raw journal entry
 
                 HistoryEntry historyentry = History.MakeHistoryEntry(current);
+                
+                History.StarScan2.AssignPending();
+
                 OnNewHistoryEntryUnfiltered?.Invoke(historyentry);     // this is our raw unfiltered history entry
 
                 if (JournalEventsManagement.DiscardDynamicJournalRecordsFromHistory(current) ||     // we may want to discard this dynamic record
@@ -203,9 +207,9 @@ namespace EDDiscovery
                     History.GetLast?.UpdateShipInformation(History.ShipInformationList.CurrentShip);    // and make the last entry have this updated info.
             }
 
-            if (u is EliteDangerousCore.UIEvents.UIOverallStatus)
+            if (u is EliteDangerousCore.UIEvents.UIOverallStatus uos)
             {
-                UIOverallStatus = u as EliteDangerousCore.UIEvents.UIOverallStatus;
+                UIOverallStatus = uos;
             }
 
             OnNewUIEvent?.Invoke(u);

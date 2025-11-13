@@ -23,7 +23,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class ScanDisplayUserControl : UserControl
     {
-        public SystemDisplay SystemDisplay { get; private set; }
+        public EliteDangerousCore.StarScan2.SystemDisplay SystemDisplay { get; private set; }
 
         public int WidthAvailable { get { return this.Width - vScrollBarCustom.Width; } }   // available display width
 
@@ -31,7 +31,7 @@ namespace EDDiscovery.UserControls
         public ScanDisplayUserControl()
         {
             InitializeComponent();
-            SystemDisplay = new SystemDisplay();
+            SystemDisplay = new EliteDangerousCore.StarScan2.SystemDisplay();
             this.AutoScaleMode = AutoScaleMode.None;            // we are dealing with graphics.. lets turn off dialog scaling.
             rtbNodeInfo.Visible = false;
             toolTip.ShowAlways = true;
@@ -48,12 +48,12 @@ namespace EDDiscovery.UserControls
 
         // draw scannode (may be null), 
         // curmats may be null
-        public void DrawSystem(StarScan.SystemNode systemnode, List<MaterialCommodityMicroResource> historicmats, 
+        public void DrawSystem(EliteDangerousCore.StarScan2.SystemNode systemnode, List<MaterialCommodityMicroResource> historicmats, 
                                     List<MaterialCommodityMicroResource> curmats,string opttext = null, string[] filter=  null ) 
         {
             HideInfo();
-            SystemDisplay.BackColor = this.BackColor;
-            SystemDisplay.LabelColor = ExtendedControls.Theme.Current.LabelColor;
+            SystemDisplay.TextBackColor = this.BackColor;
+            SystemDisplay.TextForeColor = ExtendedControls.Theme.Current.LabelColor;
             SystemDisplay.DrawSystemRender(imagebox, WidthAvailable, systemnode, historicmats, curmats, opttext, filter);
             imagebox.Render();      // replaces image..
         }

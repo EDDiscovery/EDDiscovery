@@ -70,7 +70,7 @@ namespace EDDiscovery.UserControls
                 dataGridView.RowHeadersDefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridBorderBack;
 
             //System.Diagnostics.Debug.WriteLine($"Surface UC Lookup for planets '{systemName}'");
-            var lookup = await helist.StarScan.FindSystemAsync(new SystemClass(systemName), EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM);
+            var lookup = await helist.StarScan2.FindSystemAsync(new SystemClass(systemName), EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM);
 
             if (IsClosed())
                 return;
@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
             BodyName.Items.Clear();
 
             // lets present all, even if not landable, as you may want a whole planet bookmark
-            var bodies = lookup?.Bodies()?.Where(c=>c.NodeType==StarScan.ScanNodeType.planetmoonsubstar).Select(b => b.BodyDesignator.ReplaceIfStartsWith(systemName) + (b.BodyName != null ? " " + b.BodyName : ""));
+            var bodies = lookup?.Bodies(b=>b.IsStarOrPlanet).Select(b => b.Name());
 
             foreach (string s in bodies.EmptyIfNull())
             {

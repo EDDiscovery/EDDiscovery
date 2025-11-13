@@ -105,19 +105,19 @@ namespace EDDiscovery.UserControls
                             var ri = scanof.FindRing(entry.BodyName);
                             ringtype = ri.RingClassID.ToString().SplitCapsWordFull();
 
-                            if (ri.RingClassID == JournalScan.StarPlanetRing.RingClassEnum.Metallic)
+                            if (ri.RingClassID == StarPlanetRing.RingClassEnum.Metallic)
                             {
                                 showicy = showrocky = showmr = false;
                             }
-                            else if (ri.RingClassID == JournalScan.StarPlanetRing.RingClassEnum.MetalRich)
+                            else if (ri.RingClassID == StarPlanetRing.RingClassEnum.MetalRich)
                             {
                                 showicy = showrocky = showmetalic = false;
                             }
-                            else if (ri.RingClassID == JournalScan.StarPlanetRing.RingClassEnum.Rocky)
+                            else if (ri.RingClassID == StarPlanetRing.RingClassEnum.Rocky)
                             {
                                 showicy = showmetalic = showmr = false;
                             }
-                            else if (ri.RingClassID == JournalScan.StarPlanetRing.RingClassEnum.Icy)
+                            else if (ri.RingClassID == StarPlanetRing.RingClassEnum.Icy)
                             {
                                 showrocky = showmetalic = showmr = false;
                             }

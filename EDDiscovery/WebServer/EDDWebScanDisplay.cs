@@ -69,13 +69,13 @@ namespace EDDiscovery.WebServer
                     var lookup = checkEDSM ? (checkSPANSH ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : WebExternalDataLookup.EDSM) :
                                 checkSPANSH ? EliteDangerousCore.WebExternalDataLookup.Spansh : EliteDangerousCore.WebExternalDataLookup.None;
 
-                    StarScan.SystemNode sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, lookup);
+                    var sn = hl.StarScan2.FindSystemSynchronous(hl.EntryOrder()[entry].System, lookup);
 
                     if (sn != null)
                     {
                         int starsize = (request.QueryString["starsize"] ?? "48").InvariantParseInt(48);
                         int width = (request.QueryString["width"] ?? "800").InvariantParseInt(800);
-                        SystemDisplay sd = new SystemDisplay();
+                        var sd = new EliteDangerousCore.StarScan2.SystemDisplay();
                         sd.ShowMoons = (request.QueryString["showmoons"] ?? "true").InvariantParseBool(true);
                         sd.ShowOverlays = (request.QueryString["showbodyicons"] ?? "true").InvariantParseBool(true);
                         sd.ShowMaterials = (request.QueryString["showmaterials"] ?? "true").InvariantParseBool(true);

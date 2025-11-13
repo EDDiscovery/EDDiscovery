@@ -213,7 +213,7 @@ namespace EDDiscovery.UserControls
             foreach (var searchname in searchesactive)
             {
                 // execute the search, do not delete duplicate scan results..
-                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan, false); 
+                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan2, false); 
                 
                 //System.Threading.Thread.Sleep(1000);
                 if (IsClosed)       // may be closing during async process

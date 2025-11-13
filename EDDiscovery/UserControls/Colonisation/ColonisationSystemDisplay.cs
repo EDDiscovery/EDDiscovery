@@ -50,11 +50,11 @@ namespace EDDiscovery.UserControls.Colonisation
             var filterbut = scanDisplayBodyFiltersButton;
             var configbut = scanDisplayConfigureButton;
 
-            StarScan.SystemNode nodedata = null;
+            EliteDangerousCore.StarScan2.SystemNode nodedata = null;
 
             edsmSpanshButton.ValueChanged += (s, e) =>
             {
-                nodedata = hl.StarScan.FindSystemSynchronous(SystemData.System, edsmSpanshButton.WebLookup);    // look up system, unfort must be sync due to limitations in c#
+                nodedata = hl.StarScan2.FindSystemSynchronous(SystemData.System, edsmSpanshButton.WebLookup);    // look up system, unfort must be sync due to limitations in c#
                 sd.SystemDisplay.ShowWebBodies = edsmSpanshButton.WebLookup != WebExternalDataLookup.None;
                 sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
             };
@@ -104,7 +104,7 @@ namespace EDDiscovery.UserControls.Colonisation
 
         public async void UpdateSystemDiagramAsync(HistoryList hl)
         {
-            StarScan.SystemNode nodedata = await hl.StarScan.FindSystemAsync(SystemData.System, edsmSpanshButton.WebLookup);    // look up system async
+            EliteDangerousCore.StarScan2.SystemNode nodedata = await hl.StarScan2.FindSystemAsync(SystemData.System, edsmSpanshButton.WebLookup);    // look up system async
             scanDisplayUserControl.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: scanDisplayBodyFiltersButton.BodyFilters);
         }
 

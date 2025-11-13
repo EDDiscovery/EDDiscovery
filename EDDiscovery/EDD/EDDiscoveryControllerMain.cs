@@ -210,8 +210,6 @@ namespace EDDiscovery
                 desigmapfile = Path.Combine(Path.GetDirectoryName(System.Windows.Forms.Application.ExecutablePath), "bodydesignations.csv");
             }
 
-            BodyDesignations.LoadBodyDesignationMap(desigmapfile);
-
             ReportSyncProgress("");
 
             if (EDDOptions.Instance.CheckGithubNotifications)      // not normal in debug, due to git hub choking - same start up behaviour for notifications

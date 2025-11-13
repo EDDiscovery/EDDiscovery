@@ -79,17 +79,20 @@ namespace EDDiscovery.UserControls
         private void OnNewFileChanged(object sender, FileSystemEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine($"Spansh new file changed {e.FullPath}");
-            CheckFile(e.FullPath);
+            string filename = Path.IsPathRooted(e.Name) ? e.Name : e.FullPath; // Work around https://github.com/mono/mono/issues/21677
+            CheckFile(filename);
         }
         private void OnNewFileCreated(object sender, FileSystemEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine($"Spansh new file created {e.FullPath}");
-            CheckFile(e.FullPath);
+            string filename = Path.IsPathRooted(e.Name) ? e.Name : e.FullPath; // Work around https://github.com/mono/mono/issues/21677
+            CheckFile(filename);
         }
         private void OnNewFileRenamed(object sender, RenamedEventArgs e)        // Some seem to do renames of downloaded temp file
         {
             System.Diagnostics.Debug.WriteLine($"Spansh new file renamed {e.FullPath}");
-            CheckFile(e.FullPath);
+            string filename = Path.IsPathRooted(e.Name) ? e.Name : e.FullPath; // Work around https://github.com/mono/mono/issues/21677
+            CheckFile(filename);
         }
 
         // this is in another thread

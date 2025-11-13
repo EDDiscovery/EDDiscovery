@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2021 EDDiscovery development team
+ * Copyright 2016 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using BaseUtils;
@@ -326,52 +324,51 @@ namespace EDDiscovery.UserControls
 
                         if (zoneson && last != null)
                         {
-                            StarScan scan = hl.StarScan;
-
-                            StarScan.SystemNode sn = await scan.FindSystemAsync(last.System, EliteDangerousCore.WebExternalDataLookup.All);    // web lookup
+                            var scan = hl.StarScan2;
+                            var sn = await scan.FindSystemAsync(last.System, EliteDangerousCore.WebExternalDataLookup.All);    // web lookup
+                            var star = sn?.GetStarsScanned().FirstOrDefault();
 
                             StringBuilder sb = new StringBuilder();
 
-                            if (sn != null && sn.StarNodes.Count > 0)   // if we have a star node
+                            if (star != null )   // if we have a star node
                             {   
-                                JournalScan sd = sn.StarNodes.Values[0].ScanData;       // may be null, defend
-                                JournalScan.HabZones hz = sd?.GetHabZones();            // defend against sd being null
+                                HabZones hz = star.Scan.GetHabZones();            
 
                                 if (hz != null)     // defend against missing data
                                 {
                                     if (Config(Configuration.showHabInformation))
                                     {
-                                        sd.HabZoneText_Hab(hz, sb);
+                                        hz.HabZoneText_Hab(sb);
                                         sb.AppendCR();
                                     }
 
                                     if (Config(Configuration.showMetalRichZone))
                                     {
-                                        sd.HabZoneText_MRP(hz, sb);
+                                        hz.HabZoneText_MRP(sb);
                                         sb.AppendCR();
                                     }
 
                                     if (Config(Configuration.showWaterWrldZone))
                                     {
-                                        sd.HabZoneText_WW(hz, sb);
+                                        hz.HabZoneText_WW(sb);
                                         sb.AppendCR();
                                     }
 
                                     if (Config(Configuration.showEarthLikeZone))
                                     {
-                                        sd.HabZoneText_EL(hz, sb);
+                                        hz.HabZoneText_EL(sb);
                                         sb.AppendCR();
                                     }
 
                                     if (Config(Configuration.showAmmonWrldZone))
                                     {
-                                        sd.HabZoneText_AW(hz, sb);
+                                        hz.HabZoneText_AW(sb);
                                         sb.AppendCR();
                                     }
 
                                     if (Config(Configuration.showIcyPlanetZone))
                                     {
-                                        sd.HabZoneText_ZIP(hz, sb);
+                                        hz.HabZoneText_ZIP(sb);
                                         sb.AppendCR();
                                     }
                                 }
@@ -853,7 +850,7 @@ namespace EDDiscovery.UserControls
         {
             if ( IsSurfaceScanOn )
             {
-                scantext = scan.DisplayString(historicmatlist: DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast());
+                scantext = scan.DisplayText(historicmatlist: DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast());
                 Display(current_historylist);
                 SetSurfaceScanBehaviour();  // set up timers etc.
             }

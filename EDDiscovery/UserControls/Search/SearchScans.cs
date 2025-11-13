@@ -250,7 +250,7 @@ namespace EDDiscovery.UserControls
 
                 var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
-                lastresultlog = await HistoryListQueries.Find(helist, results, "ScanSearch", cond, defaultvars, DiscoveryForm.History.StarScan, extCheckBoxDebug.Checked);
+                lastresultlog = await HistoryListQueries.Find(helist, results, "ScanSearch", cond, defaultvars, DiscoveryForm.History.StarScan2, extCheckBoxDebug.Checked);
 
                 if (IsClosed)       // may be closing during async process
                     return;
@@ -258,10 +258,6 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Debug.WriteLine($"Find complete {sw.ElapsedMilliseconds} on {helist.Count} results {results.Count}");
 
                 ISystem cursystem = DiscoveryForm.History.CurrentSystem();        // could be null
-
-                if (scanSortControl.Condition.HasChars())       // before we present, and we have a sort condition, update the sort vars
-                {
-                }
 
                 int max = 10000;
 
@@ -471,8 +467,8 @@ namespace EDDiscovery.UserControls
 
                         values.AddPropertiesFieldsOfClass(leftscan, "left.", ignoretypes, 5, sorteval[0], ensuredoublerep: true, classsepar: ".");
                         values.AddPropertiesFieldsOfClass(rightscan, "right.", ignoretypes, 5, sorteval[1], ensuredoublerep: true, classsepar: ".");
-                        values["left.Child.Count"] = ((lefthe?.ScanNode?.Children?.Count ?? 0)).ToStringInvariant();      // count of children
-                        values["right.Child.Count"] = ((righthe?.ScanNode?.Children?.Count ?? 0)).ToStringInvariant();      // count of children
+                        values["left.Child.Count"] = ((lefthe?.BodyNode?.ChildBodies.Count ?? 0)).ToStringInvariant();      // count of children
+                        values["right.Child.Count"] = ((righthe?.BodyNode?.ChildBodies.Count ?? 0)).ToStringInvariant();      // count of children
 
                         evl.ReturnSymbolValue = values;      // point evaluator at this set of values
                         object res = evl.Evaluate(condition);  // eval

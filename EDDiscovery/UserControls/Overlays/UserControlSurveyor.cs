@@ -611,7 +611,7 @@ namespace EDDiscovery.UserControls
 
             if (sys != null)
             {
-                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);        // get data with EDSM
+                var systemnode = await DiscoveryForm.History.StarScan2.FindSystemAsync(sys, edsmSpanshButton.WebLookup);        // get data with EDSM
                 if (IsClosed)   // may close during await..
                     return;
 
@@ -623,7 +623,7 @@ namespace EDDiscovery.UserControls
 
                 if (systemnode != null)
                 {
-                    int scanned = systemnode.StarPlanetsWithData(edsmSpanshButton.IsAnySet);
+                    int scanned = systemnode.StarPlanetsScanned(edsmSpanshButton.IsAnySet);
                     int clusters = systemnode.BeltClusters();
 
                     if (scanned > 0)
@@ -703,7 +703,7 @@ namespace EDDiscovery.UserControls
                         foreach (var searchname in allsearches)
                         {
                             // await is horrible, anything can happen, even closing
-                            await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan, false); // execute the searches
+                            await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan2, false); // execute the searches
 
                             if (IsClosed)       // if we was ordered to close, abore
                                 return;
@@ -721,7 +721,7 @@ namespace EDDiscovery.UserControls
 
                 System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor Find System Async {sys.Name}");
 
-                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);       
+                var systemnode = await DiscoveryForm.History.StarScan2.FindSystemAsync(sys, edsmSpanshButton.WebLookup);       
                 if (IsClosed)   // may close during await..
                     return;
 
@@ -742,9 +742,9 @@ namespace EDDiscovery.UserControls
                 {
                     System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor Process node {sys.Name}");
 
-                    foreach (StarScan.ScanNode sn in systemnode.Bodies().EmptyIfNull().Where(x => x.ScanData != null))        // only nodes with scan data can be treated here
+                    foreach (var sn in systemnode.Bodies(x=>x.Scan!=null))        // only nodes with scan data can be treated here
                     {
-                        var sd = sn.ScanData;
+                        var sd = sn.Scan;
 
                         // compute some properties of the object
 
@@ -805,7 +805,7 @@ namespace EDDiscovery.UserControls
 
                         // compute if we want search results displayed
 
-                        searchresults.TryGetValue(sn.BodyDesignator, out List<HistoryListQueries.ResultEntry> searchresultfornode);     // will be null if not found
+                        searchresults.TryGetValue(sn.Name(), out List<HistoryListQueries.ResultEntry> searchresultfornode);     // will be null if not found
 
                         var surveyordisplay = searchresultfornode != null;      // if we have a search node, display
 
@@ -830,7 +830,7 @@ namespace EDDiscovery.UserControls
                                 matchedgeosignals || matchedbiosignals || matchedthargoidsignals || matchedguardiansignals || matchedhumansignals || matchedothersignals || matchedminingsignals ||
                                 (sd.IsStar && IsSet(CtrlList.allstars)) ||
                                 (sd.IsPlanet && IsSet(CtrlList.allplanets)) ||
-                                (sd.IsBeltCluster && IsSet(CtrlList.beltclusters));
+                                (sd.IsBeltClusterBody && IsSet(CtrlList.beltclusters));
 
                         }
 
@@ -883,7 +883,7 @@ namespace EDDiscovery.UserControls
 
                         // if we had a search result, remove it from the list as we have considered it above.  Even if we decided not to print it!
                         if ( searchresultfornode != null )
-                            searchresults.Remove(sn.BodyDesignator);
+                            searchresults.Remove(sn.Name());
 
                     }   // end for..
                 }       // end of system node look thru
@@ -921,7 +921,7 @@ namespace EDDiscovery.UserControls
                 {
                     string[] filter = fsssignalstodisplay.Split(';');
 
-                    var signallist = JournalFSSSignalDiscovered.SignalList(systemnode.FSSSignalList);
+                    var signallist = systemnode.FSSSignals;
 
                     // mirrors scandisplaynodes
 
