@@ -227,6 +227,7 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Synchronizuj z EDSM"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Wyślij starsze dane do Inara (poprzednie statki, przechowywane moduły)"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
+.adminToolStripMenuItem.moveAllEntriesFromAnotherCommanderToThisCommanderToolStripMenuItem: "Move all entries from another commander to this commander" @
 .addOnsToolStripMenuItem: "&Add-Ons" => "&Dodatki"
 .addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "&Zarządzaj Dodatkami"
 .addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "&Zarządzaj Plikami Akcji Dodatków"

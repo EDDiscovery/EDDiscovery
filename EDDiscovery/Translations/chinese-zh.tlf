@@ -227,6 +227,7 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "手动与EDSM同步获取星系数据"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "向Inara发送历史数据（之前的飞船，储存的飞船模块）"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" @
+.adminToolStripMenuItem.moveAllEntriesFromAnotherCommanderToThisCommanderToolStripMenuItem: "Move all entries from another commander to this commander" @
 .addOnsToolStripMenuItem: "&Add-Ons" => "插件(&A)"
 .addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "管理插件(&M)"
 .addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "编辑插件脚本文件(&E)"
