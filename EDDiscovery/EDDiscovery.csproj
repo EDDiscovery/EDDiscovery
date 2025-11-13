@@ -1299,6 +1299,8 @@
                         name = Path.GetFileName(filename);
                   }
 
+                  name = name.Replace('\\', '/');
+
                   Console.WriteLine(".. zip up '" + filename  +"' m:'" + metaname + "' -> '" + name + "'");
 
                   using (Stream fileStream = new FileStream(filename, FileMode.Open, FileAccess.Read))
