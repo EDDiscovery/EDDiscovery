@@ -406,13 +406,13 @@
     <Compile Include="UserControls\Overlays\UserControlOrganics.Designer.cs">
       <DependentUpon>UserControlOrganics.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ScansStars\RoutesExpeditions\UserControlExpeditionRoute.cs">
+    <Compile Include="UserControls\RoutesExpeditions\UserControlExpeditionRoute.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ScansStars\RoutesExpeditions\UserControlRouteSpansh.cs">
+    <Compile Include="UserControls\RoutesExpeditions\UserControlRouteSpansh.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ScansStars\RoutesExpeditions\UserControlRouteHelpers.cs">
+    <Compile Include="UserControls\RoutesExpeditions\UserControlRouteHelpers.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\ScansStars\UserControlDiscoveries.cs">
@@ -745,16 +745,16 @@
     <Compile Include="UserControls\Overlays\UserControlSysInfo.Designer.cs">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ScansStars\RoutesExpeditions\UserControlExpedition.cs">
+    <Compile Include="UserControls\RoutesExpeditions\UserControlExpedition.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ScansStars\RoutesExpeditions\UserControlExpedition.Designer.cs">
+    <Compile Include="UserControls\RoutesExpeditions\UserControlExpedition.Designer.cs">
       <DependentUpon>UserControlExpedition.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\ScansStars\RoutesExpeditions\UserControlRoute.cs">
+    <Compile Include="UserControls\RoutesExpeditions\UserControlRoute.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\ScansStars\RoutesExpeditions\UserControlRoute.Designer.cs">
+    <Compile Include="UserControls\RoutesExpeditions\UserControlRoute.Designer.cs">
       <DependentUpon>UserControlRoute.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\LogsBookmarks\UserControlCaptainsLog.cs">
@@ -1045,10 +1045,10 @@
     <EmbeddedResource Include="UserControls\Overlays\UserControlSysInfo.resx">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ScansStars\RoutesExpeditions\UserControlExpedition.resx">
+    <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlExpedition.resx">
       <DependentUpon>UserControlExpedition.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\ScansStars\RoutesExpeditions\UserControlRoute.resx">
+    <EmbeddedResource Include="UserControls\RoutesExpeditions\UserControlRoute.resx">
       <DependentUpon>UserControlRoute.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlCaptainsLog.resx">
