@@ -182,7 +182,7 @@ namespace EDDiscovery.UserControls
             //showing_system = new SystemClass("Eorgh Prou JH-V e2-1979");
             // showing_system = new SystemClass("HYPAA FLYIAE CB-O D6-8");
             //showing_system = new SystemClass("Scheau Prao ME-M c22-21");
-            //showing_system = new SystemClass("Epsilon Indi");
+          // showing_system = new SystemClass("Eorm Chruia OJ-Q e5-265");
 
             string control_text = "No System";
 
