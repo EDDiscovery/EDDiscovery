@@ -276,9 +276,9 @@ namespace EDDiscovery.UserControls
                         {
                             bdClass.Append(bn.Scan.PlanetTypeText);
 
-                            int level = bn.GetDepthIgnoreBC();
+                            int level = bn.GetNameDepth();
 
-                            if (level <= 1)      // top level planet
+                            if (level <= 1)      // top level 
                             {
                                 planets++;
 
