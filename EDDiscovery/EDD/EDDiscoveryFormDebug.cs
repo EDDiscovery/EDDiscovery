@@ -115,10 +115,12 @@ namespace EDDiscovery
             //system = "LHS w3447";
             //string system = "Shumbeia KD-I d10-15";
             //string system = "Dryeae Brai ZR-A d14-24";
-            // string system = "Leesti";
-            // EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests", @"c:\code\AA");
-        //     string system = "MY Apodis";
-         //    EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests", @"c:\code\AA");
+            //string system = "Leesti";
+            //     string system = "MY Apodis";
+            //string system = "Pallaeni";
+            //string system = "Eorm Chruia DT-G d11-4215";
+            //string system = "Eorm Chruia DT-G d11-490";
+            //EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests", @"c:\code\AA", false);
 
             //   EliteDangerousCore.StarScan2.Tests.TestScans();
         }
@@ -144,7 +146,7 @@ namespace EDDiscovery
            // History.StarScan2.DrawAllSystemsToFolder(null);
 
             // Dump a systems entried to a debug file. Then use StarScan2.ProcessFromFile / Tests file to check the star scanner
-            //string sysname = "MY Apodis";
+            //string sysname = "Pallaeni";
             //var mhs = History.EntryOrder().Where(x => (x.System.Name.EqualsIIC(sysname)) && (x.journalEntry is IStarScan || x.journalEntry is IBodyFeature || x.journalEntry is JournalFSDJump)).ToList();
             //var jsonlines = mhs.Select(x => x.journalEntry.GetJsonString());
             //BaseUtils.FileHelpers.TryWriteAllLinesToFile($@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{sysname}.json", jsonlines.ToArray());

@@ -11,6 +11,8 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  */
+
+
 using ActionLanguage;
 using BaseUtils;
 using EliteDangerousCore;
@@ -18,7 +20,6 @@ using EliteDangerousCore.StarScan2;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
 
 namespace EDDiscovery.Actions
 {
@@ -133,7 +134,7 @@ namespace EDDiscovery.Actions
         // recurse thru the body ptr tree printing info, and use the old naming system to do this
 
         static string[] names = new string[] { "Star", "Planet", "Moon", "SubMoon", "L4", "L5", "L6", "L7","L8","L9","L10","L11","L12" };
-        void DumpNode(ActionProgramRun ap, EliteDangerousCore.StarScan2.BodyNode.NodePtr bn, string prefix, string bodystring, int level)
+        void DumpNode(ActionProgramRun ap, NodePtr bn, string prefix, string bodystring, int level)
         {
             int num = 1;
             foreach( var cbn in bn.ChildBodies)
@@ -145,7 +146,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        void DumpInfo( ActionProgramRun ap, BodyNode.NodePtr bnp, string storename , string childreninfoname )
+        void DumpInfo( ActionProgramRun ap, NodePtr bnp, string storename , string childreninfoname )
         {
             BodyNode scannode = bnp.BodyNode;
             EliteDangerousCore.JournalEvents.JournalScan sc = scannode.Scan;

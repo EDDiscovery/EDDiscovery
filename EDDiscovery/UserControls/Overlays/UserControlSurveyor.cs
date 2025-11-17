@@ -805,7 +805,7 @@ namespace EDDiscovery.UserControls
 
                         // compute if we want search results displayed
 
-                        searchresults.TryGetValue(sn.Name(), out List<HistoryListQueries.ResultEntry> searchresultfornode);     // will be null if not found
+                        searchresults.TryGetValue(sn.CanonicalNameOrOwnName, out List<HistoryListQueries.ResultEntry> searchresultfornode);     // will be null if not found
 
                         var surveyordisplay = searchresultfornode != null;      // if we have a search node, display
 
@@ -883,7 +883,7 @@ namespace EDDiscovery.UserControls
 
                         // if we had a search result, remove it from the list as we have considered it above.  Even if we decided not to print it!
                         if ( searchresultfornode != null )
-                            searchresults.Remove(sn.Name());
+                            searchresults.Remove(sn.CanonicalNameOrOwnName);
 
                     }   // end for..
                 }       // end of system node look thru
@@ -921,7 +921,7 @@ namespace EDDiscovery.UserControls
                 {
                     string[] filter = fsssignalstodisplay.Split(';');
 
-                    var signallist = systemnode.FSSSignals;
+                    var signallist = systemnode.FSSSignals ?? new List<FSSSignal>();         // This can be null, if so, make an empty array so the where does not except.
 
                     // mirrors scandisplaynodes
 
