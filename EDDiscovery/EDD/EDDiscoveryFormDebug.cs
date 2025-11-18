@@ -117,12 +117,12 @@ namespace EDDiscovery
             //string system = "Dryeae Brai ZR-A d14-24";
             //string system = "Leesti";
             //     string system = "MY Apodis";
-            string system = "Pallaeni";
+          //  string system = "Pallaeni";
             //string system = "Eorm Chruia DT-G d11-4215";
             //string system = "Eorm Chruia DT-G d11-490";
           // EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests", @"c:\code\AA", false,1920);
 //
-              EliteDangerousCore.StarScan2.Tests.TestScans(1920);
+          //    EliteDangerousCore.StarScan2.Tests.TestScans(1920);
         }
 
         public void PostShownDebug()
