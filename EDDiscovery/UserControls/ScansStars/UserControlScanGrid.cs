@@ -434,9 +434,9 @@ namespace EDDiscovery.UserControls
 
                     texttoadd = new string[] { bn.Scan.BodyName, bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() };
 
-                    systemdisplay.DrawNode(pc, bn, null, null, new Point(0,0), true, false, out Rectangle _, out int _, new Size(48,48),
-                                                new Random(), null,null,notext:true);
-                    pc[0].Location = new Rectangle(0, 0, pc[0].Image.Width, pc[0].Image.Height);
+                    var images = systemdisplay.CreateSingleObject(bn, new Size(48, 48));
+                    images.ShiftTopLeft();
+                    pc.AddRange(images.Enumerable);
                 }
                 else if (!bn.WebCreatedNode)             // rejected above, due no scan data or its EDSM and not EDSM selected.. present what we have if its ours
                 {

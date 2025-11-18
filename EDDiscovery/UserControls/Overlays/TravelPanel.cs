@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
                         int count = 0;
                         foreach (var bodys in ss.Bodies())
                         {
-                            sd.DrawSingleObject( pb, bodys);
+                        //tbd    sd.DrawSingleObject( pb, bodys, new Point(0,0));
                             if (pb.Image != null)
                             {
                                 //pb.Image.Save($"c:\\code\\dump\\image_{count}_{bodys.Name()}.png");

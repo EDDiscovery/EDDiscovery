@@ -715,19 +715,11 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtSafeMode_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm restart to safe mode".Tx(), "Safe Mode".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            // don't allow double click, and always use application exit
+            if (EDDApplicationContext.RestartOptions == null && ExtendedControls.MessageBoxTheme.Show(this, "Confirm restart to safe mode".Tx(), "Safe Mode".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                bool force = EDDApplicationContext.RestartOptions != null;
                 EDDApplicationContext.RestartOptions = "-safemode";
-
-                if (!force)
-                {
-                    Application.Exit();
-                }
-                else
-                {
-                    System.Threading.Thread.CurrentThread.Abort();
-                }
+                Application.Exit();
             }
         }
 
