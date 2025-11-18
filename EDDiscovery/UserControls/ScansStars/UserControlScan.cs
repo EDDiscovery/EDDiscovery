@@ -176,7 +176,7 @@ namespace EDDiscovery.UserControls
             panelStars.HideInfo();
 
             // showing_system = new SystemClass("Qi Lieh");
-            //showing_system = new SystemClass("Pallaeni"); - problem with shrinking lines
+           // showing_system = new SystemClass("Pallaeni"); 
             //   showing_system = new SystemClass("Borann");
             //showing_system = new SystemClass("Skaudai AM-B d14-138");
             //showing_system = new SystemClass("Eorgh Prou JH-V e2-1979");

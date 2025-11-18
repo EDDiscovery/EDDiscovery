@@ -44,8 +44,8 @@ namespace EDDiscovery.UserControls
                 new ExtendedControls.CheckedIconUserControl.Item("starclass", "Show Classes of Stars".Tx(), global::EDDiscovery.Icons.Controls.ShowStarClasses),
                 new ExtendedControls.CheckedIconUserControl.Item("planetclass", "Show Classes of Planets".Tx(), global::EDDiscovery.Icons.Controls.ShowPlanetClasses),
                 new ExtendedControls.CheckedIconUserControl.Item("dist", "Show distance of bodies".Tx(), global::EDDiscovery.Icons.Controls.ShowDistances),
-                // no longer used new ExtendedControls.CheckedIconUserControl.Item("sys", "Show system and value in main display".Tx(), global::EDDiscovery.Icons.Controls.Scan_DisplaySystemAlways),
                 new ExtendedControls.CheckedIconUserControl.Item("starsondiffline", "Show bodyless stars on separate lines".Tx(), global::EDDiscovery.Icons.Controls.ShowStarClasses),
+                new ExtendedControls.CheckedIconUserControl.Item("nonsimplified", "Display full parents relationship don't simplify", global::EDDiscovery.Icons.Controls.ShowStarClasses),
                 }, 
                 Setting,
                 (newsetting,ch) => {
@@ -75,6 +75,7 @@ namespace EDDiscovery.UserControls
             sduc.SystemDisplay.ShowPlanetClasses = displayfilters.Contains("planetclass") || all;
             sduc.SystemDisplay.ShowDist = displayfilters.Contains("dist") || all;
             sduc.SystemDisplay.NoPlanetStarsOnSameLine = displayfilters.Contains("starsondiffline") || all;
+            sduc.SystemDisplay.SimplifyDiagram = !displayfilters.Contains("nonsimplified") || all;
         }
 
     }
