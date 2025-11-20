@@ -143,7 +143,7 @@ namespace EDDiscovery
 
         public void PostHistoryLoadDebug()  // on UI thread
         {
-           // History.StarScan2.DrawAllSystemsToFolder(null);
+          //  History.StarScan2.DrawAllSystemsToFolder(null);
 
             // Dump a systems entried to a debug file. Then use StarScan2.ProcessFromFile / Tests file to check the star scanner
             //string sysname = "Pallaeni";

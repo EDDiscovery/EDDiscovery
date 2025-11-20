@@ -185,7 +185,7 @@ namespace EDDiscovery.UserControls
 
                         texttoadd = new string[] { bn.Name(), bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() };
 
-                        var bi = BodyDefinitions.GetBeltImage();
+                        var bi = BodyDefinitions.GetImageBeltCluster();
                         pc.Add(new ExtPictureBox.ImageElement(new Rectangle(0, 0, bi.Width/2, bi.Height/2),bi,
                                     imgowned:false)); // NOTE the picture box does not own the image
                     }
@@ -464,7 +464,7 @@ namespace EDDiscovery.UserControls
                     texttoadd = new string[] { bn.Name(), "", "", bdDetails.ToString() };
                     pc.Add(new ExtPictureBox.ImageElement(new Rectangle(0, 0, 48,48),
                             bn.BodyType == BodyDefinitions.BodyType.Star ? BodyDefinitions.GetImageNotScanned() :
-                            bn.BodyType == BodyDefinitions.BodyType.StellarRing ? BodyDefinitions.GetBeltImage() :
+                            bn.BodyType == BodyDefinitions.BodyType.StellarRing ? BodyDefinitions.GetImageBeltCluster() :
                             BodyDefinitions.GetImageNotScanned(),
                             imgowned:false));       // NOTE the picture box does not own the image
                 }
