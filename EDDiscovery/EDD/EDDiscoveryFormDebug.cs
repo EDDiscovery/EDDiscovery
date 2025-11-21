@@ -145,6 +145,8 @@ namespace EDDiscovery
 
         public void PostHistoryLoadDebug()  // on UI thread
         {
+            //if (History.StarScan2.TryGetSystemNode("Eorm Chruia OJ-Q e5-356", out EliteDangerousCore.StarScan2.SystemNode sn))  sn.DrawSystemToFile(@"c:\code\AA\output");
+
           // History.StarScan2.DrawAllSystemsToFolder(@"c:\code\AA");
 
             // Dump a systems entried to a debug file. Then use StarScan2.ProcessFromFile / Tests file to check the star scanner
