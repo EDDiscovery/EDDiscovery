@@ -111,18 +111,20 @@ namespace EDDiscovery
 
             FactionDefinitions.IDSTx();
 
+            //EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\synth.json", @"c:\code\AA", false, 1920, false);
+
             //string system = "Shrogaei YG-L d8-5499";
-           // string system = "LHS 3447";
+            // string system = "LHS 3447";
             //string system = "Shumbeia KD-I d10-15";
             //string system = "Dryeae Brai ZR-A d14-24";
             //string system = "Leesti";
             //     string system = "MY Apodis";
-          //  string system = "Pallaeni";
-            //string system = "Eorm Chruia DT-G d11-4215";
-            //string system = "Eorm Chruia DT-G d11-490";
-          // EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests", @"c:\code\AA", false,1920);
-//
-          //    EliteDangerousCore.StarScan2.Tests.TestScans(1920);
+            //  string system = "Pallaeni";
+        //    string system = "Eorm Chruia DT-G d11-4215";
+           // string system = "Eorm Chruia DT-G d11-490";
+        //    EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false);
+            //
+       //    EliteDangerousCore.StarScan2.Tests.TestScans(1920);
         }
 
         public void PostShownDebug()
@@ -143,7 +145,7 @@ namespace EDDiscovery
 
         public void PostHistoryLoadDebug()  // on UI thread
         {
-          //  History.StarScan2.DrawAllSystemsToFolder(null);
+          // History.StarScan2.DrawAllSystemsToFolder(@"c:\code\AA");
 
             // Dump a systems entried to a debug file. Then use StarScan2.ProcessFromFile / Tests file to check the star scanner
             //string sysname = "Pallaeni";

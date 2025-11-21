@@ -290,7 +290,7 @@ namespace EDDiscovery.UserControls
 
                 Font font = ExtendedControls.Theme.Current.GetFont;
                 pictureBoxList.ClearImageList();
-                ExtPictureBox.ImageElement displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000, 1000), wantedList.ToNullSafeString(), font, textcolour, backcolour, 1.0F);
+                ExtendedControls.ImageElement.Element displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000, 1000), wantedList.ToNullSafeString(), font, textcolour, backcolour, 1.0F);
                 pictureBoxList.Render();
                 font.Dispose();
 

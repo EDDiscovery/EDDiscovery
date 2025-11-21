@@ -205,7 +205,7 @@ namespace EDDiscovery.UserControls
 
                 if (node!=null)
                 {
-                    var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here
+                    var picelements = new List<ExtendedControls.ImageElement.Element>();       // accumulate picture elements in here
 
                     Font dfont = displayfont ?? this.Font;
 
@@ -228,7 +228,7 @@ namespace EDDiscovery.UserControls
 
                     string s = node.Organics != null ? JournalScanOrganic.OrganicListString(node.Organics, 0, false, Environment.NewLine) : "No organic scanned";
 
-                    var i = new ExtPictureBox.ImageElement();
+                    var i = new ExtendedControls.ImageElement.Element();
                     i.TextAutoSize(new Point(3, vpos),
                                                     new Size(Math.Max(pictureBox.Width - 6, 24), 10000),
                                                     l.AppendPrePad(s,Environment.NewLine),
@@ -238,7 +238,7 @@ namespace EDDiscovery.UserControls
                                                     1.0F,
                                                     frmt: frmt); ;
 
-                    extPictureBoxScroll.Height = i.Location.Bottom + 8;
+                    extPictureBoxScroll.Height = i.Bounds.Bottom + 8;
                     picelements.Add(i);
                     frmt.Dispose();
 

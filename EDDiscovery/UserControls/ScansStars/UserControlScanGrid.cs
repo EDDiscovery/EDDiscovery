@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
                 var bdDist = new StringBuilder();
                 var bdDetails = new StringBuilder();
                 string[] texttoadd = null;     // items to add to row
-                List<ExtPictureBox.ImageElement> pc = new List<ExtPictureBox.ImageElement>();
+                List<ExtendedControls.ImageElement.Element> pc = new List<ExtendedControls.ImageElement.Element>();
 
                 long organicssystemvalue = 0;
 
@@ -186,7 +186,7 @@ namespace EDDiscovery.UserControls
                         texttoadd = new string[] { bn.Name(), bdClass.ToString(), bdDist.ToString(), bdDetails.ToString() };
 
                         var bi = BodyDefinitions.GetImageBeltCluster();
-                        pc.Add(new ExtPictureBox.ImageElement(new Rectangle(0, 0, bi.Width/2, bi.Height/2),bi,
+                        pc.Add(new ExtendedControls.ImageElement.Element(new Rectangle(0, 0, bi.Width/2, bi.Height/2),bi,
                                     imgowned:false)); // NOTE the picture box does not own the image
                     }
                 }
@@ -436,7 +436,7 @@ namespace EDDiscovery.UserControls
 
                     var images = systemdisplay.CreateSingleObject(bn, new Size(48, 48));
                     images.ShiftTopLeft();
-                    pc.AddRange(images.Enumerable);
+                    pc.AddRange(images);
                 }
                 else if (!bn.WebCreatedNode)             // rejected above, due no scan data or its EDSM and not EDSM selected.. present what we have if its ours
                 {
@@ -462,7 +462,7 @@ namespace EDDiscovery.UserControls
                     }
 
                     texttoadd = new string[] { bn.Name(), "", "", bdDetails.ToString() };
-                    pc.Add(new ExtPictureBox.ImageElement(new Rectangle(0, 0, 48,48),
+                    pc.Add(new ExtendedControls.ImageElement.Element(new Rectangle(0, 0, 48,48),
                             bn.BodyType == BodyDefinitions.BodyType.Star ? BodyDefinitions.GetImageNotScanned() :
                             bn.BodyType == BodyDefinitions.BodyType.StellarRing ? BodyDefinitions.GetImageBeltCluster() :
                             BodyDefinitions.GetImageNotScanned(),

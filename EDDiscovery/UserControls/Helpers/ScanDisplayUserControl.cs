@@ -62,10 +62,10 @@ namespace EDDiscovery.UserControls
 
         #region User interaction
 
-        private void ClickElement(object sender, MouseEventArgs e, ExtPictureBox.ImageElement i, object tag)
+        private void ClickElement(object sender, MouseEventArgs e, ExtendedControls.ImageElement.Element i, object tag)
         {
             if (i != null && tag is string)
-                ShowInfo((string)tag, i.Location.Location.X < panelStars.Width / 2);
+                ShowInfo((string)tag, i.Bounds.Location.X < panelStars.Width / 2);
             else
                 HideInfo();
         }

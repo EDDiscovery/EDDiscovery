@@ -1026,7 +1026,7 @@ namespace EDDiscovery.UserControls
 
             foreach (var kvp in drawsystemtext)        // and present any text results in sorted order
             {
-                var i = new ExtPictureBox.ImageElement();
+                var i = new ExtendedControls.ImageElement.Element();
                 i.TextAutoSize(
                         new Point(3, vpos),
                         new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
@@ -1037,12 +1037,12 @@ namespace EDDiscovery.UserControls
                         1.0F,
                         frmt: frmt);
                 extPictureBoxSystemDetails.Add(i);
-                vpos += i.Location.Height;
+                vpos += i.Bounds.Height;
             }
 
             if (drawsystemvalue > 0 && IsSet(CtrlList.showValues))
             {
-                var i = new ExtPictureBox.ImageElement();
+                var i = new ExtendedControls.ImageElement.Element();
                 i.TextAutoSize(
                     new Point(3, vpos),
                     new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
@@ -1053,13 +1053,13 @@ namespace EDDiscovery.UserControls
                     1.0F,
                     frmt: frmt);
                 extPictureBoxSystemDetails.Add(i);
-                vpos += i.Location.Height;
+                vpos += i.Bounds.Height;
             }
 
             if (drawsystemsignallist.HasChars())
             {
                 //System.Diagnostics.Debug.WriteLine("Display " + siglist);
-                var i = new ExtPictureBox.ImageElement();
+                var i = new ExtendedControls.ImageElement.Element();
                 i.TextAutoSize(new Point(3, vpos),
                                                 new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
                                                 drawsystemsignallist,
@@ -1068,7 +1068,7 @@ namespace EDDiscovery.UserControls
                                                 backcolour,
                                                 1.0F,
                                                 frmt: frmt);
-                vpos += i.Location.Height;
+                vpos += i.Bounds.Height;
                 extPictureBoxSystemDetails.Add(i);
             }
 
@@ -1087,7 +1087,7 @@ namespace EDDiscovery.UserControls
             var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
             Font dfont = displayfont ?? this.Font;
 
-            var i = new ExtPictureBox.ImageElement();
+            var i = new ExtendedControls.ImageElement.Element();
             i.TextAutoSize(
                     new Point(3, 0),
                     new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
@@ -1100,7 +1100,7 @@ namespace EDDiscovery.UserControls
             pb.ClearImageList();
             pb.Add(i);
             if ( text.HasChars() && IsSet(CtrlList.showdividers))
-                pb.AddHorizontalDivider(textcolour.Multiply(0.4f), new Rectangle(0,i.Location.Height, i.Location.Width, 8), 1, 4);
+                pb.AddHorizontalDivider(textcolour.Multiply(0.4f), new Rectangle(0,i.Bounds.Height, i.Bounds.Width, 8), 1, 4);
             pb.Render();
 
             frmt.Dispose();

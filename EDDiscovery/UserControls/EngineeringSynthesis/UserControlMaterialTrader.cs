@@ -224,12 +224,12 @@ namespace EDDiscovery.UserControls
                         string s = mattxgroupnames[t.Item1];
                         s = s.Substring(s.IndexOf(" ") + 1);
                         tlen = (int)(g.MeasureString(s, titlefont).Width+2);
-                        g.DrawString(s, titlefont, b, new Point(ie.Location.Left, ie.Location.Top));
+                        g.DrawString(s, titlefont, b, new Point(ie.Bounds.Left, ie.Bounds.Top));
                     }
 
                     using (Pen p = new Pen(orange))
                     {
-                        g.DrawLine(p, new Point(tlen, ie.Location.Top + titlefont.Height / 2), new Point(maxhpos, ie.Location.Top + titlefont.Height / 2));
+                        g.DrawLine(p, new Point(tlen, ie.Bounds.Top + titlefont.Height / 2), new Point(maxhpos, ie.Bounds.Top + titlefont.Height / 2));
                     }
 
                 }, new Rectangle(0, vpos, 2000, 24), t.Item1.ToString());
@@ -432,7 +432,7 @@ namespace EDDiscovery.UserControls
             DisplayTradeSelection();
         }
 
-        private void extPictureTrades_ClickElement(object sender, MouseEventArgs eventargs, ExtendedControls.ExtPictureBox.ImageElement i, object tag)
+        private void extPictureTrades_ClickElement(object sender, MouseEventArgs eventargs, ExtendedControls.ImageElement.Element i, object tag)
         {
             if (i != null && tag is ElementTrade && last_mcl != null ) // must be an element, with a tag, must have a current mcl
             {
