@@ -167,23 +167,25 @@ namespace EDDiscovery
                 Controller.DoCAPI(he.WhereAmI, he.System.Name, History.Shipyards.AllowCobraMkIV);
         }
 
-        private void extButtonSingleStep_MouseDown(object sender, MouseEventArgs e)
-        {
-            if (e.Button == MouseButtons.Left)
-            {
-                Controller.RunDebugger(1);
-            }
-            else if (e.Button == MouseButtons.Right)
-            {
-                contextMenuStripDebugger.Show(extButtonSingleStep.PointToScreen(new Point(extButtonSingleStep.Width, 0)));
-            }
 
+        private void extButtonSingleStep_MouseClick(object sender, MouseEventArgs e)
+        {
+            Controller.RunDebugger(1);
+        }
+
+        private void extButtonMultiStep_MouseClick(object sender, MouseEventArgs e)
+        {
+            contextMenuStripDebugger.Show(extButtonSingleStep.PointToScreen(new Point(extButtonSingleStep.Width, 0)));
+        }
+
+        private void extButtonStop_Click(object sender, EventArgs e)
+        {
+            Controller.DebuggerStop();
         }
 
         private void debuggerSingleJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
             Controller.RunDebugger(0);
-
         }
 
         private void debuggerNextToolStripMenuItem_Click(object sender, EventArgs e)
@@ -241,11 +243,6 @@ namespace EDDiscovery
             }
         }
 
-
-        private void extButtonStop_Click(object sender, EventArgs e)
-        {
-            Controller.DebuggerStop();
-        }
 
     }
 }

@@ -27,7 +27,9 @@ namespace EDDiscovery.UserControls
 
         public void Init(EliteDangerousCore.DB.IUserDatabaseSettingsSaver ucb, string settingname)
         {
-            Setting = ucb.GetSetting(settingname, "moons;icons;mats;allg;habzone;starclass;planetclass;dist;starage;starmass");
+            Setting = ucb.GetSetting(settingname, "V2;moons;icons;mats;allg;habzone;starclass;planetclass;dist;starage;starmass;simplify");
+            if (!Setting.StartsWith("V2;"))
+                Setting += "simplify;";
 
             Init(new ExtendedControls.CheckedIconUserControl.Item[]
             {
@@ -45,12 +47,12 @@ namespace EDDiscovery.UserControls
                 new ExtendedControls.CheckedIconUserControl.Item("planetclass", "Show Classes of Planets".Tx(), global::EDDiscovery.Icons.Controls.ShowPlanetClasses),
                 new ExtendedControls.CheckedIconUserControl.Item("dist", "Show distance of bodies".Tx(), global::EDDiscovery.Icons.Controls.ShowDistances),
                 new ExtendedControls.CheckedIconUserControl.Item("starsondiffline", "Show bodyless stars on separate lines".Tx(), global::EDDiscovery.Icons.Controls.ShowStarClasses),
-                new ExtendedControls.CheckedIconUserControl.Item("nonsimplified", "Display full parents relationship don't simplify", global::EDDiscovery.Icons.Controls.ShowStarClasses),
+                new ExtendedControls.CheckedIconUserControl.Item("simplify", "Display simplifed diagram", global::EDDiscovery.Icons.Controls.ShowStarClasses),
                 }, 
                 Setting,
                 (newsetting,ch) => {
                     Setting = newsetting;
-                    ucb.PutSetting(settingname, newsetting);
+                    ucb.PutSetting(settingname, "V2;"+newsetting);
                 },
                 allornoneshown:true,
                 closeboundaryregion:new System.Drawing.Size(64,64),
@@ -75,7 +77,7 @@ namespace EDDiscovery.UserControls
             sduc.SystemDisplay.ShowPlanetClasses = displayfilters.Contains("planetclass") || all;
             sduc.SystemDisplay.ShowDist = displayfilters.Contains("dist") || all;
             sduc.SystemDisplay.NoPlanetStarsOnSameLine = displayfilters.Contains("starsondiffline") || all;
-            sduc.SystemDisplay.SimplifyDiagram = !displayfilters.Contains("nonsimplified") || all;
+            sduc.SystemDisplay.SimplifyDiagram = displayfilters.Contains("simplify") || all;
         }
 
     }

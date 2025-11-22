@@ -575,7 +575,7 @@ namespace EDDiscovery
             buttonReloadActions.Visible = extButtonCAPI.Visible = EDDOptions.Instance.ActionButton;
 
             // these are on the -readto date option, if selecting a max date, show single step buttons
-            extButtonStop.Visible = extButtonSingleStep.Visible = EDDOptions.Instance.MaxJournalDateUTC != null;    
+            extButtonMultiStep.Visible = extButtonStop.Visible = extButtonSingleStep.Visible = EDDOptions.Instance.MaxJournalDateUTC != null;    
 
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
@@ -1377,10 +1377,11 @@ namespace EDDiscovery
         }
 
 
+
+
         #endregion
 
-
-    }
+      }
 }
 
 

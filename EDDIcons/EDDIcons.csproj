@@ -1186,6 +1186,7 @@
     <EmbeddedResource Include="Controls\Play.png" />
     <EmbeddedResource Include="Controls\elite24.png" />
     <EmbeddedResource Include="Controls\ColourSelector.png" />
+    <EmbeddedResource Include="Controls\FastForward.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

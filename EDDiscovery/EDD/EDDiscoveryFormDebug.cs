@@ -111,7 +111,8 @@ namespace EDDiscovery
 
             FactionDefinitions.IDSTx();
 
-            //EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\synth.json", @"c:\code\AA", false, 1920, false);
+            //ring system = "Eorm Chruia EE-F d12-1139";
+        //  EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\synth.json", @"c:\code\AA\", true, 1920, false);
 
             //string system = "Shrogaei YG-L d8-5499";
             // string system = "LHS 3447";
@@ -120,11 +121,13 @@ namespace EDDiscovery
             //string system = "Leesti";
             //     string system = "MY Apodis";
             //  string system = "Pallaeni";
-        //    string system = "Eorm Chruia DT-G d11-4215";
-           // string system = "Eorm Chruia DT-G d11-490";
-        //    EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false);
+            //    string system = "Eorm Chruia DT-G d11-4215";
+            // string system = "Eorm Chruia DT-G d11-490";
+            //    EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false);
             //
-       //    EliteDangerousCore.StarScan2.Tests.TestScans(1920);
+            //    EliteDangerousCore.StarScan2.Tests.TestScans(1920);
+
+
         }
 
         public void PostShownDebug()
