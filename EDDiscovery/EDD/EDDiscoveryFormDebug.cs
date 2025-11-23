@@ -111,7 +111,7 @@ namespace EDDiscovery
 
             FactionDefinitions.IDSTx();
 
-            //ring system = "Eorm Chruia EE-F d12-1139";
+         //   string system = "Eorm Chruia EE-F d12-1139";
         //  EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\synth.json", @"c:\code\AA\", true, 1920, false);
 
             //string system = "Shrogaei YG-L d8-5499";

@@ -236,7 +236,7 @@ namespace EDDiscovery.UserControls
                     PopulateBookmarkComboSetBookmarkEnable();
                 }
                 comboBoxBookmarks.SelectedItem = sct.Name;      // must be in list, so select and set the compass
-                return PanelActionState.Success;
+                return PanelActionState.HandledContinue;
             }
             return PanelActionState.NotHandled;
         }
