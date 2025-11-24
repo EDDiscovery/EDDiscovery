@@ -374,7 +374,7 @@ namespace EDDiscovery
             var entrylast = History.GetLast;
 
             if (stepper == null && entrylast != null)
-                stepper = new EDJournalUIScanner.SingleStepper(entrylast.journalEntry);
+                stepper = new EDJournalUIScanner.SingleStepper(History, entrylast.Index);
 
             if (stepper != null)
             {
