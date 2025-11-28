@@ -319,7 +319,7 @@ namespace EDDiscovery.UserControls
             {
                 SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Speed".Tx(),
                                 null, "Class".Tx(), null, "Info".Tx());
-                sortmodecol = "AAANNANA";
+                sortmodecol = "PAANNANA";
                 HideShipRelatedButtons(false);
 
                 foreach( var ship in ItemData.GetSpaceships())
@@ -352,7 +352,7 @@ namespace EDDiscovery.UserControls
                 var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
                 SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Name".Tx(), "Ident".Tx(), "Mass".Tx(), "Location".Tx(), "Cost".Tx());
-                sortmodecol = "AAAAANAN";
+                sortmodecol = "PAAAANAN";
                 HideShipRelatedButtons(false);
 
                 foreach (var ship in ownedships)
@@ -834,8 +834,18 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewModules_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (sortmodecol.HasChars() && sortmodecol[e.Column.Index] == 'N')
-                e.SortDataGridViewColumnNumeric(removetext:"t", striptonumeric:true);
+            if (sortmodecol.HasChars())
+            {
+                if (sortmodecol[e.Column.Index] == 'P')
+                {
+                    var left = dataGridViewModules[1, e.RowIndex1].Value.ToString();
+                    var right = dataGridViewModules[1, e.RowIndex2].Value.ToString();
+                    e.SortResult = left.CompareTo(right);
+                    e.Handled = true;
+                }
+                else if (sortmodecol[e.Column.Index] == 'N')
+                    e.SortDataGridViewColumnNumeric(removetext: "t", striptonumeric: true);
+            }
         }
 
         private void dataGridViewModules_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
