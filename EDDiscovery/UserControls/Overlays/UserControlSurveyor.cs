@@ -624,7 +624,7 @@ namespace EDDiscovery.UserControls
                 if (systemnode != null)
                 {
                     int scanned = systemnode.StarPlanetsScanned(edsmSpanshButton.IsAnySet);
-                    int clusters = systemnode.BeltClusters();
+                    int clusters = systemnode.BeltClusterBodies();
 
                     if (scanned > 0)
                     {
