@@ -169,7 +169,9 @@ namespace EDDiscovery
 
             EDDiscoveryForm EDDMainForm = null;
 
+#if !DEBUG
             try
+#endif
             {
                 System.Threading.Thread.CurrentThread.Name = "EDD Main Thread";
 
@@ -307,11 +309,13 @@ namespace EDDiscovery
                 SetLoadingMsg("Starting Program");
                 SwitchContext(EDDMainForm);         // Ignition, and liftoff!
             }
+#if !DEBUG
             catch (Exception ex)
             {   // There's so many ways that things could go wrong during init; let's fail for everything!
                 Forms.ExceptionForm.ShowException(ex, "A fatal exception was encountered while initializing EDDiscovery.", Properties.Resources.URLProjectFeedback, isFatal: true, parent: MainForm);
                 EDDMainForm?.Dispose();
             }
+#endif
         }
 
 
