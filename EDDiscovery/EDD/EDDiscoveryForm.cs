@@ -788,7 +788,7 @@ namespace EDDiscovery
                     // sorted by oldest first..
                     foreach (Notifications.Notification n in notelist)
                     {
-                        Notifications.NotificationParas p = n.Select(EDDConfig.Instance.Language);
+                        Notifications.NotificationMessages p = n.Select(EDDConfig.Instance.Language);
 
                         Version vmax = n.VersionMax != null ? new Version(n.VersionMax) : null;
                         Version vmin = n.VersionMin != null ? new Version(n.VersionMin) : null;
@@ -806,20 +806,20 @@ namespace EDDiscovery
                                  (n.Conditions.TryGetValue("ConditionActionPackPresentEnabledOldVersion", out string[] ov) && ov.Length == 2 && actioncontroller.IsOlderEnabled(ov[0], ov[1]))
                                  )
                             {
-                                if (n.EntryType == "Popup")
+                                if (n.Type == "Popup")
                                 {
                                     string key = n.Key;
                                     if (!acklist.Contains(key))
                                         popupnotificationlist.Add(n);
                                 }
-                                else if (n.EntryType == "Log")
+                                else if (n.Type == "Log")
                                 {
                                     if (n.HighLight)
                                         LogLineHighlight(p.Text);
                                     else
                                         LogLine(p.Text);
                                 }
-                                else if (n.EntryType == "New")
+                                else if (n.Type == "New")
                                 {
                                     extButtonNewFeature.Tag = n;
                                     bool read = UserDatabase.Instance.GetSetting("NotificationLastNewFeature", "") == n.StartUTC.ToStringZulu();
@@ -1274,7 +1274,7 @@ namespace EDDiscovery
         private void extButtonNewFeature_Click(object sender, EventArgs e)
         {
             Notifications.Notification n = extButtonNewFeature.Tag as Notifications.Notification;
-            Notifications.NotificationParas p = n.Select(EDDConfig.Instance.Language);
+            Notifications.NotificationMessages p = n.Select(EDDConfig.Instance.Language);
 
             ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
             infoform.Info(p.Caption, this.Icon, p.Text, pointsize: n.PointSize, enableurls: true);
