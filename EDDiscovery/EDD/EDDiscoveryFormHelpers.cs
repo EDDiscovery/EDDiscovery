@@ -352,7 +352,7 @@ namespace EDDiscovery
         {
             if (popupnotificationlist.Count > 0)
             {
-                BaseUtils.Notifications.NotificationParas p = popupnotificationlist[0].Select(EDDConfig.Instance.Language);
+                BaseUtils.Notifications.NotificationMessages p = popupnotificationlist[0].Select(EDDConfig.Instance.Language);
 
                 if (p != null)      // make sure, double check, we have something
                 {

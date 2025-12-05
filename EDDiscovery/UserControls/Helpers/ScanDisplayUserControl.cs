@@ -49,12 +49,12 @@ namespace EDDiscovery.UserControls
         // draw scannode (may be null), 
         // curmats may be null
         public void DrawSystem(EliteDangerousCore.StarScan2.SystemNode systemnode, List<MaterialCommodityMicroResource> historicmats, 
-                                    List<MaterialCommodityMicroResource> curmats,string opttext = null, string[] filter=  null ) 
+                                    List<MaterialCommodityMicroResource> curmats,string titletext = null, string[] filter=  null ) 
         {
             HideInfo();
             SystemDisplay.TextBackColor = this.BackColor;
             SystemDisplay.TextForeColor = ExtendedControls.Theme.Current.LabelColor;
-            SystemDisplay.DrawSystemRender(imagebox, WidthAvailable, systemnode, historicmats, curmats, opttext, filter);
+            SystemDisplay.DrawSystemRender(imagebox, WidthAvailable, systemnode, historicmats, curmats, titletext, filter);
             imagebox.Render();      // replaces image..
         }
 

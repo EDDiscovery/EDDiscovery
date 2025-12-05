@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
                 options.Add(new ExtendedControls.CheckedIconUserControl.Item(x.ToString(), Planets.PlanetNameTranslated((EDPlanet)x)));
 
             foreach (var x in Enum.GetNames(typeof(EDStar)))
-                options.Add(new ExtendedControls.CheckedIconUserControl.Item(x.ToString(), Stars.StarName(x.ParseEnum<EDStar>())));
+                options.Add(new ExtendedControls.CheckedIconUserControl.Item(x.ToString(), Stars.ToLocalisedLanguage(x.ParseEnum<EDStar>())));
 
             // these are filter types for items which are either do not have scandata or are not stars/bodies.  Only Belts/Barycentre are displayed.. scans of rings/beltculsters are not displayed
             options.Add(new ExtendedControls.CheckedIconUserControl.Item("Star", "Star".Tx()));
