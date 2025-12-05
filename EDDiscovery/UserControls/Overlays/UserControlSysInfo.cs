@@ -393,15 +393,11 @@ namespace EDDiscovery.UserControls
 #endif
                 bool wasdiscovered = true;
 
-                var ss = DiscoveryForm.History.StarScan.FindSystemSynchronous(he.System);       // find system no web lookup 
-                if ( ss != null )
+                var ss = DiscoveryForm.History.StarScan2.FindSystemSynchronous(he.System);       // find system no web lookup 
+                var firststar = ss?.GetStarsScanned().FirstOrDefault();
+                if ( firststar != null )
                 {
-                    var mainstar = ss.StarNodes.FirstOrDefault();       // first star
-                    if (mainstar.Key != null && mainstar.Value.ScanData != null)        // if we have a name, and we have scan data, we can determine
-                    {
-                        System.Diagnostics.Debug.WriteLine($"SystemInformation determine FD on {mainstar.Value.BodyName} {mainstar.Value.OwnName} {mainstar.Value.BodyDesignator}");
-                        wasdiscovered = mainstar.Value.ScanData.WasDiscovered ?? true;          // only if its there and false will it provoke a false
-                    }
+                    wasdiscovered = firststar.Scan.WasDiscovered ?? true;          // only if its there and false will it provoke a false
                 }
 
                 panelFD.BackgroundImage = !wasdiscovered ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
@@ -595,19 +591,22 @@ namespace EDDiscovery.UserControls
                             // else body name destination or $POI $MULTIPLAYER etc
                             // Now (oct 25) its localised, but if not, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
 
-                            destname = lastdestination.Name_Localised.Alt(JournalFieldNaming.SignalBodyName(lastdestination.Name));   
+                            destname = lastdestination.Name_Localised.Alt(JournalFieldNaming.SignalBodyName(lastdestination.Name));
 
                             //System.Diagnostics.Debug.WriteLine($"Sysinfo destination {lastdestination.Name} -> {destname}");
 
-                            ss = DiscoveryForm.History.StarScan.FindSystemSynchronous(DiscoveryForm.History.GetLast.System);
-
-                            // with a found system, see if we can get the body name so we know what body its on (defensive -1 in case bodyid = null)
-                            if (ss != null && ss.NodesByID.TryGetValue(lastdestination.BodyID ?? -1, out StarScan.ScanNode body))
+                            if (lastdestination.BodyID.HasValue)
                             {
-                                onbody = body.BodyDesignator.ReplaceIfStartsWith(he.System.Name).Trim();
+                                ss = DiscoveryForm.History.StarScan2.FindSystemSynchronous(DiscoveryForm.History.GetLast.System);
+                                var body = ss?.FindBody(lastdestination.BodyID.Value);
 
-                                if (body.ScanData != null)
-                                    distance = body.ScanData.DistanceFromArrivalLS.ToString("N0") + "ls";
+                                if (body != null)
+                                {
+                                    onbody = body.Name();
+
+                                    if (body.Scan != null)
+                                        distance = body.Scan.DistanceFromArrivalLS.ToString("N0") + "ls";
+                                }
                             }
                         }
                     }

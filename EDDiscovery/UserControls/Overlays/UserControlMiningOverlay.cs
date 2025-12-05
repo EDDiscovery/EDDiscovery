@@ -101,7 +101,7 @@ namespace EDDiscovery.UserControls
         const int CFDbMax = 50;         // 0-N% on CFDB
 
         double lastrefined;             // used for timer display - refined count   
-        ExtendedControls.ExtPictureBox.ImageElement timeie; // image element of time
+        ExtendedControls.ImageElement.Element timeie; // image element of time
         Timer timetimer;                // and its timer
 
         int limpetsleftdisplay = 0;     // used to track if we need to redisplay due to limpet change
@@ -209,7 +209,7 @@ namespace EDDiscovery.UserControls
                         var ieprosp = pictureBox.AddTextAutoSize(new Point(hpos[limpetscolpos], vpos), new Size(2000, this.Height),
                                     text, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
 
-                        vpos = ieprosp.Location.Bottom + displayfont.ScalePixels(2);
+                        vpos = ieprosp.Bounds.Bottom + displayfont.ScalePixels(2);
                     }
 
                     bool displaytable = found.Count > 0 && (extCheckBoxZeroRefined.Checked ? lastrefined > 0 : true);
@@ -227,14 +227,14 @@ namespace EDDiscovery.UserControls
                         pictureBox.AddTextAutoSize(new Point(hpos[8], vpos), new Size(colsw[8], this.Height), "M.Lode".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), "HML Ct.".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                         pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), "Discv".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                        vpos = ieheader.Location.Bottom + displayfont.ScalePixels(2);
+                        vpos = ieheader.Bounds.Bottom + displayfont.ScalePixels(2);
 
                         if (prospected > 0)
                         {
                             var ie = pictureBox.AddTextAutoSize(new Point(hpos[0], vpos), new Size(colsw[0], this.Height), "Asteroids Pros.".Tx(), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                             pictureBox.AddTextAutoSize(new Point(hpos[3], vpos), new Size(colsw[3], this.Height), prospected.ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                             pictureBox.AddTextAutoSize(new Point(hpos[9], vpos), new Size(colsw[9], this.Height), content[0].ToString("N0") + "/" + content[1].ToString("N0") + "/" + content[2].ToString("N0"), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
-                            vpos = ie.Location.Bottom + displayfont.ScalePixels(2);
+                            vpos = ie.Bounds.Bottom + displayfont.ScalePixels(2);
                         }
 
                         foreach (var m in found)
@@ -263,7 +263,7 @@ namespace EDDiscovery.UserControls
                                 if (m.discovered)
                                     pictureBox.AddTextAutoSize(new Point(hpos[10], vpos), new Size(colsw[10], this.Height), " *", displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
 
-                                vpos = ie1.Location.Bottom + displayfont.ScalePixels(2);
+                                vpos = ie1.Bounds.Bottom + displayfont.ScalePixels(2);
                             }
                         }
                     }
@@ -382,8 +382,8 @@ namespace EDDiscovery.UserControls
 
             using (StringFormat frmt = new StringFormat())
             {
-                var lab = new ExtendedControls.ExtPictureBox.ImageElement();
-                lab.TextAutoSize(timeie.Position, timeie.Size, TimeText(false), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
+                var lab = new ExtendedControls.ImageElement.Element();
+                lab.TextAutoSize(timeie.Location, timeie.Size, TimeText(false), displayfont, textcolour, backcolour, 1.0F, frmt: frmt);
                 pictureBox.RemoveItem(timeie, backcolour);
                 pictureBox.AddItem(lab);
                 timeie = lab;

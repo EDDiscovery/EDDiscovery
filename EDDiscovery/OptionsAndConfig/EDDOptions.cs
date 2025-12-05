@@ -72,6 +72,7 @@ namespace EDDiscovery
         public bool SafeMode { get; private set; }
         public bool DisableJournalMerge { get; private set; }
         public bool DisableJournalRemoval { get; private set; }
+        public bool MultithreadedJournalRead { get; private set; } = true;
         public string NotificationFolderOverride { get; private set; }      // normally null..
         public float FontSize { get; private set; }                           // override font size, 0 if not
         public string Font { get; private set; }                           // override font, null if not
@@ -457,6 +458,10 @@ namespace EDDiscovery
             else if (optname == "-journalfilematch")
             {
                 DefaultJournalMatchFilename = toeol ? ca.Rest() : ca.NextEmpty();
+            }
+            else if (optname == "-journalsinglethread")
+            {
+                MultithreadedJournalRead = false;
             }
             else if (optname == "-culture")
             {

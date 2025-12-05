@@ -104,7 +104,7 @@ namespace EDDiscovery.UserControls
             bool redisplay = false;     // if we need a display 
             bool cleardisplay = false;     // if we need a display clear
 
-            if (he.journalEntry is IStarScan || he.journalEntry is IMaterialJournalEntry || he.journalEntry is IBodyNameAndID)
+            if (he.journalEntry is IStarScan || he.journalEntry is IMaterialJournalEntry || he.journalEntry is IBodyFeature)
             {
                 if (he.System.Name == current?.System.Name)     // current may be null.  If we have updated star scan data
                     redisplay = true;

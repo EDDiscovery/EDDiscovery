@@ -165,7 +165,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="QuickJSON, Version=2.10.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\RJKJSoft.QuickJSON.2.10.0\lib\net48\QuickJSON.dll</HintPath>
+      <HintPath>..\packages\RJKJSoft.QuickJSON.2.10.0\lib\net48\QuickJSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -569,11 +569,11 @@
     <Compile Include="UserControls\CurrentState\UserControlMissions.Designer.cs">
       <DependentUpon>UserControlMissions.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\CurrentState\UserControlModules.cs">
+    <Compile Include="UserControls\CurrentState\UserControlShipsAndModules.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\CurrentState\UserControlModules.Designer.cs">
-      <DependentUpon>UserControlModules.cs</DependentUpon>
+    <Compile Include="UserControls\CurrentState\UserControlShipsAndModules.Designer.cs">
+      <DependentUpon>UserControlShipsAndModules.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\EngineeringSynthesis\UserControlEngineering.cs">
       <SubType>UserControl</SubType>
@@ -982,8 +982,8 @@
     <EmbeddedResource Include="UserControls\CurrentState\UserControlMissions.resx">
       <DependentUpon>UserControlMissions.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\CurrentState\UserControlModules.resx">
-      <DependentUpon>UserControlModules.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlShipsAndModules.resx">
+      <DependentUpon>UserControlShipsAndModules.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlEngineering.resx">
       <DependentUpon>UserControlEngineering.cs</DependentUpon>

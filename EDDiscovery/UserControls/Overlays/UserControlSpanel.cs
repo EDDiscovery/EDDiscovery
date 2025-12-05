@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2021 EDDiscovery development team
+ * Copyright 2016 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using BaseUtils;
@@ -318,7 +316,7 @@ namespace EDDiscovery.UserControls
                             HistoryEntry lastfsd = hl.GetLastHistoryEntry(x => x.journalEntry is EliteDangerousCore.JournalEvents.JournalFSDJump, last);
 
                             bool firstdiscovery = false; //tbd on new first discovery system
-                            rowpos = rowmargin + AddColText(0, 0, rowpos, str, textcolour, backcolour, dfont, null, firstdiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if elite says your it's first discoverer").Location.Bottom;
+                            rowpos = rowmargin + AddColText(0, 0, rowpos, str, textcolour, backcolour, dfont, null, firstdiscovery ? EDDiscovery.Icons.Controls.firstdiscover : null, "Shows if elite says your it's first discoverer").Bounds.Bottom;
                         }
 
                         var zoneson = Config(Configuration.showHabInformation | Configuration.showMetalRichZone | Configuration.showWaterWrldZone |
@@ -326,52 +324,51 @@ namespace EDDiscovery.UserControls
 
                         if (zoneson && last != null)
                         {
-                            StarScan scan = hl.StarScan;
-
-                            StarScan.SystemNode sn = await scan.FindSystemAsync(last.System, EliteDangerousCore.WebExternalDataLookup.All);    // web lookup
+                            var scan = hl.StarScan2;
+                            var sn = await scan.FindSystemAsync(last.System, EliteDangerousCore.WebExternalDataLookup.All);    // web lookup
+                            var star = sn?.GetStarsScanned().FirstOrDefault();
 
                             StringBuilder sb = new StringBuilder();
 
-                            if (sn != null && sn.StarNodes.Count > 0)   // if we have a star node
+                            if (star != null )   // if we have a star node
                             {   
-                                JournalScan sd = sn.StarNodes.Values[0].ScanData;       // may be null, defend
-                                JournalScan.HabZones hz = sd?.GetHabZones();            // defend against sd being null
+                                HabZones hz = star.Scan.GetHabZones();            
 
                                 if (hz != null)     // defend against missing data
                                 {
                                     if (Config(Configuration.showHabInformation))
                                     {
-                                        sd.HabZoneText_Hab(hz, sb);
+                                        hz.HabZoneText_Hab(sb);
                                         sb.AppendCR();
                                     }
 
                                     if (Config(Configuration.showMetalRichZone))
                                     {
-                                        sd.HabZoneText_MRP(hz, sb);
+                                        hz.HabZoneText_MRP(sb);
                                         sb.AppendCR();
                                     }
 
                                     if (Config(Configuration.showWaterWrldZone))
                                     {
-                                        sd.HabZoneText_WW(hz, sb);
+                                        hz.HabZoneText_WW(sb);
                                         sb.AppendCR();
                                     }
 
                                     if (Config(Configuration.showEarthLikeZone))
                                     {
-                                        sd.HabZoneText_EL(hz, sb);
+                                        hz.HabZoneText_EL(sb);
                                         sb.AppendCR();
                                     }
 
                                     if (Config(Configuration.showAmmonWrldZone))
                                     {
-                                        sd.HabZoneText_AW(hz, sb);
+                                        hz.HabZoneText_AW(sb);
                                         sb.AppendCR();
                                     }
 
                                     if (Config(Configuration.showIcyPlanetZone))
                                     {
-                                        sd.HabZoneText_ZIP(hz, sb);
+                                        hz.HabZoneText_ZIP(sb);
                                         sb.AppendCR();
                                     }
                                 }
@@ -379,7 +376,7 @@ namespace EDDiscovery.UserControls
 
                             if (sb.ToString().HasChars())
                             {
-                                rowpos = rowmargin + AddColText(0, 0, rowpos, sb.ToString(), textcolour, backcolour, dfont, null).Location.Bottom;
+                                rowpos = rowmargin + AddColText(0, 0, rowpos, sb.ToString(), textcolour, backcolour, dfont, null).Bounds.Bottom;
                             }
                         }
 
@@ -389,7 +386,7 @@ namespace EDDiscovery.UserControls
                         if (targetpresent && Config(Configuration.showTargetLine) && currentsystem != null)
                         {
                             string dist = (currentsystem.HasCoordinate) ? currentsystem.Distance(xt, yt, zt).ToString("0.00") : "Unknown".Tx();
-                            rowpos = rowmargin + AddColText(0, 0, rowpos, "Target".Tx()+ ": " + name + " @ " + dist + " ly", textcolour, backcolour, dfont, null).Location.Bottom;
+                            rowpos = rowmargin + AddColText(0, 0, rowpos, "Target".Tx()+ ": " + name + " @ " + dist + " ly", textcolour, backcolour, dfont, null).Bounds.Bottom;
                         }
 
                         startingtextrowpos = rowpos;
@@ -467,7 +464,7 @@ namespace EDDiscovery.UserControls
 
             int colnum = 0;
 
-            ExtendedControls.ExtPictureBox.ImageElement edsm = null;
+            ExtendedControls.ImageElement.Element edsm = null;
 
             if (Config(Configuration.showEDSMButton) )
             {
@@ -477,13 +474,13 @@ namespace EDDiscovery.UserControls
 
                     edsm = pictureBox.AddTextAutoSize(new Point(scanpostextoffset.X + columnpos[colnum], rowpos), new Size(200, 200),
                                             "EDSM", dfont, backtext, textcolour, 0.5F, he, "View system on EDSM".Tx());
-                    edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", new Size(200, 200), dfont, backtext, textcolour.Multiply(1.2F), 0.5F), edsm.Location, true);
+                    edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", new Size(200, 200), dfont, backtext, textcolour.Multiply(1.2F), 0.5F), edsm.Bounds, true);
                 }
 
                 colnum++;
             }
 
-            List<ExtendedControls.ExtPictureBox.ImageElement> items = new List<ExtPictureBox.ImageElement>();
+            List<ExtendedControls.ImageElement.Element> items = new List<ExtendedControls.ImageElement.Element>();
 
             for (int i = 0; i < coldata.Count; i++)             // then we draw them, allowing them to overfill columns if required
             {
@@ -495,7 +492,7 @@ namespace EDDiscovery.UserControls
                 {
                     Image img = he.journalEntry.Icon();
                     var e = pictureBox.AddImage(new Rectangle(scanpostextoffset.X + columnpos[colnum + i], rowpos, img.Width, img.Height), img, null, null, false); 
-                    maxrowpos = Math.Max(maxrowpos, e.Location.Bottom);
+                    maxrowpos = Math.Max(maxrowpos, e.Bounds.Bottom);
                     items.Add(e);
                 }
                 else
@@ -503,7 +500,7 @@ namespace EDDiscovery.UserControls
                     var e = AddColText(colnum + i, colnum + nextfull, rowpos, coldata[i], textcolour, backcolour, dfont, null);
                     if (e != null)
                     {
-                        maxrowpos = Math.Max(maxrowpos, e.Location.Bottom);
+                        maxrowpos = Math.Max(maxrowpos, e.Bounds.Bottom);
                         items.Add(e);
                     }
                 }
@@ -530,19 +527,19 @@ namespace EDDiscovery.UserControls
                     {
                         if (Config(Configuration.showScanLeft))
                         {
-                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
+                            ExtendedControls.ImageElement.Element scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
                             scanpostextoffset = new Point(4 + scanimg.Image.Width + 4, 0);
                             RequestTemporaryMinimumSize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4));
                         }
                         else if (Config(Configuration.showScanAbove))     // if above, NOT transparent (can't do on top)
                         {
-                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
+                            ExtendedControls.ImageElement.Element scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
                             scanpostextoffset = new Point(0, scanimg.Image.Height + 4);
                             RequestTemporaryResizeExpand(new Size(0, scanimg.Image.Height + 4));
                         }
                         else if (Config(Configuration.showScanOnTop))
                         {
-                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
+                            ExtendedControls.ImageElement.Element scanimg = pictureBox.AddTextAutoSize(new Point(4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
 
                             if (IsTransparentModeOn)        // if transparent, the roll up panel is not visible, we can set the whole size to the text
                                 RequestTemporaryResize(new Size(scanimg.Image.Width + 8, scanimg.Image.Height + 4));        // match exactly to use minimum space
@@ -554,13 +551,13 @@ namespace EDDiscovery.UserControls
                         if (Config(Configuration.showScanRight))
                         {
                             Size s = pictureBox.DisplaySize();
-                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(s.Width + 4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN",null, frmt);
+                            ExtendedControls.ImageElement.Element scanimg = pictureBox.AddTextAutoSize(new Point(s.Width + 4, 0), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN",null, frmt);
                             RequestTemporaryMinimumSize(new Size(s.Width + 4 + scanimg.Image.Width + 8, scanimg.Image.Height + 4));
                         }
                         else if (Config(Configuration.showScanBelow))
                         {
                             Size s = pictureBox.DisplaySize();
-                            ExtPictureBox.ImageElement scanimg = pictureBox.AddTextAutoSize(new Point(4, s.Height + 4), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
+                            ExtendedControls.ImageElement.Element scanimg = pictureBox.AddTextAutoSize(new Point(4, s.Height + 4), maxscansize, scantext, dfont, textcolour, backcolour, 1.0F, "SCAN", null, frmt);
                             RequestTemporaryResizeExpand(new Size(0, scanimg.Image.Height + 4));
                         }
                     }
@@ -570,7 +567,7 @@ namespace EDDiscovery.UserControls
             return false;
         }
 
-        ExtendedControls.ExtPictureBox.ImageElement AddColText(int coli, int nextcol , int rowpos, string text, Color textcolour, Color backcolour, 
+        ExtendedControls.ImageElement.Element AddColText(int coli, int nextcol , int rowpos, string text, Color textcolour, Color backcolour, 
                                 Font dfont, string tooltip, Image opt = null , string imagetooltip = null)
         {
             if (text.Length > 0)            // don't place empty text, do not want image handling to work on blank screen
@@ -587,7 +584,7 @@ namespace EDDiscovery.UserControls
 
                 using (StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap))
                 {
-                    ExtendedControls.ExtPictureBox.ImageElement e =
+                    ExtendedControls.ImageElement.Element e =
                                     pictureBox.AddTextAutoSize(new Point(colpos, rowpos),
                                     new Size(endpos, 200),
                                     text, dfont, textcolour, backcolour, 1.0F, null, tooltip, frmt);
@@ -652,7 +649,7 @@ namespace EDDiscovery.UserControls
 
 #region Clicks
 
-        private void pictureBox_ClickElement(object sender, MouseEventArgs e, ExtendedControls.ExtPictureBox.ImageElement i, object tag)
+        private void pictureBox_ClickElement(object sender, MouseEventArgs e, ExtendedControls.ImageElement.Element i, object tag)
         {
             if (i != null)
             {
@@ -853,7 +850,7 @@ namespace EDDiscovery.UserControls
         {
             if ( IsSurfaceScanOn )
             {
-                scantext = scan.DisplayString(historicmatlist: DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast());
+                scantext = scan.DisplayText(historicmatlist: DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast());
                 Display(current_historylist);
                 SetSurfaceScanBehaviour();  // set up timers etc.
             }

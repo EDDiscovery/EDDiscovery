@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
 
         public void AddJournalExtraOptions()
         {
-            UC.AddGroupItem("ApproachBody;Docked;FSDJump;CarrierJump;Location;Undocked;NavRoute", "Travel".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
+            UC.AddGroupItem("ApproachBody;Docked;FSDJump;CarrierJump;Location;Undocked;NavRoute;StartJump", "Travel".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.FSDJump]);
 
             UC.AddGroupItem("Scan;Scan Auto;Scan Basic;Scan Nav;NavBeaconScan;SAAScanComplete;FSSAllBodiesFound;FSSSignalDiscovered;FSSDiscoveryScan;DiscoveryScan;SAASignalsFound;FSSBodySignals", "Scan".Tx(), JournalEntry.JournalTypeIcons[JournalTypeEnum.Scan]);
 

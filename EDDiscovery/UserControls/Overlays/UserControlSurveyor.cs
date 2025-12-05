@@ -611,7 +611,7 @@ namespace EDDiscovery.UserControls
 
             if (sys != null)
             {
-                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);        // get data with EDSM
+                var systemnode = await DiscoveryForm.History.StarScan2.FindSystemAsync(sys, edsmSpanshButton.WebLookup);        // get data with EDSM
                 if (IsClosed)   // may close during await..
                     return;
 
@@ -623,8 +623,8 @@ namespace EDDiscovery.UserControls
 
                 if (systemnode != null)
                 {
-                    int scanned = systemnode.StarPlanetsWithData(edsmSpanshButton.IsAnySet);
-                    int clusters = systemnode.BeltClusters();
+                    int scanned = systemnode.StarPlanetsScanned(edsmSpanshButton.IsAnySet);
+                    int clusters = systemnode.BeltClusterBodies();
 
                     if (scanned > 0)
                     {
@@ -689,7 +689,7 @@ namespace EDDiscovery.UserControls
 
                     if (helist.Count > 0)        // no point executing if nothing in helist
                     {
-                        foreach (var h in helist) { if (h.journalEntry is JournalFSSSignalDiscovered sd) { System.Diagnostics.Debug.WriteLine($"FSS Signal {sd.Signals[0].SystemAddress} vs {sys.SystemAddress}, {sd.GetDetailed(null)}"); } }
+                        //foreach (var h in helist) { if (h.journalEntry is JournalFSSSignalDiscovered sd) { System.Diagnostics.Debug.WriteLine($"FSS Signal {sd.Signals[0].SystemAddress} vs {sys.SystemAddress}, {sd.GetDetailed(null)}"); } }
 
                         var defaultvars = new BaseUtils.Variables();
                         defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10, ensuredoublerep: true);
@@ -703,7 +703,7 @@ namespace EDDiscovery.UserControls
                         foreach (var searchname in allsearches)
                         {
                             // await is horrible, anything can happen, even closing
-                            await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan, false); // execute the searches
+                            await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan2, false); // execute the searches
 
                             if (IsClosed)       // if we was ordered to close, abore
                                 return;
@@ -721,7 +721,7 @@ namespace EDDiscovery.UserControls
 
                 System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor Find System Async {sys.Name}");
 
-                StarScan.SystemNode systemnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, edsmSpanshButton.WebLookup);       
+                var systemnode = await DiscoveryForm.History.StarScan2.FindSystemAsync(sys, edsmSpanshButton.WebLookup);       
                 if (IsClosed)   // may close during await..
                     return;
 
@@ -742,9 +742,9 @@ namespace EDDiscovery.UserControls
                 {
                     System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor Process node {sys.Name}");
 
-                    foreach (StarScan.ScanNode sn in systemnode.Bodies().EmptyIfNull().Where(x => x.ScanData != null))        // only nodes with scan data can be treated here
+                    foreach (var sn in systemnode.Bodies(x=>x.Scan!=null))        // only nodes with scan data can be treated here
                     {
-                        var sd = sn.ScanData;
+                        var sd = sn.Scan;
 
                         // compute some properties of the object
 
@@ -805,7 +805,7 @@ namespace EDDiscovery.UserControls
 
                         // compute if we want search results displayed
 
-                        searchresults.TryGetValue(sn.BodyDesignator, out List<HistoryListQueries.ResultEntry> searchresultfornode);     // will be null if not found
+                        searchresults.TryGetValue(sn.CanonicalNameOrOwnName, out List<HistoryListQueries.ResultEntry> searchresultfornode);     // will be null if not found
 
                         var surveyordisplay = searchresultfornode != null;      // if we have a search node, display
 
@@ -830,7 +830,7 @@ namespace EDDiscovery.UserControls
                                 matchedgeosignals || matchedbiosignals || matchedthargoidsignals || matchedguardiansignals || matchedhumansignals || matchedothersignals || matchedminingsignals ||
                                 (sd.IsStar && IsSet(CtrlList.allstars)) ||
                                 (sd.IsPlanet && IsSet(CtrlList.allplanets)) ||
-                                (sd.IsBeltCluster && IsSet(CtrlList.beltclusters));
+                                (sd.IsBeltClusterBody && IsSet(CtrlList.beltclusters));
 
                         }
 
@@ -883,7 +883,7 @@ namespace EDDiscovery.UserControls
 
                         // if we had a search result, remove it from the list as we have considered it above.  Even if we decided not to print it!
                         if ( searchresultfornode != null )
-                            searchresults.Remove(sn.BodyDesignator);
+                            searchresults.Remove(sn.CanonicalNameOrOwnName);
 
                     }   // end for..
                 }       // end of system node look thru
@@ -921,7 +921,7 @@ namespace EDDiscovery.UserControls
                 {
                     string[] filter = fsssignalstodisplay.Split(';');
 
-                    var signallist = JournalFSSSignalDiscovered.SignalList(systemnode.FSSSignalList);
+                    var signallist = systemnode.FSSSignals ?? new List<FSSSignal>();         // This can be null, if so, make an empty array so the where does not except.
 
                     // mirrors scandisplaynodes
 
@@ -1026,7 +1026,7 @@ namespace EDDiscovery.UserControls
 
             foreach (var kvp in drawsystemtext)        // and present any text results in sorted order
             {
-                var i = new ExtPictureBox.ImageElement();
+                var i = new ExtendedControls.ImageElement.Element();
                 i.TextAutoSize(
                         new Point(3, vpos),
                         new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
@@ -1037,12 +1037,12 @@ namespace EDDiscovery.UserControls
                         1.0F,
                         frmt: frmt);
                 extPictureBoxSystemDetails.Add(i);
-                vpos += i.Location.Height;
+                vpos += i.Bounds.Height;
             }
 
             if (drawsystemvalue > 0 && IsSet(CtrlList.showValues))
             {
-                var i = new ExtPictureBox.ImageElement();
+                var i = new ExtendedControls.ImageElement.Element();
                 i.TextAutoSize(
                     new Point(3, vpos),
                     new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
@@ -1053,13 +1053,13 @@ namespace EDDiscovery.UserControls
                     1.0F,
                     frmt: frmt);
                 extPictureBoxSystemDetails.Add(i);
-                vpos += i.Location.Height;
+                vpos += i.Bounds.Height;
             }
 
             if (drawsystemsignallist.HasChars())
             {
                 //System.Diagnostics.Debug.WriteLine("Display " + siglist);
-                var i = new ExtPictureBox.ImageElement();
+                var i = new ExtendedControls.ImageElement.Element();
                 i.TextAutoSize(new Point(3, vpos),
                                                 new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
                                                 drawsystemsignallist,
@@ -1068,7 +1068,7 @@ namespace EDDiscovery.UserControls
                                                 backcolour,
                                                 1.0F,
                                                 frmt: frmt);
-                vpos += i.Location.Height;
+                vpos += i.Bounds.Height;
                 extPictureBoxSystemDetails.Add(i);
             }
 
@@ -1087,7 +1087,7 @@ namespace EDDiscovery.UserControls
             var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
             Font dfont = displayfont ?? this.Font;
 
-            var i = new ExtPictureBox.ImageElement();
+            var i = new ExtendedControls.ImageElement.Element();
             i.TextAutoSize(
                     new Point(3, 0),
                     new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
@@ -1100,7 +1100,7 @@ namespace EDDiscovery.UserControls
             pb.ClearImageList();
             pb.Add(i);
             if ( text.HasChars() && IsSet(CtrlList.showdividers))
-                pb.AddHorizontalDivider(textcolour.Multiply(0.4f), new Rectangle(0,i.Location.Height, i.Location.Width, 8), 1, 4);
+                pb.AddHorizontalDivider(textcolour.Multiply(0.4f), new Rectangle(0,i.Bounds.Height, i.Bounds.Width, 8), 1, 4);
             pb.Render();
 
             frmt.Dispose();

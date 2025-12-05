@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2023 EDDiscovery development team
+ * Copyright 2016 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,7 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
  */
 
 using EliteDangerousCore;
@@ -77,7 +76,6 @@ namespace EDDiscovery.UserControls
         {
             PutSetting("PinState", extPanelRollUp.PinState);
             DGVSaveColumnLayout(dataGridViewEstimatedValues);
-
             DiscoveryForm.OnNewEntry -= NewEntry;
         }
 
@@ -115,7 +113,7 @@ namespace EDDiscovery.UserControls
 
         async void DrawSystem()   // draw last_he
         {
-            DataGridViewColumn sortcol = dataGridViewEstimatedValues.SortedColumn != null ? dataGridViewEstimatedValues.SortedColumn : dataGridViewEstimatedValues.Columns[6];
+            DataGridViewColumn sortcol = dataGridViewEstimatedValues.SortedColumn != null ? dataGridViewEstimatedValues.SortedColumn :  ColEstBase;
             SortOrder sortorder = dataGridViewEstimatedValues.SortOrder != SortOrder.None ? dataGridViewEstimatedValues.SortOrder : SortOrder.Descending;
 
             dataGridViewEstimatedValues.Rows.Clear();
@@ -126,72 +124,65 @@ namespace EDDiscovery.UserControls
                 return;
             }
 
-            StarScan.SystemNode last_sn = await DiscoveryForm.History.StarScan.FindSystemAsync(last_he.System, edsmSpanshButton.WebLookup);
+            var last_sn = await DiscoveryForm.History.StarScan2.FindSystemAsync(last_he.System, edsmSpanshButton.WebLookup);
 
             if (last_sn != null)
             {
                 long totalvalue = 0;
 
-                foreach (var bodies in last_sn.Bodies())
+                // we have scan data and either edsm spansh set or no web bordies
+
+                foreach (var body in last_sn.Bodies(x=>x.Scan!=null && (edsmSpanshButton.IsAnySet || !x.Scan.IsWebSourced)))
                 {
-                    // we have scan data, and a name, and either edsm spansh set or no web bordies
+                    string spclass = body.Scan.IsStar ? body.Scan.StarTypeText : body.Scan.PlanetTypeText;
 
-                    if (bodies.ScanData != null && bodies.ScanData.BodyName != null && (edsmSpanshButton.IsAnySet || !bodies.ScanData.IsWebSourced))     
+                    body.Scan.GetPossibleEstimatedValues(extCheckBoxShowImpossible.Checked,
+                                        out long basevalue,
+                                        out long mappedvalue, out long mappedefficiently,                  
+                                        out long firstmappedvalue, out long firstmappedefficiently,        
+                                        out long firstdiscoveredmappedvalue, out long firstdiscoveredmappedefficiently,  
+                                        out long _
+                        );
+
+                    string mappedstr = mappedvalue > 0 ? (mappedefficiently.ToString("N0") + " / " + mappedvalue.ToString("N0")) : "";
+                    string firstmappedeffstr = firstmappedvalue > 0 ? (firstmappedefficiently.ToString("N0") + " / " + firstmappedvalue.ToString("N0")) : "";
+                    string fdmappedstr = firstdiscoveredmappedvalue > 0 ? (firstdiscoveredmappedefficiently.ToString("N0") + " / " + firstdiscoveredmappedvalue.ToString("N0")) : "";
+
+                    // System.Diagnostics.Debug.WriteLine($"EV was map {bodies.Scan.IsPreviouslyMapped} was dis {bodies.Scan.IsPreviouslyDiscovered} we map {bodies.Scan.Mapped}");
+
+                    int estimatedvalue = body.Scan.EstimatedValue;
+
+                    if (checkBoxShowZeros.Checked || basevalue > 0)
                     {
-                        string spclass = bodies.ScanData.IsStar ? bodies.ScanData.StarTypeText : bodies.ScanData.PlanetTypeText;
+                        int rwno = dataGridViewEstimatedValues.Rows.Add(new object[] {
+                                        body.Scan.GetImage(),
+                                        body.Name(),
+                                        spclass,
+                                        body.Scan.DataSourceName,
+                                        body.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : nullimg,
+                                        body.Scan.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : nullimg,
+                                        body.Scan.PR31State ? Icons.Controls.Scan_NotDiscoveredButMapped : body.Scan.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : nullimg,
+                                        basevalue.ToString("N0"),
+                                        mappedstr,
+                                        firstmappedeffstr,
+                                        fdmappedstr ,
+                                        estimatedvalue>0 ? estimatedvalue.ToString("N0") : "" });
 
-                        bodies.ScanData.GetPossibleEstimatedValues(extCheckBoxShowImpossible.Checked,
-                                            out long basevalue,
-                                            out long mappedvalue, out long mappedefficiently,                  
-                                            out long firstmappedvalue, out long firstmappedefficiently,        
-                                            out long firstdiscoveredmappedvalue, out long firstdiscoveredmappedefficiently,  
-                                            out long _
-                            );
-
-                        string mappedstr = mappedvalue > 0 ? (mappedefficiently.ToString("N0") + " / " + mappedvalue.ToString("N0")) : "";
-                        string firstmappedeffstr = firstmappedvalue > 0 ? (firstmappedefficiently.ToString("N0") + " / " + firstmappedvalue.ToString("N0")) : "";
-                        string fdmappedstr = firstdiscoveredmappedvalue > 0 ? (firstdiscoveredmappedefficiently.ToString("N0") + " / " + firstdiscoveredmappedvalue.ToString("N0")) : "";
-
-                        // System.Diagnostics.Debug.WriteLine($"EV was map {bodies.ScanData.IsPreviouslyMapped} was dis {bodies.ScanData.IsPreviouslyDiscovered} we map {bodies.ScanData.Mapped}");
-
-                        int estimatedvalue = bodies.ScanData.EstimatedValue;
-
-                        if (checkBoxShowZeros.Checked || basevalue > 0)
-                        {
-                            dataGridViewEstimatedValues.Rows.Add(new object[] {
-                                            GetBodySimpleName(bodies.ScanData.BodyDesignationOrName, last_he.System.Name),
-                                            spclass,
-                                            bodies.ScanData.DataSourceName,
-                                            (bodies.IsMapped ? Icons.Controls.Scan_Bodies_Mapped : nullimg),
-                                            (bodies.ScanData.WasMapped == true? Icons.Controls.Scan_Bodies_Mapped : nullimg),
-                                            bodies.ScanData.PR31State ? Icons.Controls.Scan_NotDiscoveredButMapped : bodies.ScanData.WasDiscovered == true ? Icons.Controls.Scan_DisplaySystemAlways : nullimg,
-                                            basevalue.ToString("N0"),
-                                            mappedstr,
-                                            firstmappedeffstr,
-                                            fdmappedstr ,
-                                            estimatedvalue>0 ? estimatedvalue.ToString("N0") : "" });
-
-                            // column 0 is sorted by tag and has the full name in it.
-                            dataGridViewEstimatedValues.Rows[dataGridViewEstimatedValues.RowCount - 1].Cells[0].Tag = bodies.ScanData.BodyDesignationOrName;
-                            totalvalue += estimatedvalue;
-                        }
+                        // column 0 is sorted by tag and has the full name in it.
+                        dataGridViewEstimatedValues.Rows[rwno].Cells[0].Tag = body.Scan.BodyName;       // store body name in cells[0] tag for sorting below
+                        totalvalue += estimatedvalue;
                     }
                 }
 
                 dataGridViewEstimatedValues.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
                 dataGridViewEstimatedValues.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
-                SetControlText(string.Format("Estimated Scan Values for {0}".Tx()+ ": " + totalvalue.ToString("N0") + " cr" + " | You scanned {1} of {2} bodies in this system.".Tx(), last_sn.System.Name, last_sn.StarPlanetsWithData(false).ToString(), last_sn.FSSTotalBodies?.ToString() ?? "?"));
+                SetControlText(string.Format("Estimated Scan Values for {0}".Tx()+ ": " + totalvalue.ToString("N0") + " cr" + " | You scanned {1} of {2} bodies in this system.".Tx(), last_sn.System.Name, last_sn.StarPlanetsScanned(false).ToString(), last_sn.FSSTotalBodies?.ToString() ?? "?"));
             }
             else
             {
                 SetControlText("No Scan".Tx());
             }
-        }
-
-        private string GetBodySimpleName(string bodyName, string systemName)
-        {
-            return bodyName.ReplaceIfStartsWith(systemName,musthaveextra:true).Trim();
         }
 
         private void CheckBoxShowZeros_CheckedChanged(object sender, EventArgs e)
@@ -206,6 +197,15 @@ namespace EDDiscovery.UserControls
             DrawSystem();
         }
 
+        private void dataGridViewEstimatedValues_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
+        {
+            if (e.Column == ColBodyImage)
+                e.SortDataGridViewColumnAlphaInt(true);     // use cell tag which has full name
+            else if (e.Column.Index >= ColEstBase.Index)
+                e.SortDataGridViewColumnNumeric();
+            else if (e.Column.Index >= ColMapped.Index)
+                SortImageColumn(e);
+        }
         private void SortImageColumn(DataGridViewSortCompareEventArgs e)
         {
             bool cv1 = !object.ReferenceEquals(e.CellValue1, nullimg);
@@ -213,16 +213,5 @@ namespace EDDiscovery.UserControls
             e.SortResult = cv1.CompareTo(cv2);
             e.Handled = true;
         }
-
-        private void dataGridViewEstimatedValues_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
-        {
-            if (e.Column.Index == 0)
-                e.SortDataGridViewColumnAlphaInt(true);     // use cell tag which has full name
-            else if (e.Column.Index >= 6)
-                e.SortDataGridViewColumnNumeric();
-            else if (e.Column.Index >= 3)
-                SortImageColumn(e);
-        }
-
-     }
+    }
 }

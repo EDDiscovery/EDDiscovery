@@ -226,6 +226,7 @@ namespace EDDiscovery.Icons
         public static Image Folder { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Folder"); } }
         public static Image Clock { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Clock"); } }
         public static Image Play { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.Play"); } }
+        public static Image FastForward { get { return BaseUtils.Icons.IconSet.GetIcon("Controls.FastForward"); } }
         public static Image Missions { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Missions"); } }
         public static Image Bounty { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Bounty"); } }
         public static Image Interdiction { get { return BaseUtils.Icons.IconSet.GetIcon("Journal.Interdiction"); } }

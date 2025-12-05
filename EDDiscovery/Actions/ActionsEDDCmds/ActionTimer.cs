@@ -30,7 +30,7 @@ namespace EDDiscovery.Actions
         {
             StringParser sp = new StringParser(input);
             List<string> s = sp.NextQuotedWordList();
-            return (s != null && s.Count >= 1 && s.Count <= 3) ? s : null;
+            return (s != null && s.Count >= 1) ? s : null;
         }
 
         public override string VerifyActionCorrect()
@@ -60,6 +60,7 @@ namespace EDDiscovery.Actions
             public string name;
             public ActionProgramRun ap;
             public HistoryEntry he;
+            public Variables vars;
         }
 
         public override bool ExecuteAction(ActionProgramRun ap)
@@ -91,18 +92,46 @@ namespace EDDiscovery.Actions
                         int time;
                         if (exp[1].InvariantParse(out time))        // if number decodes
                         {
+                            Variables timervars = new Variables();
+
                             HistoryEntry he = null;
-                            long jid;
                             if (exp.Count >= 3)                     // if jid present
                             {
-                                if (exp[2].InvariantParse(out jid))
+                                if (exp[2].InvariantParse(out long jid))
                                 {
-                                    he = (ap.ActionController as ActionController).HistoryList.GetByJID(jid);
-
-                                    if (he == null)
+                                    if (jid >= 0)
                                     {
-                                        ap.ReportError("Timer could not find event " + jid);
-                                        return true;
+                                        he = (ap.ActionController as ActionController).HistoryList.GetByJID(jid);
+
+                                        if (he == null)
+                                        {
+                                            ap.ReportError("Timer could not find event " + jid);
+                                            return true;
+                                        }
+                                    }
+
+                                    // pick up any passing variables
+                                    int counter = 3;
+                                    while( counter<exp.Count)
+                                    {
+                                        string key = exp[counter];
+                                        int asterisk = key.IndexOf('*');
+                                        if ( asterisk < 0 )                     // no wildcard
+                                        {
+                                            if (ap.variables.TryGet(key, out string ex))        // don't fail if not there, its okay
+                                                timervars[key] = ex;
+                                        }
+                                        else
+                                        {
+                                            string prefix = key.Substring(0, asterisk);
+                                            foreach( string vname in ap.variables.NameEnumuerable)  // check all variables against start pattern
+                                            {
+                                                if (vname.StartsWith(prefix) && ap.variables.TryGet(vname, out string ex))
+                                                    timervars[vname] = ex;
+                                            }
+                                        }
+
+                                        counter++;
                                     }
                                 }
                                 else
@@ -128,9 +157,11 @@ namespace EDDiscovery.Actions
                                 }
                             }
 
+                            timervars["TimerName"] = exp[0];
+
                             Timer t = new Timer() { Interval = time };
                             t.Tick += Timer_Tick;
-                            t.Tag = new TimerInfo() { timerid = timerid, ap = ap, name = exp[0], he = he };
+                            t.Tag = new TimerInfo() { timerid = timerid, ap = ap, name = exp[0], he = he, vars = timervars };
                             timers.Add(t);
                             t.Start();
                             
@@ -158,8 +189,8 @@ namespace EDDiscovery.Actions
 
             TimerInfo ti = t.Tag as TimerInfo;
 
-            //System.Diagnostics.Debug.WriteLine($"Timer ticked {ti.timerid} {ti.name}");
-            (ti.ap.ActionController as ActionController).ActionRun(Actions.ActionEventEDList.onTimer, ti.he, new Variables("TimerName", ti.name), now: false);    // queue at end an event
+           // System.Diagnostics.Debug.WriteLine($"Timer ticked {ti.timerid} {ti.name} {ti.vars.ToString()}");
+            (ti.ap.ActionController as ActionController).ActionRun(Actions.ActionEventEDList.onTimer, ti.he, ti.vars, now: false);    // queue at end an event
 
             timers.Remove(t);   // done with it
             t.Dispose();

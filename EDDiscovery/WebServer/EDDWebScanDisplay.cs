@@ -69,13 +69,13 @@ namespace EDDiscovery.WebServer
                     var lookup = checkEDSM ? (checkSPANSH ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : WebExternalDataLookup.EDSM) :
                                 checkSPANSH ? EliteDangerousCore.WebExternalDataLookup.Spansh : EliteDangerousCore.WebExternalDataLookup.None;
 
-                    StarScan.SystemNode sn = hl.StarScan.FindSystemSynchronous(hl.EntryOrder()[entry].System, lookup);
+                    var sn = hl.StarScan2.FindSystemSynchronous(hl.EntryOrder()[entry].System, lookup);
 
                     if (sn != null)
                     {
                         int starsize = (request.QueryString["starsize"] ?? "48").InvariantParseInt(48);
                         int width = (request.QueryString["width"] ?? "800").InvariantParseInt(800);
-                        SystemDisplay sd = new SystemDisplay();
+                        var sd = new EliteDangerousCore.StarScan2.SystemDisplay();
                         sd.ShowMoons = (request.QueryString["showmoons"] ?? "true").InvariantParseBool(true);
                         sd.ShowOverlays = (request.QueryString["showbodyicons"] ?? "true").InvariantParseBool(true);
                         sd.ShowMaterials = (request.QueryString["showmaterials"] ?? "true").InvariantParseBool(true);
@@ -98,12 +98,12 @@ namespace EDDiscovery.WebServer
                         //imagebox.AddTextAutoSize(new Point(10, 10), new Size(1000, 48), "Generated on " + DateTime.UtcNow.ToString(), new Font("MS Sans Serif", 8.25f), Color.Red, Color.Black, 0);
                         imagebox.Render();
 
-                        foreach (var e in imagebox.Elements)
+                        foreach (ExtendedControls.ImageElement.Element e in imagebox)
                         {
                             if (e.ToolTipText.HasChars())
                             {
                                 //     System.Diagnostics.Debug.WriteLine("{0} = {1}", e.Location, e.ToolTipText);
-                                objectlist.Add(new JObject() { ["left"] = e.Position.X, ["top"] = e.Position.Y, ["right"] = e.Location.Right, ["bottom"] = e.Location.Bottom, ["text"] = e.ToolTipText });
+                                objectlist.Add(new JObject() { ["left"] = e.Location.X, ["top"] = e.Location.Y, ["right"] = e.Bounds.Right, ["bottom"] = e.Bounds.Bottom, ["text"] = e.ToolTipText });
                             }
                         }
 

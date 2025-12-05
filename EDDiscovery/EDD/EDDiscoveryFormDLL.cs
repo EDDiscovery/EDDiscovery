@@ -211,7 +211,7 @@ namespace EDDiscovery
 
                 if (syslookup.HasChars())
                 {
-                    var sc = History.StarScan;
+                    var sc = History.StarScan2;
 
                     var sysclass = new SystemClass(syslookup);
 
@@ -254,7 +254,7 @@ namespace EDDiscovery
 
                 if (sysc != null)
                 {
-                    var sc = History.StarScan;
+                    var sc = History.StarScan2;
 
                     WebExternalDataLookup wlu = weblookup == 3 ? WebExternalDataLookup.SpanshThenEDSM : weblookup == 2 ? WebExternalDataLookup.Spansh :
                                                     weblookup == 1 ? WebExternalDataLookup.EDSM : WebExternalDataLookup.None;
