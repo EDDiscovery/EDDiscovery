@@ -72,36 +72,30 @@ namespace EDDiscovery.Forms
 
         public bool Init(string cellset)
         {
-            string datapath = EDDOptions.Instance.MapsAppDirectory();
-            if (Directory.Exists(datapath))
-            {
-                galaxy = EDDiscovery.Icons.IconMaps.StandardMaps().Find(x=>x.FilePath.Contains("Galaxy L"));
+            galaxy = EDDiscovery.Icons.IconMaps.StandardMaps().Find(x=>x.FilePath.Contains("Galaxy L"));
 
-                imageViewer.Image = galaxy.Image;
-                imageViewer.ZoomToFit();
-                imageViewer.Init(galaxy);
-                imageViewer.MinZoom = 1;
+            imageViewer.Image = galaxy.Image;
+            imageViewer.ZoomToFit();
+            imageViewer.Init(galaxy);
+            imageViewer.MinZoom = 1;
 
-                comboBoxSelections.Items.AddRange((from x in DefaultGalaxyOptions select x.Item1));
+            comboBoxSelections.Items.AddRange((from x in DefaultGalaxyOptions select x.Item1));
 
-                initialsel = Selection = cellset;
-                initiallist = new List<int>(imageViewer.Selection);     // copy of..
+            initialsel = Selection = cellset;
+            initiallist = new List<int>(imageViewer.Selection);     // copy of..
 
-                var theme = ExtendedControls.Theme.Current;
-                bool winborder = theme.ApplyDialog(this);
-                statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
+            var theme = ExtendedControls.Theme.Current;
+            bool winborder = theme.ApplyDialog(this);
+            statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
 
-                var enumlist = new Enum[] { EDTx.GalaxySectorSelect, EDTx.GalaxySectorSelect_buttonExtSet, EDTx.GalaxySectorSelect_labelSectorName };
-                BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { labelX, labelXName, labelZ, labelZName, labelID });
+            var enumlist = new Enum[] { EDTx.GalaxySectorSelect, EDTx.GalaxySectorSelect_buttonExtSet, EDTx.GalaxySectorSelect_labelSectorName };
+            BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { labelX, labelXName, labelZ, labelZName, labelID });
 
-                SetComboBox();
+            SetComboBox();
 
-                imageViewer.BackColor = Color.FromArgb(5, 5, 5);
+            imageViewer.BackColor = Color.FromArgb(5, 5, 5);
 
-                return true;
-            }
-
-            return false;
+            return true;
         }
 
 
