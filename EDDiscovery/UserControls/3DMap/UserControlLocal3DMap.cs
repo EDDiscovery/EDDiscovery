@@ -36,7 +36,8 @@ namespace EDDiscovery.UserControls
         {
             DBBaseName = "Local3DMapPanel_";
 
-            glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter,null,4,6);
+            var gr = new OpenTK.Graphics.GraphicsMode(32, 24, 8, 0, 0, 2, false);
+            glwfc = new GLOFC.WinForm.GLWinFormControl(panelOuter, gr, 4, 6);
             glwfc.EnsureCurrent = true;      // set, ensures context is set up for internal code on paint and any Paints chained to it
         }
 
