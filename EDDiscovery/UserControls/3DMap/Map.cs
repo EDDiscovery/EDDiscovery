@@ -386,7 +386,7 @@ namespace EDDiscovery.UserControls.Map3D
             starimagearraycontrolword[(int)EDStar.StellarRemnantNebula] |= 65536;
             starimagearraycontrolword[(int)EDStar.SuperMassiveBlackHole] |= 65536;
 
-            if ((parts & Parts.GalObjects) != 0)
+            if ((parts & Parts.GalObjects) != 0 && galacticmapping.VisibleMapObjects.Length > 0)            // add a check to stop loading it if we don't have any yet
             {
                 galmapobjects = new GalMapObjects();
                 galmapobjects.CreateObjects(items, rObjects, galacticmapping, findresults, true);

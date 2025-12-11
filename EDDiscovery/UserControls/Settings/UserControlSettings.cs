@@ -645,12 +645,9 @@ namespace EDDiscovery.UserControls
         private void buttonExtSystemDBConfigureArea_Click(object sender, EventArgs e)
         {
             GalaxySectorSelect gss = new GalaxySectorSelect();
-
-            if (!gss.Init(SystemsDatabase.Instance.GetGridIDs()))
-            {
-                ExtendedControls.MessageBoxTheme.Show(this, "Warning".Tx(), "No map available!".Tx());
-            }
-            else if (gss.ShowDialog() == DialogResult.OK)
+            gss.Init(SystemsDatabase.Instance.GetGridIDs());
+      
+            if (gss.ShowDialog() == DialogResult.OK)
             {
                 SystemsDatabase.Instance.SetGridIDs(gss.Selection);
 
