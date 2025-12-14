@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls
                 dataGridView.Rows.Clear();
                 long totalvalue = 0;
 
-                foreach( var system in DiscoveryForm.History.StarScan2.AllNamedSystems)
+                foreach( var system in DiscoveryForm.History.StarScan2.AllSystemNodes)
                 { 
                     foreach (var body in system.Bodies(x=>x.Organics!=null))        // all organic bodies
                     {
