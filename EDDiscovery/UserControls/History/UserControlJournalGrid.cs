@@ -416,9 +416,18 @@ namespace EDDiscovery.UserControls
                 sender.CallPerformPanelOperation(this, he);         // direct send back to sender so we don't wake up lots of panels
                 return PanelActionState.Success;
             }
+            else if (actionobj is GotoJournalEntryRequest gjr)
+            {
+                return GotoPosByJID(gjr.JournalID) ? PanelActionState.Success : PanelActionState.Failed;
+            }
 
 
             return PanelActionState.NotHandled;
+        }
+
+        public class GotoJournalEntryRequest
+        {
+            public long JournalID;
         }
 
         public bool GotoPosByJID(long jid)

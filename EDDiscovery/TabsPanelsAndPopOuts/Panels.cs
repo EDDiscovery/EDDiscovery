@@ -92,6 +92,7 @@ namespace EDDiscovery
             DockingPanel = 64,
             TravelPanel = 66,
             // ****** ADD More here DO NOT RENUMBER *****
+            PowerplayMerits = 67,
         };
 
         public const int DLLUserPanelsStart = 20000;
@@ -116,6 +117,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", "Ledger of cash related entries") },
             { new PanelInfo( PanelIDs.Missions, typeof(UserControlMissions), "Missions", "Missions", "Mission list") },
             { new PanelInfo( PanelIDs.Factions, typeof(UserControlFactions), "Factions", "Factions", "Faction rewards and trading tally") },
+            { new PanelInfo( PanelIDs.PowerplayMerits, typeof(UserControlPPMerits), "Powerplay Merits", "PowerplayMerits", "Track powerplay merits by cycle, session, system") },
             { new PanelInfo( PanelIDs.Modules, typeof(UserControlModules), "Ships/Loadout", "Modules", "Ships and their loadouts plus stored modules") },
             { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", "Statistics Information") },
             { new PanelInfo( PanelIDs.SuitsWeapons, typeof(UserControlSuitsWeapons), "Suits & Weapons", "SuitsWeapons", "Suits, Loadouts, Weapons") },
