@@ -28,6 +28,7 @@ namespace EDDiscovery.UserControls
     {
         private Timer period = new Timer();
         private int periodtickcounter = 0;
+        protected bool fleetcarrier = true;
 
         private Control[] lefttopalignedfinancecontrols;
         private Control[] midtopalignedfinancecontrols;
@@ -110,7 +111,8 @@ namespace EDDiscovery.UserControls
                                     { new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomOutX(); } ),
                                           new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomResetX(); } ),
                                     },
-                                new Action<ToolStripMenuItem[]>((list) => {
+                                new Action<ToolStripMenuItem[]>((list) =>
+                                {
                                     list[0].Enabled = list[1].Enabled = extChartLedger.IsZoomedX;
                                 })
                                 );
@@ -144,7 +146,7 @@ namespace EDDiscovery.UserControls
                 {
                     gr.FillRectangle(br4, new Rectangle(766, 513, 5, 5));
                 }
-                using (Brush br5 = new SolidBrush(Color.FromArgb(250, Color.FromArgb(200,88,73,69))))
+                using (Brush br5 = new SolidBrush(Color.FromArgb(250, Color.FromArgb(200, 88, 73, 69))))
                 {
                     gr.FillRectangle(br5, new Rectangle(1096, 625, 5, 4));
                 }
@@ -153,6 +155,16 @@ namespace EDDiscovery.UserControls
 
         protected override void Init()
         {
+            if ( !fleetcarrier)
+            {
+                extTabControl.TabPages.Remove(tabPageCAPI1);
+                tabPageCAPI1 = null;
+                extTabControl.TabPages.Remove(tabPageCAPI2);
+                tabPageCAPI2 = null;
+                extTabControl.TabPages.Remove(tabPageCAPI3);
+                tabPageCAPI3 = null;
+            }
+
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             DiscoveryForm.OnThemeChanged += ClearDisplayFontJournalCAPI;
@@ -212,14 +224,14 @@ namespace EDDiscovery.UserControls
             normfont.Dispose();
         }
 
-        private void Discoveryform_OnHistoryChange()     
+        private void Discoveryform_OnHistoryChange()
         {
             ClearDisplayFontJournalCAPI();   // do the lot, including the capi, etc.
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he)     
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
-            if ( he.journalEntry is ICarrierStats)
+            if (he.journalEntry is ICarrierStats)
             {
                 DisplayJournal();
             }
@@ -237,17 +249,17 @@ namespace EDDiscovery.UserControls
 
         private void Period_Tick(object sender, EventArgs e)
         {
-            var cs = DiscoveryForm.History.Carrier;
+            var cs = fleetcarrier ? DiscoveryForm.History.FleetCarrier : DiscoveryForm.History.SquadronCarrier;
 
             if (cs.CheckCarrierJump(DateTime.UtcNow)) // if autojump happened
                 DisplayJournal();      // redisplay all - including destinationsystem
             else
                 DisplayDestinationSystem();     // redisplay just the time
 
-            if ( ++periodtickcounter % 4 == 0)     // every N go, change the flashy lights on the image overall
+            if (++periodtickcounter % 4 == 0)     // every N go, change the flashy lights on the image overall
             {
                 imageControlOverall.ImageVisible[2] = periodtickcounter % 8 == 0;
-                imageControlOverall.Invalidate();       
+                imageControlOverall.Invalidate();
             }
 
             // capi enable/disable  - get stats
@@ -256,10 +268,10 @@ namespace EDDiscovery.UserControls
             bool capisamecmdr = DiscoveryForm.History.CommanderId == capicmdrid;
 
             // enabled if greater than this time ago or not same commander
-            extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = DiscoveryForm.History.IsRealCommanderId && (!capisamecmdr || (DateTime.UtcNow - capitime) >= new TimeSpan(0, 0, 2, 0));
+            extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = fleetcarrier && DiscoveryForm.History.IsRealCommanderId && (!capisamecmdr || (DateTime.UtcNow - capitime) >= new TimeSpan(0, 0, 2, 0));
 
             // if its the same commander, and our display is in the past, another panel fetched it, redisplay
-            if (capisamecmdr && capitime > capidisplayedtime)
+            if (fleetcarrier && capisamecmdr && capitime > capidisplayedtime)
                 DisplayCAPIFromDB();
 
         }
@@ -301,7 +313,7 @@ namespace EDDiscovery.UserControls
 
         private async void DisplayJournal()
         {
-            var cs = DiscoveryForm.History.Carrier;
+            var cs = fleetcarrier ? DiscoveryForm.History.FleetCarrier : DiscoveryForm.History.SquadronCarrier;
 
             cs.CheckCarrierJump(DateTime.UtcNow);       // see if auto jump happened
 
@@ -388,7 +400,7 @@ namespace EDDiscovery.UserControls
 
                     var row = dataGridViewLedger.Rows.Add(rowobj);
                     dataGridViewLedger.Rows[row].Tag = seltime;
-                    extChartLedger.AddXY(seltime, le.Balance,graphtooltip:$"{seltime.ToString()} {le.Balance:N0}cr");
+                    extChartLedger.AddXY(seltime, le.Balance, graphtooltip: $"{seltime.ToString()} {le.Balance:N0}cr");
                     //System.Diagnostics.Debug.WriteLine($"Add {seltime} {le.Balance}");
                 }
 
@@ -405,11 +417,11 @@ namespace EDDiscovery.UserControls
 
                     if (cs.IsDecommisioned)
                     {
-                        name += " (" + "Decommissioned".Tx()+ ")";
+                        name += " (" + "Decommissioned".Tx() + ")";
                     }
                     else if (cs.IsDecommisioning)
                     {
-                        name += " (" + "Decommissioning on".Tx()+ " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(cs.DecommisionTimeUTC.Value) + ")";
+                        name += " (" + "Decommissioning on".Tx() + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(cs.DecommisionTimeUTC.Value) + ")";
                     }
 
                     imageControlOverall.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), name, bigfont, color);
@@ -507,7 +519,7 @@ namespace EDDiscovery.UserControls
 
                             var size = imageControlServices.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), JournalCarrierCrewServices.GetTranslatedServiceName(srvtype), bigfont, color);
                             pointtextleft.Y += (int)(size.Height + 1);
-                            string coreoroptional = srvtype <= EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.ServiceType.TritiumDepot ? "Core Service".Tx(): "Optional Service".Tx();
+                            string coreoroptional = srvtype <= EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.ServiceType.TritiumDepot ? "Core Service".Tx() : "Optional Service".Tx();
                             imageControlServices.DrawText(pointtextleft, new Size(titlewidth, 1000), coreoroptional, normfont, color);
 
                             Image img = BaseUtils.Icons.IconSet.Instance.Get("Controls." + srvtype.ToString());
@@ -529,7 +541,7 @@ namespace EDDiscovery.UserControls
                                 // crewname, if either no service state or name is null, ??
                                 string crewname = servicestate?.CrewName ?? "??";
 
-                                imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name".Tx()+": "+ crewname, normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name".Tx() + ": " + crewname, normfont, color);
                             }
 
                             if (active)
@@ -648,6 +660,8 @@ namespace EDDiscovery.UserControls
 
         private int DisplayPackItem(Graphics gr, CarrierState.PackClass sp, bool module, int vpos, Color color)
         {
+            var cs = fleetcarrier ? DiscoveryForm.History.FleetCarrier : DiscoveryForm.History.SquadronCarrier;
+
             const int titlewidth = 600;
 
             var area = new Rectangle(hspacing, vpos, servicewidth, serviceheight);
@@ -661,12 +675,12 @@ namespace EDDiscovery.UserControls
 
             var size = imageControlPacks.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), sp.PackTheme.SplitCapsWordFull(), bigfont, color);
             pointtextleft.Y += (int)(size.Height + 1) + linemargin;
-            imageControlPacks.DrawText(pointtextleft, new Size(titlewidth, 2000), "Tier ".Tx()+ sp.PackTier.ToString("N0"), bigfont, color);
+            imageControlPacks.DrawText(pointtextleft, new Size(titlewidth, 2000), "Tier ".Tx() + sp.PackTier.ToString("N0"), bigfont, color);
 
 
             var pointtextmid = new Point(titlewidth + 50, pointtextleft.Y);
 
-            if (DiscoveryForm.History.Carrier.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
+            if (cs.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
             {
                 imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), BaseUtils.FieldBuilder.Build("Cost: ; cr;N0".Tx(), value), normfont, color);
             }
@@ -679,7 +693,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplayDestinationSystem()
         {
-            var cs = DiscoveryForm.History.Carrier;
+            var cs = fleetcarrier ? DiscoveryForm.History.FleetCarrier : DiscoveryForm.History.SquadronCarrier;
 
             if (cs.State.HaveCarrier && cs.IsJumping)
             {
@@ -699,7 +713,7 @@ namespace EDDiscovery.UserControls
                 else
                     jumptext += "Jumping".Tx();
 
-                imageControlOverall.DrawImage(global::EDDiscovery.Icons.Controls.ArrowsRight, new Rectangle(hpos, vpos, 48, 24), bitmap:1);
+                imageControlOverall.DrawImage(global::EDDiscovery.Icons.Controls.ArrowsRight, new Rectangle(hpos, vpos, 48, 24), bitmap: 1);
                 hpos += 48;
 
                 imageControlOverall.DrawText(new Point(hpos, vpos), new Size(30000, 30000), jumptext, bigfont, ExtendedControls.Theme.Current.SPanelColor, bitmap: 1);
@@ -711,7 +725,7 @@ namespace EDDiscovery.UserControls
 
                 paintedlayer1 = true;
             }
-            else if ( paintedlayer1)
+            else if (paintedlayer1)
             {
                 imageControlOverall.Clear(1);       // clear destination bitmap plane
                 imageControlOverall.Invalidate();
@@ -748,7 +762,7 @@ namespace EDDiscovery.UserControls
 
             int maxh = Math.Max(lypos, lmpos);
 
-            int rightpos = Width- 270;
+            int rightpos = Width - 270;
             int xpos = rightpos;
             int rypos = linemargin;
             int shown = 0;
@@ -823,7 +837,7 @@ namespace EDDiscovery.UserControls
                     int tries = 3;
                     while (tries-- > 0)        // goes at getting the valid data from frontier
                     {
-                        string fleetcarrier = DiscoveryForm.FrontierCAPI.FleetCarrier(out DateTime _, nocontentreturnemptystring:true);
+                        string fleetcarrier = DiscoveryForm.FrontierCAPI.FleetCarrier(out DateTime _, nocontentreturnemptystring: true);
 
                         if (fleetcarrier != null)
                         {
@@ -857,12 +871,12 @@ namespace EDDiscovery.UserControls
 
                         DisplayCAPI(fc);        // may be null, this will clear it if it is
 
-                        if ( nocarrier )
+                        if (nocarrier)
                         {
                             ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Carrier".Tx(),
                                 "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
-                        else if ( fc == null  )
+                        else if (fc == null)
                         {
                             ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No CAPI data from frontier, due to either or server/network failure".Tx(),
                                 "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -886,14 +900,14 @@ namespace EDDiscovery.UserControls
             int capicmd = GetSettingGlobal(dbCAPICommander, -1);
 
             // if its a valid capi for commander, turn it into a FC entity
-            var fc = (capi.Length > 0 && capicmd == DiscoveryForm.History.CommanderId) ? new CAPI.FleetCarrier(capi) : null;        
+            var fc = (capi.Length > 0 && capicmd == DiscoveryForm.History.CommanderId) ? new CAPI.FleetCarrier(capi) : null;
 
             DisplayCAPI(fc);
         }
 
         private DateTime capidisplayedtime;
 
-       
+
         // fc = null means invalid capi data, clear display
         private void DisplayCAPI(CAPI.FleetCarrier fc)
         {
@@ -1018,7 +1032,7 @@ namespace EDDiscovery.UserControls
                             string speed = ship?.Speed.ToString("N0") ?? "";
                             string boost = ship?.Boost.ToString("N0") ?? "";
                             string mass = ship?.HullMass.ToString("N0") ?? "";
-                            string classv = ship?.ClassString ?? ""; 
+                            string classv = ship?.ClassString ?? "";
 
                             object[] rowobj = {
                                             name,
@@ -1128,8 +1142,14 @@ namespace EDDiscovery.UserControls
         }
 
         #endregion
+    }
 
-        
 
+    public class UserControlSquadronCarrier : UserControlCarrier
+    {
+        public UserControlSquadronCarrier() : base()
+        {
+            fleetcarrier = false;
+        }
     }
 }

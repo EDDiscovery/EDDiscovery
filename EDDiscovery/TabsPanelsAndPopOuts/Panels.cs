@@ -91,6 +91,7 @@ namespace EDDiscovery
             AutoPanel = 63,
             DockingPanel = 64,
             TravelPanel = 66,
+            SquadronCarrier = 67,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -120,6 +121,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", "Statistics Information") },
             { new PanelInfo( PanelIDs.SuitsWeapons, typeof(UserControlSuitsWeapons), "Suits & Weapons", "SuitsWeapons", "Suits, Loadouts, Weapons") },
             { new PanelInfo( PanelIDs.Carrier, typeof(UserControlCarrier), "Carrier", "Carrier", "Data about your fleet carrier") },
+            { new PanelInfo( PanelIDs.SquadronCarrier, typeof(UserControlSquadronCarrier), "Squadron Carrier", "SquadronCarrier", "Data about your squadron's carrier") },
             { new PanelInfo( PanelIDs.Colonisation, typeof(UserControlColonisation), "Colonisation", "Colonisation", "Colonisation statistics") },
 
             { new PanelInfo( "Station Data") },

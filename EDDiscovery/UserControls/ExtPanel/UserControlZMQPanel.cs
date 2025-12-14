@@ -655,7 +655,22 @@ namespace EDDiscovery.UserControls
 
                     case "carrier":
                         {
-                            var cr = hl.Carrier;
+                            var cr = hl.FleetCarrier;
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["carrier"] = cr == null ? null : JToken.FromObject(cr, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+
+                            };
+                            //System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            zmqconnection.Send(reply);
+                        }
+                        break;
+
+                    case "squadroncarrier":
+                        {
+                            var cr = hl.SquadronCarrier;
 
                             JObject reply = new JObject
                             {
