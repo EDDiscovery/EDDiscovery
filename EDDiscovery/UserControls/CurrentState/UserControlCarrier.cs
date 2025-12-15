@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
         protected string dbCAPIDateUTC = "CAPI_Fleetcarrier_Date";
         protected string dbCAPICommander = "CAPI_Fleetcarrier_CmdrID";
 
-        string capidebugfolder = null;//@"c:\code\";
+        string capidebugfolder = null;// @"c:\code\";
 
         #region Init
 
@@ -837,10 +837,13 @@ namespace EDDiscovery.UserControls
                     while (tries-- > 0)        // goes at getting the valid data from frontier
                     {
                         string json = capidebugfolder != null ? System.IO.File.ReadAllText(capidebugfolder + (fleetcarrier ? "fleetcarrierdata.json" : "squadrons.json")) :
-                                        DiscoveryForm.FrontierCAPI.FleetCarrier(out DateTime _, nocontentreturnemptystring: true);
+                                        fleetcarrier ? DiscoveryForm.FrontierCAPI.FleetCarrier(out DateTime _, nocontentreturnemptystring: true) :
+                                        DiscoveryForm.FrontierCAPI.Squadrons(out DateTime _, nocontentreturnemptystring: true);
 
                         if (json != null)
                         {
+                            BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\carrierread.json", json);
+
                             if (json.Length == 0)       // an empty string means no carrier, or bad parse
                             {
                                 nocarrier = true;
@@ -848,7 +851,7 @@ namespace EDDiscovery.UserControls
                             }
                             else if (JToken.Parse(json) != null)
                             {
-                                System.Diagnostics.Debug.WriteLine($"Got CAPI fleetcarrier try {3 - tries} {json}");
+                                System.Diagnostics.Debug.WriteLine($"UserControlCarrier Got CAPI  try {3 - tries} {json}");
                                 PutSettingGlobal(dbCAPISave, json);       // store data into global capi slot
                                 break;
                             }
