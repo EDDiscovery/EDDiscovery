@@ -14,6 +14,7 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -44,10 +45,13 @@ namespace EDDiscovery.UserControls
         private string dbSplitterSaveCAPI1 = "CAPISplitter1";
         private string dbSplitterSaveCAPI2 = "CAPISplitter2";
         private string dbTabSave = "TabPage";
-        private string dbCAPISave = "CAPI_Fleetcarrier_Data";           // global across all panels
-        private string dbCAPIDateUTC = "CAPI_Fleetcarrier_Date";
-        private string dbCAPICommander = "CAPI_Fleetcarrier_CmdrID";
         private string dbSCLedger = "SCFinance";
+
+        protected string dbCAPISave = "CAPI_Fleetcarrier_Data";           // global across all panels
+        protected string dbCAPIDateUTC = "CAPI_Fleetcarrier_Date";
+        protected string dbCAPICommander = "CAPI_Fleetcarrier_CmdrID";
+
+        string capidebugfolder = null;//@"c:\code\";
 
         #region Init
 
@@ -151,18 +155,15 @@ namespace EDDiscovery.UserControls
                     gr.FillRectangle(br5, new Rectangle(1096, 625, 5, 4));
                 }
             }
+
+            dataGridViewSquadronMembers.SortCompare += (s, e) => { if (e.Column == colCAPIMembersJoined | e.Column == colCAPIMembersLastOnline) e.SortDataGridViewColumnDate(); };
         }
 
         protected override void Init()
         {
-            if ( !fleetcarrier)
+            if (fleetcarrier)
             {
-                extTabControl.TabPages.Remove(tabPageCAPI1);
-                tabPageCAPI1 = null;
-                extTabControl.TabPages.Remove(tabPageCAPI2);
-                tabPageCAPI2 = null;
-                extTabControl.TabPages.Remove(tabPageCAPI3);
-                tabPageCAPI3 = null;
+                extTabControl.TabPages.Remove(tabPageSquadronMembers);
             }
 
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
@@ -265,15 +266,14 @@ namespace EDDiscovery.UserControls
             // capi enable/disable  - get stats
             DateTime capitime = GetSettingGlobal(dbCAPIDateUTC, DateTime.UtcNow);
             int capicmdrid = GetSettingGlobal(dbCAPICommander, -1);
-            bool capisamecmdr = DiscoveryForm.History.CommanderId == capicmdrid;
+            bool goodcmd = DiscoveryForm.History.CommanderId == capicmdrid;
 
             // enabled if greater than this time ago or not same commander
-            extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = fleetcarrier && DiscoveryForm.History.IsRealCommanderId && (!capisamecmdr || (DateTime.UtcNow - capitime) >= new TimeSpan(0, 0, 2, 0));
+            extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = capidebugfolder != null || (DiscoveryForm.History.IsRealCommanderId && (!goodcmd || (DateTime.UtcNow - capitime) >= new TimeSpan(0, 0, 2, 0)));
 
             // if its the same commander, and our display is in the past, another panel fetched it, redisplay
-            if (fleetcarrier && capisamecmdr && capitime > capidisplayedtime)
+            if (goodcmd && capitime > capidisplayedtime)
                 DisplayCAPIFromDB();
-
         }
 
         private void ClearDisplayFontJournalCAPI()         // the lot
@@ -817,7 +817,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDoCAPI1_Click(object sender, EventArgs e)
         {
-            if (DiscoveryForm.FrontierCAPI.Active)
+            if (capidebugfolder != null || DiscoveryForm.FrontierCAPI.Active)
             {
                 extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = false;
 
@@ -831,34 +831,26 @@ namespace EDDiscovery.UserControls
 
                 System.Threading.Tasks.Task.Run(() =>
                 {
-                    CAPI.FleetCarrier fc = null;
                     bool nocarrier = false;
 
                     int tries = 3;
                     while (tries-- > 0)        // goes at getting the valid data from frontier
                     {
-                        string fleetcarrier = DiscoveryForm.FrontierCAPI.FleetCarrier(out DateTime _, nocontentreturnemptystring: true);
+                        string json = capidebugfolder != null ? System.IO.File.ReadAllText(capidebugfolder + (fleetcarrier ? "fleetcarrierdata.json" : "squadrons.json")) :
+                                        DiscoveryForm.FrontierCAPI.FleetCarrier(out DateTime _, nocontentreturnemptystring: true);
 
-                        if (fleetcarrier != null)
+                        if (json != null)
                         {
-                            if (fleetcarrier.Length == 0)       // an empty string means no carrier
+                            if (json.Length == 0)       // an empty string means no carrier, or bad parse
                             {
                                 nocarrier = true;
                                 break;
                             }
-                            else
+                            else if (JToken.Parse(json) != null)
                             {
-                                fc = new CAPI.FleetCarrier(fleetcarrier);
-
-                                if (fc.IsValid)
-                                {
-                                    //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\fc.json", fc.Json.ToString(true));
-                                    System.Diagnostics.Debug.WriteLine($"Got CAPI fleetcarrier try {3 - tries} {fleetcarrier}");
-                                    PutSettingGlobal(dbCAPISave, fleetcarrier);       // store data into global capi slot
-                                    break;
-                                }
-                                else
-                                    fc = null;
+                                System.Diagnostics.Debug.WriteLine($"Got CAPI fleetcarrier try {3 - tries} {json}");
+                                PutSettingGlobal(dbCAPISave, json);       // store data into global capi slot
+                                break;
                             }
                         }
                         else
@@ -869,14 +861,14 @@ namespace EDDiscovery.UserControls
                     {
                         System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-                        DisplayCAPI(fc);        // may be null, this will clear it if it is
+                        DisplayCAPIFromDB();
 
                         if (nocarrier)
                         {
                             ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Carrier".Tx(),
                                 "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
-                        else if (fc == null)
+                        else if (GetSettingGlobal(dbCAPISave, "x").IsEmpty())
                         {
                             ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No CAPI data from frontier, due to either or server/network failure".Tx(),
                                 "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -896,20 +888,27 @@ namespace EDDiscovery.UserControls
 
         private void DisplayCAPIFromDB()
         {
-            string capi = GetSettingGlobal(dbCAPISave, "");
+            string json = GetSettingGlobal(dbCAPISave, "");
             int capicmd = GetSettingGlobal(dbCAPICommander, -1);
+            bool goodcmd = capidebugfolder != null || capicmd == DiscoveryForm.History.CommanderId;
 
-            // if its a valid capi for commander, turn it into a FC entity
-            var fc = (capi.Length > 0 && capicmd == DiscoveryForm.History.CommanderId) ? new CAPI.FleetCarrier(capi) : null;
-
-            DisplayCAPI(fc);
+            if (fleetcarrier)
+            {
+                // if its a valid capi for commander, turn it into a FC entity
+                var fc = (json.Length > 0 && goodcmd) ? new CAPI.FleetCarrier(json) : null;
+                DisplayCarrierInfoCAPI(fc, null);
+            }
+            else
+            {
+                var sq = (json.Length > 0 && goodcmd) ? new CAPI.Squadrons(json) : null;
+                DisplayCarrierInfoCAPI(sq?.Carrier, sq);
+            }
         }
 
         private DateTime capidisplayedtime;
 
-
         // fc = null means invalid capi data, clear display
-        private void DisplayCAPI(CAPI.FleetCarrier fc)
+        private void DisplayCarrierInfoCAPI(CAPI.FleetCarrier fc, CAPI.Squadrons sq)
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
@@ -1112,44 +1111,85 @@ namespace EDDiscovery.UserControls
 
                     dataGridViewCAPIStats.Rows.Clear();
 
-                    Type jtype = fc.GetType();
-
-                    foreach (System.Reflection.PropertyInfo pi in jtype.GetProperties())
+                    if (sq != null)
                     {
-                        System.Reflection.MethodInfo getter = pi.GetGetMethod();
-                        dynamic value = getter.Invoke(fc, null);
-
-                        string res = value is string ? (string)value :
-                                        value is int ? ((int)value).ToString("N0") :
-                                        value is long ? ((long)value).ToString("N0") :
-                                        value is double ? ((double)value).ToString("") :
-                                        value is bool ? (((bool)value) ? "True" : "False") : null;
-                        if (res != null)
-                        {
-                            object[] rowobj = {
-                                            pi.Name.SplitCapsWordFull(),
-                                            res,
-                                        };
-
-                            dataGridViewCAPIStats.Rows.Add(rowobj);
-                        }
+                        ReflectProperties(sq.GetType(), sq, "Squadron" + ": ");
+                        ReflectProperties(fc.GetType(), fc, "Carrier" + ": ");
+                    }
+                    else
+                    {
+                        ReflectProperties(fc.GetType(), fc, "");
                     }
 
                     dataGridViewCAPIStats.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
                     dataGridViewCAPIStats.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
                 }
+
+                if ( sq != null) 
+                {
+                    DataGridViewColumn sortcol = dataGridViewSquadronMembers.SortedColumn != null ? dataGridViewSquadronMembers.SortedColumn : dataGridViewSquadronMembers.Columns[0];
+                    SortOrder sortorder = dataGridViewSquadronMembers.SortOrder != SortOrder.None ? dataGridViewSquadronMembers.SortOrder : SortOrder.Ascending;
+
+                    dataGridViewSquadronMembers.Rows.Clear();
+
+                    foreach( var m in sq.Members)
+                    {
+                        object[] rowobj = { m.Name, 
+                                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(m.Joined).ToString(),
+                                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(m.LastOnline).ToString(),
+                                            m.ShipModel + (m.ShipName.HasChars() ? ": " + m.ShipName : ""),
+                                            m.Status,
+                                            m.Rank,
+                                            };
+
+                        dataGridViewSquadronMembers.Add(rowobj);
+
+                    }
+
+
+                    dataGridViewSquadronMembers.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                    dataGridViewSquadronMembers.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                    
+                }
             }
         }
 
         #endregion
-    }
 
+        private void ReflectProperties(Type jtype, Object o, string prefix)
+        {
+            foreach (System.Reflection.PropertyInfo pi in jtype.GetProperties())
+            {
+                System.Reflection.MethodInfo getter = pi.GetGetMethod();
+                dynamic value = getter.Invoke(o, null);
+
+                string res = value is string ? (string)value :
+                                value is int ? ((int)value).ToString("N0") :
+                                value is long ? ((long)value).ToString("N0") :
+                                value is double ? ((double)value).ToString("") :
+                                value is bool ? (((bool)value) ? "True" : "False") : null;
+                
+                if (res != null)
+                {
+                    object[] rowobj = {
+                                            prefix + pi.Name.SplitCapsWordFull(),
+                                            res,
+                                        };
+
+                    dataGridViewCAPIStats.Rows.Add(rowobj);
+                }
+            }
+        }
+    }
 
     public class UserControlSquadronCarrier : UserControlCarrier
     {
         public UserControlSquadronCarrier() : base()
         {
             fleetcarrier = false;
+            dbCAPISave = "CAPI_Squadrons_Data";           // global across all panels
+            dbCAPIDateUTC = "CAPI_Squadrons_Date";
+            dbCAPICommander = "CAPI_Squadrons_CmdrID";
         }
     }
 }

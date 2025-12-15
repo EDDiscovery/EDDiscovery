@@ -151,6 +151,14 @@
             this.panelCAPI2 = new System.Windows.Forms.Panel();
             this.labelCAPIDateTime3 = new System.Windows.Forms.Label();
             this.extButtonDoCAPI2 = new ExtendedControls.ExtButton();
+            this.tabPageSquadronMembers = new System.Windows.Forms.TabPage();
+            this.dataGridViewSquadronMembers = new BaseUtils.DataGridViewColumnControl();
+            this.colCAPIMembersName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCAPIMembersJoined = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCAPIMembersLastOnline = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCAPIMembersShip = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCAPIMembersStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCAPIMembersRank = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extTabControl.SuspendLayout();
             this.tabPageOverall.SuspendLayout();
             this.tabPageItinerary.SuspendLayout();
@@ -195,6 +203,8 @@
             this.extPanelDataGridViewScrollCAPILocker.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCAPILocker)).BeginInit();
             this.panelCAPI2.SuspendLayout();
+            this.tabPageSquadronMembers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSquadronMembers)).BeginInit();
             this.SuspendLayout();
             // 
             // toolTip
@@ -213,6 +223,7 @@
             this.extTabControl.Controls.Add(this.tabPageCAPI3);
             this.extTabControl.Controls.Add(this.tabPageCAPI1);
             this.extTabControl.Controls.Add(this.tabPageCAPI2);
+            this.extTabControl.Controls.Add(this.tabPageSquadronMembers);
             this.extTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extTabControl.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extTabControl.Location = new System.Drawing.Point(0, 0);
@@ -1801,6 +1812,90 @@
             this.extButtonDoCAPI2.UseVisualStyleBackColor = true;
             this.extButtonDoCAPI2.Click += new System.EventHandler(this.extButtonDoCAPI1_Click);
             // 
+            // tabPageSquadronMembers
+            // 
+            this.tabPageSquadronMembers.Controls.Add(this.dataGridViewSquadronMembers);
+            this.tabPageSquadronMembers.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSquadronMembers.Name = "tabPageSquadronMembers";
+            this.tabPageSquadronMembers.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSquadronMembers.Size = new System.Drawing.Size(845, 546);
+            this.tabPageSquadronMembers.TabIndex = 12;
+            this.tabPageSquadronMembers.Text = "CAPI Members";
+            this.tabPageSquadronMembers.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewSquadronMembers
+            // 
+            this.dataGridViewSquadronMembers.AllowRowHeaderVisibleSelection = false;
+            this.dataGridViewSquadronMembers.AllowUserToAddRows = false;
+            this.dataGridViewSquadronMembers.AllowUserToDeleteRows = false;
+            this.dataGridViewSquadronMembers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewSquadronMembers.AutoSortByColumnName = true;
+            this.dataGridViewSquadronMembers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewSquadronMembers.ColumnReorder = true;
+            this.dataGridViewSquadronMembers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colCAPIMembersName,
+            this.colCAPIMembersJoined,
+            this.colCAPIMembersLastOnline,
+            this.colCAPIMembersShip,
+            this.colCAPIMembersStatus,
+            this.colCAPIMembersRank});
+            this.dataGridViewSquadronMembers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewSquadronMembers.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewSquadronMembers.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridViewSquadronMembers.Name = "dataGridViewSquadronMembers";
+            this.dataGridViewSquadronMembers.PerColumnWordWrapControl = true;
+            this.dataGridViewSquadronMembers.RowHeaderMenuStrip = null;
+            this.dataGridViewSquadronMembers.RowHeadersVisible = false;
+            this.dataGridViewSquadronMembers.RowHeadersWidth = 62;
+            this.dataGridViewSquadronMembers.RowTemplate.Height = 28;
+            this.dataGridViewSquadronMembers.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewSquadronMembers.SingleRowSelect = true;
+            this.dataGridViewSquadronMembers.Size = new System.Drawing.Size(839, 540);
+            this.dataGridViewSquadronMembers.TabIndex = 1;
+            // 
+            // colCAPIMembersName
+            // 
+            this.colCAPIMembersName.FillWeight = 150F;
+            this.colCAPIMembersName.HeaderText = "Name";
+            this.colCAPIMembersName.MinimumWidth = 8;
+            this.colCAPIMembersName.Name = "colCAPIMembersName";
+            this.colCAPIMembersName.ReadOnly = true;
+            // 
+            // colCAPIMembersJoined
+            // 
+            this.colCAPIMembersJoined.HeaderText = "Joined";
+            this.colCAPIMembersJoined.Name = "colCAPIMembersJoined";
+            this.colCAPIMembersJoined.ReadOnly = true;
+            // 
+            // colCAPIMembersLastOnline
+            // 
+            this.colCAPIMembersLastOnline.HeaderText = "Last Online";
+            this.colCAPIMembersLastOnline.Name = "colCAPIMembersLastOnline";
+            this.colCAPIMembersLastOnline.ReadOnly = true;
+            // 
+            // colCAPIMembersShip
+            // 
+            this.colCAPIMembersShip.FillWeight = 80F;
+            this.colCAPIMembersShip.HeaderText = "Ship";
+            this.colCAPIMembersShip.MinimumWidth = 8;
+            this.colCAPIMembersShip.Name = "colCAPIMembersShip";
+            this.colCAPIMembersShip.ReadOnly = true;
+            // 
+            // colCAPIMembersStatus
+            // 
+            this.colCAPIMembersStatus.FillWeight = 80F;
+            this.colCAPIMembersStatus.HeaderText = "Status";
+            this.colCAPIMembersStatus.Name = "colCAPIMembersStatus";
+            this.colCAPIMembersStatus.ReadOnly = true;
+            // 
+            // colCAPIMembersRank
+            // 
+            this.colCAPIMembersRank.FillWeight = 75F;
+            this.colCAPIMembersRank.HeaderText = "Rank";
+            this.colCAPIMembersRank.MinimumWidth = 8;
+            this.colCAPIMembersRank.Name = "colCAPIMembersRank";
+            this.colCAPIMembersRank.ReadOnly = true;
+            // 
             // UserControlCarrier
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1858,6 +1953,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCAPILocker)).EndInit();
             this.panelCAPI2.ResumeLayout(false);
             this.panelCAPI2.PerformLayout();
+            this.tabPageSquadronMembers.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSquadronMembers)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -1982,5 +2079,13 @@
         private System.Windows.Forms.Label labelCAPIDateTime3;
         private System.Windows.Forms.SplitContainer splitContainerLedger;
         private ExtendedControls.ExtSafeChart extChartLedger;
+        private System.Windows.Forms.TabPage tabPageSquadronMembers;
+        private BaseUtils.DataGridViewColumnControl dataGridViewSquadronMembers;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersJoined;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersLastOnline;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersShip;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersRank;
     }
 }
