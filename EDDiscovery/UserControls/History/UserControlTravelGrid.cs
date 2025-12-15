@@ -657,8 +657,8 @@ namespace EDDiscovery.UserControls
             if (c != null && c.ColumnIndex == ColumnNote.Index)
             {
                 var he = dataGridViewTravel.Rows[c.RowIndex].Tag as HistoryEntry;
-                var str = dataGridViewTravel[ColumnNote.Index, c.RowIndex].Value as string;
-                System.Diagnostics.Trace.Assert(str != null && he != null);
+                System.Diagnostics.Trace.Assert(he != null);
+                var str = dataGridViewTravel[ColumnNote.Index, c.RowIndex].Value as string;         // text or null if empty
                 he.journalEntry.UpdateSystemNote(str, he.System.Name, EDCommander.Current.SyncToEdsm);
                 DiscoveryForm.NoteChanged(this, he);
             }

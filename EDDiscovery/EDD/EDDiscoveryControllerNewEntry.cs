@@ -134,7 +134,7 @@ namespace EDDiscovery
                 {
                     System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} ** Process {he.EntryType} {he.EventTimeUTC}");
 
-                    he.journalEntry.SetSystemNote();                // since we are displaying it, we can check here to see if a system note needs assigning
+                    he.journalEntry.CheckAndAssignSystemNote();                // since we are displaying it, we can check here to see if a system note needs assigning
 
                     if (he.EntryType == JournalTypeEnum.CodexEntry)     // need to do some work on codex entry.. set bodyid as long as recorded body name matches tracking name, and update DB
                     {

@@ -842,7 +842,10 @@ namespace EDDiscovery.UserControls
 
                         if (json != null)
                         {
-                            BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\carrierread.json", json);
+#if DEBUG
+                            if ( capidebugfolder == null)
+                                BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\" + (fleetcarrier ? "fleetcarrierout.json" : "squadronsout.json"), json);
+#endif
 
                             if (json.Length == 0)       // an empty string means no carrier, or bad parse
                             {
