@@ -656,7 +656,7 @@ namespace EDDiscovery.UserControls
 
                     case "carrier":
                         {
-                            var cr = hl.Carrier;
+                            var cr = hl.FleetCarrier;
 
                             JObject reply = new JObject
                             {

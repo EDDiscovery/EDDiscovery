@@ -354,7 +354,7 @@ namespace EDDiscovery
         {
             System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
 
-            var carrier = JToken.FromObject(History.Carrier, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var carrier = JToken.FromObject(History.FleetCarrier, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllcarrier.json", carrier.ToString(true));
             return carrier.ToString();
         }

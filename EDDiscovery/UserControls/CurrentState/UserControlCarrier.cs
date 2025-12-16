@@ -269,7 +269,7 @@ namespace EDDiscovery.UserControls
 
         private void Period_Tick(object sender, EventArgs e)
         {
-            var cs = DiscoveryForm.History.Carrier;
+            var cs = DiscoveryForm.History.FleetCarrier;
 
             if (cs.CheckCarrierJump(DateTime.UtcNow)) // if autojump happened
                 DisplayJournal();      // redisplay all - including destinationsystem
@@ -333,7 +333,7 @@ namespace EDDiscovery.UserControls
 
         private async void DisplayJournal()
         {
-            var cs = DiscoveryForm.History.Carrier;
+            var cs = DiscoveryForm.History.FleetCarrier;
 
             cs.CheckCarrierJump(DateTime.UtcNow);       // see if auto jump happened
 
@@ -698,7 +698,7 @@ namespace EDDiscovery.UserControls
 
             var pointtextmid = new Point(titlewidth + 50, pointtextleft.Y);
 
-            if (DiscoveryForm.History.Carrier.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
+            if (DiscoveryForm.History.FleetCarrier.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
             {
                 imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), BaseUtils.FieldBuilder.Build("Cost: ; cr;N0".TxID(EDTx.UserControlCarrier_Cost), value), normfont, color);
             }
@@ -711,7 +711,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplayDestinationSystem()
         {
-            var cs = DiscoveryForm.History.Carrier;
+            var cs = DiscoveryForm.History.FleetCarrier;
 
             if (cs.State.HaveCarrier && cs.IsJumping)
             {
