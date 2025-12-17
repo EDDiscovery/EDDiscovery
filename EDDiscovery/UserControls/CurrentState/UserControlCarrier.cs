@@ -29,7 +29,7 @@ namespace EDDiscovery.UserControls
     {
         private Timer period = new Timer();
         private int periodtickcounter = 0;
-        protected bool fleetcarrier = true;
+        protected bool fleetcarrier;
 
         private Control[] lefttopalignedfinancecontrols;
         private Control[] midtopalignedfinancecontrols;
@@ -55,12 +55,21 @@ namespace EDDiscovery.UserControls
 
         #region Init
 
-        public UserControlCarrier()
+        public UserControlCarrier()         // used by Carrier
         {
             InitializeComponent();
-
+            fleetcarrier = true;
             DBBaseName = "CarrierPanel";
+            InitialiseControls();
+        }
 
+        public UserControlCarrier(int _)            // used by Squadrons, the para is just to distinquish the two
+        {
+            InitializeComponent();
+        }
+
+        protected void InitialiseControls()
+        { 
             period.Interval = 1000;
             period.Tick += Period_Tick;
 
@@ -1244,9 +1253,11 @@ namespace EDDiscovery.UserControls
 
     public class UserControlSquadronCarrier : UserControlCarrier
     {
-        public UserControlSquadronCarrier() : base()
+        public UserControlSquadronCarrier() : base(1)       // call up the constructor which does not init the controls
         {
+            DBBaseName = "Squadrons";
             fleetcarrier = false;
+            InitialiseControls();
             dbCAPISave = "CAPI_Squadrons_Data";           // global across all panels
             dbCAPIDateUTC = "CAPI_Squadrons_Date";
             dbCAPICommander = "CAPI_Squadrons_CmdrID";
