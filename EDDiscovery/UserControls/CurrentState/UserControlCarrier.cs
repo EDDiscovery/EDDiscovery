@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
         protected string dbCAPIDateUTC = "CAPI_Fleetcarrier_Date";
         protected string dbCAPICommander = "CAPI_Fleetcarrier_CmdrID";
 
-        string capidebugfolder = null;// @"c:\code\";
+        string capidebugfolder = null;//@"c:\code\";
 
         #region Init
 
@@ -84,7 +84,9 @@ namespace EDDiscovery.UserControls
             splitContainerCAPI2.SplitterDistance(GetSetting(dbSplitterSaveCAPI2, 0.5));
             splitContainerLedger.SplitterDistance(GetSetting(dbSCLedger, 0.5));
 
-            labelCAPICarrierBalance.Text = labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = "";
+            labelCAPICarrierBalance.Text = "";
+            SetCAPIDateTime("");
+
             extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = false;     // off until period poll
 
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
@@ -164,6 +166,7 @@ namespace EDDiscovery.UserControls
             if (fleetcarrier)
             {
                 extTabControl.TabPages.Remove(tabPageSquadronMembers);
+                extTabControl.TabPages.Remove(tabPageCAPISquadronItems);
             }
 
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
@@ -920,16 +923,18 @@ namespace EDDiscovery.UserControls
 
             if (fc == null || fc.IsValid == false)      // if not valid
             {
-                labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = "";
+                SetCAPIDateTime("");
                 dataGridViewCAPICargo.Rows.Clear();
                 dataGridViewCAPIShips.Rows.Clear();
                 dataGridViewCAPIModules.Rows.Clear();
                 dataGridViewCAPIStats.Rows.Clear();
+                extComboBoxSquadronItems.Items.Clear();
             }
             else
             {
                 DateTime capitime = GetSettingGlobal(dbCAPIDateUTC, DateTime.UtcNow);
-                labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(capitime).ToString();
+
+                SetCAPIDateTime(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(capitime).ToString());
                 capidisplayedtime = capitime;
 
                 labelCAPICarrierBalance.Text = fc.Balance.ToString("N0") + "cr";
@@ -1133,29 +1138,66 @@ namespace EDDiscovery.UserControls
 
                 if ( sq != null) 
                 {
-                    DataGridViewColumn sortcol = dataGridViewSquadronMembers.SortedColumn != null ? dataGridViewSquadronMembers.SortedColumn : dataGridViewSquadronMembers.Columns[0];
-                    SortOrder sortorder = dataGridViewSquadronMembers.SortOrder != SortOrder.None ? dataGridViewSquadronMembers.SortOrder : SortOrder.Ascending;
-
-                    dataGridViewSquadronMembers.Rows.Clear();
-
-                    foreach( var m in sq.Members)
                     {
-                        object[] rowobj = { m.Name, 
-                                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(m.Joined).ToString(),
-                                            EDDConfig.Instance.ConvertTimeToSelectedFromUTC(m.LastOnline).ToString(),
-                                            m.ShipModel + (m.ShipName.HasChars() ? ": " + m.ShipName : ""),
-                                            m.Status,
-                                            m.Rank,
-                                            };
+                        DataGridViewColumn sortcol = dataGridViewSquadronMembers.SortedColumn != null ? dataGridViewSquadronMembers.SortedColumn : dataGridViewSquadronMembers.Columns[0];
+                        SortOrder sortorder = dataGridViewSquadronMembers.SortOrder != SortOrder.None ? dataGridViewSquadronMembers.SortOrder : SortOrder.Ascending;
 
-                        dataGridViewSquadronMembers.Add(rowobj);
+                        dataGridViewSquadronMembers.Rows.Clear();
 
+                        foreach (var m in sq.Members)
+                        {
+                            object[] rowobj = { m.Name,
+                                                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(m.Joined).ToString(),
+                                                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(m.LastOnline).ToString(),
+                                                m.ShipModel + (m.ShipName.HasChars() ? ": " + m.ShipName : ""),
+                                                m.Status,
+                                                m.Rank,
+                                                };
+
+                            dataGridViewSquadronMembers.Add(rowobj);
+
+                        }
+
+
+                        dataGridViewSquadronMembers.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                        dataGridViewSquadronMembers.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                    }
+                    {
+                        string cursel = extComboBoxSquadronItems.SelectedItem as string;  // may be null
+
+                        extComboBoxSquadronItems.Tag = 1;           // this disables the on selected item changed
+
+                        extComboBoxSquadronItems.Items.Clear();
+                        foreach (var m in sq.Commodities.EmptyIfNull())
+                            extComboBoxSquadronItems.Items.Add("C:" + m.Key);
+
+                        foreach (var m in sq.MicroResources.EmptyIfNull())
+                            extComboBoxSquadronItems.Items.Add("MR:" + m.Key);
+
+                        if (cursel == null || !extComboBoxSquadronItems.Items.Contains(cursel))
+                            cursel = extComboBoxSquadronItems.Items.FirstOrDefault();
+
+                        dataGridViewSquadronItems.Rows.Clear();
+
+                        if ( cursel != null )
+                        {
+                            extComboBoxSquadronItems.SelectedItem = cursel;
+                            var dict = cursel.StartsWith("M") ? sq.MicroResources : sq.Commodities;
+                            string key = cursel.StartsWith("M") ? cursel.Substring(3) : cursel.Substring(2);
+                            if ( dict.TryGetValue(key,out List<CAPI.CAPIEndPointBaseClass.Commodity> cmds))
+                            {
+                                foreach( var cmd in cmds)
+                                {
+                                    MaterialCommodityMicroResourceType ty = MaterialCommodityMicroResourceType.GetByFDName(cmd.Name);
+                                    object[] rowobj = { ty != null ? ty.TranslatedName : cmd.Name, ty != null ? ty.TranslatedCategory : "", cmd.Stock.ToString() };
+                                    dataGridViewSquadronItems.Add(rowobj);
+                                }
+                            }
+                        }
+
+                        extComboBoxSquadronItems.Tag = null;
                     }
 
-
-                    dataGridViewSquadronMembers.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
-                    dataGridViewSquadronMembers.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
-                    
                 }
             }
         }
@@ -1185,6 +1227,18 @@ namespace EDDiscovery.UserControls
                     dataGridViewCAPIStats.Rows.Add(rowobj);
                 }
             }
+        }
+
+        private void extComboBoxSquadronItems_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (extComboBoxSquadronItems.Tag == null)
+                DisplayCAPIFromDB();
+        }
+
+        void SetCAPIDateTime(string s)
+        {
+            labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text =
+                labelCAPI4.Text = labelCAPI5.Text = s;
         }
     }
 

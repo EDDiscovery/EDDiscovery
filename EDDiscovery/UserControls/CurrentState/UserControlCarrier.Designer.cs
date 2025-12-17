@@ -159,6 +159,18 @@
             this.colCAPIMembersShip = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCAPIMembersStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colCAPIMembersRank = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.panelCAPI4 = new System.Windows.Forms.Panel();
+            this.labelCAPI4 = new System.Windows.Forms.Label();
+            this.extButtonDoCAPI4 = new ExtendedControls.ExtButton();
+            this.tabPageCAPISquadronItems = new System.Windows.Forms.TabPage();
+            this.dataGridViewSquadronItems = new BaseUtils.DataGridViewColumnControl();
+            this.panelCAPI5 = new System.Windows.Forms.Panel();
+            this.extComboBoxSquadronItems = new ExtendedControls.ExtComboBox();
+            this.labelCAPI5 = new System.Windows.Forms.Label();
+            this.extButtonDoCAPI5 = new ExtendedControls.ExtButton();
+            this.colSquadronItemsItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSquadronItemsType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSquadronItemsQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extTabControl.SuspendLayout();
             this.tabPageOverall.SuspendLayout();
             this.tabPageItinerary.SuspendLayout();
@@ -205,6 +217,10 @@
             this.panelCAPI2.SuspendLayout();
             this.tabPageSquadronMembers.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSquadronMembers)).BeginInit();
+            this.panelCAPI4.SuspendLayout();
+            this.tabPageCAPISquadronItems.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSquadronItems)).BeginInit();
+            this.panelCAPI5.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
@@ -224,6 +240,7 @@
             this.extTabControl.Controls.Add(this.tabPageCAPI1);
             this.extTabControl.Controls.Add(this.tabPageCAPI2);
             this.extTabControl.Controls.Add(this.tabPageSquadronMembers);
+            this.extTabControl.Controls.Add(this.tabPageCAPISquadronItems);
             this.extTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extTabControl.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extTabControl.Location = new System.Drawing.Point(0, 0);
@@ -1815,6 +1832,7 @@
             // tabPageSquadronMembers
             // 
             this.tabPageSquadronMembers.Controls.Add(this.dataGridViewSquadronMembers);
+            this.tabPageSquadronMembers.Controls.Add(this.panelCAPI4);
             this.tabPageSquadronMembers.Location = new System.Drawing.Point(4, 22);
             this.tabPageSquadronMembers.Name = "tabPageSquadronMembers";
             this.tabPageSquadronMembers.Padding = new System.Windows.Forms.Padding(3);
@@ -1840,7 +1858,7 @@
             this.colCAPIMembersStatus,
             this.colCAPIMembersRank});
             this.dataGridViewSquadronMembers.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewSquadronMembers.Location = new System.Drawing.Point(3, 3);
+            this.dataGridViewSquadronMembers.Location = new System.Drawing.Point(3, 35);
             this.dataGridViewSquadronMembers.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridViewSquadronMembers.Name = "dataGridViewSquadronMembers";
             this.dataGridViewSquadronMembers.PerColumnWordWrapControl = true;
@@ -1850,7 +1868,7 @@
             this.dataGridViewSquadronMembers.RowTemplate.Height = 28;
             this.dataGridViewSquadronMembers.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewSquadronMembers.SingleRowSelect = true;
-            this.dataGridViewSquadronMembers.Size = new System.Drawing.Size(839, 540);
+            this.dataGridViewSquadronMembers.Size = new System.Drawing.Size(839, 508);
             this.dataGridViewSquadronMembers.TabIndex = 1;
             // 
             // colCAPIMembersName
@@ -1895,6 +1913,159 @@
             this.colCAPIMembersRank.MinimumWidth = 8;
             this.colCAPIMembersRank.Name = "colCAPIMembersRank";
             this.colCAPIMembersRank.ReadOnly = true;
+            // 
+            // panelCAPI4
+            // 
+            this.panelCAPI4.Controls.Add(this.labelCAPI4);
+            this.panelCAPI4.Controls.Add(this.extButtonDoCAPI4);
+            this.panelCAPI4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelCAPI4.Location = new System.Drawing.Point(3, 3);
+            this.panelCAPI4.Name = "panelCAPI4";
+            this.panelCAPI4.Size = new System.Drawing.Size(839, 32);
+            this.panelCAPI4.TabIndex = 6;
+            // 
+            // labelCAPI4
+            // 
+            this.labelCAPI4.AutoSize = true;
+            this.labelCAPI4.Location = new System.Drawing.Point(33, 9);
+            this.labelCAPI4.Name = "labelCAPI4";
+            this.labelCAPI4.Size = new System.Drawing.Size(92, 13);
+            this.labelCAPI4.TabIndex = 2;
+            this.labelCAPI4.Text = "<code DateTime>";
+            // 
+            // extButtonDoCAPI4
+            // 
+            this.extButtonDoCAPI4.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonDoCAPI4.ButtonDisabledScaling = 0.5F;
+            this.extButtonDoCAPI4.GradientDirection = 90F;
+            this.extButtonDoCAPI4.Image = global::EDDiscovery.Icons.Controls.Refresh;
+            this.extButtonDoCAPI4.Location = new System.Drawing.Point(3, 3);
+            this.extButtonDoCAPI4.MouseOverScaling = 1.3F;
+            this.extButtonDoCAPI4.MouseSelectedScaling = 1.3F;
+            this.extButtonDoCAPI4.Name = "extButtonDoCAPI4";
+            this.extButtonDoCAPI4.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDoCAPI4.TabIndex = 0;
+            this.extButtonDoCAPI4.UseVisualStyleBackColor = true;
+            this.extButtonDoCAPI4.Click += new System.EventHandler(this.extButtonDoCAPI1_Click);
+            // 
+            // tabPageCAPISquadronItems
+            // 
+            this.tabPageCAPISquadronItems.Controls.Add(this.dataGridViewSquadronItems);
+            this.tabPageCAPISquadronItems.Controls.Add(this.panelCAPI5);
+            this.tabPageCAPISquadronItems.Location = new System.Drawing.Point(4, 22);
+            this.tabPageCAPISquadronItems.Name = "tabPageCAPISquadronItems";
+            this.tabPageCAPISquadronItems.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageCAPISquadronItems.Size = new System.Drawing.Size(845, 546);
+            this.tabPageCAPISquadronItems.TabIndex = 13;
+            this.tabPageCAPISquadronItems.Text = "CAPI Squadron Items";
+            this.tabPageCAPISquadronItems.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewSquadronItems
+            // 
+            this.dataGridViewSquadronItems.AllowRowHeaderVisibleSelection = false;
+            this.dataGridViewSquadronItems.AllowUserToAddRows = false;
+            this.dataGridViewSquadronItems.AllowUserToDeleteRows = false;
+            this.dataGridViewSquadronItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewSquadronItems.AutoSortByColumnName = true;
+            this.dataGridViewSquadronItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewSquadronItems.ColumnReorder = true;
+            this.dataGridViewSquadronItems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colSquadronItemsItem,
+            this.colSquadronItemsType,
+            this.colSquadronItemsQuantity});
+            this.dataGridViewSquadronItems.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewSquadronItems.Location = new System.Drawing.Point(3, 35);
+            this.dataGridViewSquadronItems.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridViewSquadronItems.Name = "dataGridViewSquadronItems";
+            this.dataGridViewSquadronItems.PerColumnWordWrapControl = true;
+            this.dataGridViewSquadronItems.RowHeaderMenuStrip = null;
+            this.dataGridViewSquadronItems.RowHeadersVisible = false;
+            this.dataGridViewSquadronItems.RowHeadersWidth = 62;
+            this.dataGridViewSquadronItems.RowTemplate.Height = 28;
+            this.dataGridViewSquadronItems.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewSquadronItems.SingleRowSelect = true;
+            this.dataGridViewSquadronItems.Size = new System.Drawing.Size(839, 508);
+            this.dataGridViewSquadronItems.TabIndex = 8;
+            // 
+            // panelCAPI5
+            // 
+            this.panelCAPI5.Controls.Add(this.extComboBoxSquadronItems);
+            this.panelCAPI5.Controls.Add(this.labelCAPI5);
+            this.panelCAPI5.Controls.Add(this.extButtonDoCAPI5);
+            this.panelCAPI5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelCAPI5.Location = new System.Drawing.Point(3, 3);
+            this.panelCAPI5.Name = "panelCAPI5";
+            this.panelCAPI5.Size = new System.Drawing.Size(839, 32);
+            this.panelCAPI5.TabIndex = 7;
+            // 
+            // extComboBoxSquadronItems
+            // 
+            this.extComboBoxSquadronItems.BackColor2 = System.Drawing.Color.Red;
+            this.extComboBoxSquadronItems.BorderColor = System.Drawing.Color.White;
+            this.extComboBoxSquadronItems.ControlBackground = System.Drawing.SystemColors.Control;
+            this.extComboBoxSquadronItems.DataSource = null;
+            this.extComboBoxSquadronItems.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxSquadronItems.DisabledScaling = 0.5F;
+            this.extComboBoxSquadronItems.DisplayMember = "";
+            this.extComboBoxSquadronItems.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxSquadronItems.GradientDirection = 90F;
+            this.extComboBoxSquadronItems.Location = new System.Drawing.Point(327, 5);
+            this.extComboBoxSquadronItems.MouseOverScalingColor = 1.3F;
+            this.extComboBoxSquadronItems.Name = "extComboBoxSquadronItems";
+            this.extComboBoxSquadronItems.SelectedIndex = -1;
+            this.extComboBoxSquadronItems.SelectedItem = null;
+            this.extComboBoxSquadronItems.SelectedValue = null;
+            this.extComboBoxSquadronItems.Size = new System.Drawing.Size(251, 21);
+            this.extComboBoxSquadronItems.TabIndex = 3;
+            this.extComboBoxSquadronItems.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extComboBoxSquadronItems.ValueMember = "";
+            this.extComboBoxSquadronItems.SelectedIndexChanged += new System.EventHandler(this.extComboBoxSquadronItems_SelectedIndexChanged);
+            // 
+            // labelCAPI5
+            // 
+            this.labelCAPI5.AutoSize = true;
+            this.labelCAPI5.Location = new System.Drawing.Point(33, 9);
+            this.labelCAPI5.Name = "labelCAPI5";
+            this.labelCAPI5.Size = new System.Drawing.Size(92, 13);
+            this.labelCAPI5.TabIndex = 2;
+            this.labelCAPI5.Text = "<code DateTime>";
+            // 
+            // extButtonDoCAPI5
+            // 
+            this.extButtonDoCAPI5.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonDoCAPI5.ButtonDisabledScaling = 0.5F;
+            this.extButtonDoCAPI5.GradientDirection = 90F;
+            this.extButtonDoCAPI5.Image = global::EDDiscovery.Icons.Controls.Refresh;
+            this.extButtonDoCAPI5.Location = new System.Drawing.Point(3, 3);
+            this.extButtonDoCAPI5.MouseOverScaling = 1.3F;
+            this.extButtonDoCAPI5.MouseSelectedScaling = 1.3F;
+            this.extButtonDoCAPI5.Name = "extButtonDoCAPI5";
+            this.extButtonDoCAPI5.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDoCAPI5.TabIndex = 0;
+            this.extButtonDoCAPI5.UseVisualStyleBackColor = true;
+            this.extButtonDoCAPI5.Click += new System.EventHandler(this.extButtonDoCAPI1_Click);
+            // 
+            // colSquadronItemsItem
+            // 
+            this.colSquadronItemsItem.FillWeight = 150F;
+            this.colSquadronItemsItem.HeaderText = "Item";
+            this.colSquadronItemsItem.MinimumWidth = 8;
+            this.colSquadronItemsItem.Name = "colSquadronItemsItem";
+            this.colSquadronItemsItem.ReadOnly = true;
+            // 
+            // colSquadronItemsType
+            // 
+            this.colSquadronItemsType.HeaderText = "Type";
+            this.colSquadronItemsType.Name = "colSquadronItemsType";
+            this.colSquadronItemsType.ReadOnly = true;
+            // 
+            // colSquadronItemsQuantity
+            // 
+            this.colSquadronItemsQuantity.FillWeight = 80F;
+            this.colSquadronItemsQuantity.HeaderText = "Quantity";
+            this.colSquadronItemsQuantity.MinimumWidth = 8;
+            this.colSquadronItemsQuantity.Name = "colSquadronItemsQuantity";
+            this.colSquadronItemsQuantity.ReadOnly = true;
             // 
             // UserControlCarrier
             // 
@@ -1955,6 +2126,12 @@
             this.panelCAPI2.PerformLayout();
             this.tabPageSquadronMembers.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSquadronMembers)).EndInit();
+            this.panelCAPI4.ResumeLayout(false);
+            this.panelCAPI4.PerformLayout();
+            this.tabPageCAPISquadronItems.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSquadronItems)).EndInit();
+            this.panelCAPI5.ResumeLayout(false);
+            this.panelCAPI5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -2087,5 +2264,17 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersShip;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersStatus;
         private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersRank;
+        private System.Windows.Forms.TabPage tabPageCAPISquadronItems;
+        private System.Windows.Forms.Panel panelCAPI4;
+        private System.Windows.Forms.Label labelCAPI4;
+        private ExtendedControls.ExtButton extButtonDoCAPI4;
+        private System.Windows.Forms.Panel panelCAPI5;
+        private System.Windows.Forms.Label labelCAPI5;
+        private ExtendedControls.ExtButton extButtonDoCAPI5;
+        private ExtendedControls.ExtComboBox extComboBoxSquadronItems;
+        private BaseUtils.DataGridViewColumnControl dataGridViewSquadronItems;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSquadronItemsItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSquadronItemsType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSquadronItemsQuantity;
     }
 }
