@@ -417,7 +417,21 @@ namespace EDDiscovery.UserControls
 
         public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)
+            if (actionobj is UserControlCommonBase.RequestJournalToJID jtj)
+            {
+                System.Diagnostics.Debug.WriteLine($"Journal grid perform move to JID {jtj.JID}");
+                var res = GotoPosByJID(jtj.JID);
+                System.Diagnostics.Debug.WriteLine($"..Journal grid perform move to JID {jtj.JID} result {res}");
+                if (res)
+                {
+                    if (jtj.MakeVisible)
+                        MakeVisible();
+                    return PanelActionState.Success;
+                }
+                else
+                    return PanelActionState.Failed;
+            }
+            else if (actionobj is UserControlCommonBase.TravelHistoryStartStopChanged)
             {
                 Display(current_historylist, false);
                 return PanelActionState.HandledContinue;

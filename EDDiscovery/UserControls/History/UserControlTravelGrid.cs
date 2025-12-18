@@ -562,9 +562,8 @@ namespace EDDiscovery.UserControls
 
         public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if ( actionobj is UserControlCommonBase.RequestTravelToJID)
+            if ( actionobj is UserControlCommonBase.RequestTravelToJID ttj)
             {
-                var ttj = actionobj as UserControlCommonBase.RequestTravelToJID;
                 System.Diagnostics.Debug.WriteLine($"Travel grid perform move to JID {ttj.JID}");
                 var res = GotoPosByJID(ttj.JID);
                 System.Diagnostics.Debug.WriteLine($"..Travel grid perform move to JID {ttj.JID} result {res}");

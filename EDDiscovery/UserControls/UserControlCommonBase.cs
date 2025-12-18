@@ -220,8 +220,16 @@ namespace EDDiscovery.UserControls
 
         //  RequestTravelToJID
         //           request travel grid to go to this jid. Success or Failure or NotHandled
-        public class RequestTravelToJID 
-        { 
+        public class RequestTravelToJID
+        {
+            public long JID { get; set; }
+            public bool MakeVisible { get; set; } = false;
+        };
+
+        //  RequestJournalToJID
+        //           request journal grid to go to this jid. Success or Failure or NotHandled
+        public class RequestJournalToJID
+        {
             public long JID { get; set; }
             public bool MakeVisible { get; set; } = false;
         };
