@@ -90,6 +90,8 @@ namespace EDDiscovery
             SpanshStations=60,
             TestOverlay = 61,
             Colonisation = 62,
+
+            Squadrons = 67,  
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -119,6 +121,8 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", "Statistics Information") },
             { new PanelInfo( PanelIDs.SuitsWeapons, typeof(UserControlSuitsWeapons), "Suits & Weapons", "SuitsWeapons", "Suits, Loadouts, Weapons") },
             { new PanelInfo( PanelIDs.Carrier, typeof(UserControlCarrier), "Carrier", "Carrier", "Data about your fleet carrier") },
+            { new PanelInfo( PanelIDs.Squadrons, typeof(UserControlSquadronCarrier), "Squadron/Carrier", "SquadronCarrier", "Data about your squadron") },
+
             { new PanelInfo( PanelIDs.Colonisation, typeof(UserControlColonisation), "Colonisation", "Colonisation", "Colonisation statistics") },
 
             { new PanelInfo( "Station Data") },
