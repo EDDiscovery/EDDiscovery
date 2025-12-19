@@ -197,6 +197,10 @@ SECTION PopOutInfo
 .Colonisation.Description: "Colonisation statistics" => "Kolonisationsstatistiken"
 .TestOverlay.Title: "TestOverlay" => "TestOverlay"
 .TestOverlay.Description: "Test overlay" => "Test Overlay"
+.Squadrons.Title: "Squadron/Carrier" @
+.Squadrons.Description: "Data about your squadron" @
+.PowerplayMerits.Title: "Powerplay Merits" @
+.PowerplayMerits.Description: "Track powerplay merits by cycle, session, system" @
 
 SECTION EDDiscoveryForm
 
