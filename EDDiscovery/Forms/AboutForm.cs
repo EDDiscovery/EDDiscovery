@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2021 EDDiscovery development team
+ * Copyright 2016 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -21,7 +21,7 @@ namespace EDDiscovery.Forms
 {
     public partial class AboutForm : ExtendedControls.DraggableForm
     {
-        WebBrowser webbrowser;
+        //private EDDiscovery.UserControls.Webbrowser.BrowserBase wbb;
 
         public AboutForm()
         {
@@ -57,38 +57,18 @@ namespace EDDiscovery.Forms
             extTextBoxDevs.Text = Properties.Resources.Credits;
         }
 
-        private void InitBrowser()
-        {
-            webbrowser = new WebBrowser();
-            webbrowser.Dock = DockStyle.Fill;
-            webbrowser.Visible = false;
-            webbrowser.DocumentCompleted += Webbrowser_DocumentCompleted;
-            webbrowser.NewWindow += Webbrowser_NewWindow;
-            webbrowser.ScriptErrorsSuppressed = true;
-            panelWebBrowser.Controls.Add(webbrowser);
-            if (Properties.Resources.URLReleaseVideo.HasChars() && !Properties.Resources.URLReleaseVideo.Contains("DISABLE"))
-            {
-                webbrowser.DocumentText =
-                "<html>" +
-                "<head><meta http-equiv=\"X-UA-Compatible\" content=\"IE=Edge\"/></head>" +
-                "<body style=\"margin: 0\">" +
-                $"<iframe style=\"display: block; border: none; height: 100vh; width: 100vw\" src=\"{Properties.Resources.URLReleaseVideo}\" frameborder=\"0\" allow=\"autoplay; encrypted-media\" allowfullscreen></iframe>" +
-                "</body>" +
-                "</html>";
-            }
-        }
-
+         
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
             buttonOK.Focus();
 
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
-            {
-                if (Properties.Resources.URLReleaseVideo.HasChars())
-                    InitBrowser();
-            }
-            else
+            //if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            //{
+            //    if (Properties.Resources.URLReleaseVideo.HasChars())
+            //        InitBrowser();
+            //}
+            //else
             {
                 panelWebBrowser.Visible = false;
                 textBoxLicense.Dock = DockStyle.Fill;
@@ -97,7 +77,7 @@ namespace EDDiscovery.Forms
 
         protected override void OnClosing(CancelEventArgs e)
         {
-            webbrowser?.Stop();
+            //wbb?.Stop();
             base.OnClosing(e);
         }
 
@@ -116,11 +96,6 @@ namespace EDDiscovery.Forms
             {
                 BaseUtils.BrowserInfo.LaunchBrowser(Properties.Resources.URLReleaseVideo);
             }
-        }
-
-        private void Webbrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
-        {
-            webbrowser.Visible = true;
         }
 
         private void buttonOK_Click(object sender, EventArgs e)

@@ -94,7 +94,14 @@ namespace EDDiscovery.UserControls.Webbrowser
         {
             wv2.GoBack();
         }
+
+        public override void Stop()
+        {
+            wv2.CoreWebView2.Stop();
+        }
+        public override void SetDocumentText(string text)
+        {
+            wv2.CoreWebView2.NavigateToString(text);
+        }
     }
-
-
 }

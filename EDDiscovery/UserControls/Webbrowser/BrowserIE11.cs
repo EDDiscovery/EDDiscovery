@@ -39,6 +39,15 @@ namespace EDDiscovery.UserControls.Webbrowser
             wbie11.GoBack();
         }
 
+        public override void SetDocumentText(string text)
+        {
+            wbie11.DocumentText = text;
+        }
+        public override void Stop()
+        {
+            wbie11.Stop();
+        }
+
         private void webBrowser_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
             wbie11.Visible = true;

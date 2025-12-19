@@ -35,9 +35,14 @@ namespace EDDiscovery.UserControls.Webbrowser
         public Control webbrowser { get; set; }
         public abstract void Navigate(string uri);
         public abstract void GoBack();
+        public abstract void Stop();
+        public abstract void SetDocumentText(string text);
 
         public bool IsDisallowed(string absuri)
         {
+            if (urlallowed == null)
+                return false;
+
             string[] userlistsplit = userurllist.Split(Environment.NewLine);
             string[] defaultlistsplit = defaultallowed.Split(Environment.NewLine);
 

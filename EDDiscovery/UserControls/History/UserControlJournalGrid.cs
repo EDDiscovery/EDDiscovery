@@ -94,9 +94,7 @@ namespace EDDiscovery.UserControls
                 EDTx.UserControlTravelGrid_extButtonTimeRanges_ToolTip, EDTx.UserControlTravelGrid_extComboBoxQuickMarks_ToolTip,
                 };
 
-            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, 
-                                    toplevelnames: tlnset,      // we can use either set of definitions here
-                                    debugit:true);
+            BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this, toplevelnames: tlnset);
         }
 
         protected override void Init()

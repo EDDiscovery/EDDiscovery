@@ -105,7 +105,12 @@ namespace EDDiscovery.Forms
             // buttonOK
             // 
             this.buttonOK.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.buttonOK.BackColor2 = System.Drawing.Color.Red;
+            this.buttonOK.ButtonDisabledScaling = 0.5F;
+            this.buttonOK.GradientDirection = 90F;
             this.buttonOK.Location = new System.Drawing.Point(867, 13);
+            this.buttonOK.MouseOverScaling = 1.3F;
+            this.buttonOK.MouseSelectedScaling = 1.3F;
             this.buttonOK.Name = "buttonOK";
             this.buttonOK.Size = new System.Drawing.Size(100, 24);
             this.buttonOK.TabIndex = 6;
@@ -116,6 +121,7 @@ namespace EDDiscovery.Forms
             // textBoxLicense
             // 
             this.textBoxLicense.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxLicense.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxLicense.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxLicense.DetectUrls = true;
             this.textBoxLicense.Dock = System.Windows.Forms.DockStyle.Top;
@@ -124,7 +130,7 @@ namespace EDDiscovery.Forms
             this.textBoxLicense.Name = "textBoxLicense";
             this.textBoxLicense.ReadOnly = true;
             this.textBoxLicense.Rtf = "{\\rtf1\\ansi\\ansicpg1252\\deff0\\nouicompat\\deflang2057{\\fonttbl{\\f0\\fnil\\fcharset0 " +
-    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.19041}\\viewkind4\\uc1 \r\n\\par" +
+    "Microsoft Sans Serif;}}\r\n{\\*\\generator Riched20 10.0.26100}\\viewkind4\\uc1 \r\n\\par" +
     "d\\f0\\fs17\\par\r\n}\r\n";
             this.textBoxLicense.ShowLineCount = false;
             this.textBoxLicense.Size = new System.Drawing.Size(682, 189);
@@ -181,7 +187,7 @@ namespace EDDiscovery.Forms
             this.linkLabelYouTube.Location = new System.Drawing.Point(4, 33);
             this.linkLabelYouTube.Margin = new System.Windows.Forms.Padding(3);
             this.linkLabelYouTube.Name = "linkLabelYouTube";
-            this.linkLabelYouTube.Size = new System.Drawing.Size(64, 16);
+            this.linkLabelYouTube.Size = new System.Drawing.Size(63, 16);
             this.linkLabelYouTube.TabIndex = 1;
             this.linkLabelYouTube.TabStop = true;
             this.linkLabelYouTube.Text = "YouTube";
@@ -195,7 +201,7 @@ namespace EDDiscovery.Forms
             this.linkLabelDeveloperChat.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabelDeveloperChat.Location = new System.Drawing.Point(4, 52);
             this.linkLabelDeveloperChat.Name = "linkLabelDeveloperChat";
-            this.linkLabelDeveloperChat.Size = new System.Drawing.Size(102, 16);
+            this.linkLabelDeveloperChat.Size = new System.Drawing.Size(101, 16);
             this.linkLabelDeveloperChat.TabIndex = 2;
             this.linkLabelDeveloperChat.TabStop = true;
             this.linkLabelDeveloperChat.Text = "Developer Chat";
@@ -210,7 +216,7 @@ namespace EDDiscovery.Forms
             this.linkLabelGitHubIssue.Location = new System.Drawing.Point(4, 71);
             this.linkLabelGitHubIssue.Margin = new System.Windows.Forms.Padding(3);
             this.linkLabelGitHubIssue.Name = "linkLabelGitHubIssue";
-            this.linkLabelGitHubIssue.Size = new System.Drawing.Size(114, 16);
+            this.linkLabelGitHubIssue.Size = new System.Drawing.Size(113, 16);
             this.linkLabelGitHubIssue.TabIndex = 9;
             this.linkLabelGitHubIssue.TabStop = true;
             this.linkLabelGitHubIssue.Text = "Submit Feedback";
@@ -224,7 +230,7 @@ namespace EDDiscovery.Forms
             this.linkLabelHelp.LinkColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(128)))), ((int)(((byte)(0)))));
             this.linkLabelHelp.Location = new System.Drawing.Point(4, 90);
             this.linkLabelHelp.Name = "linkLabelHelp";
-            this.linkLabelHelp.Size = new System.Drawing.Size(37, 16);
+            this.linkLabelHelp.Size = new System.Drawing.Size(36, 16);
             this.linkLabelHelp.TabIndex = 7;
             this.linkLabelHelp.TabStop = true;
             this.linkLabelHelp.Text = "Help";
@@ -239,7 +245,7 @@ namespace EDDiscovery.Forms
             this.linkLabelGitHub.Location = new System.Drawing.Point(4, 109);
             this.linkLabelGitHub.Margin = new System.Windows.Forms.Padding(3);
             this.linkLabelGitHub.Name = "linkLabelGitHub";
-            this.linkLabelGitHub.Size = new System.Drawing.Size(49, 16);
+            this.linkLabelGitHub.Size = new System.Drawing.Size(48, 16);
             this.linkLabelGitHub.TabIndex = 6;
             this.linkLabelGitHub.TabStop = true;
             this.linkLabelGitHub.Text = "GitHub";
@@ -254,7 +260,7 @@ namespace EDDiscovery.Forms
             this.linkLabelFDForum.Location = new System.Drawing.Point(4, 131);
             this.linkLabelFDForum.Margin = new System.Windows.Forms.Padding(3);
             this.linkLabelFDForum.Name = "linkLabelFDForum";
-            this.linkLabelFDForum.Size = new System.Drawing.Size(94, 16);
+            this.linkLabelFDForum.Size = new System.Drawing.Size(93, 16);
             this.linkLabelFDForum.TabIndex = 5;
             this.linkLabelFDForum.TabStop = true;
             this.linkLabelFDForum.Text = "Frontier Forum";
@@ -269,7 +275,7 @@ namespace EDDiscovery.Forms
             this.linkLabelEliteDangerous.Location = new System.Drawing.Point(4, 153);
             this.linkLabelEliteDangerous.Margin = new System.Windows.Forms.Padding(3);
             this.linkLabelEliteDangerous.Name = "linkLabelEliteDangerous";
-            this.linkLabelEliteDangerous.Size = new System.Drawing.Size(104, 16);
+            this.linkLabelEliteDangerous.Size = new System.Drawing.Size(103, 16);
             this.linkLabelEliteDangerous.TabIndex = 1;
             this.linkLabelEliteDangerous.TabStop = true;
             this.linkLabelEliteDangerous.Text = "Elite Dangerous";
@@ -291,9 +297,13 @@ namespace EDDiscovery.Forms
             this.panel_close.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.panel_close.AutoEllipsis = false;
             this.panel_close.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.panel_close.BorderColor = System.Drawing.Color.Orange;
+            this.panel_close.BorderWidth = 1;
+            this.panel_close.ButtonDisabledScaling = 0.25F;
             this.panel_close.Image = null;
             this.panel_close.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.panel_close.Location = new System.Drawing.Point(955, 3);
+            this.panel_close.MouseOverColor = System.Drawing.Color.White;
             this.panel_close.MouseSelectedColor = System.Drawing.Color.Green;
             this.panel_close.MouseSelectedColorEnable = true;
             this.panel_close.Name = "panel_close";
@@ -450,10 +460,9 @@ namespace EDDiscovery.Forms
             // 
             // extTextBoxDevs
             // 
-            this.extTextBoxDevs.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.extTextBoxDevs.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.extTextBoxDevs.BackErrorColor = System.Drawing.Color.Red;
             this.extTextBoxDevs.BorderColor = System.Drawing.Color.Transparent;
+            this.extTextBoxDevs.BorderColor2 = System.Drawing.Color.Transparent;
             this.extTextBoxDevs.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.extTextBoxDevs.ClearOnFirstChar = false;
             this.extTextBoxDevs.ControlBackground = System.Drawing.SystemColors.Control;
