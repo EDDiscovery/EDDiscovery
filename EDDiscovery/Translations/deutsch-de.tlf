@@ -45,7 +45,7 @@ SECTION StartUp
 
 SECTION DataGridView
 
-.Header: "Header" @
+.Header: "Header" => "Header"
 .WordWrap: "Word Wrap (Override)" => "Zeilenumbruch (Überschreiben)"
 
 SECTION SafeModeForm
@@ -197,10 +197,10 @@ SECTION PopOutInfo
 .Colonisation.Description: "Colonisation statistics" => "Kolonisationsstatistiken"
 .TestOverlay.Title: "TestOverlay" => "TestOverlay"
 .TestOverlay.Description: "Test overlay" => "Test Overlay"
-.Squadrons.Title: "Squadron/Carrier" @
-.Squadrons.Description: "Data about your squadron" @
-.PowerplayMerits.Title: "Powerplay Merits" @
-.PowerplayMerits.Description: "Track powerplay merits by cycle, session, system" @
+.Squadrons.Title: "Squadron/Carrier" => "Schwadron/Carrier"
+.Squadrons.Description: "Data about your squadron" => "Daten über dein Schwadron"
+.PowerplayMerits.Title: "Powerplay Merits" => "Machtspielverdienste"
+.PowerplayMerits.Description: "Track powerplay merits by cycle, session, system" => "Verfolge Machtspielverdienste pro Zyklus, Sizung, System"
 
 SECTION EDDiscoveryForm
 
@@ -231,7 +231,7 @@ SECTION EDDiscoveryForm
 .adminToolStripMenuItem.syncEDSMSystemsToolStripMenuItem: "Synchronise with EDSM" => "Snychronisiere mit EDSM"
 .adminToolStripMenuItem.sendHistoricDataToInaraToolStripMenuItem: "Send to Inara historic data (previous ships, stored modules)" => "Sende historische Daten (vorhergehende Schiffe, gelagerte Module) an Inara"
 .adminToolStripMenuItem.read21AndFormerLogFilesToolStripMenuItem.load21ToolStripMenuItem: "Scan Netlogs" => "Scanne Netlogs"
-.adminToolStripMenuItem.moveAllEntriesFromAnotherCommanderToThisCommanderToolStripMenuItem: "Move all entries from another commander to this commander" @
+.adminToolStripMenuItem.moveAllEntriesFromAnotherCommanderToThisCommanderToolStripMenuItem: "Move all entries from another commander to this commander" => "Verschiebe alle Einträge von einem anderen Kommandanten zu diesem Kommandanten."
 .addOnsToolStripMenuItem: "&Add-Ons" => "&Add-Ons"
 .addOnsToolStripMenuItem.manageAddOnsToolStripMenuItem: "&Manage Add-Ons" => "Add-Ons &verwalten"
 .addOnsToolStripMenuItem.configureAddOnActionsToolStripMenuItem: "&Edit Add-On Action Files" => "Add-On Action-Dateien b&earbeiten"
