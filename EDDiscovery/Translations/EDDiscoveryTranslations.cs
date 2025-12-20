@@ -1244,6 +1244,7 @@ namespace EDDiscovery
         UserControlRoute_groupBoxPara,
         UserControlRoute_extCheckBoxPermitSystems,
         UserControlRoute_labelCargo,
+        UserControlRoute_extButtonSpanshRockyHMC,
 
 
         UserControlWebBrowser_extButtonIE11Warning, // Control 'Using IE11 - click here to get WebView2'

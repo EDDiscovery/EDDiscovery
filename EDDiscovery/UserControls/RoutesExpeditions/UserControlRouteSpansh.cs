@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
         string spanshjobname;
 
         // common queries get an index
-        enum Spanshquerytype { RoadToRiches = 0, AmmoniaWorlds = 1, EarthLikes = 2, Neutron, TradeRouter, FleetCarrier, GalaxyPlotter, ExoMastery };
+        enum Spanshquerytype { RoadToRiches = 0, AmmoniaWorlds = 1, EarthLikes = 2, RockyHMC = 3, Neutron, TradeRouter, FleetCarrier, GalaxyPlotter, ExoMastery };
         Spanshquerytype spanshquerytype;
 
         private void extButtonSpanshRoadToRiches_Click(object sender, EventArgs e)
@@ -56,10 +56,15 @@ namespace EDDiscovery.UserControls
             CommonSpanshQuery(Spanshquerytype.EarthLikes);
         }
 
-        int[] csradius = new int[3] { 25, 500, 500 };       // size to number of common queries
-        int[] csmaxsys = new int[3] { 100, 100, 100 };
-        int[] csmaxls = new int[3] { 100000, 50000, 50000 };
-        bool[] csavoidt = new bool[3] { true, true, true };
+        private void extButtonSpanshRockyHMC_Click(object sender, EventArgs e)
+        {
+            CommonSpanshQuery(Spanshquerytype.RockyHMC);
+        }
+
+        int[] csradius = new int[] { 25, 500, 500, 500 };       // size to number of common queries
+        int[] csmaxsys = new int[] { 100, 100, 100, 100 };
+        int[] csmaxls = new int[] { 100000, 50000, 50000, 50000 };
+        bool[] csavoidt = new bool[] { true, true, true, true };
         int csminvalue = 100000;
         bool csusemap = false;
 
@@ -112,7 +117,9 @@ namespace EDDiscovery.UserControls
                                                     csavoidt[si], loop, csmaxls[si],
                                                     roadtoriches ? csminvalue : 1,
                                                     roadtoriches ? csusemap : default(bool?),
-                                                    roadtoriches ? null : qt == Spanshquerytype.AmmoniaWorlds ? "Ammonia world" : "Earth-like world"
+                                                    roadtoriches ? null : qt == Spanshquerytype.AmmoniaWorlds ? new string[] { "Ammonia world" } :
+                                                                          qt == Spanshquerytype.RockyHMC ? new string[] { "Rocky body", "High metal content world" } :
+                                                                          new string[] { "Earth-like world" }
                                                     );
                 StartSpanshQueryOp(qt);
 
@@ -121,6 +128,7 @@ namespace EDDiscovery.UserControls
         }
 
         int nrefficiency = 60;
+        bool noverchargesupercharge = false;
 
         private void extButtonNeutronRouter_Click(object sender, EventArgs e)
         {
@@ -129,6 +137,8 @@ namespace EDDiscovery.UserControls
             int vpos = topmargin;
 
             f.AddLabelAndEntry("Efficiency", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("efficiency", nrefficiency, new Point(dataleft, 0), numberboxsize, "How far off the straight line route to allow. 100 means no deviation") { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 100 });
+            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("nsc", typeof(ExtRadioButton), "Normal supercharge", new Point(4, 0), checkboxsize, "Supercharge") { ContentAlign = ContentAlignment.MiddleRight, CheckBoxChecked = !noverchargesupercharge });
+            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("osc", typeof(ExtRadioButton), "Overcharge supercharge", new Point(4, 0), checkboxsize, "Overcharge Supercharge") { ContentAlign = ContentAlignment.MiddleRight, CheckBoxChecked = noverchargesupercharge });
             f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
             f.InstallStandardTriggers();
             f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
@@ -137,7 +147,8 @@ namespace EDDiscovery.UserControls
             {
                 EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
                 nrefficiency = f.GetInt("efficiency").Value;
-                spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, nrefficiency);
+                noverchargesupercharge = f.GetBool("osc").Value;
+                spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, nrefficiency, noverchargesupercharge);
                 StartSpanshQueryOp(Spanshquerytype.Neutron);
                 labelRouteName.Text = $"{textBox_From.Text} - {textBox_To.Text} (Neutron)";
             }
@@ -416,7 +427,8 @@ namespace EDDiscovery.UserControls
                             spanshquerytype == Spanshquerytype.FleetCarrier ? sp.TryGetFleetCarrierRouter(spanshjobname) :
                             spanshquerytype == Spanshquerytype.GalaxyPlotter ? sp.TryGetGalaxyPlotter(spanshjobname) :
                             spanshquerytype == Spanshquerytype.ExoMastery ? sp.TryGetExomastery(spanshjobname) :
-                          spanshquerytype == Spanshquerytype.Neutron ? sp.TryGetNeutronRouter(spanshjobname) : sp.TryGetRoadToRichesAmmonia(spanshjobname);
+                            spanshquerytype == Spanshquerytype.Neutron ? sp.TryGetNeutronRouter(spanshjobname) : 
+                            sp.TryGetRoadToRichesAmmonia(spanshjobname);
 
                 if (res.Item1 != null)          // error return
                 {

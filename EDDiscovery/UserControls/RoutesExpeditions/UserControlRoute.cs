@@ -57,7 +57,8 @@ namespace EDDiscovery.UserControls
                                         EDTx.UserControlRoute_extButtonFleetCarrier,EDTx.UserControlRoute_extButtonSpanshGalaxyPlotter,EDTx.UserControlRoute_extButtonExoMastery,
                                         EDTx.UserControlRoute_extButtonSpanshAmmoniaWorlds,EDTx.UserControlRoute_extButtonSpanshEarthLikes,EDTx.UserControlRoute_extButtonSpanshTradeRouter,
                                         EDTx.UserControlRoute_groupBoxInternal,EDTx.UserControlRoute_groupBoxPara,
-                                        EDTx.UserControlRoute_extCheckBoxPermitSystems, EDTx.UserControlRoute_labelCargo };
+                                        EDTx.UserControlRoute_extCheckBoxPermitSystems, EDTx.UserControlRoute_labelCargo,
+             EDTx.UserControlRoute_extButtonSpanshRockyHMC};
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist);
 

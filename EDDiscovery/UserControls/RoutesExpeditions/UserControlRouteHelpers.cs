@@ -225,7 +225,8 @@ namespace EDDiscovery.UserControls
             extButtonRoute.Enabled = numsvalid && computing != 2;
             comboBoxRoutingMetric.Enabled = notcomputing;
 
-            extButtonExoMastery.Enabled = extButtonSpanshRoadToRiches.Enabled = extButtonSpanshAmmoniaWorlds.Enabled = extButtonSpanshEarthLikes.Enabled = fromvalid && notcomputing;
+            extButtonExoMastery.Enabled = extButtonSpanshRoadToRiches.Enabled = extButtonSpanshAmmoniaWorlds.Enabled = 
+                   extButtonSpanshRockyHMC.Enabled = extButtonSpanshEarthLikes.Enabled = fromvalid && notcomputing;
             extButtonNeutronRouter.Enabled = fromvalid && tovalid && notcomputing;
             extButtonSpanshTradeRouter.Enabled = fromvalid && notcomputing;
             extButtonSpanshGalaxyPlotter.Enabled = extButtonFleetCarrier.Enabled = fromvalid && tovalid && notcomputing;
