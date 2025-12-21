@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls
         string spanshjobname;
 
         // common queries get an index
-        enum Spanshquerytype { RoadToRiches = 0, AmmoniaWorlds = 1, EarthLikes = 2, Neutron, TradeRouter, FleetCarrier, GalaxyPlotter, ExoMastery };
+        enum Spanshquerytype { RoadToRiches = 0, AmmoniaWorlds = 1, EarthLikes = 2, RockyHMC = 3, Neutron, TradeRouter, FleetCarrier, GalaxyPlotter, ExoMastery };
         Spanshquerytype spanshquerytype;
 
         private void extButtonSpanshRoadToRiches_Click(object sender, EventArgs e)
@@ -112,7 +112,9 @@ namespace EDDiscovery.UserControls
                                                     csavoidt[si], loop, csmaxls[si],
                                                     roadtoriches ? csminvalue : 1,
                                                     roadtoriches ? csusemap : default(bool?),
-                                                    roadtoriches ? null : qt == Spanshquerytype.AmmoniaWorlds ? "Ammonia world" : "Earth-like world"
+                                                    roadtoriches ? null : qt == Spanshquerytype.AmmoniaWorlds ? new string[] { "Ammonia world" } :
+                                                                          qt == Spanshquerytype.RockyHMC ? new string[] { "Rocky body", "High metal content world" } :
+                                                                          new string[] { "Earth-like world" }
                                                     );
                 StartSpanshQueryOp(qt);
 
@@ -121,6 +123,7 @@ namespace EDDiscovery.UserControls
         }
 
         int nrefficiency = 60;
+        bool noverchargesupercharge = false;
 
         private void extButtonNeutronRouter_Click(object sender, EventArgs e)
         {
@@ -129,6 +132,8 @@ namespace EDDiscovery.UserControls
             int vpos = topmargin;
 
             f.AddLabelAndEntry("Efficiency", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("efficiency", nrefficiency, new Point(dataleft, 0), numberboxsize, "How far off the straight line route to allow. 100 means no deviation") { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 100 });
+            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("nsc", typeof(ExtRadioButton), "Normal supercharge", new Point(4, 0), checkboxsize, "Supercharge") { ContentAlign = ContentAlignment.MiddleRight, CheckBoxChecked = !noverchargesupercharge });
+            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("osc", typeof(ExtRadioButton), "Overcharge supercharge", new Point(4, 0), checkboxsize, "Overcharge Supercharge") { ContentAlign = ContentAlignment.MiddleRight, CheckBoxChecked = noverchargesupercharge });
             f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
             f.InstallStandardTriggers();
             f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
@@ -137,7 +142,7 @@ namespace EDDiscovery.UserControls
             {
                 EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
                 nrefficiency = f.GetInt("efficiency").Value;
-                spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, nrefficiency);
+                spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, nrefficiency,noverchargesupercharge);
                 StartSpanshQueryOp(Spanshquerytype.Neutron);
                 labelRouteName.Text = $"{textBox_From.Text} - {textBox_To.Text} (Neutron)";
             }
@@ -291,6 +296,7 @@ namespace EDDiscovery.UserControls
         private bool gpusesupercharge = false;
         private bool gpusefsdinjections = true;
         private bool gpexcludesecondary = true;
+        private bool gprefueleveryscoopable = true;
         private string gpalgo = "Optimistic";
 
         private void extButtonSpanshGalaxyPlotter_Click(object sender, EventArgs e)
@@ -308,6 +314,7 @@ namespace EDDiscovery.UserControls
                 f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("usc", gpusesupercharge, "Use supercharge", new Point(4, 0), checkboxsize, "Use neutron boosts") { ContentAlign = ContentAlignment.MiddleRight });
                 f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("fsd", gpusefsdinjections, "Use FSD Injections", new Point(4, 0), checkboxsize, "Use FSD Injections to speed travel") { ContentAlign = ContentAlignment.MiddleRight });
                 f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("ess", gpexcludesecondary, "Exclude secondary stars", new Point(4, 0), checkboxsize, "Exclude secondary stars from consideration for neutron boosting/scooping") { ContentAlign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("ref", gprefueleveryscoopable, "Refuel Every Scoopable", new Point(4, 0), checkboxsize, "Every possible time top up tank back to max") { ContentAlign = ContentAlignment.MiddleRight });
                 f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("algo", gpalgo, new Point(4, 0), textboxsize, "Pick routing algorithm", new List<string> { "Optimistic", "Fuel", "Fuel Jumps", "Guided", "Pessimistic"}));
 
                 f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
@@ -323,10 +330,12 @@ namespace EDDiscovery.UserControls
                     gpusesupercharge = f.GetBool("usc").Value;
                     gpusefsdinjections = f.GetBool("fsd").Value;
                     gpexcludesecondary = f.GetBool("ess").Value;
+                    gprefueleveryscoopable = f.GetBool("ref").Value;
                     gpalgo = f.Get("algo");
 
                     // this may fail due to not having fsd info
-                    spanshjobname = sp.RequestGalaxyPlotter(textBox_From.Text, textBox_To.Text, gpcargo, gpsupercharged, gpusesupercharge, gpusefsdinjections, gpexcludesecondary, si, gpalgo.ToLowerInvariant().Replace(" ", "_"));
+                    spanshjobname = sp.RequestGalaxyPlotter(textBox_From.Text, textBox_To.Text, gpcargo, gpsupercharged, gpusesupercharge, gpusefsdinjections,
+                                        gpexcludesecondary, gprefueleveryscoopable, si, gpalgo.ToLowerInvariant().Replace(" ", "_"));
                     if (spanshjobname != null)
                     {
                         StartSpanshQueryOp(Spanshquerytype.GalaxyPlotter);
@@ -459,6 +468,7 @@ namespace EDDiscovery.UserControls
                         prev = system;
                     }
 
+                    labelRouteName.Text += $" {res.Item2.Count} entries";
                     routeSystems = res.Item2;
                     EnableOutputButtons(res.Item2.Count > 0);
                     computing = 0;
