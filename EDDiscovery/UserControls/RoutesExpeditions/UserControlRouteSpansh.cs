@@ -132,25 +132,33 @@ namespace EDDiscovery.UserControls
 
         private void extButtonNeutronRouter_Click(object sender, EventArgs e)
         {
-            ConfigurableForm f = new ConfigurableForm();
+            Ship si = DiscoveryForm.History.GetLast?.ShipInformation;
 
-            int vpos = topmargin;
-
-            f.AddLabelAndEntry("Efficiency", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("efficiency", nrefficiency, new Point(dataleft, 0), numberboxsize, "How far off the straight line route to allow. 100 means no deviation") { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 100 });
-            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("nsc", typeof(ExtRadioButton), "Normal supercharge", new Point(4, 0), checkboxsize, "Supercharge") { ContentAlign = ContentAlignment.MiddleRight, CheckBoxChecked = !noverchargesupercharge });
-            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("osc", typeof(ExtRadioButton), "Overcharge supercharge", new Point(4, 0), checkboxsize, "Overcharge Supercharge") { ContentAlign = ContentAlignment.MiddleRight, CheckBoxChecked = noverchargesupercharge });
-            f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
-            f.InstallStandardTriggers();
-            f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
-
-            if (f.ShowDialogCentred(FindForm(), FindForm().Icon, "Neutron Router", closeicon: true) == DialogResult.OK)
+            if (si != null)
             {
-                EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                nrefficiency = f.GetInt("efficiency").Value;
-                noverchargesupercharge = f.GetBool("osc").Value;
-                spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, nrefficiency, noverchargesupercharge);
-                StartSpanshQueryOp(Spanshquerytype.Neutron);
-                labelRouteName.Text = $"{textBox_From.Text} - {textBox_To.Text} (Neutron)";
+                ConfigurableForm f = new ConfigurableForm();
+
+                int vpos = topmargin;
+
+                f.AddLabelAndEntry("Efficiency", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("efficiency", nrefficiency, new Point(dataleft, 0), numberboxsize, "How far off the straight line route to allow. 100 means no deviation") { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 100 });
+                f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
+                f.InstallStandardTriggers();
+                f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
+
+                if (f.ShowDialogCentred(FindForm(), FindForm().Icon, "Neutron Router", closeicon: true) == DialogResult.OK)
+                {
+                    EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+                    nrefficiency = f.GetInt("efficiency").Value;
+                    spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, textBox_Range.Value, nrefficiency, si);
+                    if (spanshjobname != null)
+                    {
+                        StartSpanshQueryOp(Spanshquerytype.Neutron);
+                        labelRouteName.Text = $"{textBox_From.Text} - {textBox_To.Text} (Neutron)";
+                    }
+                    else
+                        ExtendedControls.MessageBoxTheme.Show("Ship information does not have FSD Spec - will be corrected when you log into Elite again");
+
+                }
             }
         }
 
