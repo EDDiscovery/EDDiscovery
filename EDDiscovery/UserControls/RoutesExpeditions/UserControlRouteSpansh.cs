@@ -293,8 +293,8 @@ namespace EDDiscovery.UserControls
 
         private int gpcargo = 0;
         private bool gpsupercharged = false;
-        private bool gpusesupercharge = false;
-        private bool gpusefsdinjections = true;
+        private bool gpusesupercharge = true;
+        private bool gpusefsdinjections = false;
         private bool gpexcludesecondary = true;
         private bool gprefueleveryscoopable = true;
         private string gpalgo = "Optimistic";
