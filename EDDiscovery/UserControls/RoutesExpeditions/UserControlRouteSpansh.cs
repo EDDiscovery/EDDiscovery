@@ -302,6 +302,7 @@ namespace EDDiscovery.UserControls
         private bool gpusesupercharge = false;
         private bool gpusefsdinjections = true;
         private bool gpexcludesecondary = true;
+        private bool gprefueleveryscoopable = true;
         private string gpalgo = "Optimistic";
 
         private void extButtonSpanshGalaxyPlotter_Click(object sender, EventArgs e)
@@ -319,6 +320,7 @@ namespace EDDiscovery.UserControls
                 f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("usc", gpusesupercharge, "Use supercharge", new Point(4, 0), checkboxsize, "Use neutron boosts") { ContentAlign = ContentAlignment.MiddleRight });
                 f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("fsd", gpusefsdinjections, "Use FSD Injections", new Point(4, 0), checkboxsize, "Use FSD Injections to speed travel") { ContentAlign = ContentAlignment.MiddleRight });
                 f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("ess", gpexcludesecondary, "Exclude secondary stars", new Point(4, 0), checkboxsize, "Exclude secondary stars from consideration for neutron boosting/scooping") { ContentAlign = ContentAlignment.MiddleRight });
+                f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("ref", gprefueleveryscoopable, "Refuel Every Scoopable", new Point(4, 0), checkboxsize, "Every possible time top up tank back to max") { ContentAlign = ContentAlignment.MiddleRight });
                 f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("algo", gpalgo, new Point(4, 0), textboxsize, "Pick routing algorithm", new List<string> { "Optimistic", "Fuel", "Fuel Jumps", "Guided", "Pessimistic"}));
 
                 f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
@@ -334,10 +336,12 @@ namespace EDDiscovery.UserControls
                     gpusesupercharge = f.GetBool("usc").Value;
                     gpusefsdinjections = f.GetBool("fsd").Value;
                     gpexcludesecondary = f.GetBool("ess").Value;
+                    gprefueleveryscoopable = f.GetBool("ref").Value;
                     gpalgo = f.Get("algo");
 
                     // this may fail due to not having fsd info
-                    spanshjobname = sp.RequestGalaxyPlotter(textBox_From.Text, textBox_To.Text, gpcargo, gpsupercharged, gpusesupercharge, gpusefsdinjections, gpexcludesecondary, si, gpalgo.ToLowerInvariant().Replace(" ", "_"));
+                    spanshjobname = sp.RequestGalaxyPlotter(textBox_From.Text, textBox_To.Text, gpcargo, gpsupercharged, gpusesupercharge, gpusefsdinjections, 
+                                                        gpexcludesecondary, gprefueleveryscoopable, si, gpalgo.ToLowerInvariant().Replace(" ", "_"));
                     if (spanshjobname != null)
                     {
                         StartSpanshQueryOp(Spanshquerytype.GalaxyPlotter);
@@ -471,6 +475,7 @@ namespace EDDiscovery.UserControls
                         prev = system;
                     }
 
+                    labelRouteName.Text += $" {res.Item2.Count} entries";
                     routeSystems = res.Item2;
                     EnableOutputButtons(res.Item2.Count > 0);
                     computing = 0;

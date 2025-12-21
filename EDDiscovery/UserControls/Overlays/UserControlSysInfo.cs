@@ -750,7 +750,7 @@ namespace EDDiscovery.UserControls
             {
                 var si = last_he.ShipInformation;
 
-                string loadoutjournalline = si.ToJSONLoadout();
+                string loadoutjournalline = si.JSONLoadout(false).ToString();
 
                 //     File.WriteAllText(@"c:\code\loadoutout.txt", loadoutjournalline);
 
@@ -771,8 +771,7 @@ namespace EDDiscovery.UserControls
             {
                 var si = last_he.ShipInformation;
 
-                string errstr;
-                string s = si.ToJSONCoriolis(out errstr);
+                string s = si.JSONCoriolis(out string errstr).ToString();
 
                 if (errstr.Length > 0)
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
