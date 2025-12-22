@@ -55,11 +55,16 @@ namespace EDDiscovery.UserControls
         {
             CommonSpanshQuery(Spanshquerytype.EarthLikes);
         }
+        private void extButtonSpanshRockyHMC_Click(object sender, EventArgs e)
+        {
+            CommonSpanshQuery(Spanshquerytype.RockyHMC);
+        }
 
-        int[] csradius = new int[3] { 25, 500, 500 };       // size to number of common queries
-        int[] csmaxsys = new int[3] { 100, 100, 100 };
-        int[] csmaxls = new int[3] { 100000, 50000, 50000 };
-        bool[] csavoidt = new bool[3] { true, true, true };
+        double[] csrange = new double[] { -1, -1, -1, -1 };       // size to number of common queries
+        int[] csradius = new int[] { 25, 500, 500, 500 };       // size to number of common queries
+        int[] csmaxsys = new int[] { 100, 100, 100, 100 };
+        int[] csmaxls = new int[] { 1000000, 50000, 50000, 50000 };
+        bool[] csavoidt = new bool[] { true, true, true, true };
         int csminvalue = 100000;
         bool csusemap = false;
 
@@ -72,6 +77,10 @@ namespace EDDiscovery.UserControls
 
             int vpos = topmargin;
 
+            if (csrange[si] < 0)
+                csrange[si] = textBox_Range.Value;
+
+            f.AddLabelAndEntry("Range", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("range", csrange[si], new Point(dataleft, 0), numberboxsize, "Maximum jump range of ship or range between systems your happy with") { NumberBoxLongMinimum = 4 });
             f.AddLabelAndEntry("Search radius", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("radius", csradius[si], new Point(dataleft, 0), numberboxsize, "Search radius along path to search for worlds") { NumberBoxLongMinimum = 10 });
             f.AddLabelAndEntry("Max Systems", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("maxsystems", csmaxsys[si], new Point(dataleft, 0), numberboxsize, "Maximum systems to route through") { NumberBoxLongMinimum = 1 });
 
@@ -94,6 +103,7 @@ namespace EDDiscovery.UserControls
             {
                 EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
 
+                csrange[si] = f.GetDouble("range").Value;
                 csradius[si] = f.GetInt("radius").Value;
                 csmaxsys[si] = f.GetInt("maxsystems").Value;
                 csavoidt[si] = f.GetBool("avoidthargoids").Value;
@@ -107,7 +117,7 @@ namespace EDDiscovery.UserControls
 
                 bool loop = f.GetBool("loop").Value;
 
-                spanshjobname = sp.RequestRoadToRichesAmmoniaEarthlikes(textBox_From.Text, textBox_To.Text, textBox_Range.Value,
+                spanshjobname = sp.RequestRoadToRichesAmmoniaEarthlikes(textBox_From.Text, textBox_To.Text, csrange[si],
                                                     csradius[si], csmaxsys[si],
                                                     csavoidt[si], loop, csmaxls[si],
                                                     roadtoriches ? csminvalue : 1,
@@ -122,32 +132,48 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        double njumprange = -1;
         int nrefficiency = 60;
         bool noverchargesupercharge = false;
 
         private void extButtonNeutronRouter_Click(object sender, EventArgs e)
         {
-            ConfigurableForm f = new ConfigurableForm();
+            Ship si = DiscoveryForm.History.GetLast?.ShipInformation;
 
-            int vpos = topmargin;
-
-            f.AddLabelAndEntry("Efficiency", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("efficiency", nrefficiency, new Point(dataleft, 0), numberboxsize, "How far off the straight line route to allow. 100 means no deviation") { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 100 });
-            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("nsc", typeof(ExtRadioButton), "Normal supercharge", new Point(4, 0), checkboxsize, "Supercharge") { ContentAlign = ContentAlignment.MiddleRight, CheckBoxChecked = !noverchargesupercharge });
-            f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("osc", typeof(ExtRadioButton), "Overcharge supercharge", new Point(4, 0), checkboxsize, "Overcharge Supercharge") { ContentAlign = ContentAlignment.MiddleRight, CheckBoxChecked = noverchargesupercharge });
-            f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
-            f.InstallStandardTriggers();
-            f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
-
-            if (f.ShowDialogCentred(FindForm(), FindForm().Icon, "Neutron Router", closeicon: true) == DialogResult.OK)
+            if (si != null)
             {
-                EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
-                nrefficiency = f.GetInt("efficiency").Value;
-                spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, (int)textBox_Range.Value, nrefficiency,noverchargesupercharge);
-                StartSpanshQueryOp(Spanshquerytype.Neutron);
-                labelRouteName.Text = $"{textBox_From.Text} - {textBox_To.Text} (Neutron)";
+                ConfigurableForm f = new ConfigurableForm();
+
+                int vpos = topmargin;
+
+                if (njumprange < 0)
+                    njumprange = textBox_Range.Value;
+
+                f.AddLabelAndEntry("Range", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("range", njumprange, new Point(dataleft, 0), numberboxsize, "Maximum jump range of ship or range between systems your happy with") { NumberBoxLongMinimum = 4 });
+                f.AddLabelAndEntry("Efficiency", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("efficiency", nrefficiency, new Point(dataleft, 0), numberboxsize, "How far off the straight line route to allow. 100 means no deviation") { NumberBoxLongMinimum = 1, NumberBoxLongMaximum = 100 });
+                f.AddOK(new Point(140, vpos + 16), "OK", anchor: AnchorStyles.Right | AnchorStyles.Bottom);
+                f.InstallStandardTriggers();
+                f.Trigger += (name, text, obj) => { f.GetControl("OK").Enabled = f.IsAllValid(); };
+
+                if (f.ShowDialogCentred(FindForm(), FindForm().Icon, "Neutron Router", closeicon: true) == DialogResult.OK)
+                {
+                    EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
+                    njumprange = f.GetDouble("range").Value;
+                    nrefficiency = f.GetInt("efficiency").Value;
+                    spanshjobname = sp.RequestNeutronRouter(textBox_From.Text, textBox_To.Text, njumprange, nrefficiency, si);
+                    if (spanshjobname != null)
+                    {
+                        StartSpanshQueryOp(Spanshquerytype.Neutron);
+                        labelRouteName.Text = $"{textBox_From.Text} - {textBox_To.Text} (Neutron)";
+                    }
+                    else
+                        ExtendedControls.MessageBoxTheme.Show("Ship information does not have FSD Spec - will be corrected when you log into Elite again");
+
+                }
             }
         }
 
+        private double traderange = -1;
         private string tradestation = null;
         private long tradecapital = 1000;
         private int tradecargo = 7;
@@ -176,7 +202,11 @@ namespace EDDiscovery.UserControls
                 if (tradestation == null)
                     tradestation = stationnames[0];
 
+                if (traderange < 0)
+                    traderange = textBox_Range.Value;
+
                 f.AddLabelAndEntry("Station", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("station", tradestation, new Point(dataleft, 0), comboboxsize, "Station name", stationnames));
+                f.AddLabelAndEntry("Range", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("range", traderange, new Point(dataleft, 0), numberboxsize, "Maximum jump range of ship or range between systems your happy with") { NumberBoxLongMinimum = 4 });
                 f.AddLabelAndEntry("Starting Capital", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("capital", tradecapital, new Point(dataleft, 0), numberboxsize, "Starting capital") { NumberBoxLongMinimum = 100 });
                 f.AddLabelAndEntry("Max Cargo", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("cargo", tradecargo, new Point(dataleft, 0), numberboxsize, "Maximum cargo you can carry") { NumberBoxLongMinimum = 1 });
                 f.AddLabelAndEntry("Max Hops", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("hops", tradehops, new Point(dataleft, 0), numberboxsize, "Maximum hops between stations") { NumberBoxLongMinimum = 1 });
@@ -194,6 +224,7 @@ namespace EDDiscovery.UserControls
                 if (f.ShowDialogCentred(FindForm(), FindForm().Icon, "Trade Router", closeicon: true) == DialogResult.OK)
                 {
                     tradestation = f.Get("station");
+                    traderange = f.GetDouble("range").Value;
                     tradecapital = f.GetLong("capital").Value;
                     tradecargo = f.GetInt("cargo").Value;
                     tradehops = f.GetInt("hops").Value;
@@ -206,7 +237,7 @@ namespace EDDiscovery.UserControls
                     tradepermit = f.GetBool("permit").Value;
 
                     spanshjobname = sp.RequestTradeRouter(textBox_From.Text, tradestation,
-                        tradehops, textBox_Range.Value, tradecapital, tradecargo, tradedls, (int)(trademage * 86400),
+                        tradehops, traderange, tradecapital, tradecargo, tradedls, (int)(trademage * 86400),
                         tradelpad, tradeproh, tradeallowp, tradeloops, tradepermit);
                     StartSpanshQueryOp(Spanshquerytype.TradeRouter);
 
@@ -348,6 +379,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private double exorange = -1;
         private int exosearchradius = 25;
         private int exomaxsystems = 100;
         private int exomaxls = 1000000;
@@ -358,6 +390,10 @@ namespace EDDiscovery.UserControls
 
             int vpos = topmargin;
 
+            if (exorange < 0)
+                exorange = textBox_Range.Value;
+
+            f.AddLabelAndEntry("Range", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("range", exorange, new Point(dataleft, 0), numberboxsize, "Maximum jump range of ship or range between systems your happy with") { NumberBoxLongMinimum = 4 });
             f.AddLabelAndEntry("Search radius", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("radius", exosearchradius, new Point(dataleft, 0), numberboxsize, "Search radius along path to search for worlds") { NumberBoxLongMinimum = 10 });
             f.AddLabelAndEntry("Max Systems", new Point(4, 4), ref vpos, 32, labelsize, new ConfigurableEntryList.Entry("maxsystems", exomaxsystems, new Point(dataleft, 0), numberboxsize, "Maximum systems to route through") { NumberBoxLongMinimum = 1 });
             f.Add(ref vpos, 32, new ConfigurableEntryList.Entry("loop", typeof(ExtCheckBox), "Return to start", new Point(4, 0), checkboxsize, "Return to start system for route") { CheckBoxChecked = textBox_To.Text.IsEmpty(), Enabled = !textBox_To.Text.HasChars(), ContentAlign = ContentAlignment.MiddleRight });
@@ -371,13 +407,14 @@ namespace EDDiscovery.UserControls
             {
                 EliteDangerousCore.Spansh.SpanshClass sp = new EliteDangerousCore.Spansh.SpanshClass();
 
+                exorange = f.GetDouble("range").Value;
                 exosearchradius = f.GetInt("radius").Value;
                 exomaxsystems = f.GetInt("maxsystems").Value;
                 exomaxls = f.GetInt("maxls").Value;
                 exominvalue = f.GetInt("minv").Value;
                 bool loop = f.GetBool("loop").Value;
 
-                spanshjobname = sp.RequestExomastery(textBox_From.Text, textBox_To.Text, textBox_Range.Value,
+                spanshjobname = sp.RequestExomastery(textBox_From.Text, textBox_To.Text, exorange,
                                                     exosearchradius, exomaxsystems,
                                                     loop, exomaxls, exominvalue);
                 StartSpanshQueryOp(Spanshquerytype.ExoMastery);
