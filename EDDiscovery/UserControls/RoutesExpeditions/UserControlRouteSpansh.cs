@@ -135,8 +135,6 @@ namespace EDDiscovery.UserControls
 
         double njumprange = -1;
         int nrefficiency = 60;
-        bool noverchargesupercharge = false;
-// tbd
         private void extButtonNeutronRouter_Click(object sender, EventArgs e)
         {
             Ship si = DiscoveryForm.History.GetLast?.ShipInformation;
