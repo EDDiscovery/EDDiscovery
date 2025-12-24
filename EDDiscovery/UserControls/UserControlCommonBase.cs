@@ -375,7 +375,7 @@ namespace EDDiscovery.UserControls
                 }
             }
         }
-        
+
         public void SetClipboardText(string s)
         {
             try
@@ -383,9 +383,10 @@ namespace EDDiscovery.UserControls
                 if (!String.IsNullOrWhiteSpace(s))
                     Clipboard.SetText(s, TextDataFormat.Text);
             }
-            catch
+            catch (Exception ex)
             {
-                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".Tx());
+                System.Diagnostics.Trace.WriteLine($"Failed to copy cliboard text exception {ex}");
             }
         }
         public void SetClipboardImage(Image s)
@@ -394,9 +395,10 @@ namespace EDDiscovery.UserControls
             {
                 Clipboard.SetImage(s);
             }
-            catch
+            catch (Exception ex)
             {
-                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".Tx());
+                System.Diagnostics.Trace.WriteLine($"Failed to copy cliboard image exception {ex}");
             }
         }
         public void SetClipboardImage(string file)
@@ -408,9 +410,10 @@ namespace EDDiscovery.UserControls
                     Clipboard.SetImage(s);
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".T(EDTx.UserControlCommonBase_Copyingtexttoclipboardfailed));
+                DiscoveryForm.LogLineHighlight("Copying text to clipboard failed".Tx());
+                System.Diagnostics.Trace.WriteLine($"Failed to copy cliboard image {file} exception {ex}");
             }
         }
         public void SetClipboard(DataObject obj)
@@ -419,9 +422,10 @@ namespace EDDiscovery.UserControls
             {
                 Clipboard.SetDataObject(obj);
             }
-            catch
+            catch (Exception ex)
             {
                 DiscoveryForm.LogLineHighlight("Copying object to clipboard failed");
+                System.Diagnostics.Trace.WriteLine($"Failed to copy cliboard object exception {ex}");
             }
         }
 
@@ -431,9 +435,10 @@ namespace EDDiscovery.UserControls
             {
                 return Clipboard.ContainsText();
             }
-            catch
+            catch (Exception ex)
             {
                 DiscoveryForm.LogLineHighlight("Unable to access clipboard");
+                System.Diagnostics.Trace.WriteLine($"Failed to access clipboard {ex}");
                 return false;
             }
         }
@@ -444,8 +449,9 @@ namespace EDDiscovery.UserControls
             {
                 return Clipboard.GetText();
             }
-            catch
+            catch (Exception ex)
             {
+                System.Diagnostics.Trace.WriteLine($"Failed to get clipboard text {ex}");
                 return null;
             }
         }
