@@ -26,6 +26,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlColonisation : UserControlCommonBase
     {
+        string dbColonisationChecked = "HideCompleted";
+
         public UserControlColonisation()
         {
             InitializeComponent();
@@ -39,6 +41,10 @@ namespace EDDiscovery.UserControls
 
             JToken tk = JToken.Parse(GetSetting(dbDisplayState, "{}"));     // may fail if corrupted
             displaysettings = tk != null ? tk.Object() : new JObject();
+
+            ignorechange = true;
+            extCheckBoxHideCompleted.Checked = GetSetting(dbColonisationChecked, false);
+            ignorechange = false;
         }
         protected override void InitialDisplay()
         {
@@ -89,7 +95,8 @@ namespace EDDiscovery.UserControls
         {
             DiscoveryForm.OnHistoryChange -= HistoryChange;
             DiscoveryForm.OnNewEntry -= NewEntry;
-            PutSetting(dbDisplayState, displaysettings.ToString(true));   
+            PutSetting(dbDisplayState, displaysettings.ToString(true));
+            PutSetting(dbColonisationChecked, extCheckBoxHideCompleted.Checked);
         }
 
         public override bool SupportTransparency => true;
@@ -184,6 +191,8 @@ namespace EDDiscovery.UserControls
             else
                 extComboBoxSystemSel.SelectedIndex = 0;         // set to last system no trigger
 
+
+
             ignorechange = false;
         }
 
@@ -252,6 +261,15 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void extCheckBoxHideCompleted_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!ignorechange)
+            {
+                Display(true);      // redisplay with clear to remove non selected ports
+            }
+        }
+
+
         private void Display(bool cleardisplay)
         {
             if ( cleardisplay )
@@ -292,7 +310,9 @@ namespace EDDiscovery.UserControls
 
                     foreach (var kvp in current.Ports)
                     {
-                        if (stationselection == alltext || stationselection == kvp.Value.Name)  // only display selected ports
+                        if ((stationselection == alltext || stationselection == kvp.Value.Name)  && // only display selected ports
+                            (kvp.Value.State == null || kvp.Value.State?.ConstructionComplete == false || extCheckBoxHideCompleted.Checked == false)
+                            )
                         {
                             ColonisationPortDisplay cp = new ColonisationPortDisplay();
                             cp.Tag = kvp.Value;
@@ -339,7 +359,9 @@ namespace EDDiscovery.UserControls
                     // find each port in current list
                     foreach (var kvp in current.Ports)
                     {
-                        if (stationselection == alltext || stationselection == kvp.Value.Name)  // only display selected ports
+                        if ((stationselection == alltext || stationselection == kvp.Value.Name ) &&  // only display selected ports
+                            (kvp.Value.State == null || kvp.Value.State?.ConstructionComplete == false || extCheckBoxHideCompleted.Checked == false)
+                            )
                         {
                             ColonisationPortDisplay cp = pscrolledcontent.Controls.FindTag(kvp.Value) as ColonisationPortDisplay;
                             if (cp == null)     // if new, add
@@ -440,6 +462,7 @@ namespace EDDiscovery.UserControls
         JObject displaysettings;
 
         private string alltext = "All";
+
     }
 
 }
