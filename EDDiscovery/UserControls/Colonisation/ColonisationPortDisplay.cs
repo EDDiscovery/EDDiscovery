@@ -15,14 +15,12 @@
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
-using GLOFC.GL4.Controls;
 using System;
-using System.ComponentModel;
 using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls.Colonisation
 {
-    public partial class ColonisationPortDisplay: UserControl
+    public partial class ColonisationPortDisplay : UserControl
     {
         public ColonisationPortData Port { get; set; }
         public ColonisationPortDisplay()
@@ -42,7 +40,7 @@ namespace EDDiscovery.UserControls.Colonisation
             Port = port;
             extCheckBoxShowRL.CheckedChanged += (s, e) => { extCheckBoxShowZeros.Visible = extPanelDataGridViewScrollRL.Visible = extCheckBoxShowRL.Checked; ChangedDisplayState?.Invoke(); };
             extCheckBoxShowContributions.CheckedChanged += (s, e) => { extPanelDataGridViewScrollContributions.Visible = extCheckBoxShowContributions.Checked; ChangedDisplayState?.Invoke(); };
-            extCheckBoxShowZeros.CheckedChanged += (s, e) => { ChangedDisplayState?.Invoke(); UpdatePort();  };
+            extCheckBoxShowZeros.CheckedChanged += (s, e) => { ChangedDisplayState?.Invoke(); UpdatePort(); };
             dataGridViewContributions.SortCompare += DataGridViewContributions_SortCompare;
             dataGridViewRL.SortCompare += DataGridViewRL_SortCompare;
         }
@@ -54,6 +52,7 @@ namespace EDDiscovery.UserControls.Colonisation
 
             var je = Port.LastDockedOrLocation as ILocDocked; // may be null
 
+            labelDataProgress.Text = Port.State?.ConstructionComplete == true ? "Port Completed" : "Progress (N2)%";
             labelDataProgress.Data0 = Port.State?.ConstructionProgress != null ? (double?)(Port.State.ConstructionProgress * 100.0) : null;
             extLabelFailed.Visible = Port.State != null && Port.State.ConstructionFailed == true;
             labelDataProgress.Visible = Port.State != null && Port.State.ConstructionFailed == false;
@@ -101,7 +100,7 @@ namespace EDDiscovery.UserControls.Colonisation
 
                 extCheckBoxShowZeros.Visible = extPanelDataGridViewScrollRL.Visible = dataGridViewRL.Rows.Count > 0 && extCheckBoxShowRL.Checked;     // don't show if nothing or hidden
                 extCheckBoxShowRL.Visible = dataGridViewRL.Rows.Count > 0;      // no button if nothing
-                
+
             }
 
             {
@@ -125,7 +124,7 @@ namespace EDDiscovery.UserControls.Colonisation
                     }
                 }
 
-                if (posrltag != null )
+                if (posrltag != null)
                 {
                     dataGridViewContributions.SetCurrentSelOnRow(dataGridViewContributions.FindRowWithTag(posrltag), selposrl.Item2);
                 }
