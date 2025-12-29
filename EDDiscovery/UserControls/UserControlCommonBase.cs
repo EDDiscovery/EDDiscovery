@@ -72,8 +72,14 @@ namespace EDDiscovery.UserControls
         // this gives you the current transparent state
         public bool IsCurrentlyTransparent => (this.Parent is UserControlForm) ? ((UserControlForm)(this.Parent)).IsCurrentlyTransparent : false;
 
-        public virtual string HelpKeyOrAddress() { return PanelID.ToString(); }     // default help key is panel id as a string - override to specialise
-
+        // default help key is panel id as a spaced string with panel at the end - override to specialise
+        public virtual string HelpKeyOrAddress()
+        {
+            string name = PanelID.ToString().SplitCapsWordNumbersConjoined();
+            if (!name.Contains("Panel"))
+                name += " Panel";
+            return name;
+        }
         #endregion
 
         #region Lifetime Contract

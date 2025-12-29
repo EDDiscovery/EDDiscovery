@@ -53,28 +53,6 @@ namespace EDDiscovery
             });
         }
 
-        public void DownloadHelp(System.Threading.CancellationToken cancel)
-        {
-            Task.Factory.StartNew(() =>
-            {
-                string helpdir = EDDOptions.Instance.HelpDirectory();
-
-                GitHubClass github = new GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload);
-
-                var files = github.ReadFolder(cancel, "Help");
-                if (files != null)        // may be empty, unlikely, but
-                {
-                    if (github.DownloadFiles(cancel, helpdir, files, true, true))
-                    {
-                        if (!cancel.IsCancellationRequested)
-                        {
-                            InvokeAsyncOnUiThread(() => { OnHelpDownloaded?.Invoke(); });
-                        }
-                    }
-                }
-            });
-        }
-
         public void DownloadEDSMGEC(System.Threading.CancellationToken cancel)
         {
             Task.Factory.StartNew(() =>
