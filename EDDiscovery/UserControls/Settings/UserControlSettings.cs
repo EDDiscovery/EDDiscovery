@@ -42,17 +42,17 @@ namespace EDDiscovery.UserControls
             extComboBoxGameTime.Items.Add("UTC");
             extComboBoxGameTime.Items.Add("Game Time".T(EDTx.UserControlSettings_GameTime));
 
-            ConfigureHelpButton(extButtonDrawnHelpTheme, "Theming");
-            ConfigureHelpButton(extButtonDrawnHelpScreenshots, "Screenshots");
-            ConfigureHelpButton(extButtonDrawnHelpTransparency, "Transparency");
-            ConfigureHelpButton(extButtonDrawnHelpWebServer, "Webserver");
-            ConfigureHelpButton(extButtonDrawnHelpSafeMode, "SafeMode");
-            ConfigureHelpButton(extButtonDrawnHelpMemory, "Memory");
-            ConfigureHelpButton(extButtonDrawnHelpEDSM, "EDSMSettings");
-            ConfigureHelpButton(extButtonDrawnHelpHistory, "HistoryDisplay");
-            ConfigureHelpButton(extButtonDrawnHelpDLL, "DLL");
-            ConfigureHelpButton(extButtonDrawnHelpWindowOptions, "WindowOptions");
             ConfigureHelpButton(extButtonDrawnHelpCommanders, "Commanders");
+            ConfigureHelpButton(extButtonDrawnHelpTheme, "Theme");
+            ConfigureHelpButton(extButtonDrawnHelpHistory, "History Options");
+            ConfigureHelpButton(extButtonDrawnHelpWebServer, "Web Server");
+            ConfigureHelpButton(extButtonDrawnHelpTransparency, "Interaction");
+            ConfigureHelpButton(extButtonDrawnHelpMemory, "Memory");
+            ConfigureHelpButton(extButtonDrawnHelpScreenshots, "Screenshots");
+            ConfigureHelpButton(extButtonDrawnHelpEDSM, "System DB Control");
+            ConfigureHelpButton(extButtonDrawnHelpWindowOptions, "Window Options");
+            ConfigureHelpButton(extButtonDrawnHelpDLL, "DLLs");
+            ConfigureHelpButton(extButtonDrawnHelpSafeMode, "Advanced");
 
             var enumlist = new Enum[] { EDTx.UserControlSettings_groupBoxCommanders, EDTx.UserControlSettings_ColumnCommander, EDTx.UserControlSettings_EdsmName, EDTx.UserControlSettings_JournalDirCol, 
                                         EDTx.UserControlSettings_NotesCol, EDTx.UserControlSettings_btnDeleteCommander, EDTx.UserControlSettings_buttonEditCommander, 
@@ -564,7 +564,8 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDrawnHelp_Click(object sender, EventArgs e)
         {
-            EDDHelp.Help(FindForm(), extButtonDrawnHelpTheme, ((Control)sender).Tag as string);
+            Control ct = sender as Control;
+            EDDHelp.HelpPanel(FindForm(), ct.PointToScreen(new Point(0, ct.Height)), HelpKeyOrAddress(), ct.Tag as string);
         }
 
 

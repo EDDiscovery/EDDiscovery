@@ -178,11 +178,11 @@ namespace EDDiscovery
             {
                 TabPage page = TabPages[tabIndex];
                 if (page.Tag != null)
-                    EDDHelp.HistoryTab(parent, pt);
+                    EDDHelp.HelpName(parent, pt, "1.6 History Tab");
                 else
                 {
                     UserControls.UserControlCommonBase uccb = page.Controls[0] as UserControls.UserControlCommonBase;
-                    EDDHelp.Help(parent, pt, uccb.HelpKeyOrAddress());
+                    EDDHelp.HelpPanel(parent, pt, uccb.HelpKeyOrAddress());
                 }
             }
 

@@ -293,7 +293,7 @@ namespace EDDiscovery.UserControls
                     var uccb = (c as UserControlCommonBase);
                     uccb.AutoScaleMode = AutoScaleMode.Inherit;     // must be in inherit mode to prevent multi scaling
                     c.Name = pi.WindowTitle;        // tabs uses Name field for display, must set it
-                    tab.HelpAction = (pt) => { EDDHelp.Help(this.FindForm(), pt,uccb.HelpKeyOrAddress()); };
+                    tab.HelpAction = (pt) => { EDDHelp.HelpPanel(this.FindForm(), pt,uccb.HelpKeyOrAddress()); };
 
                     //System.Diagnostics.Trace.WriteLine("SplitterCreate Tab " + c.Name );
 

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2018 EDDiscovery development team
+ * Copyright 2018-2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,178 +10,105 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using QuickJSON;
-using EDDiscovery.UserControls;
 using ExtendedControls;
-using System;
 using System.Drawing;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Collections.Generic;
 
 namespace EDDiscovery
 {
-    public static class EDDHelp 
+    public static class EDDHelp
     {
-        // NOTE! keep synced with JSON on EDDiscovery data as this gets downloaded by EDDControllermain.cs::DownloadHelp once per day
-
-        static private JToken defaulthelp = new JObject()
+        static Dictionary<string, string> NamesToVideos = new Dictionary<string, string> 
         {
-            ["Version"] = "16.1.0.0",
-            ["Panels"] = new JArray()
-            {
-                // synced with PanelIDs in order
-
-                new JObject() { ["panel"] = "Log", ["wiki"] = "/Using-the-EDDiscovery-Log-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=625" },
-                new JObject() { ["panel"] = "StarDistance", ["wiki"] = "/Using-the-Nearest-Stars-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=590" },
-                new JObject() { ["panel"] = "Materials", ["wiki"] = "/Using-the-Materials-Panel", ["video"] = "https://youtu.be/U1id5TxS8bs" },
-                new JObject() { ["panel"] = "Commodities", ["wiki"] = "/Using-the-Commodities-Panel", ["video"] = "https://youtu.be/U1id5TxS8bs" },
-                new JObject() { ["panel"] = "Ledger", ["wiki"] = "/Using-the-Ledger-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Journal", ["wiki"] = "/Using-the-Journal-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "TravelGrid", ["wiki"] = "/Using-the-History-Grid-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=56" },
-                new JObject() { ["panel"] = "ScreenShot", ["wiki"] = "/Using-the-Screenshot-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Statistics", ["wiki"] = "/Using-the-Statistics-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Scan", ["wiki"] = "/Using-the-Scan-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=636" },
-                
-                new JObject() { ["panel"] = "Modules", ["wiki"] = "/Using-the-Ships-Load-Out-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Synthesis", ["wiki"] = "/Using-the-Synthesis-Panel", ["video"] = "https://youtu.be/gI6rKmgqGb0" },
-                new JObject() { ["panel"] = "Missions", ["wiki"] = "/Using-the-Missions-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Engineering", ["wiki"] = "/Using-the-Engineering-panel", ["video"] = "https://youtu.be/gI6rKmgqGb0" },
-                new JObject() { ["panel"] = "MarketData", ["wiki"] = "/Using-the-Market-Data-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "SystemInformation", ["wiki"] = "/Using-the-System-Information-Panel", ["video"] = "https://youtu.be/PwTbnFikBgA?t=520" },
-                new JObject() { ["panel"] = "Spanel", ["wiki"] = "/Using-the-SPanel", ["video"] = "" },
-                new JObject() { ["panel"] = "NotePanel", ["wiki"] = "/Using-the-Note-Panel", ["video"] = "" },
-
-                new JObject() { ["panel"] = "RouteTracker", ["wiki"] = "/Using-the-Surveyor-Panel", ["video"] = "https://youtu.be/dcuNn4o7gJ4" },
-                new JObject() { ["panel"] = "Grid", ["wiki"] = "/Using-the-Grid", ["video"] = "https://youtu.be/fSnxTDL90B4?t=346" },
-                new JObject() { ["panel"] = "StarList", ["wiki"] = "/Using-the-Star-List-Grid", ["video"] = "" },
-                new JObject() { ["panel"] = "EstimatedValues", ["wiki"] = "/Using-the-Estimated-Exploration-Values-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Search", ["wiki"] = "/Using-the-Search-Panel", ["video"] = "https://youtu.be/GZGVuimjEeI" },
-                new JObject() { ["panel"] = "ShoppingList", ["wiki"] = "/Using-the-Shopping-List-Panel", ["video"] = "https://youtu.be/gI6rKmgqGb0" },
-                new JObject() { ["panel"] = "Route", ["wiki"] = "/Using-the-Route-Panel", ["video"] = "https://youtu.be/zw_RlzX0yn4" },
-                new JObject() { ["panel"] = "Expedition", ["wiki"] = "/Using-the-Expeditions-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Trilateration", ["wiki"] = "/Using-the-Trilateration-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Settings", ["wiki"] = "/Using-the-Settings-Panel", ["video"] = "/watch?v=v5g03mYdYAw" },
-
-                new JObject() { ["panel"] = "ScanGrid", ["wiki"] = "/Using-the-Scan-Grid", ["video"] = "" },
-                new JObject() { ["panel"] = "Compass", ["wiki"] = "/Using-the-Compass-Panel", ["video"] = "https://youtu.be/s-AVEYq5vCo" },
-                new JObject() { ["panel"] = "PanelSelector", ["wiki"] = "/Using-Panels", ["video"] = "" },
-                new JObject() { ["panel"] = "BookmarkManager", ["wiki"] = "/Using-the-Bookmarks-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "CombatPanel", ["wiki"] = "/Using-the-combat-panel", ["video"] = "" },
-                new JObject() { ["panel"] = "ShipYardPanel", ["wiki"] = "/Using-the-Shipyard-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "OutfittingPanel", ["wiki"] = "/Using-the-Outfitting-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "SplitterControl", ["wiki"] = "/Using-the-Splitter", ["video"] = "https://youtu.be/fSnxTDL90B4?t=209" },
-
-                new JObject() { ["panel"] = "MissionOverlay", ["wiki"] = "/Using-the-Mission-Overlay-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "CaptainsLog", ["wiki"] = "/Using-the-Captains-Log-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Surveyor", ["wiki"] = "/Using-the-Surveyor-Panel", ["video"] = "https://youtu.be/dcuNn4o7gJ4" },
-                new JObject() { ["panel"] = "EDSM", ["wiki"] = "/Using-the-WebView-Panels", ["video"] = "" },
-                new JObject() { ["panel"] = "MaterialTrader", ["wiki"] = "/Using-the-Material-Trader-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Map2D", ["wiki"] = "/Using-the-2D-Map", ["video"] = "" },
-                new JObject() { ["panel"] = "MiningOverlay", ["wiki"] = "/Using-the-mining-panel", ["video"] = "https://youtu.be/D-U8euLWbKU" },
-                new JObject() { ["panel"] = "Factions", ["wiki"] = "/Using-the-Factions-Panel", ["video"] = "" },
-                new JObject() { ["panel"] = "Spansh", ["wiki"] = "/Using-the-WebView-Panels", ["video"] = "https://youtu.be/qeLnq-pU14I" },
-
-                new JObject() { ["panel"] = "Inara", ["wiki"] = "/Using-the-WebView-Panels", ["video"] = "" },
-                new JObject() { ["panel"] = "MicroResources", ["wiki"] = "/Using-the-Micro-Resources-Panel", ["video"] = "https://youtu.be/U1id5TxS8bs" },
-                new JObject() { ["panel"] = "SuitsWeapons", ["wiki"] = "/Using-the-Suits-and-Weapons-Panel", ["video"] = "https://youtu.be/qKyhIXRfrAE" },
-                new JObject() { ["panel"] = "Map3D", ["wiki"] = "/Using-the-3D-Map", ["video"] = "https://youtu.be/9c09d93zFB8" },
-                new JObject() { ["panel"] = "LocalMap3D", ["wiki"] = "/Using-the-3D-Map", ["video"] = "https://youtu.be/9c09d93zFB8" },
-                new JObject() { ["panel"] = "Organics", ["wiki"] = "/Using-the-Organic-Scans", ["video"] = "https://youtu.be/Uhw4zHnsorI" },
-                new JObject() { ["panel"] = "Engineers", ["wiki"] = "/Using-the-Engineers-Panel", ["video"] = "https://youtu.be/gI6rKmgqGb0" },
-                new JObject() { ["panel"] = "Discoveries", ["wiki"] = "/Using-the-Discoveries-Panel", ["video"] = "https://youtu.be/GZGVuimjEeI" },
-                new JObject() { ["panel"] = "Carrier", ["wiki"] = "/Using-the-Carrier-Panel", ["video"] = "https://youtu.be/zot3a7uHQfQ" },
-                new JObject() { ["panel"] = "Resources", ["wiki"] = "/Using-the-Resources-Panel", ["video"] = "https://youtu.be/U1id5TxS8bs" },
-                new JObject() { ["panel"] = "SpanshStations", ["wiki"] = "/Using-the-Spansh-Station-Panel", ["video"] = "https://youtu.be/pivLR8FzpmY" },
-
-                // special
-
-                new JObject() { ["panel"] = "HistoryTab", ["wiki"] = "/Using-the-History-Tab", ["video"] = "https://youtu.be/PwTbnFikBgA" },
-
-                // Settings, in order in usercontrolsettings.cs
-
-                new JObject() { ["panel"] = "Theming", ["wiki"] = "/Configuring-the-look-of-EDDiscovery", ["video"] = "" },
-                new JObject() { ["panel"] = "Screenshots", ["wiki"] = "/Screen-Shots", ["video"] = "" },
-                new JObject() { ["panel"] = "Transparency", ["wiki"] = "/Using-Panels#Pop-Out-Panels", ["video"] = "" },
-                new JObject() { ["panel"] = "Webserver", ["wiki"] = "/EDD-Web-Server-(Roccat-Style-Grid)", ["video"] = "https://youtu.be/GkOGB7WF1Lo?t=140" },
-                new JObject() { ["panel"] = "SafeMode", ["wiki"] = "/Safe-Mode", ["video"] = "" },
-                new JObject() { ["panel"] = "Memory", ["wiki"] = "/Reducing-Memory-Usage", ["video"] = "" },
-                new JObject() { ["panel"] = "EDSMSettings", ["wiki"] = "/EDSM-Integration-with-EDDiscovery", ["video"] = "" },
-                new JObject() { ["panel"] = "HistoryDisplay", ["wiki"] = "/Using-the-Settings-Panel#History-Options", ["video"] = "" },
-                new JObject() { ["panel"] = "DLL", ["wiki"] = "/Using-the-Settings-Panel#DLLs", ["video"] = "" },
-                new JObject() { ["panel"] = "WindowOptions", ["wiki"] = "/Using-the-Settings-Panel#Window-Options", ["video"] = "" },
-                new JObject() { ["panel"] = "Commanders", ["wiki"] = "/Using-the-Settings-Panel#Commanders", ["video"] = "" },
-
-
-            }
+            ["4. Log Panel"] = "https://youtu.be/PwTbnFikBgA?t=625",
+            ["4. Nearest Stars Panel"] = "https://youtu.be/PwTbnFikBgA?t=590",
+            ["4. Materials Panel"] = "https://youtu.be/U1id5TxS8bs",
+            ["4. Commodities Panel"] = "https://youtu.be/U1id5TxS8bs",
+            ["4. History Grid Panel"] = "https://youtu.be/PwTbnFikBgA?t=56",
+            ["4. Scan Panel"] = "https://youtu.be/PwTbnFikBgA?t=636",
+            ["4. Synthesis Panel"] = "https://youtu.be/gI6rKmgqGb0",
+            ["4. Engineering Panel"] = "https://youtu.be/gI6rKmgqGb0",
+            ["4. System Information Panel"] = "https://youtu.be/PwTbnFikBgA?t=520",
+            ["4. Surveyor Panel"] = "https://youtu.be/dcuNn4o7gJ4",
+            ["4. Grid Panel"] = "https://youtu.be/fSnxTDL90B4?t=346",
+            ["4. Search Panel"] = "https://youtu.be/GZGVuimjEeI",
+            ["4. Shopping List Panel"] = "https://youtu.be/gI6rKmgqGb0",
+            ["4. Engineering Panel"] = "https://youtu.be/gI6rKmgqGb0",
+            ["4. Systhesis Panel"] = "https://youtu.be/gI6rKmgqGb0",
+            ["4. Route Panel"] = "https://youtu.be/zw_RlzX0yn4",
+            ["1.2 Settings Panel"] = "https://youtu.be/v5g03mYdYAw",
+            ["4. Compass Panel"] = "https://youtu.be/s-AVEYq5vCo",
+            ["4. Splitter Control Panel"] = "https://youtu.be/fSnxTDL90B4?t=209",
+            ["4. Surveyor Panel"] = "https://youtu.be/dcuNn4o7gJ4",
+            ["4. Mining Overlay Panel"] = "https://youtu.be/D-U8euLWbKU",
+            ["4. Spansh Panel"] = "https://youtu.be/qeLnq-pU14I",
+            ["4. Micro Resources Panel"] = "https://youtu.be/U1id5TxS8bs",
+            ["4. Suits Weapons Panel"] = "https://youtu.be/qKyhIXRfrAE",
+            ["4. Map 3D Panel"] = "https://youtu.be/9c09d93zFB8",
+            ["4. Local Map 3D Panel"] = "https://youtu.be/9c09d93zFB8",
+            ["4. Organics Panel"] = "https://youtu.be/Uhw4zHnsorI",
+            ["4. Engineers Panel"] = "https://youtu.be/gI6rKmgqGb0",
+            ["4. Discoveries Panel"] = "https://youtu.be/GZGVuimjEeI",
+            ["4. Carrier Panel"] = "https://youtu.be/zot3a7uHQfQ",
+            ["4. Resources Panel"] = "https://youtu.be/U1id5TxS8bs",
+            ["4. Spansh Stations Panel"] = "https://youtu.be/pivLR8FzpmY",
+            ["1.6 History Tab"] = "https://youtu.be/PwTbnFikBgA",
+            ["1.2 Settings Panel#Web Server"] = "https://youtu.be/GkOGB7WF1Lo?t=140",
         };
 
-        public static void Help(Form parent, Control ct, string name)
+        // Used by Panels.
+        // The caller has converted in HelpKeyOrAddress the panel ID into "X Y Panel" but has not corrected for some ancient naming 
+        // issues below.
+        // this function knows about the layout of the wiki, specifically mapping some panelid to wiki names, the 1.2 settings panel
+        // ajnd the 4. for panels
+        public static void HelpPanel(Form parent, Point pos, string name, string bookmark = null)
         {
-            Help(parent, ct.PointToScreen(new Point(0, ct.Height)), name);
-        }
-
-        public static void HistoryTab(Form parent, Point p)
-        {
-            Help(parent,p,"HistoryTab");
-        }
-
-        // do videos
-        // use file in folder if present, download folder..
-
-        public static void Help(Form parent, Point pos, string name)
-        {
-            if (name.StartsWith("http"))        // direct launch
+            if (name == "Settings Panel")
             {
-                BaseUtils.BrowserInfo.LaunchBrowser(name);
+                name = "1.2 Settings Panel";
             }
             else
             {
-                JToken helptouse = defaulthelp;
+                if (name == "Star Distance Panel")
+                    name = "Nearest Stars Panel";
+                else if (name == "Travel Grid Panel")
+                    name = "History Grid Panel";
+                else if (name == "Modules Panel")
+                    name = "Ships Load Out Panel";
+                
+                if ( name.Contains(" Panel"))       // .. Panels are always in section 4 of the wiki
+                    name = "4. " + name;
+            }
 
-                string helpfile = Path.Combine(EDDOptions.Instance.HelpDirectory(), "help.json");
-                if (File.Exists(helpfile))
-                {
-                    string t = BaseUtils.FileHelpers.TryReadAllTextFromFile(helpfile);
-                    JToken filejson = t != null ? JToken.Parse(t) : null;
-                    if (filejson != null)
-                    {
-                        Version intv = new Version(helptouse["Version"].Str("0.0.0.0"));
-                        Version filev = new Version(filejson["Version"].Str("0.0.0.0"));
+            HelpName(parent, pos, name, bookmark);
+        }
 
-                        if (filev >= intv)
-                            helptouse = filejson;
-                    }
-                }
+        // launch an HTTP or a wiki/video,
+        // wikiname is the launch name with an optional bookmark
+        // video is picked up from above list vs this name/bookmark combo
 
-                //System.IO.File.WriteAllText(@"c:\code\help.json",helptouse.ToString(true));
-                //System.Diagnostics.Debug.WriteLine("Help on " + name);
+        public static void HelpName(Form parent, Point pos, string wikiname, string bookmark = null)
+        {
+            if (wikiname.StartsWith("http"))        // direct launch
+            {
+                BaseUtils.BrowserInfo.LaunchBrowser(wikiname);
+            }
+            else
+            {
+                wikiname += (bookmark != null ? "#" + bookmark : "");       // add bookmark
 
-                string wiki = Properties.Resources.URLProjectWiki;      // default..
-                string video = Properties.Resources.URLProjectVideos;
+                NamesToVideos.TryGetValue(wikiname, out string video);      // see if video
 
-                JArray panels = helptouse["Panels"].Array();            // may be null if there is trouble
+                string wiki = Properties.Resources.URLProjectWiki + "/" + wikiname.Replace(" ","-");    // convert to URI
 
-                JToken obj = panels?.Where(x => x.Object()["panel"].ValueEquals(name)).Select(x => x).FirstOrDefault() ?? null;     // allow for panels to be null
-                if (obj != null)
-                {
-                    wiki = obj["wiki"].StrNull();
-                    video = obj["video"].StrNull();
+                System.Diagnostics.Debug.WriteLine($"Help on {wikiname} # {bookmark} at `{wiki}` video {video}");
 
-                    if (wiki != null && wiki.StartsWith("/"))
-                        wiki = Properties.Resources.URLProjectWiki + wiki;
-
-                    if (video != null && video.StartsWith("/"))
-                        video = Properties.Resources.URLProjectVideosRoot + video;
-
-                    //System.Diagnostics.Debug.WriteLine("For {0} {1} {2}", name, wiki, video);
-                }
-
-                if (wiki.HasChars() && video.HasChars())
+                if (video.HasChars())
                 {
                     ConfigurableForm cfg = new ExtendedControls.ConfigurableForm();
                     cfg.AllowSpaceForScrollBar = false;
@@ -214,15 +141,10 @@ namespace EDDiscovery
                     else if (res == DialogResult.Yes)
                         BaseUtils.BrowserInfo.LaunchBrowser(video);
                 }
-                else if (wiki.HasChars())
-                    BaseUtils.BrowserInfo.LaunchBrowser(wiki);
-                else if (video.HasChars())
-                    BaseUtils.BrowserInfo.LaunchBrowser(video);
                 else
-                    MessageBox.Show("No help for " + name);
+                    BaseUtils.BrowserInfo.LaunchBrowser(wiki);
             }
 
         }
-
-      }
+    }
 }

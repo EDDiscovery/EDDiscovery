@@ -81,7 +81,6 @@ namespace EDDiscovery
         // Due to background taskc completing async to the rest
 
         public event Action<bool> OnExpeditionsDownloaded;                  // UI, true if changed entries
-        public event Action OnHelpDownloaded;                               // UI
 
         #endregion
 
@@ -222,9 +221,6 @@ namespace EDDiscovery
                 {
                     // Expedition data
                     DownloadExpeditions(PendingClose.Token);
-
-                    // and Help files
-                    DownloadHelp(PendingClose.Token);
 
                     UserDatabase.Instance.PutSetting("DownloadFilesLastTime", DateTime.UtcNow);
                 }
