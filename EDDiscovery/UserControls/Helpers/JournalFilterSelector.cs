@@ -127,6 +127,7 @@ namespace EDDiscovery.UserControls
                         {
                             string cursettings = GetChecked();
                             UC.AddGroupItem( cursettings, promptValue, global::EDDiscovery.Icons.Controls.RescanJournals, usertag:1);   // new entry with usertag:1
+                            ForceRedrawOnNextShow();
                         }
                     }
                 }
