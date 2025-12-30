@@ -1376,7 +1376,7 @@
             this.extButtonSpanshRockyHMC.Name = "extButtonSpanshRockyHMC";
             this.extButtonSpanshRockyHMC.Size = new System.Drawing.Size(100, 27);
             this.extButtonSpanshRockyHMC.TabIndex = 40;
-            this.extButtonSpanshRockyHMC.Text = "Rocky/HMC";
+            this.extButtonSpanshRockyHMC.Text = "Rocky HMC";
             this.extButtonSpanshRockyHMC.UseVisualStyleBackColor = true;
             this.extButtonSpanshRockyHMC.Click += new System.EventHandler(this.extButtonSpanshRockyHMC_Click);
             // 

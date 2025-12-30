@@ -133,8 +133,8 @@ SECTION PopOutInfo
 .Expedition.Title: "Expedition" => "远航"
 .SystemInformation.Description: "System Information" => "星系信息"
 .SystemInformation.Title: "System Information" = PopOutInfo.SystemInformation.Description
-.Spanel.Description: "Summary panel overlay" => "概要面板(遮罩)"
-.Spanel.Title: "Summary Panel" => "概要面板"
+.SummaryPanel.Description: "Summary panel overlay" => "概要面板(遮罩)"
+.SummaryPanel.Title: "Summary Panel" => "概要面板"
 .Trippanel.Description: "Trip computer overlay" => "导航仪(遮罩)"
 .Trippanel.Title: "Trip Computer" => "导航仪"
 .NotePanel.Description: "Notes overlay" => "笔记(遮罩)"

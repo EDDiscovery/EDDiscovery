@@ -133,8 +133,8 @@ SECTION PopOutInfo
 .Expedition.Title: "Expedition" @
 .SystemInformation.Description: "System Information" @
 .SystemInformation.Title: "System Information" @
-.Spanel.Description: "Summary panel overlay" @
-.Spanel.Title: "Summary Panel" @
+.SummaryPanel.Description: "Summary panel overlay" @
+.SummaryPanel.Title: "Summary Panel" @
 .Trippanel.Description: "Trip computer overlay" @
 .Trippanel.Title: "Trip Computer" @
 .NotePanel.Description: "Notes overlay" @

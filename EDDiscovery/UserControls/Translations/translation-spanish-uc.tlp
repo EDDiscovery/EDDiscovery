@@ -609,6 +609,8 @@ SECTION UserControlPanelSelector
 
 SECTION UserControlRoute
 
+.extButtonSpanshRockyHMC: "Rocky HMC" @
+
 .M1: "Nearest to Waypoint" => "Más cercano a Marcador"
 .M2: "Minimum Deviation from Path" => "Desviación mínima de la ruta"
 .M3: "Nearest to Waypoint with dev<=100ly" => "Más cercano a Marcador con dev<=100ly"

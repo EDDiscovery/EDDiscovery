@@ -133,8 +133,8 @@ SECTION PopOutInfo
 .Expedition.Title: "Expedition" => "Spedizioni"
 .SystemInformation.Description: "System Information" => "Informazioni sul Sistema"
 .SystemInformation.Title: "System Information" = PopOutInfo.SystemInformation.Description
-.Spanel.Description: "Summary panel overlay" => "Sommario"
-.Spanel.Title: "Summary Panel" = PopOutInfo.Spanel.Description
+.SummaryPanel.Description: "Summary panel overlay" => "Sommario"
+.SummaryPanel.Title: "Summary Panel" = PopOutInfo.SummaryPanel.Description
 .Trippanel.Description: "Trip computer overlay" => "Computer di Viaggio"
 .Trippanel.Title: "Trip Computer" = PopOutInfo.Trippanel.Description
 .NotePanel.Description: "Notes overlay" => "Annotazioni sul Sistema"
@@ -417,7 +417,7 @@ SetNoteForm: "Set Note" => "Imposta Nota"
 .labelTTimestamp: "Timestamp:" => "Data e ora"
 .buttonSave: "Save" => "Salva"
 .labelTSystem: "System:" => "Sistema"
-.labelTSummary: "Summary:" = PopOutInfo.Spanel.Description
+.labelTSummary: "Summary:" = PopOutInfo.SummaryPanel.Description
 .labelTDetails: "Details:" => "Dettagli"
 
 SECTION MessageBoxTheme

@@ -133,8 +133,8 @@ SECTION PopOutInfo
 .Expedition.Title: "Expedition" => "Expedición"
 .SystemInformation.Description: "System Information" => "Información del sistema"
 .SystemInformation.Title: "System Information" = PopOutInfo.SystemInformation.Description
-.Spanel.Description: "Summary panel overlay" => "Superposición del panel de resumen"
-.Spanel.Title: "Summary Panel" => "Panel de resumen"
+.SummaryPanel.Description: "Summary panel overlay" => "Superposición del panel de resumen"
+.SummaryPanel.Title: "Summary Panel" => "Panel de resumen"
 .Trippanel.Description: "Trip computer overlay" => "Superposición de la computadora de viaje"
 .Trippanel.Title: "Trip Computer" => "Computadora de viaje"
 .NotePanel.Description: "Notes overlay" => "Superposición de notas del sistema"
