@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2022 EDDiscovery development team
+ * Copyright © 2015 - 2026 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -14,7 +14,7 @@
 
 using System;
 using System.Globalization;
-using System.Threading;                 // Tasks and Mutex
+using System.Threading; // Tasks and Mutex
 using System.Windows.Forms;
 
 namespace EDDiscovery
@@ -24,7 +24,13 @@ namespace EDDiscovery
         [STAThread]
         static void Main()
         {
-            using (OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions { EnableHighResolution = false, Backend = OpenTK.PlatformBackend.PreferNative }))
+            bool restartRequested = false;
+
+            using (OpenTK.Toolkit.Init(new OpenTK.ToolkitOptions
+            {
+                EnableHighResolution = false,
+                Backend = OpenTK.PlatformBackend.PreferNative
+            }))
             {
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
@@ -33,38 +39,92 @@ namespace EDDiscovery
                 {
                     using (new BaseUtils.SingleUserInstance(1000))
                     {
-                        Application.Run(new EDDApplicationContext());
+                        using (var context = new EDDApplicationContext())
+                        {
+                            Application.Run(context);
+                            restartRequested = context.RestartRequested;
+                        }
                     }
                 }
-                catch (TimeoutException te)
+                catch (TimeoutException)
                 {
-                    System.Diagnostics.Trace.WriteLine($"EDD Program Timeout exception {te} {Environment.StackTrace}");
-                    BaseUtils.TranslatorMkII tx = new BaseUtils.TranslatorMkII();
-                    tx.LoadTranslation("Auto", CultureInfo.CurrentUICulture, new string[] { System.IO.Path.GetDirectoryName(Application.ExecutablePath) }, 0, System.IO.Path.GetTempPath());
+                    LoadTranslator();
 
-                    if (System.Windows.Forms.MessageBox.Show("EDDiscovery is already running. Launch anyway?".Tx(), "EDDiscovery", MessageBoxButtons.YesNo) == DialogResult.Yes)
-                    {
-                        Application.Run(new EDDApplicationContext());
-                    }
-                }
-                catch (ThreadAbortException tae)
-                {
-                    System.Diagnostics.Trace.WriteLine($"EDD Program Thread Abort exception {tae} {Environment.StackTrace}");
-                    if (EDDApplicationContext.RestartOptions != null)
-                    {
-                        System.Diagnostics.Process.Start(Application.ExecutablePath, EDDApplicationContext.RestartOptions);
-                    }
-                }
-                finally 
-                {
-                    EliteDangerousCore.DB.UserDatabase.Instance.Stop();     // need everything closed before we can shut down the DBs threads
-                    EliteDangerousCore.DB.SystemsDatabase.Instance.Stop();
+                    var result = MessageBox.Show(
+                        "Another instance of EDDiscovery is already running.\n\nDo you want to start a second instance?".Tx(),
+                        "EDDiscovery",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question
+                    );
 
-                    if (EDDApplicationContext.RestartOptions != null)
+                    if (result == DialogResult.Yes)
                     {
-                        System.Diagnostics.Process.Start(Application.ExecutablePath, EDDApplicationContext.RestartOptions);
+                        using (var context = new EDDApplicationContext())
+                        {
+                            Application.Run(context);
+                            restartRequested = context.RestartRequested;
+                        }
                     }
                 }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Trace.WriteLine($"EDD fatal exception {ex}");
+                    MessageBox.Show(
+                        "A fatal error occurred and EDDiscovery needs to close.\n\nCheck logs for details.",
+                        "EDDiscovery",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                    );
+                }
+                finally
+                {
+                    ShutdownDatabases();
+
+                    if (restartRequested)
+                        Restart();
+                }
+            }
+        }
+
+        private static void LoadTranslator()
+        {
+            var tx = new BaseUtils.TranslatorMkII();
+            tx.LoadTranslation(
+                "Auto",
+                CultureInfo.CurrentUICulture,
+                new[] { AppContext.BaseDirectory },
+                0,
+                System.IO.Path.GetTempPath()
+            );
+        }
+
+        private static void ShutdownDatabases()
+        {
+            try
+            {
+                EliteDangerousCore.DB.UserDatabase.Instance.Stop();
+                EliteDangerousCore.DB.SystemsDatabase.Instance.Stop();
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"DB shutdown error {ex}");
+            }
+        }
+
+        private static void Restart()
+        {
+            try
+            {
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = Application.ExecutablePath,
+                    Arguments = EDDApplicationContext.RestartOptions ?? "",
+                    UseShellExecute = true
+                });
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Trace.WriteLine($"Restart failed {ex}");
             }
         }
     }
