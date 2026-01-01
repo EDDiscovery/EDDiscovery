@@ -51,9 +51,9 @@ namespace EDDiscovery.UserControls.Colonisation
             extLabelStationName.Font = Theme.Current.GetScaledFont(1.3f);
 
             var je = Port.LastDockedOrLocation as ILocDocked; // may be null
-
-            labelDataProgress.Text = Port.State?.ConstructionComplete == true ? "Port Completed" : "Progress (N2)%";
+            labelDataProgress.Text = Port.State?.ConstructionComplete == true ? "Port Completed" : "Progress {N1}%";
             labelDataProgress.Data0 = Port.State?.ConstructionProgress != null ? (double?)(Port.State.ConstructionProgress * 100.0) : null;
+
             extLabelFailed.Visible = Port.State != null && Port.State.ConstructionFailed == true;
             labelDataProgress.Visible = Port.State != null && Port.State.ConstructionFailed == false;
 

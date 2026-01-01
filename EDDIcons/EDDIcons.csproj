@@ -258,7 +258,7 @@
     <EmbeddedResource Include="Panels\ScreenShot.png" />
     <EmbeddedResource Include="Panels\Settings.png" />
     <EmbeddedResource Include="Panels\ShoppingList.png" />
-    <EmbeddedResource Include="Panels\Spanel.png" />
+    <EmbeddedResource Include="Panels\SummaryPanel.png" />
     <EmbeddedResource Include="Panels\StarList.png" />
     <EmbeddedResource Include="Panels\Statistics.png" />
     <EmbeddedResource Include="Panels\Synthesis.png" />
