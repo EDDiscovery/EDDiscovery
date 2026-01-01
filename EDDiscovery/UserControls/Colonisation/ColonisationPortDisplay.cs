@@ -52,8 +52,8 @@ namespace EDDiscovery.UserControls.Colonisation
 
             var je = Port.LastDockedOrLocation as ILocDocked; // may be null
 
-            labelDataProgress.Data0 = Port.State?.ConstructionProgress != null ? (double?)(Port.State.ConstructionProgress * 100.0) : null;
-            labelDataProgress.Text = Port.State?.ConstructionComplete == true ? "Port Completed" : BaseUtils.FieldBuilder.Build("Progress: ;%;N2", labelDataProgress.Data0 ?? -1);            
+            labelDataProgress.Text = Port.State?.ConstructionComplete == true ? "Port Completed" : "Progress (N2)%";
+            labelDataProgress.Data0 = Port.State?.ConstructionProgress != null ? (double?)(Port.State.ConstructionProgress * 100.0): null;
             extLabelFailed.Visible = Port.State != null && Port.State.ConstructionFailed == true;
             labelDataProgress.Visible = Port.State != null && Port.State.ConstructionFailed == false;
 
