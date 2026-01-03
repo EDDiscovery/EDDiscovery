@@ -118,8 +118,9 @@ namespace EDDiscovery.UserControls
                             }
 
                             dr.Cells[ColTags.Index].Value = "";
-                            dr.Cells[ColTags.Index].Tag = loc.Tags;
-                            var taglist = EDDConfig.BookmarkTagArray(loc.Tags);
+                            string tags = loc.Tags ?? "";
+                            dr.Cells[ColTags.Index].Tag = tags;
+                            var taglist = EDDConfig.BookmarkTagArray(tags);
                             dr.Cells[ColTags.Index].ToolTipText = string.Join(Environment.NewLine, taglist);
                             TagsForm.SetMinHeight(taglist.Length, dr, ColTags.Width, TagSize);
 
