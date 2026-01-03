@@ -28,6 +28,7 @@ namespace EDDiscovery.UserControls
     {
         #region Initialisation
 
+
         public UserControlSurveyor()
         {
             InitializeComponent();
@@ -43,10 +44,10 @@ namespace EDDiscovery.UserControls
 
             PopulateCtrlList();
 
-            extCheckBoxWordWrap.Checked = GetSetting("wordwrap", false);
+            extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, false);
             extCheckBoxWordWrap.Click += wordWrapToolStripMenuItem_Click;
 
-            fsssignalstodisplay = GetSetting("fsssignals", "");
+            fsssignalstodisplay = GetSetting(dbfsssignals, "");
 
             DiscoveryForm.OnNewUIEvent += Discoveryform_OnNewUIEvent;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
@@ -64,12 +65,13 @@ namespace EDDiscovery.UserControls
 
             translatednavroutename = "Nav Route".T(EDTx.UserControlSurveyor_navroute);
 
-            displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);        // null if not set
+            displayfont = FontHelpers.GetFont(GetSetting(dbFont, ""), null);        // null if not set
 
-            LoadRoute(GetSetting("route", ""));
-            routecontrolsettings = GetSetting("routecontrol", "showJumps;showwaypoints;shownotetext");
+            LoadRoute(GetSetting(dbRouteName, ""), GetSetting(dbRouteManualPos,-1));
 
-            rollUpPanelTop.PinState = GetSetting("PinState", true);
+            routecontrolsettings = GetSetting(dbroutecontrol, "showJumps;showwaypoints;shownotetext");
+
+            rollUpPanelTop.PinState = GetSetting(dbpinstate, true);
 
             drawsystemupdatetimer = new Timer() { Interval = 500 };
             drawsystemupdatetimer.Tick += DrawSystemUpdatetimer_Tick;
@@ -87,7 +89,8 @@ namespace EDDiscovery.UserControls
         {
             drawsystemupdatetimer.Stop();
 
-            PutSetting("PinState", rollUpPanelTop.PinState);
+            PutSetting(dbpinstate, rollUpPanelTop.PinState);
+            PutSetting(dbRouteManualPos, currentRoute != null ? currentRouteManualTarget : -1);
 
             DiscoveryForm.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -103,7 +106,7 @@ namespace EDDiscovery.UserControls
             shipfsdinfo = hl.GetLast?.GetJumpInfo(DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(hl.GetLast.MaterialCommodity));
             shipinfo = hl.GetLast?.ShipInformation;
 
-            LoadRoute(GetSetting("route", ""));     // reload the route, may have locations now
+            LoadRoute(GetSetting(dbRouteName, ""), GetSetting(dbRouteManualPos, -1));     // reload the route, may have locations now
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber}  History Load '{currentRoute?.Name}' {currentRoute?.Id} systems {currentRoute?.Systems.Count} lastsys '{last_sys?.Name}'");
 
             DrawAll(cur_sys);
@@ -120,7 +123,7 @@ namespace EDDiscovery.UserControls
             if (he.EntryType == JournalTypeEnum.NavRoute && currentRoute != null && currentRoute.Id == -1)
             {
                 //System.Diagnostics.Debug.WriteLine("Surveyor {displaynumber} new entry, load nav route");
-                LoadRoute(NavRouteNameLabel);
+                LoadRoute(NavRouteNameLabel, GetSetting(dbRouteManualPos, -1));        // into auto mode
                 cur_sys = DiscoveryForm.History.GetLast?.System;      // may be null, make sure its set.
                 CalculateThenDrawSystemSignals(cur_sys);
             }
@@ -248,6 +251,7 @@ namespace EDDiscovery.UserControls
                 {
                     instartjump = false;
                     cur_sys = he.System;        // ensure fully populated
+                    CheckManualTarget();
                     System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor arrived in system {cur_sys.Name}");
                     DrawAll(cur_sys);      // we are in the system now, draw all, in case we had signals between start jump and now, and to update the route/fuel thingies
                     return;
@@ -293,6 +297,7 @@ namespace EDDiscovery.UserControls
                 bodies_found = 0;
                 all_found = false;
                 cur_sys = he.System;       // and set, then
+                CheckManualTarget();
                 System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor noted system change to {cur_sys.Name} DrawAll");
                 DrawAll(cur_sys);
                 return;         // finish, do nothing else
@@ -424,6 +429,8 @@ namespace EDDiscovery.UserControls
 
             string lastroutetext = "No System Info";
 
+            SavedRouteClass.ClosestInfo comp = null;
+
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Current route set, sys has coord, route is {currentRoute.Systems.Count} {currentRoute.Id}");
             if (sys != null && currentRoute != null && sys.HasCoordinate)      // must have a system, a current route, and coord
             {
@@ -433,8 +440,9 @@ namespace EDDiscovery.UserControls
                 }
                 else
                 {
-                    SavedRouteClass.ClosestInfo closest = currentRoute.ClosestTo(sys);
-                    if (closest == null)  // if null, no systems found.. uh oh
+                    comp = currentRoute.ClosestTo(sys, currentRouteManualTarget);
+
+                    if (comp == null)  // if null, no systems found.. uh oh
                     {
                         lastroutetext = "No systems in route have known co-ords".T(EDTx.UserControlRouteTracker_NoCo);
                     }
@@ -442,11 +450,11 @@ namespace EDDiscovery.UserControls
                     {
                         double routedistance = currentRoute.CumulativeDistance();       // total distance
 
-                        double distleft = closest.disttowaypoint + (closest.deviation < 0 ? 0 : closest.cumulativewpdist);
+                        double distleft = comp.disttowaypoint + (comp.deviation < 0 ? 0 : comp.cumulativewpdist);
 
                         //System.Diagnostics.Debug.WriteLine($"Surveyor: {closest.lastsystem?.Name}->{closest.nextsystem?.Name} {closest.waypoint} distance to {closest.disttowaypoint} dev {closest.deviation} cuml after wp {closest.cumulativewpdist} inc wp {distleft} route {routedistance}");
 
-                        lastroutetext = $"{currentRoute.Name} {currentRoute.Systems.Count} WPs, {routedistance:N1}ly -> {closest.finalsystem.Name}";
+                        lastroutetext = $"{currentRoute.Name} {currentRoute.Systems.Count} WPs, {routedistance:N1}ly -> {comp.finalsystem.Name}";
 
                         string jumpmsg = "";
                         if (IsSet(RouteControl.showJumps))
@@ -458,7 +466,7 @@ namespace EDDiscovery.UserControls
                                 if (jumps > 0)
                                     lastroutetext += ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
 
-                                jumps = (int)Math.Ceiling(closest.disttowaypoint / shipfsdinfo.avgsinglejump);
+                                jumps = (int)Math.Ceiling(comp.disttowaypoint / shipfsdinfo.avgsinglejump);
 
                                 if (jumps > 1 && currentRoute.Id != -1) // if more than 1 jump, and not nav route
                                     jumpmsg = ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".T(EDTx.UserControlRouteTracker_J1) : "jumps".T(EDTx.UserControlRouteTracker_JS));
@@ -469,26 +477,35 @@ namespace EDDiscovery.UserControls
 
                         string wpposmsg = "";
                         if (IsSet(RouteControl.showwaypoints))
-                            wpposmsg = String.Format(" @{0:N1},{1:N1},{2:N1}", closest.nextsystem.X, closest.nextsystem.Y, closest.nextsystem.Z);
+                            wpposmsg = String.Format(" @{0:N1},{1:N1},{2:N1}", comp.nextsystem.X, comp.nextsystem.Y, comp.nextsystem.Z);
 
-                        if (closest.deviation < 0)        // if not on path
+                        if (comp.deviation < 0)        // if not on path
                         {
                             lastroutetext += Environment.NewLine;
-                            lastroutetext += closest.cumulativewpdist == 0 ? "From Last WP ".T(EDTx.UserControlRouteTracker_FL) : "To First WP ".T(EDTx.UserControlRouteTracker_TF);
-                            lastroutetext += $" >> {closest.disttowaypoint:N1}ly >> " + closest.nextsystem.Name + wpposmsg + jumpmsg;
+                            lastroutetext += comp.cumulativewpdist == 0 ? "From Last WP ".T(EDTx.UserControlRouteTracker_FL) : "To First WP ".T(EDTx.UserControlRouteTracker_TF);
+                            lastroutetext += $" >> {comp.disttowaypoint:N1}ly >> " + comp.nextsystem.Name + wpposmsg + jumpmsg;
                         }
                         else
                         {
                             lastroutetext += String.Format(", Left {0:N1}ly".T(EDTx.UserControlRouteTracker_LF), distleft) + Environment.NewLine;
+ 
                             if (distleft == 0)
-                                lastroutetext += $"{closest.nextsystem.Name}";
+                                lastroutetext += $"{comp.nextsystem.Name}";
                             else
-                                lastroutetext += $"{closest.lastsystem?.Name} >> {closest.disttowaypoint:N1}ly >> {closest.nextsystem.Name}";
-                            lastroutetext += " " + String.Format("(WP {0})".T(EDTx.UserControlRouteTracker_ToWP), closest.waypoint + 1);
+                            {
+                                // if in auto mode, and we have a last system, we give the last >> dist >> next
+
+                                if (currentRouteManualTarget < 0 && comp.lastsystem!=null)
+                                    lastroutetext += $"{comp.lastsystem?.Name} >> {comp.disttowaypoint:N1}ly >> {comp.nextsystem.Name}";
+                                else
+                                    lastroutetext += $"{comp.disttowaypoint:N1}ly >> {comp.nextsystem.Name}";
+                            }
+
+                            lastroutetext += " " + String.Format("(WP {0})".T(EDTx.UserControlRouteTracker_ToWP), comp.waypoint + 1);
                             lastroutetext += wpposmsg + jumpmsg;
 
-                            if (IsSet(RouteControl.showdeviation))
-                                lastroutetext += String.Format(", Dev {0:N1}ly".T(EDTx.UserControlRouteTracker_Dev), closest.deviation);
+                            if (IsSet(RouteControl.showdeviation) && comp.deviation>0)
+                                lastroutetext += String.Format(", Dev {0:N1}ly".T(EDTx.UserControlRouteTracker_Dev), comp.deviation);
                         }
 
                         //System.Diagnostics.Debug.WriteLine(lastroutetext);
@@ -501,42 +518,65 @@ namespace EDDiscovery.UserControls
                                 lastroutetext += Environment.NewLine + String.Format("Note: {0}".T(EDTx.UserControlRouteTracker_Note), bookmark.Note);
                         }
 
-                        if (IsSet(RouteControl.shownotetext) && closest.nextsystemwaypointnote.HasChars())
+                        if (IsSet(RouteControl.shownotetext))
                         {
-                            // closest lastsystem can be null
-                            if (closest.lastsystem != null && sys.Name == closest.lastsystem.Name)
-                            {
-                                lastroutetext = lastroutetext.AppendPrePad(closest.lastsystem.Name + ": " + closest.lastsystemwaypointnote, Environment.NewLine);
-                                lastroutetext = lastroutetext.AppendPrePad(closest.nextsystem.Name + ": " + closest.nextsystemwaypointnote, Environment.NewLine);
-                            }
-                            else
-                            {
-                                lastroutetext = lastroutetext.AppendPrePad(closest.nextsystemwaypointnote, Environment.NewLine);
-                            }
+                            // closest lastsystem can be null. If we are at the last system, we print both last system and this next waypoint
+                            if ( comp.lastsystemwaypointnote.HasChars())
+                                lastroutetext = lastroutetext.AppendPrePad(comp.lastsystem.Name + ": " + comp.lastsystemwaypointnote, Environment.NewLine);
+
+                            if (comp.nextsystemwaypointnote.HasChars())
+                                lastroutetext = lastroutetext.AppendPrePad(comp.nextsystem.Name + ": " + comp.nextsystemwaypointnote, Environment.NewLine);
                         }
 
-                        string closestsystem = closest.nextsystem.Name;
+                        // if a new closestsystem, then autocopy
 
-                        if (lastsystemonroute == null || closestsystem.CompareTo(lastsystemonroute) != 0)
+                        if (lastsystemonroute == null || comp.nextsystem.Name.CompareTo(lastsystemonroute) != 0)
                         {
                             if (IsSet(RouteControl.autocopy))
-                                SetClipboardText(closestsystem);
+                                SetClipboardText(comp.nextsystem.Name);
 
                             if (IsSet(RouteControl.settarget))
                             {
-                                if (TargetClass.SetTargetOnSystemConditional(closestsystem, closest.nextsystem.X, closest.nextsystem.Y, closest.nextsystem.Z))
+                                if (TargetClass.SetTargetOnSystemConditional(comp.nextsystem.Name, comp.nextsystem.X, comp.nextsystem.Y, comp.nextsystem.Z))
                                 {
                                     DiscoveryForm.NewTargetSet(this);
                                 }
                             }
 
-                            lastsystemonroute = closestsystem;
+                            lastsystemonroute = comp.nextsystem.Name;
                         }
                     }
                 }
             }
 
-            DrawTextIntoBox(extPictureBoxRoute, lastroutetext);
+            extPictureBoxRoute.ClearImageList();
+
+            Point pos = new Point(3, 20);
+
+            // display the manual selection buttons when appropriate
+            if (comp != null && !IsCurrentlyTransparent)
+            {
+                var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                var but1 = new ExtPictureBox.Button() { Text = "<", Font = this.Font, Location = new Rectangle(pos.X,pos.Y, 20, 20) };
+                but1.Enabled = currentRouteManualTarget > 0;
+                but1.BackColor = Color.Transparent; but1.ForeColor = textcolour; but1.ButtonFaceColor = Theme.Current.ButtonBackColor; but1.MouseOverFaceColor = Theme.Current.ButtonBackColor.Multiply(1.3f);
+                but1.Click += (pb, iel, w) => { currentRouteManualTarget = currentRouteManualTarget > 0 ? currentRouteManualTarget - 1 : 0; DrawRoute(cur_sys); };
+                extPictureBoxRoute.Add(but1);
+
+                var but2 = new ExtPictureBox.Button() { Text = ">", Font = this.Font, Location = new Rectangle(but1.Location.Right, but1.Location.Top, 20, 20) };
+                but2.Enabled = currentRouteManualTarget < 0 || currentRouteManualTarget < currentRoute.Systems.Count-1;
+                but2.BackColor = Color.Transparent; but2.ForeColor = textcolour; but2.ButtonFaceColor = Theme.Current.ButtonBackColor; but2.MouseOverFaceColor = Theme.Current.ButtonBackColor.Multiply(1.3f);
+                but2.Click += (pb, iel, w) => { currentRouteManualTarget = currentRouteManualTarget < currentRoute.Systems.Count - 1 ? currentRouteManualTarget + 1 : 0; DrawRoute(cur_sys); };
+                extPictureBoxRoute.Add(but2);
+
+                pos.X += 45;
+            }
+
+            var ie = DrawText(lastroutetext, pos);
+            extPictureBoxRoute.Add(ie);
+
+            DrawHorzDivider(extPictureBoxRoute, ie);
+            extPictureBoxRoute.Render();
         }
 
         // Target, direct, no async
@@ -1070,31 +1110,64 @@ namespace EDDiscovery.UserControls
         }
 
 
-        void DrawTextIntoBox(ExtPictureBox pb, string text)
+        ExtPictureBox.ImageElement DrawTextIntoBox(ExtPictureBox pb, string text)
         {
-            StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
-            frmt.Alignment = alignment;
-            var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-            var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
-            Font dfont = displayfont ?? this.Font;
-
-            var i = new ExtPictureBox.ImageElement();
-            i.TextAutoSize(
-                    new Point(3, 0),
-                    new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
-                    text,
-                    dfont,
-                    textcolour,
-                    backcolour,
-                    1.0F,
-                    frmt: frmt);
-            pb.ClearImageList();
-            pb.Add(i);
-            if ( text.HasChars() && IsSet(CtrlList.showdividers))
-                pb.AddHorizontalDivider(textcolour.Multiply(0.4f), new Rectangle(0,i.Location.Height, i.Location.Width, 8), 1, 4);
+            var ie = DrawText(text, new Point(3, 0));
+            pb.Add(ie);
+            if (text.HasChars())
+                DrawHorzDivider(pb, ie);
             pb.Render();
+            return ie;
+        }
 
-            frmt.Dispose();
+        void DrawHorzDivider(ExtPictureBox pb, ExtPictureBox.ImageElement ie)
+        {
+            if (IsSet(CtrlList.showdividers))
+            {
+                var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                pb.AddHorizontalDivider(textcolour.Multiply(0.4f), new Rectangle(0, ie.Location.Bottom, ie.Location.Width, 8), 1, 4);
+            }
+        }
+
+        ExtPictureBox.ImageElement DrawText(string text, Point loc)
+        {
+            using (StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap) { Alignment = alignment })
+            {
+                var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+                var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
+                Font dfont = displayfont ?? this.Font;
+
+                var ie = new ExtPictureBox.ImageElement();
+                ie.TextAutoSize(
+                        loc,
+                        new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
+                        text,
+                        dfont,
+                        textcolour,
+                        backcolour,
+                        1.0F,
+                        frmt: frmt);
+                return ie;
+            }
+        }
+
+        // See if manual target needs updating
+        private void CheckManualTarget()
+        {
+            if (currentRoute != null)
+            {
+                var knownsystems = currentRoute.SystemsWithCoordinates();
+
+                if (currentRouteManualTarget >= 0 && currentRouteManualTarget < knownsystems.Count - 1)        // paranoia
+                {
+                    // if we are the target system, increment target
+                    if (cur_sys.Name.EqualsIIC(knownsystems[currentRouteManualTarget].Item1.Name))
+                    {
+                        currentRouteManualTarget++;
+                        System.Diagnostics.Debug.WriteLine($"Saved Route arrived at manual target {cur_sys.Name} Index {currentRouteManualTarget}");
+                    }
+                }
+            }
         }
 
 
@@ -1287,14 +1360,14 @@ namespace EDDiscovery.UserControls
             Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);     // will be null on cancel
             string setting = FontHelpers.GetFontSettingString(f);
             //System.Diagnostics.Debug.WriteLine($"Surveyor Font selected {setting}");
-            PutSetting("font", setting);
+            PutSetting(dbFont, setting);
             displayfont = f;
             DrawAll(cur_sys,true);
         }
 
         private void wordWrapToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PutSetting("wordwrap", extCheckBoxWordWrap.Checked);
+            PutSetting(dbWordWrap, extCheckBoxWordWrap.Checked);
             DrawAll(cur_sys,true);
         }
 
@@ -1325,7 +1398,7 @@ namespace EDDiscovery.UserControls
             if (res == DialogResult.OK)
             {
                 fsssignalstodisplay = f.Get("Text");
-                PutSetting("fsssignals", fsssignalstodisplay);
+                PutSetting(dbfsssignals, fsssignalstodisplay);
                 CalculateThenDrawSystemSignals(cur_sys);
             }
         }
@@ -1374,14 +1447,15 @@ namespace EDDiscovery.UserControls
             dropdown.Show(this.FindForm());
         }
 
-        private void LoadRoute(string name)
+        private void LoadRoute(string name, int manualpos = -1)
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Order load of route '{name}'");
-            PutSetting("route", name);      // store back the current name 
+            PutSetting(dbRouteName, name);      // store back the current name 
 
-            //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} In DB its now '{GetSetting("route","???")}'");
+            //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} In DB its now '{GetSetting(dbRouteName,"???")}'");
 
             currentRoute = null;        // clear route and held text
+            currentRouteManualTarget = -1;
 
             if (name.HasChars())
             {
@@ -1397,6 +1471,7 @@ namespace EDDiscovery.UserControls
                                 Select(rt => new SavedRouteClass.SystemEntry(rt.StarSystem,"",rt.StarPos.X,rt.StarPos.Y,rt.StarPos.Z)).ToList();
 
                         currentRoute = new SavedRouteClass(translatednavroutename, systems);      // with an ID of -1 note, used to detect navroutes
+                        currentRouteManualTarget = manualpos;
                         //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Loaded Nav route with {systems.Length}");
                     }
                     else
@@ -1411,6 +1486,7 @@ namespace EDDiscovery.UserControls
                     var savedroutes = SavedRouteClass.GetAllSavedRoutes();      // load routes
                     currentRoute = savedroutes.Find(x => x.Name == name);       // pick, if not found, will be null
                     currentRoute?.FillInCoordinates();                           // fill in any co-ords into DB - it may be in the DB without known co-ords
+                    currentRouteManualTarget = manualpos;
                     //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Loaded route with {currentRoute?.Systems.Count}");
                 }
             }
@@ -1462,7 +1538,7 @@ namespace EDDiscovery.UserControls
             displayfilter.SaveSettings = (s, o) =>
             {
                 routecontrolsettings = s;
-                PutSetting("routecontrol", s);
+                PutSetting(dbroutecontrol, s);
                 DrawRoute(cur_sys);
                 DrawFuel();
                 SetVisibility();
@@ -1499,6 +1575,7 @@ namespace EDDiscovery.UserControls
         private const string NavRouteNameLabel = "!*NavRoute";      // special label to identify a save of using the nav route - not user presented
         private string translatednavroutename = "";     // presented to the user, found by the translator
         private SavedRouteClass currentRoute = null;    // the current route selected by the user. ID=-1 means a navroute
+        private int currentRouteManualTarget = -1;      // current route manual target
         private string lastsystemonroute;               // last system on route, used to check for updates
 
         // fsd
@@ -1548,6 +1625,13 @@ namespace EDDiscovery.UserControls
 
         public const string dbSearchesText = "Searches";
         public const string dbSearchesVoice = "SearchesVoice";
+        public const string dbRouteName = "route";
+        public const string dbRouteManualPos = "routepos";
+        public const string dbFont = "font";
+        public const string dbWordWrap = "wordwrap";
+        public const string dbfsssignals = "fsssignals";
+        public const string dbroutecontrol = "routecontrol";
+        public const string dbpinstate = "PinState";
         #endregion
 
     }
