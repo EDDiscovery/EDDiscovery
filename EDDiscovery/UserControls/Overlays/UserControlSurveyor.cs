@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls
 
             displayfont = FontHelpers.GetFont(GetSetting(dbFont, ""), null);        // null if not set
 
-            LoadRoute(GetSetting(dbRouteName, ""), GetSetting(dbRouteManualPos,-1));
+            LoadRoute(GetSetting(dbRouteName, ""), GetSetting(dbRouteManualPos, -1));
 
             routecontrolsettings = GetSetting(dbroutecontrol, "showJumps;showwaypoints;shownotetext");
 
