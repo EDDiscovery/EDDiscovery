@@ -451,8 +451,17 @@ namespace EDDiscovery.UserControls
 
         private string ComputeCycleKey(DateTime timeUtc)
         {
-            var monday = timeUtc.Date.AddDays(-(int)timeUtc.Date.DayOfWeek + (int)DayOfWeek.Monday);
-            return $"{monday:yyyy-MM-dd}";
+            // Calculate days since the most recent Thursday (or today if today is Thursday)
+            int daysFromThursday = ((int)timeUtc.Date.DayOfWeek - (int)DayOfWeek.Thursday + 7) % 7;
+            var thursday = timeUtc.Date.AddDays(-daysFromThursday);
+            
+            // If it's Thursday but before 07:00 UTC, use the previous week's Thursday
+            if (daysFromThursday == 0 && timeUtc.TimeOfDay < TimeSpan.FromHours(7))
+            {
+                thursday = thursday.AddDays(-7);
+            }
+            
+            return $"{thursday:yyyy-MM-dd}";
         }
 
         private bool GetDefaultExpandedState(int levelIndex, dynamic group, HashSet<string> defaultExpandCycles)
