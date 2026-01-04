@@ -2,7 +2,7 @@ Development, Release, Videos by:
 Cmdr Robby
 
 Developers for this release series:
-Eahlstan, Jugom, Flynn
+Eahlstan, Shufton
 
 Images Captured by:
 Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
@@ -14,4 +14,4 @@ Program Concept by:
 Cmdr Finwen  (Robert Wahlström)
 
 Previous Contributors:
-Merovech, Bravada Cadelanne, JDM12983, Fredjk-gh, nullx27, Iain Ross, Andrea Spada, Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran, Myshka, Zed, Marlon Blake, Smacker, Jason Thorpe, Greg Malcolm,  Majkl578, MWerle..
+Jugom, Flynn, Merovech, Bravada Cadelanne, JDM12983, Fredjk-gh, nullx27, Iain Ross, Andrea Spada, Carcher99, IGAU, EoD, Imathrowback, phwoelfel, Robosa, Daniel-finger, Phroggie, Finwen, Corbin Moran, Myshka, Zed, Marlon Blake, Smacker, Jason Thorpe, Greg Malcolm,  Majkl578, MWerle..

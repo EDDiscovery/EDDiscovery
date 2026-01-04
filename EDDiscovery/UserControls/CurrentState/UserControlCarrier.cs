@@ -14,6 +14,7 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -28,6 +29,7 @@ namespace EDDiscovery.UserControls
     {
         private Timer period = new Timer();
         private int periodtickcounter = 0;
+        protected bool fleetcarrier;
 
         private Control[] lefttopalignedfinancecontrols;
         private Control[] midtopalignedfinancecontrols;
@@ -43,19 +45,31 @@ namespace EDDiscovery.UserControls
         private string dbSplitterSaveCAPI1 = "CAPISplitter1";
         private string dbSplitterSaveCAPI2 = "CAPISplitter2";
         private string dbTabSave = "TabPage";
-        private string dbCAPISave = "CAPI_Fleetcarrier_Data";           // global across all panels
-        private string dbCAPIDateUTC = "CAPI_Fleetcarrier_Date";
-        private string dbCAPICommander = "CAPI_Fleetcarrier_CmdrID";
         private string dbSCLedger = "SCFinance";
+
+        protected string dbCAPISave = "CAPI_Fleetcarrier_Data";           // global across all panels
+        protected string dbCAPIDateUTC = "CAPI_Fleetcarrier_Date";
+        protected string dbCAPICommander = "CAPI_Fleetcarrier_CmdrID";
+
+        string capidebugfolder = null;//@"c:\code\";
 
         #region Init
 
-        public UserControlCarrier()
+        public UserControlCarrier()         // used by Carrier
         {
             InitializeComponent();
-
+            fleetcarrier = true;
             DBBaseName = "CarrierPanel";
+            InitialiseControls();
+        }
 
+        public UserControlCarrier(int _)            // used by Squadrons, the para is just to distinquish the two
+        {
+            InitializeComponent();
+        }
+
+        protected void InitialiseControls()
+        { 
             period.Interval = 1000;
             period.Tick += Period_Tick;
 
@@ -79,7 +93,9 @@ namespace EDDiscovery.UserControls
             splitContainerCAPI2.SplitterDistance(GetSetting(dbSplitterSaveCAPI2, 0.5));
             splitContainerLedger.SplitterDistance(GetSetting(dbSCLedger, 0.5));
 
-            labelCAPICarrierBalance.Text = labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = "";
+            labelCAPICarrierBalance.Text = "";
+            SetCAPIDateTime("");
+
             extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = false;     // off until period poll
 
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
@@ -110,7 +126,8 @@ namespace EDDiscovery.UserControls
                                     { new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomOutX(); } ),
                                           new Action<ToolStripMenuItem>((s)=> {extChartLedger.ZoomResetX(); } ),
                                     },
-                                new Action<ToolStripMenuItem[]>((list) => {
+                                new Action<ToolStripMenuItem[]>((list) =>
+                                {
                                     list[0].Enabled = list[1].Enabled = extChartLedger.IsZoomedX;
                                 })
                                 );
@@ -144,15 +161,23 @@ namespace EDDiscovery.UserControls
                 {
                     gr.FillRectangle(br4, new Rectangle(766, 513, 5, 5));
                 }
-                using (Brush br5 = new SolidBrush(Color.FromArgb(250, Color.FromArgb(200,88,73,69))))
+                using (Brush br5 = new SolidBrush(Color.FromArgb(250, Color.FromArgb(200, 88, 73, 69))))
                 {
                     gr.FillRectangle(br5, new Rectangle(1096, 625, 5, 4));
                 }
             }
+
+            dataGridViewSquadronMembers.SortCompare += (s, e) => { if (e.Column == colCAPIMembersJoined | e.Column == colCAPIMembersLastOnline) e.SortDataGridViewColumnDate(); };
         }
 
         protected override void Init()
         {
+            if (fleetcarrier)
+            {
+                extTabControl.TabPages.Remove(tabPageSquadronMembers);
+                extTabControl.TabPages.Remove(tabPageCAPISquadronItems);
+            }
+
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             DiscoveryForm.OnHistoryChange += Discoveryform_OnHistoryChange;
             DiscoveryForm.OnThemeChanged += ClearDisplayFontJournalCAPI;
@@ -212,14 +237,14 @@ namespace EDDiscovery.UserControls
             normfont.Dispose();
         }
 
-        private void Discoveryform_OnHistoryChange()     
+        private void Discoveryform_OnHistoryChange()
         {
             ClearDisplayFontJournalCAPI();   // do the lot, including the capi, etc.
         }
 
-        private void Discoveryform_OnNewEntry(HistoryEntry he)     
+        private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
-            if ( he.journalEntry is ICarrierStats)
+            if (he.journalEntry is ICarrierStats)
             {
                 DisplayJournal();
             }
@@ -237,31 +262,30 @@ namespace EDDiscovery.UserControls
 
         private void Period_Tick(object sender, EventArgs e)
         {
-            var cs = DiscoveryForm.History.Carrier;
+            var cs = fleetcarrier ? DiscoveryForm.History.FleetCarrier : DiscoveryForm.History.SquadronCarrier;
 
             if (cs.CheckCarrierJump(DateTime.UtcNow)) // if autojump happened
                 DisplayJournal();      // redisplay all - including destinationsystem
             else
                 DisplayDestinationSystem();     // redisplay just the time
 
-            if ( ++periodtickcounter % 4 == 0)     // every N go, change the flashy lights on the image overall
+            if (++periodtickcounter % 4 == 0)     // every N go, change the flashy lights on the image overall
             {
                 imageControlOverall.ImageVisible[2] = periodtickcounter % 8 == 0;
-                imageControlOverall.Invalidate();       
+                imageControlOverall.Invalidate();
             }
 
             // capi enable/disable  - get stats
             DateTime capitime = GetSettingGlobal(dbCAPIDateUTC, DateTime.UtcNow);
             int capicmdrid = GetSettingGlobal(dbCAPICommander, -1);
-            bool capisamecmdr = DiscoveryForm.History.CommanderId == capicmdrid;
+            bool goodcmd = DiscoveryForm.History.CommanderId == capicmdrid;
 
             // enabled if greater than this time ago or not same commander
-            extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = DiscoveryForm.History.IsRealCommanderId && (!capisamecmdr || (DateTime.UtcNow - capitime) >= new TimeSpan(0, 0, 2, 0));
+            extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = capidebugfolder != null || (DiscoveryForm.History.IsRealCommanderId && (!goodcmd || (DateTime.UtcNow - capitime) >= new TimeSpan(0, 0, 2, 0)));
 
             // if its the same commander, and our display is in the past, another panel fetched it, redisplay
-            if (capisamecmdr && capitime > capidisplayedtime)
+            if (goodcmd && capitime > capidisplayedtime)
                 DisplayCAPIFromDB();
-
         }
 
         private void ClearDisplayFontJournalCAPI()         // the lot
@@ -301,7 +325,7 @@ namespace EDDiscovery.UserControls
 
         private async void DisplayJournal()
         {
-            var cs = DiscoveryForm.History.Carrier;
+            var cs = fleetcarrier ? DiscoveryForm.History.FleetCarrier : DiscoveryForm.History.SquadronCarrier;
 
             cs.CheckCarrierJump(DateTime.UtcNow);       // see if auto jump happened
 
@@ -388,7 +412,7 @@ namespace EDDiscovery.UserControls
 
                     var row = dataGridViewLedger.Rows.Add(rowobj);
                     dataGridViewLedger.Rows[row].Tag = seltime;
-                    extChartLedger.AddXY(seltime, le.Balance,graphtooltip:$"{seltime.ToString()} {le.Balance:N0}cr");
+                    extChartLedger.AddXY(seltime, le.Balance, graphtooltip: $"{seltime.ToString()} {le.Balance:N0}cr");
                     //System.Diagnostics.Debug.WriteLine($"Add {seltime} {le.Balance}");
                 }
 
@@ -405,11 +429,11 @@ namespace EDDiscovery.UserControls
 
                     if (cs.IsDecommisioned)
                     {
-                        name += " (" + "Decommissioned".Tx()+ ")";
+                        name += " (" + "Decommissioned".Tx() + ")";
                     }
                     else if (cs.IsDecommisioning)
                     {
-                        name += " (" + "Decommissioning on".Tx()+ " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(cs.DecommisionTimeUTC.Value) + ")";
+                        name += " (" + "Decommissioning on".Tx() + " " + EDDConfig.Instance.ConvertTimeToSelectedFromUTC(cs.DecommisionTimeUTC.Value) + ")";
                     }
 
                     imageControlOverall.DrawText(new Point(hspacing, vposl), new Size(30000, 30000), name, bigfont, color);
@@ -507,7 +531,7 @@ namespace EDDiscovery.UserControls
 
                             var size = imageControlServices.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), JournalCarrierCrewServices.GetTranslatedServiceName(srvtype), bigfont, color);
                             pointtextleft.Y += (int)(size.Height + 1);
-                            string coreoroptional = srvtype <= EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.ServiceType.TritiumDepot ? "Core Service".Tx(): "Optional Service".Tx();
+                            string coreoroptional = srvtype <= EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.ServiceType.TritiumDepot ? "Core Service".Tx() : "Optional Service".Tx();
                             imageControlServices.DrawText(pointtextleft, new Size(titlewidth, 1000), coreoroptional, normfont, color);
 
                             Image img = BaseUtils.Icons.IconSet.Instance.Get("Controls." + srvtype.ToString());
@@ -529,7 +553,7 @@ namespace EDDiscovery.UserControls
                                 // crewname, if either no service state or name is null, ??
                                 string crewname = servicestate?.CrewName ?? "??";
 
-                                imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name".Tx()+": "+ crewname, normfont, color);
+                                imageControlServices.DrawText(new Point(servicecol1top.X + 800, servicecol1top.Y + lineh), new Size(2000, 2000), "Crew Name".Tx() + ": " + crewname, normfont, color);
                             }
 
                             if (active)
@@ -648,6 +672,8 @@ namespace EDDiscovery.UserControls
 
         private int DisplayPackItem(Graphics gr, CarrierState.PackClass sp, bool module, int vpos, Color color)
         {
+            var cs = fleetcarrier ? DiscoveryForm.History.FleetCarrier : DiscoveryForm.History.SquadronCarrier;
+
             const int titlewidth = 600;
 
             var area = new Rectangle(hspacing, vpos, servicewidth, serviceheight);
@@ -661,12 +687,12 @@ namespace EDDiscovery.UserControls
 
             var size = imageControlPacks.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), sp.PackTheme.SplitCapsWordFull(), bigfont, color);
             pointtextleft.Y += (int)(size.Height + 1) + linemargin;
-            imageControlPacks.DrawText(pointtextleft, new Size(titlewidth, 2000), "Tier ".Tx()+ sp.PackTier.ToString("N0"), bigfont, color);
+            imageControlPacks.DrawText(pointtextleft, new Size(titlewidth, 2000), "Tier ".Tx() + sp.PackTier.ToString("N0"), bigfont, color);
 
 
             var pointtextmid = new Point(titlewidth + 50, pointtextleft.Y);
 
-            if (DiscoveryForm.History.Carrier.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
+            if (cs.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
             {
                 imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), BaseUtils.FieldBuilder.Build("Cost: ; cr;N0".Tx(), value), normfont, color);
             }
@@ -679,7 +705,7 @@ namespace EDDiscovery.UserControls
 
         private void DisplayDestinationSystem()
         {
-            var cs = DiscoveryForm.History.Carrier;
+            var cs = fleetcarrier ? DiscoveryForm.History.FleetCarrier : DiscoveryForm.History.SquadronCarrier;
 
             if (cs.State.HaveCarrier && cs.IsJumping)
             {
@@ -699,7 +725,7 @@ namespace EDDiscovery.UserControls
                 else
                     jumptext += "Jumping".Tx();
 
-                imageControlOverall.DrawImage(global::EDDiscovery.Icons.Controls.ArrowsRight, new Rectangle(hpos, vpos, 48, 24), bitmap:1);
+                imageControlOverall.DrawImage(global::EDDiscovery.Icons.Controls.ArrowsRight, new Rectangle(hpos, vpos, 48, 24), bitmap: 1);
                 hpos += 48;
 
                 imageControlOverall.DrawText(new Point(hpos, vpos), new Size(30000, 30000), jumptext, bigfont, ExtendedControls.Theme.Current.SPanelColor, bitmap: 1);
@@ -711,7 +737,7 @@ namespace EDDiscovery.UserControls
 
                 paintedlayer1 = true;
             }
-            else if ( paintedlayer1)
+            else if (paintedlayer1)
             {
                 imageControlOverall.Clear(1);       // clear destination bitmap plane
                 imageControlOverall.Invalidate();
@@ -748,7 +774,7 @@ namespace EDDiscovery.UserControls
 
             int maxh = Math.Max(lypos, lmpos);
 
-            int rightpos = Width- 270;
+            int rightpos = Width - 270;
             int xpos = rightpos;
             int rypos = linemargin;
             int shown = 0;
@@ -803,7 +829,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDoCAPI1_Click(object sender, EventArgs e)
         {
-            if (DiscoveryForm.FrontierCAPI.Active)
+            if (capidebugfolder != null || DiscoveryForm.FrontierCAPI.Active)
             {
                 extButtonDoCAPI1.Enabled = extButtonDoCAPI2.Enabled = extButtonDoCAPI3.Enabled = false;
 
@@ -817,34 +843,32 @@ namespace EDDiscovery.UserControls
 
                 System.Threading.Tasks.Task.Run(() =>
                 {
-                    CAPI.FleetCarrier fc = null;
                     bool nocarrier = false;
 
                     int tries = 3;
                     while (tries-- > 0)        // goes at getting the valid data from frontier
                     {
-                        string fleetcarrier = DiscoveryForm.FrontierCAPI.FleetCarrier(out DateTime _, nocontentreturnemptystring:true);
+                        string json = capidebugfolder != null ? System.IO.File.ReadAllText(capidebugfolder + (fleetcarrier ? "fleetcarrierdata.json" : "squadrons.json")) :
+                                        fleetcarrier ? DiscoveryForm.FrontierCAPI.FleetCarrier(out DateTime _, nocontentreturnemptystring: true) :
+                                        DiscoveryForm.FrontierCAPI.Squadrons(out DateTime _, nocontentreturnemptystring: true);
 
-                        if (fleetcarrier != null)
+                        if (json != null)
                         {
-                            if (fleetcarrier.Length == 0)       // an empty string means no carrier
+#if DEBUG
+                            if ( capidebugfolder == null)
+                                BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\" + (fleetcarrier ? "fleetcarrierout.json" : "squadronsout.json"), json);
+#endif
+
+                            if (json.Length == 0)       // an empty string means no carrier, or bad parse
                             {
                                 nocarrier = true;
                                 break;
                             }
-                            else
+                            else if (JToken.Parse(json) != null)
                             {
-                                fc = new CAPI.FleetCarrier(fleetcarrier);
-
-                                if (fc.IsValid)
-                                {
-                                    //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\fc.json", fc.Json.ToString(true));
-                                    System.Diagnostics.Debug.WriteLine($"Got CAPI fleetcarrier try {3 - tries} {fleetcarrier}");
-                                    PutSettingGlobal(dbCAPISave, fleetcarrier);       // store data into global capi slot
-                                    break;
-                                }
-                                else
-                                    fc = null;
+                                System.Diagnostics.Debug.WriteLine($"UserControlCarrier Got CAPI  try {3 - tries} {json}");
+                                PutSettingGlobal(dbCAPISave, json);       // store data into global capi slot
+                                break;
                             }
                         }
                         else
@@ -855,14 +879,14 @@ namespace EDDiscovery.UserControls
                     {
                         System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
-                        DisplayCAPI(fc);        // may be null, this will clear it if it is
+                        DisplayCAPIFromDB();
 
-                        if ( nocarrier )
+                        if (nocarrier)
                         {
                             ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No Carrier".Tx(),
                                 "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
-                        else if ( fc == null  )
+                        else if (GetSettingGlobal(dbCAPISave, "x").IsEmpty())
                         {
                             ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "No CAPI data from frontier, due to either or server/network failure".Tx(),
                                 "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -882,35 +906,44 @@ namespace EDDiscovery.UserControls
 
         private void DisplayCAPIFromDB()
         {
-            string capi = GetSettingGlobal(dbCAPISave, "");
+            string json = GetSettingGlobal(dbCAPISave, "");
             int capicmd = GetSettingGlobal(dbCAPICommander, -1);
+            bool goodcmd = capidebugfolder != null || capicmd == DiscoveryForm.History.CommanderId;
 
-            // if its a valid capi for commander, turn it into a FC entity
-            var fc = (capi.Length > 0 && capicmd == DiscoveryForm.History.CommanderId) ? new CAPI.FleetCarrier(capi) : null;        
-
-            DisplayCAPI(fc);
+            if (fleetcarrier)
+            {
+                // if its a valid capi for commander, turn it into a FC entity
+                var fc = (json.Length > 0 && goodcmd) ? new CAPI.FleetCarrier(json) : null;
+                DisplayCarrierInfoCAPI(fc, null);
+            }
+            else
+            {
+                var sq = (json.Length > 0 && goodcmd) ? new CAPI.Squadrons(json) : null;
+                DisplayCarrierInfoCAPI(sq?.Carrier, sq);
+            }
         }
 
         private DateTime capidisplayedtime;
 
-       
         // fc = null means invalid capi data, clear display
-        private void DisplayCAPI(CAPI.FleetCarrier fc)
+        private void DisplayCarrierInfoCAPI(CAPI.FleetCarrier fc, CAPI.Squadrons sq)
         {
             System.Diagnostics.Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
             if (fc == null || fc.IsValid == false)      // if not valid
             {
-                labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = "";
+                SetCAPIDateTime("");
                 dataGridViewCAPICargo.Rows.Clear();
                 dataGridViewCAPIShips.Rows.Clear();
                 dataGridViewCAPIModules.Rows.Clear();
                 dataGridViewCAPIStats.Rows.Clear();
+                extComboBoxSquadronItems.Items.Clear();
             }
             else
             {
                 DateTime capitime = GetSettingGlobal(dbCAPIDateUTC, DateTime.UtcNow);
-                labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(capitime).ToString();
+
+                SetCAPIDateTime(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(capitime).ToString());
                 capidisplayedtime = capitime;
 
                 labelCAPICarrierBalance.Text = fc.Balance.ToString("N0") + "cr";
@@ -1018,7 +1051,7 @@ namespace EDDiscovery.UserControls
                             string speed = ship?.Speed.ToString("N0") ?? "";
                             string boost = ship?.Boost.ToString("N0") ?? "";
                             string mass = ship?.HullMass.ToString("N0") ?? "";
-                            string classv = ship?.ClassString ?? ""; 
+                            string classv = ship?.ClassString ?? "";
 
                             object[] rowobj = {
                                             name,
@@ -1098,38 +1131,136 @@ namespace EDDiscovery.UserControls
 
                     dataGridViewCAPIStats.Rows.Clear();
 
-                    Type jtype = fc.GetType();
-
-                    foreach (System.Reflection.PropertyInfo pi in jtype.GetProperties())
+                    if (sq != null)
                     {
-                        System.Reflection.MethodInfo getter = pi.GetGetMethod();
-                        dynamic value = getter.Invoke(fc, null);
-
-                        string res = value is string ? (string)value :
-                                        value is int ? ((int)value).ToString("N0") :
-                                        value is long ? ((long)value).ToString("N0") :
-                                        value is double ? ((double)value).ToString("") :
-                                        value is bool ? (((bool)value) ? "True" : "False") : null;
-                        if (res != null)
-                        {
-                            object[] rowobj = {
-                                            pi.Name.SplitCapsWordFull(),
-                                            res,
-                                        };
-
-                            dataGridViewCAPIStats.Rows.Add(rowobj);
-                        }
+                        ReflectProperties(sq.GetType(), sq, "Squadron" + ": ");
+                        ReflectProperties(fc.GetType(), fc, "Carrier" + ": ");
+                    }
+                    else
+                    {
+                        ReflectProperties(fc.GetType(), fc, "");
                     }
 
                     dataGridViewCAPIStats.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
                     dataGridViewCAPIStats.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                }
+
+                if ( sq != null) 
+                {
+                    {
+                        DataGridViewColumn sortcol = dataGridViewSquadronMembers.SortedColumn != null ? dataGridViewSquadronMembers.SortedColumn : dataGridViewSquadronMembers.Columns[0];
+                        SortOrder sortorder = dataGridViewSquadronMembers.SortOrder != SortOrder.None ? dataGridViewSquadronMembers.SortOrder : SortOrder.Ascending;
+
+                        dataGridViewSquadronMembers.Rows.Clear();
+
+                        foreach (var m in sq.Members)
+                        {
+                            object[] rowobj = { m.Name,
+                                                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(m.Joined).ToString(),
+                                                EDDConfig.Instance.ConvertTimeToSelectedFromUTC(m.LastOnline).ToString(),
+                                                m.ShipModel + (m.ShipName.HasChars() ? ": " + m.ShipName : ""),
+                                                m.Status,
+                                                m.Rank,
+                                                };
+
+                            dataGridViewSquadronMembers.Add(rowobj);
+
+                        }
+
+
+                        dataGridViewSquadronMembers.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
+                        dataGridViewSquadronMembers.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                    }
+                    {
+                        string cursel = extComboBoxSquadronItems.SelectedItem as string;  // may be null
+
+                        extComboBoxSquadronItems.Tag = 1;           // this disables the on selected item changed
+
+                        extComboBoxSquadronItems.Items.Clear();
+                        foreach (var m in sq.Commodities.EmptyIfNull())
+                            extComboBoxSquadronItems.Items.Add("C:" + m.Key);
+
+                        foreach (var m in sq.MicroResources.EmptyIfNull())
+                            extComboBoxSquadronItems.Items.Add("MR:" + m.Key);
+
+                        if (cursel == null || !extComboBoxSquadronItems.Items.Contains(cursel))
+                            cursel = extComboBoxSquadronItems.Items.FirstOrDefault();
+
+                        dataGridViewSquadronItems.Rows.Clear();
+
+                        if ( cursel != null )
+                        {
+                            extComboBoxSquadronItems.SelectedItem = cursel;
+                            var dict = cursel.StartsWith("M") ? sq.MicroResources : sq.Commodities;
+                            string key = cursel.StartsWith("M") ? cursel.Substring(3) : cursel.Substring(2);
+                            if ( dict.TryGetValue(key,out List<CAPI.CAPIEndPointBaseClass.Commodity> cmds))
+                            {
+                                foreach( var cmd in cmds)
+                                {
+                                    MaterialCommodityMicroResourceType ty = MaterialCommodityMicroResourceType.GetByFDName(cmd.Name);
+                                    object[] rowobj = { ty != null ? ty.TranslatedName : cmd.Name, ty != null ? ty.TranslatedCategory : "", cmd.Stock.ToString() };
+                                    dataGridViewSquadronItems.Add(rowobj);
+                                }
+                            }
+                        }
+
+                        extComboBoxSquadronItems.Tag = null;
+                    }
+
                 }
             }
         }
 
         #endregion
 
-        
+        private void ReflectProperties(Type jtype, Object o, string prefix)
+        {
+            foreach (System.Reflection.PropertyInfo pi in jtype.GetProperties())
+            {
+                System.Reflection.MethodInfo getter = pi.GetGetMethod();
+                dynamic value = getter.Invoke(o, null);
 
+                string res = value is string ? (string)value :
+                                value is int ? ((int)value).ToString("N0") :
+                                value is long ? ((long)value).ToString("N0") :
+                                value is double ? ((double)value).ToString("") :
+                                value is bool ? (((bool)value) ? "True" : "False") : null;
+                
+                if (res != null)
+                {
+                    object[] rowobj = {
+                                            prefix + pi.Name.SplitCapsWordFull(),
+                                            res,
+                                        };
+
+                    dataGridViewCAPIStats.Rows.Add(rowobj);
+                }
+            }
+        }
+
+        private void extComboBoxSquadronItems_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (extComboBoxSquadronItems.Tag == null)
+                DisplayCAPIFromDB();
+        }
+
+        void SetCAPIDateTime(string s)
+        {
+            labelCAPIDateTime1.Text = labelCAPIDateTime2.Text = labelCAPIDateTime3.Text =
+                labelCAPI4.Text = labelCAPI5.Text = s;
+        }
+    }
+
+    public class UserControlSquadronCarrier : UserControlCarrier
+    {
+        public UserControlSquadronCarrier() : base(1)       // call up the constructor which does not init the controls
+        {
+            DBBaseName = "Squadrons";
+            fleetcarrier = false;
+            InitialiseControls();
+            dbCAPISave = "CAPI_Squadrons_Data";           // global across all panels
+            dbCAPIDateUTC = "CAPI_Squadrons_Date";
+            dbCAPICommander = "CAPI_Squadrons_CmdrID";
+        }
     }
 }

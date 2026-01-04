@@ -258,7 +258,7 @@
     <EmbeddedResource Include="Panels\ScreenShot.png" />
     <EmbeddedResource Include="Panels\Settings.png" />
     <EmbeddedResource Include="Panels\ShoppingList.png" />
-    <EmbeddedResource Include="Panels\Spanel.png" />
+    <EmbeddedResource Include="Panels\SummaryPanel.png" />
     <EmbeddedResource Include="Panels\StarList.png" />
     <EmbeddedResource Include="Panels\Statistics.png" />
     <EmbeddedResource Include="Panels\Synthesis.png" />
@@ -476,6 +476,10 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\CancelledSquadronApplication.png" />
+    <EmbeddedResource Include="Journal\SquadronApplicationApproved.png" />
+    <EmbeddedResource Include="Journal\SquadronApplicationRejected.png" />
+    <EmbeddedResource Include="Panels\Squadrons.png" />
     <EmbeddedResource Include="Ships\explorer_nx.jpg" />
     <EmbeddedResource Include="Controls\Scan\Bodies\BarycentreLeftBar.png" />
     <EmbeddedResource Include="Journal\ShipyardBankDeposit.png" />

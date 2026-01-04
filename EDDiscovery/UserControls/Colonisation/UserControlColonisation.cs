@@ -26,6 +26,8 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlColonisation : UserControlCommonBase
     {
+        string dbColonisationChecked = "HideCompleted";
+
         public UserControlColonisation()
         {
             InitializeComponent();
@@ -39,6 +41,10 @@ namespace EDDiscovery.UserControls
 
             JToken tk = JToken.Parse(GetSetting(dbDisplayState, "{}"));     // may fail if corrupted
             displaysettings = tk != null ? tk.Object() : new JObject();
+
+            ignorechange = true;
+            extCheckBoxHideCompleted.Checked = GetSetting(dbColonisationChecked, false);
+            ignorechange = false;
         }
         protected override void InitialDisplay()
         {
@@ -47,16 +53,16 @@ namespace EDDiscovery.UserControls
 
         private void HistoryChange()
         {
-            var colonisationevents = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(), 
-                            new HashSet<JournalTypeEnum> { JournalTypeEnum.ColonisationBeaconDeployed, JournalTypeEnum.ColonisationConstructionDepot, JournalTypeEnum.ColonisationContribution, 
+            var colonisationevents = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(),
+                            new HashSet<JournalTypeEnum> { JournalTypeEnum.ColonisationBeaconDeployed, JournalTypeEnum.ColonisationConstructionDepot, JournalTypeEnum.ColonisationContribution,
                                 JournalTypeEnum.ColonisationSystemClaim, JournalTypeEnum.ColonisationSystemClaimRelease,
                                 JournalTypeEnum.Docked , JournalTypeEnum.FSDJump, JournalTypeEnum.Location, JournalTypeEnum.CarrierJump},
-                            mindatetime:EliteReleaseDates.Trailblazers);
+                            mindatetime: EliteReleaseDates.Trailblazers);
 
             colonisation.Clear();
 
             foreach (var he in colonisationevents.EmptyIfNull())
-                colonisation.Add( he, colonisationevents);
+                colonisation.Add(he, colonisationevents);
 
             current = null;     // no system
 
@@ -89,7 +95,8 @@ namespace EDDiscovery.UserControls
         {
             DiscoveryForm.OnHistoryChange -= HistoryChange;
             DiscoveryForm.OnNewEntry -= NewEntry;
-            PutSetting(dbDisplayState, displaysettings.ToString(true));   
+            PutSetting(dbDisplayState, displaysettings.ToString(true));
+            PutSetting(dbColonisationChecked, extCheckBoxHideCompleted.Checked);
         }
 
         public override bool SupportTransparency => true;
@@ -133,7 +140,7 @@ namespace EDDiscovery.UserControls
             if (ret.newsystem)                                                  // if we have a change in system list, update the combo
                 UpdateSystemComboBox();
 
-            if ( redisplay )
+            if (redisplay)
                 Display(cleardisplay);
         }
 
@@ -184,6 +191,8 @@ namespace EDDiscovery.UserControls
             else
                 extComboBoxSystemSel.SelectedIndex = 0;         // set to last system no trigger
 
+
+
             ignorechange = false;
         }
 
@@ -206,7 +215,7 @@ namespace EDDiscovery.UserControls
                 var json = JToken.Parse(GetSetting(dbStationSelection, "{}")) ?? new JToken();
                 var name = json[current.System.Name].StrNull(); // may be null
                 var index = name != null ? extComboBoxStationSelect.Items.IndexOf(name) : -1;       // may be -1, name not found, or index 1 onwards (0 = all)
-                extComboBoxStationSelect.SelectedIndex = index>0 ? index : 0;   // select in
+                extComboBoxStationSelect.SelectedIndex = index > 0 ? index : 0;   // select in
 
                 ignorechange = false;
             }
@@ -252,14 +261,23 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private void extCheckBoxHideCompleted_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!ignorechange)
+            {
+                Display(true);      // redisplay with clear to remove non selected ports
+            }
+        }
+
+
         private void Display(bool cleardisplay)
         {
-            if ( cleardisplay )
+            if (cleardisplay)
             {
                 extPanelGradientFillUCCP.Controls.Clear();
             }
 
-            if ( current != null)
+            if (current != null)
             {
                 string stationselection = (string)extComboBoxStationSelect.SelectedItem;
 
@@ -292,7 +310,9 @@ namespace EDDiscovery.UserControls
 
                     foreach (var kvp in current.Ports)
                     {
-                        if (stationselection == alltext || stationselection == kvp.Value.Name)  // only display selected ports
+                        if ((stationselection == alltext || stationselection == kvp.Value.Name) && // only display selected ports
+                            (kvp.Value.State == null || kvp.Value.State?.ConstructionComplete == false || extCheckBoxHideCompleted.Checked == false)
+                            )
                         {
                             ColonisationPortDisplay cp = new ColonisationPortDisplay();
                             cp.Tag = kvp.Value;
@@ -315,7 +335,7 @@ namespace EDDiscovery.UserControls
                     // so we must manually control the height of the content panel to the height of the children, and the width to the available space
 
                     Size contentsize = pscrolledcontent.FindMaxSubControlArea(0, 0);
-                    pscrolledcontent.Size = new Size(pouter.ContentWidth , contentsize.Height);
+                    pscrolledcontent.Size = new Size(pouter.ContentWidth, contentsize.Height);
 
                     pinnervscroll.Recalcuate();        // we need to calculate the ranging of the scroll bar..
 
@@ -339,7 +359,9 @@ namespace EDDiscovery.UserControls
                     // find each port in current list
                     foreach (var kvp in current.Ports)
                     {
-                        if (stationselection == alltext || stationselection == kvp.Value.Name)  // only display selected ports
+                        if ((stationselection == alltext || stationselection == kvp.Value.Name) &&  // only display selected ports
+                            (kvp.Value.State == null || kvp.Value.State?.ConstructionComplete == false || extCheckBoxHideCompleted.Checked == false)
+                            )
                         {
                             ColonisationPortDisplay cp = pscrolledcontent.Controls.FindTag(kvp.Value) as ColonisationPortDisplay;
                             if (cp == null)     // if new, add
@@ -396,7 +418,7 @@ namespace EDDiscovery.UserControls
         private void SetupPort(ColonisationPortDisplay cp, ColonisationPortData pd)
         {
             cp.Initialise(pd);
-            cp.ShowState = DisplayState("State",pd);
+            cp.ShowState = DisplayState("State", pd);
             cp.ShowContributions = DisplayState("Contributions", pd);
             cp.ShowZeros = DisplayState("ShowZeros", pd);
             cp.ChangedDisplayState += () =>
@@ -410,13 +432,13 @@ namespace EDDiscovery.UserControls
         private bool DisplayState(string part, ColonisationPortData port = null, bool? setit = null)
         {
             JObject sysobj = displaysettings[current.System.Name].Object();
-            if ( sysobj == null)
+            if (sysobj == null)
                 displaysettings[current.System.Name] = sysobj = new JObject();
 
             JObject partobj = port != null ? sysobj[port.Name].Object() : sysobj;
 
-            if ( partobj == null )
-                sysobj[port.Name] = partobj= new JObject();  
+            if (partobj == null)
+                sysobj[port.Name] = partobj = new JObject();
 
             if (!partobj[part].TryGetBool(out bool value))        // if it fails, value is true
                 value = true;
@@ -440,6 +462,7 @@ namespace EDDiscovery.UserControls
         JObject displaysettings;
 
         private string alltext = "All";
+
     }
 
 }

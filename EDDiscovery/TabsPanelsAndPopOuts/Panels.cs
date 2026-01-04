@@ -43,7 +43,7 @@ namespace EDDiscovery
             Engineering=14,
             MarketData=15,
             SystemInformation=16,      
-            Spanel=17,
+            SummaryPanel=17,
             // Trippanel removed for 15.0
             NotePanel = 19,
             RouteTracker=20,           
@@ -91,6 +91,7 @@ namespace EDDiscovery
             AutoPanel = 63,
             DockingPanel = 64,
             TravelPanel = 66,
+            Squadrons = 67,
             // ****** ADD More here DO NOT RENUMBER *****
             PowerplayMerits = 67,
         };
@@ -122,6 +123,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", "Statistics Information") },
             { new PanelInfo( PanelIDs.SuitsWeapons, typeof(UserControlSuitsWeapons), "Suits & Weapons", "SuitsWeapons", "Suits, Loadouts, Weapons") },
             { new PanelInfo( PanelIDs.Carrier, typeof(UserControlCarrier), "Carrier", "Carrier", "Data about your fleet carrier") },
+            { new PanelInfo( PanelIDs.Squadrons, typeof(UserControlSquadronCarrier), "Squadron/Carrier", "SquadronCarrier", "Data about your squadron") },
             { new PanelInfo( PanelIDs.Colonisation, typeof(UserControlColonisation), "Colonisation", "Colonisation", "Colonisation statistics") },
 
             { new PanelInfo( "Station Data") },
@@ -167,7 +169,7 @@ namespace EDDiscovery
 
             { new PanelInfo( "Overlay Panels") },
             { new PanelInfo( PanelIDs.SystemInformation, typeof(UserControlSysInfo), "System Information", "SystemInfo", "System Information"  ) },
-            { new PanelInfo( PanelIDs.Spanel, typeof(UserControlSpanel), "Summary Panel", "Spanel", "Summary panel overlay"  ) },
+            { new PanelInfo( PanelIDs.SummaryPanel, typeof(UserControlSpanel), "Summary Panel", "Spanel", "Summary panel overlay"  ) },
             { new PanelInfo( PanelIDs.Surveyor, typeof(UserControlSurveyor), "Surveyor", "Surveyor", "Surveyor - Exploration and route overlay"  ) },
             { new PanelInfo( PanelIDs.NotePanel, typeof(UserControlNotePanel), "Notes", "NotePanel", "Notes overlay" ) },
             { new PanelInfo( PanelIDs.RouteTracker, typeof(UserControlRouteTracker),"Route Tracker", "RouteTracker", "Route tracker overlay") },

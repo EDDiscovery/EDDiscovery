@@ -151,6 +151,26 @@
             this.panelCAPI2 = new System.Windows.Forms.Panel();
             this.labelCAPIDateTime3 = new System.Windows.Forms.Label();
             this.extButtonDoCAPI2 = new ExtendedControls.ExtButton();
+            this.tabPageSquadronMembers = new System.Windows.Forms.TabPage();
+            this.dataGridViewSquadronMembers = new BaseUtils.DataGridViewColumnControl();
+            this.colCAPIMembersName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCAPIMembersJoined = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCAPIMembersLastOnline = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCAPIMembersShip = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCAPIMembersStatus = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colCAPIMembersRank = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.panelCAPI4 = new System.Windows.Forms.Panel();
+            this.labelCAPI4 = new System.Windows.Forms.Label();
+            this.extButtonDoCAPI4 = new ExtendedControls.ExtButton();
+            this.tabPageCAPISquadronItems = new System.Windows.Forms.TabPage();
+            this.dataGridViewSquadronItems = new BaseUtils.DataGridViewColumnControl();
+            this.panelCAPI5 = new System.Windows.Forms.Panel();
+            this.extComboBoxSquadronItems = new ExtendedControls.ExtComboBox();
+            this.labelCAPI5 = new System.Windows.Forms.Label();
+            this.extButtonDoCAPI5 = new ExtendedControls.ExtButton();
+            this.colSquadronItemsItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSquadronItemsType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSquadronItemsQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extTabControl.SuspendLayout();
             this.tabPageOverall.SuspendLayout();
             this.tabPageItinerary.SuspendLayout();
@@ -195,6 +215,12 @@
             this.extPanelDataGridViewScrollCAPILocker.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCAPILocker)).BeginInit();
             this.panelCAPI2.SuspendLayout();
+            this.tabPageSquadronMembers.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSquadronMembers)).BeginInit();
+            this.panelCAPI4.SuspendLayout();
+            this.tabPageCAPISquadronItems.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSquadronItems)).BeginInit();
+            this.panelCAPI5.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
@@ -213,6 +239,8 @@
             this.extTabControl.Controls.Add(this.tabPageCAPI3);
             this.extTabControl.Controls.Add(this.tabPageCAPI1);
             this.extTabControl.Controls.Add(this.tabPageCAPI2);
+            this.extTabControl.Controls.Add(this.tabPageSquadronMembers);
+            this.extTabControl.Controls.Add(this.tabPageCAPISquadronItems);
             this.extTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.extTabControl.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extTabControl.Location = new System.Drawing.Point(0, 0);
@@ -291,6 +319,7 @@
             this.dataViewScrollerPanelItinerary.Location = new System.Drawing.Point(3, 3);
             this.dataViewScrollerPanelItinerary.Margin = new System.Windows.Forms.Padding(2);
             this.dataViewScrollerPanelItinerary.Name = "dataViewScrollerPanelItinerary";
+            this.dataViewScrollerPanelItinerary.ScrollBarWidth = 24;
             this.dataViewScrollerPanelItinerary.Size = new System.Drawing.Size(839, 540);
             this.dataViewScrollerPanelItinerary.TabIndex = 2;
             this.dataViewScrollerPanelItinerary.VerticalScrollBarDockRight = true;
@@ -307,7 +336,7 @@
             this.extScrollBarItinerary.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarItinerary.HideScrollBar = false;
             this.extScrollBarItinerary.LargeChange = 0;
-            this.extScrollBarItinerary.Location = new System.Drawing.Point(820, 0);
+            this.extScrollBarItinerary.Location = new System.Drawing.Point(815, 0);
             this.extScrollBarItinerary.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarItinerary.Maximum = -1;
             this.extScrollBarItinerary.Minimum = 0;
@@ -316,13 +345,13 @@
             this.extScrollBarItinerary.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarItinerary.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarItinerary.Name = "extScrollBarItinerary";
-            this.extScrollBarItinerary.Size = new System.Drawing.Size(19, 540);
+            this.extScrollBarItinerary.Size = new System.Drawing.Size(24, 540);
+            this.extScrollBarItinerary.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarItinerary.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarItinerary.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarItinerary.SliderDrawAngle = 90F;
             this.extScrollBarItinerary.SmallChange = 1;
             this.extScrollBarItinerary.TabIndex = 1;
-            this.extScrollBarItinerary.Text = "";
             this.extScrollBarItinerary.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarItinerary.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarItinerary.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -360,7 +389,7 @@
             this.dataGridViewItinerary.RowTemplate.Height = 28;
             this.dataGridViewItinerary.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewItinerary.SingleRowSelect = true;
-            this.dataGridViewItinerary.Size = new System.Drawing.Size(820, 540);
+            this.dataGridViewItinerary.Size = new System.Drawing.Size(815, 540);
             this.dataGridViewItinerary.TabIndex = 0;
             this.dataGridViewItinerary.WebLookup = EliteDangerousCore.WebExternalDataLookup.None;
             // 
@@ -473,6 +502,7 @@
             this.extPanelDataGridViewScrollLedger.Location = new System.Drawing.Point(0, 0);
             this.extPanelDataGridViewScrollLedger.Margin = new System.Windows.Forms.Padding(2);
             this.extPanelDataGridViewScrollLedger.Name = "extPanelDataGridViewScrollLedger";
+            this.extPanelDataGridViewScrollLedger.ScrollBarWidth = 24;
             this.extPanelDataGridViewScrollLedger.Size = new System.Drawing.Size(839, 220);
             this.extPanelDataGridViewScrollLedger.TabIndex = 3;
             this.extPanelDataGridViewScrollLedger.VerticalScrollBarDockRight = true;
@@ -489,7 +519,7 @@
             this.extScrollBarLedger.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarLedger.HideScrollBar = false;
             this.extScrollBarLedger.LargeChange = 0;
-            this.extScrollBarLedger.Location = new System.Drawing.Point(820, 0);
+            this.extScrollBarLedger.Location = new System.Drawing.Point(815, 0);
             this.extScrollBarLedger.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarLedger.Maximum = -1;
             this.extScrollBarLedger.Minimum = 0;
@@ -498,13 +528,13 @@
             this.extScrollBarLedger.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarLedger.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarLedger.Name = "extScrollBarLedger";
-            this.extScrollBarLedger.Size = new System.Drawing.Size(19, 220);
+            this.extScrollBarLedger.Size = new System.Drawing.Size(24, 220);
+            this.extScrollBarLedger.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarLedger.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarLedger.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarLedger.SliderDrawAngle = 90F;
             this.extScrollBarLedger.SmallChange = 1;
             this.extScrollBarLedger.TabIndex = 1;
-            this.extScrollBarLedger.Text = "";
             this.extScrollBarLedger.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarLedger.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarLedger.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -543,7 +573,7 @@
             this.dataGridViewLedger.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewLedger.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewLedger.SingleRowSelect = true;
-            this.dataGridViewLedger.Size = new System.Drawing.Size(820, 220);
+            this.dataGridViewLedger.Size = new System.Drawing.Size(815, 220);
             this.dataGridViewLedger.TabIndex = 0;
             this.dataGridViewLedger.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewLedger_CellClick);
             // 
@@ -764,6 +794,7 @@
             this.imageControlScrollServices.Location = new System.Drawing.Point(3, 3);
             this.imageControlScrollServices.Name = "imageControlScrollServices";
             this.imageControlScrollServices.ScrollBarEnabled = true;
+            this.imageControlScrollServices.ScrollBarWidth = 48;
             this.imageControlScrollServices.Size = new System.Drawing.Size(839, 540);
             this.imageControlScrollServices.TabIndex = 0;
             this.imageControlScrollServices.VerticalScrollBarDockRight = true;
@@ -779,7 +810,7 @@
         false};
             this.imageControlServices.Location = new System.Drawing.Point(0, 0);
             this.imageControlServices.Name = "imageControlServices";
-            this.imageControlServices.Size = new System.Drawing.Size(820, 217);
+            this.imageControlServices.Size = new System.Drawing.Size(791, 217);
             this.imageControlServices.TabIndex = 1;
             // 
             // extScrollBarServices
@@ -794,7 +825,7 @@
             this.extScrollBarServices.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarServices.HideScrollBar = false;
             this.extScrollBarServices.LargeChange = 540;
-            this.extScrollBarServices.Location = new System.Drawing.Point(820, 0);
+            this.extScrollBarServices.Location = new System.Drawing.Point(791, 0);
             this.extScrollBarServices.Maximum = 216;
             this.extScrollBarServices.Minimum = 0;
             this.extScrollBarServices.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -802,13 +833,13 @@
             this.extScrollBarServices.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarServices.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarServices.Name = "extScrollBarServices";
-            this.extScrollBarServices.Size = new System.Drawing.Size(19, 540);
+            this.extScrollBarServices.Size = new System.Drawing.Size(48, 540);
+            this.extScrollBarServices.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarServices.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarServices.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarServices.SliderDrawAngle = 90F;
             this.extScrollBarServices.SmallChange = 1;
             this.extScrollBarServices.TabIndex = 0;
-            this.extScrollBarServices.Text = "";
             this.extScrollBarServices.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarServices.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarServices.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -836,6 +867,7 @@
             this.imageControlScrollPacks.Location = new System.Drawing.Point(3, 3);
             this.imageControlScrollPacks.Name = "imageControlScrollPacks";
             this.imageControlScrollPacks.ScrollBarEnabled = true;
+            this.imageControlScrollPacks.ScrollBarWidth = 48;
             this.imageControlScrollPacks.Size = new System.Drawing.Size(839, 540);
             this.imageControlScrollPacks.TabIndex = 1;
             this.imageControlScrollPacks.VerticalScrollBarDockRight = true;
@@ -851,7 +883,7 @@
         false};
             this.imageControlPacks.Location = new System.Drawing.Point(0, 0);
             this.imageControlPacks.Name = "imageControlPacks";
-            this.imageControlPacks.Size = new System.Drawing.Size(820, 217);
+            this.imageControlPacks.Size = new System.Drawing.Size(791, 217);
             this.imageControlPacks.TabIndex = 1;
             // 
             // extScrollBarPacks
@@ -866,7 +898,7 @@
             this.extScrollBarPacks.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarPacks.HideScrollBar = false;
             this.extScrollBarPacks.LargeChange = 540;
-            this.extScrollBarPacks.Location = new System.Drawing.Point(820, 0);
+            this.extScrollBarPacks.Location = new System.Drawing.Point(791, 0);
             this.extScrollBarPacks.Maximum = 216;
             this.extScrollBarPacks.Minimum = 0;
             this.extScrollBarPacks.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -874,13 +906,13 @@
             this.extScrollBarPacks.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarPacks.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarPacks.Name = "extScrollBarPacks";
-            this.extScrollBarPacks.Size = new System.Drawing.Size(19, 540);
+            this.extScrollBarPacks.Size = new System.Drawing.Size(48, 540);
+            this.extScrollBarPacks.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarPacks.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarPacks.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarPacks.SliderDrawAngle = 90F;
             this.extScrollBarPacks.SmallChange = 1;
             this.extScrollBarPacks.TabIndex = 0;
-            this.extScrollBarPacks.Text = "";
             this.extScrollBarPacks.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarPacks.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarPacks.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -908,6 +940,7 @@
             this.extPanelDataGridViewScrollOrders.Location = new System.Drawing.Point(3, 3);
             this.extPanelDataGridViewScrollOrders.Margin = new System.Windows.Forms.Padding(2);
             this.extPanelDataGridViewScrollOrders.Name = "extPanelDataGridViewScrollOrders";
+            this.extPanelDataGridViewScrollOrders.ScrollBarWidth = 24;
             this.extPanelDataGridViewScrollOrders.Size = new System.Drawing.Size(839, 540);
             this.extPanelDataGridViewScrollOrders.TabIndex = 3;
             this.extPanelDataGridViewScrollOrders.VerticalScrollBarDockRight = true;
@@ -924,7 +957,7 @@
             this.extScrollBarOrders.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarOrders.HideScrollBar = false;
             this.extScrollBarOrders.LargeChange = 0;
-            this.extScrollBarOrders.Location = new System.Drawing.Point(820, 0);
+            this.extScrollBarOrders.Location = new System.Drawing.Point(815, 0);
             this.extScrollBarOrders.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarOrders.Maximum = -1;
             this.extScrollBarOrders.Minimum = 0;
@@ -933,13 +966,13 @@
             this.extScrollBarOrders.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarOrders.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarOrders.Name = "extScrollBarOrders";
-            this.extScrollBarOrders.Size = new System.Drawing.Size(19, 540);
+            this.extScrollBarOrders.Size = new System.Drawing.Size(24, 540);
+            this.extScrollBarOrders.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarOrders.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarOrders.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarOrders.SliderDrawAngle = 90F;
             this.extScrollBarOrders.SmallChange = 1;
             this.extScrollBarOrders.TabIndex = 1;
-            this.extScrollBarOrders.Text = "";
             this.extScrollBarOrders.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarOrders.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarOrders.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -976,7 +1009,7 @@
             this.dataGridViewOrders.RowTemplate.Height = 28;
             this.dataGridViewOrders.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewOrders.SingleRowSelect = true;
-            this.dataGridViewOrders.Size = new System.Drawing.Size(820, 540);
+            this.dataGridViewOrders.Size = new System.Drawing.Size(815, 540);
             this.dataGridViewOrders.TabIndex = 0;
             // 
             // colOrdersDate
@@ -1059,6 +1092,7 @@
             this.extPanelDataGridViewScrollCAPIStats.Location = new System.Drawing.Point(3, 35);
             this.extPanelDataGridViewScrollCAPIStats.Margin = new System.Windows.Forms.Padding(2);
             this.extPanelDataGridViewScrollCAPIStats.Name = "extPanelDataGridViewScrollCAPIStats";
+            this.extPanelDataGridViewScrollCAPIStats.ScrollBarWidth = 24;
             this.extPanelDataGridViewScrollCAPIStats.Size = new System.Drawing.Size(839, 508);
             this.extPanelDataGridViewScrollCAPIStats.TabIndex = 5;
             this.extPanelDataGridViewScrollCAPIStats.VerticalScrollBarDockRight = true;
@@ -1075,7 +1109,7 @@
             this.extScrollBarCAPIStats.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarCAPIStats.HideScrollBar = false;
             this.extScrollBarCAPIStats.LargeChange = 0;
-            this.extScrollBarCAPIStats.Location = new System.Drawing.Point(820, 0);
+            this.extScrollBarCAPIStats.Location = new System.Drawing.Point(815, 0);
             this.extScrollBarCAPIStats.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarCAPIStats.Maximum = -1;
             this.extScrollBarCAPIStats.Minimum = 0;
@@ -1084,13 +1118,13 @@
             this.extScrollBarCAPIStats.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarCAPIStats.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPIStats.Name = "extScrollBarCAPIStats";
-            this.extScrollBarCAPIStats.Size = new System.Drawing.Size(19, 508);
+            this.extScrollBarCAPIStats.Size = new System.Drawing.Size(24, 508);
+            this.extScrollBarCAPIStats.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarCAPIStats.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPIStats.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPIStats.SliderDrawAngle = 90F;
             this.extScrollBarCAPIStats.SmallChange = 1;
             this.extScrollBarCAPIStats.TabIndex = 1;
-            this.extScrollBarCAPIStats.Text = "";
             this.extScrollBarCAPIStats.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPIStats.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPIStats.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -1121,7 +1155,7 @@
             this.dataGridViewCAPIStats.RowTemplate.Height = 28;
             this.dataGridViewCAPIStats.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCAPIStats.SingleRowSelect = true;
-            this.dataGridViewCAPIStats.Size = new System.Drawing.Size(820, 508);
+            this.dataGridViewCAPIStats.Size = new System.Drawing.Size(815, 508);
             this.dataGridViewCAPIStats.TabIndex = 0;
             // 
             // dataGridViewTextBoxColumn1
@@ -1222,6 +1256,7 @@
             this.extPanelDataGridViewScrollCAPIShips.Location = new System.Drawing.Point(0, 0);
             this.extPanelDataGridViewScrollCAPIShips.Margin = new System.Windows.Forms.Padding(2);
             this.extPanelDataGridViewScrollCAPIShips.Name = "extPanelDataGridViewScrollCAPIShips";
+            this.extPanelDataGridViewScrollCAPIShips.ScrollBarWidth = 24;
             this.extPanelDataGridViewScrollCAPIShips.Size = new System.Drawing.Size(839, 284);
             this.extPanelDataGridViewScrollCAPIShips.TabIndex = 4;
             this.extPanelDataGridViewScrollCAPIShips.VerticalScrollBarDockRight = true;
@@ -1238,7 +1273,7 @@
             this.extScrollBarCAPIShips.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarCAPIShips.HideScrollBar = false;
             this.extScrollBarCAPIShips.LargeChange = 0;
-            this.extScrollBarCAPIShips.Location = new System.Drawing.Point(820, 0);
+            this.extScrollBarCAPIShips.Location = new System.Drawing.Point(815, 0);
             this.extScrollBarCAPIShips.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarCAPIShips.Maximum = -1;
             this.extScrollBarCAPIShips.Minimum = 0;
@@ -1247,13 +1282,13 @@
             this.extScrollBarCAPIShips.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarCAPIShips.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPIShips.Name = "extScrollBarCAPIShips";
-            this.extScrollBarCAPIShips.Size = new System.Drawing.Size(19, 284);
+            this.extScrollBarCAPIShips.Size = new System.Drawing.Size(24, 284);
+            this.extScrollBarCAPIShips.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarCAPIShips.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPIShips.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPIShips.SliderDrawAngle = 90F;
             this.extScrollBarCAPIShips.SmallChange = 1;
             this.extScrollBarCAPIShips.TabIndex = 1;
-            this.extScrollBarCAPIShips.Text = "";
             this.extScrollBarCAPIShips.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPIShips.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPIShips.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -1289,7 +1324,7 @@
             this.dataGridViewCAPIShips.RowTemplate.Height = 28;
             this.dataGridViewCAPIShips.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCAPIShips.SingleRowSelect = true;
-            this.dataGridViewCAPIShips.Size = new System.Drawing.Size(820, 284);
+            this.dataGridViewCAPIShips.Size = new System.Drawing.Size(815, 284);
             this.dataGridViewCAPIShips.TabIndex = 0;
             // 
             // colCAPIShipsName
@@ -1354,6 +1389,7 @@
             this.extPanelDataGridViewCAPIModules.Location = new System.Drawing.Point(0, 0);
             this.extPanelDataGridViewCAPIModules.Margin = new System.Windows.Forms.Padding(2);
             this.extPanelDataGridViewCAPIModules.Name = "extPanelDataGridViewCAPIModules";
+            this.extPanelDataGridViewCAPIModules.ScrollBarWidth = 24;
             this.extPanelDataGridViewCAPIModules.Size = new System.Drawing.Size(839, 220);
             this.extPanelDataGridViewCAPIModules.TabIndex = 4;
             this.extPanelDataGridViewCAPIModules.VerticalScrollBarDockRight = true;
@@ -1370,7 +1406,7 @@
             this.extScrollBarCAPIModules.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarCAPIModules.HideScrollBar = false;
             this.extScrollBarCAPIModules.LargeChange = 0;
-            this.extScrollBarCAPIModules.Location = new System.Drawing.Point(820, 0);
+            this.extScrollBarCAPIModules.Location = new System.Drawing.Point(815, 0);
             this.extScrollBarCAPIModules.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarCAPIModules.Maximum = -1;
             this.extScrollBarCAPIModules.Minimum = 0;
@@ -1379,13 +1415,13 @@
             this.extScrollBarCAPIModules.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarCAPIModules.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPIModules.Name = "extScrollBarCAPIModules";
-            this.extScrollBarCAPIModules.Size = new System.Drawing.Size(19, 220);
+            this.extScrollBarCAPIModules.Size = new System.Drawing.Size(24, 220);
+            this.extScrollBarCAPIModules.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarCAPIModules.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPIModules.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPIModules.SliderDrawAngle = 90F;
             this.extScrollBarCAPIModules.SmallChange = 1;
             this.extScrollBarCAPIModules.TabIndex = 1;
-            this.extScrollBarCAPIModules.Text = "";
             this.extScrollBarCAPIModules.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPIModules.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPIModules.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -1421,7 +1457,7 @@
             this.dataGridViewCAPIModules.RowTemplate.Height = 28;
             this.dataGridViewCAPIModules.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCAPIModules.SingleRowSelect = true;
-            this.dataGridViewCAPIModules.Size = new System.Drawing.Size(820, 220);
+            this.dataGridViewCAPIModules.Size = new System.Drawing.Size(815, 220);
             this.dataGridViewCAPIModules.TabIndex = 0;
             // 
             // colCAPIModulesName
@@ -1551,6 +1587,7 @@
             this.extPanelDataGridViewScrollCAPICargo.Location = new System.Drawing.Point(0, 0);
             this.extPanelDataGridViewScrollCAPICargo.Margin = new System.Windows.Forms.Padding(2);
             this.extPanelDataGridViewScrollCAPICargo.Name = "extPanelDataGridViewScrollCAPICargo";
+            this.extPanelDataGridViewScrollCAPICargo.ScrollBarWidth = 24;
             this.extPanelDataGridViewScrollCAPICargo.Size = new System.Drawing.Size(839, 284);
             this.extPanelDataGridViewScrollCAPICargo.TabIndex = 4;
             this.extPanelDataGridViewScrollCAPICargo.VerticalScrollBarDockRight = true;
@@ -1567,7 +1604,7 @@
             this.extScrollBarCAPICargo.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarCAPICargo.HideScrollBar = false;
             this.extScrollBarCAPICargo.LargeChange = 0;
-            this.extScrollBarCAPICargo.Location = new System.Drawing.Point(820, 0);
+            this.extScrollBarCAPICargo.Location = new System.Drawing.Point(815, 0);
             this.extScrollBarCAPICargo.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarCAPICargo.Maximum = -1;
             this.extScrollBarCAPICargo.Minimum = 0;
@@ -1576,13 +1613,13 @@
             this.extScrollBarCAPICargo.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarCAPICargo.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPICargo.Name = "extScrollBarCAPICargo";
-            this.extScrollBarCAPICargo.Size = new System.Drawing.Size(19, 284);
+            this.extScrollBarCAPICargo.Size = new System.Drawing.Size(24, 284);
+            this.extScrollBarCAPICargo.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarCAPICargo.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPICargo.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPICargo.SliderDrawAngle = 90F;
             this.extScrollBarCAPICargo.SmallChange = 1;
             this.extScrollBarCAPICargo.TabIndex = 1;
-            this.extScrollBarCAPICargo.Text = "";
             this.extScrollBarCAPICargo.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPICargo.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPICargo.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -1617,7 +1654,7 @@
             this.dataGridViewCAPICargo.RowTemplate.Height = 28;
             this.dataGridViewCAPICargo.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCAPICargo.SingleRowSelect = true;
-            this.dataGridViewCAPICargo.Size = new System.Drawing.Size(820, 284);
+            this.dataGridViewCAPICargo.Size = new System.Drawing.Size(815, 284);
             this.dataGridViewCAPICargo.TabIndex = 0;
             // 
             // colCAPICargoCommodity
@@ -1672,6 +1709,7 @@
             this.extPanelDataGridViewScrollCAPILocker.Location = new System.Drawing.Point(0, 0);
             this.extPanelDataGridViewScrollCAPILocker.Margin = new System.Windows.Forms.Padding(2);
             this.extPanelDataGridViewScrollCAPILocker.Name = "extPanelDataGridViewScrollCAPILocker";
+            this.extPanelDataGridViewScrollCAPILocker.ScrollBarWidth = 24;
             this.extPanelDataGridViewScrollCAPILocker.Size = new System.Drawing.Size(839, 220);
             this.extPanelDataGridViewScrollCAPILocker.TabIndex = 4;
             this.extPanelDataGridViewScrollCAPILocker.VerticalScrollBarDockRight = true;
@@ -1688,7 +1726,7 @@
             this.extScrollBarCAPILocker.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarCAPILocker.HideScrollBar = false;
             this.extScrollBarCAPILocker.LargeChange = 0;
-            this.extScrollBarCAPILocker.Location = new System.Drawing.Point(820, 0);
+            this.extScrollBarCAPILocker.Location = new System.Drawing.Point(815, 0);
             this.extScrollBarCAPILocker.Margin = new System.Windows.Forms.Padding(2);
             this.extScrollBarCAPILocker.Maximum = -1;
             this.extScrollBarCAPILocker.Minimum = 0;
@@ -1697,13 +1735,13 @@
             this.extScrollBarCAPILocker.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarCAPILocker.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPILocker.Name = "extScrollBarCAPILocker";
-            this.extScrollBarCAPILocker.Size = new System.Drawing.Size(19, 220);
+            this.extScrollBarCAPILocker.Size = new System.Drawing.Size(24, 220);
+            this.extScrollBarCAPILocker.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarCAPILocker.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPILocker.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPILocker.SliderDrawAngle = 90F;
             this.extScrollBarCAPILocker.SmallChange = 1;
             this.extScrollBarCAPILocker.TabIndex = 1;
-            this.extScrollBarCAPILocker.Text = "";
             this.extScrollBarCAPILocker.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBarCAPILocker.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarCAPILocker.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -1735,7 +1773,7 @@
             this.dataGridViewCAPILocker.RowTemplate.Height = 28;
             this.dataGridViewCAPILocker.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewCAPILocker.SingleRowSelect = true;
-            this.dataGridViewCAPILocker.Size = new System.Drawing.Size(820, 220);
+            this.dataGridViewCAPILocker.Size = new System.Drawing.Size(815, 220);
             this.dataGridViewCAPILocker.TabIndex = 0;
             // 
             // colCAPILockerName
@@ -1790,6 +1828,244 @@
             this.extButtonDoCAPI2.TabIndex = 0;
             this.extButtonDoCAPI2.UseVisualStyleBackColor = true;
             this.extButtonDoCAPI2.Click += new System.EventHandler(this.extButtonDoCAPI1_Click);
+            // 
+            // tabPageSquadronMembers
+            // 
+            this.tabPageSquadronMembers.Controls.Add(this.dataGridViewSquadronMembers);
+            this.tabPageSquadronMembers.Controls.Add(this.panelCAPI4);
+            this.tabPageSquadronMembers.Location = new System.Drawing.Point(4, 22);
+            this.tabPageSquadronMembers.Name = "tabPageSquadronMembers";
+            this.tabPageSquadronMembers.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageSquadronMembers.Size = new System.Drawing.Size(845, 546);
+            this.tabPageSquadronMembers.TabIndex = 12;
+            this.tabPageSquadronMembers.Text = "CAPI Members";
+            this.tabPageSquadronMembers.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewSquadronMembers
+            // 
+            this.dataGridViewSquadronMembers.AllowRowHeaderVisibleSelection = false;
+            this.dataGridViewSquadronMembers.AllowUserToAddRows = false;
+            this.dataGridViewSquadronMembers.AllowUserToDeleteRows = false;
+            this.dataGridViewSquadronMembers.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewSquadronMembers.AutoSortByColumnName = true;
+            this.dataGridViewSquadronMembers.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewSquadronMembers.ColumnReorder = true;
+            this.dataGridViewSquadronMembers.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colCAPIMembersName,
+            this.colCAPIMembersJoined,
+            this.colCAPIMembersLastOnline,
+            this.colCAPIMembersShip,
+            this.colCAPIMembersStatus,
+            this.colCAPIMembersRank});
+            this.dataGridViewSquadronMembers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewSquadronMembers.Location = new System.Drawing.Point(3, 35);
+            this.dataGridViewSquadronMembers.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridViewSquadronMembers.Name = "dataGridViewSquadronMembers";
+            this.dataGridViewSquadronMembers.PerColumnWordWrapControl = true;
+            this.dataGridViewSquadronMembers.RowHeaderMenuStrip = null;
+            this.dataGridViewSquadronMembers.RowHeadersVisible = false;
+            this.dataGridViewSquadronMembers.RowHeadersWidth = 62;
+            this.dataGridViewSquadronMembers.RowTemplate.Height = 28;
+            this.dataGridViewSquadronMembers.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewSquadronMembers.SingleRowSelect = true;
+            this.dataGridViewSquadronMembers.Size = new System.Drawing.Size(839, 508);
+            this.dataGridViewSquadronMembers.TabIndex = 1;
+            // 
+            // colCAPIMembersName
+            // 
+            this.colCAPIMembersName.FillWeight = 150F;
+            this.colCAPIMembersName.HeaderText = "Name";
+            this.colCAPIMembersName.MinimumWidth = 8;
+            this.colCAPIMembersName.Name = "colCAPIMembersName";
+            this.colCAPIMembersName.ReadOnly = true;
+            // 
+            // colCAPIMembersJoined
+            // 
+            this.colCAPIMembersJoined.HeaderText = "Joined";
+            this.colCAPIMembersJoined.Name = "colCAPIMembersJoined";
+            this.colCAPIMembersJoined.ReadOnly = true;
+            // 
+            // colCAPIMembersLastOnline
+            // 
+            this.colCAPIMembersLastOnline.HeaderText = "Last Online";
+            this.colCAPIMembersLastOnline.Name = "colCAPIMembersLastOnline";
+            this.colCAPIMembersLastOnline.ReadOnly = true;
+            // 
+            // colCAPIMembersShip
+            // 
+            this.colCAPIMembersShip.FillWeight = 80F;
+            this.colCAPIMembersShip.HeaderText = "Ship";
+            this.colCAPIMembersShip.MinimumWidth = 8;
+            this.colCAPIMembersShip.Name = "colCAPIMembersShip";
+            this.colCAPIMembersShip.ReadOnly = true;
+            // 
+            // colCAPIMembersStatus
+            // 
+            this.colCAPIMembersStatus.FillWeight = 80F;
+            this.colCAPIMembersStatus.HeaderText = "Status";
+            this.colCAPIMembersStatus.Name = "colCAPIMembersStatus";
+            this.colCAPIMembersStatus.ReadOnly = true;
+            // 
+            // colCAPIMembersRank
+            // 
+            this.colCAPIMembersRank.FillWeight = 75F;
+            this.colCAPIMembersRank.HeaderText = "Rank";
+            this.colCAPIMembersRank.MinimumWidth = 8;
+            this.colCAPIMembersRank.Name = "colCAPIMembersRank";
+            this.colCAPIMembersRank.ReadOnly = true;
+            // 
+            // panelCAPI4
+            // 
+            this.panelCAPI4.Controls.Add(this.labelCAPI4);
+            this.panelCAPI4.Controls.Add(this.extButtonDoCAPI4);
+            this.panelCAPI4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelCAPI4.Location = new System.Drawing.Point(3, 3);
+            this.panelCAPI4.Name = "panelCAPI4";
+            this.panelCAPI4.Size = new System.Drawing.Size(839, 32);
+            this.panelCAPI4.TabIndex = 6;
+            // 
+            // labelCAPI4
+            // 
+            this.labelCAPI4.AutoSize = true;
+            this.labelCAPI4.Location = new System.Drawing.Point(33, 9);
+            this.labelCAPI4.Name = "labelCAPI4";
+            this.labelCAPI4.Size = new System.Drawing.Size(92, 13);
+            this.labelCAPI4.TabIndex = 2;
+            this.labelCAPI4.Text = "<code DateTime>";
+            // 
+            // extButtonDoCAPI4
+            // 
+            this.extButtonDoCAPI4.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonDoCAPI4.ButtonDisabledScaling = 0.5F;
+            this.extButtonDoCAPI4.GradientDirection = 90F;
+            this.extButtonDoCAPI4.Image = global::EDDiscovery.Icons.Controls.Refresh;
+            this.extButtonDoCAPI4.Location = new System.Drawing.Point(3, 3);
+            this.extButtonDoCAPI4.MouseOverScaling = 1.3F;
+            this.extButtonDoCAPI4.MouseSelectedScaling = 1.3F;
+            this.extButtonDoCAPI4.Name = "extButtonDoCAPI4";
+            this.extButtonDoCAPI4.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDoCAPI4.TabIndex = 0;
+            this.extButtonDoCAPI4.UseVisualStyleBackColor = true;
+            this.extButtonDoCAPI4.Click += new System.EventHandler(this.extButtonDoCAPI1_Click);
+            // 
+            // tabPageCAPISquadronItems
+            // 
+            this.tabPageCAPISquadronItems.Controls.Add(this.dataGridViewSquadronItems);
+            this.tabPageCAPISquadronItems.Controls.Add(this.panelCAPI5);
+            this.tabPageCAPISquadronItems.Location = new System.Drawing.Point(4, 22);
+            this.tabPageCAPISquadronItems.Name = "tabPageCAPISquadronItems";
+            this.tabPageCAPISquadronItems.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPageCAPISquadronItems.Size = new System.Drawing.Size(845, 546);
+            this.tabPageCAPISquadronItems.TabIndex = 13;
+            this.tabPageCAPISquadronItems.Text = "CAPI Squadron Items";
+            this.tabPageCAPISquadronItems.UseVisualStyleBackColor = true;
+            // 
+            // dataGridViewSquadronItems
+            // 
+            this.dataGridViewSquadronItems.AllowRowHeaderVisibleSelection = false;
+            this.dataGridViewSquadronItems.AllowUserToAddRows = false;
+            this.dataGridViewSquadronItems.AllowUserToDeleteRows = false;
+            this.dataGridViewSquadronItems.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
+            this.dataGridViewSquadronItems.AutoSortByColumnName = true;
+            this.dataGridViewSquadronItems.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.dataGridViewSquadronItems.ColumnReorder = true;
+            this.dataGridViewSquadronItems.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.colSquadronItemsItem,
+            this.colSquadronItemsType,
+            this.colSquadronItemsQuantity});
+            this.dataGridViewSquadronItems.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.dataGridViewSquadronItems.Location = new System.Drawing.Point(3, 35);
+            this.dataGridViewSquadronItems.Margin = new System.Windows.Forms.Padding(2);
+            this.dataGridViewSquadronItems.Name = "dataGridViewSquadronItems";
+            this.dataGridViewSquadronItems.PerColumnWordWrapControl = true;
+            this.dataGridViewSquadronItems.RowHeaderMenuStrip = null;
+            this.dataGridViewSquadronItems.RowHeadersVisible = false;
+            this.dataGridViewSquadronItems.RowHeadersWidth = 62;
+            this.dataGridViewSquadronItems.RowTemplate.Height = 28;
+            this.dataGridViewSquadronItems.ScrollBars = System.Windows.Forms.ScrollBars.None;
+            this.dataGridViewSquadronItems.SingleRowSelect = true;
+            this.dataGridViewSquadronItems.Size = new System.Drawing.Size(839, 508);
+            this.dataGridViewSquadronItems.TabIndex = 8;
+            // 
+            // panelCAPI5
+            // 
+            this.panelCAPI5.Controls.Add(this.extComboBoxSquadronItems);
+            this.panelCAPI5.Controls.Add(this.labelCAPI5);
+            this.panelCAPI5.Controls.Add(this.extButtonDoCAPI5);
+            this.panelCAPI5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelCAPI5.Location = new System.Drawing.Point(3, 3);
+            this.panelCAPI5.Name = "panelCAPI5";
+            this.panelCAPI5.Size = new System.Drawing.Size(839, 32);
+            this.panelCAPI5.TabIndex = 7;
+            // 
+            // extComboBoxSquadronItems
+            // 
+            this.extComboBoxSquadronItems.BackColor2 = System.Drawing.Color.Red;
+            this.extComboBoxSquadronItems.BorderColor = System.Drawing.Color.White;
+            this.extComboBoxSquadronItems.ControlBackground = System.Drawing.SystemColors.Control;
+            this.extComboBoxSquadronItems.DataSource = null;
+            this.extComboBoxSquadronItems.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxSquadronItems.DisabledScaling = 0.5F;
+            this.extComboBoxSquadronItems.DisplayMember = "";
+            this.extComboBoxSquadronItems.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxSquadronItems.GradientDirection = 90F;
+            this.extComboBoxSquadronItems.Location = new System.Drawing.Point(327, 5);
+            this.extComboBoxSquadronItems.MouseOverScalingColor = 1.3F;
+            this.extComboBoxSquadronItems.Name = "extComboBoxSquadronItems";
+            this.extComboBoxSquadronItems.SelectedIndex = -1;
+            this.extComboBoxSquadronItems.SelectedItem = null;
+            this.extComboBoxSquadronItems.SelectedValue = null;
+            this.extComboBoxSquadronItems.Size = new System.Drawing.Size(251, 21);
+            this.extComboBoxSquadronItems.TabIndex = 3;
+            this.extComboBoxSquadronItems.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extComboBoxSquadronItems.ValueMember = "";
+            this.extComboBoxSquadronItems.SelectedIndexChanged += new System.EventHandler(this.extComboBoxSquadronItems_SelectedIndexChanged);
+            // 
+            // labelCAPI5
+            // 
+            this.labelCAPI5.AutoSize = true;
+            this.labelCAPI5.Location = new System.Drawing.Point(33, 9);
+            this.labelCAPI5.Name = "labelCAPI5";
+            this.labelCAPI5.Size = new System.Drawing.Size(92, 13);
+            this.labelCAPI5.TabIndex = 2;
+            this.labelCAPI5.Text = "<code DateTime>";
+            // 
+            // extButtonDoCAPI5
+            // 
+            this.extButtonDoCAPI5.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonDoCAPI5.ButtonDisabledScaling = 0.5F;
+            this.extButtonDoCAPI5.GradientDirection = 90F;
+            this.extButtonDoCAPI5.Image = global::EDDiscovery.Icons.Controls.Refresh;
+            this.extButtonDoCAPI5.Location = new System.Drawing.Point(3, 3);
+            this.extButtonDoCAPI5.MouseOverScaling = 1.3F;
+            this.extButtonDoCAPI5.MouseSelectedScaling = 1.3F;
+            this.extButtonDoCAPI5.Name = "extButtonDoCAPI5";
+            this.extButtonDoCAPI5.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDoCAPI5.TabIndex = 0;
+            this.extButtonDoCAPI5.UseVisualStyleBackColor = true;
+            this.extButtonDoCAPI5.Click += new System.EventHandler(this.extButtonDoCAPI1_Click);
+            // 
+            // colSquadronItemsItem
+            // 
+            this.colSquadronItemsItem.FillWeight = 150F;
+            this.colSquadronItemsItem.HeaderText = "Item";
+            this.colSquadronItemsItem.MinimumWidth = 8;
+            this.colSquadronItemsItem.Name = "colSquadronItemsItem";
+            this.colSquadronItemsItem.ReadOnly = true;
+            // 
+            // colSquadronItemsType
+            // 
+            this.colSquadronItemsType.HeaderText = "Type";
+            this.colSquadronItemsType.Name = "colSquadronItemsType";
+            this.colSquadronItemsType.ReadOnly = true;
+            // 
+            // colSquadronItemsQuantity
+            // 
+            this.colSquadronItemsQuantity.FillWeight = 80F;
+            this.colSquadronItemsQuantity.HeaderText = "Quantity";
+            this.colSquadronItemsQuantity.MinimumWidth = 8;
+            this.colSquadronItemsQuantity.Name = "colSquadronItemsQuantity";
+            this.colSquadronItemsQuantity.ReadOnly = true;
             // 
             // UserControlCarrier
             // 
@@ -1848,6 +2124,14 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewCAPILocker)).EndInit();
             this.panelCAPI2.ResumeLayout(false);
             this.panelCAPI2.PerformLayout();
+            this.tabPageSquadronMembers.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSquadronMembers)).EndInit();
+            this.panelCAPI4.ResumeLayout(false);
+            this.panelCAPI4.PerformLayout();
+            this.tabPageCAPISquadronItems.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSquadronItems)).EndInit();
+            this.panelCAPI5.ResumeLayout(false);
+            this.panelCAPI5.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1972,5 +2256,25 @@
         private System.Windows.Forms.Label labelCAPIDateTime3;
         private System.Windows.Forms.SplitContainer splitContainerLedger;
         private ExtendedControls.ExtSafeChart extChartLedger;
+        private System.Windows.Forms.TabPage tabPageSquadronMembers;
+        private BaseUtils.DataGridViewColumnControl dataGridViewSquadronMembers;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersJoined;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersLastOnline;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersShip;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersStatus;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colCAPIMembersRank;
+        private System.Windows.Forms.TabPage tabPageCAPISquadronItems;
+        private System.Windows.Forms.Panel panelCAPI4;
+        private System.Windows.Forms.Label labelCAPI4;
+        private ExtendedControls.ExtButton extButtonDoCAPI4;
+        private System.Windows.Forms.Panel panelCAPI5;
+        private System.Windows.Forms.Label labelCAPI5;
+        private ExtendedControls.ExtButton extButtonDoCAPI5;
+        private ExtendedControls.ExtComboBox extComboBoxSquadronItems;
+        private BaseUtils.DataGridViewColumnControl dataGridViewSquadronItems;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSquadronItemsItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSquadronItemsType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn colSquadronItemsQuantity;
     }
 }
