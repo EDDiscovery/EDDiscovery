@@ -44,15 +44,17 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.extPanelGradientFillToolbar = new ExtendedControls.ExtPanelGradientFill();
+            this.extComboBoxStationSelect = new ExtendedControls.ExtComboBox();
             this.extComboBoxSystemSel = new ExtendedControls.ExtComboBox();
             this.extPanelGradientFillUCCP = new ExtendedControls.ExtPanelGradientFill();
-            this.extComboBoxStationSelect = new ExtendedControls.ExtComboBox();
+            this.extCheckBoxHideCompleted = new ExtendedControls.ExtCheckBox();
             this.extPanelGradientFillToolbar.SuspendLayout();
             this.SuspendLayout();
             // 
             // extPanelGradientFillToolbar
             // 
             this.extPanelGradientFillToolbar.ChildrenThemed = true;
+            this.extPanelGradientFillToolbar.Controls.Add(this.extCheckBoxHideCompleted);
             this.extPanelGradientFillToolbar.Controls.Add(this.extComboBoxStationSelect);
             this.extPanelGradientFillToolbar.Controls.Add(this.extComboBoxSystemSel);
             this.extPanelGradientFillToolbar.Dock = System.Windows.Forms.DockStyle.Top;
@@ -69,6 +71,30 @@ namespace EDDiscovery.UserControls
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
             this.extPanelGradientFillToolbar.ThemeColorSet = -1;
+            this.extPanelGradientFillToolbar.ThisThemed = true;
+            // 
+            // extComboBoxStationSelect
+            // 
+            this.extComboBoxStationSelect.BackColor2 = System.Drawing.Color.Red;
+            this.extComboBoxStationSelect.BorderColor = System.Drawing.Color.White;
+            this.extComboBoxStationSelect.ControlBackground = System.Drawing.SystemColors.Control;
+            this.extComboBoxStationSelect.DataSource = null;
+            this.extComboBoxStationSelect.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxStationSelect.DisabledScaling = 0.5F;
+            this.extComboBoxStationSelect.DisplayMember = "";
+            this.extComboBoxStationSelect.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxStationSelect.GradientDirection = 90F;
+            this.extComboBoxStationSelect.Location = new System.Drawing.Point(247, 4);
+            this.extComboBoxStationSelect.MouseOverScalingColor = 1.3F;
+            this.extComboBoxStationSelect.Name = "extComboBoxStationSelect";
+            this.extComboBoxStationSelect.SelectedIndex = -1;
+            this.extComboBoxStationSelect.SelectedItem = null;
+            this.extComboBoxStationSelect.SelectedValue = null;
+            this.extComboBoxStationSelect.Size = new System.Drawing.Size(216, 21);
+            this.extComboBoxStationSelect.TabIndex = 0;
+            this.extComboBoxStationSelect.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extComboBoxStationSelect.ValueMember = "";
+            this.extComboBoxStationSelect.SelectedIndexChanged += new System.EventHandler(this.extComboBoxStationSelect_SelectedIndexChanged);
             // 
             // extComboBoxSystemSel
             // 
@@ -110,29 +136,31 @@ namespace EDDiscovery.UserControls
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
             this.extPanelGradientFillUCCP.ThemeColorSet = -1;
+            this.extPanelGradientFillUCCP.ThisThemed = true;
             // 
-            // extComboBoxStationSelect
+            // extCheckBoxHideCompleted
             // 
-            this.extComboBoxStationSelect.BackColor2 = System.Drawing.Color.Red;
-            this.extComboBoxStationSelect.BorderColor = System.Drawing.Color.White;
-            this.extComboBoxStationSelect.ControlBackground = System.Drawing.SystemColors.Control;
-            this.extComboBoxStationSelect.DataSource = null;
-            this.extComboBoxStationSelect.DisableBackgroundDisabledShadingGradient = false;
-            this.extComboBoxStationSelect.DisabledScaling = 0.5F;
-            this.extComboBoxStationSelect.DisplayMember = "";
-            this.extComboBoxStationSelect.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.extComboBoxStationSelect.GradientDirection = 90F;
-            this.extComboBoxStationSelect.Location = new System.Drawing.Point(247, 4);
-            this.extComboBoxStationSelect.MouseOverScalingColor = 1.3F;
-            this.extComboBoxStationSelect.Name = "extComboBoxStationSelect";
-            this.extComboBoxStationSelect.SelectedIndex = -1;
-            this.extComboBoxStationSelect.SelectedItem = null;
-            this.extComboBoxStationSelect.SelectedValue = null;
-            this.extComboBoxStationSelect.Size = new System.Drawing.Size(216, 21);
-            this.extComboBoxStationSelect.TabIndex = 0;
-            this.extComboBoxStationSelect.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.extComboBoxStationSelect.ValueMember = "";
-            this.extComboBoxStationSelect.SelectedIndexChanged += new System.EventHandler(this.extComboBoxStationSelect_SelectedIndexChanged);
+            this.extCheckBoxHideCompleted.AutoSize = true;
+            this.extCheckBoxHideCompleted.ButtonGradientDirection = 90F;
+            this.extCheckBoxHideCompleted.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxHideCompleted.CheckBoxGradientDirection = 225F;
+            this.extCheckBoxHideCompleted.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxHideCompleted.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxHideCompleted.CheckColor2 = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxHideCompleted.DisabledScaling = 0.5F;
+            this.extCheckBoxHideCompleted.ImageIndeterminate = null;
+            this.extCheckBoxHideCompleted.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxHideCompleted.ImageUnchecked = null;
+            this.extCheckBoxHideCompleted.Location = new System.Drawing.Point(479, 6);
+            this.extCheckBoxHideCompleted.MouseOverScaling = 1.3F;
+            this.extCheckBoxHideCompleted.MouseSelectedScaling = 1.3F;
+            this.extCheckBoxHideCompleted.Name = "extCheckBoxHideCompleted";
+            this.extCheckBoxHideCompleted.Size = new System.Drawing.Size(101, 17);
+            this.extCheckBoxHideCompleted.TabIndex = 1;
+            this.extCheckBoxHideCompleted.Text = "Hide Completed";
+            this.extCheckBoxHideCompleted.TickBoxReductionRatio = 0.75F;
+            this.extCheckBoxHideCompleted.UseVisualStyleBackColor = true;
+            this.extCheckBoxHideCompleted.CheckedChanged += new System.EventHandler(this.extCheckBoxHideCompleted_CheckedChanged);
             // 
             // UserControlColonisation
             // 
@@ -143,6 +171,7 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlColonisation";
             this.Size = new System.Drawing.Size(941, 383);
             this.extPanelGradientFillToolbar.ResumeLayout(false);
+            this.extPanelGradientFillToolbar.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -153,5 +182,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPanelGradientFill extPanelGradientFillUCCP;
         private ExtendedControls.ExtComboBox extComboBoxSystemSel;
         private ExtendedControls.ExtComboBox extComboBoxStationSelect;
+        private ExtendedControls.ExtCheckBox extCheckBoxHideCompleted;
     }
 }

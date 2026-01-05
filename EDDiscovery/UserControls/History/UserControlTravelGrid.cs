@@ -449,16 +449,32 @@ namespace EDDiscovery.UserControls
             if (debugmode)
             {
                 colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss:fff");
-                colTime += Environment.NewLine + $"{he.Status.TravelState} @ {he.System.Name}:{he.System.SystemAddress}\r\n"
-                               + $"b{he.Status.BodyName},{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}\r\n"
-                               + $"s{he.Status.StationName_Localised},{he.Status.StationType}, DPad:{he.Status.DockingPad}\r\n"
-                               + $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}/ml{he.MissionList}\r\n"
-                               + $"b{he.journalEntry.IsBeta}/h{ he.journalEntry.IsHorizons}/o{ he.journalEntry.IsOdyssey}\r\n"
-                               + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship} mp {he.Status.IsInMultiPlayer}\r\n"
-                               + $"jcb{he.Status.CurrentBoost} fsds{he.Status.FSDJumpSequence} jm'{he.Status.FSDJumpNextSystemName??"NoJump"}' ad{he.Status.FSDJumpNextSystemAddress??-1}\r\n"
-                               + $"PP {he.Status.PowerPledged} / {he.Status.PowerPledgedThisLoadGame}\r\n"
-                               + $"tv{he.isTravelling} dist {he.TravelledDistance} sec {he.TravelledTimeSec} jmps {he.TravelledJumps}"
-                               ;
+                colTime += Environment.NewLine + $"{he.Status.TravelState} @ {he.System.Name}:{he.System.SystemAddress}\r\n";
+
+                if ( he.Status.BodyName!=null)
+                    colTime += $"b`{he.Status.BodyName}`,{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}\r\n";
+
+                if (he.Status.Latitude != null)
+                    colTime += $"latlong {he.Status.Latitude:N2}, {he.Status.Longitude:N2}\r\n";
+
+                if (he.Status.StationName_Localised != null)
+                    colTime += $"s`{he.Status.StationName_Localised}`, {he.Status.StationType}\r\n";
+
+                if ( he.Status.DockingPad>0)
+                    colTime += $"DPad: {he.Status.DockingPad}\r\n";
+
+                if (he.Status.FSDJumpSequence)
+                    colTime += $"FSDJump {he.Status.FSDJumpNextSystemName} {he.Status.FSDJumpNextSystemAddress} boost {he.Status.CurrentBoost}\r\n";
+
+                if (he.isTravelling)
+                    colTime += $"Travel dist {he.TravelledDistance} sec {he.TravelledTimeSec} jmps {he.TravelledJumps}\r\n";
+
+                colTime += $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}/ml{he.MissionList}\r\n"
+                        //+ $"b{he.journalEntry.IsBeta}/h{he.journalEntry.IsHorizons}/o{he.journalEntry.IsOdyssey}\r\n"
+                        //+ $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship} mp {he.Status.IsInMultiPlayer}\r\n"
+                        //+ $"PP {he.Status.PowerPledged} / {he.Status.PowerPledgedThisLoadGame}\r\n"
+                       
+                        ;
 
                 colDescription = he.journalEntry.EventTypeStr.SplitCapsWord() == he.EventSummary ? he.EventSummary : (he.journalEntry.EventTypeStr + Environment.NewLine + he.EventSummary);
 
@@ -641,8 +657,8 @@ namespace EDDiscovery.UserControls
             if (c != null && c.ColumnIndex == ColumnNote.Index)
             {
                 var he = dataGridViewTravel.Rows[c.RowIndex].Tag as HistoryEntry;
-                var str = dataGridViewTravel[ColumnNote.Index, c.RowIndex].Value as string;
-                System.Diagnostics.Trace.Assert(str != null && he != null);
+                System.Diagnostics.Trace.Assert(he != null);
+                var str = dataGridViewTravel[ColumnNote.Index, c.RowIndex].Value as string;         // text or null if empty
                 he.journalEntry.UpdateSystemNote(str, he.System.Name, EDCommander.Current.SyncToEdsm);
                 DiscoveryForm.NoteChanged(this, he);
             }
@@ -1358,7 +1374,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDrawnHelp_Click(object sender, EventArgs e)
         {
-            EDDHelp.Help(this.FindForm(), extButtonDrawnHelp.PointToScreen(new Point(0,extButtonDrawnHelp.Bottom)),this.HelpKeyOrAddress());
+            EDDHelp.HelpPanel(this.FindForm(), extButtonDrawnHelp.PointToScreen(new Point(0,extButtonDrawnHelp.Bottom)),this.HelpKeyOrAddress());
         }
 
         private void runSelectionThroughEDAstroDebugToolStripMenuItem_Click(object sender, EventArgs e)

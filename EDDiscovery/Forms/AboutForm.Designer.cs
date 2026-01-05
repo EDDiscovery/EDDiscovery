@@ -423,7 +423,7 @@ namespace EDDiscovery.Forms
             this.labelNoAffiliation.Padding = new System.Windows.Forms.Padding(0, 8, 0, 0);
             this.labelNoAffiliation.Size = new System.Drawing.Size(198, 44);
             this.labelNoAffiliation.TabIndex = 18;
-            this.labelNoAffiliation.Text = "(C) 2015-2024 \r\nRobby && EDDiscovery Team";
+            this.labelNoAffiliation.Text = "(C) 2015-2025 \r\nRobby && EDDiscovery Team";
             this.labelNoAffiliation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // panelRight

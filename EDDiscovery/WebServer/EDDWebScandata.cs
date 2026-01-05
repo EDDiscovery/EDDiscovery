@@ -79,7 +79,7 @@ namespace EDDiscovery.WebServer
                     var lookup = edsm ? (spansh ? EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM : WebExternalDataLookup.EDSM) :
                                  spansh ? EliteDangerousCore.WebExternalDataLookup.Spansh : EliteDangerousCore.WebExternalDataLookup.None;
 
-                    var scannode = discoveryform.History.StarScan.FindSystemSynchronous(he.System, lookup);  
+                    var scannode = discoveryform.History.StarScan2.FindSystemSynchronous(he.System, lookup);  
 
                     var bodylist = scannode?.Bodies().ToList();       // may be null
 
@@ -90,20 +90,19 @@ namespace EDDiscovery.WebServer
                     {
                         JObject jo = new JObject()
                         {
-                            ["NodeType"] = body.NodeType.ToString(),
-                            ["FullName"] = body.BodyDesignator,
+                            ["NodeType"] = body.BodyType.ToString(),
+                            ["FullName"] = body.Name(),
                             ["OwnName"] = body.OwnName,
-                            ["CustomName"] = body.BodyName,
-                            ["CustomNameOrOwnName"] = body.BodyNameOrOwnName,
-                            ["Level"] = body.Level,
+                            ["CustomName"] = body.Name(),
+                            ["CustomNameOrOwnName"] = body.Name(),
                             ["BodyID"] = body.BodyID,
                         };
 
                         JToken jdata = null;
 
-                        if (body.ScanData != null)
+                        if (body.Scan != null)
                         {
-                            jdata = JToken.FromObject(body.ScanData, true, null, 5, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly);
+                            jdata = JToken.FromObject(body.Scan, true, null, 5, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.DeclaredOnly);
                         }
                         jo["Scan"] = jdata;
 

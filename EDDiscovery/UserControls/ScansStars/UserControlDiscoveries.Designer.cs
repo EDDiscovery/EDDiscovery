@@ -210,6 +210,7 @@ namespace EDDiscovery.UserControls
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
             this.rollUpPanelTop.ThemeColorSet = -1;
+            this.rollUpPanelTop.ThisThemed = true;
             this.rollUpPanelTop.UnrollHoverDelay = 1000;
             // 
             // panelControls
@@ -319,6 +320,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustom.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom.Name = "vScrollBarCustom";
             this.vScrollBarCustom.Size = new System.Drawing.Size(24, 650);
+            this.vScrollBarCustom.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.vScrollBarCustom.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SliderColor2 = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom.SliderDrawAngle = 90F;

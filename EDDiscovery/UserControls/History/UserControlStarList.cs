@@ -223,11 +223,11 @@ namespace EDDiscovery.UserControls
                 {
                     if (rowpresent != null)       // only need to do something if its displayed
                     {
-                        var node = DiscoveryForm.History.StarScan?.FindSystemSynchronous(rowhe.System); // may be null
+                        var node = DiscoveryForm.History.StarScan2.FindSystemSynchronous(rowhe.System); // may be null
                         string info = Infoline(rowhe.System, node);  // lookup node, using star name, no EDSM lookup.
                         rowpresent.Cells[3].Value = info;   // update info
                         rowpresent.Cells[4].Value = node?.ScanValue(true).ToString("N0") ?? "0"; // update scan value
-                        rowpresent.Cells[5].Value = node?.FSSTotalBodies != null ? node.FSSTotalBodies.ToString() : node?.StarPlanetsWithData(false).ToString() ?? "?";
+                        rowpresent.Cells[5].Value = node?.FSSTotalBodies != null ? node.FSSTotalBodies.ToString() : node?.StarPlanetsScanned(false).ToString() ?? "?";
                     }
                 }
             }
@@ -346,11 +346,11 @@ namespace EDDiscovery.UserControls
             //string debugt = item.Journalid + "  " + item.System.id_edsm + " " + item.System.GetHashCode() + " "; // add on for debug purposes to a field below
 
             string time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString();
-            var node = DiscoveryForm.History.StarScan?.FindSystemSynchronous(he.System); // may be null
+            var node = DiscoveryForm.History.StarScan2.FindSystemSynchronous(he.System); // may be null
 
             string visits = DiscoveryForm.History.Visits(he.System.Name).ToString();
             string info = Infoline(he.System, node);  // lookup node, using star name, no EDSM lookup.
-            string bodycount = node?.FSSTotalBodies != null ? node.FSSTotalBodies.ToString() : node?.StarPlanetsWithData(false).ToString() ?? "?";
+            string bodycount = node?.FSSTotalBodies != null ? node.FSSTotalBodies.ToString() : node?.StarPlanetsScanned(false).ToString() ?? "?";
 
             if (search.Enabled)
             {
@@ -386,15 +386,15 @@ namespace EDDiscovery.UserControls
             return rw;
         }
 
-        string Infoline(ISystem system, StarScan.SystemNode sysnode )
+        string Infoline(ISystem system, EliteDangerousCore.StarScan2.SystemNode sysnode )
         {
             string infostr = "";
 
-            if (sysnode?.StarNodes != null)
+            if (sysnode != null)
             {
-                string st = sysnode.StarTypesFound();
+                string st = sysnode.StarTypesScanned();
                 int stars = sysnode.StarsScanned();
-                int total = sysnode.StarPlanetsWithData(edsmSpanshButton.IsAnySet);      // total with data, include web bodies if we have the tick box on
+                int total = sysnode.StarPlanetsScanned(edsmSpanshButton.IsAnySet);      // total with data, include web bodies if we have the tick box on
 
                 infostr = string.Format("{0} Star(s) {1}".Tx(), stars, st);
 
@@ -405,14 +405,14 @@ namespace EDDiscovery.UserControls
 
                 bool showcodex = displayfilters.Contains("codex");
 
-                if ( sysnode.CodexEntryList.Count>0 && showcodex)
+                if (showcodex)
                 {
-                    foreach( var c in sysnode.CodexEntryList)
+                    var codexes = sysnode.Codexes();
+                    foreach (var c in codexes.EmptyIfNull())
                     {
                         infostr = infostr.AppendPrePad(c.Info(), Environment.NewLine);
                     }
                 }
-
 
                 string jumponium = "";
 
@@ -433,31 +433,31 @@ namespace EDDiscovery.UserControls
                 bool showrings = displayfilters.Contains("rings");
                 bool showorganics = displayfilters.Contains("organics");
 
-                bool showjumponium = displayfilters.Contains("jumponium");                
+                bool showjumponium = displayfilters.Contains("jumponium");
 
-                foreach (StarScan.ScanNode sn in sysnode.Bodies())
+                foreach (var sn in sysnode.Bodies(x => x.IsStarOrPlanet))
                 {
-                    if (sn?.ScanData != null )  // must have scan data..
+                    if (sn.Scan != null)  // must have scan data..
                     {
-                         if (
-                            (sn.ScanData.IsBeltCluster && showbeltclusters) ||     // major selectors for line display
-                            (sn.ScanData.IsPlanet && showplanets) ||
-                            (sn.ScanData.IsStar && showstars) ||
-                            (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike))
-                            )
+                        if (
+                        (sn.Scan.IsBeltClusterBody && showbeltclusters) ||     // major selectors for line display
+                        (sn.Scan.IsPlanet && showplanets) ||
+                        (sn.Scan.IsStar && showstars) ||
+                        (showvalueables && (sn.Scan.AmmoniaWorld || sn.Scan.CanBeTerraformable || sn.Scan.WaterWorld || sn.Scan.Earthlike))
+                        )
                         {
-                            string info = sn.SurveyorInfoLine(system, showsignals, showorganics, 
+                            string info = sn.SurveyorInfoLine(system, showsignals, showorganics,
                                                                 showvol, showv, showsi, showg,
-                                                                showatmos && sn.ScanData.IsLandable, showTemp, showrings,
+                                                                showatmos && sn.Scan.IsLandable, showTemp, showrings,
                                                                 lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
                             infostr = infostr.AppendPrePad(info, Environment.NewLine);
                         }
 
-                        sn.ScanData.AccumulateJumponium(ref jumponium, sn.ScanData.BodyDesignationOrName);
+                        sn.Scan.AccumulateJumponium(ref jumponium);
                     }
                 }
 
-                if (jumponium.HasChars() )
+                if (jumponium.HasChars())
                 {
                     infostr = infostr.AppendPrePad("This system has materials for FSD boost".Tx(), Environment.NewLine);
                     if (showjumponium)
@@ -506,7 +506,7 @@ namespace EDDiscovery.UserControls
         public async void CheckWeb(DataGridViewRow row)
         {
             HistoryEntry he = row.Tag as HistoryEntry;
-            var node = await DiscoveryForm.History.StarScan?.FindSystemAsync(he.System, edsmSpanshButton.WebLookup);  
+            var node = await DiscoveryForm.History.StarScan2.FindSystemAsync(he.System, edsmSpanshButton.WebLookup);  
             row.Cells[Columns.OtherInformation].Value = Infoline(he.System,node);
             row.Cells[Columns.SystemValue].Value = node?.ScanValue(true).ToString("N0") ?? "";
         }

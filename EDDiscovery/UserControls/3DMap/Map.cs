@@ -386,7 +386,7 @@ namespace EDDiscovery.UserControls.Map3D
             starimagearraycontrolword[(int)EDStar.StellarRemnantNebula] |= 65536;
             starimagearraycontrolword[(int)EDStar.SuperMassiveBlackHole] |= 65536;
 
-            if ((parts & Parts.GalObjects) != 0)
+            if ((parts & Parts.GalObjects) != 0 && galacticmapping.VisibleMapObjects.Length > 0)            // add a check to stop loading it if we don't have any yet
             {
                 galmapobjects = new GalMapObjects();
                 galmapobjects.CreateObjects(items, rObjects, galacticmapping, findresults, true);
@@ -795,7 +795,20 @@ namespace EDDiscovery.UserControls.Map3D
             if (shaderlog.HasChars())
             {
                 var inf = new ExtendedControls.InfoForm();
-                inf.Info("Shader log - report to EDD team", Properties.Resources.edlogo_3mo_icon, shaderlog);
+                string text = "";
+                text += $"Version  {GLStatics.GetVersion()}" + Environment.NewLine;
+                text += $"Version  {GLStatics.GetVersionString()}" + Environment.NewLine;
+                text += $"Vendor  {GLStatics.GetVendor()}" + Environment.NewLine;
+                text += $"Shading lang {GLStatics.GetShaderLanguageVersion()}" + Environment.NewLine;
+                text += $"Shading lang {GLStatics.GetShadingLanguageVersionString()}" + Environment.NewLine;
+                text += $"UBS={GLOFC.GL4.GL4Statics.GetMaxUniformBlockSize()}" + Environment.NewLine;
+                GLOFC.GL4.GL4Statics.GetMaxUniformBuffers(out int vertex, out int fragfment, out int geo, out int tesscontrol, out int tesseval);
+                text += $"UB v{vertex} f{fragfment} g{geo} tc{tesscontrol} te{tesseval}" + Environment.NewLine;
+                text += $"tex layers {GLOFC.GL4.GL4Statics.GetMaxTextureDepth()} " + Environment.NewLine;
+                text += $"Vertex attribs {GLOFC.GL4.GL4Statics.GetMaxVertexAttribs()} " + Environment.NewLine;
+                text += $"Shader storage buffer bindings {GLOFC.GL4.GL4Statics.GetShaderStorageMaxBindingNumber()} " + Environment.NewLine;
+                text += shaderlog;
+                inf.Info("Shader log - report to EDD team", Properties.Resources.edlogo_3mo_icon, text); 
                 inf.Show();
             }
 

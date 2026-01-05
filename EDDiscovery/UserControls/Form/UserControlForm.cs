@@ -470,7 +470,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDrawnHelp_Click(object sender, EventArgs e)
         {
-            EDDHelp.Help(this, extButtonDrawnHelp.PointToScreen(new Point(0,extButtonDrawnHelp.Height)), UserControl.HelpKeyOrAddress());
+            EDDHelp.HelpPanel(this, extButtonDrawnHelp.PointToScreen(new Point(0,extButtonDrawnHelp.Height)), UserControl.HelpKeyOrAddress());
         }
 
         #endregion

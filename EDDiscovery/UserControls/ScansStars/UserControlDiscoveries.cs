@@ -67,8 +67,7 @@ namespace EDDiscovery.UserControls
             PopulateCtrlList();
 
             dataGridView.Init(DiscoveryForm);
-            dataGridView.Columns[4].Tag = "TooltipPopOut;TextPopOut";
-            dataGridView.Columns[5].Tag = "TextPopOut";       // these two double click are text popouts
+            dataGridView.Columns[4].Tag = dataGridView.Columns[5].Tag = dataGridView.Columns[6].Tag = dataGridView.Columns[7].Tag = dataGridView.Columns[8].Tag = "TooltipPopOut;TextPopOut";
 
             dataGridView.UserChangedColumnVisibility += ChangeColumnVisibility;
 
@@ -214,7 +213,7 @@ namespace EDDiscovery.UserControls
             foreach (var searchname in searchesactive)
             {
                 // execute the search, do not delete duplicate scan results..
-                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan, false); 
+                await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan2, false); 
                 
                 //System.Threading.Thread.Sleep(1000);
                 if (IsClosed)       // may be closing during async process

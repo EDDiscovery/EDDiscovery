@@ -43,32 +43,33 @@ namespace EDDiscovery.UserControls
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
+            this.extPictureBox = new ExtendedControls.ExtPictureBox();
+            ((System.ComponentModel.ISupportInitialize)(this.extPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
-            // label1
+            // extPictureBox
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(52, 25);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(35, 13);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "label1";
+            this.extPictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPictureBox.FillColor = System.Drawing.Color.Transparent;
+            this.extPictureBox.FreezeTracking = false;
+            this.extPictureBox.Location = new System.Drawing.Point(0, 0);
+            this.extPictureBox.Name = "extPictureBox";
+            this.extPictureBox.Size = new System.Drawing.Size(684, 666);
+            this.extPictureBox.TabIndex = 1;
             // 
             // TravelPanel
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.label1);
+            this.Controls.Add(this.extPictureBox);
             this.Name = "TravelPanel";
             this.Size = new System.Drawing.Size(684, 666);
+            ((System.ComponentModel.ISupportInitialize)(this.extPictureBox)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
+        private ExtendedControls.ExtPictureBox extPictureBox;
     }
 }

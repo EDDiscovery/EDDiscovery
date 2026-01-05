@@ -534,7 +534,7 @@ namespace EDDiscovery.UserControls
                         info.pos == null ? "" : info.pos.X.ToString("0.####"),
                         info.pos == null ? "" : info.pos.Y.ToString("0.####"),
                         info.pos == null ? "" : info.pos.Z.ToString("0.####"),
-                        info.pos == null ? "" : info.system == null ? Stars.StarName(EDStar.Unknown) : Stars.StarName(info.system.MainStarType),
+                        info.pos == null ? "" : info.system == null ? Stars.ToLocalisedLanguage(EDStar.Unknown) : Stars.ToLocalisedLanguage(info.system.MainStarType),
                         double.IsNaN(info.waypointdist) ? "" : info.waypointdist.ToString("0.0"),
                         double.IsNaN(info.deviation) ? "" : info.deviation.ToString("0.0")
                         );

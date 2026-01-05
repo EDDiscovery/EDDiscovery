@@ -300,7 +300,10 @@ namespace EDDiscovery.UserControls
             if (obj is EliteDangerousCore.UIEvents.UIDestination)
             {
                 var j = (EliteDangerousCore.UIEvents.UIDestination)obj;
-                if (lastdestination == null || j.Name != lastdestination.Name || j.BodyID != lastdestination.BodyID)        // if name or bodyid has changed
+                
+                // if name or bodyid has changed, for the better or for worse (null)
+
+                if (lastdestination == null || j.Name != lastdestination.Name || j.BodyID != lastdestination.BodyID)        
                 {
                     //System.Diagnostics.Debug.WriteLine($"Sysinfo - Destination got");
                     lastdestination = j;
@@ -390,15 +393,11 @@ namespace EDDiscovery.UserControls
 #endif
                 bool wasdiscovered = true;
 
-                var ss = DiscoveryForm.History.StarScan.FindSystemSynchronous(he.System);       // find system no web lookup 
-                if ( ss != null )
+                var ss = DiscoveryForm.History.StarScan2.FindSystemSynchronous(he.System);       // find system no web lookup 
+                var firststar = ss?.GetStarsScanned().FirstOrDefault();
+                if ( firststar != null )
                 {
-                    var mainstar = ss.StarNodes.FirstOrDefault();       // first star
-                    if (mainstar.Key != null && mainstar.Value.ScanData != null)        // if we have a name, and we have scan data, we can determine
-                    {
-                        System.Diagnostics.Debug.WriteLine($"SystemInformation determine FD on {mainstar.Value.BodyName} {mainstar.Value.OwnName} {mainstar.Value.BodyDesignator}");
-                        wasdiscovered = mainstar.Value.ScanData.WasDiscovered ?? true;          // only if its there and false will it provoke a false
-                    }
+                    wasdiscovered = firststar.Scan.WasDiscovered ?? true;          // only if its there and false will it provoke a false
                 }
 
                 panelFD.BackgroundImage = !wasdiscovered ? EDDiscovery.Icons.Controls.firstdiscover : EDDiscovery.Icons.Controls.notfirstdiscover;
@@ -579,7 +578,7 @@ namespace EDDiscovery.UserControls
                     //bool sysinfoincurrentsystem = he.System.Name == (discoveryform.history.LastOrDefault?.System.Name ?? "xx");
 
                     // decide on time which one to present..  if lastdestination is newer..
-                    if (lastdestination != null && (lasttarget == null || lastdestination.EventTimeUTC >= lasttarget.EventTimeUTC))
+                    if (lastdestination?.Name != null && (lasttarget == null || lastdestination.EventTimeUTC >= lasttarget.EventTimeUTC))
                     {
                         if (lastdestination.BodyID == 0)    // if its a star..
                         {
@@ -587,24 +586,27 @@ namespace EDDiscovery.UserControls
                             starclass = lasttarget != null && lasttarget.StarSystem == lastdestination.Name ? ": " + lasttarget.StarClass : "";
                           //  System.Diagnostics.Debug.WriteLine($"Destination select star {lastdestination.Name} {lastdestination.BodyID}");
                         }
-                        else
+                        else 
                         {
                             // else body name destination or $POI $MULTIPLAYER etc
-                            // Its not localised, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
+                            // Now (oct 25) its localised, but if not, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
 
-                            destname = JournalFieldNaming.SignalBodyName(lastdestination.Name);   
+                            destname = lastdestination.Name_Localised.Alt(JournalFieldNaming.SignalBodyName(lastdestination.Name));
 
                             //System.Diagnostics.Debug.WriteLine($"Sysinfo destination {lastdestination.Name} -> {destname}");
 
-                            ss = DiscoveryForm.History.StarScan.FindSystemSynchronous(DiscoveryForm.History.GetLast.System);
-
-                            // with a found system, see if we can get the body name so we know what body its on
-                            if (ss != null && ss.NodesByID.TryGetValue(lastdestination.BodyID, out StarScan.ScanNode body))
+                            if (lastdestination.BodyID.HasValue)
                             {
-                                onbody = body.BodyDesignator.ReplaceIfStartsWith(he.System.Name).Trim();
+                                ss = DiscoveryForm.History.StarScan2.FindSystemSynchronous(DiscoveryForm.History.GetLast.System);
+                                var body = ss?.FindBody(lastdestination.BodyID.Value);
 
-                                if (body.ScanData != null)
-                                    distance = body.ScanData.DistanceFromArrivalLS.ToString("N0") + "ls";
+                                if (body != null)
+                                {
+                                    onbody = body.Name();
+
+                                    if (body.Scan != null)
+                                        distance = body.Scan.DistanceFromArrivalLS.ToString("N0") + "ls";
+                                }
                             }
                         }
                     }
@@ -724,7 +726,7 @@ namespace EDDiscovery.UserControls
             {
                 var si = last_he.ShipInformation;
 
-                string loadoutjournalline = si.ToJSONLoadout();
+                string loadoutjournalline = si.JSONLoadout(false).ToString();
 
                 //     File.WriteAllText(@"c:\code\loadoutout.txt", loadoutjournalline);
 
@@ -745,8 +747,7 @@ namespace EDDiscovery.UserControls
             {
                 var si = last_he.ShipInformation;
 
-                string errstr;
-                string s = si.ToJSONCoriolis(out errstr);
+                string s = si.JSONCoriolis(out string errstr).ToString();
 
                 if (errstr.Length > 0)
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");

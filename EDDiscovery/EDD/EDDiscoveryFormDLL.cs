@@ -211,7 +211,7 @@ namespace EDDiscovery
 
                 if (syslookup.HasChars())
                 {
-                    var sc = History.StarScan;
+                    var sc = History.StarScan2;
 
                     var sysclass = new SystemClass(syslookup);
 
@@ -254,7 +254,7 @@ namespace EDDiscovery
 
                 if (sysc != null)
                 {
-                    var sc = History.StarScan;
+                    var sc = History.StarScan2;
 
                     WebExternalDataLookup wlu = weblookup == 3 ? WebExternalDataLookup.SpanshThenEDSM : weblookup == 2 ? WebExternalDataLookup.Spansh :
                                                     weblookup == 1 ? WebExternalDataLookup.EDSM : WebExternalDataLookup.None;
@@ -354,7 +354,7 @@ namespace EDDiscovery
         {
             System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
 
-            var carrier = JToken.FromObject(History.Carrier, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+            var carrier = JToken.FromObject(History.FleetCarrier, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllcarrier.json", carrier.ToString(true));
             return carrier.ToString();
         }

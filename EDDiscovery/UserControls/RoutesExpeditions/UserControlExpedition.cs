@@ -128,7 +128,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
-            if (he.journalEntry is IStarScan || he.IsFSDCarrierJump || he.journalEntry is IBodyNameAndID)
+            if (he.journalEntry is IStarScan || he.IsFSDCarrierJump || he.journalEntry is IBodyFeature)
                 UpdateAllRows();
         }
 
@@ -440,34 +440,34 @@ namespace EDDiscovery.UserControls
                 double? disttocur = sys.HasCoordinate && historySystem != null ? sys.Distance(historySystem) : default(double?);
                 row.Cells[CurDist.Index].Value = disttocur.HasValue ? disttocur.Value.ToString("N2") : "";
 
-                StarScan.SystemNode sysnode = await DiscoveryForm.History.StarScan.FindSystemAsync(sys, lookup);
+                var sysnode = await DiscoveryForm.History.StarScan2.FindSystemAsync(sys, lookup);
 
                 if (IsClosed)        // because its async, may be called during closedown. stop this
                     return;
 
                 if (sysnode != null)
                 {
-                    row.Cells[Scans.Index].Value = sysnode.StarPlanetsWithData(edsmSpanshButton.IsAnySet).ToString("0");
+                    row.Cells[Scans.Index].Value = sysnode.StarPlanetsScanned(edsmSpanshButton.IsAnySet).ToString("0");
                     row.Cells[FSSBodies.Index].Value = sysnode.FSSTotalBodies.HasValue ? sysnode.FSSTotalBodies.Value.ToString("0") : "";
-                    row.Cells[KnownBodies.Index].Value = sysnode.StarPlanetsWithData(edsmSpanshButton.IsAnySet).ToString("0");
-                    row.Cells[Stars.Index].Value = sysnode.StarTypesFound(false);
+                    row.Cells[KnownBodies.Index].Value = sysnode.StarPlanetsScanned(edsmSpanshButton.IsAnySet).ToString("0");       //?? repeat
+                    row.Cells[Stars.Index].Value = sysnode.StarTypesScanned(false);
 
                     string info = "";
                     foreach (var sn in sysnode.Bodies())
                     {
-                        if (sn?.ScanData != null)  // must have scan data..
+                        if (sn?.Scan != null)  // must have scan data..
                         {
                             if (
-                                (sn.ScanData.IsBeltCluster && showbeltclusters && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet)) ||     // major selectors for line display
-                                (sn.ScanData.IsPlanet && showplanets && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet)) ||
-                                (sn.ScanData.IsStar && showstars && (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet)) ||
-                                (showvalueables && (sn.ScanData.AmmoniaWorld || sn.ScanData.CanBeTerraformable || sn.ScanData.WaterWorld || sn.ScanData.Earthlike) && 
-                                            (!sn.ScanData.IsWebSourced || edsmSpanshButton.IsAnySet))
+                                (sn.Scan.IsBeltClusterBody && showbeltclusters && (!sn.Scan.IsWebSourced || edsmSpanshButton.IsAnySet)) ||     // major selectors for line display
+                                (sn.Scan.IsPlanet && showplanets && (!sn.Scan.IsWebSourced || edsmSpanshButton.IsAnySet)) ||
+                                (sn.Scan.IsStar && showstars && (!sn.Scan.IsWebSourced || edsmSpanshButton.IsAnySet)) ||
+                                (showvalueables && (sn.Scan.AmmoniaWorld || sn.Scan.CanBeTerraformable || sn.Scan.WaterWorld || sn.Scan.Earthlike) && 
+                                            (!sn.Scan.IsWebSourced || edsmSpanshButton.IsAnySet))
                                 )
                             {
                                 string bs = sn.SurveyorInfoLine(sys, showsignals, showorganics,
                                                             showvol, showv, showsi, showg,
-                                                            showatmos && sn.ScanData.IsLandable, showTemp, showrings,
+                                                            showatmos && sn.Scan.IsLandable, showTemp, showrings,
                                                             lowRadiusLimit, largeRadiusLimit, eccentricityLimit);
 
                                 info = info.AppendPrePad(bs, Environment.NewLine);

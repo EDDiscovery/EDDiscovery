@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            EliteDangerousCore.SystemDisplay systemDisplay2 = new EliteDangerousCore.SystemDisplay();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extCheckBoxSystemShow = new ExtendedControls.ExtCheckBox();
             this.scanDisplayBodyFiltersButton = new EDDiscovery.UserControls.ScanDisplayBodyFiltersButton();
@@ -263,32 +262,6 @@
             this.scanDisplayUserControl.Location = new System.Drawing.Point(0, 60);
             this.scanDisplayUserControl.Name = "scanDisplayUserControl";
             this.scanDisplayUserControl.Size = new System.Drawing.Size(973, 361);
-            systemDisplay2.BackColor = System.Drawing.Color.Black;
-            systemDisplay2.ContextMenuStripBelts = null;
-            systemDisplay2.ContextMenuStripMats = null;
-            systemDisplay2.ContextMenuStripPlanetsMoons = null;
-            systemDisplay2.ContextMenuStripSignals = null;
-            systemDisplay2.ContextMenuStripStars = null;
-            systemDisplay2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            systemDisplay2.FontUnderlined = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            systemDisplay2.HideFullMaterials = false;
-            systemDisplay2.LabelColor = System.Drawing.Color.DarkOrange;
-            systemDisplay2.LargerFont = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            systemDisplay2.NoPlanetStarsOnSameLine = true;
-            systemDisplay2.ShowAllG = true;
-            systemDisplay2.ShowDist = true;
-            systemDisplay2.ShowHabZone = true;
-            systemDisplay2.ShowMaterials = true;
-            systemDisplay2.ShowMoons = true;
-            systemDisplay2.ShowOnlyMaterialsRare = false;
-            systemDisplay2.ShowOverlays = true;
-            systemDisplay2.ShowPlanetClasses = true;
-            systemDisplay2.ShowPlanetMass = true;
-            systemDisplay2.ShowStarAge = true;
-            systemDisplay2.ShowStarClasses = true;
-            systemDisplay2.ShowStarMass = true;
-            systemDisplay2.ShowWebBodies = false;
-            systemDisplay2.ValueLimit = 50000;
             this.scanDisplayUserControl.TabIndex = 2;
             // 
             // ColonisationSystemDisplay

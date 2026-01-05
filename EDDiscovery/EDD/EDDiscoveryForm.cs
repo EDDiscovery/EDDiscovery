@@ -156,12 +156,8 @@ namespace EDDiscovery
         // called from EDDApplicationContext .. continues on with the construction of the system
         public void Init(Action<string> msg)  
         {
-            System.Diagnostics.Trace.WriteLine($"Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
-
             if (EDDOptions.Instance.Culture != null)
                 CultureInfo.CurrentCulture = System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.GetCultureInfo(EDDOptions.Instance.Culture);
-
-            System.Diagnostics.Trace.WriteLine($"EDD UI Culture is {CultureInfo.CurrentCulture.Name} {System.Threading.Thread.CurrentThread.CurrentUICulture.Name}");
 
             // Clean up some log folders
 
@@ -225,10 +221,15 @@ namespace EDDiscovery
                 System.Net.ServicePointManager.SecurityProtocol = System.Net.SecurityProtocolType.Tls12 | System.Net.SecurityProtocolType.Tls11;
             }
 
+            // we not being the main part of the load
+
+            System.Diagnostics.Trace.WriteLine($"Elite Dangerous Discovery Initializing - {EDDOptions.Instance.VersionDisplayString}, Platform: {Environment.OSVersion.Platform.ToString()}");
+            System.Diagnostics.Trace.WriteLine($"EDD UI Culture is {CultureInfo.CurrentCulture.Name} {System.Threading.Thread.CurrentThread.CurrentUICulture.Name}");
+            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load IconsStart");
+
             GlobalBookMarkList.LoadBookmarks();
             GlobalCaptainsLogList.LoadLog();
 
-            System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load Icons");
             msg.Invoke("Loading Icons");
 
             EDDiscovery.Icons.ForceInclusion.Include();      // Force the assembly into the project by a empty call
@@ -575,7 +576,7 @@ namespace EDDiscovery
             buttonReloadActions.Visible = extButtonCAPI.Visible = EDDOptions.Instance.ActionButton;
 
             // these are on the -readto date option, if selecting a max date, show single step buttons
-            extButtonStop.Visible = extButtonSingleStep.Visible = EDDOptions.Instance.MaxJournalDateUTC != null;    
+            extButtonMultiStep.Visible = extButtonStop.Visible = extButtonSingleStep.Visible = EDDOptions.Instance.MaxJournalDateUTC != null;    
 
             extButtonDrawnHelp.Text = "";
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
@@ -779,7 +780,7 @@ namespace EDDiscovery
                     // sorted by oldest first..
                     foreach (Notifications.Notification n in notelist)
                     {
-                        Notifications.NotificationParas p = n.Select(EDDConfig.Instance.Language);
+                        Notifications.NotificationMessages p = n.Select(EDDConfig.Instance.Language);
 
                         Version vmax = n.VersionMax != null ? new Version(n.VersionMax) : null;
                         Version vmin = n.VersionMin != null ? new Version(n.VersionMin) : null;
@@ -797,20 +798,20 @@ namespace EDDiscovery
                                  (n.Conditions.TryGetValue("ConditionActionPackPresentEnabledOldVersion", out string[] ov) && ov.Length == 2 && actioncontroller.IsOlderEnabled(ov[0], ov[1]))
                                  )
                             {
-                                if (n.EntryType == "Popup")
+                                if (n.Type == "Popup")
                                 {
                                     string key = n.Key;
                                     if (!acklist.Contains(key))
                                         popupnotificationlist.Add(n);
                                 }
-                                else if (n.EntryType == "Log")
+                                else if (n.Type == "Log")
                                 {
                                     if (n.HighLight)
                                         LogLineHighlight(p.Text);
                                     else
                                         LogLine(p.Text);
                                 }
-                                else if (n.EntryType == "New")
+                                else if (n.Type == "New")
                                 {
                                     extButtonNewFeature.Tag = n;
                                     bool read = UserDatabase.Instance.GetSetting("NotificationLastNewFeature", "") == n.StartUTC.ToStringZulu();
@@ -1260,7 +1261,7 @@ namespace EDDiscovery
         private void extButtonNewFeature_Click(object sender, EventArgs e)
         {
             Notifications.Notification n = extButtonNewFeature.Tag as Notifications.Notification;
-            Notifications.NotificationParas p = n.Select(EDDConfig.Instance.Language);
+            Notifications.NotificationMessages p = n.Select(EDDConfig.Instance.Language);
 
             ExtendedControls.InfoForm infoform = new ExtendedControls.InfoForm();
             infoform.Info(p.Caption, this.Icon, p.Text, pointsize: n.PointSize, enableurls: true);
@@ -1377,10 +1378,11 @@ namespace EDDiscovery
         }
 
 
+
+
         #endregion
 
-
-    }
+      }
 }
 
 

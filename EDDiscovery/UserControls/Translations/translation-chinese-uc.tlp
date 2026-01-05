@@ -515,6 +515,7 @@ CFD4E874046B93: "Road to Riches" @
 AB2A9F0D8D787B: "Earth Likes" @
 0077D22826A77F: "Trade Router" @
 0CF5E327910E74: "Fleet Carrier" @
+7F0950D59B1A34: "Squadron Carrier" @
 B12CDD63114BA4: "Galaxy Plotter" @
 B364AA8B4033FF: "Exo Mastery" @
 07AB47C5737BA1: "Use Permit Systems" @
@@ -552,6 +553,7 @@ DE6A8B4B96A80A: "Copy the target system to end route entry" => "将目标星系�
 681943CB0EA134: "Save as an expedition for use on expedition and surveyor panels" @
 4BB903205B7347: "This will result in a large number ({0}) of jumps\r\nConfirm please" @
 33C5EE107CFEC3: "No route set up, retry" @
+98310A2466609B: "Rocky HMC" @
 
 SECTION UserControlRouteTracker
 
@@ -578,6 +580,7 @@ C415DA3D51A1E9: "No systems in route have known co-ords" => "此航线中没有�
 
 SECTION UserControlScan
 
+5D479135A43DAC: "Belt Cluster Body" @
 F3B7084D189898: "Configure scan display body filters" @
 0FE1B534E56651: "Configure scan display" @
 111D3A2E729C26: "Select image size" => "选择图标大小"
@@ -1017,6 +1020,7 @@ D9273536780112: "Control Outlining" => "纲要模式控制"
 03C54D66F2DA56: "Next start/stop marker is hidden" @
 905A92084F2F46: "No start/stop marker found below" @
 A89F26DDCFE091: "Entry filtered out of grid" @
+A070027FDED89B: "Colour events by type" @
 
 SECTION UserControlCaptainsLog
 
@@ -1285,7 +1289,7 @@ CDED093321DDAA: "Orders" @
 171A0606F7C745: "Group" => "面板列表使用字母顺序进行排序，而不是安装类别排序。注意需要重启。（目前中文界面下无效）"
 160F06D4799C85: "Purchase" @
 0028D743EB44B8: "Sale" @
-D909428F5E2D1E: "Blackmarket" => "贸易市场;黑市"
+D909428F5E2D1E: "Blackmarket" => "贸易市场 黑市"
 57218AD66361FC: "CAPI Stats" @
 9C452534CDFE1E: "CAPI Ships/Modules" @
 2D2CB022BC3D26: "Speed" => "质量/速度"
@@ -1294,8 +1298,8 @@ D909428F5E2D1E: "Blackmarket" => "贸易市场;黑市"
 7548AB52C3D1D5: "Power" => "势力斗争"
 BCECF4562F1709: "Stock" @
 2011FCCFA79102: "CAPI Items" @
-44F6AF6945544C: "Quantity" => "精炼矿石量：;t;N0"
-678DD8A69CFC99: "Stolen" => ";赃物"
+44F6AF6945544C: "Quantity" => "精炼矿石量"
+678DD8A69CFC99: "Stolen" => "赃物"
 3F6F257DD23224: "Microresource" @
 
 SECTION BookmarkForm
@@ -1402,3 +1406,11 @@ AA198A34E74B30: "S/D 3" @
 D7DECF1AA22B02: "Filter" @
 D97D1EE339E4EE: "Show" @
 
+SECTION UserControlPowerPlayMerits
+
+F7F1997C6CD1AA: "Session" @
+F5EDA1B11AFA0F: "Cycle" @
+70DA870EE0EA81: "View on Journal Grid" @
+50944E656EBC33: "Copy Merits" @
+0AFA5205B52671: "Copy Merits Report" @
+DC521442E6AC91: "Copy System Name" @
