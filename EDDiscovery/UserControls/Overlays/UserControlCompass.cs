@@ -236,7 +236,7 @@ namespace EDDiscovery.UserControls
                     PopulateBookmarkComboSetBookmarkEnable();
                 }
                 comboBoxBookmarks.SelectedItem = sct.Name;      // must be in list, so select and set the compass
-                return PanelActionState.Success;
+                return PanelActionState.HandledContinue;
             }
             return PanelActionState.NotHandled;
         }
@@ -405,17 +405,17 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                var sysnode = DiscoveryForm.History.StarScan.FindSystemSynchronous(current_sys);     // not edsm, so no delay
+                var sysnode = DiscoveryForm.History.StarScan2.FindSystemSynchronous(current_sys);
 
                 if ( sysnode != null)
                 {
-                    var scannode = current_body.HasChars() ? sysnode.Find(current_body) : null;
+                    var scannode = current_body.HasChars() ? sysnode.FindCanonicalBodyName(current_body) : null;
 
                     if ( scannode != null)
                     {
                         System.Diagnostics.Debug.WriteLine($"..Compass Found scannode for {current_body}");
 
-                        foreach (var sf in scannode.SurfaceFeatures.EmptyIfNull())
+                        foreach (var sf in scannode.Features.EmptyIfNull())
                         {
                             if (sf.HasLatLong)  // only want positions
                             {
@@ -427,16 +427,16 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        foreach( var bodies in sysnode.Bodies())
+                        foreach( var bodies in sysnode.Bodies(x=>x.IsPlanetOrMoon))
                         {
-                            System.Diagnostics.Debug.WriteLine($"..Compass no current body processing {bodies.BodyDesignator}");
+                            System.Diagnostics.Debug.WriteLine($"..Compass no current body processing {bodies.CanonicalNameNoSystemName()}");
 
-                            foreach (var sf in bodies.SurfaceFeatures.EmptyIfNull())
+                            foreach (var sf in bodies.Features.EmptyIfNull())
                             {
                                 if (sf.HasLatLong)  // only want positions
                                 {
                                     System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {sf.Name_Localised}");
-                                    comboBoxBookmarks.Items.Add($"{bodies.BodyNameOrOwnName}: {sf.Name_Localised} @ {sf.Latitude.Value:0.####}, {sf.Longitude.Value:0.####}");
+                                    comboBoxBookmarks.Items.Add($"{bodies.Name()}: {sf.Name_Localised} @ {sf.Latitude.Value:0.####}, {sf.Longitude.Value:0.####}");
                                     comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = sf.Latitude.Value, Longitude = sf.Longitude.Value });
                                 }
                             }

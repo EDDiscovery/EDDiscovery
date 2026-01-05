@@ -70,7 +70,7 @@ namespace EDDiscovery.UserControls
                 dataGridView.RowHeadersDefaultCellStyle.BackColor = ExtendedControls.Theme.Current.GridBorderBack;
 
             //System.Diagnostics.Debug.WriteLine($"Surface UC Lookup for planets '{systemName}'");
-            var lookup = await helist.StarScan.FindSystemAsync(new SystemClass(systemName), EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM);
+            var lookup = await helist.StarScan2.FindSystemAsync(new SystemClass(systemName), EliteDangerousCore.WebExternalDataLookup.SpanshThenEDSM);
 
             if (IsClosed())
                 return;
@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
             BodyName.Items.Clear();
 
             // lets present all, even if not landable, as you may want a whole planet bookmark
-            var bodies = lookup?.Bodies()?.Where(c=>c.NodeType==StarScan.ScanNodeType.planetmoonsubstar).Select(b => b.BodyDesignator.ReplaceIfStartsWith(systemName) + (b.BodyName != null ? " " + b.BodyName : ""));
+            var bodies = lookup?.Bodies(b=>b.IsStarOrPlanet).Select(b => b.Name());
 
             foreach (string s in bodies.EmptyIfNull())
             {
@@ -118,8 +118,9 @@ namespace EDDiscovery.UserControls
                             }
 
                             dr.Cells[ColTags.Index].Value = "";
-                            dr.Cells[ColTags.Index].Tag = loc.Tags;
-                            var taglist = EDDConfig.BookmarkTagArray(loc.Tags);
+                            string tags = loc.Tags ?? "";
+                            dr.Cells[ColTags.Index].Tag = tags;
+                            var taglist = EDDConfig.BookmarkTagArray(tags);
                             dr.Cells[ColTags.Index].ToolTipText = string.Join(Environment.NewLine, taglist);
                             TagsForm.SetMinHeight(taglist.Length, dr, ColTags.Width, TagSize);
 

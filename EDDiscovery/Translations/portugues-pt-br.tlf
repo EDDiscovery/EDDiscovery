@@ -44,6 +44,8 @@ B5E77C5C02A90C: "Removed" => "Entfernt"
 // misc
 
 1090044535D1EA: "Panel Colour" @
+96FCC783071DFD: "Current Key Delay String" @
+3CD8E99F3C4143: "Default Down Delay (0=Default)" @
 
 SECTION StartUp
 
@@ -198,8 +200,16 @@ BE1C21D6FE0AE4: "Discoveries" @
 17DFA3A002E3D5: "Stations in the system from spansh web data" @
 4DFB01DC92677C: "Colonisation" @
 91A4AFA2089B9F: "Colonisation statistics" @
-C963A786E115F9: "TestOverlay" @
-78576CE18E50B2: "Test overlay" @
+5A016BA9B95236: "Test Overlay" @
+52A1B9A52B8BFE: "Auto Panel" @
+42EA6768A9E951: "Docking Panel" @
+C722A22DF80446: "Docking Panel shows pad location" @
+BA0D4229A016A8: "Travel Panel" @
+D0758FD8BCFFB4: "Travel Panel showing current position information" @
+
+6D1493B0BA32C8: "Squadron/Carrier" @
+03C97A8152D15D: "Data about your squadron" @
+305D3C4826F3F9: "Track powerplay merits by cycle, session, system" @
 
 SECTION EDDiscoveryForm
 
@@ -293,6 +303,7 @@ DE5CFD5A00795F: "Fetch Star Data Again" => "Recupera novamente os registro di es
 683617E8B53C1F: "Web server disabled due to incorrect folder or missing zip file" => "Servidor web desativado"
 37F51D0860E8D7: "*** Web server is disabled ***" => "Servidor web desabilitado"
 AEA794CB1D04DB: "DLLs disabled: {0}" @
+C7F0C2BDEE6813: "Move another commanders history to this commander" @
 
 SECTION EDDiscoveryController
 
@@ -374,6 +385,7 @@ SECTION MoveToCommander
 264067C44C54E3: "Move To Commander" => "Move para o comandante"
 CBB4CC49824BF7: "Transfer" => "Transfira"
 1FA39F8C15CB36: "Move selected history to commander." => "Move o histórico selecionado ao comandante."
+A605D496654C40: "Pick commander to move all their history to current commander" @
 
 SECTION NewReleaseForm
 

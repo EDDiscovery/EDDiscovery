@@ -22,7 +22,6 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using static EliteDangerousCore.StarScan;
 
 namespace EDDiscovery.UserControls
 {
@@ -656,7 +655,22 @@ namespace EDDiscovery.UserControls
 
                     case "carrier":
                         {
-                            var cr = hl.Carrier;
+                            var cr = hl.FleetCarrier;
+
+                            JObject reply = new JObject
+                            {
+                                ["responsetype"] = request,
+                                ["carrier"] = cr == null ? null : JToken.FromObject(cr, true, null, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public),
+
+                            };
+                            //System.Diagnostics.Debug.WriteLine($"Return {reply.ToString(true)}");
+                            zmqconnection.Send(reply);
+                        }
+                        break;
+
+                    case "squadroncarrier":
+                        {
+                            var cr = hl.SquadronCarrier;
 
                             JObject reply = new JObject
                             {
@@ -737,7 +751,7 @@ namespace EDDiscovery.UserControls
                             long? systemid = json["systemid"].LongNull();
                             WebExternalDataLookup wdl = json["weblookup"].EnumStr<WebExternalDataLookup>(WebExternalDataLookup.None, true);
                             var sc = new SystemClass(system, systemid);
-                            var node = await hl.StarScan.FindSystemAsync(sc, wdl);
+                            var node = await hl.StarScan2.FindSystemAsync(sc, wdl);
                             if (IsClosed)
                                 return;
 

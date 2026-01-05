@@ -113,7 +113,7 @@ namespace EDDiscovery.UserControls
                     string sep = " / ";
                     object[] rowobj = {     index.ToString(),
                                             sys.Name,
-                                            Stars.StarName(sys.MainStarType),
+                                            Stars.ToLocalisedLanguage(sys.MainStarType),
                                             (ret.Item2>=0 ? ret.Item2.ToString("0.#") : ""),
                                             (cursystem != null ? cursystem.Distance(sys).ToString("0.#") : ""),
                                             sys.X.ToString("0.#") + sep + sys.Y.ToString("0.#") + sep + sys.Z.ToString("0.#")

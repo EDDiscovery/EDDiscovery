@@ -174,7 +174,7 @@ namespace EDDiscovery.UserControls
                         {
 
                         }
-                        if ((scan.IsPlanet && ShowPlanets) || (scan.IsStar && ShowStars) || (scan.IsBeltCluster && ShowBeltClusters))
+                        if ((scan.IsPlanet && ShowPlanets) || (scan.IsStar && ShowStars) || (scan.IsBeltClusterBody && ShowBeltClusters))
                         {
                             writer.Write(csv.Format(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(scan.EventTimeUTC)));
                             writer.Write(csv.Format(scan.BodyName));

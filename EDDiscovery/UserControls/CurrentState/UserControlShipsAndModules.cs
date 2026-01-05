@@ -319,7 +319,7 @@ namespace EDDiscovery.UserControls
             {
                 SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Speed".Tx(),
                                 null, "Class".Tx(), null, "Info".Tx());
-                sortmodecol = "AAANNANA";
+                sortmodecol = "PAANNANA";
                 HideShipRelatedButtons(false);
 
                 foreach( var ship in ItemData.GetSpaceships())
@@ -352,7 +352,7 @@ namespace EDDiscovery.UserControls
                 var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
                 SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Name".Tx(), "Ident".Tx(), "Mass".Tx(), "Location".Tx(), "Cost".Tx());
-                sortmodecol = "AAAAANAN";
+                sortmodecol = "PAAAANAN";
                 HideShipRelatedButtons(false);
 
                 foreach (var ship in ownedships)
@@ -707,8 +707,7 @@ namespace EDDiscovery.UserControls
         {
             if (last_si != null)
             {
-                string errstr;
-                string coriolis = last_si.ToJSONCoriolis(out errstr);
+                string coriolis = last_si.JSONCoriolis(out string errstr).ToString();
 
                 if (errstr.Length > 0)
                     ExtendedControls.MessageBoxTheme.Show(FindForm(), errstr + Environment.NewLine + "This is probably a new or powerplay module" + Environment.NewLine + "Report to EDD Team by Github giving the full text above", "Unknown Module Type");
@@ -741,17 +740,7 @@ namespace EDDiscovery.UserControls
         {
             if (last_si != null)
             {
-                string loadoutjournalline = last_si.ToJSONLoadout();
-
-                // test code
-                //loadoutjournalline = BaseUtils.FileHelpers.TryReadAllTextFromFile(@"c:\code\edsysidewinder.out");
-                //QuickJSON.JToken tk = QuickJSON.JToken.Parse(loadoutjournalline, out string err);
-                //QuickJSON.JArray tk1 = tk.Array();
-                //QuickJSON.JObject tko = tk1[0]["data"].Object();
-                //loadoutjournalline = tko.ToString(true);
-
-                System.Diagnostics.Debug.WriteLine("EDSY Export " + last_si.JSONLoadout().ToString(true));
-                //System.Diagnostics.Debug.WriteLine("EDSY Export " + loadoutjournalline);
+                string loadoutjournalline = last_si.JSONLoadout(false).ToString();
 
                 string uri = EDDConfig.Instance.EDDShipyardURL + "#/I=" +loadoutjournalline.URIGZipBase64Escape();
 
@@ -834,8 +823,18 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewModules_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
         {
-            if (sortmodecol.HasChars() && sortmodecol[e.Column.Index] == 'N')
-                e.SortDataGridViewColumnNumeric(removetext:"t", striptonumeric:true);
+            if (sortmodecol.HasChars())
+            {
+                if (sortmodecol[e.Column.Index] == 'P')
+                {
+                    var left = dataGridViewModules[1, e.RowIndex1].Value.ToString();
+                    var right = dataGridViewModules[1, e.RowIndex2].Value.ToString();
+                    e.SortResult = left.CompareTo(right);
+                    e.Handled = true;
+                }
+                else if (sortmodecol[e.Column.Index] == 'N')
+                    e.SortDataGridViewColumnNumeric(removetext: "t", striptonumeric: true);
+            }
         }
 
         private void dataGridViewModules_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
@@ -883,7 +882,7 @@ namespace EDDiscovery.UserControls
                     frm.ShowOptionalButton("Loadout", () =>
                      {
                          frm.Close();
-                         string s = last_si.JSONLoadout().ToString(false);
+                         string s = last_si.JSONLoadout(true).ToString(false);
                          ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
                          info.Info("Loadout", this.FindForm().Icon, s);
                          info.Show(this);
@@ -948,7 +947,7 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        if (!BaseUtils.FileHelpers.TryWriteToFile(frm.Path, last_si.JSONLoadout().ToString(true)))
+                        if (!BaseUtils.FileHelpers.TryWriteToFile(frm.Path, last_si.JSONLoadout(true).ToString(true)))
                         {
                             CSVHelpers.WriteFailed(FindForm(), frm.Path);
                         }
@@ -981,7 +980,7 @@ namespace EDDiscovery.UserControls
                         name += ".loadout";
                         string path = System.IO.Path.Combine(EDDOptions.Instance.ShipLoadoutsDirectory(), name);
 
-                        if (BaseUtils.FileHelpers.TryWriteToFile(path, si.JSONLoadout().ToString(true)))    // this must work, but check
+                        if (BaseUtils.FileHelpers.TryWriteToFile(path, si.JSONLoadout(true).ToString(true)))    // this must work, but check
                         {
                             UpdateComboBox();
                             if ( comboBoxShips.Text == name)
@@ -1006,7 +1005,7 @@ namespace EDDiscovery.UserControls
                 {
                     name += ".loadout";
                     string path = System.IO.Path.Combine(EDDOptions.Instance.ShipLoadoutsDirectory(), name);
-                    if (BaseUtils.FileHelpers.TryWriteToFile(path, last_si.JSONLoadout().ToString(true)))
+                    if (BaseUtils.FileHelpers.TryWriteToFile(path, last_si.JSONLoadout(true).ToString(true)))
                     {
                         UpdateComboBox();
                         comboBoxShips.SelectedItem = name;

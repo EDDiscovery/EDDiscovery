@@ -306,18 +306,19 @@ namespace EDDiscovery.UserControls
                             panel.Dispose();
                             panel = null;
                         }
-                        PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(pid);
-                        UserControlCommonBase uccb = PanelInformation.Create(pid);
-                        uccb.Dock = DockStyle.Fill;
-                        Controls.Add(uccb);
-                        System.Diagnostics.Debug.Assert(uccb.DBBaseName != null);
-                        uccb.DBBaseName = "Autopanel_" + uccb.DBBaseName;
-                        uccb.CallInit(DiscoveryForm, DisplayNumber);
-                        ExtendedControls.Theme.Current.ApplyStd(uccb);
-                        uccb.CallLoadLayout();
-                        uccb.CallInitialDisplay();
+                        //PanelInformation.PanelInfo pi = PanelInformation.GetPanelInfoByPanelID(pid);
+                        //UserControlCommonBase uccb = PanelInformation.Create(pid);
+                        //uccb.Dock = DockStyle.Fill;
+                        //Controls.Add(uccb);
+                        //System.Diagnostics.Debug.Assert(uccb.DBBaseName != null);
+                        //uccb.DBBaseName = "Autopanel_" + uccb.DBBaseName;
+                        //uccb.CallInit(DiscoveryForm, DisplayNumber);
+                        //ExtendedControls.Theme.Current.ApplyStd(uccb);
+                        //uccb.CallLoadLayout();
+                        //// TBD not wired up request system
+                        //uccb.CallInitialDisplay();
 
-                        panel = uccb;
+                        //panel = uccb;
                         mode = newmode;
                     }
                     else

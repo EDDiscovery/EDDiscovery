@@ -138,7 +138,7 @@ namespace EDDiscovery.UserControls.Map3D
             if (sys != null)
             {
                 if (sys.MainStarType != EDStar.Unknown)
-                    info = info.AppendPrePad($"Star Type {Stars.StarName(sys.MainStarType)}", Environment.NewLine);
+                    info = info.AppendPrePad($"Star Type {Stars.ToLocalisedLanguage(sys.MainStarType)}", Environment.NewLine);
                 if (EliteDangerousCore.DB.SystemsDatabase.Instance.IsPermitSystem(sys))
                 {
                     info = info.AppendPrePad("Permit System", Environment.NewLine);

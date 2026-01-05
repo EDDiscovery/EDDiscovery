@@ -58,7 +58,7 @@ namespace EDDiscovery.UserControls
                 EDSMSpanshButton edsmSpanshButton = null;
                 ScanDisplayUserControl sd = new ScanDisplayUserControl();
 
-                StarScan.SystemNode nodedata = null;
+                EliteDangerousCore.StarScan2.SystemNode nodedata = null;
 
                 if (forcedlookup == null)   // if we not forced into the mode
                 {
@@ -66,7 +66,7 @@ namespace EDDiscovery.UserControls
                     edsmSpanshButton.Init(db, "EDSMSpansh", "");
                     edsmSpanshButton.ValueChanged += (s, e) =>
                     {
-                        nodedata = hl.StarScan.FindSystemSynchronous(sys, edsmSpanshButton.WebLookup);    // look up system, unfort must be sync due to limitations in c#
+                        nodedata = hl.StarScan2.FindSystemSynchronous(sys, edsmSpanshButton.WebLookup);    // look up system, unfort must be sync due to limitations in c#
                         sd.SystemDisplay.ShowWebBodies = edsmSpanshButton.WebLookup != WebExternalDataLookup.None;
                         sd.DrawSystem(nodedata, null, hl.MaterialCommoditiesMicroResources.GetLast(), filter: filterbut.BodyFilters);
                     };
@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls
                 sd.SystemDisplay.SetSize( selsize );
                 sd.Size = maincontentsize;
 
-                nodedata = await hl.StarScan.FindSystemAsync(sys, forcedlookup.HasValue ? forcedlookup.Value : edsmSpanshButton.WebLookup);    // look up system async
+                nodedata = await hl.StarScan2.FindSystemAsync(sys, forcedlookup.HasValue ? forcedlookup.Value : edsmSpanshButton.WebLookup);    // look up system async
 
                 filterbut.Init(db, "BodyFilter");
                 filterbut.Image = EDDiscovery.Icons.Controls.EventFilter;

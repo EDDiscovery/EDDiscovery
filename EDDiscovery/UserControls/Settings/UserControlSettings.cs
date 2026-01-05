@@ -43,17 +43,16 @@ namespace EDDiscovery.UserControls
             extComboBoxGameTime.Items.Add("UTC");
             extComboBoxGameTime.Items.Add("Game Time".Tx());
 
-            ConfigureHelpButton(extButtonDrawnHelpTheme, "Theming");
-            ConfigureHelpButton(extButtonDrawnHelpScreenshots, "Screenshots");
-            ConfigureHelpButton(extButtonDrawnHelpTransparency, "Transparency");
-            ConfigureHelpButton(extButtonDrawnHelpWebServer, "Webserver");
-            ConfigureHelpButton(extButtonDrawnHelpSafeMode, "SafeMode");
+            ConfigureHelpButton(extButtonDrawnHelpTheme, "Theme");
+            ConfigureHelpButton(extButtonDrawnHelpHistory, "History Options");
+            ConfigureHelpButton(extButtonDrawnHelpWebServer, "Web Server");
+            ConfigureHelpButton(extButtonDrawnHelpTransparency, "Interaction");
             ConfigureHelpButton(extButtonDrawnHelpMemory, "Memory");
-            ConfigureHelpButton(extButtonDrawnHelpEDSM, "EDSMSettings");
-            ConfigureHelpButton(extButtonDrawnHelpHistory, "HistoryDisplay");
-            ConfigureHelpButton(extButtonDrawnHelpDLL, "DLL");
-            ConfigureHelpButton(extButtonDrawnHelpWindowOptions, "WindowOptions");
-            ConfigureHelpButton(extButtonDrawnHelpCommanders, "Commanders");
+            ConfigureHelpButton(extButtonDrawnHelpScreenshots, "Screenshots");
+            ConfigureHelpButton(extButtonDrawnHelpEDSM, "System DB Control");
+            ConfigureHelpButton(extButtonDrawnHelpWindowOptions, "Window Options");
+            ConfigureHelpButton(extButtonDrawnHelpDLL, "DLLs");
+            ConfigureHelpButton(extButtonDrawnHelpSafeMode, "Advanced");
 
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
@@ -525,7 +524,8 @@ namespace EDDiscovery.UserControls
 
         private void extButtonDrawnHelp_Click(object sender, EventArgs e)
         {
-            EDDHelp.Help(FindForm(), extButtonDrawnHelpTheme, ((Control)sender).Tag as string);
+            Control ct = sender as Control;
+            EDDHelp.HelpPanel(FindForm(), ct.PointToScreen(new Point(0, ct.Height)), HelpKeyOrAddress(), ct.Tag as string);
         }
 
 
@@ -645,12 +645,9 @@ namespace EDDiscovery.UserControls
         private void buttonExtSystemDBConfigureArea_Click(object sender, EventArgs e)
         {
             GalaxySectorSelect gss = new GalaxySectorSelect();
-
-            if (!gss.Init(SystemsDatabase.Instance.GetGridIDs()))
-            {
-                ExtendedControls.MessageBoxTheme.Show(this, "Warning".Tx(), "No map available!".Tx());
-            }
-            else if (gss.ShowDialog() == DialogResult.OK)
+            gss.Init(SystemsDatabase.Instance.GetGridIDs());
+      
+            if (gss.ShowDialog() == DialogResult.OK)
             {
                 SystemsDatabase.Instance.SetGridIDs(gss.Selection);
 
@@ -715,19 +712,11 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtSafeMode_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Confirm restart to safe mode".Tx(), "Safe Mode".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            // don't allow double click, and always use application exit
+            if (EDDApplicationContext.RestartOptions == null && ExtendedControls.MessageBoxTheme.Show(this, "Confirm restart to safe mode".Tx(), "Safe Mode".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
-                bool force = EDDApplicationContext.RestartOptions != null;
                 EDDApplicationContext.RestartOptions = "-safemode";
-
-                if (!force)
-                {
-                    Application.Exit();
-                }
-                else
-                {
-                    System.Threading.Thread.CurrentThread.Abort();
-                }
+                Application.Exit();
             }
         }
 

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2023 EDDiscovery development team
+ * Copyright 2016 - 2025 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -142,7 +142,7 @@ namespace EDDiscovery.UserControls
             if (he != null)
             {
                 // Star scan type, or material entry type, or a bodyname/id entry, or not set, or not same system
-                if ( he.journalEntry is IStarScan || he.journalEntry is IMaterialJournalEntry || he.journalEntry is IBodyNameAndID || last_he == null || last_he.System != he.System) 
+                if ( he.journalEntry is IStarScan || he.journalEntry is IMaterialJournalEntry || he.journalEntry is IBodyFeature || last_he == null || last_he.System != he.System) 
                 {
                     last_he = he;
                     DrawSystem(last_he);
@@ -176,18 +176,21 @@ namespace EDDiscovery.UserControls
             panelStars.HideInfo();
 
             // showing_system = new SystemClass("Qi Lieh");
-            //showing_system = new SystemClass("Pallaeni"); - problem with shrinking lines
+           // showing_system = new SystemClass("Pallaeni"); 
             //   showing_system = new SystemClass("Borann");
             //showing_system = new SystemClass("Skaudai AM-B d14-138");
             //showing_system = new SystemClass("Eorgh Prou JH-V e2-1979");
-           //  showing_system = new SystemClass("HYPAA FLYIAE CB-O D6-8");
+            // showing_system = new SystemClass("HYPAA FLYIAE CB-O D6-8");
+            //showing_system = new SystemClass("Scheau Prao ME-M c22-21");
+          // showing_system = new SystemClass("Eorm Chruia OJ-Q e5-265");
+
+            string control_text = "No System";
 
 #if PLAYTHRU
-            StarScan.SystemNode data = showing_system != null ? await discoveryform.history.starscan.FindSystemAsync(showing_system, false, byname: true) : null;
+                EliteDangerousCore.StarScan2.SystemNode data = showing_system != null ? await DiscoveryForm.History.StarScan2.FindSystemAsync(showing_system,WebExternalDataLookup.None) : null;
 #else
-            StarScan.SystemNode data = showing_system != null ? await DiscoveryForm.History.StarScan.FindSystemAsync(showing_system, edsmSpanshButton.WebLookup) : null;
+            EliteDangerousCore.StarScan2.SystemNode data = showing_system != null ? await DiscoveryForm.History.StarScan2.FindSystemAsync(showing_system, edsmSpanshButton.WebLookup) : null;
 #endif
-            string control_text = "No System";
 
             if (showing_system != null)
             {
@@ -198,14 +201,14 @@ namespace EDDiscovery.UserControls
                     long value = data.ScanValue(edsmSpanshButton.IsAnySet);
                     control_text += " ~ " + value.ToString("N0") + " cr";
 
-                    int scanned = data.StarPlanetsWithData(edsmSpanshButton.IsAnySet);
+                    int scanned = data.StarPlanetsScanned(edsmSpanshButton.IsAnySet);
 
                     if (scanned > 0)
                     {
                         control_text += " " + "Scan".Tx()+ " " + scanned.ToString() + (data.FSSTotalBodies != null ? (" / " + data.FSSTotalBodies.Value.ToString()) : "");
                     }
 
-                    int fsssignals = data.FSSSignalList.Count;
+                    int fsssignals = data.FSSSignals?.Count ?? 0;
                     if (fsssignals>0)
                     {
                         control_text += " " + " Signals " + fsssignals.ToString();
@@ -262,8 +265,8 @@ namespace EDDiscovery.UserControls
                 if (res == DialogResult.OK)
                 {
                     string sname = f.Get("Sys");
-                    if (sname.HasChars())
-                    {
+                    if ( sname.HasChars() && DiscoveryForm.History.StarScan2.GetISystem(sname)!=null )
+                    { 
                         showing_matcomds = null;
                         showing_system = new EliteDangerousCore.SystemClass(sname);
                         override_system = true;
@@ -368,41 +371,33 @@ namespace EDDiscovery.UserControls
         {
             if (showing_system == null)
                 return;
-            var sysnode = DiscoveryForm.History.StarScan.FindSystemSynchronous(showing_system);
+
+            var sysnode = DiscoveryForm.History.StarScan2.FindSystemSynchronous(showing_system);
 
             if ( sysnode != null )
             {
-                foreach (StarScan.ScanNode starnode in sysnode.StarNodes.Values)
-                    StarScan.ScanNode.DumpTree(starnode, starnode.BodyDesignator, 0);
+                sysnode.DumpTree();
 
-                var nodes = sysnode?.OrderedSystemTree();
-
-                if (nodes != null)
-                {
-
-                    StarScan.ScanNode.DumpTree(nodes, "Top", 0);
-
-                    Forms.ImportExportForm frm = new Forms.ImportExportForm();
-                    frm.Export( new string[] {
+                Forms.ImportExportForm frm = new Forms.ImportExportForm();
+                frm.Export(new string[] {
                                         "JSON Orbital Parameters",
                                         },
-                        new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.None },
-                        new string[] { "JSON|*.json|All|*.*" },
-                        new string[] { last_he?.System.Name ?? "" }
-                    );
+                    new Forms.ImportExportForm.ShowFlags[] { Forms.ImportExportForm.ShowFlags.None },
+                    new string[] { "JSON|*.json|All|*.*" },
+                    new string[] { last_he?.System.Name ?? "" }
+                );
 
-                    if (frm.ShowDialog(FindForm()) == DialogResult.OK)
+                if (frm.ShowDialog(FindForm()) == DialogResult.OK)
+                {
+                    try
                     {
-                        try
-                        {
-                            QuickJSON.JObject jobj = StarScan.ScanNode.DumpOrbitElements(nodes);
-                            File.WriteAllText(frm.Path, jobj.ToString(true)); // failure will be picked up below
-                        }
-                        catch (Exception ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine("Scan json " + ex);
-                            ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        }
+                        var json = sysnode.ToJson();
+                        File.WriteAllText(frm.Path, json.ToString(true)); // failure will be picked up below
+                    }
+                    catch (Exception ex)
+                    {
+                        System.Diagnostics.Debug.WriteLine("Scan json " + ex);
+                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Failed to write to " + frm.Path, "Export Failed", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                     }
                 }
             }
@@ -415,9 +410,9 @@ namespace EDDiscovery.UserControls
         Timer t;
         private void T_Tick(object sender, EventArgs e)
         {
-            while (hec < discoveryform.history.EntryOrder.Count)
+            while (hec < DiscoveryForm.History.EntryOrder().Count)
             {
-                HistoryEntry he = discoveryform.history.EntryOrder[hec++];
+                HistoryEntry he = DiscoveryForm.History.EntryOrder()[hec++];
                 if (he.System.Name != last_he.System.Name)
                 {
                     last_he = he;

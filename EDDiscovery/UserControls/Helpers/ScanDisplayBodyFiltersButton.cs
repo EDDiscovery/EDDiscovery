@@ -30,20 +30,22 @@ namespace EDDiscovery.UserControls
 
         public void Init(EliteDangerousCore.DB.IUserDatabaseSettingsSaver ucb, string settingname)
         {
-            Setting = ucb.GetSetting(settingname, "All");
+            Setting = ucb.GetSetting(settingname, "All").Replace("belt;","BeltClusterBody;BeltCluster;");
 
             var options = new List<ExtendedControls.CheckedIconUserControl.Item>();
             foreach (var x in Enum.GetValues(typeof(EDPlanet)))
                 options.Add(new ExtendedControls.CheckedIconUserControl.Item(x.ToString(), Planets.PlanetNameTranslated((EDPlanet)x)));
 
             foreach (var x in Enum.GetNames(typeof(EDStar)))
-                options.Add(new ExtendedControls.CheckedIconUserControl.Item(x.ToString(), Stars.StarName(x.ParseEnum<EDStar>())));
+                options.Add(new ExtendedControls.CheckedIconUserControl.Item(x.ToString(), Stars.ToLocalisedLanguage(x.ParseEnum<EDStar>())));
 
             // these are filter types for items which are either do not have scandata or are not stars/bodies.  Only Belts/Barycentre are displayed.. scans of rings/beltculsters are not displayed
-            options.Add(new ExtendedControls.CheckedIconUserControl.Item("star", "Star".Tx()));
-            options.Add(new ExtendedControls.CheckedIconUserControl.Item("body", "Body".Tx()));
-            options.Add(new ExtendedControls.CheckedIconUserControl.Item("barycentre", "Barycentre".Tx()));
-            options.Add(new ExtendedControls.CheckedIconUserControl.Item("belt", "Belt".Tx()));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("Star", "Star".Tx()));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("Planet", "Body".Tx()));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("Unknown", "Unknown".Tx()));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("Barycentre", "Barycentre".Tx()));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("StellarRing", "Belt Cluster".Tx()));
+            options.Add(new ExtendedControls.CheckedIconUserControl.Item("AsteroidCluster", "Belt Cluster Body".Tx()));
 
             Init(options,
                 Setting,

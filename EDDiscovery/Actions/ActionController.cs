@@ -161,7 +161,7 @@ namespace EDDiscovery.Actions
                     {
                         try
                         {
-                            var image = iconpath.LoadBitmapNoLock();        // may except, so protect
+                            var image = iconpath.CloneBitmapFromFileLocked();        // may except, so protect
 
                             // registered panels, search the stored list, see if there, then it gets the index, else its added to the list
                             int panelid = EDDConfig.Instance.FindCreatePanelID(id);

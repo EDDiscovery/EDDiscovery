@@ -268,13 +268,13 @@ namespace EDDiscovery.UserControls
                 tabstrip.Tag = enumid;                         // Tag stores the ID index of this view
                 tabstrip.Name = Name + "." + enumid.ToStringInvariant();
 
-                tabstrip.ContextMenuStrip = ExtPanelGradientFill.RightClickThemeColorSetSelector((s) =>
+                tabstrip.SetSelectorCMS(ExtPanelGradientFill.RightClickThemeColorSetSelector((s) =>
                     {
                         tabstrip.ThemeColorSet = s;
                         tabstrip.Theme(Theme.Current, Theme.Current.GetFont);
                     },
                     "Default".Tx()
-                );
+                ));
 
                 //TBD
 
@@ -304,7 +304,7 @@ namespace EDDiscovery.UserControls
                     var uccb = (c as UserControlCommonBase);
                     uccb.AutoScaleMode = AutoScaleMode.Inherit;     // must be in inherit mode to prevent multi scaling
                     c.Name = pi.WindowTitle;        // tabs uses Name field for display, must set it
-                    tab.HelpAction = (pt) => { EDDHelp.Help(this.FindForm(), pt,uccb.HelpKeyOrAddress()); };
+                    tab.HelpAction = (pt) => { EDDHelp.HelpPanel(this.FindForm(), pt,uccb.HelpKeyOrAddress()); };
 
                     //System.Diagnostics.Trace.WriteLine("SplitterCreate Tab " + c.Name );
 

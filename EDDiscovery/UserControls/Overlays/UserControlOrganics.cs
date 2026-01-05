@@ -198,13 +198,14 @@ namespace EDDiscovery.UserControls
 
             pictureBox.ClearImageList();
 
-            if (lasthe != null && lasthe.Status.HasBodyID && lasthe.Status.BodyType == "Planet")
+            if (lasthe != null && lasthe.Status.HasBodyID && lasthe.Status.BodyType == BodyDefinitions.BodyType.Planet)
             {
-                StarScan.SystemNode data = DiscoveryForm.History.StarScan.FindSystemSynchronous(lasthe.System);
+                var data = DiscoveryForm.History.StarScan2.FindSystemSynchronous(lasthe.System);
+                var node = data?.FindBody(lasthe.Status.BodyID.Value);
 
-                if (data != null && data.NodesByID.TryGetValue(lasthe.Status.BodyID.Value, out StarScan.ScanNode node))
+                if (node!=null)
                 {
-                    var picelements = new List<ExtPictureBox.ImageElement>();       // accumulate picture elements in here
+                    var picelements = new List<ExtendedControls.ImageElement.Element>();       // accumulate picture elements in here
 
                     Font dfont = displayfont ?? this.Font;
 
@@ -216,16 +217,18 @@ namespace EDDiscovery.UserControls
                     var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                     var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
 
-                    string l = string.Format("At {0}".Tx(), node.BodyDesignator);
-                    if (node.ScanData != null)
+                    string l = string.Format("At {0}".Tx(), node.Name());
+                    if (node.Scan != null)
                     {
-                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}".Tx(), node.ScanData.PlanetTypeText, node.ScanData.RadiusText,
-                                                (Math.Round(node.ScanData.nSurfaceGravityG.Value, 2, MidpointRounding.AwayFromZero).ToString() ?? "?") + " g", node.ScanData.AtmosphereTranslated, node.CountBioSignals.ToString(), ((node.Genuses != null && node.CountBioSignals > 0) ? ": " + String.Join(", ", node.Genuses?.Select(x => x.Genus_Localised).ToArray()) : ""));
+                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}".Tx(), node.Scan.PlanetTypeText, node.Scan.RadiusText,
+                                                (Math.Round(node.Scan.nSurfaceGravityG.Value, 2, MidpointRounding.AwayFromZero).ToString() ?? "?") + " g", 
+                                                node.Scan.AtmosphereTranslated, node.CountBioSignals.ToString(), 
+                                                ((node.Genuses != null && node.CountBioSignals > 0) ? ": " + String.Join(", ", node.Genuses?.Select(x => x.Genus_Localised).ToArray()) : ""));
                     }
 
                     string s = node.Organics != null ? JournalScanOrganic.OrganicListString(node.Organics, 0, false, Environment.NewLine) : "No organic scanned";
 
-                    var i = new ExtPictureBox.ImageElement();
+                    var i = new ExtendedControls.ImageElement.Element();
                     i.TextAutoSize(new Point(3, vpos),
                                                     new Size(Math.Max(pictureBox.Width - 6, 24), 10000),
                                                     l.AppendPrePad(s,Environment.NewLine),
@@ -235,7 +238,7 @@ namespace EDDiscovery.UserControls
                                                     1.0F,
                                                     frmt: frmt); ;
 
-                    extPictureBoxScroll.Height = i.Location.Bottom + 8;
+                    extPictureBoxScroll.Height = i.Bounds.Bottom + 8;
                     picelements.Add(i);
                     frmt.Dispose();
 
@@ -261,53 +264,46 @@ namespace EDDiscovery.UserControls
                 dataGridView.Rows.Clear();
                 long totalvalue = 0;
 
-                foreach (var syskvp in DiscoveryForm.History.StarScan.ScanDataByName)
-                {
-                    foreach (var starkvp in syskvp.Value.StarNodes)
+                foreach( var system in DiscoveryForm.History.StarScan2.AllSystemNodes)
+                { 
+                    foreach (var body in system.Bodies(x=>x.Organics!=null))        // all organic bodies
                     {
-                        foreach (var body in starkvp.Value.Bodies())
+                        var orglist = JournalScanOrganic.SortList(body.Organics);
+
+                        if (startutc != null || endutc != null)      // if sorting by date, knock out ones outside range
                         {
-                            if (body.Organics != null)
+                            orglist = orglist.Where(x => (startutc == null || x.Item2.EventTimeUTC >= startutc) && (endutc == null || x.Item2.EventTimeUTC <= endutc)).ToList();
+                        }
+
+                        foreach (var os in orglist)
+                        {
+                            if (os.Item2.ScanType == JournalScanOrganic.ScanTypeEnum.Analyse || extCheckBoxShowIncomplete.Checked)
                             {
-                                var orglist = JournalScanOrganic.SortList(body.Organics);
+                                DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(os.Item2.EventTimeUTC);
 
-                                if (startutc != null || endutc != null)      // if sorting by date, knock out ones outside range
+                                string valuestr = os.Item2.EstimatedValue.HasValue ? os.Item2.EstimatedValue.Value.ToString("N0") :
+                                                    os.Item2.PotentialEstimatedValue.HasValue ? "(" + os.Item2.PotentialEstimatedValue.Value.ToString("N0") + ")" : "";
+
+                                object[] data = new object[]
                                 {
-                                    orglist = orglist.Where(x => (startutc == null || x.Item2.EventTimeUTC >= startutc) && (endutc == null || x.Item2.EventTimeUTC <= endutc)).ToList();
-                                }
+                                        time.ToStringYearFirst(),
+                                        system.System.Name,
+                                        body.Name(),
+                                        body.Scan?.PlanetTypeText ?? "",
+                                        os.Item2.Genus_Localised??"",
+                                        os.Item2.Species_Localised_Short,
+                                        os.Item2.Variant_Localised_Short,
+                                        os.Item2.ScanType,
+                                        valuestr,
+                                };
 
-                                foreach (var os in orglist)
-                                {
-                                    if (os.Item2.ScanType == JournalScanOrganic.ScanTypeEnum.Analyse || extCheckBoxShowIncomplete.Checked)
-                                    {
-                                        DateTime time = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(os.Item2.EventTimeUTC);
+                                dataGridView.Rows.Add(data);
 
-                                        string valuestr = os.Item2.EstimatedValue.HasValue ? os.Item2.EstimatedValue.Value.ToString("N0") :
-                                                            os.Item2.PotentialEstimatedValue.HasValue ? "(" + os.Item2.PotentialEstimatedValue.Value.ToString("N0") + ")" : "";
-
-                                        object[] data = new object[]
-                                        {
-                                                time.ToStringYearFirst(),
-                                                syskvp.Key.ToString() + ": " + starkvp.Key.ToString(),
-                                                body.BodyDesignator,
-                                                body.ScanData?.PlanetTypeText ?? "",
-                                                os.Item2.Genus_Localised??"",
-                                                os.Item2.Species_Localised_Short,
-                                                os.Item2.Variant_Localised_Short,
-                                                os.Item2.ScanType,
-                                                valuestr,
-                                        };
-
-                                        dataGridView.Rows.Add(data);
-
-                                        totalvalue += os.Item2.EstimatedValue != null ? os.Item2.EstimatedValue.Value : 0;
-                                        dataGridView.Rows[dataGridView.RowCount - 1].Tag = os.Item2;
-                                    }
-                                }
+                                totalvalue += os.Item2.EstimatedValue != null ? os.Item2.EstimatedValue.Value : 0;
+                                dataGridView.Rows[dataGridView.RowCount - 1].Tag = os.Item2;
                             }
                         }
                     }
-
                 }
 
                 dataGridView.Sort(sortcolprev, (sortorderprev == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);

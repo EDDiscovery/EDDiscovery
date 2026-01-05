@@ -70,39 +70,30 @@ namespace EDDiscovery.Forms
             imageViewer.onChange += ChangedSel;
         }
 
-        public bool Init(string cellset)
+        public void Init(string cellset)
         {
-            string datapath = EDDOptions.Instance.MapsAppDirectory();
-            if (Directory.Exists(datapath))
-            {
-                galaxy = EDDiscovery.Icons.IconMaps.StandardMaps().Find(x=>x.FilePath.Contains("Galaxy L"));
+            galaxy = EDDiscovery.Icons.IconMaps.StandardMaps().Find(x=>x.FilePath.Contains("Galaxy L"));
 
-                imageViewer.Image = galaxy.Image;
-                imageViewer.ZoomToFit();
-                imageViewer.Init(galaxy);
-                imageViewer.MinZoom = 1;
+            imageViewer.Image = galaxy.Image;
+            imageViewer.ZoomToFit();
+            imageViewer.Init(galaxy);
+            imageViewer.MinZoom = 1;
 
-                comboBoxSelections.Items.AddRange((from x in DefaultGalaxyOptions select x.Item1));
+            comboBoxSelections.Items.AddRange((from x in DefaultGalaxyOptions select x.Item1));
 
-                initialsel = Selection = cellset;
-                initiallist = new List<int>(imageViewer.Selection);     // copy of..
+            initialsel = Selection = cellset;
+            initiallist = new List<int>(imageViewer.Selection);     // copy of..
 
-                var theme = ExtendedControls.Theme.Current;
-                bool winborder = theme.ApplyDialog(this);
-                statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
+            var theme = ExtendedControls.Theme.Current;
+            bool winborder = theme.ApplyDialog(this);
+            statusStripCustom.Visible = panel_close.Visible = panel_minimize.Visible = !winborder;
 
-                BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
 
-                SetComboBox();
+            SetComboBox();
 
-                imageViewer.BackColor = Color.FromArgb(5, 5, 5);
-
-                return true;
-            }
-
-            return false;
+            imageViewer.BackColor = Color.FromArgb(5, 5, 5);
         }
-
 
         private void GalaxySectorSelect_Resize(object sender, EventArgs e)
         {

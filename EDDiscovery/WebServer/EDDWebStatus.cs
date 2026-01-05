@@ -166,7 +166,7 @@ namespace EDDiscovery.WebServer
 
             response["Bodyname"] = he.WhereAmI;
 
-            response["Bodytype"] = he.Status.BodyType;      // new nov 23
+            response["Bodytype"] = he.Status.BodyType.ToString();      // new nov 23
             response["BodyApproached"] = he.Status.BodyApproached;
             response["BodyID"] = he.Status.BodyID;
             response["StationName"] = he.Status.StationName_Localised;        // may be null

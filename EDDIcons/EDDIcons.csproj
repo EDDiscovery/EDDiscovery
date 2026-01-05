@@ -258,7 +258,7 @@
     <EmbeddedResource Include="Panels\ScreenShot.png" />
     <EmbeddedResource Include="Panels\Settings.png" />
     <EmbeddedResource Include="Panels\ShoppingList.png" />
-    <EmbeddedResource Include="Panels\Spanel.png" />
+    <EmbeddedResource Include="Panels\SummaryPanel.png" />
     <EmbeddedResource Include="Panels\StarList.png" />
     <EmbeddedResource Include="Panels\Statistics.png" />
     <EmbeddedResource Include="Panels\Synthesis.png" />
@@ -476,6 +476,14 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\EDDDestinationSelected.png" />
+    <EmbeddedResource Include="Panels\PowerplayMerits.png" />
+    <EmbeddedResource Include="Journal\CancelledSquadronApplication.png" />
+    <EmbeddedResource Include="Journal\SquadronApplicationApproved.png" />
+    <EmbeddedResource Include="Journal\SquadronApplicationRejected.png" />
+    <EmbeddedResource Include="Panels\Squadrons.png" />
+    <EmbeddedResource Include="Ships\explorer_nx.jpg" />
+    <EmbeddedResource Include="Controls\Scan\Bodies\BarycentreLeftBar.png" />
     <EmbeddedResource Include="Journal\ShipyardBankDeposit.png" />
     <EmbeddedResource Include="Ships\lakonminer.png" />
     <EmbeddedResource Include="Ships\panthermkii.jpg" />
@@ -1185,6 +1193,7 @@
     <EmbeddedResource Include="Controls\Play.png" />
     <EmbeddedResource Include="Controls\elite24.png" />
     <EmbeddedResource Include="Controls\ColourSelector.png" />
+    <EmbeddedResource Include="Controls\FastForward.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />
@@ -1222,6 +1231,8 @@
       <Name>BaseUtils</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Stations\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -174,17 +174,17 @@ namespace EDDiscovery.UserControls
                 var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(totalWanted, mcl);
 
                 JournalScan sd = null;
-                StarScan.SystemNode last_sn = null;
+                EliteDangerousCore.StarScan2.SystemNode last_sn = null;
 
                 if (showListAvailability || showPlanetMats)
                 {
                     // tbd spansh - but the right click UI is horrible, when we reengineer it, we will fix
 
-                    last_sn = await DiscoveryForm.History.StarScan.FindSystemAsync(last_he.System, useEDSMForSystemAvailability ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);
+                    last_sn = await DiscoveryForm.History.StarScan2.FindSystemAsync(last_he.System, useEDSMForSystemAvailability ? EliteDangerousCore.WebExternalDataLookup.EDSM : EliteDangerousCore.WebExternalDataLookup.None);
 
                     if (last_he.Status.IsLandedInShipOrSRV && last_sn != null )       // if found node, and landed
                     {
-                        sd = last_sn.Find(last_he.WhereAmI)?.ScanData;  // find scan data for this body
+                        sd = last_sn.FindCanonicalBodyName(last_he.WhereAmI)?.Scan;  // find scan data for this body
                     }
                 }
 
@@ -223,16 +223,16 @@ namespace EDDiscovery.UserControls
                         }
                         if (!last_he.Status.IsLandedInShipOrSRV && last_sn != null)
                         {
-                            var landables = last_sn.Bodies().Where(b => b.ScanData != null && (!b.ScanData.IsWebSourced || useEDSMForSystemAvailability) &&
-                                                                 b.ScanData.HasMaterials && b.ScanData.Materials.ContainsKey(c.Item1.Details.FDName));
+                            var landables = last_sn.Bodies(b => b.Scan != null && (!b.Scan.IsWebSourced || useEDSMForSystemAvailability) &&
+                                                                 b.Scan.HasMaterials && b.Scan.Materials.ContainsKey(c.Item1.Details.FDName));
                             if (landables.Count() > 0)
                             {
                                 wantedList.Append("\n    ");
                                 List<Tuple<string, double>> allMats = new List<Tuple<string, double>>();
-                                foreach (StarScan.ScanNode sn in landables)
+                                foreach (EliteDangerousCore.StarScan2.BodyNode sn in landables)
                                 {
-                                    sn.ScanData.Materials.TryGetValue(c.Item1.Details.FDName, out available);
-                                    allMats.Add(new Tuple<string, double>(sn.BodyDesignator.Replace(last_he.System.Name, "", StringComparison.InvariantCultureIgnoreCase).Trim(), available));
+                                    sn.Scan.Materials.TryGetValue(c.Item1.Details.FDName, out available);
+                                    allMats.Add(new Tuple<string, double>(sn.Name(), available));
                                 }
                                 allMats = allMats.OrderByDescending(m => m.Item2).ToList();
                                 int n = 1;
@@ -290,7 +290,7 @@ namespace EDDiscovery.UserControls
 
                 Font font = ExtendedControls.Theme.Current.GetFont;
                 pictureBoxList.ClearImageList();
-                ExtPictureBox.ImageElement displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000, 1000), wantedList.ToNullSafeString(), font, textcolour, backcolour, 1.0F);
+                ExtendedControls.ImageElement.Element displayList = pictureBoxList.AddTextAutoSize(new Point(0, 0), new Size(1000, 1000), wantedList.ToNullSafeString(), font, textcolour, backcolour, 1.0F);
                 pictureBoxList.Render();
                 font.Dispose();
 
