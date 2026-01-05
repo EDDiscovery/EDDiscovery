@@ -385,7 +385,7 @@ SECTION MoveToCommander
 264067C44C54E3: "Move To Commander" @
 CBB4CC49824BF7: "Transfer" @
 1FA39F8C15CB36: "Move selected history to commander." @
-22244282A69ADA: "Pick commander to move all their history to current commander:" @
+A605D496654C40: "Pick commander to move all their history to current commander" @
 
 SECTION NewReleaseForm
 
