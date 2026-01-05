@@ -240,6 +240,14 @@ namespace EDDiscovery.UserControls
             public bool MakeVisible { get; set; } = false;
         };
 
+        //  RequestJournalToJID
+        //           request journal grid to go to this jid. Success or Failure or NotHandled
+        public class RequestJournalToJID
+        {
+            public long JID { get; set; }
+            public bool MakeVisible { get; set; } = false;
+        };
+
         // RequestTravelHistoryPos - request primary travel grid to call back directly to sender with the current HE (may be null)
         //           Splitter/grid distributes it around the siblings - if a TG there, they respond true, which stops the distribution (like the main tab will)
         //           If not ack, sent up to tab - Other will send it to maintab only

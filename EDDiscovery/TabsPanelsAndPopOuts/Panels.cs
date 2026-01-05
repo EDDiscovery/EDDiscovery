@@ -92,6 +92,7 @@ namespace EDDiscovery
             DockingPanel = 64,
             TravelPanel = 66,
             Squadrons = 67,
+            PowerplayMerits = 68,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -123,6 +124,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Carrier, typeof(UserControlCarrier), "Carrier", "Carrier", "Data about your fleet carrier") },
             { new PanelInfo( PanelIDs.Squadrons, typeof(UserControlSquadronCarrier), "Squadron/Carrier", "SquadronCarrier", "Data about your squadron") },
             { new PanelInfo( PanelIDs.Colonisation, typeof(UserControlColonisation), "Colonisation", "Colonisation", "Colonisation statistics") },
+            { new PanelInfo( PanelIDs.PowerplayMerits, typeof(UserControlPPMerits), "Powerplay Merits", "PowerplayMerits", "Track powerplay merits by cycle, session, system") },
 
             { new PanelInfo( "Station Data") },
             { new PanelInfo( PanelIDs.MarketData, typeof(UserControlMarketData), "Market Data", "MarketData", "Market data, giving commodity price information where available" ) },

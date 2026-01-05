@@ -207,6 +207,10 @@ C722A22DF80446: "Docking Panel shows pad location" @
 BA0D4229A016A8: "Travel Panel" @
 D0758FD8BCFFB4: "Travel Panel showing current position information" @
 
+6D1493B0BA32C8: "Squadron/Carrier" @
+03C97A8152D15D: "Data about your squadron" @
+305D3C4826F3F9: "Track powerplay merits by cycle, session, system" @
+
 SECTION EDDiscoveryForm
 
 586CFE03DAA723: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" @

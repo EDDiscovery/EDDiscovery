@@ -553,6 +553,7 @@ DE6A8B4B96A80A: "Copy the target system to end route entry" @
 681943CB0EA134: "Save as an expedition for use on expedition and surveyor panels" @
 4BB903205B7347: "This will result in a large number ({0}) of jumps\r\nConfirm please" @
 33C5EE107CFEC3: "No route set up, retry" @
+98310A2466609B: "Rocky HMC" @
 
 SECTION UserControlRouteTracker
 
@@ -579,6 +580,7 @@ C415DA3D51A1E9: "No systems in route have known co-ords" @
 
 SECTION UserControlScan
 
+5D479135A43DAC: "Belt Cluster Body" @
 F3B7084D189898: "Configure scan display body filters" @
 0FE1B534E56651: "Configure scan display" @
 111D3A2E729C26: "Select image size" @
@@ -1404,3 +1406,11 @@ AA198A34E74B30: "S/D 3" @
 D7DECF1AA22B02: "Filter" @
 D97D1EE339E4EE: "Show" @
 
+SECTION UserControlPowerPlayMerits
+
+F7F1997C6CD1AA: "Session" @
+F5EDA1B11AFA0F: "Cycle" @
+70DA870EE0EA81: "View on Journal Grid" @
+50944E656EBC33: "Copy Merits" @
+0AFA5205B52671: "Copy Merits Report" @
+DC521442E6AC91: "Copy System Name" @

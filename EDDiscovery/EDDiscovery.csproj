@@ -290,6 +290,12 @@
     <Compile Include="UserControls\CurrentState\UserControlFactions.Designer.cs">
       <DependentUpon>UserControlFactions.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlPPMerits.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\CurrentState\UserControlPPMerits.Designer.cs">
+      <DependentUpon>UserControlPPMerits.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\CurrentState\UserControlSuitsWeapons.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -915,6 +921,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\CurrentState\UserControlCarrier.resx">
       <DependentUpon>UserControlCarrier.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\CurrentState\UserControlPPMerits.resx">
+      <DependentUpon>UserControlPPMerits.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\CurrentState\UserControlSuitsWeapons.resx">
       <DependentUpon>UserControlSuitsWeapons.cs</DependentUpon>
