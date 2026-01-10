@@ -167,7 +167,10 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            dataGridViewSquadronMembers.SortCompare += (s, e) => { if (e.Column == colCAPIMembersJoined | e.Column == colCAPIMembersLastOnline) e.SortDataGridViewColumnDate(); };
+            dataGridViewSquadronMembers.SortCompare += (s, e) => { 
+                if (e.Column == colCAPIMembersJoined | e.Column == colCAPIMembersLastOnline) e.SortDataGridViewColumnDate(); 
+                if ( e.Column == colCAPIMembersRank) e.SortDataGridViewColumnNumeric(usecelltag:true);
+            };
         }
 
         protected override void Init()
@@ -1159,16 +1162,17 @@ namespace EDDiscovery.UserControls
 
                         foreach (var m in sq.Members)
                         {
+                            string rank = RankDefinitions.FriendlySquadronRankName( (RankDefinitions.SquadronRankVanguards)m.Rank);
                             object[] rowobj = { m.Name,
                                                 EDDConfig.Instance.ConvertTimeToSelectedFromUTC(m.Joined).ToString(),
                                                 EDDConfig.Instance.ConvertTimeToSelectedFromUTC(m.LastOnline).ToString(),
                                                 m.ShipModel + (m.ShipName.HasChars() ? ": " + m.ShipName : ""),
                                                 m.Status,
-                                                m.Rank,
+                                                rank,
                                                 };
 
-                            dataGridViewSquadronMembers.Add(rowobj);
-
+                            var row = dataGridViewSquadronMembers.Add(rowobj);
+                            row.Cells[5].Tag = m.Rank.ToString();       // SortDataGridColumnNumeric uses string to carry numbers
                         }
 
 
