@@ -51,7 +51,7 @@ namespace EDDiscovery.UserControls
         protected string dbCAPIDateUTC = "CAPI_Fleetcarrier_Date";
         protected string dbCAPICommander = "CAPI_Fleetcarrier_CmdrID";
 
-        string capidebugfolder = null;//@"c:\code\";
+        string capidebugfolder = null; //@"c:\code\";
 
         #region Init
 
@@ -199,6 +199,8 @@ namespace EDDiscovery.UserControls
             DGVLoadColumnLayout(dataGridViewCAPIModules, "CAPIModules");
             DGVLoadColumnLayout(dataGridViewCAPICargo, "CAPICargo");
             DGVLoadColumnLayout(dataGridViewCAPILocker, "CAPILocker");
+            DGVLoadColumnLayout(dataGridViewSquadronMembers, "CAPISquadronMembers");
+            DGVLoadColumnLayout(dataGridViewSquadronItems, "CAPISquadronItems");
 
             int index = GetSetting(dbTabSave, 0);
             if (index >= 0 && index < extTabControl.TabCount)
@@ -223,6 +225,8 @@ namespace EDDiscovery.UserControls
             DGVSaveColumnLayout(dataGridViewCAPIModules, "CAPIModules");
             DGVSaveColumnLayout(dataGridViewCAPICargo, "CAPICargo");
             DGVSaveColumnLayout(dataGridViewCAPILocker, "CAPILocker");
+            DGVSaveColumnLayout(dataGridViewSquadronMembers, "CAPISquadronMembers");
+            DGVSaveColumnLayout(dataGridViewSquadronItems, "CAPISquadronItems");
 
             PutSetting(dbSplitterSaveCAPI1, splitContainerCAPI1.GetSplitterDistance());
             PutSetting(dbSplitterSaveCAPI2, splitContainerCAPI2.GetSplitterDistance());

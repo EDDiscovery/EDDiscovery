@@ -164,13 +164,17 @@
             this.extButtonDoCAPI4 = new ExtendedControls.ExtButton();
             this.tabPageCAPISquadronItems = new System.Windows.Forms.TabPage();
             this.dataGridViewSquadronItems = new BaseUtils.DataGridViewColumnControl();
+            this.colSquadronItemsItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSquadronItemsType = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colSquadronItemsQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.panelCAPI5 = new System.Windows.Forms.Panel();
             this.extComboBoxSquadronItems = new ExtendedControls.ExtComboBox();
             this.labelCAPI5 = new System.Windows.Forms.Label();
             this.extButtonDoCAPI5 = new ExtendedControls.ExtButton();
-            this.colSquadronItemsItem = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colSquadronItemsType = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.colSquadronItemsQuantity = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.extPanelDataGridViewScrollSquadronMembers = new ExtendedControls.ExtPanelDataGridViewScroll();
+            this.extScrollBarSquadronMembers = new ExtendedControls.ExtScrollBar();
+            this.extScrollBarSquadronItems = new ExtendedControls.ExtScrollBar();
+            this.extPanelDataGridViewScrollSquadronItems = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extTabControl.SuspendLayout();
             this.tabPageOverall.SuspendLayout();
             this.tabPageItinerary.SuspendLayout();
@@ -221,6 +225,8 @@
             this.tabPageCAPISquadronItems.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSquadronItems)).BeginInit();
             this.panelCAPI5.SuspendLayout();
+            this.extPanelDataGridViewScrollSquadronMembers.SuspendLayout();
+            this.extPanelDataGridViewScrollSquadronItems.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
@@ -230,6 +236,7 @@
             // extTabControl
             // 
             this.extTabControl.AllowDragReorder = false;
+            this.extTabControl.AutoForceUpdate = true;
             this.extTabControl.Controls.Add(this.tabPageOverall);
             this.extTabControl.Controls.Add(this.tabPageItinerary);
             this.extTabControl.Controls.Add(this.tabPageFinances);
@@ -346,6 +353,7 @@
             this.extScrollBarItinerary.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarItinerary.Name = "extScrollBarItinerary";
             this.extScrollBarItinerary.Size = new System.Drawing.Size(24, 540);
+            this.extScrollBarItinerary.SkinnyStyle = false;
             this.extScrollBarItinerary.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarItinerary.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarItinerary.SliderDrawAngle = 90F;
@@ -528,6 +536,7 @@
             this.extScrollBarLedger.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarLedger.Name = "extScrollBarLedger";
             this.extScrollBarLedger.Size = new System.Drawing.Size(24, 220);
+            this.extScrollBarLedger.SkinnyStyle = false;
             this.extScrollBarLedger.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarLedger.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarLedger.SliderDrawAngle = 90F;
@@ -832,6 +841,7 @@
             this.extScrollBarServices.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarServices.Name = "extScrollBarServices";
             this.extScrollBarServices.Size = new System.Drawing.Size(48, 540);
+            this.extScrollBarServices.SkinnyStyle = false;
             this.extScrollBarServices.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarServices.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarServices.SliderDrawAngle = 90F;
@@ -904,6 +914,7 @@
             this.extScrollBarPacks.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarPacks.Name = "extScrollBarPacks";
             this.extScrollBarPacks.Size = new System.Drawing.Size(48, 540);
+            this.extScrollBarPacks.SkinnyStyle = false;
             this.extScrollBarPacks.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarPacks.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarPacks.SliderDrawAngle = 90F;
@@ -963,6 +974,7 @@
             this.extScrollBarOrders.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarOrders.Name = "extScrollBarOrders";
             this.extScrollBarOrders.Size = new System.Drawing.Size(24, 540);
+            this.extScrollBarOrders.SkinnyStyle = false;
             this.extScrollBarOrders.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarOrders.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarOrders.SliderDrawAngle = 90F;
@@ -1114,6 +1126,7 @@
             this.extScrollBarCAPIStats.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPIStats.Name = "extScrollBarCAPIStats";
             this.extScrollBarCAPIStats.Size = new System.Drawing.Size(24, 508);
+            this.extScrollBarCAPIStats.SkinnyStyle = false;
             this.extScrollBarCAPIStats.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPIStats.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPIStats.SliderDrawAngle = 90F;
@@ -1277,6 +1290,7 @@
             this.extScrollBarCAPIShips.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPIShips.Name = "extScrollBarCAPIShips";
             this.extScrollBarCAPIShips.Size = new System.Drawing.Size(24, 284);
+            this.extScrollBarCAPIShips.SkinnyStyle = false;
             this.extScrollBarCAPIShips.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPIShips.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPIShips.SliderDrawAngle = 90F;
@@ -1409,6 +1423,7 @@
             this.extScrollBarCAPIModules.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPIModules.Name = "extScrollBarCAPIModules";
             this.extScrollBarCAPIModules.Size = new System.Drawing.Size(24, 220);
+            this.extScrollBarCAPIModules.SkinnyStyle = false;
             this.extScrollBarCAPIModules.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPIModules.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPIModules.SliderDrawAngle = 90F;
@@ -1606,6 +1621,7 @@
             this.extScrollBarCAPICargo.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPICargo.Name = "extScrollBarCAPICargo";
             this.extScrollBarCAPICargo.Size = new System.Drawing.Size(24, 284);
+            this.extScrollBarCAPICargo.SkinnyStyle = false;
             this.extScrollBarCAPICargo.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPICargo.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPICargo.SliderDrawAngle = 90F;
@@ -1727,6 +1743,7 @@
             this.extScrollBarCAPILocker.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarCAPILocker.Name = "extScrollBarCAPILocker";
             this.extScrollBarCAPILocker.Size = new System.Drawing.Size(24, 220);
+            this.extScrollBarCAPILocker.SkinnyStyle = false;
             this.extScrollBarCAPILocker.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPILocker.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarCAPILocker.SliderDrawAngle = 90F;
@@ -1821,7 +1838,7 @@
             // 
             // tabPageSquadronMembers
             // 
-            this.tabPageSquadronMembers.Controls.Add(this.dataGridViewSquadronMembers);
+            this.tabPageSquadronMembers.Controls.Add(this.extPanelDataGridViewScrollSquadronMembers);
             this.tabPageSquadronMembers.Controls.Add(this.panelCAPI4);
             this.tabPageSquadronMembers.Location = new System.Drawing.Point(4, 22);
             this.tabPageSquadronMembers.Name = "tabPageSquadronMembers";
@@ -1848,7 +1865,7 @@
             this.colCAPIMembersStatus,
             this.colCAPIMembersRank});
             this.dataGridViewSquadronMembers.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewSquadronMembers.Location = new System.Drawing.Point(3, 35);
+            this.dataGridViewSquadronMembers.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewSquadronMembers.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridViewSquadronMembers.Name = "dataGridViewSquadronMembers";
             this.dataGridViewSquadronMembers.PerColumnWordWrapControl = true;
@@ -1858,7 +1875,7 @@
             this.dataGridViewSquadronMembers.RowTemplate.Height = 28;
             this.dataGridViewSquadronMembers.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewSquadronMembers.SingleRowSelect = true;
-            this.dataGridViewSquadronMembers.Size = new System.Drawing.Size(839, 508);
+            this.dataGridViewSquadronMembers.Size = new System.Drawing.Size(815, 508);
             this.dataGridViewSquadronMembers.TabIndex = 1;
             // 
             // colCAPIMembersName
@@ -1940,7 +1957,7 @@
             // 
             // tabPageCAPISquadronItems
             // 
-            this.tabPageCAPISquadronItems.Controls.Add(this.dataGridViewSquadronItems);
+            this.tabPageCAPISquadronItems.Controls.Add(this.extPanelDataGridViewScrollSquadronItems);
             this.tabPageCAPISquadronItems.Controls.Add(this.panelCAPI5);
             this.tabPageCAPISquadronItems.Location = new System.Drawing.Point(4, 22);
             this.tabPageCAPISquadronItems.Name = "tabPageCAPISquadronItems";
@@ -1964,7 +1981,7 @@
             this.colSquadronItemsType,
             this.colSquadronItemsQuantity});
             this.dataGridViewSquadronItems.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.dataGridViewSquadronItems.Location = new System.Drawing.Point(3, 35);
+            this.dataGridViewSquadronItems.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewSquadronItems.Margin = new System.Windows.Forms.Padding(2);
             this.dataGridViewSquadronItems.Name = "dataGridViewSquadronItems";
             this.dataGridViewSquadronItems.PerColumnWordWrapControl = true;
@@ -1974,8 +1991,30 @@
             this.dataGridViewSquadronItems.RowTemplate.Height = 28;
             this.dataGridViewSquadronItems.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewSquadronItems.SingleRowSelect = true;
-            this.dataGridViewSquadronItems.Size = new System.Drawing.Size(839, 508);
+            this.dataGridViewSquadronItems.Size = new System.Drawing.Size(815, 508);
             this.dataGridViewSquadronItems.TabIndex = 8;
+            // 
+            // colSquadronItemsItem
+            // 
+            this.colSquadronItemsItem.FillWeight = 150F;
+            this.colSquadronItemsItem.HeaderText = "Item";
+            this.colSquadronItemsItem.MinimumWidth = 8;
+            this.colSquadronItemsItem.Name = "colSquadronItemsItem";
+            this.colSquadronItemsItem.ReadOnly = true;
+            // 
+            // colSquadronItemsType
+            // 
+            this.colSquadronItemsType.HeaderText = "Type";
+            this.colSquadronItemsType.Name = "colSquadronItemsType";
+            this.colSquadronItemsType.ReadOnly = true;
+            // 
+            // colSquadronItemsQuantity
+            // 
+            this.colSquadronItemsQuantity.FillWeight = 80F;
+            this.colSquadronItemsQuantity.HeaderText = "Quantity";
+            this.colSquadronItemsQuantity.MinimumWidth = 8;
+            this.colSquadronItemsQuantity.Name = "colSquadronItemsQuantity";
+            this.colSquadronItemsQuantity.ReadOnly = true;
             // 
             // panelCAPI5
             // 
@@ -2035,27 +2074,101 @@
             this.extButtonDoCAPI5.UseVisualStyleBackColor = true;
             this.extButtonDoCAPI5.Click += new System.EventHandler(this.extButtonDoCAPI1_Click);
             // 
-            // colSquadronItemsItem
+            // extPanelDataGridViewScrollSquadronMembers
             // 
-            this.colSquadronItemsItem.FillWeight = 150F;
-            this.colSquadronItemsItem.HeaderText = "Item";
-            this.colSquadronItemsItem.MinimumWidth = 8;
-            this.colSquadronItemsItem.Name = "colSquadronItemsItem";
-            this.colSquadronItemsItem.ReadOnly = true;
+            this.extPanelDataGridViewScrollSquadronMembers.Controls.Add(this.extScrollBarSquadronMembers);
+            this.extPanelDataGridViewScrollSquadronMembers.Controls.Add(this.dataGridViewSquadronMembers);
+            this.extPanelDataGridViewScrollSquadronMembers.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPanelDataGridViewScrollSquadronMembers.InternalMargin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.extPanelDataGridViewScrollSquadronMembers.Location = new System.Drawing.Point(3, 35);
+            this.extPanelDataGridViewScrollSquadronMembers.Name = "extPanelDataGridViewScrollSquadronMembers";
+            this.extPanelDataGridViewScrollSquadronMembers.ScrollBarWidth = 24;
+            this.extPanelDataGridViewScrollSquadronMembers.Size = new System.Drawing.Size(839, 508);
+            this.extPanelDataGridViewScrollSquadronMembers.TabIndex = 7;
+            this.extPanelDataGridViewScrollSquadronMembers.VerticalScrollBarDockRight = true;
             // 
-            // colSquadronItemsType
+            // extScrollBarSquadronMembers
             // 
-            this.colSquadronItemsType.HeaderText = "Type";
-            this.colSquadronItemsType.Name = "colSquadronItemsType";
-            this.colSquadronItemsType.ReadOnly = true;
+            this.extScrollBarSquadronMembers.AlwaysHideScrollBar = false;
+            this.extScrollBarSquadronMembers.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.extScrollBarSquadronMembers.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarSquadronMembers.ArrowButtonColor2 = System.Drawing.Color.LightGray;
+            this.extScrollBarSquadronMembers.ArrowDownDrawAngle = 270F;
+            this.extScrollBarSquadronMembers.ArrowUpDrawAngle = 90F;
+            this.extScrollBarSquadronMembers.BorderColor = System.Drawing.Color.White;
+            this.extScrollBarSquadronMembers.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extScrollBarSquadronMembers.HideScrollBar = false;
+            this.extScrollBarSquadronMembers.LargeChange = 0;
+            this.extScrollBarSquadronMembers.Location = new System.Drawing.Point(815, 0);
+            this.extScrollBarSquadronMembers.Maximum = -1;
+            this.extScrollBarSquadronMembers.Minimum = 0;
+            this.extScrollBarSquadronMembers.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarSquadronMembers.MouseOverButtonColor2 = System.Drawing.Color.Green;
+            this.extScrollBarSquadronMembers.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarSquadronMembers.MousePressedButtonColor2 = System.Drawing.Color.Red;
+            this.extScrollBarSquadronMembers.Name = "extScrollBarSquadronMembers";
+            this.extScrollBarSquadronMembers.Size = new System.Drawing.Size(24, 508);
+            this.extScrollBarSquadronMembers.SkinnyStyle = false;
+            this.extScrollBarSquadronMembers.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarSquadronMembers.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarSquadronMembers.SliderDrawAngle = 90F;
+            this.extScrollBarSquadronMembers.SmallChange = 1;
+            this.extScrollBarSquadronMembers.TabIndex = 2;
+            this.extScrollBarSquadronMembers.Text = "extScrollBar1";
+            this.extScrollBarSquadronMembers.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.extScrollBarSquadronMembers.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarSquadronMembers.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
+            this.extScrollBarSquadronMembers.ThumbDrawAngle = 0F;
+            this.extScrollBarSquadronMembers.Value = -1;
+            this.extScrollBarSquadronMembers.ValueLimited = -1;
             // 
-            // colSquadronItemsQuantity
+            // extScrollBarSquadronItems
             // 
-            this.colSquadronItemsQuantity.FillWeight = 80F;
-            this.colSquadronItemsQuantity.HeaderText = "Quantity";
-            this.colSquadronItemsQuantity.MinimumWidth = 8;
-            this.colSquadronItemsQuantity.Name = "colSquadronItemsQuantity";
-            this.colSquadronItemsQuantity.ReadOnly = true;
+            this.extScrollBarSquadronItems.AlwaysHideScrollBar = false;
+            this.extScrollBarSquadronItems.ArrowBorderColor = System.Drawing.Color.LightBlue;
+            this.extScrollBarSquadronItems.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.extScrollBarSquadronItems.ArrowButtonColor2 = System.Drawing.Color.LightGray;
+            this.extScrollBarSquadronItems.ArrowDownDrawAngle = 270F;
+            this.extScrollBarSquadronItems.ArrowUpDrawAngle = 90F;
+            this.extScrollBarSquadronItems.BorderColor = System.Drawing.Color.White;
+            this.extScrollBarSquadronItems.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extScrollBarSquadronItems.HideScrollBar = false;
+            this.extScrollBarSquadronItems.LargeChange = 0;
+            this.extScrollBarSquadronItems.Location = new System.Drawing.Point(815, 0);
+            this.extScrollBarSquadronItems.Maximum = -1;
+            this.extScrollBarSquadronItems.Minimum = 0;
+            this.extScrollBarSquadronItems.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.extScrollBarSquadronItems.MouseOverButtonColor2 = System.Drawing.Color.Green;
+            this.extScrollBarSquadronItems.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.extScrollBarSquadronItems.MousePressedButtonColor2 = System.Drawing.Color.Red;
+            this.extScrollBarSquadronItems.Name = "extScrollBarSquadronItems";
+            this.extScrollBarSquadronItems.Size = new System.Drawing.Size(24, 508);
+            this.extScrollBarSquadronItems.SkinnyStyle = false;
+            this.extScrollBarSquadronItems.SliderColor = System.Drawing.Color.DarkGray;
+            this.extScrollBarSquadronItems.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.extScrollBarSquadronItems.SliderDrawAngle = 90F;
+            this.extScrollBarSquadronItems.SmallChange = 1;
+            this.extScrollBarSquadronItems.TabIndex = 9;
+            this.extScrollBarSquadronItems.Text = "extScrollBar2";
+            this.extScrollBarSquadronItems.ThumbBorderColor = System.Drawing.Color.Yellow;
+            this.extScrollBarSquadronItems.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.extScrollBarSquadronItems.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
+            this.extScrollBarSquadronItems.ThumbDrawAngle = 0F;
+            this.extScrollBarSquadronItems.Value = -1;
+            this.extScrollBarSquadronItems.ValueLimited = -1;
+            // 
+            // extPanelDataGridViewScrollSquadronItems
+            // 
+            this.extPanelDataGridViewScrollSquadronItems.Controls.Add(this.extScrollBarSquadronItems);
+            this.extPanelDataGridViewScrollSquadronItems.Controls.Add(this.dataGridViewSquadronItems);
+            this.extPanelDataGridViewScrollSquadronItems.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.extPanelDataGridViewScrollSquadronItems.InternalMargin = new System.Windows.Forms.Padding(0, 0, 0, 0);
+            this.extPanelDataGridViewScrollSquadronItems.Location = new System.Drawing.Point(3, 35);
+            this.extPanelDataGridViewScrollSquadronItems.Name = "extPanelDataGridViewScrollSquadronItems";
+            this.extPanelDataGridViewScrollSquadronItems.ScrollBarWidth = 24;
+            this.extPanelDataGridViewScrollSquadronItems.Size = new System.Drawing.Size(839, 508);
+            this.extPanelDataGridViewScrollSquadronItems.TabIndex = 10;
+            this.extPanelDataGridViewScrollSquadronItems.VerticalScrollBarDockRight = true;
             // 
             // UserControlCarrier
             // 
@@ -2122,6 +2235,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewSquadronItems)).EndInit();
             this.panelCAPI5.ResumeLayout(false);
             this.panelCAPI5.PerformLayout();
+            this.extPanelDataGridViewScrollSquadronMembers.ResumeLayout(false);
+            this.extPanelDataGridViewScrollSquadronItems.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -2266,5 +2381,9 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn colSquadronItemsItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSquadronItemsType;
         private System.Windows.Forms.DataGridViewTextBoxColumn colSquadronItemsQuantity;
+        private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollSquadronMembers;
+        private ExtendedControls.ExtScrollBar extScrollBarSquadronMembers;
+        private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScrollSquadronItems;
+        private ExtendedControls.ExtScrollBar extScrollBarSquadronItems;
     }
 }
