@@ -44,8 +44,8 @@ B5E77C5C02A90C: "Removed" => "Eliminado"
 // misc
 
 1090044535D1EA: "Panel Colour" => "Color del panel"
-96FCC783071DFD: "Current Key Delay String" @
-3CD8E99F3C4143: "Default Down Delay (0=Default)" @
+96FCC783071DFD: "Current Key Delay String" => "Retardo de tecla actual"
+3CD8E99F3C4143: "Default Down Delay (0=Default)" => "Retardo de bajada predeterminado (0=Predeterminado)"
 
 SECTION StartUp
 
@@ -200,16 +200,16 @@ BE1C21D6FE0AE4: "Discoveries" => "Descubrimientos"
 17DFA3A002E3D5: "Stations in the system from spansh web data" => "Estaciones en el sistema desde datos web de Spansh"
 4DFB01DC92677C: "Colonisation" => "Colonización"
 91A4AFA2089B9F: "Colonisation statistics" => "Estadísticas de colonización"
-5A016BA9B95236: "Test Overlay" @
-52A1B9A52B8BFE: "Auto Panel" @
-42EA6768A9E951: "Docking Panel" @
-C722A22DF80446: "Docking Panel shows pad location" @
-BA0D4229A016A8: "Travel Panel" @
-D0758FD8BCFFB4: "Travel Panel showing current position information" @
+5A016BA9B95236: "Test Overlay" => "Superposición de prueba"
+52A1B9A52B8BFE: "Auto Panel" => "Panel automático"
+42EA6768A9E951: "Docking Panel" => "Panel de atraque"
+C722A22DF80446: "Docking Panel shows pad location" => "Panel de atraque mostrando la ubicación de la plataforma"
+BA0D4229A016A8: "Travel Panel" => "Panel de viaje"
+D0758FD8BCFFB4: "Travel Panel showing current position information" => "Panel de viaje mostrando la información de la posición actual"
 
-6D1493B0BA32C8: "Squadron/Carrier" @
-03C97A8152D15D: "Data about your squadron" @
-305D3C4826F3F9: "Track powerplay merits by cycle, session, system" @
+6D1493B0BA32C8: "Squadron/Carrier" => "Flota/Portanaves"
+03C97A8152D15D: "Data about your squadron" => "Datos sobre tu flota"
+305D3C4826F3F9: "Track powerplay merits by cycle, session, system" => "Rastrear méritos de Powerplay por ciclo, sesión, sistema"
 
 SECTION EDDiscoveryForm
 
@@ -303,7 +303,7 @@ DE5CFD5A00795F: "Fetch Star Data Again" => "Obtener datos de estrellas de nuevo"
 683617E8B53C1F: "Web server disabled due to incorrect folder or missing zip file" => "Servidor web desactivado debido a una carpeta incorrecta o falta un archivo zip"
 37F51D0860E8D7: "*** Web server is disabled ***" => "*** El servidor web está deshabilitado ***"
 AEA794CB1D04DB: "DLLs disabled: {0}" => "Desactivar DLLs: {0}"
-C7F0C2BDEE6813: "Move another commanders history to this commander" @
+C7F0C2BDEE6813: "Move another commanders history to this commander" => "Mover el historial de otro comandante a este comandante"
 
 SECTION EDDiscoveryController
 
@@ -385,7 +385,7 @@ SECTION MoveToCommander
 264067C44C54E3: "Move To Commander" => "Mover a Comandante"
 CBB4CC49824BF7: "Transfer" => "Transferir"
 1FA39F8C15CB36: "Move selected history to commander." => "Mover el historial seleccionado al comandante"
-A605D496654C40: "Pick commander to move all their history to current commander" @
+A605D496654C40: "Pick commander to move all their history to current commander" => "Elija el comandante para mover todo su historial al comandante actual"
 
 SECTION NewReleaseForm
 
