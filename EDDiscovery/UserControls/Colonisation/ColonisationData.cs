@@ -115,7 +115,7 @@ namespace EDDiscovery.UserControls.Colonisation
             else if (he.journalEntry is JournalColonisationConstructionDepot cd)
             {
                 var classify = StationDefinitions.Classify(cd.MarketID, StationDefinitions.StarportTypes.Unknown);
-                global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} {cd.MarketID} {classify} Colonisation depot `{he.Status.StationName_Localised}` {he.Status.StationType} {cd.ConstructionProgress * 100.0:N2} @ {he.System.Name} ");
+                global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} {cd.MarketID} {classify} Colonisation depot `{he.Status.StationName_Localised}` {he.Status.FDStationType} {cd.ConstructionProgress * 100.0:N2} @ {he.System.Name} ");
 
                 if (cd.MarketID == he.Status.MarketID)        // double check on location..
                 {

@@ -289,7 +289,7 @@ namespace EDDiscovery.UserControls
                     if (!matched && search.Terms[1] != null)       // system
                         matched = he.System.Name.WildCardMatch(search.Terms[1], true);
                     if (!matched && search.Terms[2] != null)       // body
-                        matched = he.Status.BodyName?.WildCardMatch(search.Terms[2], true) ?? false;
+                        matched = he.Status.WhereAmI?.WildCardMatch(search.Terms[2], true) ?? false;
 
                     if (!matched)
                         continue;

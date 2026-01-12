@@ -170,7 +170,7 @@ namespace EDDiscovery.WebServer
             response["BodyApproached"] = he.Status.BodyApproached;
             response["BodyID"] = he.Status.BodyID;
             response["StationName"] = he.Status.StationName_Localised;        // may be null
-            response["StationType"] = he.Status.StationType;
+            response["StationType"] = he.Status.FDStationType.ToString();
             response["StationFaction"] = he.Status.StationFaction;
             response["OnCrewWithCaptain"] = he.Status.OnCrewWithCaptain;
             response["Multiplayer"] = he.Status.IsInMultiPlayer;

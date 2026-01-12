@@ -451,14 +451,13 @@ namespace EDDiscovery.UserControls
                 colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss:fff");
                 colTime += Environment.NewLine + $"{he.Status.TravelState} @ {he.System.Name}:{he.System.SystemAddress}\r\n";
 
-                if ( he.Status.BodyName!=null)
-                    colTime += $"b`{he.Status.BodyName}`,{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}\r\n";
+                colTime += $"b`{he.Status.WhereAmI}`,{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}\r\n";
 
                 if (he.Status.Latitude != null)
                     colTime += $"latlong {he.Status.Latitude:N2}, {he.Status.Longitude:N2}\r\n";
 
                 if (he.Status.StationName_Localised != null)
-                    colTime += $"s`{he.Status.StationName_Localised}`, {he.Status.StationType}\r\n";
+                    colTime += $"s`{he.Status.StationName_Localised}`, {he.Status.FDStationType}\r\n";
 
                 if ( he.Status.DockingPad>0)
                     colTime += $"DPad: {he.Status.DockingPad}\r\n";
@@ -503,7 +502,7 @@ namespace EDDiscovery.UserControls
                 if (!matched && search.Terms[1] != null)       // system
                     matched = he.System.Name.WildCardMatch(search.Terms[1],true);
                 if (!matched && search.Terms[2] != null)       // body
-                    matched = he.Status.BodyName?.WildCardMatch(search.Terms[2],true) ?? false;
+                    matched = he.Status.WhereAmI?.WildCardMatch(search.Terms[2],true) ?? false;
                 if (!matched && search.Terms[3] != null)       // station
                     matched = he.Status.StationName_Localised?.WildCardMatch(search.Terms[3], true) ?? false;
                 if (!matched && search.Terms[4] != null)       // stationfaction

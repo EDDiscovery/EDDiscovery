@@ -88,60 +88,72 @@ namespace EDDiscovery.UserControls
 
         public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
-            // use for debug purposes, follows history cursor
-            // lasthe = he; UpdateDisplay();
+            lasthe = DiscoveryForm.History.GetLast;
+            UpdateDisplay();
         }
 
         async void UpdateDisplay()
         {
-            string text = "";
-            if (uistatus.MajorMode == UIMode.MajorModeType.MainShip)
-            {
-                if (uistatus.Mode == UIMode.ModeType.MainShipNormalSpace)
-                {
-                    text = "Normal space";
-                    // show destination if set, if approach body show that, get body info from scan data
-                }
-                else if (uistatus.Mode == UIMode.ModeType.MainShipDockedStarPort)
-                {
-                    text = "Docked Starport";
-                    // show information about the station, economy, etc
-                }
-                else if (uistatus.Mode == UIMode.ModeType.MainShipDockedPlanet)
-                {
-                    text = "Docked Planet";
-                    // show information about the station, economy, etc
-                }
-                else if (uistatus.Mode == UIMode.ModeType.MainShipSupercruise)
-                {
-                    bool injump = uistatus.Flags.Contains(UITypeEnum.FsdJump);
-                    if (injump)
-                        text = "Jumping to ";
-                    else
-                        text = "Supercruising"; // tbd to?
+            EliteDangerousCore.StarScan2.SystemNode data = lasthe != null ? DiscoveryForm.History.StarScan2.FindSystemSynchronous(lasthe.System, WebExternalDataLookup.None) : null;
 
-                    // show destination if set, if approach body show that, get body info from scan data
-                }
-                else if (uistatus.Mode == UIMode.ModeType.MainShipLanded)
+            if (data != null)
+            {
+                if ( lasthe.Status.IsDocked)
                 {
-                    text = "Landed";
-                    // show destination if set, if approach body show that, get body info from scan data
+                    //IBodyFeature bf = data.GetFeature(lasthe.Status.)
                 }
-            }
-            else if (uistatus.MajorMode == UIMode.MajorModeType.SRV)
-            {
-                text = "SRV";
-                // show information about lat/long
-            }
-            else if (uistatus.MajorMode == UIMode.MajorModeType.Fighter)
-            {
-                text = "Fighter";
-                // show information about stuff
-            }
-            if (uistatus.MajorMode == UIMode.MajorModeType.OnFoot)
-            {
-                text = "OnFoot";
-                // show information about planet or station
+
+
+                //string text = "";
+                //if (uistatus.MajorMode == UIMode.MajorModeType.MainShip)
+                //{
+                //    if (uistatus.Mode == UIMode.ModeType.MainShipNormalSpace)
+                //    {
+                //        text = "Normal space";
+                //        // show destination if set, if approach body show that, get body info from scan data
+                //    }
+                //    else if (uistatus.Mode == UIMode.ModeType.MainShipDockedStarPort)
+                //    {
+                //        if ( data.FindCanonicalBodyName)
+                //        text = "Docked Starport";
+                //        // show information about the station, economy, etc
+                //    }
+                //    else if (uistatus.Mode == UIMode.ModeType.MainShipDockedPlanet)
+                //    {
+                //        text = "Docked Planet";
+                //        // show information about the station, economy, etc
+                //    }
+                //    else if (uistatus.Mode == UIMode.ModeType.MainShipSupercruise)
+                //    {
+                //        bool injump = uistatus.Flags.Contains(UITypeEnum.FsdJump);
+                //        if (injump)
+                //            text = "Jumping to ";
+                //        else
+                //            text = "Supercruising"; // tbd to?
+
+                //        // show destination if set, if approach body show that, get body info from scan data
+                //    }
+                //    else if (uistatus.Mode == UIMode.ModeType.MainShipLanded)
+                //    {
+                //        text = "Landed";
+                //        // show destination if set, if approach body show that, get body info from scan data
+                //    }
+                //}
+                //else if (uistatus.MajorMode == UIMode.MajorModeType.SRV)
+                //{
+                //    text = "SRV";
+                //    // show information about lat/long
+                //}
+                //else if (uistatus.MajorMode == UIMode.MajorModeType.Fighter)
+                //{
+                //    text = "Fighter";
+                //    // show information about stuff
+                //}
+                //if (uistatus.MajorMode == UIMode.MajorModeType.OnFoot)
+                //{
+                //    text = "OnFoot";
+                //    // show information about planet or station
+                //}
             }
 
             if (uistatus.DestinationName.HasChars() && uistatus.DestinationSystemAddress.HasValue)
