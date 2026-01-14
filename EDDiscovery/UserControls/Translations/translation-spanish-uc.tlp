@@ -515,7 +515,7 @@ CFD4E874046B93: "Road to Riches" => "Camino hacia las Riquezas"
 AB2A9F0D8D787B: "Earth Likes" => "Tipo Tierra"
 0077D22826A77F: "Trade Router" => "Enrutador de Comercio"
 0CF5E327910E74: "Fleet Carrier" => "Portanaves"
-7F0950D59B1A34: "Squadron Carrier" @
+7F0950D59B1A34: "Squadron Carrier" => "Portanaves de Flota"
 B12CDD63114BA4: "Galaxy Plotter" => "Traza Galáctica"
 B364AA8B4033FF: "Exo Mastery" => "Maestría Exo"
 07AB47C5737BA1: "Use Permit Systems" => "Usar Sistemas con Permisos"
@@ -553,7 +553,7 @@ DE6A8B4B96A80A: "Copy the target system to end route entry" => "Copie el sistema
 681943CB0EA134: "Save as an expedition for use on expedition and surveyor panels" => "Guardar como expedición para usar en los paneles de expedición y agrimensor"
 4BB903205B7347: "This will result in a large number ({0}) of jumps\r\nConfirm please" => "Esto resultara en un gran número ({0}) de saltos\r\nPor favor confirmar"
 33C5EE107CFEC3: "No route set up, retry" => "Ruta no establecida, reintentar"
-98310A2466609B: "Rocky HMC" @
+98310A2466609B: "Rocky HMC" => "Rocoso con ACM"
 
 SECTION UserControlRouteTracker
 
@@ -580,7 +580,7 @@ C415DA3D51A1E9: "No systems in route have known co-ords" => "Ningún sistema en 
 
 SECTION UserControlScan
 
-5D479135A43DAC: "Belt Cluster Body" @
+5D479135A43DAC: "Belt Cluster Body" => "Cuerpo de Cinturón de Asteroides"
 F3B7084D189898: "Configure scan display body filters" => "Configurar filtro de cuerpos para escaneos mostrados"
 0FE1B534E56651: "Configure scan display" => "Configurar escaneos mostrados"
 111D3A2E729C26: "Select image size" => "Seleccionar tamaño de imagen"
@@ -1020,7 +1020,7 @@ D9273536780112: "Control Outlining" => "Esquema de control"
 03C54D66F2DA56: "Next start/stop marker is hidden" => "El próximo marcador de inicio/parada está oculto"
 905A92084F2F46: "No start/stop marker found below" => "No se encontró marcador de inicio/parada debajo"
 A89F26DDCFE091: "Entry filtered out of grid" => "Entrada filtrada fuera de la cuadrícula"
-A070027FDED89B: "Colour events by type" @
+A070027FDED89B: "Colour events by type" => "Colorear eventos por tipo"
 
 SECTION UserControlCaptainsLog
 
@@ -1393,11 +1393,11 @@ A369535C35A528: "Output grid to excel" => "Exportar cuadrícula a Excel"
 
 F06FC9B08C6AE1: "LY Distance" => "Distancia (al)"
 4EFE75D6EB0078: "Price 1" => "Precio 1"
-F33B503B1A195E: "S/D 1" @
+F33B503B1A195E: "S/D 1" => "O/D 1"
 606BB56FD9280F: "Price 2" => "Precio 2"
-D9796972CCCEFC: "S/D 2" @
+D9796972CCCEFC: "S/D 2" => "O/D 2"
 92AB2B177847F1: "Price 3" => "Precio 3"
-AA198A34E74B30: "S/D 3" @
+AA198A34E74B30: "S/D 3" => "O/D 3"
 18301E1F358F4D: "SPad" => "Plataforma P"
 2D53706E25BD61: "MPad" => "Plataforma M"
 140E78CB855A9A: "LPad" => "Plataforma G"
@@ -1408,9 +1408,9 @@ D97D1EE339E4EE: "Show" => "Mostrar"
 
 SECTION UserControlPowerPlayMerits
 
-F7F1997C6CD1AA: "Session" @
-F5EDA1B11AFA0F: "Cycle" @
-70DA870EE0EA81: "View on Journal Grid" @
-50944E656EBC33: "Copy Merits" @
-0AFA5205B52671: "Copy Merits Report" @
-DC521442E6AC91: "Copy System Name" @
+F7F1997C6CD1AA: "Session" => "Sesión"
+F5EDA1B11AFA0F: "Cycle" => "Ciclo"
+70DA870EE0EA81: "View on Journal Grid" => "Ver en la cuadrícula del diario"
+50944E656EBC33: "Copy Merits" => "Copiar méritos"
+0AFA5205B52671: "Copy Merits Report" => "Copiar informe de méritos"
+DC521442E6AC91: "Copy System Name" => "Copiar nombre del sistema"
