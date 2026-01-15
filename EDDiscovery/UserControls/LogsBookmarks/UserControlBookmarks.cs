@@ -36,21 +36,10 @@ namespace EDDiscovery.UserControls
         public UserControlBookmarks()
         {
             InitializeComponent();
-        }
-
-        protected override void Init()
-        {
-            DBBaseName = "UCBookmarks";
-
-            searchtimer = new Timer() { Interval = 500 };
-            searchtimer.Tick += Searchtimer_Tick;
-
-            GlobalBookMarkList.Instance.OnBookmarkChange += BookmarksChanged;
-
             var enumlist = new Enum[] { EDTx.UserControlBookmarks_ColType, EDTx.UserControlBookmarks_ColBookmarkName,
                                             EDTx.UserControlBookmarks_ColDescription, EDTx.UserControlBookmarks_ColTags,
                                             EDTx.UserControlBookmarks_labelSearch };
-            
+
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { userControlSurfaceBookmarks });
 
             var enumlisttt = new Enum[] {EDTx.UserControlBookmarks_textBoxFilter_ToolTip, EDTx.UserControlBookmarks_buttonFilter_ToolTip, EDTx.UserControlBookmarks_buttonNew_ToolTip,
@@ -59,13 +48,22 @@ namespace EDDiscovery.UserControls
                     EDTx.UserControlBookmarks_buttonExtImport_ToolTip};
             BaseUtils.Translator.Instance.TranslateTooltip(toolTip, enumlisttt, this);
 
+            DBBaseName = "UCBookmarks";
+        }
+
+        protected override void Init()
+        {
+            searchtimer = new Timer() { Interval = 500 };
+            searchtimer.Tick += Searchtimer_Tick;
+
+            GlobalBookMarkList.Instance.OnBookmarkChange += BookmarksChanged;
+
             // manually pick these up from DataGridViewStarResults as the names don't match
             viewScanOfSystemToolStripMenuItem.Text = viewScanOfSystemToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Data);
             mapGotoStartoolStripMenuItem.Text = mapGotoStartoolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_3d);
             viewOnSpanshToolStripMenuItem.Text = viewOnSpanshToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_Spansh);
             viewOnEDSMToolStripMenuItem.Text = viewOnEDSMToolStripMenuItem.Text.TxID(EDTx.DataGridViewStarResults_EDSM);
             addToExpeditionToolStripMenuItem.Text = addToExpeditionToolStripMenuItem.Text.TxID(EDTx.UserControlStarDistance_addToExpeditionToolStripMenuItem);
-
 
             userControlSurfaceBookmarks.TagFilter = GetSetting(dbSurfaceTags, "All");
         }
@@ -111,30 +109,34 @@ namespace EDDiscovery.UserControls
 
             dataGridView.Rows.Clear();
 
+            string tagfilter = GetSetting(dbTags, "All");
+            string textfilter = textBoxFilter.Text;
+
             foreach (BookmarkClass bk in GlobalBookMarkList.Instance.Bookmarks)
             {
                 //System.Diagnostics.Debug.WriteLine("Bookmark " + bk.Name  +":" + bk.Note);
-                var rw = dataGridView.RowTemplate.Clone() as DataGridViewRow;
-                rw.CreateCells( dataGridView , bk.IsRegion ? "Region" : "System" ,
+                var row = dataGridView.RowTemplate.Clone() as DataGridViewRow;
+                row.CreateCells( dataGridView , bk.IsRegion ? "Region" : "System" ,
                     bk.IsRegion ? bk.Heading : bk.StarName,
                     bk.Note,
                     bk.X.ToString("0.##"),
                     bk.Y.ToString("0.##"),
                     bk.Z.ToString("0.##"),
                     "");
-                rw.Tag = bk;
+
                 string tags = bk.Tags ?? "";        // character separated and end tagged list
-                rw.Cells[ColTags.Index].Tag = tags;
-                var taglist = EDDConfig.BookmarkTagArray(tags);
-                rw.Cells[ColTags.Index].ToolTipText = string.Join(Environment.NewLine, taglist);
-                TagsForm.SetMinHeight(taglist.Length, rw, ColTags.Width, TagSize);
 
-                dataGridView.Rows.Add(rw);
+                if ((textfilter.IsEmpty() || row.IsTextInRow(textfilter)) && TagsForm.AreTagsInFilter(tags, tagfilter, EDDConfig.TagSplitStringBK))
+                {
+                    row.Tag = bk;
+                    row.Cells[ColTags.Index].Tag = tags;
+                    var taglist = EDDConfig.BookmarkTagArray(tags);
+                    row.Cells[ColTags.Index].ToolTipText = string.Join(Environment.NewLine, taglist);
+                    TagsForm.SetMinHeight(taglist.Length, row, ColTags.Width, TagSize);
+
+                    dataGridView.Rows.Add(row);
+                }
             }
-
-            string tagfilter = GetSetting(dbTags, "All");
-            if (textBoxFilter.Text.HasChars() || tagfilter != ExtendedControls.CheckedIconUserControl.All)
-                FilterView();
 
             dataGridView.ResumeLayout();
 
@@ -146,7 +148,7 @@ namespace EDDiscovery.UserControls
             if (lastrow >= 0 && lastrow < dataGridView.Rows.Count)
                 dataGridView.SetCurrentAndSelectAllCellsOnRow(Math.Min(lastrow, dataGridView.Rows.Count - 1));
 
-            RefreshCurrentEdit();
+            SetSelection();
 
             this.dataGridView.SelectionChanged += new System.EventHandler(this.dataGridViewBookMarks_SelectionChanged);
         }
@@ -179,18 +181,22 @@ namespace EDDiscovery.UserControls
                 e.SortDataGridViewColumnNumeric();
         }
 
-
-        private void RefreshCurrentEdit()
+        private void SetSelection()
         {
             if (dataGridView.CurrentCell != null)
             {
-                currentedit = dataGridView.Rows[dataGridView.CurrentCell.RowIndex];
-                BookmarkClass bk = (BookmarkClass)(currentedit.Tag);
-                //System.Diagnostics.Debug.WriteLine("Move to row " + currentedit.Index + " Notes " + bk.Name);
-                if (bk.IsRegion)
-                    userControlSurfaceBookmarks.Disable();
-                else
-                    userControlSurfaceBookmarks.Display(bk.StarName,DiscoveryForm.History, ()=>IsClosed, bk.PlanetaryMarks);
+                DataGridViewRow newedit = dataGridView.Rows[dataGridView.CurrentCell.RowIndex];
+
+                if (newedit != currentedit)
+                {
+                    currentedit = newedit;
+                    BookmarkClass bk = (BookmarkClass)(currentedit.Tag);
+                    System.Diagnostics.Debug.WriteLine("Bookmark Form Move to row " + currentedit.Index + " Notes " + bk.Name);
+                    if (bk.IsRegion)
+                        userControlSurfaceBookmarks.Disable();
+                    else
+                        userControlSurfaceBookmarks.Display(bk.StarName, DiscoveryForm.History, () => IsClosed, bk.PlanetaryMarks);
+                }
             }
             else
             {
@@ -228,7 +234,34 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Toolbar UI
+        #region Toolbar UI, in order
+
+        // search filter
+        private void textBoxFilter_TextChanged(object sender, EventArgs e)
+        {
+            searchtimer.Stop();
+            searchtimer.Start();
+        }
+
+        private void Searchtimer_Tick(object sender, EventArgs e)
+        {
+            searchtimer.Stop();
+            SaveBackAnyChanges();
+            Display();
+        }
+
+        // TAG filter
+        private void buttonEditTagsList_Click(object sender, EventArgs e)
+        {
+            string curtags = TagsForm.UniqueTags(GlobalBookMarkList.Instance.GetAllTags(true), EDDConfig.TagSplitStringBK);
+            TagsForm.EditTags(this.FindForm(),
+                                        EDDConfig.Instance.BookmarkTagDictionary, curtags, GetSetting(dbTags, "All"),
+                                        buttonFilter.PointToScreen(new System.Drawing.Point(0, buttonFilter.Height)),
+                                        (newtags,t) => { PutSetting(dbTags, newtags); Display(); },
+                                        null, EDDConfig.TagSplitStringBK,
+                                        true,// we want ALL back to include everything in case we don't know the tag (due to it being removed)
+                                        true);          // and we want Or/empty
+        }
 
         private void buttonNew_Click(object sender, EventArgs e)
         {
@@ -254,7 +287,8 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void buttonEdit_Click(object sender, EventArgs e)
+        // Edit bookmark
+        private void buttonEditBookmark_Click(object sender, EventArgs e)
         {
             if (currentedit != null)      // if we have a current cell.. 
             {
@@ -322,44 +356,6 @@ namespace EDDiscovery.UserControls
             }
         }
 
-        private void textBoxFilter_TextChanged(object sender, EventArgs e)
-        {
-            searchtimer.Stop();
-            searchtimer.Start();
-        }
-
-        private void Searchtimer_Tick(object sender, EventArgs e)
-        {
-            searchtimer.Stop();
-            SaveBackAnyChanges();
-            FilterView();
-            RefreshCurrentEdit();
-        }
-
-        private void buttonFilter_Click(object sender, EventArgs e)
-        {
-            string curtags = TagsForm.UniqueTags(GlobalBookMarkList.Instance.GetAllTags(true), EDDConfig.TagSplitStringBK);
-            TagsForm.EditTags(this.FindForm(),
-                                        EDDConfig.Instance.BookmarkTagDictionary, curtags, GetSetting(dbTags, "All"),
-                                        buttonFilter.PointToScreen(new System.Drawing.Point(0,buttonFilter.Height)),
-                                        TagFilterChanged, null, EDDConfig.TagSplitStringBK,
-                                        true,// we want ALL back to include everything in case we don't know the tag (due to it being removed)
-                                        true);          // and we want Or/empty
-        }
-
-        private void TagFilterChanged(string newtags, Object tag)
-        {
-            PutSetting(dbTags, newtags);
-            FilterView();
-        }
-
-        private void FilterView()
-        {
-            string tags = GetSetting(dbTags, "All");
-            dataGridView.FilterGridView((row) => row.IsTextInRow(textBoxFilter.Text) && TagsForm.AreTagsInFilter(row.Cells[ColTags.Index].Tag, tags, EDDConfig.TagSplitStringBK));
-        }
-
-
         #endregion
 
         #region Grid Editing
@@ -390,6 +386,8 @@ namespace EDDiscovery.UserControls
             dataGridView.InvalidateRow(rw.Index);
 
             BookmarkClass bk = (BookmarkClass)rw.Tag;
+            
+            // will cause callback into this class they BookmarksChanged so prevent double loop
             updating_grid = true;
             GlobalBookMarkList.Instance.AddOrUpdateBookmark(bk, !bk.IsRegion,
                                 bk.IsRegion ? bk.Heading : bk.StarName,
@@ -402,11 +400,12 @@ namespace EDDiscovery.UserControls
         private void dataGridViewBookMarks_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
             if ( e.ColumnIndex != ColDescription.Index && e.ColumnIndex != ColTags.Index)
-                buttonEdit_Click(sender, e);
+                buttonEditBookmark_Click(sender, e);
         }
+
         private void dataGridViewBookMarks_CellEndEdit(object sender, DataGridViewCellEventArgs e)
         {
-            if(e.ColumnIndex == ColDescription.Index)
+            if(e.ColumnIndex == ColDescription.Index)       // ONLY this column is writable by the user, user has completed editing it
             {
                 SaveBackAnyChanges();
             }
@@ -415,7 +414,7 @@ namespace EDDiscovery.UserControls
         private void dataGridViewBookMarks_SelectionChanged(object sender, EventArgs e)
         {
             SaveBackAnyChanges();
-            RefreshCurrentEdit();
+            SetSelection();
         }
 
         #endregion
@@ -437,16 +436,47 @@ namespace EDDiscovery.UserControls
         #region Right clicks
 
         BookmarkClass rightclickbookmark = null;
+        private void dataGridViewBookMarks_MouseDown(object sender, MouseEventArgs e)
+        {
+            rightclickbookmark = (dataGridView.RightClickRowValid) ? (BookmarkClass)dataGridView.Rows[dataGridView.RightClickRow].Tag : null;
+        }
 
+        private void contextMenuStripBookmarks_Opening(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            mapGotoStartoolStripMenuItem.Enabled = rightclickbookmark != null;
+            viewOnEDSMToolStripMenuItem.Enabled = rightclickbookmark != null && rightclickbookmark.IsStar;
+        }
+
+        private void viewScanOfSystemToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), new SystemClass(rightclickbookmark.StarName), DiscoveryForm.History);
+        }
+
+        private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
+        {
+            DiscoveryForm.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", null, rightclickbookmark.X, rightclickbookmark.Y, rightclickbookmark.Z));
+        }
+
+        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(new SystemClass(rightclickbookmark.StarName));
+        }
+
+        private void openInEDSMToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Cursor = Cursors.WaitCursor;
+            EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
+            
+            if (!edsm.ShowSystemInEDSM(rightclickbookmark.StarName))
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlBookmarks_SysU));
+
+            this.Cursor = Cursors.Default;
+        }
 
         private void addToExpeditionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            AddTo(UserControlCommonBase.PushStars.PushType.Expedition);
-        }
+            UserControlCommonBase.PushStars.PushType pushtype = UserControlCommonBase.PushStars.PushType.Expedition;
 
-
-        private void AddTo(UserControlCommonBase.PushStars.PushType pushtype)
-        {
             IEnumerable<DataGridViewRow> selectedRows = dataGridView.SelectedCells.Cast<DataGridViewCell>()
                                                                        .Select(cell => cell.OwningRow)
                                                                        .Distinct()
@@ -469,45 +499,6 @@ namespace EDDiscovery.UserControls
             // Create a push request and forward it to the respective panel
             PushStars req = new UserControlCommonBase.PushStars() { PushTo = pushtype, SystemList = syslist, MakeVisible = true };
             RequestPanelOperationOpen(pushtype == PushStars.PushType.Expedition ? PanelInformation.PanelIDs.Expedition : PanelInformation.PanelIDs.Trilateration, req);
-        }
-
-
-
-        private void dataGridViewBookMarks_MouseDown(object sender, MouseEventArgs e)
-        {
-            rightclickbookmark = (dataGridView.RightClickRowValid) ? (BookmarkClass)dataGridView.Rows[dataGridView.RightClickRow].Tag : null;
-        }
-
-        private void contextMenuStripBookmarks_Opening(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            mapGotoStartoolStripMenuItem.Enabled = rightclickbookmark != null;
-            viewOnEDSMToolStripMenuItem.Enabled = rightclickbookmark != null && rightclickbookmark.IsStar;
-        }
-
-        private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
-        {
-            DiscoveryForm.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", null, rightclickbookmark.X, rightclickbookmark.Y, rightclickbookmark.Z));
-        }
-
-        private void viewScanOfSystemToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), new SystemClass(rightclickbookmark.StarName), DiscoveryForm.History);
-        }
-
-        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(new SystemClass(rightclickbookmark.StarName));
-        }
-
-        private void openInEDSMToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Cursor = Cursors.WaitCursor;
-            EliteDangerousCore.EDSM.EDSMClass edsm = new EDSMClass();
-            
-            if (!edsm.ShowSystemInEDSM(rightclickbookmark.StarName))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".T(EDTx.UserControlBookmarks_SysU));
-
-            this.Cursor = Cursors.Default;
         }
 
         #endregion
