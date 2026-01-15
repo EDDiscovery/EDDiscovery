@@ -166,7 +166,7 @@
             this.buttonFilter.TabIndex = 40;
             this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on tag");
             this.buttonFilter.UseVisualStyleBackColor = true;
-            this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
+            this.buttonFilter.Click += new System.EventHandler(this.buttonEditTagsList_Click);
             // 
             // buttonNew
             // 
@@ -234,7 +234,7 @@
             this.buttonEdit.TabIndex = 3;
             this.toolTip.SetToolTip(this.buttonEdit, "Edit Selected Bookmark");
             this.buttonEdit.UseVisualStyleBackColor = true;
-            this.buttonEdit.Click += new System.EventHandler(this.buttonEdit_Click);
+            this.buttonEdit.Click += new System.EventHandler(this.buttonEditBookmark_Click);
             // 
             // buttonDelete
             // 

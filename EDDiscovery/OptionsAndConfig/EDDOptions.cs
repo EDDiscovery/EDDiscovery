@@ -13,9 +13,11 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Windows.Documents;
 
 namespace EDDiscovery
 {
@@ -163,28 +165,18 @@ namespace EDDiscovery
 #else
             EnableTGRightDebugClicks = true;
 #endif
-            // Order is:
-            //  1. Check command line for -optionfiles relative for exedir, if so, allow -appfolder and process options
-            //  2. Check executable folder for options*.txt, if so, allow -appfolder and process options
-            //  3. Check command line for -appfolder
-            //  4. Establish app folder
-            //  5. Check command line for -optionfiles relative to appfolder, if so, process options.  Can't change appfolder
-            //  6. go thru appfolder and process options*.txt and dboptions*.txt
-            //  7. process command line for all but -optionfiles/-appfolder
 
+            // FIND all appfolder changes
 
-            // 1. go thru the command line looking for -optionfile only and process them
-            // allow for -appfolder to be set in the option file
-            ProcessCommandLineForOptionsFile(ExeDirectory(), ProcessOption, true);
+            // 1. go thru the command line looking for -optionfile only and process them only for -appdata changes
+            // allow rooted and relative to exe folder
+            ProcessCommandLineForOptionsFile(ExeDirectory(), true, false, ProcessOption);
 
-            // 2. read the options*.txt files in the exe folder
-            foreach (var f in Directory.EnumerateFiles(ExeDirectory(), "options*.txt", SearchOption.TopDirectoryOnly))
+            // 2. read the options*.txt files in the exe folder and allow app changes
+            foreach (var exefiles in Directory.EnumerateFiles(ExeDirectory(), "options*.txt", SearchOption.TopDirectoryOnly))
             {
-                // pass for -appfolder
-                ProcessFileForAppFolder(f);
-
-                // second pass is for the rest of the options
-                ProcessFile(f, ProcessOption);
+                System.Diagnostics.Debug.WriteLine($"Options process EXE file {exefiles}");
+                ProcessFileForAppFolder(exefiles);
             }
 
             // 3. process command line options for -appfolder
@@ -232,24 +224,34 @@ namespace EDDiscovery
 
             translationfolder = Path.Combine(AppDataDirectory, "Translator");
 
-            // 5. go thru the command line looking for -optionfile relative to app folder, then read them. Do not allow appfolder change now
+            // 5. with appdata set, read the options*.txt files in the exe folder again and allow options
+            foreach (var exefiles in Directory.EnumerateFiles(ExeDirectory(), "options*.txt", SearchOption.TopDirectoryOnly))
+            {
+                System.Diagnostics.Debug.WriteLine($"Options process exe file options {exefiles}");
+                ProcessFile(exefiles, ProcessOption);                       // execute all options
+            }
 
-            ProcessCommandLineForOptionsFile(AppDataDirectory, ProcessOption, false);
+            // 6. with appdata set, go thru the command line looking for -optionfile rooted or relative to app folder
+            // Do not allow appfolder change now
 
-            // 6. go thru appfolder looking for options*.txt and dboptions*.txt
+            ProcessCommandLineForOptionsFile(AppDataDirectory, false, true, ProcessOption);
+
+            // 7. go thru appfolder looking for options*.txt and dboptions*.txt
 
             try  // protect.. check incase we could not create appdata, because the user gave us a bad location where we can't make directories in
             {
                 // process appdata options files
-                foreach (var f in Directory.EnumerateFiles(AppDataDirectory, "options*.txt", SearchOption.TopDirectoryOnly))
+                foreach (var appfiles in Directory.EnumerateFiles(AppDataDirectory, "options*.txt", SearchOption.TopDirectoryOnly))
                 {
-                    ProcessFile(f, ProcessOption);
+                    System.Diagnostics.Debug.WriteLine($"Options process APP DATA file {appfiles}");
+                    ProcessFile(appfiles, ProcessOption);
                 }
 
                 // process appdata dboptions files
-                foreach (var f in Directory.EnumerateFiles(AppDataDirectory, "dboptions*.txt", SearchOption.TopDirectoryOnly))
+                foreach (var dbfiles in Directory.EnumerateFiles(AppDataDirectory, "dboptions*.txt", SearchOption.TopDirectoryOnly))
                 {
-                    ProcessFile(f, ProcessOption);
+                    System.Diagnostics.Debug.WriteLine($"Options process DB file {dbfiles}");
+                    ProcessFile(dbfiles, ProcessOption);
                 }
             }
             catch (Exception ex)
@@ -257,7 +259,7 @@ namespace EDDiscovery
                 System.Diagnostics.Trace.WriteLine($"EDDOptions enumerate exception {ex}");
             }
 
-            // 7. do all of the command line except optionsfile and appfolder..
+            // 8. do all of the command line except optionsfile and appfolder..
             ProcessCommandLineOptions(ProcessOption);
 
             // Set version display string
@@ -299,28 +301,37 @@ namespace EDDiscovery
         }
 
 
-        // go thru command line and find -optionsfile, and execute the options in it. Allow the options file to set appfolder if permitted
-        private void ProcessCommandLineForOptionsFile(string basefolder, Action<string, BaseUtils.CommandArgs, bool> processoption, bool allowappfolderchange)   
+        // go thru command line and find -optionsfile, and execute the options in it.
+        private void ProcessCommandLineForOptionsFile(string basefolder, bool allowappfolderchange, bool allowoptions,
+                                                            Action<string, BaseUtils.CommandArgs, bool> processoption)   
         {
-            //System.Diagnostics.Debug.WriteLine("OptionFile -optionsfile ");
             ProcessCommandLineOptions((optname, ca, toeol) =>
             {
                 if (optname == "-optionsfile" && ca.More)
                 {
-                    string filepath = ca.Next();
+                    string cmdlineoptfile = ca.Next();
 
-                    if (!File.Exists(filepath) && !Path.IsPathRooted(filepath))  // if it does not exist on its own, may be relative to base folder ..
-                        filepath = Path.Combine(basefolder, filepath);
+                    bool ispathrooted = Path.IsPathRooted(cmdlineoptfile);
 
-                    if (File.Exists(filepath))
-                    {
-                        if ( allowappfolderchange)
-                            ProcessFileForAppFolder(filepath);                      // give it a chance to set appfolder
-                            
-                        ProcessFile(filepath, processoption);                       // execute all options
+                    if (!File.Exists(cmdlineoptfile) && !ispathrooted)                      // if it does not exist on its own, may be relative to base folder ..
+                        cmdlineoptfile = Path.Combine(basefolder, cmdlineoptfile);
+
+                    if (File.Exists(cmdlineoptfile))
+                    { 
+                        if (allowappfolderchange)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Options process file for appfolder {cmdlineoptfile}");
+                            ProcessFileForAppFolder(cmdlineoptfile);                      // give it a chance to set appfolder
+                        }
+
+                        if (allowoptions)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Options process file for cmd options {cmdlineoptfile}");
+                            ProcessFile(cmdlineoptfile, processoption);                       // execute all options
+                        }
                     }
                     else
-                        System.Diagnostics.Debug.WriteLine("No Option File " + filepath);
+                        System.Diagnostics.Debug.WriteLine("No Option File " + cmdlineoptfile);
                 }
             });
         }
@@ -328,7 +339,6 @@ namespace EDDiscovery
         // read file and process thru process option
         private void ProcessFile(string filepath, Action<string, BaseUtils.CommandArgs, bool> processoption)       
         {
-            //System.Diagnostics.Debug.WriteLine("Read File " + filepath);
             foreach (string line in File.ReadAllLines(filepath))
             {
                 if (!line.IsEmpty())
@@ -365,7 +375,7 @@ namespace EDDiscovery
                 if (optname == "-appfolder" && ca.More)
                 {
                     AppFolder = ca.Rest();
-                    System.Diagnostics.Debug.WriteLine("Exe sets App Folder to " + AppFolder);
+                    System.Diagnostics.Debug.WriteLine("Options file sets App Folder to " + AppFolder);
                 }
             });
         }
@@ -380,178 +390,184 @@ namespace EDDiscovery
             {
                 ca.Remove();   // waste it
             }
-            else if (optname == "-translationfolder")
-            {
-                translationfolder = ca.NextEmpty();
-                TranslatorDirectoryIncludeSearchUpDepth = ca.Int();
-            }
-            else if (optname == "-userdbpath")
-            {
-                UserDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-userdbfilename")
-            {
-                UserDatabaseFilename = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-cmdr" || optname == "-commander")
-            {
-                Commander = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-profile")
-            {
-                Profile = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-zmqport")
-            {
-                string s = toeol ? ca.Rest() : ca.NextEmpty();
-                ZMQPort = s.InvariantParseInt(12300);
-            }
-            else if (optname == "-systemsdbpath")
-            {
-                SystemDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-scancachepath")
-            {
-                ScanCachePath = toeol ? ca.Rest() : ca.NextEmpty();     // use DISABLED c/i
-            }
-            else if (optname == "-systemsdbfilename" )
-            {
-                SystemDatabaseFilename = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-iconspath")
-            {
-                IconsPath = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-notificationfolder")
-            {
-                NotificationFolderOverride = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-tracelog")
-            {
-                TraceLog = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-fontsize")
-            {
-                FontSize = (toeol ? ca.Rest() : ca.NextEmpty()).InvariantParseFloat(0);
-            }
-            else if (optname == "-font")
-            {
-                Font = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-language")
-            {
-                SelectLanguage = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-webserverfolder" || optname == "-wsf")
-            {
-                WebServerFolder = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-outputeventhelp")
-            {
-                OutputEventHelp = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-defaultjournalfolder")
-            {
-                DefaultJournalFolder = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-journalfilematch")
-            {
-                DefaultJournalMatchFilename = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-journalsinglethread")
-            {
-                MultithreadedJournalRead = false;
-            }
-            else if (optname == "-culture")
-            {
-                Culture = toeol ? ca.Rest() : ca.NextEmpty();
-            }
-            else if (optname == "-minjournaldateutc")
-            {
-                string s = toeol ? ca.Rest() : ca.NextEmpty();
-                MinJournalDateUTC = s.ParseDateTime(ObjectExtensionsDates.MinValueUTC(), System.Globalization.CultureInfo.CurrentCulture);
-            }
-            else if (optname == "-historyloaddaylimit")
-            {
-                string s = (toeol ? ca.Rest() : ca.NextEmpty());
-                if (DateTime.TryParse(s, out DateTime t))
-                {
-                    var delta = DateTime.UtcNow - t;
-                    HistoryLoadDayLimit = (int)((delta.TotalHours + 23.999) / 24);
-                }
-                else
-                    HistoryLoadDayLimit = s.InvariantParseInt(0);
-            }
-            else if (optname == "-readto")
-            {
-                string s = toeol ? ca.Rest() : ca.NextEmpty();
-                MaxJournalDateUTC = s.ParseDateTime(ObjectExtensionsDates.MaxValueUTC(), System.Globalization.CultureInfo.CurrentCulture);
-            }
-            else if (optname.StartsWith("-"))
-            {
-                string opt = optname.Substring(1);
-
-                switch (opt)
-                {
-                    case "safemode": SafeMode = true; break;
-                    case "norepositionwindow": NoWindowReposition = true; break;
-                    case "minimize": case "minimise": MinimiseOnOpen = true; break;
-                    case "maximise": case "maximize": MaximiseOnOpen = true; break;
-                    case "portable": PortableInstall = true; break;
-                    case "nrw": NoWindowReposition = true; break;
-                    case "showactionbutton": ActionButton = true; break;
-                    case "noload": NoLoad = true; break;
-                    case "nosystemsload": NoSystemsLoad = true; break;
-                    case "logexceptions": LogExceptions = true; break;
-                    case "nogithubpacks": DontAskGithubForPacks = true; break;
-                    case "checkrelease": CheckGithubRelease = true; break;
-                    case "checknotifications": CheckGithubNotifications = true; break;
-                    case "checkaddons": CheckGithubAddOn = true; break;
-                    case "nocheckrelease": CheckGithubRelease = false; break;
-                    case "nochecknotifications": CheckGithubNotifications = false; break;
-                    case "nocheckaddons": CheckGithubAddOn = false; break;
-                    case "disablemerge": DisableJournalMerge = true; break;
-                    case "disableremoval": DisableJournalRemoval = true; break;
-                    case "disablebetacheck":
-                        DisableBetaCommanderCheck = true;
-                        break;
-                    case "forcebeta":       // use to move logs to a beta commander for testing
-                        ForceBetaOnCommander = true;
-                        break;
-                    case "notheme": NoTheme = true; break;
-                    case "notabs": NoTabs = true; break;
-                    case "openalltabtypes": OpenAllTabTypes = true; break;
-                    case "tabsreset": TabsReset = true; break;
-                    case "nosound": NoSound = true; break;
-                    case "notitleinfo": DisableShowDebugInfoInTitle = true; break;
-                    case "resetlanguage": ResetLanguage = true; break;
-                    case "tempdirindatadir": TempDirInDataDir = true; break;
-                    case "notempdirindatadir": TempDirInDataDir = false; break;
-                    case "lowpriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.BelowNormal; break;
-                    case "backgroundpriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.Idle; break;
-                    case "highpriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.High; break;
-                    case "abovenormalpriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.AboveNormal; break;
-                    case "realtimepriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.RealTime; break;
-                    case "forcetls12": ForceTLS12 = true; break;
-                    case "disabletimedisplay": DisableTimeDisplay = true; break;
-                    case "disablecommanderselect": DisableCommanderSelect = true; break;
-                    case "disableversiondisplay": DisableVersionDisplay = true; break;
-                    case "enabletgrightclicks": EnableTGRightDebugClicks = true; break;
-                    case "autoloadnextcommander": AutoLoadNextCommander = true; break;
-                    case "null": break;     // null option - used by installer when it writes a app options file if it does not want to do anything
-                    case "deletesystemdb": DeleteSystemDB = true; break;
-                    case "deleteuserdb": DeleteUserDB = true; break;
-                    case "deleteuserjournals": DeleteUserJournals = true; break;
-                    case "keepsystemdownloadedfiles": KeepSystemDataDownloadedFiles = true; break;
-                    case "noeddnfornewcommanders": SetEDDNforNewCommanders = false; break;
-                    default:
-                        System.Diagnostics.Debug.WriteLine($"Unrecognized option -{opt}");
-                        break;
-                }
-            }
             else
             {
-                System.Diagnostics.Debug.WriteLine($"Unrecognized non option {optname}");
+                bool handled = true;
+                string readdata = null;
+
+                if (optname == "-translationfolder")
+                {
+                    readdata = translationfolder = ca.NextEmpty();
+                    TranslatorDirectoryIncludeSearchUpDepth = ca.Int();
+                }
+                else if (optname == "-userdbpath")
+                {
+                    readdata = UserDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-userdbfilename")
+                {
+                    readdata = UserDatabaseFilename = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-cmdr" || optname == "-commander")
+                {
+                    readdata = Commander = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-profile")
+                {
+                    readdata = Profile = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-zmqport")
+                {
+                    readdata = toeol ? ca.Rest() : ca.NextEmpty();
+                    ZMQPort = readdata.InvariantParseInt(12300);
+                }
+                else if (optname == "-systemsdbpath")
+                {
+                    readdata = SystemDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-scancachepath")
+                {
+                    readdata = ScanCachePath = toeol ? ca.Rest() : ca.NextEmpty();     // use DISABLED c/i
+                }
+                else if (optname == "-systemsdbfilename")
+                {
+                    readdata = SystemDatabaseFilename = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-iconspath")
+                {
+                    readdata = IconsPath = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-notificationfolder")
+                {
+                    readdata = NotificationFolderOverride = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-tracelog")
+                {
+                    readdata = TraceLog = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-fontsize")
+                {
+                    readdata = toeol ? ca.Rest() : ca.NextEmpty();
+                    FontSize = readdata.InvariantParseFloat(0);
+                }
+                else if (optname == "-font")
+                {
+                    readdata = Font = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-language")
+                {
+                    readdata = SelectLanguage = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-webserverfolder" || optname == "-wsf")
+                {
+                    readdata = WebServerFolder = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-outputeventhelp")
+                {
+                    readdata = OutputEventHelp = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-defaultjournalfolder")
+                {
+                    readdata = DefaultJournalFolder = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-journalfilematch")
+                {
+                    readdata = DefaultJournalMatchFilename = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-culture")
+                {
+                    readdata = Culture = toeol ? ca.Rest() : ca.NextEmpty();
+                }
+                else if (optname == "-minjournaldateutc")
+                {
+                    readdata = toeol ? ca.Rest() : ca.NextEmpty();
+                    MinJournalDateUTC = readdata.ParseDateTime(ObjectExtensionsDates.MinValueUTC(), System.Globalization.CultureInfo.CurrentCulture);
+                }
+                else if (optname == "-historyloaddaylimit")
+                {
+                    readdata = (toeol ? ca.Rest() : ca.NextEmpty());
+                    if (DateTime.TryParse(readdata, out DateTime t))
+                    {
+                        var delta = DateTime.UtcNow - t;
+                        HistoryLoadDayLimit = (int)((delta.TotalHours + 23.999) / 24);
+                    }
+                    else
+                        HistoryLoadDayLimit = readdata.InvariantParseInt(0);
+                }
+                else if (optname == "-readto")
+                {
+                    readdata = toeol ? ca.Rest() : ca.NextEmpty();
+                    MaxJournalDateUTC = readdata.ParseDateTime(ObjectExtensionsDates.MaxValueUTC(), System.Globalization.CultureInfo.CurrentCulture);
+                }
+                else if (optname.StartsWith("-"))
+                {
+                    switch (optname)
+                    {
+                        case "-journalsinglethread": MultithreadedJournalRead = false; break;
+                        case "-safemode": SafeMode = true; break;
+                        case "-norepositionwindow": NoWindowReposition = true; break;
+                        case "-minimize": case "-minimise": MinimiseOnOpen = true; break;
+                        case "-maximise": case "-maximize": MaximiseOnOpen = true; break;
+                        case "-portable": PortableInstall = true; break;
+                        case "-nrw": NoWindowReposition = true; break;
+                        case "-showactionbutton": ActionButton = true; break;
+                        case "-noload": NoLoad = true; break;
+                        case "-nosystemsload": NoSystemsLoad = true; break;
+                        case "-logexceptions": LogExceptions = true; break;
+                        case "-nogithubpacks": DontAskGithubForPacks = true; break;
+                        case "-checkrelease": CheckGithubRelease = true; break;
+                        case "-checknotifications": CheckGithubNotifications = true; break;
+                        case "-checkaddons": CheckGithubAddOn = true; break;
+                        case "-nocheckrelease": CheckGithubRelease = false; break;
+                        case "-nochecknotifications": CheckGithubNotifications = false; break;
+                        case "-nocheckaddons": CheckGithubAddOn = false; break;
+                        case "-disablemerge": DisableJournalMerge = true; break;
+                        case "-disableremoval": DisableJournalRemoval = true; break;
+                        case "-disablebetacheck":
+                            DisableBetaCommanderCheck = true;
+                            break;
+                        case "-forcebeta":       // use to move logs to a beta commander for testing
+                            ForceBetaOnCommander = true;
+                            break;
+                        case "-notheme": NoTheme = true; break;
+                        case "-notabs": NoTabs = true; break;
+                        case "-openalltabtypes": OpenAllTabTypes = true; break;
+                        case "-tabsreset": TabsReset = true; break;
+                        case "-nosound": NoSound = true; break;
+                        case "-notitleinfo": DisableShowDebugInfoInTitle = true; break;
+                        case "-resetlanguage": ResetLanguage = true; break;
+                        case "-tempdirindatadir": TempDirInDataDir = true; break;
+                        case "-notempdirindatadir": TempDirInDataDir = false; break;
+                        case "-lowpriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.BelowNormal; break;
+                        case "-backgroundpriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.Idle; break;
+                        case "-highpriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.High; break;
+                        case "-abovenormalpriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.AboveNormal; break;
+                        case "-realtimepriority": ProcessPriorityClass = System.Diagnostics.ProcessPriorityClass.RealTime; break;
+                        case "-forcetls12": ForceTLS12 = true; break;
+                        case "-disabletimedisplay": DisableTimeDisplay = true; break;
+                        case "-disablecommanderselect": DisableCommanderSelect = true; break;
+                        case "-disableversiondisplay": DisableVersionDisplay = true; break;
+                        case "-enabletgrightclicks": EnableTGRightDebugClicks = true; break;
+                        case "-autoloadnextcommander": AutoLoadNextCommander = true; break;
+                        case "-null": break;     // null option - used by installer when it writes a app options file if it does not want to do anything
+                        case "-deletesystemdb": DeleteSystemDB = true; break;
+                        case "-deleteuserdb": DeleteUserDB = true; break;
+                        case "-deleteuserjournals": DeleteUserJournals = true; break;
+                        case "-keepsystemdownloadedfiles": KeepSystemDataDownloadedFiles = true; break;
+                        case "-noeddnfornewcommanders": SetEDDNforNewCommanders = false; break;
+                        default: handled = false; break;
+                    }
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"Unrecognized non option {optname}");
+                    return;
+                }
+
+                if (handled)
+                    System.Diagnostics.Debug.WriteLine($"  Option {optname} {readdata}");
+                else
+                    System.Diagnostics.Debug.WriteLine($"  Option not recognised {optname}");
             }
         }
 
