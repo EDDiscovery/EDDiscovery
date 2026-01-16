@@ -109,26 +109,38 @@ namespace EDDiscovery
                 File.WriteAllText(fn, s);
             }
 
-            FactionDefinitions.IDSTx();
+            //FactionDefinitions.IDSTx();
 
             //   string system = "Eorm Chruia EE-F d12-1139";
-            //  EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\synth.json", @"c:\code\AA\", true, 1920, false);
-
-            //string system = "Shrogaei YG-L d8-5499";
             // string system = "LHS 3447";
             //string system = "Shumbeia KD-I d10-15";
             //string system = "Dryeae Brai ZR-A d14-24";
-            //string system = "Leesti";
-         //    string system = "Eorm Chruia OJ-Q e5-391";
-            //  string system = "Pallaeni";
+            //    string system = "Eorm Chruia OJ-Q e5-391";
             //    string system = "Eorm Chruia DT-G d11-4215";
             //string system = "Eorm Chruia DT-G d11-490";
-           //   string system = "Dryaea Aowsy JQ-P d5-0";
-           // EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false);
-            //
-            //    EliteDangerousCore.StarScan2.Tests.TestScans(1920);
 
+            //var files = System.IO.Directory.EnumerateFiles($@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\", "*.json");
+            //foreach( var f in files)
+            //{
+            //    string name = System.IO.Path.GetFileNameWithoutExtension(f);
+            //    if ( !name.StartsWithIIC("Synth"))
+            //        EliteDangerousCore.StarScan2.Tests.TestScan(name, f, @"c:\code\AA", false, 1920, false);
+            //}
 
+            //string sksk = "; Due to Crime".Tx();
+
+            //{ string system = "Sol"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
+            // { string system = "Lave"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
+            // { string system = "Shrogaei YG-L d8-5499"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
+            //  { string system = "Leesti"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
+            //{ string system = "Pallaeni"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
+            //{ string system = "Prism"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
+            //{ string system = "Artemis"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
+            //{ string system = "LP 98-132"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
+            // { string system = "Dahan"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
+            //{ string system = "Sharur"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
+            //{ string system = "Carthage"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
+          //  { string system = "Asellus Primus"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
         }
 
         public void PostShownDebug()
@@ -149,17 +161,17 @@ namespace EDDiscovery
 
         public void PostHistoryLoadDebug()  // on UI thread
         {
+#if false
+            {   //Dump a systems entried to a debug file. Then use StarScan2.ProcessFromFile / Tests file to check the star scanner
+                string system = "LHS 3006";
+                var mhs = History.EntryOrder().Where(x => (x.System.Name.EqualsIIC(system)) && (x.journalEntry is IStarScan || x.journalEntry is IBodyFeature)).ToList();
+                var jsonlines = mhs.Select(x => x.journalEntry.GetJsonString());
+                BaseUtils.FileHelpers.TryWriteAllLinesToFile($@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", jsonlines.ToArray());
+            }
+#endif
             //if (History.StarScan2.TryGetSystemNode("Eorm Chruia OJ-Q e5-356", out EliteDangerousCore.StarScan2.SystemNode sn))  sn.DrawSystemToFile(@"c:\code\AA\output");
 
-             //History.StarScan2.DrawAllSystemsToFolder(@"c:\code\AA");
-
-            //Dump a systems entried to a debug file. Then use StarScan2.ProcessFromFile / Tests file to check the star scanner
-            //string system = "Eorm Chruia OJ-Q e5-391";
-            //string system = "Dryaea Aowsy JQ-P d5-0";
-            //var mhs = History.EntryOrder().Where(x => (x.System.Name.EqualsIIC(system)) && (x.journalEntry is IStarScan || x.journalEntry is IBodyFeature)).ToList();
-            //var jsonlines = mhs.Select(x => x.journalEntry.GetJsonString());
-            //BaseUtils.FileHelpers.TryWriteAllLinesToFile($@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", jsonlines.ToArray());
-
+            //History.StarScan2.DrawAllSystemsToFolder(@"c:\code\AA");
 
 
             //var sys = History.StarScan.FindSystemSynchronous(new SystemClass("Pyranu QO-Z d13-28", 977516105979), WebExternalDataLookup.Spansh);
