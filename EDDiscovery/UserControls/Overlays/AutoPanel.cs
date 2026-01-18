@@ -159,7 +159,7 @@ namespace EDDiscovery.UserControls
                 bool hasminingequipment = ship?.HasMiningEquipment() ?? false;
                 bool hasweapons = ship?.HasWeapons() ?? false;
                 bool docking = lasthe?.Status.DockingPad > 0;
-                bool isinmininglocation = BodyDefinitions.BodyTypeFromBodyNameRingOrPlanet(uistatus.BodyName) == BodyDefinitions.BodyType.PlanetaryRing;
+                bool isinmininglocation = false; // TBD BodyDefinitions.BodyTypeFromBodyNameRingOrPlanet(uistatus.BodyName) == BodyDefinitions.BodyType.PlanetaryRing;
 
                 System.Diagnostics.Debug.WriteLine($"Autopanel UpdateState Docking: {docking}");
 
