@@ -58,6 +58,7 @@
             this.ColY = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColPlanetMarks = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarkUserControl();
             this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.labelSearch = new System.Windows.Forms.Label();
@@ -358,6 +359,7 @@
             this.vScrollBarCustom1.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustom1.Name = "vScrollBarCustom1";
             this.vScrollBarCustom1.Size = new System.Drawing.Size(24, 204);
+            this.vScrollBarCustom1.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.vScrollBarCustom1.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SliderColor2 = System.Drawing.Color.DarkGray;
             this.vScrollBarCustom1.SliderDrawAngle = 90F;
@@ -386,7 +388,8 @@
             this.ColX,
             this.ColY,
             this.ColZ,
-            this.ColTags});
+            this.ColTags,
+            this.ColPlanetMarks});
             this.dataGridView.ContextMenuStrip = this.contextMenuStripBookmarks;
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
@@ -449,6 +452,12 @@
             this.ColTags.MinimumWidth = 32;
             this.ColTags.Name = "ColTags";
             this.ColTags.ReadOnly = true;
+            // 
+            // ColPlanetMarks
+            // 
+            this.ColPlanetMarks.HeaderText = "Planet Marks";
+            this.ColPlanetMarks.Name = "ColPlanetMarks";
+            this.ColPlanetMarks.ReadOnly = true;
             // 
             // userControlSurfaceBookmarks
             // 
@@ -533,6 +542,9 @@
         private ExtendedControls.ExtButton extButtonNewRegion;
         private ExtendedControls.ExtButton buttonTags;
         private ExtendedControls.ExtButton buttonFilter;
+        private System.Windows.Forms.ToolStripMenuItem viewScanOfSystemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addToExpeditionToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColType;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColBookmarkName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColDescription;
@@ -540,8 +552,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColY;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColZ;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTags;
-        private System.Windows.Forms.ToolStripMenuItem viewScanOfSystemToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addToExpeditionToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColPlanetMarks;
     }
 }
