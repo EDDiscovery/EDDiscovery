@@ -867,6 +867,7 @@ namespace EDDiscovery
         UserControlBookmarks_ColBookmarkName, // Column Header 'Bookmark Name'
         UserControlBookmarks_ColDescription, // Column Header 'Description'
         UserControlBookmarks_ColTags, // Column Header 'Tags'
+        UserControlBookmarks_ColPlanetMarks, 
         UserControlBookmarks_labelSearch, // Control 'Search'
         UserControlBookmarks_CFN, // Do you really want to delete {0} bookmarks?
         UserControlBookmarks_CF, // Do you really want to delete the bookmark for {0}

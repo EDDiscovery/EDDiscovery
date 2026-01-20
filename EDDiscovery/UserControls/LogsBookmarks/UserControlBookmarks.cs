@@ -38,6 +38,7 @@ namespace EDDiscovery.UserControls
             InitializeComponent();
             var enumlist = new Enum[] { EDTx.UserControlBookmarks_ColType, EDTx.UserControlBookmarks_ColBookmarkName,
                                             EDTx.UserControlBookmarks_ColDescription, EDTx.UserControlBookmarks_ColTags,
+                                             EDTx.UserControlBookmarks_ColPlanetMarks,
                                             EDTx.UserControlBookmarks_labelSearch };
 
             BaseUtils.Translator.Instance.TranslateControls(this, enumlist, new Control[] { userControlSurfaceBookmarks });
@@ -122,11 +123,13 @@ namespace EDDiscovery.UserControls
                     bk.X.ToString("0.##"),
                     bk.Y.ToString("0.##"),
                     bk.Z.ToString("0.##"),
-                    "");
+                    "",
+                    bk.PlanetaryMarks?.Planets?.Count ?? 0);
 
                 string tags = bk.Tags ?? "";        // character separated and end tagged list
 
-                if ((textfilter.IsEmpty() || row.IsTextInRow(textfilter)) && TagsForm.AreTagsInFilter(tags, tagfilter, EDDConfig.TagSplitStringBK))
+                if ((textfilter.IsEmpty() || row.IsTextInRow(textfilter) || bk.ContainsLocationText(textfilter)) 
+                    && TagsForm.AreTagsInFilter(tags, tagfilter, EDDConfig.TagSplitStringBK))
                 {
                     row.Tag = bk;
                     row.Cells[ColTags.Index].Tag = tags;

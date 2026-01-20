@@ -51,6 +51,9 @@
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom1 = new ExtendedControls.ExtScrollBar();
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
+            this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarkUserControl();
+            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
+            this.labelSearch = new System.Windows.Forms.Label();
             this.ColType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColBookmarkName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColDescription = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -58,9 +61,7 @@
             this.ColY = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColZ = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColTags = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.userControlSurfaceBookmarks = new EDDiscovery.UserControls.SurfaceBookmarkUserControl();
-            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
-            this.labelSearch = new System.Windows.Forms.Label();
+            this.ColPlanetMarks = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStripBookmarks.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
             this.splitContainer.Panel1.SuspendLayout();
@@ -387,7 +388,8 @@
             this.ColX,
             this.ColY,
             this.ColZ,
-            this.ColTags});
+            this.ColTags,
+            this.ColPlanetMarks});
             this.dataGridView.ContextMenuStrip = this.contextMenuStripBookmarks;
             this.dataGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dataGridView.Location = new System.Drawing.Point(0, 0);
@@ -405,6 +407,45 @@
             this.dataGridView.RowPostPaint += new System.Windows.Forms.DataGridViewRowPostPaintEventHandler(this.dataGridViewBookMarks_RowPostPaint);
             this.dataGridView.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewBookMarks_SortCompare);
             this.dataGridView.MouseDown += new System.Windows.Forms.MouseEventHandler(this.dataGridViewBookMarks_MouseDown);
+            // 
+            // userControlSurfaceBookmarks
+            // 
+            this.userControlSurfaceBookmarks.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.userControlSurfaceBookmarks.Location = new System.Drawing.Point(0, 0);
+            this.userControlSurfaceBookmarks.Name = "userControlSurfaceBookmarks";
+            this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 205);
+            this.userControlSurfaceBookmarks.TabIndex = 5;
+            this.userControlSurfaceBookmarks.TagFilter = null;
+            // 
+            // topPanel
+            // 
+            this.topPanel.AutoSize = true;
+            this.topPanel.Controls.Add(this.labelSearch);
+            this.topPanel.Controls.Add(this.textBoxFilter);
+            this.topPanel.Controls.Add(this.buttonFilter);
+            this.topPanel.Controls.Add(this.buttonNew);
+            this.topPanel.Controls.Add(this.extButtonEditSystem);
+            this.topPanel.Controls.Add(this.extButtonNewRegion);
+            this.topPanel.Controls.Add(this.buttonEdit);
+            this.topPanel.Controls.Add(this.buttonDelete);
+            this.topPanel.Controls.Add(this.buttonTags);
+            this.topPanel.Controls.Add(this.buttonExtExcel);
+            this.topPanel.Controls.Add(this.buttonExtImport);
+            this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
+            this.topPanel.Location = new System.Drawing.Point(0, 0);
+            this.topPanel.Name = "topPanel";
+            this.topPanel.Size = new System.Drawing.Size(676, 30);
+            this.topPanel.TabIndex = 39;
+            // 
+            // labelSearch
+            // 
+            this.labelSearch.AutoSize = true;
+            this.labelSearch.Location = new System.Drawing.Point(3, 4);
+            this.labelSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
+            this.labelSearch.Name = "labelSearch";
+            this.labelSearch.Size = new System.Drawing.Size(41, 13);
+            this.labelSearch.TabIndex = 26;
+            this.labelSearch.Text = "Search";
             // 
             // ColType
             // 
@@ -451,44 +492,11 @@
             this.ColTags.Name = "ColTags";
             this.ColTags.ReadOnly = true;
             // 
-            // userControlSurfaceBookmarks
+            // ColPlanetMarks
             // 
-            this.userControlSurfaceBookmarks.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.userControlSurfaceBookmarks.Location = new System.Drawing.Point(0, 0);
-            this.userControlSurfaceBookmarks.Name = "userControlSurfaceBookmarks";
-            this.userControlSurfaceBookmarks.Size = new System.Drawing.Size(676, 205);
-            this.userControlSurfaceBookmarks.TabIndex = 5;
-            this.userControlSurfaceBookmarks.TagFilter = null;
-            // 
-            // topPanel
-            // 
-            this.topPanel.AutoSize = true;
-            this.topPanel.Controls.Add(this.labelSearch);
-            this.topPanel.Controls.Add(this.textBoxFilter);
-            this.topPanel.Controls.Add(this.buttonFilter);
-            this.topPanel.Controls.Add(this.buttonNew);
-            this.topPanel.Controls.Add(this.extButtonEditSystem);
-            this.topPanel.Controls.Add(this.extButtonNewRegion);
-            this.topPanel.Controls.Add(this.buttonEdit);
-            this.topPanel.Controls.Add(this.buttonDelete);
-            this.topPanel.Controls.Add(this.buttonTags);
-            this.topPanel.Controls.Add(this.buttonExtExcel);
-            this.topPanel.Controls.Add(this.buttonExtImport);
-            this.topPanel.Dock = System.Windows.Forms.DockStyle.Top;
-            this.topPanel.Location = new System.Drawing.Point(0, 0);
-            this.topPanel.Name = "topPanel";
-            this.topPanel.Size = new System.Drawing.Size(676, 30);
-            this.topPanel.TabIndex = 39;
-            // 
-            // labelSearch
-            // 
-            this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(3, 4);
-            this.labelSearch.Margin = new System.Windows.Forms.Padding(3, 4, 3, 1);
-            this.labelSearch.Name = "labelSearch";
-            this.labelSearch.Size = new System.Drawing.Size(41, 13);
-            this.labelSearch.TabIndex = 26;
-            this.labelSearch.Text = "Search";
+            this.ColPlanetMarks.HeaderText = "Planet Marks";
+            this.ColPlanetMarks.Name = "ColPlanetMarks";
+            this.ColPlanetMarks.ReadOnly = true;
             // 
             // UserControlBookmarks
             // 
@@ -534,6 +542,9 @@
         private ExtendedControls.ExtButton extButtonNewRegion;
         private ExtendedControls.ExtButton buttonTags;
         private ExtendedControls.ExtButton buttonFilter;
+        private System.Windows.Forms.ToolStripMenuItem viewScanOfSystemToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem addToExpeditionToolStripMenuItem;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColType;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColBookmarkName;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColDescription;
@@ -541,8 +552,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn ColY;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColZ;
         private System.Windows.Forms.DataGridViewTextBoxColumn ColTags;
-        private System.Windows.Forms.ToolStripMenuItem viewScanOfSystemToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem viewOnSpanshToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem addToExpeditionToolStripMenuItem;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColPlanetMarks;
     }
 }
