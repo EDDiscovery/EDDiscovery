@@ -419,7 +419,7 @@ namespace EDDiscovery.UserControls
                 text += " | " + "System scan complete".T(EDTx.UserControlSurveyor_Systemscancomplete) + ": " + bodies_found + " bodies found.".T(EDTx.UserControlSurveyor_bodiesfound);
 
             SetControlText(text);
-            DrawTextIntoBox(extPictureBoxTitle, text);
+            ClearThenDrawText(extPictureBoxTitle, text);
         }
 
         // draw route, direct, no async. Sys is current system
@@ -606,7 +606,7 @@ namespace EDDiscovery.UserControls
                     lasttargettext = "No known system";
             }
 
-            DrawTextIntoBox(extPictureBoxTarget, lasttargettext);
+            ClearThenDrawText(extPictureBoxTarget, lasttargettext);
         }
 
         // Fuel, direct, no async
@@ -637,7 +637,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            DrawTextIntoBox(extPictureBoxFuel, fueltext);
+            ClearThenDrawText(extPictureBoxFuel, fueltext);
         }
 
         // calculate then draw the scan summmary info. Await
@@ -690,7 +690,7 @@ namespace EDDiscovery.UserControls
 
         private void DrawScanSummaryUnlocked()
         {
-            DrawTextIntoBox(extPictureBoxScanSummary, scansummarytext);
+            ClearThenDrawText(extPictureBoxScanSummary, scansummarytext);
         }
 
         // recalc the system drawSystem* values, then lock, set the locals above, then lock draw
@@ -1110,14 +1110,15 @@ namespace EDDiscovery.UserControls
         }
 
 
-        ExtPictureBox.ImageElement DrawTextIntoBox(ExtPictureBox pb, string text)
+        // Draw text into an image element, add horz divider, and and return
+        void ClearThenDrawText(ExtPictureBox pb, string text)
         {
+            pb.ClearImageList();
             var ie = DrawText(text, new Point(3, 0));
             pb.Add(ie);
             if (text.HasChars())
                 DrawHorzDivider(pb, ie);
             pb.Render();
-            return ie;
         }
 
         void DrawHorzDivider(ExtPictureBox pb, ExtPictureBox.ImageElement ie)
@@ -1129,6 +1130,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        // Draw text into an image element and return
         ExtPictureBox.ImageElement DrawText(string text, Point loc)
         {
             using (StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap) { Alignment = alignment })
