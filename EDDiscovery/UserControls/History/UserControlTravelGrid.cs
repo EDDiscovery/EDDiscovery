@@ -1265,10 +1265,27 @@ namespace EDDiscovery.UserControls
                 string find = $"{{ \"timestamp\":\"{rightclickhe.EventTimeUTC.ToStringZulu()}\", \"event\":\"{rightclickhe.journalEntry.EventTypeID.ToString()}\"";
                 int lineno = Array.FindIndex(lines, x => x.StartsWithIIC(find));
 
+                string exeforlog = Processes.GetExecutableForFile(file);
+
+                string exe = "Notepad.exe";
+                string cmd = $"\"{file}\"";
+
+                if ( exeforlog!= null) //!
+                {
+                    exe = exeforlog;
+
+                    if ( exe.ContainsIIC("Notepad++"))
+                    {
+                        cmd = lineno >= 0 ? $"-n{lineno + 1} \"{file}\"" : $"\"{file}\"";
+                    }
+                    else if (exe.ContainsIIC("\\code"))
+                    {
+                        cmd = lineno >= 0 ? $"-goto \"{file}\":{lineno+1}" : $"\"{file}\"";
+                    }
+                }
+
                 BaseUtils.Processes process = new BaseUtils.Processes();
-                int pid = process.StartProcess("Notepad++.exe", lineno > 0 ? $"-n{lineno+1} \"{file}\"" : $"\"{file}\"");
-                if (pid == 0)
-                    pid = process.StartProcess("Notepad.exe", file);
+                int pid = process.StartProcess(exe, cmd);
 
                 if (pid == 0)
                 {
