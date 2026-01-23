@@ -1270,7 +1270,7 @@ namespace EDDiscovery.UserControls
                 string exe = "Notepad.exe";
                 string cmd = $"\"{file}\"";
 
-                if ( exeforlog!= null) //!
+                if ( exeforlog!= null) // got one
                 {
                     exe = exeforlog;
 
@@ -1280,7 +1280,7 @@ namespace EDDiscovery.UserControls
                     }
                     else if (exe.ContainsIIC("\\code"))
                     {
-                        cmd = lineno >= 0 ? $"-goto \"{file}\":{lineno+1}" : $"\"{file}\"";
+                        cmd = lineno >= 0 ? $"--goto \"{file}\":{lineno+1}" : $"\"{file}\"";
                     }
                 }
 
