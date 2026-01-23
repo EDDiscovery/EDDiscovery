@@ -77,6 +77,7 @@ namespace EDDiscovery.UserControls
             this.removeJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openInNotepadTheJournalFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsAcrossSelectionToolSpeechStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -311,6 +312,8 @@ namespace EDDiscovery.UserControls
             // historyContextMenu
             // 
             this.historyContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openInNotepadTheJournalFileToolStripMenuItem,
+            this.writeEventInfoToLogDebugToolStripMenuItem,
             this.quickMarkToolStripMenuItem,
             this.removeSortingOfColumnsToolStripMenuItem,
             this.gotoEntryNumberToolStripMenuItem,
@@ -329,7 +332,6 @@ namespace EDDiscovery.UserControls
             this.removeJournalEntryToolStripMenuItem,
             this.runActionsOnThisEntryToolStripMenuItem,
             this.copyJournalEntryToClipboardToolStripMenuItem,
-            this.writeEventInfoToLogDebugToolStripMenuItem,
             this.runActionsAcrossSelectionToolSpeechStripMenuItem,
             this.runSelectionThroughInaraSystemToolStripMenuItem,
             this.runEntryThroughProfileSystemToolStripMenuItem,
@@ -338,7 +340,7 @@ namespace EDDiscovery.UserControls
             this.sendJournalEntriesToDLLsToolStripMenuItem,
             this.travelGridInDebugModeToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 576);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 620);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // quickMarkToolStripMenuItem
@@ -501,6 +503,13 @@ namespace EDDiscovery.UserControls
             this.copyJournalEntryToClipboardToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard/Log";
             this.copyJournalEntryToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyJournalEntryToClipboardToolStripMenuItem_Click);
+            // 
+            // openInNotepadTheJournalFileToolStripMenuItem
+            // 
+            this.openInNotepadTheJournalFileToolStripMenuItem.Name = "openInNotepadTheJournalFileToolStripMenuItem";
+            this.openInNotepadTheJournalFileToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.openInNotepadTheJournalFileToolStripMenuItem.Text = "Open in Notepad++ the journal file (Debug)";
+            this.openInNotepadTheJournalFileToolStripMenuItem.Click += new System.EventHandler(this.openInNotepadTheJournalFileToolStripMenuItem_Click);
             // 
             // writeEventInfoToLogDebugToolStripMenuItem
             // 
@@ -978,5 +987,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ToolStripMenuItem viewScanDisplayToolStripMenuItem;
         private ExtendedControls.ExtButton extButtonTimeRanges;
         private ExtendedControls.ExtButton extButtonEventColours;
+        private System.Windows.Forms.ToolStripMenuItem openInNotepadTheJournalFileToolStripMenuItem;
     }
 }

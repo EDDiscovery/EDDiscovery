@@ -12,6 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
+using BaseUtils;
 using EDDiscovery.UserControls.Helpers;
 using EliteDangerousCore;
 using EliteDangerousCore.EDDN;
@@ -126,14 +127,6 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            writeEventInfoToLogDebugToolStripMenuItem.Visible =
-            runActionsAcrossSelectionToolSpeechStripMenuItem.Visible =
-            runSelectionThroughInaraSystemToolStripMenuItem.Visible =
-            runEntryThroughProfileSystemToolStripMenuItem.Visible =
-            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible =
-            sendJournalEntriesToDLLsToolStripMenuItem.Visible =
-            travelGridInDebugModeToolStripMenuItem.Visible = 
-            runSelectionThroughEDAstroDebugToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks;
             travelGridInDebugModeToolStripMenuItem.Checked = EDDOptions.Instance.EnableTGRightDebugClicks ? GetSetting(dbDebugMode, false) : false;
             travelGridInDebugModeToolStripMenuItem.CheckedChanged += new System.EventHandler(this.travelGridInDebugModeToolStripMenuItem_CheckedChanged);
 
@@ -448,7 +441,7 @@ namespace EDDiscovery.UserControls
 
             if (debugmode)
             {
-                colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss:fff");
+                colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss");
                 colTime += Environment.NewLine + $"{he.Status.TravelState} @ {he.System.Name}:{he.System.SystemAddress}\r\n";
 
                 colTime += $"b`{he.Status.WhereAmI}`,{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}\r\n";
@@ -477,10 +470,13 @@ namespace EDDiscovery.UserControls
 
                 colDescription = he.journalEntry.EventTypeStr.SplitCapsWord() == he.EventSummary ? he.EventSummary : (he.journalEntry.EventTypeStr + Environment.NewLine + he.EventSummary);
 
-                var js = he.journalEntry.GetJsonCloned();
-                js.Remove("event", "timestamp");
-                string j = js.ToString().Replace(",\"", ", \"");
-                colNote = j.Left(1000);
+                colNote = "";
+
+                var cl = he.Status.CurrentLocation; colNote += cl == null ? "NO LOCATION\r\n" : $"LC {cl.EventTimeUTC.ToString("HH:mm:ss")} {cl.EventTypeStr} bn:`{cl.BodyName}`:{cl.BodyID}:{cl.BodyType} N:`{cl.Name}` sf:`{cl.StationFaction}` {cl.FDStationType}\r\n";
+                var si = he.Status.SystemInfo; colNote += si == null ? "NO SYSINFO\r\n" : $"SI {si.EventTimeUTC.ToString("HH:mm:ss")} {si.EventTypeStr} `{si.StarSystem}` f:`{si.Faction}` {si.Allegiance} {si.Economy} {si.Government}\r\n";
+                var lg = he.Status.LastLoadGame; colNote += lg == null ? "NO LOADGAME\r\n" : $"LG {lg.GameVersion} {lg.Build} {lg.Group} {lg.ShipType} {lg.Credits}cr\r\n";
+                //var js = he.journalEntry.GetJsonCloned();  js.Remove("event", "timestamp"); colNote += js.ToString().Replace(",\"", ", \"").Left(200);
+
             }
 
             if (search.Enabled)
@@ -902,15 +898,26 @@ namespace EDDiscovery.UserControls
             removeJournalEntryToolStripMenuItem.Visible = (rightclickhe != null);
             runActionsOnThisEntryToolStripMenuItem.Visible = (rightclickhe != null);
             setNoteToolStripMenuItem.Visible = (rightclickhe != null);
-            writeEventInfoToLogDebugToolStripMenuItem.Visible = (rightclickhe != null);
             copyJournalEntryToClipboardToolStripMenuItem.Visible = (rightclickhe != null);
             createEditBookmarkToolStripMenuItem.Visible = (rightclickhe != null);
             gotoEntryNumberToolStripMenuItem.Visible = dataGridViewTravel.Rows.Count > 0;
             removeSortingOfColumnsToolStripMenuItem.Visible = dataGridViewTravel.SortedColumn != null;
             gotoNextStartStopMarkerToolStripMenuItem.Visible = (rightclickhe != null);
-            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks && rightclickhe != null && EDDNClass.IsEDDNMessage(rightclickhe.EntryType);
-        }
 
+            openInNotepadTheJournalFileToolStripMenuItem.Visible =
+            writeEventInfoToLogDebugToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks && rightclickhe != null;
+            openInNotepadTheJournalFileToolStripMenuItem.Enabled = rightclickhe?.journalEntry.FullPath.HasChars() ?? false;
+
+            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks && rightclickhe != null && EDDNClass.IsEDDNMessage(rightclickhe.EntryType);
+
+            runActionsAcrossSelectionToolSpeechStripMenuItem.Visible =
+            runSelectionThroughInaraSystemToolStripMenuItem.Visible =
+            runEntryThroughProfileSystemToolStripMenuItem.Visible =
+            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible =
+            sendJournalEntriesToDLLsToolStripMenuItem.Visible =
+            travelGridInDebugModeToolStripMenuItem.Visible =
+            runSelectionThroughEDAstroDebugToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks;
+        }
 
         private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -1248,6 +1255,28 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".Tx(), "Warning".Tx());
         }
 
+        private void openInNotepadTheJournalFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+         //   var tlu = rightclickhe.journalEntry.TLUId;
+            string file = rightclickhe.journalEntry.FullPath;
+            string[] lines;
+            if (file != null && (lines = FileHelpers.TryReadAllLinesFromFile(file)) != null )
+            {
+                string find = $"{{ \"timestamp\":\"{rightclickhe.EventTimeUTC.ToStringZulu()}\", \"event\":\"{rightclickhe.journalEntry.EventTypeID.ToString()}\"";
+                int lineno = Array.FindIndex(lines, x => x.StartsWithIIC(find));
+
+                BaseUtils.Processes process = new BaseUtils.Processes();
+                int pid = process.StartProcess("Notepad++.exe", lineno > 0 ? $"-n{lineno+1} \"{file}\"" : $"\"{file}\"");
+                if (pid == 0)
+                    pid = process.StartProcess("Notepad.exe", file);
+
+                if (pid == 0)
+                {
+                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Configuration did not run", "Web Server");
+                }
+            }
+        }
+
         #endregion
 
         #region Event Filter
@@ -1442,6 +1471,7 @@ namespace EDDiscovery.UserControls
 
 
         #endregion
+
 
     }
 }

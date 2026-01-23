@@ -418,7 +418,7 @@ namespace EDDiscovery.UserControls
                 text += " | " + "System scan complete".Tx()+ ": " + bodies_found + " bodies found.".Tx();
 
             SetControlText(text);
-            DrawTextIntoBox(extPictureBoxTitle, text);
+            ClearThenDrawText(extPictureBoxTitle, text);
         }
 
 
@@ -606,7 +606,7 @@ namespace EDDiscovery.UserControls
                     lasttargettext = "No known system";
             }
 
-            DrawTextIntoBox(extPictureBoxTarget, lasttargettext);
+            ClearThenDrawText(extPictureBoxTarget, lasttargettext);
         }
 
         // Fuel, direct, no async
@@ -637,7 +637,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            DrawTextIntoBox(extPictureBoxFuel, fueltext);
+            ClearThenDrawText(extPictureBoxFuel, fueltext);
         }
 
 
@@ -691,7 +691,7 @@ namespace EDDiscovery.UserControls
 
         private void DrawScanSummaryUnlocked()
         {
-            DrawTextIntoBox(extPictureBoxScanSummary, scansummarytext);
+            ClearThenDrawText(extPictureBoxScanSummary, scansummarytext);
         }
 
         // recalc the system drawSystem* values, then lock, set the locals above, then lock draw
@@ -1118,14 +1118,14 @@ namespace EDDiscovery.UserControls
         }
 
 
-        ExtendedControls.ImageElement.Element DrawTextIntoBox(ExtPictureBox pb, string text)
+        void ClearThenDrawText(ExtPictureBox pb, string text)
         {
+            pb.ClearImageList();
             var ie = DrawText(text, new Point(3, 0));
             pb.Add(ie);
             if (text.HasChars())
                 DrawHorzDivider(pb, ie);
             pb.Render();
-            return ie;
         }
 
         void DrawHorzDivider(ExtPictureBox pb, ExtendedControls.ImageElement.Element ie)
@@ -1137,6 +1137,7 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        // Draw text into an image element and return
         ExtendedControls.ImageElement.Element DrawText(string text, Point loc)
         {
             using (StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap) { Alignment = alignment })

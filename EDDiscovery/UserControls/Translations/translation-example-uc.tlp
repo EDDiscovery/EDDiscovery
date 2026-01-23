@@ -1019,9 +1019,11 @@ D9273536780112: "Control Outlining" @
 10FA8B1B034219: "Go to a marked journal entry. Use right click to mark an entry" @
 0128C783DB2024: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 03C54D66F2DA56: "Next start/stop marker is hidden" @
-905A92084F2F46: "No start/stop marker found below" @
+905A92084F2F46: "No start/stop marker found ``below" @
 A89F26DDCFE091: "Entry filtered out of grid" @
 A070027FDED89B: "Colour events by type" @
+C6D8752C10F84E: "Open in Notepad++ the journal file (Debug)" @
+
 
 SECTION UserControlCaptainsLog
 
