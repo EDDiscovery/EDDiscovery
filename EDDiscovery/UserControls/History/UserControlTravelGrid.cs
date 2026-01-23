@@ -1280,7 +1280,7 @@ namespace EDDiscovery.UserControls
                     }
                     else if (exe.ContainsIIC("\\code"))
                     {
-                        cmd = lineno >= 0 ? $"--goto \"{file}\":{lineno+1}" : $"\"{file}\"";
+                        cmd = lineno >= 0 ? $"--goto \"{file}:{lineno + 1}\"" : $"\"{file}\"";
                     }
                 }
 
