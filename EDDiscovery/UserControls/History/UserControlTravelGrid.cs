@@ -143,6 +143,13 @@ namespace EDDiscovery.UserControls
 
             if (BaseUtils.TranslatorMkII.Instance.IsDefined(searchterms))
                 searchterms = searchterms.Tx();
+
+            // reorder of entries for debugging
+            if (EDDOptions.Instance.EnableTGRightDebugClicks)
+            {
+                historyContextMenu.Items.Remove(copyJournalEntryToClipboardToolStripMenuItem);
+                historyContextMenu.Items.Insert(2,copyJournalEntryToClipboardToolStripMenuItem);
+            }
         }
 
         protected override void LoadLayout()
@@ -1257,40 +1264,11 @@ namespace EDDiscovery.UserControls
 
         private void openInNotepadTheJournalFileToolStripMenuItem_Click(object sender, EventArgs e)
         {
-         //   var tlu = rightclickhe.journalEntry.TLUId;
             string file = rightclickhe.journalEntry.FullPath;
-            string[] lines;
-            if (file != null && (lines = FileHelpers.TryReadAllLinesFromFile(file)) != null )
+            if (file.HasChars())
             {
                 string find = $"{{ \"timestamp\":\"{rightclickhe.EventTimeUTC.ToStringZulu()}\", \"event\":\"{rightclickhe.journalEntry.EventTypeID.ToString()}\"";
-                int lineno = Array.FindIndex(lines, x => x.StartsWithIIC(find));
-
-                string exeforlog = Processes.GetExecutableForFile(file);
-
-                string exe = "Notepad.exe";
-                string cmd = $"\"{file}\"";
-
-                if ( exeforlog!= null) // got one
-                {
-                    exe = exeforlog;
-
-                    if ( exe.ContainsIIC("Notepad++"))
-                    {
-                        cmd = lineno >= 0 ? $"-n{lineno + 1} \"{file}\"" : $"\"{file}\"";
-                    }
-                    else if (exe.ContainsIIC("\\code"))
-                    {
-                        cmd = lineno >= 0 ? $"--goto \"{file}:{lineno + 1}\"" : $"\"{file}\"";
-                    }
-                }
-
-                BaseUtils.Processes process = new BaseUtils.Processes();
-                int pid = process.StartProcess(exe, cmd);
-
-                if (pid == 0)
-                {
-                    ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Configuration did not run", "Web Server");
-                }
+                Processes.OpenTextFileAtText(file, find);
             }
         }
 

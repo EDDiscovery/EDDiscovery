@@ -186,7 +186,7 @@ namespace EDDiscovery.Actions
                                 BaseUtils.GitHubClass ghc = new BaseUtils.GitHubClass(EDDiscovery.Properties.Resources.URLGithubDataDownload);
                                 var files = ghc.DownloadFolder(new System.Threading.CancellationToken(), localdirectory, gitfolder, filewildcard, true, optclean != null && optclean == "1");
                                 ap["Downloaded"] = (files != null && files.Count > 0).ToStringIntValue();
-                                ap["DownloadedCount"] = (files?.Count ??0).ToStringInvariant();
+                                ap["DownloadedCount"] = (files?.Count ?? 0).ToStringInvariant();
                             }
                             else
                                 ap.ReportError("Download folder " + localdirectory + " does not exist");
@@ -397,7 +397,7 @@ namespace EDDiscovery.Actions
 
                             if (c != null)      // if did not fail..
                             {
-                                ac.ActionRun(new ActionEvent(nextword,thirdword,"Program",null), c, now: true);
+                                ac.ActionRun(new ActionEvent(nextword, thirdword, "Program", null), c, now: true);
                             }
                         }
                         else

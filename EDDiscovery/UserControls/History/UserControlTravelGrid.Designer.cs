@@ -55,6 +55,8 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime = new ExtendedControls.ExtComboBox();
             this.labelTime = new System.Windows.Forms.Label();
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openInNotepadTheJournalFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.quickMarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gotoEntryNumberToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -77,8 +79,6 @@ namespace EDDiscovery.UserControls
             this.removeJournalEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsOnThisEntryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyJournalEntryToClipboardToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openInNotepadTheJournalFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.writeEventInfoToLogDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runActionsAcrossSelectionToolSpeechStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runSelectionThroughInaraSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.runEntryThroughProfileSystemToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -343,6 +343,20 @@ namespace EDDiscovery.UserControls
             this.historyContextMenu.Size = new System.Drawing.Size(388, 620);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
+            // openInNotepadTheJournalFileToolStripMenuItem
+            // 
+            this.openInNotepadTheJournalFileToolStripMenuItem.Name = "openInNotepadTheJournalFileToolStripMenuItem";
+            this.openInNotepadTheJournalFileToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.openInNotepadTheJournalFileToolStripMenuItem.Text = "Open journal file in editor (Debug)";
+            this.openInNotepadTheJournalFileToolStripMenuItem.Click += new System.EventHandler(this.openInNotepadTheJournalFileToolStripMenuItem_Click);
+            // 
+            // writeEventInfoToLogDebugToolStripMenuItem
+            // 
+            this.writeEventInfoToLogDebugToolStripMenuItem.Name = "writeEventInfoToLogDebugToolStripMenuItem";
+            this.writeEventInfoToLogDebugToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
+            this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event class info to Log (Debug)";
+            this.writeEventInfoToLogDebugToolStripMenuItem.Click += new System.EventHandler(this.writeEventInfoToLogDebugToolStripMenuItem_Click);
+            // 
             // quickMarkToolStripMenuItem
             // 
             this.quickMarkToolStripMenuItem.Checked = true;
@@ -503,20 +517,6 @@ namespace EDDiscovery.UserControls
             this.copyJournalEntryToClipboardToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
             this.copyJournalEntryToClipboardToolStripMenuItem.Text = "Copy journal entry to clipboard/Log";
             this.copyJournalEntryToClipboardToolStripMenuItem.Click += new System.EventHandler(this.copyJournalEntryToClipboardToolStripMenuItem_Click);
-            // 
-            // openInNotepadTheJournalFileToolStripMenuItem
-            // 
-            this.openInNotepadTheJournalFileToolStripMenuItem.Name = "openInNotepadTheJournalFileToolStripMenuItem";
-            this.openInNotepadTheJournalFileToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.openInNotepadTheJournalFileToolStripMenuItem.Text = "Open in Notepad++ the journal file (Debug)";
-            this.openInNotepadTheJournalFileToolStripMenuItem.Click += new System.EventHandler(this.openInNotepadTheJournalFileToolStripMenuItem_Click);
-            // 
-            // writeEventInfoToLogDebugToolStripMenuItem
-            // 
-            this.writeEventInfoToLogDebugToolStripMenuItem.Name = "writeEventInfoToLogDebugToolStripMenuItem";
-            this.writeEventInfoToLogDebugToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.writeEventInfoToLogDebugToolStripMenuItem.Text = "Write event class info to Log (Debug)";
-            this.writeEventInfoToLogDebugToolStripMenuItem.Click += new System.EventHandler(this.writeEventInfoToLogDebugToolStripMenuItem_Click);
             // 
             // runActionsAcrossSelectionToolSpeechStripMenuItem
             // 

@@ -199,6 +199,20 @@ namespace EDDiscovery.Actions
                         {
                             ap.ReportError("Not implemented");
                         }
+                        else if (cmdname.Equals("openjournalineditor"))
+                        {
+                            string file = he.journalEntry.FullPath;
+                            if ( file.HasChars())
+                            {
+                                string find = $"{{ \"timestamp\":\"{he.EventTimeUTC.ToStringZulu()}\", \"event\":\"{he.journalEntry.EventTypeID.ToString()}\"";
+                                bool opened = Processes.OpenTextFileAtText(file, find) >= 0;
+                                if (!opened)
+                                    ap.ReportError($"Event {he.EventTimeUTC} {he.journalEntry.EventTypeStr} cannot open editor, in Event");
+                            }
+                            else
+                                ap.ReportError($"Event {he.EventTimeUTC} {he.journalEntry.EventTypeStr} does not have a journal entry, in Event");
+
+                        }
                         else if (cmdname.Equals("info"))
                         {
                             ActionVars.SystemVarsFurtherInfo(ap, hl, he.System, prefix);

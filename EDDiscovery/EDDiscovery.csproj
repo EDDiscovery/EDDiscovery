@@ -194,8 +194,8 @@
     <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Actions\ActionControllerKeys.cs" />
-    <Compile Include="Actions\ActionControllerVoice.cs" />
+    <Compile Include="Actions\Core\ActionControllerKeys.cs" />
+    <Compile Include="Actions\Core\ActionControllerVoice.cs" />
     <Compile Include="CapiClientID.cs" />
     <Compile Include="EDD\EDDiscoveryControllerHelpers.cs" />
     <Compile Include="EDD\EDDiscoveryControllerCAPI.cs" />
@@ -484,11 +484,11 @@
     <Compile Include="UserControls\ScansStars\UserControl2DMap.Designer.cs">
       <DependentUpon>UserControl2DMap.cs</DependentUpon>
     </Compile>
-    <Compile Include="Actions\ActionEventList.cs" />
+    <Compile Include="Actions\Core\ActionEventList.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionEliteBindings.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionKeyED.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionShip.cs" />
-    <Compile Include="Actions\ActionController.cs" />
+    <Compile Include="Actions\Core\ActionController.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionEvent.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionHistoryTab.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionLedger.cs" />
@@ -499,7 +499,7 @@
     <Compile Include="Actions\ActionsEDDCmds\ActionScanStar.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionTimer.cs" />
     <Compile Include="Actions\ActionsEDDCmds\ActionMenuItem.cs" />
-    <Compile Include="Actions\ActionVars.cs" />
+    <Compile Include="Actions\Core\ActionVars.cs" />
     <Compile Include="EDD\ConditionFunctionsEDD.cs" />
     <Compile Include="OptionsAndConfig\EDDOptions.cs" />
     <Compile Include="Forms\GalaxySectorSelect.cs">
@@ -667,7 +667,7 @@
     <Compile Include="Forms\SetNoteForm.Designer.cs">
       <DependentUpon>SetNoteForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="Actions\ActionsFromInputDevices.cs" />
+    <Compile Include="Actions\Core\ActionsFromInputDevices.cs" />
     <Compile Include="TabsPanelsAndPopOuts\Panels.cs" />
     <Compile Include="UserControls\Helpers\BookmarkForm.cs">
       <SubType>Form</SubType>
