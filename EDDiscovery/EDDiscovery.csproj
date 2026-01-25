@@ -361,6 +361,9 @@
     <Compile Include="UserControls\Helpers\SpanshStationsUserControl.Designer.cs">
       <DependentUpon>SpanshStationsUserControl.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\History\HistoryGridRightClickMenu.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\History\HistoryGridExcel.cs">
       <SubType>UserControl</SubType>
     </Compile>

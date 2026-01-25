@@ -12,16 +12,11 @@
  * governing permissions and limitations under the License.
  */
 
-using BaseUtils;
 using EDDiscovery.UserControls.Helpers;
 using EliteDangerousCore;
-using EliteDangerousCore.EDDN;
-using EliteDangerousCore.EDSM;
-using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
@@ -732,547 +727,6 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
-        #region Right/Left Clicks
-
-        HistoryEntry rightclickhe = null;
-        HistoryEntry leftclickhe = null;
-
-        private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
-        {
-            //System.Diagnostics.Debug.WriteLine($"{dataGridViewTravel.HitType} {dataGridViewTravel.HitIndex} {dataGridViewTravel.HitButton}");
-            rightclickhe = dataGridViewTravel.RightClickRowValid ? (HistoryEntry)dataGridViewTravel.Rows[dataGridViewTravel.RightClickRow].Tag : null;
-            leftclickhe = dataGridViewTravel.LeftClickRowValid ? (HistoryEntry)dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow].Tag : null;
-        }
-
-        private void dataGridViewTravel_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (dataGridViewTravel.LeftClickRowValid)                                                
-            {
-                if (e.ColumnIndex == ColumnNote.Index)
-                {
-                    if (!dataGridViewTravel.IsCurrentCellInEditMode)
-                    {
-                        EditNoteInWindow(leftclickhe);
-                    }
-                }
-                else
-                {
-                    DataGridViewRow row = dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow];
-
-                    bool expanded = row.Cells[ColumnInformation.Index].Tag != null;
-
-                    if (expanded) // put it back to original text, remove tag, and set wrap mode notset
-                    {
-                        row.Cells[ColumnInformation.Index].Value = leftclickhe.GetInfo();
-                        row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.NotSet;
-                        row.Cells[ColumnInformation.Index].Tag = null;
-                    }
-                    else
-                    {
-                        string infodetailed = leftclickhe.GetInfoDetailed();
-
-                        using (Graphics g = Parent.CreateGraphics())
-                        {
-                            int maxh = 0;
-                            for (int i = 0; i < row.Cells.Count; i++)
-                            {
-                                if (row.Cells[i].Value is string)
-                                {
-                                    string s = i == ColumnInformation.Index ? infodetailed : (string)row.Cells[i].Value;
-                                    int h = (int)(g.MeasureString(s, dataGridViewTravel.Font, dataGridViewTravel.Columns[i].Width - 4).Height + 2);
-                                    maxh = Math.Max(maxh, h);
-                                }
-                            }
-
-                            if (maxh > dataGridViewTravel.Height * 3 / 4) // unreasonable amount of space to show it.
-                            {
-                                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
-                                info.Info(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(leftclickhe.EventTimeUTC) + ": " + leftclickhe.EventSummary,
-                                    FindForm().Icon, infodetailed);
-                                info.Size = new Size(1200, 800);
-                                info.Show(FindForm());
-                            }
-                            else
-                            {
-                                row.Cells[ColumnInformation.Index].Value = infodetailed;        // display in cell with wrap mode turned on irrespective of setting
-                                row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.True;
-                            }
-
-                            row.Cells[ColumnInformation.Index].Tag = true;      // mark expanded
-                        }
-                    }
-
-                    dataViewScrollerPanel.UpdateScroll();
-                }
-            }
-        }
-
-        private void dataGridViewTravel_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
-        {
-            panelOutlining.Clear();
-            extCheckBoxOutlines.Checked = false;
-        }
-
-        #endregion
-
-        #region Outlining
-
-        private void extButtonOutlines_Click(object sender, EventArgs e)
-        {
-            if (extCheckBoxOutlines.Checked == true && outliningOnOffToolStripMenuItem.Checked)     // if going checked.. means it was unchecked
-            {
-                Display(current_historylist, true);      // Reapply, disabled by sorting etc
-            }
-            else
-            {
-                var p = extCheckBoxOutlines.PointToScreen(new Point(0, extCheckBoxOutlines.Height));
-                contextMenuStripOutlines.Font = this.Font;
-                contextMenuStripOutlines.Show(p);
-            }
-        }
-
-        private void toolStripOutliningToggle(object sender, EventArgs e)
-        {
-            PutSetting(dbOutlines, contextMenuStripOutlines.GetToolStripState());
-            extCheckBoxOutlines.Checked = outliningOnOffToolStripMenuItem.Checked;
-            if (outliningOnOffToolStripMenuItem.Checked || sender == outliningOnOffToolStripMenuItem)
-                Display(current_historylist, true);
-        }
-
-        private void rolluplimitToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ToolStripMenuItem tmi = sender as ToolStripMenuItem;
-            rollUpOffToolStripMenuItem.Checked = tmi == rollUpOffToolStripMenuItem;         // makes them work as radio buttons
-            rollUpAfterFirstToolStripMenuItem.Checked = tmi == rollUpAfterFirstToolStripMenuItem;
-            rollUpAfter5ToolStripMenuItem.Checked = tmi == rollUpAfter5ToolStripMenuItem;
-            PutSetting(dbOutlines, contextMenuStripOutlines.GetToolStripState());
-            if (outliningOnOffToolStripMenuItem.Checked )
-                Display(current_historylist, true);
-        }
-
-        private void extButtonEventColours_Click(object sender, EventArgs e)
-        {
-            eventcolours.Edit(this.FindForm(), extButtonEventColours, (changed) =>
-            {
-                System.Diagnostics.Debug.WriteLine($"Event colours changed {changed}");
-                if (changed)
-                {
-                    PutSetting(dbEventColours, eventcolours.ToString());
-                    Display(current_historylist, false);
-                }
-            });
-        }
-
-
-
-        #endregion
-
-        #region TravelHistoryRightClick
-
-        private void historyContextMenu_Opening(object sender, CancelEventArgs e)
-        {
-            if (dataGridViewTravel.SelectedCells.Count == 0)      // need something selected  stops context menu opening on nothing..
-                e.Cancel = true;
-
-            if (rightclickhe != null)
-            {
-                if (rightclickhe.StartMarker)
-                {
-                    toolStripMenuItemStartStop.Text = "Clear Start marker".Tx();
-                }
-                else if (rightclickhe.StopMarker)
-                {
-                    toolStripMenuItemStartStop.Text = "Clear Stop marker".Tx();
-                }
-                else if (rightclickhe.isTravelling)
-                {
-                    toolStripMenuItemStartStop.Text = "Set Stop marker for travel calculations".Tx();
-                }
-                else
-                {
-                    toolStripMenuItemStartStop.Text = "Set Start marker for travel calculations".Tx();
-                }
-            }
-
-            toolStripMenuItemStartStop.Visible = rightclickhe != null;
-            quickMarkToolStripMenuItem.Visible = rightclickhe != null;
-            quickMarkToolStripMenuItem.Checked = rightclickhe != null && quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
-            mapGotoStartoolStripMenuItem.Visible = (rightclickhe != null && rightclickhe.System.HasCoordinate);
-            viewOnEDSMToolStripMenuItem.Visible = (rightclickhe != null);
-            viewOnSpanshToolStripMenuItem.Visible = (rightclickhe != null);
-            viewScanDisplayToolStripMenuItem.Visible = (rightclickhe != null);
-            toolStripMenuItemStartStop.Visible = (rightclickhe != null);
-            removeJournalEntryToolStripMenuItem.Visible = (rightclickhe != null);
-            runActionsOnThisEntryToolStripMenuItem.Visible = (rightclickhe != null);
-            setNoteToolStripMenuItem.Visible = (rightclickhe != null);
-            copyJournalEntryToClipboardToolStripMenuItem.Visible = (rightclickhe != null);
-            createEditBookmarkToolStripMenuItem.Visible = (rightclickhe != null);
-            gotoEntryNumberToolStripMenuItem.Visible = dataGridViewTravel.Rows.Count > 0;
-            removeSortingOfColumnsToolStripMenuItem.Visible = dataGridViewTravel.SortedColumn != null;
-            gotoNextStartStopMarkerToolStripMenuItem.Visible = (rightclickhe != null);
-
-            openInNotepadTheJournalFileToolStripMenuItem.Visible =
-            writeEventInfoToLogDebugToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks && rightclickhe != null;
-            openInNotepadTheJournalFileToolStripMenuItem.Enabled = rightclickhe?.journalEntry.FullPath.HasChars() ?? false;
-
-            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks && rightclickhe != null && EDDNClass.IsEDDNMessage(rightclickhe.EntryType);
-
-            runActionsAcrossSelectionToolSpeechStripMenuItem.Visible =
-            runSelectionThroughInaraSystemToolStripMenuItem.Visible =
-            runEntryThroughProfileSystemToolStripMenuItem.Visible =
-            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible =
-            sendJournalEntriesToDLLsToolStripMenuItem.Visible =
-            travelGridInDebugModeToolStripMenuItem.Visible =
-            runSelectionThroughEDAstroDebugToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks;
-        }
-
-        private void removeSortingOfColumnsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Display(current_historylist, true);
-        }
-
-        private void mapGotoStartoolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DiscoveryForm.Open3DMap(rightclickhe?.System);
-        }
-
-        private void starMapColourToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
-                                                           .Select(cell => cell.OwningRow)
-                                                           .Distinct();
-            ColorDialog mapColorDialog = new ColorDialog();
-            mapColorDialog.AllowFullOpen = true;
-            mapColorDialog.FullOpen = true;
-            HistoryEntry sp2 = (HistoryEntry)selectedRows.First().Tag;
-            mapColorDialog.Color = Color.Red;
-
-            if (mapColorDialog.ShowDialog(FindForm()) == DialogResult.OK)
-            {
-                foreach (DataGridViewRow r in selectedRows)
-                {
-                    HistoryEntry sp = (HistoryEntry)r.Tag;
-                    System.Diagnostics.Debug.Assert(sp != null);
-                    sp.journalEntry.UpdateMapColour(mapColorDialog.Color.ToArgb());
-                }
-
-                Display(current_historylist,false);
-            }
-        }
-
-        private void hideSystemToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
-                .Select(cell => cell.OwningRow)
-                .Distinct();
-
-            foreach (DataGridViewRow r in selectedRows)
-            {
-                HistoryEntry sp = (HistoryEntry)r.Tag;
-                System.Diagnostics.Debug.Assert(sp != null);
-                sp.journalEntry.UpdateCommanderID(-1);
-                rowsbyjournalid.Remove(sp.Journalid);
-            }
-
-            // Remove rows
-            if (selectedRows.Count<DataGridViewRow>() == dataGridViewTravel.Rows.Count)
-            {
-                dataGridViewTravel.Rows.Clear();
-                rowsbyjournalid.Clear();
-            }
-            else
-            {
-                foreach (DataGridViewRow row in selectedRows.ToList<DataGridViewRow>())
-                {
-                    dataGridViewTravel.Rows.Remove(row);
-                }
-            }
-        }
-
-        private void moveToAnotherCommanderToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
-                .Select(cell => cell.OwningRow)
-                .Distinct();
-
-            List<HistoryEntry> listsyspos = new List<HistoryEntry>();
-
-            foreach (DataGridViewRow r in selectedRows)
-            {
-                HistoryEntry sp = (HistoryEntry)r.Tag;
-                System.Diagnostics.Debug.Assert(sp != null);
-                listsyspos.Add(sp);
-                rowsbyjournalid.Remove(sp.Journalid);
-            }
-
-            EDDiscovery.Forms.MoveToCommander movefrm = new EDDiscovery.Forms.MoveToCommander();
-
-            movefrm.Init();
-
-            DialogResult red = movefrm.ShowDialog(FindForm());
-            if (red == DialogResult.OK)
-            {
-                foreach (HistoryEntry sp in listsyspos)
-                {
-                    sp.journalEntry.UpdateCommanderID(movefrm.SelectedCommander.Id);
-                }
-
-                foreach (DataGridViewRow row in selectedRows)
-                {
-                    dataGridViewTravel.Rows.Remove(row);
-                }
-            }
-        }
-
-        private void trilaterationToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddSystemToOthers(dist:true);
-        }
-
-        private void wantedSystemsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddSystemToOthers(wanted:true);
-        }
-
-        private void bothToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddSystemToOthers(dist:true, wanted:true);
-        }
-
-        private void expeditionToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            AddSystemToOthers(expedition:true);
-        }
-
-        private void AddSystemToOthers(bool dist = false, bool wanted = false, bool expedition = false, bool exploration = false)
-        {
-            IEnumerable<DataGridViewRow> selectedRows = dataGridViewTravel.SelectedCells.Cast<DataGridViewCell>()
-                                                                        .Select(cell => cell.OwningRow)
-                                                                        .Distinct()
-                                                                        .OrderBy(cell => cell.Index);
-
-            List<ISystem> systemlist = new List<ISystem>();
-
-            string lastname = "";
-            foreach (DataGridViewRow r in selectedRows)
-            {
-                HistoryEntry sp = (HistoryEntry)r.Tag;
-
-                if (!sp.System.Name.Equals(lastname))
-                {
-                    lastname = sp.System.Name;
-                    systemlist.Add(sp.System);
-                }
-            }
-
-            if (dist)
-                RequestPanelOperationOpen(PanelInformation.PanelIDs.Trilateration, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriSystems, SystemList = systemlist, MakeVisible = true });
-
-            if (wanted)
-                RequestPanelOperationOpen(PanelInformation.PanelIDs.Trilateration, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.TriWanted, SystemList = systemlist, MakeVisible = true });
-
-            if (expedition)
-                RequestPanelOperationOpen(PanelInformation.PanelIDs.Expedition, new UserControlCommonBase.PushStars() { PushTo = UserControlCommonBase.PushStars.PushType.Expedition, SystemList = systemlist, MakeVisible = true });
-
-        }
-        private void viewScanDisplayToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            ScanDisplayForm.ShowScanOrMarketForm(this.FindForm(), rightclickhe, DiscoveryForm.History); 
-        }
-
-        private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            EDSMClass edsm = new EDSMClass();
-            if (!edsm.ShowSystemInEDSM(rightclickhe.System.Name))
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "System could not be found - has not been synched or EDSM is unavailable".Tx());
-        }
-
-        private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if ( rightclickhe.System.SystemAddress.HasValue)
-                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(rightclickhe.System.SystemAddress.Value);
-        }
-
-        private void removeJournalEntryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string warning = ("Confirm you wish to remove this entry" + Environment.NewLine + "It may reappear if the logs are rescanned").Tx();
-            if (ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".Tx(), MessageBoxButtons.OKCancel) == DialogResult.OK)
-            {
-                JournalEntry.Delete(rightclickhe.Journalid);
-                DiscoveryForm.RefreshHistoryAsync();
-            }
-        }
-
-        private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DiscoveryForm.ActionRunOnEntry(rightclickhe, Actions.ActionEventEDList.UserRightClick(rightclickhe));
-        }
-
-        private void setNoteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            EditNoteInWindow(rightclickhe);
-        }
-
-        private void EditNoteInWindow(HistoryEntry he)
-        {
-            using (Forms.SetNoteForm noteform = new Forms.SetNoteForm(he))
-            {
-                if (noteform.ShowDialog(FindForm()) == DialogResult.OK)
-                {
-                    System.Diagnostics.Trace.Assert(noteform.NoteText != null && he.System != null);
-                    he.journalEntry.UpdateSystemNote(noteform.NoteText, he.System.Name, EDCommander.Current.SyncToEdsm);
-                    DiscoveryForm.NoteChanged(this, he);
-                }
-            }
-        }
-
-        private void writeEventInfoToLogDebugToolStripMenuItem_Click(object sender, EventArgs e)        
-        {
-            // copies the work of action run for he's
-            BaseUtils.Variables eventvars = new BaseUtils.Variables();
-            var ev = Actions.ActionEventEDList.NewEntry(rightclickhe);
-            Actions.ActionVars.TriggerVars(eventvars, ev.TriggerName, ev.TriggerType);
-            Actions.ActionVars.HistoryEventVars(eventvars, rightclickhe, "Event");     // if HE is null, ignored
-            Actions.ActionVars.ShipBasicInformation(eventvars, rightclickhe?.ShipInformation, "Event");     // if He null, or si null, ignore
-            Actions.ActionVars.SystemVars(eventvars, rightclickhe?.System, "Event");
-            DiscoveryForm.LogLine(eventvars.ToString(separ: Environment.NewLine));
-        }
-
-        private void copyJournalEntryToClipboardToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string json = rightclickhe.journalEntry.GetJsonString();
-            if (json != null)
-            {
-                SetClipboardText(json);
-                DiscoveryForm.LogLine(json);
-            }
-        }
-
-        private void createEditBookmarkToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            BookmarkHelpers.ShowBookmarkForm(DiscoveryForm, DiscoveryForm, rightclickhe.System, null);
-        }
-
-        private void gotoEntryNumberToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            int curi = rightclickhe != null ? (EDDConfig.Instance.OrderRowsInverted ? rightclickhe.EntryNumber : (DiscoveryForm.History.Count - rightclickhe.EntryNumber + 1)) : 0;
-            int selrow = dataGridViewTravel.JumpToDialog(this.FindForm(), curi, r =>
-            {
-                HistoryEntry he = r.Tag as HistoryEntry;
-                return EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
-            });
-
-            if (selrow >= 0)
-            {
-                dataGridViewTravel.ClearSelection();
-                dataGridViewTravel.SetCurrentAndSelectAllCellsOnRow(selrow);
-                FireChangeSelection();
-            }
-        }
-
-        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)       // sync with Journal Grid call
-        {
-            this.dataGridViewTravel.Cursor = Cursors.WaitCursor;
-
-            rightclickhe.SetStartStop();                                        // change flag
-            DiscoveryForm.History.RecalculateTravel();                          // recalculate all
-            
-            foreach( DataGridViewRow row in dataGridViewTravel.Rows)            // dgv could be in any sort order, we have to do the lot
-            {
-                HistoryEntry he = row.Tag as HistoryEntry;
-                if (he.IsFSD || he.StopMarker || he == rightclickhe)
-                {
-                    row.Cells[ColumnInformation.Index].Value = he.GetInfo();
-                    row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.NotSet;        // in case it was in expanded state (see cell double click)
-                    row.Cells[ColumnInformation.Index].Tag = null;
-                }
-            }
-
-            dataGridViewTravel.Refresh();       // to make the start/stop marker appear, refresh
-
-            RequestPanelOperation(this, new TravelHistoryStartStopChanged());        // tell others
-
-            this.dataGridViewTravel.Cursor = Cursors.Default;
-        }
-
-        private void gotoNextStartStopMarkerToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            for( int rown = dataGridViewTravel.RightClickRow + 1; rown < dataGridViewTravel.Rows.Count; rown++ )
-            {
-                DataGridViewRow r = dataGridViewTravel.Rows[rown];
-                HistoryEntry h = r.Tag as HistoryEntry;
-                if (h.StartMarker || h.StopMarker)
-                {
-                    if (r.Visible)
-                    {
-                        dataGridViewTravel.DisplayRow(r.Index, true);
-                        dataGridViewTravel.ClearSelection();
-                        dataGridViewTravel.Rows[r.Index].Selected = true;
-                        return;
-                    }
-                    else
-                    {
-                        ExtendedControls.MessageBoxTheme.Show(FindForm(), "Next start/stop marker is hidden".Tx());
-                    }
-                    break;
-                }
-            }
-
-            ExtendedControls.MessageBoxTheme.Show(FindForm(), "No start/stop marker found below".Tx());
-        }
-
-        // quickmarks.
-        private void quickMarkToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (quickMarkToolStripMenuItem.Checked)
-                quickMarkJIDs.Add(rightclickhe.journalEntry.Id);
-            else
-                quickMarkJIDs.Remove(rightclickhe.journalEntry.Id);
-
-            var str = quickMarkJIDs.Select(x => x.ToStringInvariant()).ToArray().Join(';');
-            PutSetting(dbBookmarks + ":" + DiscoveryForm.History.CommanderId.ToStringInvariant(), str);
-            UpdateQuickMarkComboBox();
-        }
-
-        private void UpdateQuickMarkComboBox()
-        {
-            // quick marks are commander dependent
-            var str = GetSetting(dbBookmarks + ":" + DiscoveryForm.History.CommanderId.ToStringInvariant(), "").Split(';');
-            quickMarkJIDs = str.Select(x => x.InvariantParseLong(-1)).ToList().ToHashSet();
-
-            extComboBoxQuickMarks.Items.Clear();
-            List<long> jids = new List<long>();
-            foreach (var j in quickMarkJIDs)
-            {
-                if (rowsbyjournalid.TryGetValue(j, out DataGridViewRow row)) // if it parses and its in view, add it to combo box.
-                {
-                    extComboBoxQuickMarks.Items.Add((string)row.Cells[0].Value + ":" + (string)row.Cells[2].Value);
-                    jids.Add(j);
-                }
-            }
-            extComboBoxQuickMarks.Tag = jids;
-            extComboBoxQuickMarks.Text = "Marked".Tx();      // only works for custom
-        }
-
-        private void extComboBoxBookmark_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            List<long> jids = extComboBoxQuickMarks.Tag as List<long>;
-            long jid = jids[extComboBoxQuickMarks.SelectedIndex];
-            if (!GotoPosByJID(jid))
-                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".Tx(), "Warning".Tx());
-        }
-
-        private void openInNotepadTheJournalFileToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string file = rightclickhe.journalEntry.FullPath;
-            if (file.HasChars())
-            {
-                string find = $"{{ \"timestamp\":\"{rightclickhe.EventTimeUTC.ToStringZulu()}\", \"event\":\"{rightclickhe.journalEntry.EventTypeID.ToString()}\"";
-                Processes.OpenEditorForTextFileAtText(file, find);
-            }
-        }
-
-        #endregion
 
         #region Event Filter
 
@@ -1339,133 +793,155 @@ namespace EDDiscovery.UserControls
             dataViewScrollerPanel.UpdateScroll();
         }
 
-        #endregion
-
-        #region DEBUG clicks - only for special people who build the debug version!
-
-        private void runSelectionThroughInaraSystemToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (rightclickhe != null)
-            {
-                var mcmr = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetDict(rightclickhe.MaterialCommodity);
-                List<QuickJSON.JToken> list = EliteDangerousCore.Inara.InaraSync.NewEntryList(rightclickhe, DateTime.UtcNow, mcmr);
-
-                foreach (var j in list)
-                {
-                    j["eventTimestamp"] = DateTime.UtcNow.ToStringZulu();       // mangle time to now to allow it to send.
-                    if (j["eventName"].Str() == "addCommanderMission")
-                    {
-                        j["eventData"]["missionExpiry"] = DateTime.UtcNow.AddDays(1).ToStringZulu();       // mangle mission time to now to allow it to send.
-                    }
-                    if (j["eventName"].Str() == "setCommunityGoal")
-                    {
-                        j["eventData"]["goalExpiry"] = DateTime.UtcNow.AddDays(5).ToStringZulu();       // mangle expiry time
-                    }
-                }
-
-                string json = rightclickhe.journalEntry.GetJsonString();
-                DiscoveryForm.LogLine(json);
-
-                EliteDangerousCore.Inara.InaraClass inara = new EliteDangerousCore.Inara.InaraClass(EDCommander.Current);
-                string str = inara.ToJSONString(list);
-                DiscoveryForm.LogLine(str);
-                //System.IO.File.WriteAllText(@"c:\code\inaraentry.json", str);
-
-                if (list.Count > 0)
-                {
-                    string strres = inara.Send(list);
-                    DiscoveryForm.LogLine(strres);
-                }
-                else
-                    DiscoveryForm.LogLine("No Events");
-            }
-        }
-
-        private void runEntryThroughProfileSystemToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DiscoveryForm.CheckActionProfile(rightclickhe);
-        }
-
-        private void runSelectionThroughEDDNDebugNoSendToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if ( rightclickhe != null )
-            {
-                EDDNSync.SendToEDDN(rightclickhe, true);
-            }
-
-        }
-
         private void extButtonDrawnHelp_Click(object sender, EventArgs e)
         {
-            EDDHelp.HelpPanel(this.FindForm(), extButtonDrawnHelp.PointToScreen(new Point(0,extButtonDrawnHelp.Bottom)),this.HelpKeyOrAddress());
+            EDDHelp.HelpPanel(this.FindForm(), extButtonDrawnHelp.PointToScreen(new Point(0, extButtonDrawnHelp.Bottom)), this.HelpKeyOrAddress());
         }
 
-        private void runSelectionThroughEDAstroDebugToolStripMenuItem_Click(object sender, EventArgs e)
+
+        private void extComboBoxBookmark_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (rightclickhe != null)
+            List<long> jids = extComboBoxQuickMarks.Tag as List<long>;
+            long jid = jids[extComboBoxQuickMarks.SelectedIndex];
+            if (!GotoPosByJID(jid))
+                ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".Tx(), "Warning".Tx());
+        }
+
+        #endregion
+
+
+        #region Outlining
+
+        private void extButtonOutlines_Click(object sender, EventArgs e)
+        {
+            if (extCheckBoxOutlines.Checked == true && outliningOnOffToolStripMenuItem.Checked)     // if going checked.. means it was unchecked
             {
-                EliteDangerousCore.EDAstro.EDAstroSync.SendEDAstroEvents(new List<HistoryEntry>() { rightclickhe });
+                Display(current_historylist, true);      // Reapply, disabled by sorting etc
+            }
+            else
+            {
+                var p = extCheckBoxOutlines.PointToScreen(new Point(0, extCheckBoxOutlines.Height));
+                contextMenuStripOutlines.Font = this.Font;
+                contextMenuStripOutlines.Show(p);
             }
         }
 
-        private void sendJournalEntriesToDLLsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void toolStripOutliningToggle(object sender, EventArgs e)
         {
-            if (rightclickhe != null)
-            {
-                DiscoveryForm.DLLManager.NewJournalEntry(EliteDangerousCore.DLL.EDDDLLCallerHE.CreateFromHistoryEntry(DiscoveryForm.History, rightclickhe), true);
-            }
-
+            PutSetting(dbOutlines, contextMenuStripOutlines.GetToolStripState());
+            extCheckBoxOutlines.Checked = outliningOnOffToolStripMenuItem.Checked;
+            if (outliningOnOffToolStripMenuItem.Checked || sender == outliningOnOffToolStripMenuItem)
+                Display(current_historylist, true);
         }
 
-        private void travelGridInDebugModeToolStripMenuItem_CheckedChanged(object sender, EventArgs e)
+        private void rolluplimitToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            PutSetting(dbDebugMode, travelGridInDebugModeToolStripMenuItem.Checked);
-            Display(current_historylist, false);
+            ToolStripMenuItem tmi = sender as ToolStripMenuItem;
+            rollUpOffToolStripMenuItem.Checked = tmi == rollUpOffToolStripMenuItem;         // makes them work as radio buttons
+            rollUpAfterFirstToolStripMenuItem.Checked = tmi == rollUpAfterFirstToolStripMenuItem;
+            rollUpAfter5ToolStripMenuItem.Checked = tmi == rollUpAfter5ToolStripMenuItem;
+            PutSetting(dbOutlines, contextMenuStripOutlines.GetToolStripState());
+            if (outliningOnOffToolStripMenuItem.Checked)
+                Display(current_historylist, true);
         }
 
-        private void runActionsAcrossSelectionToolStripMenuItem_Click(object sender, EventArgs e)
+        private void extButtonEventColours_Click(object sender, EventArgs e)
         {
-            string laststring = "";
-            string lasttype = "";
-            int lasttypecount = 0;
-
-            DiscoveryForm.ActionController.AsyncMode = false;     // to force it to do all the action code before returning..
-
-            if (dataGridViewTravel.SelectedRows.Count > 0)
+            eventcolours.Edit(this.FindForm(), extButtonEventColours, (changed) =>
             {
-                List<DataGridViewRow> rows = (from DataGridViewRow x in dataGridViewTravel.SelectedRows where x.Visible orderby x.Index select x).ToList();
-                foreach (DataGridViewRow rw in rows)
+                System.Diagnostics.Debug.WriteLine($"Event colours changed {changed}");
+                if (changed)
                 {
-                    HistoryEntry he = rw.Tag as HistoryEntry;
-                    // System.Diagnostics.Debug.WriteLine("Row " + rw.Index + " " + he.EventSummary + " " + he.EventDescription);
+                    PutSetting(dbEventColours, eventcolours.ToString());
+                    Display(current_historylist, false);
+                }
+            });
+        }
 
+        #endregion
 
-                    bool same = he.journalEntry.EventTypeStr.Equals(lasttype);
-                    if (!same || lasttypecount < 10)
+        #region Right/Left Clicks on Grid
+
+        HistoryEntry rightclickhe = null;
+        HistoryEntry leftclickhe = null;
+
+        private void dataGridViewTravel_MouseDown(object sender, MouseEventArgs e)
+        {
+            //System.Diagnostics.Debug.WriteLine($"{dataGridViewTravel.HitType} {dataGridViewTravel.HitIndex} {dataGridViewTravel.HitButton}");
+            rightclickhe = dataGridViewTravel.RightClickRowValid ? (HistoryEntry)dataGridViewTravel.Rows[dataGridViewTravel.RightClickRow].Tag : null;
+            leftclickhe = dataGridViewTravel.LeftClickRowValid ? (HistoryEntry)dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow].Tag : null;
+        }
+
+        private void dataGridViewTravel_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dataGridViewTravel.LeftClickRowValid)
+            {
+                if (e.ColumnIndex == ColumnNote.Index)
+                {
+                    if (!dataGridViewTravel.IsCurrentCellInEditMode)
                     {
-                        lasttype = he.journalEntry.EventTypeStr;
-                        lasttypecount = (same) ? ++lasttypecount : 0;
+                        EditNoteInWindow(leftclickhe);
+                    }
+                }
+                else
+                {
+                    DataGridViewRow row = dataGridViewTravel.Rows[dataGridViewTravel.LeftClickRow];
 
-                        DiscoveryForm.ActionController.SetPeristentGlobal("GlobalSaySaid", "");
-                        BaseUtils.FunctionHandlers.SetRandom(new Random(rw.Index + 1));
-                        DiscoveryForm.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
+                    bool expanded = row.Cells[ColumnInformation.Index].Tag != null;
 
-                        string json = he.journalEntry.GetJsonString();
+                    if (expanded) // put it back to original text, remove tag, and set wrap mode notset
+                    {
+                        row.Cells[ColumnInformation.Index].Value = leftclickhe.GetInfo();
+                        row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.NotSet;
+                        row.Cells[ColumnInformation.Index].Tag = null;
+                    }
+                    else
+                    {
+                        string infodetailed = leftclickhe.GetInfoDetailed();
 
-                        string s = DiscoveryForm.ActionController.Globals["GlobalSaySaid"];
-
-                        if (s.Length > 0 && !s.Equals(laststring))
+                        using (Graphics g = Parent.CreateGraphics())
                         {
-                            //System.Diagnostics.Debug.WriteLine("Call ts(j='" + json?.Replace("'", "\\'") + "',s='" + s.Replace("'", "\\'") + "',r=" + (rw.Index + 1).ToStringInvariant() + ")");
-                            laststring = s;
+                            int maxh = 0;
+                            for (int i = 0; i < row.Cells.Count; i++)
+                            {
+                                if (row.Cells[i].Value is string)
+                                {
+                                    string s = i == ColumnInformation.Index ? infodetailed : (string)row.Cells[i].Value;
+                                    int h = (int)(g.MeasureString(s, dataGridViewTravel.Font, dataGridViewTravel.Columns[i].Width - 4).Height + 2);
+                                    maxh = Math.Max(maxh, h);
+                                }
+                            }
+
+                            if (maxh > dataGridViewTravel.Height * 3 / 4) // unreasonable amount of space to show it.
+                            {
+                                ExtendedControls.InfoForm info = new ExtendedControls.InfoForm();
+                                info.Info(EDDConfig.Instance.ConvertTimeToSelectedFromUTC(leftclickhe.EventTimeUTC) + ": " + leftclickhe.EventSummary,
+                                    FindForm().Icon, infodetailed);
+                                info.Size = new Size(1200, 800);
+                                info.Show(FindForm());
+                            }
+                            else
+                            {
+                                row.Cells[ColumnInformation.Index].Value = infodetailed;        // display in cell with wrap mode turned on irrespective of setting
+                                row.Cells[ColumnInformation.Index].Style.WrapMode = DataGridViewTriState.True;
+                            }
+
+                            row.Cells[ColumnInformation.Index].Tag = true;      // mark expanded
                         }
                     }
+
+                    dataViewScrollerPanel.UpdateScroll();
                 }
             }
         }
-
+        private void dataGridViewTravel_ColumnHeaderMouseClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            panelOutlining.Clear();
+            extCheckBoxOutlines.Checked = false;
+        }
 
         #endregion
+
 
 
     }
