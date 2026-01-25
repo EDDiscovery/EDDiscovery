@@ -205,7 +205,7 @@ namespace EDDiscovery.Actions
                             if ( file.HasChars())
                             {
                                 string find = $"{{ \"timestamp\":\"{he.EventTimeUTC.ToStringZulu()}\", \"event\":\"{he.journalEntry.EventTypeID.ToString()}\"";
-                                bool opened = Processes.OpenTextFileAtText(file, find) >= 0;
+                                bool opened = Processes.OpenEditorForTextFileAtText(file, find) >= 0;
                                 if (!opened)
                                     ap.ReportError($"Event {he.EventTimeUTC} {he.journalEntry.EventTypeStr} cannot open editor, in Event");
                             }

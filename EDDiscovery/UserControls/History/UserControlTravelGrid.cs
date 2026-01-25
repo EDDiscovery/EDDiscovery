@@ -1268,7 +1268,7 @@ namespace EDDiscovery.UserControls
             if (file.HasChars())
             {
                 string find = $"{{ \"timestamp\":\"{rightclickhe.EventTimeUTC.ToStringZulu()}\", \"event\":\"{rightclickhe.journalEntry.EventTypeID.ToString()}\"";
-                Processes.OpenTextFileAtText(file, find);
+                Processes.OpenEditorForTextFileAtText(file, find);
             }
         }
 
