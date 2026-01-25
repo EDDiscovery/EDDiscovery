@@ -1008,7 +1008,7 @@ EF5031AC6BB79D: "Run selection through Inara System (Debug)" @
 524BF0531AFD77: "Run selection through EDAstro (Debug)" @
 0F5FE8CD3D51BA: "Send selection to DLLs (Debug)" @
 B91F8B4B18E7EA: "Show lines in System Visited Fore Colour" @
-27E9DD0E266E2D: "Travel grid in Debug Mode" @
+C083AF7B5668ED: "Debug Mode" @
 21FE521D359452: "Outlining On" @
 7CD3494777C5DB: "Scan Events Outlining" @
 F66672D57338E9: "Roll up older entries" @

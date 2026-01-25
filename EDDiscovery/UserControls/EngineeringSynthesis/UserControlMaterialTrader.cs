@@ -143,7 +143,7 @@ namespace EDDiscovery.UserControls
             }
             else
             {
-                RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+                RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
             }
         }
 

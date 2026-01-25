@@ -25,7 +25,7 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlContainerSplitter: UserControlCommonBase        // circular, huh! neat!
     {
-        public UserControlTravelGrid GetTravelGrid { get { return GetUserControl<UserControlTravelGrid>(PanelInformation.PanelIDs.TravelGrid); } }
+        public HistoryGrid GetHistoryGrid { get { return GetUserControl<HistoryGrid>(PanelInformation.PanelIDs.HistoryGrid); } }
 
         public T GetUserControl<T>(PanelInformation.PanelIDs p) where T : class
         {
@@ -410,13 +410,13 @@ namespace EDDiscovery.UserControls
         }
 
         // called from above for us to do something, work out if we should pass it down
-        // we don't pass up some travel grid stuff if we have a travel grid ourselves
+        // we don't pass up some history grid stuff if we have a history grid ourselves
         // sender can't be us since we are being called from above.
         public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
             //System.Diagnostics.Debug.WriteLine($"Splitter {DisplayNumber} perform action {actionobj}");
 
-            if (IsOperationHistoryPush(actionobj) && GetUserControl(PanelInformation.PanelIDs.TravelGrid)!=null)
+            if (IsOperationHistoryPush(actionobj) && GetUserControl(PanelInformation.PanelIDs.HistoryGrid)!=null)
             {
                 //System.Diagnostics.Debug.WriteLine($".. blocked because we have a TH in the splitter for {actionobj}");
                 return PanelActionState.NotHandled;

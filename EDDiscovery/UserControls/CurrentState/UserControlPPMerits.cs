@@ -394,7 +394,7 @@ namespace EDDiscovery.UserControls
         private void findInHistoryPanelToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (rightClickMeritRow?.HE != null)
-                RequestPanelOperationOpen(PanelInformation.PanelIDs.TravelGrid, new RequestTravelToJID { JID = rightClickMeritRow.HE.Journalid, MakeVisible = true });
+                RequestPanelOperationOpen(PanelInformation.PanelIDs.HistoryGrid, new RequestHistoryToJID { JID = rightClickMeritRow.HE.Journalid, MakeVisible = true });
         }
 
 

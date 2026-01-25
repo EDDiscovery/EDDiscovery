@@ -156,7 +156,7 @@ namespace EDDiscovery.UserControls
         {
             if (isHistoric)
             {
-                RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+                RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
             }
             else
             {

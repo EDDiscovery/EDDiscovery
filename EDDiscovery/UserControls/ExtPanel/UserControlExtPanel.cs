@@ -68,7 +68,7 @@ namespace EDDiscovery.UserControls
             callbacks.RequestTravelGridPosition = () => 
             {
                 System.Diagnostics.Trace.Assert(Application.MessageLoop);       // must be
-                return (RequestPanelOperation?.Invoke(this, new RequestTravelHistoryPos()) ?? PanelActionState.NotHandled) == PanelActionState.Success; 
+                return (RequestPanelOperation?.Invoke(this, new RequestHistoryGridPos()) ?? PanelActionState.NotHandled) == PanelActionState.Success; 
             };
             callbacks.PushStars = (name,list) => 
             {

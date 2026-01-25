@@ -28,7 +28,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlTravelGrid : UserControlCommonBase
+    public partial class HistoryGrid : UserControlCommonBase
     {
         #region Public IF
 
@@ -71,7 +71,7 @@ namespace EDDiscovery.UserControls
 
         private EventColours eventcolours;
 
-        public UserControlTravelGrid()
+        public HistoryGrid()
         {
             InitializeComponent();
 
@@ -86,7 +86,7 @@ namespace EDDiscovery.UserControls
         protected override void Init()
         {
 
-            //System.Diagnostics.Debug.WriteLine("Travel grid is " + this.GetHashCode());
+            //System.Diagnostics.Debug.WriteLine("History grid is " + this.GetHashCode());
 
             cfs = new JournalFilterSelector();
             cfs.UC.AddAllNone();
@@ -546,12 +546,12 @@ namespace EDDiscovery.UserControls
 
         public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if ( actionobj is UserControlCommonBase.RequestTravelToJID)
+            if ( actionobj is UserControlCommonBase.RequestHistoryToJID)
             {
-                var ttj = actionobj as UserControlCommonBase.RequestTravelToJID;
-                System.Diagnostics.Debug.WriteLine($"Travel grid perform move to JID {ttj.JID}");
+                var ttj = actionobj as UserControlCommonBase.RequestHistoryToJID;
+                System.Diagnostics.Debug.WriteLine($"History grid perform move to JID {ttj.JID}");
                 var res = GotoPosByJID(ttj.JID);
-                System.Diagnostics.Debug.WriteLine($"..Travel grid perform move to JID {ttj.JID} result {res}");
+                System.Diagnostics.Debug.WriteLine($"..History grid perform move to JID {ttj.JID} result {res}");
                 if (res)
                 {
                     if (ttj.MakeVisible)
@@ -561,10 +561,10 @@ namespace EDDiscovery.UserControls
                 else
                     return PanelActionState.Failed;
             }
-            else if ( actionobj is UserControlCommonBase.RequestTravelHistoryPos )
+            else if ( actionobj is UserControlCommonBase.RequestHistoryGridPos )
             {
                 var he = CurrentHE();
-                //System.Diagnostics.Debug.WriteLine($"Travel Grid position request direct send to {sender}");
+                //System.Diagnostics.Debug.WriteLine($"History grid position request direct send to {sender}");
                 sender.CallPerformPanelOperation(this, he);         // direct send back to sender so we don't wake up lots of panels
                 return PanelActionState.Success;
             }
@@ -595,7 +595,7 @@ namespace EDDiscovery.UserControls
         public bool GotoPosByJID(long jid)       
         {
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
-            //System.Diagnostics.Debug.WriteLine($"Travel Grid move by jid {jid} {rowno}");
+            //System.Diagnostics.Debug.WriteLine($"History grid move by jid {jid} {rowno}");
 
             if (rowno >= 0)
             {
@@ -614,7 +614,7 @@ namespace EDDiscovery.UserControls
             var he = CurrentHE();
             if ( he != null )
             {
-                //System.Diagnostics.Trace.WriteLine($"Travel Grid Fire Change {he.EventTimeUTC} {he.EventSummary} {he.System.Name} {dataGridViewTravel.CurrentCell?.RowIndex}:{dataGridViewTravel.CurrentCell?.ColumnIndex}");
+                //System.Diagnostics.Trace.WriteLine($"History grid Fire Change {he.EventTimeUTC} {he.EventSummary} {he.System.Name} {dataGridViewTravel.CurrentCell?.RowIndex}:{dataGridViewTravel.CurrentCell?.ColumnIndex}");
                 RequestPanelOperation?.Invoke(this, he);
             }
         }

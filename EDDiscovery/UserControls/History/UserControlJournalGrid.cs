@@ -423,10 +423,10 @@ namespace EDDiscovery.UserControls
                 Display(current_historylist, false);
                 return PanelActionState.HandledContinue;
             }
-            else if (actionobj is UserControlCommonBase.RequestTravelHistoryPos)
+            else if (actionobj is UserControlCommonBase.RequestHistoryGridPos)
             {
                 var he = CurrentHE();
-                //System.Diagnostics.Debug.WriteLine($"Travel Grid position request direct send to {sender}");
+                //System.Diagnostics.Debug.WriteLine($"History Grid position request direct send to {sender}");
                 sender.CallPerformPanelOperation(this, he);         // direct send back to sender so we don't wake up lots of panels
                 return PanelActionState.Success;
             }
@@ -438,8 +438,7 @@ namespace EDDiscovery.UserControls
         public bool GotoPosByJID(long jid)
         {
             int rowno = DataGridViewControlHelpersStaticFunc.FindGridPosByID(rowsbyjournalid, jid, true);
-            //System.Diagnostics.Debug.WriteLine($"Travel Grid move by jid {jid} {rowno}");
-
+            
             if (rowno >= 0)
             {
                 dataGridViewJournal.SetCurrentAndSelectAllCellsOnRow(rowno);
@@ -664,7 +663,7 @@ namespace EDDiscovery.UserControls
                 EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(rightclickhe.System.SystemAddress.Value);
         }
 
-        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)       // sync with travel grid call
+        private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)       // sync with history grid call
         {
             this.dataGridViewJournal.Cursor = Cursors.WaitCursor;
 

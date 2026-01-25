@@ -91,7 +91,7 @@ namespace EDDiscovery.UserControls
         {
             if (isHistoric)
             {
-                RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());
+                RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());
             }
             else
             {

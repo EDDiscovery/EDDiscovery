@@ -190,7 +190,7 @@ namespace EDDiscovery.Actions
         // DLL Event
         public static ActionEvent DLLEvent(string eventname) { return new ActionEventEDList(eventname, "DLLEvent", "", null); }
 
-        // Journal or Travel grid, run actions on this event
+        // Journal or History, run actions on this event
         public static ActionEvent UserRightClick(EliteDangerousCore.HistoryEntry he) { return new ActionEventEDList(he.journalEntry.EventTypeStr, "UserRightClick", "", null); }
 
         public static List<ActionEvent> EventsFromNames(List<string> alist, string prefix , string triggertype, string uiclname)

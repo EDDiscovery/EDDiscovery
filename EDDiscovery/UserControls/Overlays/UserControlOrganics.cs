@@ -101,7 +101,7 @@ namespace EDDiscovery.UserControls
         protected override void InitialDisplay()
         {
             DrawGrid();
-            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
         }
 
         protected override void Closing()

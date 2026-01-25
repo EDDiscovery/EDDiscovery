@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlTravelGrid
+    partial class HistoryGrid
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlTravelGrid));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(HistoryGrid));
             this.extCheckBoxOutlines = new ExtendedControls.ExtCheckBox();
             this.checkBoxCursorToTop = new ExtendedControls.ExtCheckBox();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
@@ -567,7 +567,7 @@ namespace EDDiscovery.UserControls
             this.travelGridInDebugModeToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.travelGridInDebugModeToolStripMenuItem.Name = "travelGridInDebugModeToolStripMenuItem";
             this.travelGridInDebugModeToolStripMenuItem.Size = new System.Drawing.Size(387, 22);
-            this.travelGridInDebugModeToolStripMenuItem.Text = "Travel grid in Debug Mode";
+            this.travelGridInDebugModeToolStripMenuItem.Text = "Debug Mode";
             // 
             // toolTip
             // 
@@ -904,13 +904,13 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelp.UseMnemonic = true;
             this.extButtonDrawnHelp.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
-            // UserControlTravelGrid
+            // HistoryGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.panelTop);
-            this.Name = "UserControlTravelGrid";
+            this.Name = "HistoryGrid";
             this.Size = new System.Drawing.Size(859, 646);
             this.historyContextMenu.ResumeLayout(false);
             this.dataViewScrollerPanel.ResumeLayout(false);

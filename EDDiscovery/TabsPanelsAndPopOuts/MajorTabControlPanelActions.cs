@@ -27,9 +27,9 @@ namespace EDDiscovery
         {
             //System.Diagnostics.Debug.WriteLine($"MTC RequestOp primary request {actionobj}");
 
-            // We should never get this because the primary tab always has a travel grid
+            // We should never get this because the primary tab always has a history grid
             // and it will claim the call in the primary tab splitter
-            System.Diagnostics.Debug.Assert(!(actionobj is RequestTravelToJID));      
+            System.Diagnostics.Debug.Assert(!(actionobj is RequestHistoryToJID));      
 
             foreach (TabPage tp in TabPages)
             {
@@ -87,12 +87,12 @@ namespace EDDiscovery
                 return PanelActionState.NotHandled;
             }
 
-            // if we are pushing a operation that only the primary tab can operate on as it owns the travel grid (TravelToJID, RequestTravelHistoryPos)
-            // send to primary tab only as it owns the primary travel grid
+            // if we are pushing a operation that only the primary tab can operate on as it owns the history grid (TravelToJID, RequestTravelHistoryPos)
+            // send to primary tab only as it owns the primary history grid
 
             else if (IsOperationForPrimaryTH(actionobj))
             {
-                //System.Diagnostics.Debug.WriteLine($"..Send travel grid request {actionobj} to primary tab");
+                //System.Diagnostics.Debug.WriteLine($"..Send history grid request {actionobj} to primary tab");
                 UserControls.UserControlContainerSplitter pt = PrimarySplitterTab;
                 return pt.CallPerformPanelOperation(sender, actionobj);        
             }

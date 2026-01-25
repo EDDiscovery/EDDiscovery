@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlTravelGrid
+    public partial class HistoryGrid
     {
         private void buttonExtExcel_Click(object sender, EventArgs e)
         {

@@ -303,7 +303,7 @@ namespace EDDiscovery.UserControls
 
         protected override void InitialDisplay()
         {
-            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
         }
 
         // display at this mcl with an optional don't repaint the grid, just the shopping list

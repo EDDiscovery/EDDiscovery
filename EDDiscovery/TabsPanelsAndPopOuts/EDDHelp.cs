@@ -76,8 +76,6 @@ namespace EDDiscovery
             {
                 if (name == "Star Distance Panel")
                     name = "Nearest Stars Panel";
-                else if (name == "Travel Grid Panel")
-                    name = "History Grid Panel";
                 else if (name == "Modules Panel")
                     name = "Ships Load Out Panel";
 

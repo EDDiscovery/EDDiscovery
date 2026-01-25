@@ -85,7 +85,7 @@ namespace EDDiscovery.UserControls
 
         protected override void InitialDisplay()
         {
-            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
         }
         private void Discoveryform_OnHistoryChange()
         {

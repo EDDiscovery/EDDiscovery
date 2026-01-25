@@ -32,7 +32,7 @@ namespace EDDiscovery
             Commodities=3,            
             Ledger=4,                 
             Journal=5,
-            TravelGrid=6,
+            HistoryGrid=6,              // aka the Travel Grid
             ScreenShot=7,
             Statistics=8,             
             Scan=9,
@@ -107,7 +107,7 @@ namespace EDDiscovery
             { new PanelInfo( "History") },
             { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Log of program information" ) },
             { new PanelInfo( PanelIDs.Journal, typeof(UserControlJournalGrid), "Journal", "JournalHistory", "Journal grid") },
-            { new PanelInfo( PanelIDs.TravelGrid, typeof(UserControlTravelGrid), "History", "TravelHistory", "History grid") },
+            { new PanelInfo( PanelIDs.HistoryGrid, typeof(HistoryGrid), "History", "TravelHistory", "History grid") },
             { new PanelInfo( PanelIDs.StarList, typeof(UserControlStarList), "Visited Stars", "StarList", "Visited Star list") },
 
             { new PanelInfo( "Current State") },

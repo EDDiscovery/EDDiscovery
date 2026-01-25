@@ -85,7 +85,7 @@ namespace EDDiscovery.UserControls
 
         protected override void InitialDisplay()
         {
-            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
         }
 
         // from the travel history, give the current HE we are pointing at.  Never fires if he = null

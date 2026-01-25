@@ -339,7 +339,7 @@ namespace EDDiscovery.UserControls
             {
                 long v = (long)dataGridViewLedger.Rows[dataGridViewLedger.RightClickRow].Tag;
 
-                if (RequestPanelOperation(this, new UserControlCommonBase.RequestTravelToJID() { JID = v, MakeVisible = true }) == PanelActionState.Failed)
+                if (RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryToJID() { JID = v, MakeVisible = true }) == PanelActionState.Failed)
                     ExtendedControls.MessageBoxTheme.Show(DiscoveryForm, "Entry filtered out of grid".Tx(), "Warning".Tx());
             }
         }

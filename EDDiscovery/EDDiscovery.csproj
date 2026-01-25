@@ -361,7 +361,7 @@
     <Compile Include="UserControls\Helpers\SpanshStationsUserControl.Designer.cs">
       <DependentUpon>SpanshStationsUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\History\UserControlTravelGrid2.cs">
+    <Compile Include="UserControls\History\HistoryGridExcel.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="UserControls\ExtPanel\UserControlExtPanel.cs">
@@ -647,11 +647,11 @@
     <Compile Include="UserControls\History\UserControlStarList.Designer.cs">
       <DependentUpon>UserControlStarList.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\History\UserControlTravelGrid.cs">
+    <Compile Include="UserControls\History\HistoryGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\History\UserControlTravelGrid.Designer.cs">
-      <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
+    <Compile Include="UserControls\History\HistoryGrid.Designer.cs">
+      <DependentUpon>HistoryGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -1021,8 +1021,8 @@
     <EmbeddedResource Include="UserControls\History\UserControlJournalGrid.resx">
       <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\History\UserControlTravelGrid.resx">
-      <DependentUpon>UserControlTravelGrid.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\History\HistoryGrid.resx">
+      <DependentUpon>HistoryGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlCompass.resx">
       <DependentUpon>UserControlCompass.cs</DependentUpon>

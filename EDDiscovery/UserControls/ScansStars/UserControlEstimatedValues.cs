@@ -89,7 +89,7 @@ namespace EDDiscovery.UserControls
         }
         protected override void InitialDisplay()
         {
-            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
         }
 
         public void NewEntry(HistoryEntry he)               // called when a new entry is made.. check to see if its a scan update

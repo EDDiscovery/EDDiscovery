@@ -224,7 +224,7 @@ namespace EDDiscovery.UserControls
         #region Panel communication
 
         // Action request system - replaces UCTG. Allows comms between panels
-        public static bool IsOperationForPrimaryTH(object actionobj) { return actionobj is RequestTravelToJID || actionobj is RequestTravelHistoryPos; }
+        public static bool IsOperationForPrimaryTH(object actionobj) { return actionobj is RequestHistoryToJID || actionobj is RequestHistoryGridPos; }
         public static bool IsOperationHistoryPush(object actionobj) { return actionobj is EliteDangerousCore.HistoryEntry; }
 
         // HistoryEntry - sent by all TG on cursor moves.
@@ -233,8 +233,8 @@ namespace EDDiscovery.UserControls
         //          All panels must return HandledContinue or NotHandled so no one grabs it
 
         //  RequestTravelToJID
-        //           request travel grid to go to this jid. Success or Failure or NotHandled
-        public class RequestTravelToJID 
+        //           request history grid to go to this jid. Success or Failure or NotHandled
+        public class RequestHistoryToJID 
         { 
             public long JID { get; set; }
             public bool MakeVisible { get; set; } = false;
@@ -248,11 +248,11 @@ namespace EDDiscovery.UserControls
             public bool MakeVisible { get; set; } = false;
         };
 
-        // RequestTravelHistoryPos - request primary travel grid to call back directly to sender with the current HE (may be null)
+        // RequestTravelHistoryPos - request primary history grid to call back directly to sender with the current HE (may be null)
         //           Splitter/grid distributes it around the siblings - if a TG there, they respond true, which stops the distribution (like the main tab will)
         //           If not ack, sent up to tab - Other will send it to maintab only
         //           Panel should return Success when it claims it
-        public class RequestTravelHistoryPos { };       // use in Request to ask for your travel grid to send thru an he. TG will return true 
+        public class RequestHistoryGridPos { };       // use in Request to ask for your history grid to send thru an he. TG will return true 
 
         // PushStars - someone is pushing a system list to expedition or trilat
         //           Splitter/grid distributes it around the siblings - if a recipient is there and uses it, they respond true, which stops the distribution

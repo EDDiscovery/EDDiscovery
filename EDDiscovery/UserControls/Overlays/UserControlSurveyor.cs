@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
 
         protected override void InitialDisplay()
         {
-            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
             SetVisibility();
             doresize = true;                            // now allow resizing actions, before, resizes were due to setups, now due to user interactions
         }

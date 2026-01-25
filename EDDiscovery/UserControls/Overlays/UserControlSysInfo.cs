@@ -258,7 +258,7 @@ namespace EDDiscovery.UserControls
         protected override void InitialDisplay()
         {
             UpdateViewOnSelection();  // then turn the right ones on
-            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
         }
 
         private void Discoveryform_OnEDSMSyncComplete(int count, string syslist)     // EDSM ~MAY~ have updated the last discovery flag, so redisplay
@@ -315,7 +315,7 @@ namespace EDDiscovery.UserControls
         // override and intercept events
         public override PanelActionState PerformPanelOperation(UserControlCommonBase sender, object actionobj)
         {
-            if (actionobj is EliteDangerousCore.HistoryEntry)       // he from travel grid
+            if (actionobj is EliteDangerousCore.HistoryEntry)       // he from history
             {
                 //System.Diagnostics.Debug.WriteLine($"systeminfo perform panel operation history");
                 NewHistoryEntry((EliteDangerousCore.HistoryEntry)actionobj);

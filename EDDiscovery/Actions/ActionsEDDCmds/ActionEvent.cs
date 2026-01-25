@@ -69,7 +69,7 @@ namespace EDDiscovery.Actions
 
                     if (cmdname.Equals("thpos"))
                     {
-                        HistoryEntry he = (ap.ActionController as ActionController).DiscoveryForm.PrimaryTravelGrid.GetCurrentHistoryEntry;
+                        HistoryEntry he = (ap.ActionController as ActionController).DiscoveryForm.PrimaryHistoryGrid.GetCurrentHistoryEntry;
 
                         if ( he == null )
                         {

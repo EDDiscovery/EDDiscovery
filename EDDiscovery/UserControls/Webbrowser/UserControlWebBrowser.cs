@@ -26,7 +26,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlWebBrowser : UserControlCommonBase
     {
         private string source;
-        private ISystem last_sys_tracked = null;        // this tracks the travel grid selection always
+        private ISystem last_sys_tracked = null;        // this tracks the history grid selection always
         private SystemClass override_system = null;     // if set, override to this system.. 
 
         private BrowserBase wbb;
@@ -95,7 +95,7 @@ namespace EDDiscovery.UserControls
 
                 last_sys_tracked = null;             
 
-                RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+                RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
             };
             wv2.Start();
         }

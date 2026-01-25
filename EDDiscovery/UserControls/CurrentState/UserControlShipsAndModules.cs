@@ -144,11 +144,11 @@ namespace EDDiscovery.UserControls
         protected override void InitialDisplay()
         {
             labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
-            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
             extButtonDrawnResetPips.Top = multiPipControlEng.Bottom - extButtonDrawnResetPips.Height;       // lets realign the control manually to make sure it lines up at the bottom
         }
 
-        // new entry received from travel grid
+        // new entry received from history
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
             if (comboBoxShips.Items.Count == 0)

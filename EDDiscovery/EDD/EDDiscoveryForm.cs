@@ -45,7 +45,7 @@ namespace EDDiscovery
 
         public ExtendedControls.ThemeList ThemeList { get; private set; }
 
-        public UserControls.UserControlTravelGrid PrimaryTravelGrid { get { return tabControlMain.PrimarySplitterTab.GetTravelGrid; } }
+        public UserControls.HistoryGrid PrimaryHistoryGrid { get { return tabControlMain.PrimarySplitterTab.GetHistoryGrid; } }
         public UserControls.UserControlContainerSplitter PrimarySplitter { get { return tabControlMain.PrimarySplitterTab; } }
 
         public EliteDangerousCore.ScreenShots.ScreenShotConverter ScreenshotConverter { get; set; }
@@ -603,7 +603,7 @@ namespace EDDiscovery
             if (!EDDOptions.Instance.NoTabs)
             {
                 tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, DefaultTabList);      // numbers from popouts, which are FIXED!
-                if (tabControlMain.PrimarySplitterTab == null || tabControlMain.PrimarySplitterTab.GetTravelGrid == null)  // double check we have a primary tab and tg..
+                if (tabControlMain.PrimarySplitterTab == null || tabControlMain.PrimarySplitterTab.GetHistoryGrid == null)  // double check we have a primary tab and tg..
                 {
                     MessageBox.Show(("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
                                     "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +

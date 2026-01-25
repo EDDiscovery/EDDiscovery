@@ -81,7 +81,7 @@ namespace EDDiscovery.UserControls
 
         protected override void InitialDisplay()
         {
-            RequestPanelOperation(this, new UserControlCommonBase.RequestTravelHistoryPos());     //request an update 
+            RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
         }
 
         public override void ReceiveHistoryEntry(HistoryEntry he)        //we track the history cursor
