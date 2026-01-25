@@ -641,11 +641,11 @@
     <Compile Include="UserControls\LogsBookmarks\UserControlLog.Designer.cs">
       <DependentUpon>UserControlLog.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\History\UserControlStarList.cs">
+    <Compile Include="UserControls\History\StarList.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\History\UserControlStarList.Designer.cs">
-      <DependentUpon>UserControlStarList.cs</DependentUpon>
+    <Compile Include="UserControls\History\StarList.Designer.cs">
+      <DependentUpon>StarList.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\History\HistoryGrid.cs">
       <SubType>UserControl</SubType>
@@ -961,8 +961,8 @@
     <EmbeddedResource Include="UserControls\Helpers\TagsForm.resx">
       <DependentUpon>TagsForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\History\UserControlStarList.resx">
-      <DependentUpon>UserControlStarList.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\History\StarList.resx">
+      <DependentUpon>StarList.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LogsBookmarks\CaptainsLogDiary.resx">
       <DependentUpon>CaptainsLogDiary.cs</DependentUpon>

@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2024 EDDiscovery development team
+ * Copyright 2016 - 2026 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -24,7 +24,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlStarList : UserControlCommonBase
+    public partial class StarList : UserControlCommonBase
     {
         #region Init
         private class Columns
@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls
 
         private HashSet<string> quickMarkSystemName = new HashSet<string>();
 
-        public UserControlStarList()
+        public StarList()
         {
             InitializeComponent();
 
