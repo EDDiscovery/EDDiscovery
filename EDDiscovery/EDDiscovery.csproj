@@ -373,6 +373,12 @@
     <Compile Include="UserControls\ExtPanel\UserControlExtPanel.Designer.cs">
       <DependentUpon>UserControlExtPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\LogsBookmarks\Log.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\LogsBookmarks\Log.Designer.cs">
+      <DependentUpon>Log.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\Overlays\TravelPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -637,12 +643,6 @@
     </Compile>
     <Compile Include="UserControls\History\JournalGrid.Designer.cs">
       <DependentUpon>JournalGrid.cs</DependentUpon>
-    </Compile>
-    <Compile Include="UserControls\LogsBookmarks\UserControlLog.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\LogsBookmarks\UserControlLog.Designer.cs">
-      <DependentUpon>UserControlLog.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\History\StarList.cs">
       <SubType>UserControl</SubType>
@@ -973,8 +973,8 @@
     <EmbeddedResource Include="UserControls\LogsBookmarks\CaptainsLogEntries.resx">
       <DependentUpon>CaptainsLogEntries.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlLog.resx">
-      <DependentUpon>UserControlLog.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\LogsBookmarks\Log.resx">
+      <DependentUpon>Log.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\TravelPanel.resx">
       <DependentUpon>TravelPanel.cs</DependentUpon>

@@ -105,7 +105,7 @@ namespace EDDiscovery
         {
             //                                                      Windows title, windows ref name (used in registry), description 
             { new PanelInfo( "History") },
-            { new PanelInfo( PanelIDs.Log , typeof(UserControlLog),"Log", "Log", "Log of program information" ) },
+            { new PanelInfo( PanelIDs.Log , typeof(Log),"Log", "Log", "Log of program information" ) },
             { new PanelInfo( PanelIDs.Journal, typeof(JournalGrid), "Journal", "JournalHistory", "Journal grid") },
             { new PanelInfo( PanelIDs.HistoryGrid, typeof(HistoryGrid), "History", "TravelHistory", "History grid") },
             { new PanelInfo( PanelIDs.StarList, typeof(StarList), "Visited Stars", "StarList", "Visited Star list") },

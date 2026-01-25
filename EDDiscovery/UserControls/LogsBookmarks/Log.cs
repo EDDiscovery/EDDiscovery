@@ -17,9 +17,9 @@ using System.Drawing;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlLog : UserControlCommonBase
+    public partial class Log : UserControlCommonBase
     {
-        public UserControlLog()
+        public Log()
         {
             InitializeComponent();
             DBBaseName = "LogWindow";
