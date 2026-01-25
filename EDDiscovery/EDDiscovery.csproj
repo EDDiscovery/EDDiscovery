@@ -373,6 +373,12 @@
     <Compile Include="UserControls\ExtPanel\UserControlExtPanel.Designer.cs">
       <DependentUpon>UserControlExtPanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\LogsBookmarks\Bookmarks.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\LogsBookmarks\Bookmarks.Designer.cs">
+      <DependentUpon>Bookmarks.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserControls\LogsBookmarks\Log.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -772,12 +778,6 @@
     <Compile Include="UserControls\LogsBookmarks\UserControlCaptainsLog.Designer.cs">
       <DependentUpon>UserControlCaptainsLog.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\LogsBookmarks\UserControlBookmarks.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="UserControls\LogsBookmarks\UserControlBookmarks.Designer.cs">
-      <DependentUpon>UserControlBookmarks.cs</DependentUpon>
-    </Compile>
     <Compile Include="UserControls\Helpers\DataGridViewStarResults.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -967,6 +967,9 @@
     <EmbeddedResource Include="UserControls\History\StarList.resx">
       <DependentUpon>StarList.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\LogsBookmarks\Bookmarks.resx">
+      <DependentUpon>Bookmarks.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LogsBookmarks\CaptainsLogDiary.resx">
       <DependentUpon>CaptainsLogDiary.cs</DependentUpon>
     </EmbeddedResource>
@@ -1065,9 +1068,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlCaptainsLog.resx">
       <DependentUpon>UserControlCaptainsLog.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\LogsBookmarks\UserControlBookmarks.resx">
-      <DependentUpon>UserControlBookmarks.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\3DMap\UserControl3DMap.resx">
       <DependentUpon>UserControl3DMap.cs</DependentUpon>

@@ -157,7 +157,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Discoveries, typeof(UserControlDiscoveries) ,"Discoveries", "Discoveries", "Discoveries Observer List") },
 
             { new PanelInfo( "Bookmarks and Logs") },
-            { new PanelInfo( PanelIDs.BookmarkManager, typeof(UserControlBookmarks), "Bookmarks", "Bookmarks", "Bookmarks on systems and planets")},
+            { new PanelInfo( PanelIDs.BookmarkManager, typeof(Bookmarks), "Bookmarks", "Bookmarks", "Bookmarks on systems and planets")},
             { new PanelInfo( PanelIDs.CaptainsLog, typeof(UserControlCaptainsLog), "Captain's Log", "CaptainsLog", "Captain's Log - notes on your travels")},
 
             { new PanelInfo( "Combat") },

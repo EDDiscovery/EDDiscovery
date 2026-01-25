@@ -23,7 +23,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlBookmarks : UserControlCommonBase
+    public partial class Bookmarks : UserControlCommonBase
     {
         private DataGridViewRow currentedit = null;
         private Timer searchtimer;
@@ -34,7 +34,7 @@ namespace EDDiscovery.UserControls
         const string dbSurfaceTags = "TagFilter";
 
         #region init
-        public UserControlBookmarks()
+        public Bookmarks()
         {
             InitializeComponent();
            
