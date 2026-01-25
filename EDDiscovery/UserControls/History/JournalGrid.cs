@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2016 - 2025 EDDiscovery development team
+ * Copyright 2016 - 2026 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -25,7 +25,7 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlJournalGrid : UserControlCommonBase
+    public partial class JournalGrid : UserControlCommonBase
     {
         private JournalFilterSelector cfs;
         private BaseUtils.ConditionLists fieldfilter = new BaseUtils.ConditionLists();
@@ -69,7 +69,7 @@ namespace EDDiscovery.UserControls
 
         #region Init
 
-        public UserControlJournalGrid()
+        public JournalGrid()
         {
             InitializeComponent();
 

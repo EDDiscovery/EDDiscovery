@@ -629,11 +629,11 @@
     <Compile Include="UserControls\Helpers\FindSystemsUserControl.Designer.cs">
       <DependentUpon>FindSystemsUserControl.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\History\UserControlJournalGrid.cs">
+    <Compile Include="UserControls\History\JournalGrid.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\History\UserControlJournalGrid.Designer.cs">
-      <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    <Compile Include="UserControls\History\JournalGrid.Designer.cs">
+      <DependentUpon>JournalGrid.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\LogsBookmarks\UserControlLog.cs">
       <SubType>UserControl</SubType>
@@ -1018,8 +1018,8 @@
     <EmbeddedResource Include="UserControls\Helpers\FindSystemsUserControl.resx">
       <DependentUpon>FindSystemsUserControl.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\History\UserControlJournalGrid.resx">
-      <DependentUpon>UserControlJournalGrid.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\History\JournalGrid.resx">
+      <DependentUpon>JournalGrid.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\History\HistoryGrid.resx">
       <DependentUpon>HistoryGrid.cs</DependentUpon>

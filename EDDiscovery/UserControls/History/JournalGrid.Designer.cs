@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlJournalGrid
+    partial class JournalGrid
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlJournalGrid));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(JournalGrid));
             this.historyContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.quickMarkToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.removeSortingOfColumnsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
