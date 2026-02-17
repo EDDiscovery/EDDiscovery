@@ -214,6 +214,7 @@ namespace EDDiscovery.UserControls
                     int vpos = 0;
                     StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
                     frmt.Alignment = alignment;
+                    int setwidth = alignment != StringAlignment.Near ? pictureBox.Width - 6 : -1;   // so, if we are not using far, we now force the bitwidth to max in draw
                     var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                     var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
 
@@ -231,12 +232,13 @@ namespace EDDiscovery.UserControls
                     var i = new ExtendedControls.ImageElement.Element();
                     i.TextAutoSize(new Point(3, vpos),
                                                     new Size(Math.Max(pictureBox.Width - 6, 24), 10000),
-                                                    l.AppendPrePad(s,Environment.NewLine),
+                                                    l.AppendPrePad(s, Environment.NewLine),
                                                     dfont,
                                                     textcolour,
                                                     backcolour,
                                                     1.0F,
-                                                    frmt: frmt); ;
+                                                    frmt: frmt,
+                                                    setwidth: setwidth);
 
                     extPictureBoxScroll.Height = i.Bounds.Bottom + 8;
                     picelements.Add(i);

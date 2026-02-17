@@ -553,9 +553,26 @@ namespace EDDiscovery.UserControls
 
             Point pos = new Point(3, 20);
 
+
+            extPictureBoxRoute.AddPictureTextHorzDivider(
+                             new Rectangle(pos.X,pos.Y, Math.Max(extPictureBoxSystemDetails.Width - 6 - pos.X, 24), 10000),
+                             null, Size.Empty,
+                             lastroutetext, displayfont ?? this.Font, extCheckBoxWordWrap.Checked, alignment,
+                             IsSet(CtrlList.showdividers),
+                             IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor,
+                             IsTransparentModeOn ? Color.Transparent : this.BackColor
+                             );
+
             // display the manual selection buttons when appropriate
             if (closest != null && !IsCurrentlyTransparent)
             {
+                if (alignment == StringAlignment.Near)
+                {
+                    extPictureBoxRoute[0].X += 44;
+                }
+                else
+                    pos = new Point(extPictureBoxRoute[0].X - 44, pos.Y);
+
                 var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                 var but1 = new ExtendedControls.ImageElement.Button() { Text = "<", Font = this.Font, Bounds = new Rectangle(pos.X, pos.Y, 20, 20) };
                 but1.Enabled = currentRouteManualTarget > 0;
@@ -568,14 +585,8 @@ namespace EDDiscovery.UserControls
                 but2.BackColor = Color.Transparent; but2.ForeColor = textcolour; but2.ButtonFaceColor = Theme.Current.ButtonBackColor; but2.MouseOverFaceColor = Theme.Current.ButtonBackColor.Multiply(1.3f);
                 but2.Click += (pb, iel, w) => { currentRouteManualTarget = currentRouteManualTarget < currentRoute.Systems.Count - 1 ? currentRouteManualTarget + 1 : 0; DrawRoute(cur_sys); };
                 extPictureBoxRoute.Add(but2);
-
-                pos.X += 45;
             }
 
-            var ie = DrawText(lastroutetext, pos);
-            extPictureBoxRoute.Add(ie);
-
-            DrawHorzDivider(extPictureBoxRoute, ie);
             extPictureBoxRoute.Render();
         }
 
@@ -1048,7 +1059,6 @@ namespace EDDiscovery.UserControls
 
         // Draw system data, stored in drawsystem* values, to screen, taking into account width
         // this is not locked. MUST be extenally locked
-
         private void DrawSystemUnlocked()
         {
             System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor present system results");
@@ -1059,6 +1069,7 @@ namespace EDDiscovery.UserControls
 
             StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap);
             frmt.Alignment = alignment;
+            int setwidth = alignment != StringAlignment.Near ? extPictureBoxSystemDetails.Width - 6 : -1;   // so, if we are not using far, we now force the bitwidth to max in draw
             var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
             var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
             Font dfont = displayfont ?? this.Font;
@@ -1066,15 +1077,15 @@ namespace EDDiscovery.UserControls
             foreach (var kvp in drawsystemtext)        // and present any text results in sorted order
             {
                 var i = new ExtendedControls.ImageElement.Element();
-                i.TextAutoSize(
-                        new Point(3, vpos),
+                i.TextAutoSize( new Point(3, vpos),
                         new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
                         kvp.Value,
                         dfont,
                         textcolour,
                         backcolour,
                         1.0F,
-                        frmt: frmt);
+                        frmt: frmt,
+                        setwidth: setwidth);
                 extPictureBoxSystemDetails.Add(i);
                 vpos += i.Bounds.Height;
             }
@@ -1082,15 +1093,15 @@ namespace EDDiscovery.UserControls
             if (drawsystemvalue > 0 && IsSet(CtrlList.showValues))
             {
                 var i = new ExtendedControls.ImageElement.Element();
-                i.TextAutoSize(
-                    new Point(3, vpos),
+                i.TextAutoSize( new Point(3, vpos),
                     new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
                     "^^ ~ " + drawsystemvalue.ToString("N0") + " cr",
                     dfont,
                     textcolour,
                     backcolour,
                     1.0F,
-                    frmt: frmt);
+                    frmt: frmt,
+                    setwidth: setwidth);
                 extPictureBoxSystemDetails.Add(i);
                 vpos += i.Bounds.Height;
             }
@@ -1106,7 +1117,8 @@ namespace EDDiscovery.UserControls
                                                 textcolour,
                                                 backcolour,
                                                 1.0F,
-                                                frmt: frmt);
+                                                frmt: frmt,
+                                                setwidth:setwidth);
                 vpos += i.Bounds.Height;
                 extPictureBoxSystemDetails.Add(i);
             }
@@ -1117,47 +1129,17 @@ namespace EDDiscovery.UserControls
             Refresh();
         }
 
-
         void ClearThenDrawText(ExtPictureBox pb, string text)
         {
             pb.ClearImageList();
-            var ie = DrawText(text, new Point(3, 0));
-            pb.Add(ie);
-            if (text.HasChars())
-                DrawHorzDivider(pb, ie);
+            pb.AddPictureTextHorzDivider(new Rectangle(3, 0, Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
+                                         null, Size.Empty,
+                                         text, displayfont ?? this.Font, extCheckBoxWordWrap.Checked, alignment,
+                                         IsSet(CtrlList.showdividers) && text.HasChars(),
+                                         IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor,
+                                         IsTransparentModeOn ? Color.Transparent : this.BackColor
+                                         );
             pb.Render();
-        }
-
-        void DrawHorzDivider(ExtPictureBox pb, ExtendedControls.ImageElement.Element ie)
-        {
-            if (IsSet(CtrlList.showdividers))
-            {
-                var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-                pb.AddHorizontalDivider(textcolour.Multiply(0.4f), new Rectangle(0, ie.Bounds.Bottom, ie.Bounds.Width, 8), 1, 4);
-            }
-        }
-
-        // Draw text into an image element and return
-        ExtendedControls.ImageElement.Element DrawText(string text, Point loc)
-        {
-            using (StringFormat frmt = new StringFormat(extCheckBoxWordWrap.Checked ? 0 : StringFormatFlags.NoWrap) { Alignment = alignment })
-            {
-                var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
-                var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
-                Font dfont = displayfont ?? this.Font;
-
-                var ie = new ExtendedControls.ImageElement.Element();
-                ie.TextAutoSize(
-                        loc,
-                        new Size(Math.Max(extPictureBoxSystemDetails.Width - 6, 24), 10000),
-                        text,
-                        dfont,
-                        textcolour,
-                        backcolour,
-                        1.0F,
-                        frmt: frmt);
-                return ie;
-            }
         }
 
         // See if manual target needs updating
@@ -1231,14 +1213,14 @@ namespace EDDiscovery.UserControls
             ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
 
             displayfilter.UC.AddAllNone();
-            displayfilter.UC.Add(CtrlList.allplanets.ToString(), "Show All Planets".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.HMCv10"));
-            displayfilter.UC.Add(CtrlList.showAmmonia.ToString(), "Ammonia World".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.AMWv1"));
-            displayfilter.UC.Add(CtrlList.showEarthlike.ToString(), "Earthlike World".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.ELWv5"));
-            displayfilter.UC.Add(CtrlList.showWaterWorld.ToString(), "Water World".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.WTRv7"));
-            displayfilter.UC.Add(CtrlList.showHMC.ToString(), "High metal content body".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.HMCv3"));
-            displayfilter.UC.Add(CtrlList.showMR.ToString(), "Metal-rich body".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.MRBv5"));
-            displayfilter.UC.Add(CtrlList.showTerraformable.ToString(), "Terraformable".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.ELWv5"));
-            displayfilter.UC.Add(CtrlList.showVolcanism.ToString(), "Has volcanism".Tx(), BaseUtils.Icons.IconSet.GetIcon("Bodies.Planets.Terrestrial.HMCv37"));
+            displayfilter.UC.Add(CtrlList.allplanets.ToString(), "Show All Planets".Tx(), BaseUtils.Icons.IconSet.GetImage("Bodies.Planets.Terrestrial.HMCv10"));
+            displayfilter.UC.Add(CtrlList.showAmmonia.ToString(), "Ammonia World".Tx(), BaseUtils.Icons.IconSet.GetImage("Bodies.Planets.Terrestrial.AMWv1"));
+            displayfilter.UC.Add(CtrlList.showEarthlike.ToString(), "Earthlike World".Tx(), BaseUtils.Icons.IconSet.GetImage("Bodies.Planets.Terrestrial.ELWv5"));
+            displayfilter.UC.Add(CtrlList.showWaterWorld.ToString(), "Water World".Tx(), BaseUtils.Icons.IconSet.GetImage("Bodies.Planets.Terrestrial.WTRv7"));
+            displayfilter.UC.Add(CtrlList.showHMC.ToString(), "High metal content body".Tx(), BaseUtils.Icons.IconSet.GetImage("Bodies.Planets.Terrestrial.HMCv3"));
+            displayfilter.UC.Add(CtrlList.showMR.ToString(), "Metal-rich body".Tx(), BaseUtils.Icons.IconSet.GetImage("Bodies.Planets.Terrestrial.MRBv5"));
+            displayfilter.UC.Add(CtrlList.showTerraformable.ToString(), "Terraformable".Tx(), BaseUtils.Icons.IconSet.GetImage("Bodies.Planets.Terrestrial.ELWv5"));
+            displayfilter.UC.Add(CtrlList.showVolcanism.ToString(), "Has volcanism".Tx(), BaseUtils.Icons.IconSet.GetImage("Bodies.Planets.Terrestrial.HMCv37"));
             displayfilter.UC.Add(CtrlList.showRinged.ToString(), "Has Rings".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_RingOnly);
             displayfilter.UC.Add(CtrlList.showEccentricity.ToString(), "High eccentricity".Tx(), global::EDDiscovery.Icons.Controls.Eccentric);
             displayfilter.UC.Add(CtrlList.lowradius.ToString(), "Tiny body".Tx(), global::EDDiscovery.Icons.Controls.Scan_SizeSmall);

@@ -412,9 +412,9 @@ namespace EDDiscovery.UserControls.Map3D
                     (ie) =>  // image:
                     {
                         string name = ie.ImagePathOrURL.Substring(6).Trim();
-                        if (BaseUtils.Icons.IconSet.Instance.Contains(name))
+                        if (BaseUtils.Icons.IconSet.Contains(name))
                         {
-                            ie.Bitmap = (Bitmap)BaseUtils.Icons.IconSet.Instance.Get(name);
+                            ie.Bitmap = (Bitmap)BaseUtils.Icons.IconSet.GetImage(name);
                             ie.OwnBitmap = false;
                             usertexturebitmaps.Add(null, null, ie.Bitmap, 1,
                                 new Vector3(ie.Centre.X, ie.Centre.Y, ie.Centre.Z),

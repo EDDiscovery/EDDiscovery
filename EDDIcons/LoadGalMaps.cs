@@ -28,8 +28,8 @@ namespace EDDiscovery.Icons
             string json = "{\"x1\" : -45000,\"x2\" : 45000,\"y1\" : 70000,\"y2\" : -20000,\"px1\" : 0,\"px2\" : 4499,\"py1\" : 0,\"py2\" : 4499 }";
 
             // do not own bitmap, so do not dispose.
-            maps.Add(new Map2d("Galaxy L", json, BaseUtils.Icons.IconSet.Instance.Get("GalMap.Galaxy_L"))); 
-            maps.Add(new Map2d("Galaxy L Grid", json, BaseUtils.Icons.IconSet.Instance.Get("GalMap.Galaxy_L_Grid")));
+            maps.Add(new Map2d("Galaxy L", json, BaseUtils.Icons.IconSet.GetImage("GalMap.Galaxy_L"))); 
+            maps.Add(new Map2d("Galaxy L Grid", json, BaseUtils.Icons.IconSet.GetImage("GalMap.Galaxy_L_Grid")));
 
             return maps;
         }

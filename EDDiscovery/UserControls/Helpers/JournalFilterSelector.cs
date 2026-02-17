@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
 
             var lle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "Ledger", "LedgerNC" });
             string legtype = string.Join(";", lle.Select(x => x.Item1)) + ";";
-            UC.AddGroupItem(legtype, "Ledger".Tx(), BaseUtils.Icons.IconSet.GetIcon("Controls.Ledger"));
+            UC.AddGroupItem(legtype, "Ledger".Tx(), BaseUtils.Icons.IconSet.GetImage("Controls.Ledger"));
 
             var sle = EliteDangerousCore.JournalEntry.GetNameImageOfEvents(new string[] { "ShipInformation" });
             string shiptype = string.Join(";", sle.Select(x => x.Item1)) + ";";

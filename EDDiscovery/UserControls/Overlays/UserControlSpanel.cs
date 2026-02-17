@@ -474,7 +474,8 @@ namespace EDDiscovery.UserControls
 
                     edsm = pictureBox.AddTextAutoSize(new Point(scanpostextoffset.X + columnpos[colnum], rowpos), new Size(200, 200),
                                             "EDSM", dfont, backtext, textcolour, 0.5F, he, "View system on EDSM".Tx());
-                    edsm.SetAlternateImage(BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", new Size(200, 200), dfont, backtext, textcolour.Multiply(1.2F), 0.5F), edsm.Bounds, true);
+                    var altimg = BaseUtils.BitMapHelpers.DrawTextIntoAutoSizedBitmap("EDSM", new Size(200, 200), dfont, backtext, textcolour.Multiply(1.2F), 0.5F);
+                    edsm.SetAlternateImage(altimg, edsm.Bounds, true);
                 }
 
                 colnum++;

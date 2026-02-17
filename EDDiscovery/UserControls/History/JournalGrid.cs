@@ -568,7 +568,8 @@ namespace EDDiscovery.UserControls
             {
                 if (rowsbyjournalid.TryGetValue(jid, out DataGridViewRow row)) // if it parses and its in view, add it to combo box.
                 {
-                    extComboBoxQuickMarks.Items.Add((string)row.Cells[0].Value + ":" + (string)row.Cells[2].Value);
+                    HistoryEntry he = row.Tag as HistoryEntry;
+                    extComboBoxQuickMarks.Items.Add((string)row.Cells[0].Value + ":" + (string)row.Cells[2].Value + $" @ {he?.System.Name}");
                     jids.Add(jid);
                 }
             }

@@ -117,7 +117,7 @@ namespace EDDiscovery.WebServer
             {
                 discoveryform.Invoke((MethodInvoker)delegate
                 {
-                    img = BaseUtils.Icons.IconSet.GetIcon("Bodies.Unknown") as Bitmap;
+                    img = BaseUtils.Icons.IconSet.GetImage("Bodies.Unknown") as Bitmap;
                 });
             }
 

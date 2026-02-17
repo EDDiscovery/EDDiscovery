@@ -534,7 +534,7 @@ namespace EDDiscovery.UserControls
                             string coreoroptional = srvtype <= EliteDangerousCore.JournalEvents.JournalCarrierCrewServices.ServiceType.TritiumDepot ? "Core Service".Tx() : "Optional Service".Tx();
                             imageControlServices.DrawText(pointtextleft, new Size(titlewidth, 1000), coreoroptional, normfont, color);
 
-                            Image img = BaseUtils.Icons.IconSet.Instance.Get("Controls." + srvtype.ToString());
+                            Image img = BaseUtils.Icons.IconSet.GetImage("Controls." + srvtype.ToString());
                             imageControlServices.DrawImage(img, new Rectangle(hspacing * 4, vpos + serviceheight - linemargin - img.Height, img.Width, img.Height));
 
                             var servicecol1top = new Point(titlewidth + 50, vpos + linemargin * 2);
@@ -559,7 +559,7 @@ namespace EDDiscovery.UserControls
                             if (active)
                             {
                                 imageControlServices.DrawText(servicecol1top, new Size(2000, 2000), "This Service is Active".Tx(), normfont, color);
-                                Image img2 = BaseUtils.Icons.IconSet.Instance.Get("Controls.ServicesTick");
+                                Image img2 = BaseUtils.Icons.IconSet.GetImage("Controls.ServicesTick");
                                 imageControlServices.DrawImage(img2, new Rectangle(titlewidth, vpos, img.Width, img.Height));
                             }
                             else if (disabled)
@@ -697,7 +697,7 @@ namespace EDDiscovery.UserControls
                 imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), BaseUtils.FieldBuilder.Build("Cost: ; cr;N0".Tx(), value), normfont, color);
             }
 
-            Image img = BaseUtils.Icons.IconSet.Instance.Get(module ? "Controls.ModulePack" : "Controls.Shipyard");
+            Image img = BaseUtils.Icons.IconSet.GetImage(module ? "Controls.ModulePack" : "Controls.Shipyard");
             imageControlPacks.DrawImage(img, new Rectangle(hspacing * 4, vpos + serviceheight - linemargin - img.Height, img.Width, img.Height));
 
             return serviceheight + linemargin;

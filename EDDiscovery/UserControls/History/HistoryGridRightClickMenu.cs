@@ -404,7 +404,8 @@ namespace EDDiscovery.UserControls
             {
                 if (rowsbyjournalid.TryGetValue(j, out DataGridViewRow row)) // if it parses and its in view, add it to combo box.
                 {
-                    extComboBoxQuickMarks.Items.Add((string)row.Cells[0].Value + ":" + (string)row.Cells[2].Value);
+                    HistoryEntry he = row.Tag as HistoryEntry;
+                    extComboBoxQuickMarks.Items.Add((string)row.Cells[0].Value + ":" + (string)row.Cells[2].Value + $" @ {he?.System.Name}");
                     jids.Add(j);
                 }
             }
@@ -536,8 +537,7 @@ namespace EDDiscovery.UserControls
             string file = rightclickhe.journalEntry.FullPath;
             if (file.HasChars())
             {
-                string find = $"{{ \"timestamp\":\"{rightclickhe.EventTimeUTC.ToStringZulu()}\", \"event\":\"{rightclickhe.journalEntry.EventTypeID.ToString()}\"";
-                Processes.OpenEditorForTextFileAtText(file, find);
+                Processes.OpenEditorForTextFileAtText(file, rightclickhe.journalEntry.JSONSearchSignatures());
             }
         }
 

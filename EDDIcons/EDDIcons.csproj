@@ -476,6 +476,18 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Stations\AsteroidBase.jpg" />
+    <EmbeddedResource Include="Stations\Coriolis.jpg" />
+    <EmbeddedResource Include="Stations\CraterPort.jpg" />
+    <EmbeddedResource Include="Stations\Dodec.jpg" />
+    <EmbeddedResource Include="Stations\FleetCarrier.jpg" />
+    <EmbeddedResource Include="Stations\Megaship.jpg" />
+    <EmbeddedResource Include="Stations\Ocellus.jpg" />
+    <EmbeddedResource Include="Stations\OnFootSettlement.jpg" />
+    <EmbeddedResource Include="Stations\Orbis.jpg" />
+    <EmbeddedResource Include="Stations\Outpost.jpg" />
+    <EmbeddedResource Include="Stations\SpaceConstructionDepot.jpg" />
+    <EmbeddedResource Include="Stations\SurfaceStation.jpg" />
     <EmbeddedResource Include="Journal\EDDDestinationSelected.png" />
     <EmbeddedResource Include="Panels\PowerplayMerits.png" />
     <EmbeddedResource Include="Journal\CancelledSquadronApplication.png" />
@@ -1232,8 +1244,6 @@
       <Name>BaseUtils</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Stations\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
