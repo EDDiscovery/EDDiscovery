@@ -184,8 +184,8 @@ F12262247D08BD: "Micro resource count" => "Compteur des micro ressources"
 393A482F174DA6: "Suits, Loadouts, Weapons" => "Combinaisons, équipements, armes"
 723E769CA8B7F1: "3D Map" => "Carte 3D"
 4927077FF8C996: "3D Map of galaxy" => "Carte 3D de la galaxie"
-4F49FDDD44F492: "Local 3D Map" @
-112E4D8C9B4EEC: "Local 3D Map of systems near you" @
+4F49FDDD44F492: "Local 3D Map" => "Carte 3D locale"
+112E4D8C9B4EEC: "Local 3D Map of systems near you" => "Carte 3D locale des systèmes proches de vous"
 92F242BD12833A: "Organic Scans" => "Scans organique"
 092BC4115EF04D: "Organic scans of current body and historic scans" => "Scans organique du corps actuel et historique des scans"
 C6C5065C1BFCBE: "Engineers" => "Ingénieurs"
@@ -194,7 +194,7 @@ BE1C21D6FE0AE4: "Discoveries" => "Découvertes"
 98A0679EBD354B: "Discoveries Observer List" => "Liste des découvertes"
 91B0BA24657FE5: "Carrier" => "Porte-vaisseaux"
 42F527004E124B: "Data about your fleet carrier" => "Données de votre porte-vaisseaux"
-87DF60DE337FB5: "Resources" @
+87DF60DE337FB5: "Resources" => "Ressources"
 9AE60B8B41DFAD: "Resources: All Materials, Commodity, Micro resources" => "Ressources : Tous les matériaux, marchandises, micro ressources"
 542CC34C1F691F: "Spansh Stations" => "Spansh - Stations"
 17DFA3A002E3D5: "Stations in the system from spansh web data" => "Les stations du système depuis le site web Spansh"
@@ -202,14 +202,14 @@ BE1C21D6FE0AE4: "Discoveries" => "Découvertes"
 91A4AFA2089B9F: "Colonisation statistics" => "Statistiques de colonisation"
 5A016BA9B95236: "Test Overlay" @
 52A1B9A52B8BFE: "Auto Panel" @
-42EA6768A9E951: "Docking Panel" @
-C722A22DF80446: "Docking Panel shows pad location" @
-BA0D4229A016A8: "Travel Panel" @
-D0758FD8BCFFB4: "Travel Panel showing current position information" @
+42EA6768A9E951: "Docking Panel" => "Paneau appontage"
+C722A22DF80446: "Docking Panel shows pad location" => "Paneau appontage affiche l'emplacement des plate-forme d'atterrissage"
+BA0D4229A016A8: "Travel Panel" => "Panneau voyage"
+D0758FD8BCFFB4: "Travel Panel showing current position information" => "Panneau voyage affiche les informations de l'emplacement actuel"
 
-6D1493B0BA32C8: "Squadron/Carrier" @
-03C97A8152D15D: "Data about your squadron" @
-305D3C4826F3F9: "Track powerplay merits by cycle, session, system" @
+6D1493B0BA32C8: "Squadron/Carrier" => "Porte-vaisseaux d'escadron"
+03C97A8152D15D: "Data about your squadron" => "Données à propos de votre escadron"
+305D3C4826F3F9: "Track powerplay merits by cycle, session, system" => "Suis les points de distinction Powerplay par cycle, session, système"
 
 SECTION EDDiscoveryForm
 
@@ -303,7 +303,7 @@ DE5CFD5A00795F: "Fetch Star Data Again" => "Récupérer les données stellaires 
 683617E8B53C1F: "Web server disabled due to incorrect folder or missing zip file" => "Serveur web désactivé, car le répertoire est incorrect ou le fichier zip est manquant"
 37F51D0860E8D7: "*** Web server is disabled ***" => "*** Serveur Web désactivé***"
 AEA794CB1D04DB: "DLLs disabled: {0}" => "DLLs désactivées : {0}"
-C7F0C2BDEE6813: "Move another commanders history to this commander" @
+C7F0C2BDEE6813: "Move another commanders history to this commander" => "Déplacer l'historique d'un autre commandant dans ce commandant"
 
 SECTION EDDiscoveryController
 
@@ -385,7 +385,7 @@ SECTION MoveToCommander
 264067C44C54E3: "Move To Commander" => "Transferts vers commandant"
 CBB4CC49824BF7: "Transfer" => "Transférer"
 1FA39F8C15CB36: "Move selected history to commander." => "Déplacer l'historique sélectionné vers le commandant"
-A605D496654C40: "Pick commander to move all their history to current commander" @
+A605D496654C40: "Pick commander to move all their history to current commander" => "Sélectionnez un commandant pour déplacer tout son historique dans le commandant actuel"
 
 SECTION NewReleaseForm
 
@@ -419,7 +419,7 @@ DC3DECBB938475: "Details" => "Détails"
 
 SECTION MessageBoxTheme
 
-98F55DB57C8ED8: "Ignore" @
+98F55DB57C8ED8: "Ignore" => "Ignorer"
 9F5CD8A2E8807D: "Retry" => "Réessayer"
 6F3ABBE484ABD8: "Abort" => "Abandonner"
 816C52FD2BDD94: "No" => "Non"
@@ -471,7 +471,7 @@ SECTION SpeechConfigure
 
 4AA6307BD004DD: "Configure Speech" => "Configuration synthèse vocale"
 52F5A347177056: "Set Text to say (use ; to separate randomly selectable phrases and {} to group)" => "Définir le texte à prononcer (utiliser ; pour séparer les phrases sélectionnées aléatoirement et {} pour les groupes)"
-A5A74A6DF09278: "Device" @
+A5A74A6DF09278: "Device" => "Périphérique"
 8F25A859269CA5: "Effects" => "Effets"
 92E97E035F44F8: "Literal" => "Litéral"
 D8CBC0CB400C12: "Wait until speech completes" => "Attendez la fin du discours"
@@ -485,7 +485,7 @@ D8CBC0CB400C12: "Wait until speech completes" => "Attendez la fin du discours"
 SECTION WaveConfigureDialog
 
 72209F8C09DF0D: "Configure Wave" @
-5CB7091D05A1FB: "Select Default device, volume and effects" @
+5CB7091D05A1FB: "Select Default device, volume and effects" => "Sélectionnez le périphérique par défaut, le volume et les effets"
 2F3B5C55BC27CD: "Browse" => "Parcourir"
 2B63A06A3CF32F: "Wait until audio completes" => "Attendez la fin de l'audio"
 
@@ -514,13 +514,13 @@ E7A1A898CC09B9: "Cent Freq" @
 
 SECTION AudioDeviceConfigure
 
-5B91330DCA5F99: "Audio Device Select" @
-87A47513B6B28B: "Select Device" @
+5B91330DCA5F99: "Audio Device Select" => "Sélection du périphérique par défaut"
+87A47513B6B28B: "Select Device" => "Sélectionnez le périphérique"
 
 SECTION ActionPackEditPackForm
 
-3B042F6CEA285B: "Install Parameters" @
-9D68007B0763CB: "Program" @
+3B042F6CEA285B: "Install Parameters" => "Paramètres d'installation"
+9D68007B0763CB: "Program" => "Programme"
 
 SECTION ActionProgramEditForm
 

@@ -12,7 +12,7 @@ E398338D28B496: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cance
 90DFF113AC3FB4: "System could not be found - has not been synched or EDSM is unavailable" => "Système introuvable - n'a pas été synchronisé ou EDSM est indisponible"
 568BA6A0FCB8CE: "Import bookmarks to EDD from CSV file" => "Importer des marque-pages vers EDD depuis un fichier CSV"
 4E0D3ABD07EF26: "Export bookmarks to CSV file" => "Exporter des marque-pages vers un fichier CSV"
-D3D49E22353948: "New bookmark on current system" @
+D3D49E22353948: "New bookmark on current system" => "Nouveau marque-page sur le système actuel"
 0F2EFE41F3122D: "New Region Bookmark" => "Nouveau marque-page de région"
 848EED0FBD5429: "Tags" @
 87CA81FA83093E: "Filter out entries based on tag" => "Filtrer les entrées suivant les tags"
@@ -27,7 +27,7 @@ BFAC50D6424B51: "Credits" => "Crédits"
 9EC34025B6DB16: "Kills" => "Tués"
 645DE66F0C79ED: "Faction Kills" => "Tués par la faction"
 90EEF613042C5A: "Balance" => "Solde"
-68316444B99C6B: "Died" @
+68316444B99C6B: "Died" => "Mort"
 000C7B010AA15B: "Crimes" @
 61AD50A9B9189C: "Target" => "Cible"
 9D269517397775: "Faction" @
@@ -399,7 +399,7 @@ B97C4D4CDDF23E: "Font" => "Police de caractère"
 23048BC1AE69FE: "Word Wrap" => "Retour à la ligne"
 1BB6C810B1DA16: "Select route to follow" => "Sélectionner l'itinéraire à suivre"
 524DD2CDBBAD94: "Route Settings" => "Paramètres d'itinéraire"
-B10CFFF10BABC0: "Nav Route" @
+B10CFFF10BABC0: "Nav Route" => "Itinéraire de navigation en jeu"
 9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => ", Moy : {0:N1} al, Max : {1:N1} al, Portée : {2:N1} al"
 B37E90C8789813: "List signals to display, semicolon seperated" => "Liste des signaux à afficher, séparés par des points-virgules"
 
@@ -515,7 +515,7 @@ CFD4E874046B93: "Road to Riches" => "Route à la richesse"
 AB2A9F0D8D787B: "Earth Likes" => "Mondes telluriques"
 0077D22826A77F: "Trade Router" => "Itinéraire commercial"
 0CF5E327910E74: "Fleet Carrier" => "Porte-vaisseaux"
-7F0950D59B1A34: "Squadron Carrier" @
+7F0950D59B1A34: "Squadron Carrier" => "Porte-vaisseaux d'escadron"
 B12CDD63114BA4: "Galaxy Plotter" => "Itinéraire galactique"
 B364AA8B4033FF: "Exo Mastery" => "Maitrise exobiologique"
 07AB47C5737BA1: "Use Permit Systems" => "Utiliser les systèmes avec permis"
@@ -553,7 +553,7 @@ DE6A8B4B96A80A: "Copy the target system to end route entry" => "Copier le systè
 681943CB0EA134: "Save as an expedition for use on expedition and surveyor panels" => "Sauvegarder en tant qu'expédition pour une utilisation sur les panneaux Expédition et Géomètre"
 4BB903205B7347: "This will result in a large number ({0}) of jumps\r\nConfirm please" => "Cela entraînera un grand nombre ({0}) de sauts\r\nVeuillez confirmer"
 33C5EE107CFEC3: "No route set up, retry" => "Aucun itinéraire configuré, réessayez"
-98310A2466609B: "Rocky HMC" @
+98310A2466609B: "Rocky HMC" => "Rocheux abondant en métaux"
 
 SECTION UserControlRouteTracker
 
@@ -580,7 +580,7 @@ C415DA3D51A1E9: "No systems in route have known co-ords" => "Aucun système de l
 
 SECTION UserControlScan
 
-5D479135A43DAC: "Belt Cluster Body" @
+5D479135A43DAC: "Belt Cluster Body" => "Corps de la ceinture d'astéroïdes"
 F3B7084D189898: "Configure scan display body filters" => "Configurer les filtres d'affichage du scan pour les corps"
 0FE1B534E56651: "Configure scan display" => "Configurer l'affichage du scan"
 111D3A2E729C26: "Select image size" => "Sélectionner la taille d'image"
@@ -592,7 +592,7 @@ A0BB88B66F57E8: "Set High Value Limit" => "Définir la limite haute de valeur"
 9F6C1D41D0D032: "Show Materials" => "Afficher les matériaux"
 B028A006D79224: "Show rare materials only" => "Afficher uniquement les matériaux rares"
 00848F83A633FB: "Show Moons" => "Afficher les lunes"
-2DBDE6DD6FB541: "Belt" => "Ceinture"
+2DBDE6DD6FB541: "Belt" => "Ceinture d'astéroïdes"
 17B8D69486D780: "Barycentre" @
 14E0E8D442549A: "Show G on all planets" => "Afficher les G sur toutes les planètes"
 12071F4330F803: "Show Habitation Zone" => "Afficher la zone habitable"
@@ -1020,7 +1020,7 @@ D9273536780112: "Control Outlining" => "Contrôle du regroupement"
 03C54D66F2DA56: "Next start/stop marker is hidden" => "Le marqueur début/fin suivant est caché"
 905A92084F2F46: "No start/stop marker found below" => "Pas de marqueur début/fin trouvé ci-dessous"
 A89F26DDCFE091: "Entry filtered out of grid" => "Entrées filtrées"
-A070027FDED89B: "Colour events by type" @
+A070027FDED89B: "Colour events by type" => "Colorer les événements par type"
 
 SECTION UserControlCaptainsLog
 
@@ -1092,7 +1092,7 @@ DA433CD41E7FB7: "Raw" => "Brut"
 
 SECTION UserControlMiningOverlay
 
-92743D7648AAD4: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" @
+92743D7648AAD4: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" => ", Prospecteurs tirés {0}, Collecteurs déployés {1}, Fracturés {2}"
 3E82E468720F25: "Ref." => "Raff."
 633C0EE42BDD19: "Coll." @
 FF44397BA75466: "Prosp." @
@@ -1126,7 +1126,7 @@ C1ECFEB8DEF4DC: "Commds Profit" => "Gains marchandises"
 6AC2053328E50A: "Crimes Committed" => "Crimes commis"
 77E2DD8141E981: "Bounty Kills" => "Tués pour primes"
 397B67A90DEC91: "Bounty Rewards" => "Récompenses de prime"
-D5965451E332A6: "Bounty Rewards Value" => "Valeur des primes"
+D5965451E332A6: "Bounty Rewards Value" => "Valeur des récompenses de primes"
 B83FE58DB23E57: "Interdicted" => "Interdit"
 C21AFB3EFA18AB: "Interdiction" => "Interdiction"
 5F22266A168021: "Kill Bonds Victim" => "Victimes de récompenses de combat"
@@ -1148,7 +1148,7 @@ F6A9D28E466A97: "Missions In Progress" => "Missions en cours"
 6F623465F6238E: "Capital ship Award" => "Récompenses de vaisseau capital"
 C7AD6F7B6831A8: "Redeem Voucher" => "Valeur des primes réclamées"
 2C60D95A352DA3: "Pay Fines" => "Valeur des amendes"
-7E2BA2DEEF4EF3: "Pay Bounty Value" @
+7E2BA2DEEF4EF3: "Pay Bounty Value" => "Valeur des primes"
 984FAF564D50B9: "DL Victim" => "Victimes liaison de données"
 AB2BEAA625AAC3: "DL Payee Faction" => "Récompenses liaison de données"
 91FDF90FC89C75: "DL Payee Value" => "Valeur des récompenses liaison de données"
@@ -1410,7 +1410,7 @@ SECTION UserControlPowerPlayMerits
 
 F7F1997C6CD1AA: "Session" @
 F5EDA1B11AFA0F: "Cycle" @
-70DA870EE0EA81: "View on Journal Grid" @
-50944E656EBC33: "Copy Merits" @
-0AFA5205B52671: "Copy Merits Report" @
-DC521442E6AC91: "Copy System Name" @
+70DA870EE0EA81: "View on Journal Grid" => "Voir sur la grille de journal"
+50944E656EBC33: "Copy Merits" => "Copier les points de distinction"
+0AFA5205B52671: "Copy Merits Report" => "Copier le rapport des points de distinction"
+DC521442E6AC91: "Copy System Name" => "Copier le nom du système"
