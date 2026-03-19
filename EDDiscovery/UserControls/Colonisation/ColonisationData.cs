@@ -114,38 +114,40 @@ namespace EDDiscovery.UserControls.Colonisation
             }
             else if (he.journalEntry is JournalColonisationConstructionDepot cd)
             {
-                var classify = StationDefinitions.Classify(cd.MarketID, StationDefinitions.StarportTypes.Unknown);
-                global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} {cd.MarketID} {classify} Colonisation depot `{he.Status.StationName_Localised}` {he.Status.FDStationType} {cd.ConstructionProgress * 100.0:N2} @ {he.System.Name} ");
+                //var classify = StationDefinitions.Classify(cd.MarketID, StationDefinitions.StarportTypes.Unknown); global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} {cd.MarketID} {classify} Colonisation depot `{he.Status.StationName_Localised}` {he.Status.FDStationType} {cd.ConstructionProgress * 100.0:N2} @ {he.System.Name} ");
 
-                if (cd.MarketID == he.Status.MarketID)        // double check on location..
+                if (he.Status.MarketID != null)        // Frontier bug, 19 march 26, we have seen this event after touchdown event, even though it should be docked.  
                 {
-                    bool newsystem = MakeSystem(hl, he.System, out ColonisationSystemData sys);     // make the system
-                    bool newport = MakePort(sys, hl, cd.MarketID, he.WhereAmI, out ColonisationPortData port);
-                    port.State = cd;
-                    //global::System.Diagnostics.Debug.WriteLine($"Colonisation Depot {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cd.MarketID} {cd.ConstructionProgress}");
-                    return new Ret(newsystem, sys, port);
-                }
-                else
-                {
-                    // if it disagrees, its due to the renaming of the station and market ID on progress  = 1
-                    if (cd.ConstructionProgress < 1)
-                        global::System.Diagnostics.Debug.WriteLine($"Colonisation Depot ERROR Rename without progress=1 {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cd.MarketID} {cd.ConstructionProgress}");
-
-                    bool newsystem = MakeSystem(hl, he.System, out ColonisationSystemData sys);     // make the system
-
-                    var port = sys.Ports.Values.ToList().Find(x => x.Name.Contains(he.WhereAmI)); // see if we can find a port with the text in it
-
-                    if (port != null)
+                    if (cd.MarketID == he.Status.MarketID)        // double check on location..
                     {
-                        //global::System.Diagnostics.Debug.WriteLine($"Colonisation Depot Rename Port {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cd.MarketID} {cd.ConstructionProgress}");
-                        port.Name = he.WhereAmI;
-                        port.MarketID = he.Status.MarketID.Value;
+                        bool newsystem = MakeSystem(hl, he.System, out ColonisationSystemData sys);     // make the system
+                        bool newport = MakePort(sys, hl, cd.MarketID, he.WhereAmI, out ColonisationPortData port);
+                        port.State = cd;
+                        //global::System.Diagnostics.Debug.WriteLine($"Colonisation Depot {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cd.MarketID} {cd.ConstructionProgress}");
                         return new Ret(newsystem, sys, port);
                     }
                     else
                     {
-                        global::System.Diagnostics.Debug.WriteLine($"Colonisation Depot ERROR no port found with associated text {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cd.MarketID} {cd.ConstructionProgress}");
-                        return new Ret(newsystem, sys, null);
+                        // if it disagrees, its due to the renaming of the station and market ID on progress  = 1
+                        if (cd.ConstructionProgress < 1)
+                            global::System.Diagnostics.Debug.WriteLine($"Colonisation Depot ERROR Rename without progress=1 {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cd.MarketID} {cd.ConstructionProgress}");
+
+                        bool newsystem = MakeSystem(hl, he.System, out ColonisationSystemData sys);     // make the system
+
+                        var port = sys.Ports.Values.ToList().Find(x => x.Name.Contains(he.WhereAmI)); // see if we can find a port with the text in it
+
+                        if (port != null)
+                        {
+                            //global::System.Diagnostics.Debug.WriteLine($"Colonisation Depot Rename Port {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cd.MarketID} {cd.ConstructionProgress}");
+                            port.Name = he.WhereAmI;
+                            port.MarketID = he.Status.MarketID.Value;
+                            return new Ret(newsystem, sys, port);
+                        }
+                        else
+                        {
+                            global::System.Diagnostics.Debug.WriteLine($"Colonisation Depot ERROR no port found with associated text {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cd.MarketID} {cd.ConstructionProgress}");
+                            return new Ret(newsystem, sys, null);
+                        }
                     }
                 }
             }
