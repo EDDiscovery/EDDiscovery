@@ -227,7 +227,7 @@ namespace EDDiscovery.UserControls
             allmodulesref.Clear();      // no ref to all modules info
 
             SetColHeaders(null,null,null,null, null,null,null,null);        //default
-            sortmodecol = "AAAANANA";
+            sortmodecol = null; 
 
             Value.Visible = SlotCol.Visible = PriorityEnable.Visible = BluePrint.Visible = true;
 
@@ -242,6 +242,7 @@ namespace EDDiscovery.UserControls
 
                     ShipModulesInStore mi = last_he.StoredModules;
                     labelVehicle.Text = "";
+                    sortmodecol = "AAATNANA";
 
                     foreach (ShipModulesInStore.StoredModule sm in mi.StoredModules)
                     {
@@ -260,6 +261,8 @@ namespace EDDiscovery.UserControls
             }
             else if (comboBoxShips.Text == allmodulestext)
             {
+                sortmodecol = "AASANANA";           // default is alpha, alpha, slot (via TAG), Alpha Num Alpha Num, Alpha
+
                 ShipList shm = DiscoveryForm.History.ShipInformationList;
                 var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
@@ -296,6 +299,7 @@ namespace EDDiscovery.UserControls
             {
                 HideShipRelatedButtons();
                 Value.Visible = SlotCol.Visible = PriorityEnable.Visible = BluePrint.Visible = false;
+                sortmodecol = "AAAANAAA";
 
                 var modules = ItemData.GetShipModules(true, true, true, true, true, compressarmourtosidewinderonly: false);
                 foreach (var kvp in modules)
@@ -312,14 +316,14 @@ namespace EDDiscovery.UserControls
                                     "",
                                 };
 
-                    dataGridViewModules.Rows.Add(rowobj);
+                    var rw = dataGridViewModules.Rows.Add(rowobj);
                 }
             }
             else if ( comboBoxShips.Text == allshipstext)
             {
                 SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Speed".Tx(),
                                 null, "Class".Tx(), null, "Info".Tx());
-                sortmodecol = "PAANNANA";
+                sortmodecol = "PAANNANA";           // P = sort on column 1 fixed
                 HideShipRelatedButtons(false);
 
                 foreach( var ship in ItemData.GetSpaceships())
@@ -352,7 +356,7 @@ namespace EDDiscovery.UserControls
                 var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
                 SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Name".Tx(), "Ident".Tx(), "Mass".Tx(), "Location".Tx(), "Cost".Tx());
-                sortmodecol = "PAAAANAN";
+                sortmodecol = "PAAAANAN";      // P = sort on column 1 fixed
                 HideShipRelatedButtons(false);
 
                 foreach (var ship in ownedships)
@@ -428,6 +432,7 @@ namespace EDDiscovery.UserControls
         // call to update the grid and the ship data panel
         private void DisplayShip(Ship si, bool displaydeleteloadoutbutton)
         {
+            sortmodecol = "AASANANA";           // default is alpha, alpha, slot (via TAG), Alpha Num Alpha Num, Alpha
             last_si = si;
 
             DisplayShipData(si);
@@ -567,22 +572,16 @@ namespace EDDiscovery.UserControls
                                 value, 
                                 sm.PE() };
 
-            int row = dataGridViewModules.Rows.Add(rowobj);
+            var row = dataGridViewModules.Rows.Add(rowobj);
+            var rw = dataGridViewModules.Rows[row];
 
-            dataGridViewModules.Rows[row].Cells[3].ToolTipText = infoentry;
+            rw.Cells[3].ToolTipText = infoentry;
+            rw.Cells[2].Tag = sm.SlotFD;
 
             if (engtooltip != null)
             {
                 dataGridViewModules.Rows[row].Cells[5].ToolTipText = engtooltip;
             }
-        }
-
-        void AddInfoLine(string s, string v, string opt = "", string tooltip = "")
-        {
-            object[] rowobj = { s, v.AppendPrePad(opt), "", "", "", "", "", "" };
-            dataGridViewModules.Rows.Add(rowobj);
-            if (!string.IsNullOrEmpty(tooltip))
-                dataGridViewModules.Rows[dataGridViewModules.Rows.Count - 1].Cells[0].ToolTipText = tooltip;
         }
 
         void SetColHeaders(params string[] list)
@@ -825,15 +824,53 @@ namespace EDDiscovery.UserControls
         {
             if (sortmodecol.HasChars())
             {
-                if (sortmodecol[e.Column.Index] == 'P')
+                var sort = sortmodecol[e.Column.Index];
+                if (sort == 'P')     // sort on column 1, not this column
                 {
                     var left = dataGridViewModules[1, e.RowIndex1].Value.ToString();
                     var right = dataGridViewModules[1, e.RowIndex2].Value.ToString();
                     e.SortResult = left.CompareTo(right);
                     e.Handled = true;
                 }
-                else if (sortmodecol[e.Column.Index] == 'N')
+                else if (sort == 'N')
+                {
                     e.SortDataGridViewColumnNumeric(removetext: "t", striptonumeric: true);
+                }
+                else if (sort == 'S')
+                {
+                    var tag1 = dataGridViewModules[e.Column.Index, e.RowIndex1].Tag;
+                    var tag2 = dataGridViewModules[e.Column.Index, e.RowIndex2].Tag;
+                    if (tag1 != null)
+                    {
+                        if (tag2 != null)
+                            e.SortResult = ((ShipSlots.Slot)tag1).CompareTo((ShipSlots.Slot)tag2);
+                        else
+                            e.SortResult = -1;
+                    }
+                    else
+                        e.SortResult = 1;
+                    e.Handled = true;
+                }
+                else if (sort == 'T')
+                {
+                    if (e.CellValue1 != null && TimeSpan.TryParse(e.CellValue1 as string, out TimeSpan l))
+                    {
+                        if (e.CellValue2 != null && TimeSpan.TryParse(e.CellValue2 as string, out TimeSpan r))
+                        {
+                            e.SortResult = l.CompareTo(r);
+                        }
+                        else
+                            e.SortResult = -1;
+                    }
+                    else 
+                        e.SortResult = 1;
+                    e.Handled = true;
+                }
+                else if (sort == 'A')
+                {       // default
+                }
+                else
+                    System.Diagnostics.Debug.Assert(false, "Bad sort mode");
             }
         }
 

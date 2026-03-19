@@ -470,14 +470,13 @@ namespace EDDiscovery.UserControls
                        
                         ;
 
-                colDescription = he.journalEntry.EventTypeStr.SplitCapsWord() == he.EventSummary ? he.EventSummary : (he.journalEntry.EventTypeStr + Environment.NewLine + he.EventSummary);
+                colNote = colInformation;
+                colInformation = "";
 
-                colNote = "";
-
-                var cl = he.Status.CurrentLocation; colNote += cl == null ? "NO LOCATION\r\n" : $"LC {cl.EventTimeUTC.ToString("HH:mm:ss")} {cl.EventTypeStr} bn:`{cl.BodyName}`:{cl.BodyID}:{cl.BodyType} N:`{cl.Name}` sf:`{cl.StationFaction}` {cl.FDStationType}\r\n";
-                var si = he.Status.LastFSDJump; colNote += si == null ? "NO FSDINFO\r\n" : $"FSD {si.EventTimeUTC.ToString("HH:mm:ss")} {si.EventTypeStr} `{si.StarSystem}` f:`{si.Faction}` {si.Allegiance} {si.Economy} {si.Government}\r\n";
-                var lg = he.Status.LastLoadGame; colNote += lg == null ? "NO LOADGAME\r\n" : $"LG {lg.GameVersion} {lg.Build} {lg.Group} {lg.ShipType} {lg.Credits}cr\r\n";
-                //var js = he.journalEntry.GetJsonCloned();  js.Remove("event", "timestamp"); colNote += js.ToString().Replace(",\"", ", \"").Left(200);
+                var cl = he.Status.CurrentLocation; colInformation += cl == null ? "NO LOCATION\r\n" : $"LC {cl.EventTimeUTC.ToString("HH:mm:ss")} {cl.EventTypeStr} bn:`{cl.BodyName}`:{cl.BodyID}:{cl.BodyType} N:`{cl.Name}` sf:`{cl.StationFaction}` {cl.FDStationType}\r\n";
+                var si = he.Status.LastFSDJump; colInformation += si == null ? "NO FSDINFO\r\n" : $"FSD {si.EventTimeUTC.ToString("HH:mm:ss")} {si.EventTypeStr} `{si.StarSystem}` f:`{si.Faction}` {si.Allegiance} {si.Economy} {si.Government}\r\n";
+                var lg = he.Status.LastLoadGame; colInformation += lg == null ? "NO LOADGAME\r\n" : $"LG {lg.GameVersion} {lg.Build} {lg.Group} {lg.ShipType} {lg.Credits}cr\r\n";
+                //var js = he.journalEntry.GetJsonCloned();  js.Remove("event", "timestamp"); colInformationcription += js.ToString().Replace(",\"", ", \"").Left(200);
 
             }
 
