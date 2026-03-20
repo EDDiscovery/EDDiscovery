@@ -37,6 +37,7 @@ namespace EDDiscovery.UserControls
             this.copyMeritsReportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copySystemNameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panelTop = new System.Windows.Forms.Panel();
+            this.labelDuplicateWarning = new System.Windows.Forms.Label();
             this.extPanelDataGridViewScroll = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarDGV = new ExtendedControls.ExtScrollBar();
             ((System.ComponentModel.ISupportInitialize)(this.grid)).BeginInit();
@@ -224,6 +225,7 @@ namespace EDDiscovery.UserControls
             // 
             // panelTop
             // 
+                this.panelTop.Controls.Add(this.labelDuplicateWarning);
             this.panelTop.Controls.Add(this.checkSystem);
             this.panelTop.Controls.Add(this.checkSession);
             this.panelTop.Controls.Add(this.checkCycle);
@@ -232,6 +234,20 @@ namespace EDDiscovery.UserControls
             this.panelTop.Name = "panelTop";
             this.panelTop.Size = new System.Drawing.Size(800, 32);
             this.panelTop.TabIndex = 5;
+                // 
+                // labelDuplicateWarning
+                // 
+                this.labelDuplicateWarning.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+                | System.Windows.Forms.AnchorStyles.Right)));
+                this.labelDuplicateWarning.AutoEllipsis = true;
+                this.labelDuplicateWarning.ForeColor = System.Drawing.Color.OrangeRed;
+                this.labelDuplicateWarning.Location = new System.Drawing.Point(270, 8);
+                this.labelDuplicateWarning.Name = "labelDuplicateWarning";
+                this.labelDuplicateWarning.Size = new System.Drawing.Size(520, 16);
+                this.labelDuplicateWarning.TabIndex = 4;
+                this.labelDuplicateWarning.Text = "CMDR - A known FDEV issue sometimes sends duplicate Merit awards. Please re-log t" +
+            "o generate a new sync message to check if the last pair are duplicates.";
+                this.labelDuplicateWarning.Visible = false;
             // 
             // extPanelDataGridViewScroll
             // 
@@ -314,5 +330,6 @@ namespace EDDiscovery.UserControls
         private ExtPanelDataGridViewScroll extPanelDataGridViewScroll;
         private ExtScrollBar extScrollBarDGV;
         private ToolStripMenuItem findInHistoryPanelToolStripMenuItem;
+        private Label labelDuplicateWarning;
     }
 }

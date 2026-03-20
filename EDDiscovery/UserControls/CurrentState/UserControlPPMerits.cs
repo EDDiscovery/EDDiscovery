@@ -52,6 +52,20 @@ namespace EDDiscovery.UserControls
         private bool pendingRedraw;
         private DateTime? lastAddedMeritTime;
 
+        // Duplicate detection state
+        private double trackedMeritTotal = -1;  // -1 means not yet initialized
+        private readonly List<PendingMerit> pendingMeritsQueue = new List<PendingMerit>();
+        private static readonly TimeSpan QueueExpiryTime = TimeSpan.FromMinutes(10);
+        private const double MeritTolerance = 0.01;
+
+        private class PendingMerit
+        {
+            public HistoryEntry HE;
+            public JournalPowerplayMerits PPM;
+            public DateTime QueuedAtUTC;
+            public int SessionId;
+        }
+
         #endregion
 
         #region Initialization
@@ -122,13 +136,31 @@ namespace EDDiscovery.UserControls
             if (he == null || he.journalEntry == null)
                 return;
 
-            if (he.journalEntry is JournalPowerplayMerits ppm)
+            if (he.journalEntry is JournalPowerplay pp)
             {
-                AddMerit(he, ppm);
-                // Debounce redraws to avoid flicker on burst updates
-                pendingRedraw = true;
-                redrawDebounceTimer.Stop();
-                redrawDebounceTimer.Start();
+                // Each journal file starts with a Powerplay status event containing the authoritative total.
+                // Use this as a sync checkpoint - reconcile prior session tail and then reset tracked total.
+                System.Diagnostics.Debug.WriteLine($"[PPMerits] Powerplay status received: AuthoritativeTotal={pp.Merits}, PreviousTracked={trackedMeritTotal}, QueueSize={pendingMeritsQueue.Count}");
+                bool reconciled = ReconcileFromAuthoritativeTotal(pp.Merits);
+                trackedMeritTotal = pp.Merits;
+                pendingMeritsQueue.Clear();
+
+                if (reconciled)
+                {
+                    pendingRedraw = true;
+                    redrawDebounceTimer.Stop();
+                    redrawDebounceTimer.Start();
+                }
+            }
+            else if (he.journalEntry is JournalPowerplayMerits ppm)
+            {
+                if (TryProcessMerit(he, ppm))
+                {
+                    // Debounce redraws to avoid flicker on burst updates
+                    pendingRedraw = true;
+                    redrawDebounceTimer.Stop();
+                    redrawDebounceTimer.Start();
+                }
             }
             else if (he.journalEntry is JournalLoadGame)
             {
@@ -176,8 +208,11 @@ namespace EDDiscovery.UserControls
 
         private void BuildFromHistory()
         {
+            System.Diagnostics.Debug.WriteLine($"[PPMerits] BuildFromHistory: Starting full rebuild");
             meritRows.Clear();
+            pendingMeritsQueue.Clear();
             nextSessionId = 0;
+            trackedMeritTotal = -1;
 
             foreach (var he in DiscoveryForm.History.EntryOrder())
             {
@@ -185,17 +220,28 @@ namespace EDDiscovery.UserControls
                 {
                     nextSessionId++;
                 }
-
-                if (he.journalEntry is JournalPowerplayMerits ppm)
+                else if (he.journalEntry is JournalPowerplay pp)
                 {
-                    AddMerit(he, ppm);
+                    // Each journal file starts with a Powerplay status event containing the authoritative total.
+                    // Use this as a sync checkpoint - reconcile prior session tail and then reset tracked total.
+                    System.Diagnostics.Debug.WriteLine($"[PPMerits] BuildFromHistory: Powerplay status at {he.EventTimeUTC:HH:mm:ss}, AuthoritativeTotal={pp.Merits}, PreviousTracked={trackedMeritTotal}");
+                    ReconcileFromAuthoritativeTotal(pp.Merits);
+                    trackedMeritTotal = pp.Merits;
+                    pendingMeritsQueue.Clear();
+                }
+                else if (he.journalEntry is JournalPowerplayMerits ppm)
+                {
+                    TryProcessMerit(he, ppm);
                 }
             }
 
+            ResolvePendingQueue(true);
+
+            System.Diagnostics.Debug.WriteLine($"[PPMerits] BuildFromHistory: Complete - MeritRows={meritRows.Count}, PendingQueue={pendingMeritsQueue.Count}, TrackedTotal={trackedMeritTotal}");
             Redraw();
         }
 
-        private void AddMerit(HistoryEntry he, JournalPowerplayMerits ppm)
+        private void AddMerit(HistoryEntry he, JournalPowerplayMerits ppm, int? sessionIdOverride = null)
         {
             var row = new MeritRow
             {
@@ -205,7 +251,7 @@ namespace EDDiscovery.UserControls
                 TotalMerits = (int)ppm.TotalMerits,
                 SystemName = he.System != null ? he.System.Name : string.Empty,
                 CycleKey = ComputeCycleKey(he.EventTimeUTC),
-                SessionId = nextSessionId,
+                SessionId = sessionIdOverride ?? nextSessionId,
                 HE = he
             };
             meritRows.Add(row);
@@ -218,6 +264,8 @@ namespace EDDiscovery.UserControls
 
         private void Redraw()
         {
+            UpdateDuplicateTailWarning();
+
             grid.SuspendLayout();
             grid.Rows.Clear();
 
@@ -443,7 +491,261 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region Duplicate Detection
+
+        /// <summary>
+        /// Attempts to process a merit event. Returns true if the merit was added to the UI,
+        /// false if it was queued or discarded as a duplicate.
+        /// </summary>
+        private bool TryProcessMerit(HistoryEntry he, JournalPowerplayMerits ppm)
+        {
+            System.Diagnostics.Debug.WriteLine($"[PPMerits] TryProcessMerit: Time={he.EventTimeUTC:HH:mm:ss.fff}, MeritsGained={ppm.MeritsGained}, TotalMerits={ppm.TotalMerits}, TrackedTotal={trackedMeritTotal}");
+
+            QueueMerit(he, ppm);
+
+            if (trackedMeritTotal < 0)
+            {
+                System.Diagnostics.Debug.WriteLine("[PPMerits]   -> WAITING: No initial Powerplay status received yet");
+                return false;
+            }
+
+            return ResolvePendingQueue(false);
+        }
+
+        private void QueueMerit(HistoryEntry he, JournalPowerplayMerits ppm)
+        {
+            System.Diagnostics.Debug.WriteLine($"[PPMerits] QueueMerit: Adding to queue (QueueSize={pendingMeritsQueue.Count + 1}), MeritsGained={ppm.MeritsGained}, TotalMerits={ppm.TotalMerits}");
+            pendingMeritsQueue.Add(new PendingMerit
+            {
+                HE = he,
+                PPM = ppm,
+                QueuedAtUTC = DateTime.UtcNow,
+                SessionId = nextSessionId
+            });
+        }
+
+        /// <summary>
+        /// Process the pending queue, attempting to match queued merits to the current tracked total.
+        /// Also cleans up expired and duplicate entries.
+        /// </summary>
+        private bool ResolvePendingQueue(bool allowTailCommit)
+        {
+            if (trackedMeritTotal < 0 || pendingMeritsQueue.Count == 0)
+                return false;
+
+            System.Diagnostics.Debug.WriteLine($"[PPMerits] ResolvePendingQueue: Starting with QueueSize={pendingMeritsQueue.Count}, TrackedTotal={trackedMeritTotal}, AllowTailCommit={allowTailCommit}");
+
+            bool anyProcessed;
+            bool anyAdded = false;
+            int iteration = 0;
+            do
+            {
+                anyProcessed = false;
+                iteration++;
+
+                // First, clean up expired and obvious duplicates
+                int beforeCleanup = pendingMeritsQueue.Count;
+                CleanupPendingQueue();
+                if (pendingMeritsQueue.Count != beforeCleanup)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[PPMerits]   Iteration {iteration}: Cleanup removed {beforeCleanup - pendingMeritsQueue.Count} items, QueueSize now={pendingMeritsQueue.Count}");
+                }
+
+                if (pendingMeritsQueue.Count == 0)
+                    break;
+
+                if (!allowTailCommit && pendingMeritsQueue.Count == 1)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[PPMerits]   Iteration {iteration}: Waiting for more evidence before committing the final queued merit");
+                    break;
+                }
+
+                var firstPending = pendingMeritsQueue[0];
+                bool canAcceptFirst = DoesMeritMatch(trackedMeritTotal, firstPending.PPM);
+                int acceptScore = canAcceptFirst ? 1 + CountGreedyMatches(1, firstPending.PPM.TotalMerits) : int.MinValue;
+                int skipScore = CountGreedyMatches(1, trackedMeritTotal);
+
+                if (allowTailCommit && pendingMeritsQueue.Count == 1 && canAcceptFirst)
+                {
+                    acceptScore = 1;
+                }
+
+                if (acceptScore > skipScore && acceptScore > 0)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[PPMerits]   Iteration {iteration}: ACCEPTED queued merit: MeritsGained={firstPending.PPM.MeritsGained}, TotalMerits={firstPending.PPM.TotalMerits}, AcceptScore={acceptScore}, SkipScore={skipScore}");
+                    AddMerit(firstPending.HE, firstPending.PPM, firstPending.SessionId);
+                    trackedMeritTotal = firstPending.PPM.TotalMerits;
+                    pendingMeritsQueue.RemoveAt(0);
+                    anyProcessed = true;
+                    anyAdded = true;
+                }
+                else if (skipScore > acceptScore)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[PPMerits]   Iteration {iteration}: SKIPPED queued merit as inferred duplicate: MeritsGained={firstPending.PPM.MeritsGained}, TotalMerits={firstPending.PPM.TotalMerits}, AcceptScore={acceptScore}, SkipScore={skipScore}");
+                    pendingMeritsQueue.RemoveAt(0);
+                    anyProcessed = true;
+                }
+                else
+                {
+                    System.Diagnostics.Debug.WriteLine($"[PPMerits]   Iteration {iteration}: Ambiguous queued merit, keeping for more evidence: MeritsGained={firstPending.PPM.MeritsGained}, TotalMerits={firstPending.PPM.TotalMerits}, AcceptScore={acceptScore}, SkipScore={skipScore}");
+                    break;
+                }
+            } while (anyProcessed && pendingMeritsQueue.Count > 0);
+
+            System.Diagnostics.Debug.WriteLine($"[PPMerits] ResolvePendingQueue: Finished after {iteration} iteration(s), QueueSize={pendingMeritsQueue.Count}, TrackedTotal={trackedMeritTotal}, Added={anyAdded}");
+            return anyAdded;
+        }
+
+        private bool ReconcileFromAuthoritativeTotal(double authoritativeTotal)
+        {
+            bool changed = false;
+            double runningTotal = trackedMeritTotal;
+
+            if (runningTotal >= 0 && pendingMeritsQueue.Count > 0)
+            {
+                System.Diagnostics.Debug.WriteLine($"[PPMerits] ReconcileInit: Evaluating {pendingMeritsQueue.Count} queued merit(s) against authoritative total {authoritativeTotal}");
+
+                for (int i = 0; i < pendingMeritsQueue.Count;)
+                {
+                    var pending = pendingMeritsQueue[i];
+
+                    if (!DoesMeritMatch(runningTotal, pending.PPM))
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[PPMerits] ReconcileInit: Dropping non-matching queued merit at index {i}");
+                        pendingMeritsQueue.RemoveAt(i);
+                        changed = true;
+                        continue;
+                    }
+
+                    if (pending.PPM.TotalMerits > authoritativeTotal + MeritTolerance)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"[PPMerits] ReconcileInit: Dropping overshoot queued merit at index {i}, Total={pending.PPM.TotalMerits}, Authoritative={authoritativeTotal}");
+                        pendingMeritsQueue.RemoveAt(i);
+                        changed = true;
+                        continue;
+                    }
+
+                    AddMerit(pending.HE, pending.PPM, pending.SessionId);
+                    runningTotal = pending.PPM.TotalMerits;
+                    pendingMeritsQueue.RemoveAt(i);
+                    changed = true;
+
+                    if (Math.Abs(runningTotal - authoritativeTotal) < MeritTolerance)
+                    {
+                        if (pendingMeritsQueue.Count > 0)
+                        {
+                            changed = true;
+                            pendingMeritsQueue.Clear();
+                        }
+
+                        break;
+                    }
+                }
+
+                if (pendingMeritsQueue.Count > 0)
+                {
+                    changed = true;
+                    pendingMeritsQueue.Clear();
+                }
+            }
+
+            int previousSessionId = nextSessionId - 1;
+            if (previousSessionId >= 0)
+            {
+                var previousSessionRows = meritRows.Where(r => r.SessionId == previousSessionId)
+                                                  .OrderBy(r => r.TimeUTC)
+                                                  .ToList();
+
+                if (previousSessionRows.Count > 0)
+                {
+                    var lastRow = previousSessionRows[previousSessionRows.Count - 1];
+                    if (Math.Abs(lastRow.TotalMerits - authoritativeTotal) >= MeritTolerance)
+                    {
+                        int lastMatchingIndex = previousSessionRows.FindLastIndex(r => Math.Abs(r.TotalMerits - authoritativeTotal) < MeritTolerance);
+                        if (lastMatchingIndex >= 0 && lastMatchingIndex < previousSessionRows.Count - 1)
+                        {
+                            var rowsToRemove = new HashSet<MeritRow>(previousSessionRows.Skip(lastMatchingIndex + 1));
+                            int removed = meritRows.RemoveAll(r => rowsToRemove.Contains(r));
+                            if (removed > 0)
+                            {
+                                System.Diagnostics.Debug.WriteLine($"[PPMerits] ReconcileInit: Removed {removed} tail merit(s) from previous session to match authoritative total {authoritativeTotal}");
+                                changed = true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return changed;
+        }
+
+        /// <summary>
+        /// Remove expired entries (older than 10 minutes) and duplicates (total <= current tracked total).
+        /// </summary>
+        private void CleanupPendingQueue()
+        {
+            var now = DateTime.UtcNow;
+
+            for (int i = pendingMeritsQueue.Count - 1; i >= 0; i--)
+            {
+                var pending = pendingMeritsQueue[i];
+
+                // Remove if older than expiry time
+                if (now - pending.QueuedAtUTC > QueueExpiryTime)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[PPMerits] CleanupPendingQueue: EXPIRED - Removing merit at index {i}, Age={now - pending.QueuedAtUTC}, MeritsGained={pending.PPM.MeritsGained}, TotalMerits={pending.PPM.TotalMerits}");
+                    pendingMeritsQueue.RemoveAt(i);
+                    continue;
+                }
+
+                // Remove if total is <= current tracked total (likely a duplicate)
+                if (pending.PPM.TotalMerits <= trackedMeritTotal)
+                {
+                    System.Diagnostics.Debug.WriteLine($"[PPMerits] CleanupPendingQueue: DUPLICATE - Removing merit at index {i}, TotalMerits={pending.PPM.TotalMerits} <= TrackedTotal={trackedMeritTotal}, MeritsGained={pending.PPM.MeritsGained}");
+                    pendingMeritsQueue.RemoveAt(i);
+                    continue;
+                }
+            }
+        }
+
+        private int CountGreedyMatches(int startIndex, double currentTotal)
+        {
+            int matches = 0;
+
+            for (int i = startIndex; i < pendingMeritsQueue.Count; i++)
+            {
+                var pending = pendingMeritsQueue[i];
+                if (DoesMeritMatch(currentTotal, pending.PPM))
+                {
+                    matches++;
+                    currentTotal = pending.PPM.TotalMerits;
+                }
+            }
+
+            return matches;
+        }
+
+        private bool DoesMeritMatch(double currentTotal, JournalPowerplayMerits ppm)
+        {
+            return Math.Abs((currentTotal + ppm.MeritsGained) - ppm.TotalMerits) < MeritTolerance;
+        }
+
+        #endregion
+
         #region Helper Methods
+
+        private void UpdateDuplicateTailWarning()
+        {
+            bool showWarning = false;
+
+            if (meritRows.Count >= 2)
+            {
+                int last = meritRows.Count - 1;
+                showWarning = meritRows[last].MeritsGained == meritRows[last - 1].MeritsGained;
+            }
+
+            labelDuplicateWarning.Visible = showWarning;
+        }
 
         private string ComputeCycleKey(DateTime timeUtc)
         {
