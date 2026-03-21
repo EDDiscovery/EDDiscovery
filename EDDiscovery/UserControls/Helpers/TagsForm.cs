@@ -112,7 +112,7 @@ namespace EDDiscovery.UserControls
 
             g.iconname = iconname;
             g.icon.AutoSize = false;    // buttons are normally autosized due to theming, turn it off now
-            g.icon.Image = BaseUtils.Icons.IconSet.GetIcon(iconname);     // assign image - it may be big
+            g.icon.Image = BaseUtils.Icons.IconSet.GetImage(iconname);     // assign image - it may be big
 
             FixUpGroups();
 
@@ -166,7 +166,7 @@ namespace EDDiscovery.UserControls
             foreach (var n in names)
             {
                 cfs.UC.AddButton(n, n.SplitCapsWordFull().Replace(" . ", " "), 
-                                BaseUtils.Icons.IconSet.Instance.Get(n));
+                                BaseUtils.Icons.IconSet.GetImage(n));
             }
 
             cfs.PositionBelow(but);
@@ -176,7 +176,7 @@ namespace EDDiscovery.UserControls
 
             cfs.UC.ButtonPressed += (index, itemtag, itemname, usertag, me) => 
             { 
-                but.Image = BaseUtils.Icons.IconSet.Instance.Get(itemtag);      // reset image and tag
+                but.Image = BaseUtils.Icons.IconSet.GetImage(itemtag);      // reset image and tag
                 g.iconname = itemtag;
                 cfs.Close(); 
             };
@@ -268,7 +268,7 @@ namespace EDDiscovery.UserControls
             }
 
             foreach (var x in configuredtags.Keys)
-                cfs.UC.Add(x, x, BaseUtils.Icons.IconSet.Instance.Get(configuredtags[x]));
+                cfs.UC.Add(x, x, BaseUtils.Icons.IconSet.GetImage(configuredtags[x]));
 
             foreach (var usertag in extratags.SplitNoEmptyStartFinish(tagsplitstr[0]))       // we may have older tags not in the configuredtags lets list them
             {
@@ -299,7 +299,7 @@ namespace EDDiscovery.UserControls
             int tagscount = 0;
             for (int i = 0; i < taglist.Length; i++)
             {
-                Image img = images.TryGetValue(taglist[i], out string imagename) ? BaseUtils.Icons.IconSet.Instance.Get(imagename) : EDDiscovery.Icons.Controls.Star;
+                Image img = images.TryGetValue(taglist[i], out string imagename) ? BaseUtils.Icons.IconSet.GetImage(imagename) : EDDiscovery.Icons.Controls.Star;
                 gr.DrawImage(img, area);
                 if (i % across == across - 1)
                 {
@@ -319,7 +319,7 @@ namespace EDDiscovery.UserControls
             int pos = 2;
             for (int i = 0; i < taglist.Length; i++)
             {
-                Image img = images.TryGetValue(taglist[i], out string imagename) ? BaseUtils.Icons.IconSet.Instance.Get(imagename) : EDDiscovery.Icons.Controls.Star;
+                Image img = images.TryGetValue(taglist[i], out string imagename) ? BaseUtils.Icons.IconSet.GetImage(imagename) : EDDiscovery.Icons.Controls.Star;
                 Panel p = new Panel();
                 p.BackgroundImage = img;
                 p.Bounds = new System.Drawing.Rectangle(pos, 1, 28, 28);

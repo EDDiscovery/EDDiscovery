@@ -91,7 +91,7 @@ namespace EDDiscovery.UserControls
 
             labelEngineerName.Text = name;
             labelEngineerStatus.Text = "";
-            engineerImage.Image = BaseUtils.Icons.IconSet.GetIcon("Engineers." + name);
+            engineerImage.Image = BaseUtils.Icons.IconSet.GetImage("Engineers." + name);
             labelEngineerStarSystem.Text = ei?.StarSystem ?? "";
             labelEngineerPlanet.Text = ei?.Planet ?? "";
             labelEngineerBaseName.Text = ei?.BaseName ?? "";

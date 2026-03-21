@@ -340,7 +340,7 @@ namespace EDDiscovery.UserControls
             this.sendJournalEntriesToDLLsToolStripMenuItem,
             this.travelGridInDebugModeToolStripMenuItem});
             this.historyContextMenu.Name = "historyContextMenu";
-            this.historyContextMenu.Size = new System.Drawing.Size(388, 620);
+            this.historyContextMenu.Size = new System.Drawing.Size(388, 598);
             this.historyContextMenu.Opening += new System.ComponentModel.CancelEventHandler(this.historyContextMenu_Opening);
             // 
             // openInNotepadTheJournalFileToolStripMenuItem
@@ -647,7 +647,7 @@ namespace EDDiscovery.UserControls
             this.extComboBoxQuickMarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.extComboBoxQuickMarks, "Go to a marked journal entry. Use right click to mark an entry");
             this.extComboBoxQuickMarks.ValueMember = "";
-            this.extComboBoxQuickMarks.SelectedIndexChanged += new System.EventHandler(this.extComboBoxBookmark_SelectedIndexChanged);
+            this.extComboBoxQuickMarks.SelectedIndexChanged += new System.EventHandler(this.extComboBoxQuickMarks_SelectedIndexChanged);
             // 
             // extButtonEventColours
             // 

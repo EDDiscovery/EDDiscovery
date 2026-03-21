@@ -660,7 +660,7 @@ namespace EDDiscovery
             {
                 string[] parts = s.Split('=');
                 // valid number, valid length, image exists
-                if (parts.Length == 2 && parts[0].Length > 0 && parts[1].Length > 0 && BaseUtils.Icons.IconSet.Instance.Contains(parts[1]))
+                if (parts.Length == 2 && parts[0].Length > 0 && parts[1].Length > 0 && BaseUtils.Icons.IconSet.Contains(parts[1]))
                 {
                     dict[parts[0]] = parts[1];
                 }

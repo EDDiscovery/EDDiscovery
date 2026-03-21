@@ -67,7 +67,7 @@ namespace EDDiscovery.UserControls.Helpers
             frm.UC.AddButton($"Load","Load".Tx(), attop: true, tooltiptext: "Load settings from file");
             frm.UC.AddButton($"Save","Save".Tx(), attop: true, tooltiptext: "Save settings to file");
             frm.UC.AddButton($"Selected", resettext, attop: true, tooltiptext: "Currently selected colour for right clicks. Click left to set right click colour to default");
-            frm.UC.AddButton($"Elite", "Elite Theme", BaseUtils.Icons.IconSet.GetIcon("Controls.elite24"), attop: true);
+            frm.UC.AddButton($"Elite", "Elite Theme", BaseUtils.Icons.IconSet.GetImage("Controls.elite24"), attop: true);
             frm.UC.AddButton($"None", "None".Tx(), CheckedIconGroupUserControl.ImageNone, attop: true);
 
             frm.CloseBoundaryRegion = new Size(64, 64);

@@ -271,7 +271,7 @@ namespace EDDiscovery
             else
                 return false;
 
-            Image img = BaseUtils.Icons.IconSet.GetIcon(icon);
+            Image img = BaseUtils.Icons.IconSet.GetImage(icon);
 
             var x = (from ToolStripItem p in parent.DropDownItems where p.Text.Equals(menutext) && p.Tag != null && p.Name.Equals(menuname) select p);
 

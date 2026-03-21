@@ -242,7 +242,7 @@ namespace EDDiscovery.UserControls
                 else if (t.Item1.ToString().Contains("Raw"))
                     backname = "rawbackground";
 
-                Bitmap background = BaseUtils.Icons.IconSet.GetIcon("Controls.MaterialTrader." + backname ) as Bitmap;
+                Bitmap background = BaseUtils.Icons.IconSet.GetImage("Controls.MaterialTrader." + backname ) as Bitmap;
 
                 foreach ( var mat in t.Item2 )
                 {
@@ -331,7 +331,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (offer > 0 && receive > 0)
                     {
-                        Bitmap arrow = BaseUtils.Icons.IconSet.GetIcon("Controls.MaterialTrader.materialexchange") as Bitmap;
+                        Bitmap arrow = BaseUtils.Icons.IconSet.GetImage("Controls.MaterialTrader.materialexchange") as Bitmap;
 
                         g.DrawImage(arrow, new Point(8, 8));
 
@@ -353,7 +353,7 @@ namespace EDDiscovery.UserControls
 
                 if ( level > 0)
                 {
-                    Bitmap petal = BaseUtils.Icons.IconSet.GetIcon("Controls.MaterialTrader.petal" + level.ToStringInvariant()) as Bitmap;
+                    Bitmap petal = BaseUtils.Icons.IconSet.GetImage("Controls.MaterialTrader.petal" + level.ToStringInvariant()) as Bitmap;
                     g.DrawImage(petal, new Point(bmp.Width/2-petal.Width/2,42-petal.Height/2));
                 }
 
@@ -465,10 +465,10 @@ namespace EDDiscovery.UserControls
                         int margin = 20;
 
                         var butl = new ExtendedControls.ExtButton();
-                        butl.Image = BaseUtils.Icons.IconSet.GetIcon("Controls.MaterialTrader.LeftArrow");
+                        butl.Image = BaseUtils.Icons.IconSet.GetImage("Controls.MaterialTrader.LeftArrow");
                         f.Add(new ExtendedControls.ConfigurableEntryList.Entry(butl, "less", "", new Point(margin, 64), new Size(32, 32), null));
                         var butr = new ExtendedControls.ExtButton();
-                        butr.Image = BaseUtils.Icons.IconSet.GetIcon("Controls.MaterialTrader.RightArrow");
+                        butr.Image = BaseUtils.Icons.IconSet.GetImage("Controls.MaterialTrader.RightArrow");
                         f.Add(new ExtendedControls.ConfigurableEntryList.Entry(butr, "more", "", new Point(width - margin - 32, 64), new Size(32, 32), null));
 
                         f.Add(new ExtendedControls.ConfigurableEntryList.Entry("olabel", typeof(Label), "Offer".Tx(), new Point(margin, 30), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
@@ -477,7 +477,7 @@ namespace EDDiscovery.UserControls
 
                         var bar = new PictureBox();
                         bar.SizeMode = PictureBoxSizeMode.StretchImage;
-                        bar.Image = BaseUtils.Icons.IconSet.GetIcon("Controls.MaterialTrader.TraderBar");
+                        bar.Image = BaseUtils.Icons.IconSet.GetImage("Controls.MaterialTrader.TraderBar");
                         f.Add(new ExtendedControls.ConfigurableEntryList.Entry(bar, "bar", "", new Point(width / 2 - 32, 70), new Size(64, 16), null));
 
                         f.Add(new ExtendedControls.ConfigurableEntryList.Entry("receive", typeof(Label), "0", new Point(width / 2 - 12, 90), new Size(width / 2 - 20, 20), null, 1.2f, ContentAlignment.MiddleLeft));
