@@ -554,21 +554,10 @@ namespace EDDiscovery.UserControls
                 if (pendingMeritsQueue.Count == 0)
                     break;
 
-                if (!allowTailCommit && pendingMeritsQueue.Count == 1)
-                {
-                    System.Diagnostics.Debug.WriteLine($"[PPMerits]   Iteration {iteration}: Waiting for more evidence before committing the final queued merit");
-                    break;
-                }
-
                 var firstPending = pendingMeritsQueue[0];
                 bool canAcceptFirst = DoesMeritMatch(trackedMeritTotal, firstPending.PPM);
                 int acceptScore = canAcceptFirst ? 1 + CountGreedyMatches(1, firstPending.PPM.TotalMerits) : int.MinValue;
                 int skipScore = CountGreedyMatches(1, trackedMeritTotal);
-
-                if (allowTailCommit && pendingMeritsQueue.Count == 1 && canAcceptFirst)
-                {
-                    acceptScore = 1;
-                }
 
                 if (acceptScore > skipScore && acceptScore > 0)
                 {
