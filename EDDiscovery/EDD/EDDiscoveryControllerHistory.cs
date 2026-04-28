@@ -162,7 +162,9 @@ namespace EDDiscovery
         {
             HistoryList hist = null;
 
+#if !DEBUG
             try
+#endif
             {
                 lastRefreshArgs = args;           // we are processing this set of operations
 
@@ -258,10 +260,12 @@ namespace EDDiscovery
 
                 System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()}  EDC Load history complete with {hist.Count} records");
             }
+#if !DEBUG
             catch (Exception ex)
             {
                 LogLineHighlight("History Refresh Error: " + ex);
             }
+#endif
 
             ReportRefreshProgress(100, "Refresh Displays".Tx());
 
