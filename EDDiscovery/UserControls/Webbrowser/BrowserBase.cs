@@ -29,7 +29,8 @@ namespace EDDiscovery.UserControls.Webbrowser
                 "https://www.google.com/recaptcha" + Environment.NewLine +
                 "https://consentcdn.cookiebot.com" + Environment.NewLine +
                 "https://auth.frontierstore.net" + Environment.NewLine +
-                "https://googleads.g.doubleclick.net" + Environment.NewLine;
+                "https://googleads.g.doubleclick.net" + Environment.NewLine +
+                 "https://challenges.cloudflare.com" + Environment.NewLine;
 
 
         public Control webbrowser { get; set; }
