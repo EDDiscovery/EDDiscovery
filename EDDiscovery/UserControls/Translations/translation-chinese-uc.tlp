@@ -4,6 +4,7 @@ SECTION UserControlBookmarks
 .ColType: "Bookmark Type" => "书签类型"
 .ColBookmarkName: "Bookmark Name" => "书签名称"
 .ColDescription: "Description" => "描述"
+.ColPlanetMarks: "Planet Marks" @
 .labelSearch: "Search" => "搜索"
 .buttonDelete.ToolTip: "Delete selected bookmark" => "删除选中的书签"
 .buttonNew.ToolTip: "New Bookmark" => "新建书签"

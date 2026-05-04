@@ -4,6 +4,7 @@ SECTION UserControlBookmarks
 .ColType: "Bookmark Type" => "Typ Zakładki"
 .ColBookmarkName: "Bookmark Name" => "Nazwa Zakładki"
 .ColDescription: "Description" => "Opis"
+.ColPlanetMarks: "Planet Marks" @
 .labelSearch: "Search" => "Szukaj"
 .buttonDelete.ToolTip: "Delete selected bookmark" => "Usuń zaznaczoną zakładkę"
 .buttonNew.ToolTip: "New Bookmark" => "Nowa zakładka"

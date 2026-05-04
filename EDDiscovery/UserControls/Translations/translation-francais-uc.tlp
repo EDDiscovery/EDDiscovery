@@ -4,6 +4,7 @@ SECTION UserControlBookmarks
 .ColType: "Bookmark Type" => "Type de marque-page"
 .ColBookmarkName: "Bookmark Name" => "Nom du marque-page"
 .ColDescription: "Description" @
+.ColPlanetMarks: "Planet Marks" @
 .labelSearch: "Search" => "Recherche"
 .buttonDelete.ToolTip: "Delete selected bookmark" => "Supprimer le marque-page sélectionné"
 .buttonNew.ToolTip: "New Bookmark" => "Nouveau marque-page"

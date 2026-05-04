@@ -4,6 +4,7 @@ SECTION UserControlBookmarks
 .ColType: "Bookmark Type" => "Тип закладки"
 .ColBookmarkName: "Bookmark Name" => "Название закладки"
 .ColDescription: "Description" => "Описание"
+.ColPlanetMarks: "Planet Marks" @
 .labelSearch: "Search" => "Поиск"
 .buttonDelete.ToolTip: "Delete selected bookmark" => "Удалить выбранную закладку"
 .buttonNew.ToolTip: "New Bookmark" => "Новая закладка"

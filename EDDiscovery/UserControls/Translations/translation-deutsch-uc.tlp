@@ -4,6 +4,7 @@ SECTION UserControlBookmarks
 .ColType: "Bookmark Type" => "Lesezeichentyp"
 .ColBookmarkName: "Bookmark Name" => "Lesezeichenname"
 .ColDescription: "Description" => "Beschreibung"
+.ColPlanetMarks: "Planet Marks" @
 .labelSearch: "Search" => "Suche"
 .buttonDelete.ToolTip: "Delete selected bookmark" => "Lösche ausgewähltes Lesezeichen"
 .buttonNew.ToolTip: "New Bookmark" => "Neues Lesezeichen"
