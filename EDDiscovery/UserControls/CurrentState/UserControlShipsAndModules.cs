@@ -896,7 +896,7 @@ namespace EDDiscovery.UserControls
             {
                 foreach( DataGridViewRow rw in dataGridViewModules.Rows)
                 {
-                    if ((ShipSlots.Slot)rw.Cells[2].Tag == ss)      // Cells[2] has the tag
+                    if (rw.Cells[2].Tag != null && (ShipSlots.Slot)rw.Cells[2].Tag == ss)      // Cells[2] has the tag
                     {
                         dataGridViewModules.SafeFirstDisplayedScrollingRowIndex(rw.Index);
                         dataGridViewModules.ClearSelection();
@@ -908,17 +908,19 @@ namespace EDDiscovery.UserControls
 
         private void dataGridViewModules_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            Ship shipinstance = dataGridViewModules.Rows[e.RowIndex].Tag as Ship;        // if row tag is ship (ownedshiptext)
-            ItemData.ShipProperties ship = dataGridViewModules.Rows[e.RowIndex].Tag as ItemData.ShipProperties;        // if row tag is ship prop (all ship text)
-            if (shipinstance != null)
+            if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                DisplayModuleDiagram(shipinstance.GetShipProperties(), shipinstance);
+                Ship shipinstance = dataGridViewModules.Rows[e.RowIndex].Tag as Ship;        // if row tag is ship (ownedshiptext)
+                ItemData.ShipProperties ship = dataGridViewModules.Rows[e.RowIndex].Tag as ItemData.ShipProperties;        // if row tag is ship prop (all ship text)
+                if (shipinstance != null)
+                {
+                    DisplayModuleDiagram(shipinstance.GetShipProperties(), shipinstance);
+                }
+                else if (ship != null)
+                {
+                    DisplayModuleDiagram(ship, null);
+                }
             }
-            else if (ship != null)
-            {
-                DisplayModuleDiagram(ship, null);
-            }
-
         }
         private void dataGridViewModules_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
         {
