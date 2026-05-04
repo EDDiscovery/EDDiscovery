@@ -10,6 +10,7 @@ B85750D457FE9A: "Search for Bookmark" => "Buscar marcador"
 E398338D28B496: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" => "¿Realmente desea eliminar {0} marcadores?\r\nConfirmar o cancelar"
 882252A12A74FC: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" => "¿Realmente desea eliminar el marcador de {0}\r\nConfirmar o cancelar"
 90DFF113AC3FB4: "System could not be found - has not been synched or EDSM is unavailable" => "No se pudo encontrar el sistema - no se ha sincronizado o EDSM no está disponible"
+F8E75C39CF38CC: "Planet Marks" @
 568BA6A0FCB8CE: "Import bookmarks to EDD from CSV file" => "Importar marcadores a EDD desde un archivo CSV"
 4E0D3ABD07EF26: "Export bookmarks to CSV file" => "Exportar marcadores a archivo CSV"
 D3D49E22353948: "New bookmark on current system" => "Editar marcador en el sistema actual"
@@ -629,6 +630,7 @@ F914C4A8D920BF: "Show rings" => "Anillos"
 
 SECTION UserControlSettings
 
+1AA2284ABF94BF: "System Lookup from Web" @
 B6EB402E86A9AA: "Commanders" => "Comandantes"
 79056C7AE5C30B: "Commander" => "Comandante"
 F5110F31C60E83: "EDSM Name" => "Nombre EDSM"
@@ -1018,9 +1020,11 @@ D9273536780112: "Control Outlining" => "Esquema de control"
 10FA8B1B034219: "Go to a marked journal entry. Use right click to mark an entry" => "Ir a una entrada de diario marcada. Use clic derecho para marcar una entrada"
 0128C783DB2024: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 03C54D66F2DA56: "Next start/stop marker is hidden" => "El próximo marcador de inicio/parada está oculto"
-905A92084F2F46: "No start/stop marker found below" => "No se encontró marcador de inicio/parada debajo"
+72BB592592883F: "No start/stop marker found ``below" => "No se encontró marcador de inicio/parada debajo"
 A89F26DDCFE091: "Entry filtered out of grid" => "Entrada filtrada fuera de la cuadrícula"
 A070027FDED89B: "Colour events by type" => "Colorear eventos por tipo"
+D5769D2797F39C: "Open journal file in editor (Debug)" @
+
 
 SECTION UserControlCaptainsLog
 

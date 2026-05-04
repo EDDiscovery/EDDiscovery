@@ -10,6 +10,7 @@ B85750D457FE9A: "Search for Bookmark" => "Chercher un marque-page"
 E398338D28B496: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" => "Voulez-vous vraiment supprimer {0} marque-pages ? \r\n Confirmer ou Annuler"
 882252A12A74FC: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" => "Voulez-vous vraiment supprimer le marque-page pour {0} ? \r\n Confirmer ou Annuler"
 90DFF113AC3FB4: "System could not be found - has not been synched or EDSM is unavailable" => "Système introuvable - n'a pas été synchronisé ou EDSM est indisponible"
+F8E75C39CF38CC: "Planet Marks" @
 568BA6A0FCB8CE: "Import bookmarks to EDD from CSV file" => "Importer des marque-pages vers EDD depuis un fichier CSV"
 4E0D3ABD07EF26: "Export bookmarks to CSV file" => "Exporter des marque-pages vers un fichier CSV"
 D3D49E22353948: "New bookmark on current system" => "Nouveau marque-page sur le système actuel"
@@ -629,6 +630,7 @@ F914C4A8D920BF: "Show rings" => "Anneaux"
 
 SECTION UserControlSettings
 
+1AA2284ABF94BF: "System Lookup from Web" @
 B6EB402E86A9AA: "Commanders" => "Commandants"
 79056C7AE5C30B: "Commander" => "Commandant"
 F5110F31C60E83: "EDSM Name" => "Nom EDSM"
@@ -1018,9 +1020,11 @@ D9273536780112: "Control Outlining" => "Contrôle du regroupement"
 10FA8B1B034219: "Go to a marked journal entry. Use right click to mark an entry" => "Accédez à une entrée de journal marquée. Faites un clic droit pour marquer une entrée"
 0128C783DB2024: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 03C54D66F2DA56: "Next start/stop marker is hidden" => "Le marqueur début/fin suivant est caché"
-905A92084F2F46: "No start/stop marker found below" => "Pas de marqueur début/fin trouvé ci-dessous"
+72BB592592883F: "No start/stop marker found ``below" => "Pas de marqueur début/fin trouvé ci-dessous"
 A89F26DDCFE091: "Entry filtered out of grid" => "Entrées filtrées"
 A070027FDED89B: "Colour events by type" => "Colorer les événements par type"
+D5769D2797F39C: "Open journal file in editor (Debug)" @
+
 
 SECTION UserControlCaptainsLog
 

@@ -10,6 +10,7 @@ B85750D457FE9A: "Search for Bookmark" => "Поиск в закладках"
 E398338D28B496: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" => "Вы действительно хотите удалить закладки ({0} шт.)?"
 882252A12A74FC: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" => "Вы действительно хотите удалить закладки для {0}?"
 90DFF113AC3FB4: "System could not be found - has not been synched or EDSM is unavailable" => "Не удалось найти систему, нет синхронизации или доступа к EDSM"
+F8E75C39CF38CC: "Planet Marks" @
 568BA6A0FCB8CE: "Import bookmarks to EDD from CSV file" => "Импорт закладок из csv-файла в EDD"
 4E0D3ABD07EF26: "Export bookmarks to CSV file" => "Экспорт закладок в csv-файл"
 D3D49E22353948: "New bookmark on current system" @
@@ -629,6 +630,7 @@ F914C4A8D920BF: "Show rings" => "Кольца"
 
 SECTION UserControlSettings
 
+1AA2284ABF94BF: "System Lookup from Web" @
 B6EB402E86A9AA: "Commanders" => "Командир"
 79056C7AE5C30B: "Commander" => "Командир"
 F5110F31C60E83: "EDSM Name" => "Имя в EDSM"
@@ -1007,7 +1009,7 @@ EF5031AC6BB79D: "Run selection through Inara System (Debug)" => "Выполни�
 524BF0531AFD77: "Run selection through EDAstro (Debug)" @
 0F5FE8CD3D51BA: "Send selection to DLLs (Debug)" @
 B91F8B4B18E7EA: "Show lines in System Visited Fore Colour" @
-27E9DD0E266E2D: "Travel grid in Debug Mode" @
+C083AF7B5668ED: "Debug Mode" @
 21FE521D359452: "Outlining On" => "Включить группирование"
 7CD3494777C5DB: "Scan Events Outlining" => "Группировать записи о сканировании"
 F66672D57338E9: "Roll up older entries" => "Свернуть старые записи"
@@ -1018,9 +1020,11 @@ D9273536780112: "Control Outlining" => "Группировать"
 10FA8B1B034219: "Go to a marked journal entry. Use right click to mark an entry" @
 0128C783DB2024: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 03C54D66F2DA56: "Next start/stop marker is hidden" @
-905A92084F2F46: "No start/stop marker found below" @
+72BB592592883F: "No start/stop marker found ``below" @
 A89F26DDCFE091: "Entry filtered out of grid" @
 A070027FDED89B: "Colour events by type" @
+D5769D2797F39C: "Open journal file in editor (Debug)" @
+
 
 SECTION UserControlCaptainsLog
 

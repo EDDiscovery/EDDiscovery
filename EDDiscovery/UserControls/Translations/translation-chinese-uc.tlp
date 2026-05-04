@@ -10,6 +10,7 @@ B85750D457FE9A: "Search for Bookmark" => "搜索书签"
 E398338D28B496: "Do you really want to delete {0} bookmarks?\r\nConfirm or Cancel" => "你真的要删除这{0}个书签吗？"
 882252A12A74FC: "Do you really want to delete the bookmark for {0}\r\nConfirm or Cancel" => "你真的要删除书签{0}吗？"
 90DFF113AC3FB4: "System could not be found - has not been synched or EDSM is unavailable" => "无法找到该星系，该星系未被同步或者EDSM现在不可用。"
+F8E75C39CF38CC: "Planet Marks" @
 568BA6A0FCB8CE: "Import bookmarks to EDD from CSV file" @
 4E0D3ABD07EF26: "Export bookmarks to CSV file" @
 D3D49E22353948: "New bookmark on current system" @
@@ -629,6 +630,7 @@ F914C4A8D920BF: "Show rings" => "环(Rings)"
 
 SECTION UserControlSettings
 
+1AA2284ABF94BF: "System Lookup from Web" @
 B6EB402E86A9AA: "Commanders" => "指挥官"
 79056C7AE5C30B: "Commander" => "指挥官"
 F5110F31C60E83: "EDSM Name" => "EDSM 用户名"
@@ -1007,7 +1009,7 @@ EF5031AC6BB79D: "Run selection through Inara System (Debug)" @
 524BF0531AFD77: "Run selection through EDAstro (Debug)" @
 0F5FE8CD3D51BA: "Send selection to DLLs (Debug)" @
 B91F8B4B18E7EA: "Show lines in System Visited Fore Colour" @
-27E9DD0E266E2D: "Travel grid in Debug Mode" @
+C083AF7B5668ED: "Debug Mode" @
 21FE521D359452: "Outlining On" => "打开纲要模式"
 7CD3494777C5DB: "Scan Events Outlining" => "收起扫描事件"
 F66672D57338E9: "Roll up older entries" => "收起旧的条目"
@@ -1018,9 +1020,11 @@ D9273536780112: "Control Outlining" => "纲要模式控制"
 10FA8B1B034219: "Go to a marked journal entry. Use right click to mark an entry" @
 0128C783DB2024: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 03C54D66F2DA56: "Next start/stop marker is hidden" @
-905A92084F2F46: "No start/stop marker found below" @
+72BB592592883F: "No start/stop marker found ``below" @
 A89F26DDCFE091: "Entry filtered out of grid" @
 A070027FDED89B: "Colour events by type" @
+D5769D2797F39C: "Open journal file in editor (Debug)" @
+
 
 SECTION UserControlCaptainsLog
 

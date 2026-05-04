@@ -18,6 +18,7 @@ using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
 using EliteDangerousCore.Spansh;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -109,11 +110,26 @@ namespace EDDiscovery
                 File.WriteAllText(fn, s);
             }
 
+            //{
+            //    JToken j = QuickJSON.JTokenExtensionsOther.ReadJSONFile(@"c:\code\kestrel.json");
+            //    //JToken j = QuickJSON.JTokenExtensionsOther.ReadJSONFile(@"c:\code\ferdelance.json");
+            //    if (j != null)
+            //    {
+            //        JournalLoadout lp = new JournalLoadout(j.Object());
+            //        ShipList list = new ShipList();
+            //        lp.ShipInformation(list, "Sol", new SystemClass("Sol", 1234));
+
+            //        Ship shp = list.Ships.First().Value;
+            //        EliteDangerousCore.ShipModuleDisplay.DrawToFile(@"c:\code\md.bmp", shp.GetShipProperties(), shp, 19200, "Test Ship");
+            //    }
+            //}
+
+
             //FactionDefinitions.IDSTx();
 
             // use to extract a translation ID Eahlstan!
 
-            //string sksk = "; Due to Crime".Tx();
+            // string sksk = "DamagedHuman".Tx();
 
 
             //var files = System.IO.Directory.EnumerateFiles($@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\", "*.json");
@@ -145,7 +161,7 @@ namespace EDDiscovery
             //  { string system = "Asellus Primus"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
             //   { string system = "UCAC3 70-2386"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
             //  { string system = "Amitrite"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
-           // { string system = "Tethlon"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
+            // { string system = "Tethlon"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
             //DebuggerHelpers.OutputControl += "StarScan";        // turn on debugging
 
 

@@ -630,6 +630,7 @@ F914C4A8D920BF: "Show rings" @
 
 SECTION UserControlSettings
 
+1AA2284ABF94BF: "System Lookup from Web" @
 B6EB402E86A9AA: "Commanders" @
 79056C7AE5C30B: "Commander" @
 F5110F31C60E83: "EDSM Name" @
@@ -1019,7 +1020,7 @@ D9273536780112: "Control Outlining" @
 10FA8B1B034219: "Go to a marked journal entry. Use right click to mark an entry" @
 0128C783DB2024: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 03C54D66F2DA56: "Next start/stop marker is hidden" @
-905A92084F2F46: "No start/stop marker found ``below" @
+72BB592592883F: "No start/stop marker found ``below" @
 A89F26DDCFE091: "Entry filtered out of grid" @
 A070027FDED89B: "Colour events by type" @
 D5769D2797F39C: "Open journal file in editor (Debug)" @
