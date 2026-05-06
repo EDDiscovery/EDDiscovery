@@ -1214,6 +1214,7 @@
     <EmbeddedResource Include="Controls\Turret48.png" />
     <EmbeddedResource Include="Controls\Engineered48.png" />
     <EmbeddedResource Include="Controls\PowerOn48.png" />
+    <EmbeddedResource Include="Controls\PowerOff48.png" />
     <Content Include="Controls\readme.txt" />
     <EmbeddedResource Include="Panels\MissionOverlay.png" />
     <EmbeddedResource Include="Journal\CrimeVictim.png" />

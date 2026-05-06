@@ -501,7 +501,10 @@ namespace EDDiscovery.UserControls
             extPictureBoxModules.ClearImageList();
             if (shipproperties != null)       // we may not know the ship
             {
-                var images = smd.CreateImages(shipproperties, shipinstance, new Point(0, 0), extPictureBoxModules.Width);     // create module display
+                // create module display
+
+                var images = smd.CreateImages(shipproperties, shipinstance, new Point(0, 0), extPictureBoxModules.Width, null, 
+                    shipinstance!=null);            // only tag if we have a shipinstance, so the normal display, not the all ships one
                 extPictureBoxModules.AddRange(images);
                 last_moduleshipproperties = shipproperties; // keep a record of this for resize
             }
@@ -573,6 +576,27 @@ namespace EDDiscovery.UserControls
                             hullmass, modulemass, hullmass + modulemass, last_cargo, si.CalculateCargoCapacity(), warningpercent};
 
             labelDataCost.Data = new object[] { si.HullValue, si.ModulesValue, si.HullValue + si.ModulesValue, si.Rebuy };
+
+            if (stats != null)
+            {
+                labelDataPower.Data = new object[] { stats.PowerDrawCore,
+                    stats.PowerPlant.HasValue ? 100.0 *stats.PowerDrawCore / stats.PowerPlant : null,
+                    stats.PowerDrawWeapons ,
+                    stats.PowerPlant.HasValue ? 100.0 *stats.PowerDrawWeapons / stats.PowerPlant : null,
+                    stats.PowerDrawTotal,
+                    stats.PowerPlant.HasValue ? 100.0 *stats.PowerDrawTotal / stats.PowerPlant : null,
+                };
+
+                extProgressBar1.Value = stats.PowerPlant != null ? (int)(100.0 * stats.PowerDrawTotal / stats.PowerPlant) : 0;
+                extProgressBar1.Marker1 = stats.PowerPlant != null ? (int)(100.0 * stats.PowerDrawCore / stats.PowerPlant) : -1;
+            }
+            else
+            {
+                labelDataPower.Data = null;
+                extProgressBar1.Value = 0;
+                extProgressBar1.Marker1 = -1;
+            }
+
         }
 
         void AddModuleLine(ShipModule sm , Ship onship = null)
@@ -673,7 +697,7 @@ namespace EDDiscovery.UserControls
             pbsModuleDisplay.Render();
         }
 
-        #endregion
+#endregion
 
         #region Word wrap
 
@@ -892,18 +916,27 @@ namespace EDDiscovery.UserControls
 
         private void ModuleDisplayClickElement(object sender, MouseEventArgs e, ExtendedControls.ImageElement.Element i, object tag)
         {
-            if (i != null && tag is ShipSlots.Slot ss)
+            if (i != null)
             {
-                foreach( DataGridViewRow rw in dataGridViewModules.Rows)
+                if (tag is ShipSlots.Slot ss)
                 {
-                    if (rw.Cells[2].Tag != null && (ShipSlots.Slot)rw.Cells[2].Tag == ss)      // Cells[2] has the tag
+                    foreach (DataGridViewRow rw in dataGridViewModules.Rows)
                     {
-                        dataGridViewModules.SafeFirstDisplayedScrollingRowIndex(rw.Index);
-                        dataGridViewModules.ClearSelection();
-                        break;
+                        if (rw.Cells[2].Tag != null && (ShipSlots.Slot)rw.Cells[2].Tag == ss)      // Cells[2] has the tag
+                        {
+                            dataGridViewModules.SafeFirstDisplayedScrollingRowIndex(rw.Index);
+                            dataGridViewModules.ClearSelection();
+                            break;
+                        }
                     }
                 }
+                else if ( tag is ShipModule sm)
+                {
+                    sm.SetEnabled(sm.Enabled != true);
+                    Display();
+                }
             }
+
         }
 
         private void dataGridViewModules_CellClick(object sender, DataGridViewCellEventArgs e)
