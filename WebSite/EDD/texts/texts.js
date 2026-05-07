@@ -30,7 +30,7 @@ export function OnLoad()
     var header = document.getElementsByTagName("header");
     WriteHeader(header[0]);
     var nav = document.getElementsByTagName("nav");
-    WriteNav(nav[0], 6);
+    WriteNav(nav[0], 7);
 
     var div = CreateDiv("menubutton", "menubutton1");
 

@@ -30,6 +30,8 @@ function OnLoad()
     var nav = document.getElementsByTagName("nav");
     WriteNav(nav[0], 2);
 
+    // create a scan menu and attach to the nav menu
+
     var div = CreateDiv("menubutton", "menubutton1");
 
     div.appendChild(CreateImage("/Images/menu.png", "Menu", null, togglemenu, null, null, "menubutton"));

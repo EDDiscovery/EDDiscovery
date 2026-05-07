@@ -21,6 +21,8 @@ using EliteDangerousCore;
 using System.Drawing;
 using System.Net;
 using System.Windows.Forms;
+using System.Collections.Generic;
+using System;
 
 namespace EDDiscovery.WebServer
 {
@@ -47,18 +49,16 @@ namespace EDDiscovery.WebServer
             System.Diagnostics.Debug.WriteLine("Serve Scan Display " + partialpath);
             //foreach (var k in request.QueryString.AllKeys)   System.Diagnostics.Debug.WriteLine("Key {0} = {1}", k, request.QueryString[k]);
 
-            int entry = (request.QueryString["entry"] ?? "-1").InvariantParseInt(-1);
-            bool checkEDSM = (request.QueryString["EDSM"] ?? "false").InvariantParseBool(false);
-            bool checkSPANSH = (request.QueryString["SPANSH"] ?? "false").InvariantParseBool(false);
-
             Bitmap img = null;
-            JObject response = new JObject();
-            response["responsetype"] = "scandisplayobjects";
-            JArray objectlist = new JArray();
+            JArray objectlist = new JArray();       // list of info for the display
 
             var hl = discoveryform.History;
             if (hl.Count > 0)
             {
+                int entry = (request.QueryString["entry"] ?? "-1").InvariantParseInt(-1);
+                bool checkweb = (request.QueryString["EDSM"] ?? "false").InvariantParseBool(false);
+                checkweb |= (request.QueryString["SPANSH"] ?? "false").InvariantParseBool(false);
+
                 if (entry < 0 || entry >= hl.Count)
                     entry = hl.Count - 1;
 
@@ -66,7 +66,7 @@ namespace EDDiscovery.WebServer
 
                 discoveryform.Invoke((MethodInvoker)delegate
                 {
-                    var sn = hl.StarScan2.FindSystemSynchronous(hl.EntryOrder()[entry].System, checkEDSM || checkSPANSH);
+                    var sn = hl.StarScan2.FindSystemSynchronous(hl.EntryOrder()[entry].System, checkweb );
 
                     if (sn != null)
                     {
@@ -85,14 +85,28 @@ namespace EDDiscovery.WebServer
                         sd.ShowPlanetClasses = (request.QueryString["showplanetclass"] ?? "true").InvariantParseBool(true);
                         sd.ShowDist = (request.QueryString["showdistance"] ?? "true").InvariantParseBool(true);
                         sd.ValueLimit = (request.QueryString["valuelimit"] ?? "50000").InvariantParseInt(50000);
-                        sd.ShowWebBodies = checkEDSM;
+                        sd.ShowWebBodies = checkweb;
+                        sd.SimplifyDiagram = true;
                         sd.SetSize(starsize);
                         sd.Font = new Font("MS Sans Serif", 8.25f);
                         sd.FontLarge = new Font("MS Sans Serif", 10f);
                         sd.FontUnderlined = new Font("MS Sans Serif", 8.25f, FontStyle.Underline);
                         ExtendedControls.ExtPictureBox imagebox = new ExtendedControls.ExtPictureBox();
-                        sd.DrawSystemRender(imagebox, width, sn, null, null);
-                        //imagebox.AddTextAutoSize(new Point(10, 10), new Size(1000, 48), "Generated on " + DateTime.UtcNow.ToString(), new Font("MS Sans Serif", 8.25f), Color.Red, Color.Black, 0);
+
+                        List<string> bodytypes = new List<string>();
+
+                        foreach (var x in Enum.GetValues(typeof(EDPlanet)))
+                            bodytypes.Add(x.ToString());
+
+                        foreach (var x in Enum.GetNames(typeof(EDStar)))
+                            bodytypes.Add(x.ToString());
+
+                        bodytypes.AddRange(new string[] { "Star", "Planet", "Unknown", "Barycentre", "StellarRing", "AsteroidCluster" });
+
+                        if ((request.QueryString["showasteroidbodies"] ?? "false").InvariantParseBool(true) == false)
+                            bodytypes.Remove("AsteroidCluster");
+
+                        sd.DrawSystemRender(imagebox, width, sn, null, null,null, bodytypes.ToArray());
                         imagebox.Render();
 
                         foreach (ExtendedControls.ImageElement.Element e in imagebox)
@@ -118,6 +132,10 @@ namespace EDDiscovery.WebServer
                 });
             }
 
+            // send thru the web socket a scan display objects prompt giving a new set of objects
+
+            JObject response = new JObject();
+            response["responsetype"] = "scandisplayobjects";
             response["objectlist"] = objectlist;
             server.SendWebSockets(response, false); // refresh history
 

@@ -39,7 +39,8 @@ namespace EDDiscovery.UserControls
         private HistoryEntry last_he = null;
         private Ship last_displayship = null;
         private int last_cargo = 0;
-        ItemData.ShipProperties last_moduleshipproperties;
+        private ItemData.ShipProperties last_moduleshipproperties;
+        private bool last_moduleclickbacks;
 
         private string dbDisplayFilters = "DisplayFiltersNew";
         private string dbWordWrap = "WordWrap";
@@ -475,7 +476,7 @@ namespace EDDiscovery.UserControls
             last_displayship = shipinstance;
 
             DisplayShipStats(shipinstance);
-            DisplayModuleDiagram(shipinstance.GetShipProperties(),shipinstance);
+            DisplayModuleDiagram(shipinstance.GetShipProperties(),shipinstance, true);
             foreach (var key in shipinstance.Modules.Keys)
             {
                 ShipModule sm = shipinstance.Modules[key];
@@ -495,18 +496,16 @@ namespace EDDiscovery.UserControls
         }
 
 
-        private void DisplayModuleDiagram(ItemData.ShipProperties shipproperties, Ship shipinstance)
+        private void DisplayModuleDiagram(ItemData.ShipProperties shipproperties, Ship shipinstance, bool clickbacks)
         {
             pbsModuleDisplay.Resize -= PbsModuleDisplay_Resize;
             extPictureBoxModules.ClearImageList();
             if (shipproperties != null)       // we may not know the ship
             {
-                // create module display
-
-                var images = smd.CreateImages(shipproperties, shipinstance, new Point(0, 0), extPictureBoxModules.Width, null, 
-                    shipinstance!=null);            // only tag if we have a shipinstance, so the normal display, not the all ships one
+                var images = smd.CreateImages(shipproperties, shipinstance, new Point(0, 0), extPictureBoxModules.Width, null, clickbacks, clickbacks);
                 extPictureBoxModules.AddRange(images);
                 last_moduleshipproperties = shipproperties; // keep a record of this for resize
+                last_moduleclickbacks = clickbacks;
             }
             pbsModuleDisplay.Render();
             pbsModuleDisplay.Resize += PbsModuleDisplay_Resize;
@@ -517,7 +516,7 @@ namespace EDDiscovery.UserControls
             if ( last_moduleshipproperties!=null)
             {
 //                System.Diagnostics.Debug.WriteLine($"PBS Module redisplay {pbsModuleDisplay.Size}");
-                DisplayModuleDiagram(last_moduleshipproperties, last_displayship);
+                DisplayModuleDiagram(last_moduleshipproperties, last_displayship, last_moduleclickbacks);
             }
         }
 
@@ -947,11 +946,11 @@ namespace EDDiscovery.UserControls
                 ItemData.ShipProperties ship = dataGridViewModules.Rows[e.RowIndex].Tag as ItemData.ShipProperties;        // if row tag is ship prop (all ship text)
                 if (shipinstance != null)
                 {
-                    DisplayModuleDiagram(shipinstance.GetShipProperties(), shipinstance);
+                    DisplayModuleDiagram(shipinstance.GetShipProperties(), shipinstance, false);
                 }
                 else if (ship != null)
                 {
-                    DisplayModuleDiagram(ship, null);
+                    DisplayModuleDiagram(ship, null, false);
                 }
             }
         }

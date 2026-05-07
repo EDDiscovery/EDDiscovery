@@ -13,8 +13,10 @@
  */
 
 /* pop ups attached to body, with
-    <div class="rightsidednotification" id="scanobjectnotification">
+    <div class="<notificationclass>" id="scanobjectnotification">
     </div>
+
+    popupnotification.css defines the <notificationclass> positioning
 
 style:
 .rightsidednotification {

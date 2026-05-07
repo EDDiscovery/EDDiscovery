@@ -1,0 +1,39 @@
+
+/* Style the article section */
+
+body {
+    background-color: black;
+    color: darkorange;
+    font-family: Arial,Helvetica,Sans-serif;
+    margin: 0px;
+    overflow: hidden; /* crucial to stop a right scroll bar appearing even though the flex overflow hidden should stop it */
+}
+
+/* top level div is a flex. Important to lock page to vh so it does not scroll and occupies the whole page  */
+.page {
+    height:100vh;
+    width:100%;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+}
+
+/* first is headernav, third is footer */
+/* second part of three sections is a flex:1 */
+.middlesection {
+    width: 100%;
+    flex: 1;
+    clear: both;
+    overflow:hidden;
+}
+
+/* this div holds the image inside an article, and it has the scroll bar. You must set it to 100% height to override autoheight and get it to scroll 
+    set the width to required % of the middlesection
+*/
+.moduleimage
+{
+    float: left;
+    overflow-y: scroll;
+    height: 100%;
+    width: 100%;
+}

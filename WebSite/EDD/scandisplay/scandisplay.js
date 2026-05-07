@@ -1,5 +1,5 @@
 /*
- * Copyright 2021-2021 Robbyxp1 @ github.com
+ * Copyright 2021-2026 Robbyxp1 @ github.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -12,7 +12,6 @@
  * governing permissions and limitations under the License.
  */
 
-
 import { WriteHeader, WriteNav, WriteFooter } from "/header.js"
 import { RequestStatus, FillSystemTable } from "/systemtable/systemtable.js"
 import { CreateImage, CreatePara, CreateDiv } from "/jslib/elements.js"
@@ -20,6 +19,7 @@ import { WriteMenu, ToggleMenu, GetMenuItemCheckState, CloseMenus } from "/jslib
 import { WSURIFromLocation } from "/jslib/websockets.js"
 import { FetchState, StoreState, FetchNumber } from "/jslib/localstorage.js"
 import { ShowPopup, HidePopup } from "/jslib/popups.js"
+import { Debounce } from "/jslib/debounce.js"
 
 var websocket;
 
@@ -30,6 +30,8 @@ function OnLoad()
     var nav = document.getElementsByTagName("nav");
     WriteNav(nav[0], 1);
 
+    // attach a menu to the nav button
+
     var div = CreateDiv("menubutton", "menubutton1");
 
     div.appendChild(CreateImage("/Images/menu.png", "Menu", null, togglemenu, null, null, "menubutton"));
@@ -39,21 +41,21 @@ function OnLoad()
             ["checkbox", "moon", "Show Moons", scandisplaychange, true],
             ["checkbox", "bodyicons", "Show Body Icons", scandisplaychange, true],
             ["checkbox", "materials", "Show Materials", scandisplaychange, true],
+            ["checkbox", "asteroidbodies", "Show Asteroid Bodies", scandisplaychange, false],
             ["checkbox", "gvalue", "Show G on all planets", scandisplaychange, true],
             ["checkbox", "habzone", "Show Habzones", scandisplaychange, true],
             ["checkbox", "starclass", "Show classes of stars", scandisplaychange, true],
             ["checkbox", "planetclass", "Show classes of planets", scandisplaychange, true],
             ["checkbox", "distance", "Show distance of bodies", scandisplaychange, true],
-            ["checkbox", "edsm", "Check EDSM", scandisplaychange, false],
+            ["checkbox", "edsm", "Check Web For bodies", scandisplaychange, false],
             ["button", "value", "Set Valuable Limit", setvaluelimit, false],
-            ["submenu", "size", "Set body image size..", "submenusize"],
-            ["submenu", "statussize", "Set star display width..", "submenustardisplaysize"],
+            ["submenu", "size", "Set body image size..", "submenusize"],                        // submenu called submenusize, see below
+            ["submenu", "statussize", "Set star display width..", "submenustardisplaysize"],    // submenu see below
         ]);
 
-    nav[0].appendChild(div);
+    nav[0].appendChild(div);        // attach to nav bar
 
-    /* attach to mainbody, not div, because we need page absolute positioning */
-
+    // submenu of set body image size
     WriteMenu(document.body, "submenusize", "navmenu",
         [
             ["radio", "16", "16", sizedisplaychange, "sizegroup", "48"],
@@ -65,6 +67,7 @@ function OnLoad()
             ["radio", "160", "160", sizedisplaychange, "sizegroup"],
         ]);
 
+    // submenu of set star display width
     WriteMenu(document.body, "submenustardisplaysize", "navmenu",
         [
             ["radio", "100", "Full Width", stardisplaysizedisplaychange, "stardisplaysizegroup", "70"],
@@ -95,6 +98,8 @@ function OnLoad()
     document.getElementById("valuedialog_cancel").onclick = cancelvalue;
     document.getElementById("valuedialog_ok").onclick = setvalue;
 
+    // on window resize, we debounce it, and 500ms later ask for a new image at the right size
+    window.onresize = Debounce(()=> {console.log("Resized Scan Display");RequestImage(-1);},500);
 }
 
 document.body.onload = OnLoad;
@@ -151,7 +156,8 @@ function RequestImage(entry)
     var starclass = GetMenuItemCheckState("scandisplaymenu", "starclass");
     var planetclass = GetMenuItemCheckState("scandisplaymenu", "planetclass");
     var distance = GetMenuItemCheckState("scandisplaymenu", "distance");
-    var edsm = GetMenuItemCheckState("scandisplaymenu", "edsm");
+    var webbodies = GetMenuItemCheckState("scandisplaymenu", "edsm");
+    var asteroidbodies = GetMenuItemCheckState("scandisplaymenu", "asteroidbodies");
 
     var width = jimgdiv.clientWidth;
 
@@ -162,14 +168,17 @@ function RequestImage(entry)
 
     var req = "/systemmap/image.png?entry=" + entry + "&width=" + width + "&starsize=" + size + "&showmoons=" + showmoon + "&showbodyicons=" + bodyicons +
         "&showmaterials=" + showmaterials + "&showgravity=" + gvalue + "&showhabzone=" + habzone + "&showstarclass=" + starclass + "&showplanetclass=" + planetclass +
-        "&showdistance=" + distance + "&EDSM=" + edsm + "&valuelimit=" + valuelimit + "&reqtime=" + new Date().getTime();
+        "&showasteroidbodies=" + asteroidbodies + 
+        "&showdistance=" + distance + "&SPANSH=" + webbodies + "&valuelimit=" + valuelimit + "&reqtime=" + new Date().getTime();
 
     lastobjectlist = null;      // indicate don't have a list now
+
     var img = jimgdiv.childNodes[0];
     console.log("Reload image source" + req);
     img.src = req;
 }
 
+// Menu changing option
 function scandisplaychange(mouseevent)
 {
     var ct = mouseevent.currentTarget;
@@ -180,6 +189,7 @@ function scandisplaychange(mouseevent)
     RequestImage(-1);
 }
 
+// Menu Size changing option
 function sizedisplaychange(mouseevent)
 {
     var ct = mouseevent.currentTarget;
@@ -189,6 +199,7 @@ function sizedisplaychange(mouseevent)
     RequestImage(-1);
 }
 
+// menu changing option
 function stardisplaysizedisplaychange(mouseevent)
 {
     var ct = mouseevent.currentTarget;
@@ -199,6 +210,7 @@ function stardisplaysizedisplaychange(mouseevent)
     RequestImage(-1);
 }
 
+// menu limit changing option
 function setvaluelimit(mouseevent)
 {
     CloseMenus();
@@ -227,8 +239,9 @@ function togglemenu()
     ToggleMenu("scandisplaymenu");
 }
 
-
-function clickonscanbackground(mouseevent)      // since image is on scanimage div its the same click offset
+// when clicked on scanimagearea
+// since image is on scanimage div its the same click offset
+function clickonscanbackground(mouseevent)      
 {
     CloseMenus();
 
@@ -258,12 +271,14 @@ function clickonscanbackground(mouseevent)      // since image is on scanimage d
     HidePopup("scanobjectnotification");
 }
 
+// click on aside
 function cancelmenupopup()
 {
     CloseMenus();
     HidePopup("scanobjectnotification");
 }
 
+// set up scanimage and aside widths
 function setDisplaySize()
 {
     var stardisplaysize = FetchNumber("submenustardisplaysize.stardisplaysizegroup.radiostate", "70");

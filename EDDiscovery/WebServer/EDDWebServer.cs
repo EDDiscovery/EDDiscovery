@@ -84,10 +84,16 @@ namespace EDDiscovery.WebServer
     // EventTypeID=NavRouteClear, property data.NavRouteClear, no properties.
     // Ones containing data."EventID" contain other game data: CommanderID, EventTimeLocal, IsBeta, IsOdyssey, GameVersion, Build.
     //
-    //-------------------------------------------------------------------------------------------------------------------
-    // .png load of image from /systemmap/ folder - image name is not important, encoded query field /systemmap/map.png?entry=n&EDSM=true&SPANSH=true  (SPANSH from 17.0)
-    //
+    //------------------------------------------------------------------------------------------------------------------- Scans
+    // .png load of image from /systemmap/ folder - image name is not important, encoded query field /systemmap/map.png?entry=n&EDSM=true&SPANSH=true (See code for many more options)
+    //      generates a push scandisplayobjects with a list of x/y/w/h co-ords and tooltips
     // Push responsetype=systemmapchanged               : indicate scan system map has changed
+    //
+    //-------------------------------------------------------------------------------------------------------------------  Modules
+    // .png load of image from /modulemap/ folder - image name is not important, encoded query field /modules/map.png?Width=X
+    //      generates a push moduledisplayobjects with a list of x/y/w/h co-ords and tooltips
+    //
+    // Push responsetype=moduleschanged               : indicate modules have changed
 
     public class EDDWebServer
     {
@@ -105,6 +111,7 @@ namespace EDDiscovery.WebServer
 
         EDDIconNodes iconnodes;
         EDDScanDisplay scandisplay;
+        EDDModuleDisplay moduledisplay;
         JSONDispatcher jsondispatch;
 
         JournalRequest journalsender;
@@ -140,6 +147,10 @@ namespace EDDiscovery.WebServer
             // scan display
             scandisplay = new EDDScanDisplay(discoveryform, httpws);
             httpdispatcher.AddPartialPathNode("/systemmap/", scandisplay);   // serve a display of this system
+
+            // module display
+            moduledisplay = new EDDModuleDisplay(discoveryform, httpws);
+            httpdispatcher.AddPartialPathNode("/modulemap/", moduledisplay);   // serve a display of this system
 
             if (servefrom.Contains(".zip"))                                 // fall back, none of the above matching
             {
@@ -219,6 +230,7 @@ namespace EDDiscovery.WebServer
             httpws.SendWebSockets(statussender.Refresh(-1), false); // and status
             httpws.SendWebSockets(scandata.Notify(), false); // tell it its changed
             httpws.SendWebSockets(scandisplay.Notify(), false); // tell it its changed
+            httpws.SendWebSockets(moduledisplay.Notify(), false); // tell it its changed
             httpws.SendWebSockets(missions.Notify(), false); // tell it its changed
             httpws.SendWebSockets(texts.Notify(), false); // tell it its changed
         }
@@ -252,9 +264,13 @@ namespace EDDiscovery.WebServer
                 httpws.SendWebSockets(scandisplay.Notify(), false); // tell it its changed
             }
 
-            if ( he.journalEntry is IMissions )
+            if (he.journalEntry is IMissions)
             {
                 httpws.SendWebSockets(missions.Notify(), false); // tell it its changed
+            }
+            if (he.journalEntry is IShipInformation)
+            {
+                httpws.SendWebSockets(moduledisplay.Notify(), false); // tell it its changed
             }
         }
     }
