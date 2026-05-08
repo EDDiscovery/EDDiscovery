@@ -20,11 +20,14 @@ import { RequestStatus, FillSystemTable } from "/systemtable/systemtable.js"
 import { CreateDiv, CreateImage } from "/jslib/elements.js"
 import { FetchNumber, StoreState } from "/jslib/localstorage.js"
 import { WriteMenu, ToggleMenu, GetMenuItemCheckState, CloseMenus } from "/jslib/menus.js"
+import { SetupTheme, menuicon } from "/theme.js"
 
 var websocket;
 
 function OnLoad()
 {
+    SetupTheme();
+
     var header = document.getElementsByTagName("header");
     WriteHeader(header[0]);
     var nav = document.getElementsByTagName("nav");
@@ -34,12 +37,12 @@ function OnLoad()
 
     var div = CreateDiv("menubutton", "menubutton1");
 
-    div.appendChild(CreateImage("/Images/menu.png", "Menu", null, togglemenu, null, null, "menubutton"));
+    div.appendChild(CreateImage(menuicon, "Menu", null, togglemenu, null, null, "menubutton"));
 
     WriteMenu(div, "scanmenu", "navmenu", [
         ["checkbox", "materials", "Show materials", scanmenuchange, false],
         ["checkbox", "value", "Show Value", scanmenuchange, true],
-        ["checkbox", "EDSM", "Check EDSM", scanmenuchange, false],
+        ["checkbox", "EDSM", "Check Web for bodies", scanmenuchange, false],
         ["submenu", "statussize", "Set grid display width..", "submenugriddisplaysize"],
 
     ]);

@@ -97,9 +97,11 @@ namespace EDDiscovery.UserControls
 
         public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
+#if DEBUG
             lasthe = he;
-            //System.Diagnostics.Debug.WriteLine($"Receive HE {lasthe.EventTimeUTC} {lasthe.EventSummary} {lasthe.System.Name}");
+            System.Diagnostics.Debug.WriteLine($"TravelPanel Receive HE {lasthe.EventTimeUTC} {lasthe.EventSummary} {lasthe.System.Name}");
             UpdateDisplay();
+#endif
         }
 
         async void UpdateDisplay()
@@ -120,6 +122,7 @@ namespace EDDiscovery.UserControls
             var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
             var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
             Font dfont = displayfont ?? this.Font;
+
 
             ExtendedControls.ImageElement.List el = new ExtendedControls.ImageElement.List();
 
@@ -159,29 +162,49 @@ namespace EDDiscovery.UserControls
             {
                 BodyNode bn = currentlocationclass.BodyID != null ? sysnode.FindBody(currentlocationclass.BodyID.Value) : null;
 
-                string loctext = "";
+                string loctext = "????";
                 Image image = null;
 
-                if (currentlocationclass is JournalDocked dck)
-                {
-                    loctext += Environment.NewLine + $"{dck.StationName_Localised} {StationDefinitions.ToLocalisedLanguage(dck.FDStationType)}, {dck.StationFaction}, {AllegianceDefinitions.ToEnglish(dck.StationAllegiance)}";
+                // possible location types are listed in HES
 
-                    string iname = StationDefinitions.StationImageName(dck.FDStationType);
-                    BaseUtils.Icons.IconSet.TryGetImage(iname, out image);      // may not have an image so 
-                }
-                else if (currentlocationclass is JournalApproachSettlement)
-                {
-
-                }
-                else
+                if (currentlocationclass is JournalLocation jloc)           // Location can be Location or SupercruiseExit
                 {
                     loctext = $"{currentlocationclass.BodyName} {currentlocationclass.BodyType}";
 
                     if (bn?.Scan != null)
                     {
                         image = bn.Scan.GetImage();
-
                     }
+                }
+                else if (currentlocationclass is JournalFSDJump || currentlocationclass is JournalCarrierJump)
+                {
+                    var jjump = currentlocationclass as JournalLocOrJump;
+                    // else SupercruiseExit, Locatio
+
+                    loctext = $"{currentlocationclass.BodyName} {currentlocationclass.BodyType}";
+                }
+                else if (currentlocationclass is JournalApproachBody jab)
+                {
+
+                }
+                else if (currentlocationclass is JournalApproachSettlement jas)
+                {
+
+                }
+                else if (currentlocationclass is JournalSupercruiseExit jse)
+                {
+
+                }
+                else if (currentlocationclass is JournalDocked jdck)
+                {
+                    loctext += Environment.NewLine + $"{jdck.StationName_Localised} {StationDefinitions.ToLocalisedLanguage(jdck.FDStationType)}, {jdck.StationFaction}, {AllegianceDefinitions.ToEnglish(jdck.StationAllegiance)}";
+
+                    string iname = StationDefinitions.StationImageName(jdck.FDStationType);
+                    BaseUtils.Icons.IconSet.TryGetImage(iname, out image);      // may not have an image so 
+                }
+                else
+                {
+                    System.Diagnostics.Debug.Assert(false, $"TravelPanel unexpected Location class {currentlocationclass.GetType().Name}");
                 }
 
                 el.AddPictureTextHorzDivider(new Rectangle(new Point(pos.X, el.Max.Y + 4), textsize),

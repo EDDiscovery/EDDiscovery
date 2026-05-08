@@ -1,11 +1,39 @@
 
+/* Everyone includes the header, so its an opportunity to add CSS vars to everything */
+
+:root
+{
+    --textcolor: green;
+    --backcolor: black;
+    --tabcolor: #ff9c08;
+    --tabhighlighted: #ffe028;
+    --tabhover: #ffbc48;
+    --titlecolor: darkorange;
+    --tabtext: black;
+    --textbuttonback: darkorange;
+    --textbuttonborder: orange;
+    --textbuttonback: black;
+    --actionstext: #000000;
+    --actionsbackground: #ffac28;
+    --gridborders: rgb(200,128,0);
+    --gridbuttonborders: rgb(200,128,0);
+    --headerbackground: rgb(40,40,40);
+    --scrollbartrack: rgb(40,40,40);
+    --scrollthumb: darkorange;
+    --scrollthumbhover: rgb(255,160,0);
+    --dropdownmenuback: darkorange;
+    --dropdownmenutext: black;
+    --dropdownmenuhover: #ffe028;
+}
+
 /* there is nothing in the header, since the two bits below float */
 /* use the fixing the float mech to make the header expand to the size of the two floats, usign overflow:auto*/
 
 header {
     padding: 0px;
     margin: 0px;
-    background-color: rgb(40,40,40);
+    background-color: var(--headerbackground);
+    color: var(--titlecolor);
     overflow: auto;
 }
 
@@ -29,20 +57,23 @@ header h1:last-of-type {
 }
 
 /* fullscreen button */
-header h1 input {
-    background-color: #ff9c08;
+header h1 input
+{
+    background-color: var(--textbuttonback);
     margin: 0px 10px;
-    border: 1px solid black;
+    border: 1px solid var(--textbuttonborder);
+    color: var(--textbutton);
     border-radius: 8px;
     transform: translateY(-50%);
     -ms-transform: translateY(-50%);
 }
 
 /* ************************************************** Set up Nav styling */
-nav {
+nav
+{
     padding: 0px;
     margin: 0px;
-    background-color: rgb(40,40,40);
+    background-color: var(--headerbackground);
 }
 
 nav ul
@@ -58,8 +89,8 @@ nav ul
 
 nav ul li
 {
-    display:inline-block;       /* block so we don't constrain height.  float:left also works */
-    background-color: #ff9c08;
+    display: inline-block; /* block so we don't constrain height.  float:left also works */
+    background-color: var(--tabcolor);
     margin: 0px 0px 0px 0px;
     border-top: 1px solid black;
     border-right: 1px solid rgb(0,0,0);
@@ -70,14 +101,16 @@ nav ul li
 
 /* this style gets assigned to the highlighted tab classList and overrides the background-color.  Hover still works though #ffac28; */
 
-.tabhighlighted {
-    background-color: #ffe028;
+.tabhighlighted
+{
+    background-color: var(--tabhighlighted);
 }
 
 /* gets added as you hover */
 
-nav ul li:hover {
-    background-color: #ffbc48;
+nav ul li:hover
+{
+    background-color: var(--tabhover);
 }
 
 /* positioning of first tab */
@@ -90,7 +123,7 @@ nav * a {
     padding: 0.5em;
     line-height: 2em;
     text-decoration: none;
-    color: black;
+    color: var(--tabtext);
 }
 
 /* this class is assigned to the div holding both the menu button AND the menu */
@@ -109,7 +142,7 @@ nav .menubutton img {
 }
 
 nav .menubutton img:hover {
-    background-color: #ffe028;
+    background-color: var(--tabhover);
 }
 
 /* styling of the nav menu */
@@ -118,8 +151,8 @@ nav .menubutton img:hover {
     position: absolute;
     top: 24px;      /* relative positioning from nav div */
     left: 0px;
-    background-color: darkorange;
-    color: black;
+    background-color: var(--dropdownmenuback);
+    color: var(--dropdownmenutext);
     z-index: 1;
 }
 
@@ -132,7 +165,7 @@ nav .menubutton img:hover {
 }
 
 .navmenu div:hover {
-    background-color: #ffe028;
+    background-color: var(--dropdownmenuhover);
 }
 
 /* ********************************************************** Footer formatting */
@@ -140,14 +173,16 @@ nav .menubutton img:hover {
 footer {
     padding: 0px;
     margin: 5px 0px 0px 0px;
-    background-color: rgb(40,40,40);
+    background-color: var(--headerbackground);
 }
 
-footer button {
+footer button
+{
     margin: 4px 20px 4px 4px;
-    border: 1px solid black;
+    border: 1px solid var(--textbuttonborder);
     border-radius: 8px;
-    background-color: #ff9c08;
+    background-color: var(--textbuttonback);
+    color: var(--textbutton);
 }
 
 /* Chrome only scrollbar fix */
@@ -157,14 +192,18 @@ footer button {
 }
 
 ::-webkit-scrollbar-track {
-    background: rgb(40,40,40);
+    background: var(--scrollbartrack);
 }
 
 ::-webkit-scrollbar-thumb {
-    background: darkorange;
+    background: var(--scrollthumb);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background: rgb(255,160,0);
+    background: var(--scrollthumbhover);
 }
 
+a
+{
+    color:var(--textcolor);
+}

@@ -1,9 +1,10 @@
 
 /* Style the article section */
 
-body {
-    background-color: black;
-    color: darkorange;
+body
+{
+    background-color: var(--backcolor);
+    color: var(--textcolor);
     font-family: Arial,Helvetica,Sans-serif;
     margin: 0px;
 }
@@ -29,10 +30,11 @@ body {
 
 /* Status and action boxes are constrained inside middlesection by width, which we set to 95% to prevent the page width scroll bar appearing for some reason */
 
-#StatusBox, #ActionBox {
+#StatusBox, #ActionBox
+{
     margin-top: 1em;
     width: 95%;
-    border: 1px solid #ffac28;
+    border: 1px solid var(--gridborders);
 }
 
 
@@ -50,20 +52,21 @@ body {
     /* Style the buttons */
     #StatusBox img, #ActionBox img {
         padding: 10px;
-        border: 2px solid darkorange;
+        border: 2px solid var(--gridbuttonborders);
         border-radius: 8px;
     }
 
     /* this moves the title text in action box to form a group type text overlay */
 
-    #ActionBox p {
-        color: black;
-        position: relative;
-        top: -0.5em;
-        margin-left: 0.5em;
-        display: inline;
-        background-color: #ffac28;
-    }
+#ActionBox p
+{
+    color: var(--actionstext);
+    position: relative;
+    top: -0.5em;
+    margin-left: 0.5em;
+    display: inline;
+    background-color: var(--actionsbackground);
+}
 
 #StatusOther p {
     white-space: pre-wrap;

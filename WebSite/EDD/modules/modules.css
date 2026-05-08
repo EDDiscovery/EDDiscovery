@@ -1,9 +1,10 @@
 
 /* Style the article section */
 
-body {
-    background-color: black;
-    color: darkorange;
+body
+{
+    background-color: var(--backcolor);
+    color: var(--textcolor);
     font-family: Arial,Helvetica,Sans-serif;
     margin: 0px;
     overflow: hidden; /* crucial to stop a right scroll bar appearing even though the flex overflow hidden should stop it */

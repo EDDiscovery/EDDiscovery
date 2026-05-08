@@ -54,7 +54,6 @@ namespace EDDiscovery.WebServer
             {
                 discoveryform.Invoke((MethodInvoker)delegate
                 {
-                    int width = (request.QueryString["width"] ?? "800").InvariantParseInt(800);
                     ShipModuleDisplay smd = new ShipModuleDisplay();
                     smd.TextForeColor = Color.DarkOrange;
                     smd.BoxBackColor1 = Color.FromArgb(255, 64, 64, 64);
@@ -62,6 +61,10 @@ namespace EDDiscovery.WebServer
                     smd.BoxBorderColor = Color.FromArgb(255, 128,128, 128);
                     smd.Font = new System.Drawing.Font("Arial", 8);
                     smd.FontLarge = new System.Drawing.Font("Arial", 12);
+
+                    int width = (request.QueryString["width"] ?? "800").InvariantParseInt(800);
+                    string color = request.QueryString["textcolor"] ?? "#ff8000";
+                    smd.TextForeColor = color.ColorFromNameOrValues();
 
                     var il = smd.CreateImages(ship, instance, new Point(4,8), width, instance.Name, true,false);
                     bmp = il.Paint(Color.Transparent);

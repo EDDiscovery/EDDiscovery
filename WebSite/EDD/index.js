@@ -21,12 +21,14 @@ import { ShowPopup } from "/jslib/popups.js"
 import { CreateDiv, CreateImage } from "/jslib/elements.js"
 import { FetchNumber, StoreState } from "/jslib/localstorage.js"
 import { WriteMenu, ToggleMenu, GetMenuItemCheckState, CloseMenus } from "/jslib/menus.js"
-
+import { SetupTheme, SetTheme, menuicon } from "/theme.js"
     
 var websocket;
-
+var menuelement;
 export function OnLoad()
 {
+    SetupTheme();
+
     var header = document.getElementsByTagName("header");
     WriteHeader(header[0]);
     var nav = document.getElementsByTagName("nav");
@@ -34,10 +36,15 @@ export function OnLoad()
 
     var div = CreateDiv("menubutton", "menubutton1");
 
-    div.appendChild(CreateImage("/Images/menu.png", "Menu", null, togglemenu, null, null, "menubutton"));
+    // keep the menuelement as we need to change the source on changing theme
+    menuelement = CreateImage(menuicon, "Menu", null, togglemenu, null, null, "menubutton");
+    div.appendChild(menuelement);
 
     WriteMenu(div, "journalmenu", "navmenu", [
         ["submenu", "statussize", "Set grid display width..", "submenujournaldisplaysize"],
+        ["button", "standardtheme", "Standard Theme", selectstdtheme ],
+        ["button", "standardtheme", "Red Theme", selectredtheme ],
+        ["button", "standardtheme", "EDSM Theme", selectedsmtheme ],
     ]);
 
     WriteMenu(document.body, "submenujournaldisplaysize", "navmenu",
@@ -159,3 +166,22 @@ function journaldisplaysizedisplaychange(mouseevent)
     CloseMenus();
 } 
 
+
+function selectstdtheme()
+{
+    SetTheme(0);
+    menuelement.src = menuicon;
+    CloseMenus();
+}
+function selectredtheme()
+{
+    SetTheme(1);
+    menuelement.src = menuicon;
+    CloseMenus();
+}
+function selectedsmtheme()
+{
+    SetTheme(2);
+    menuelement.src = menuicon;
+    CloseMenus();
+}

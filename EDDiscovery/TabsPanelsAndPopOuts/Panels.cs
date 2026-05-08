@@ -177,7 +177,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.MissionOverlay, typeof(UserControlMissionOverlay), "Mission Overlay", "MissionOV", "Mission List overlay") },
             { new PanelInfo( PanelIDs.MiningOverlay, typeof(UserControlMiningOverlay), "Mining Overlay", "MiningOV", "Mining overlay") },
             { new PanelInfo( PanelIDs.DockingPanel, typeof(DockingPanel), "Docking Panel", "DockingPanel", "Docking Panel shows pad location" ) },
-            { new PanelInfo( PanelIDs.AutoPanel, typeof(AutoPanel), "Auto Panel", "AutoPanel", "Auto Panel" ) },
+          //  { new PanelInfo( PanelIDs.AutoPanel, typeof(AutoPanel), "Auto Panel", "AutoPanel", "Auto Panel" ) },      // NOT YET
             { new PanelInfo( PanelIDs.TravelPanel, typeof(TravelPanel), "Travel Panel", "TravelPanel", "Travel Panel showing current position information" ) },
 
 #if DEBUG

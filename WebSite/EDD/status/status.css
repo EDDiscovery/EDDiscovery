@@ -1,9 +1,10 @@
 
 /* Style the article section */
 
-body {
-    background-color: black;
-    color: darkorange;
+body
+{
+    background-color: var(--backcolor);
+    color: var(--textcolor);
     font-family: Arial,Helvetica,Sans-serif;
     margin: 0px;
 }
@@ -61,10 +62,11 @@ aside {
 
 /* Status and action boxes are constrained inside aside by width, which we set to 95% to prevent the page width scroll bar appearing for some reason */
 
-#StatusBox, #ActionBox {
+#StatusBox, #ActionBox
+{
     margin-top: 1em;
     width: 95%;
-    border: 1px solid #ffac28;
+    border: 1px solid var(--gridborders);
 }
 
 /* td's in action box are inline so flow around the actionbox areas, expanding it vertically */
@@ -79,21 +81,23 @@ aside {
 }
 
 /* Style the buttons */
-#StatusBox img, #ActionBox img {
+#StatusBox img, #ActionBox img
+{
     padding: 10px;
-    border: 2px solid darkorange;
+    border: 2px solid var(--gridbuttonborders);
     border-radius: 8px;
 }
 
 /* this moves the title text in action box to form a group type text overlay */
 
-#ActionBox p {
-    color: black;
+#ActionBox p
+{
+    color: var(--actionstext);
     position: relative;
     top: -0.5em;
     margin-left: 0.5em;
     display: inline;
-    background-color: #ffac28;
+    background-color: var(--actionsbackground);
 }
 
 #StatusOther p {
@@ -107,14 +111,15 @@ aside {
 
 
 /* EDSM Buttons on aside */
-.edsmetcbuttons {
+.edsmetcbuttons
+{
     width: 6em;
     margin: 1px 0px 1px 10px;
     line-height: 1;
-    background-color: orange;
-    border: 1px solid darkorange;
+    background-color: var(--textbuttonback);
+    border: 1px solid var(--textbuttonborder);
     border-radius: 4px;
-    color: #000;
+    color: var(--textbutton);
     text-decoration: none;
 }
 

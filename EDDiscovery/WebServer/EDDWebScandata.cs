@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ *
  */
 
 using BaseUtils;
@@ -44,18 +44,18 @@ namespace EDDiscovery.WebServer
         public JToken Response(string key, JToken message, HttpListenerRequest request) // request indicator state
         {
             int entry = message["entry"].Int(0);
-            bool edsm = message["edsm"].Bool(false);
-            bool spansh = message["spansh"].Bool(false);        // 17.0 new spansh
-            System.Diagnostics.Debug.WriteLine("scandata Request " + key + " Entry" + entry + " EDSM " + edsm);
-            return MakeResponse(entry, "scandata", edsm, spansh);
+            bool weblookup = message["edsm"].Bool(false);
+            weblookup |= message["spansh"].Bool(false);    
+            System.Diagnostics.Debug.WriteLine("scandata Request " + key + " Entry" + entry + " Web " + weblookup);
+            return MakeResponse(entry, "scandata", weblookup);
         }
 
         //EliteDangerousCore.UIEvents.UIOverallStatus status,
-        public JToken MakeResponse(int entry, string type, bool edsm, bool spansh)       // entry = -1 means latest
+        public JToken MakeResponse(int entry, string type, bool weblookup)       // entry = -1 means latest
         {
             if (discoveryform.InvokeRequired)
             {
-                return (JToken)discoveryform.Invoke(new Func<JToken>(() => MakeResponse(entry, type, edsm , spansh)));
+                return (JToken)discoveryform.Invoke(new Func<JToken>(() => MakeResponse(entry, type, weblookup)));
             }
             else
             {
@@ -76,7 +76,7 @@ namespace EDDiscovery.WebServer
 
                     HistoryEntry he = hl[entry];
 
-                    var scannode = discoveryform.History.StarScan2.FindSystemSynchronous(he.System, edsm || spansh);  
+                    var scannode = discoveryform.History.StarScan2.FindSystemSynchronous(he.System, weblookup);  
 
                     var bodylist = scannode?.Bodies().ToList();       // may be null
 

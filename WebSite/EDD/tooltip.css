@@ -10,9 +10,9 @@
 .tooltip .tooltiptext
 {
     visibility: hidden;
-    color: orange;
-    background-color: black;
-    border: 1px solid orange;
+    color: var(--textcolor);
+    background-color: var(--backcolor);
+    border: 1px solid var(--gridborders);
     border-radius: 1px;
     text-align: center;
     padding: 5px 0;

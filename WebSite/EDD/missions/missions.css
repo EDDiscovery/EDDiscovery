@@ -1,9 +1,10 @@
 
 /* Style the article section */
 
-body {
-    background-color: black;
-    color: darkorange;
+body
+{
+    background-color: var(--backcolor);
+    color: var(--textcolor);
     font-family: Arial,Helvetica,Sans-serif;
     margin: 0px;
     overflow: hidden; /* crucial to stop a right scroll bar appearing even though the flex overflow hidden should stop it */
@@ -43,25 +44,6 @@ article table {
     border-collapse: collapse;
 }
 
-article table td:nth-child(1) {
-    width: auto;
-}
-
-article table td:nth-child(2) {
-    width: 20%;
-}
-
-article table td:nth-child(3) {
-    width: 20%;
-}
-
-article table td:nth-child(4) {
-    width: 40%;
-}
-
-article table td:nth-child(5) {
-    width: 20%;
-}
 
 article table tr:nth-child(even) {
     background: #2b2b2b;
@@ -71,8 +53,10 @@ article table tr:nth-child(odd) {
     background: #000000;
 }
 
-article table tr td {
-    border: 1px solid rgb(200,128,0);
+article table tr td
+{
+    border: 1px solid var(--gridborders);
+   
 }
 
 .highlightentry {
@@ -106,13 +90,14 @@ aside tr td:last-of-type {
 }
 
 /* EDSM Buttons on aside */
-.edsmetcbuttons {
+.edsmetcbuttons
+{
     width: 6em;
     margin: 1px 0px 1px 10px;
     line-height: 1;
-    background-color: orange;
-    border: 1px solid darkorange;
+    background-color: var(--textbuttonback);
+    border: 1px solid var(--textbuttonborder);
     border-radius: 4px;
-    color: #000;
+    color: var(--textbutton);
     text-decoration: none;
 }

@@ -52,7 +52,7 @@ export function FillScanTable(jdata, showmaterials, showvalue, showedsm)
         var sn = jdata.Bodies[e];
         var scandata = sn.Scan;
 
-        if (scandata != null && (showedsm || scandata.IsEDSMBody == false))
+        if (scandata != null && (showedsm || scandata.IsWebSourced == false))
         {
            // console.log("STable " + e + " " + sn.NodeType);
 

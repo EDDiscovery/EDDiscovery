@@ -14,7 +14,6 @@
 
 using EliteDangerousCore;
 using EliteDangerousCore.UIEvents;
-using ExtendedControls;
 using System.Drawing;
 
 namespace EDDiscovery.UserControls
@@ -29,8 +28,6 @@ namespace EDDiscovery.UserControls
             orbisDockingPads.Dock = System.Windows.Forms.DockStyle.Fill;
             fleetCarrierDockingPads.Visible = false;
         }
-
-        private int lastdockingpad = 0;
 
         UIOverallStatus uistatus;
         HistoryEntry lasthe;
@@ -88,7 +85,6 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.WriteLine($"Autopanel NewHistory {he.EventTimeUTC}");
             lasthe = DiscoveryForm.History.GetLast;
-            lastdockingpad = lasthe?.Status.DockingPad ?? 0;
             UpdateDisplay();
         }
 
@@ -104,8 +100,10 @@ namespace EDDiscovery.UserControls
 
         public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
+#if DEBUG
             // use for debug purposes, follows history cursor
-           // lasthe = he; UpdateDisplay();
+             lasthe = he; UpdateDisplay();
+#endif
         }
 
         void UpdateDisplay()

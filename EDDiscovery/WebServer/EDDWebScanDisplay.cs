@@ -11,7 +11,7 @@
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
  * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
+ *
  */
 
 using BaseUtils;
@@ -91,6 +91,8 @@ namespace EDDiscovery.WebServer
                         sd.Font = new Font("MS Sans Serif", 8.25f);
                         sd.FontLarge = new Font("MS Sans Serif", 10f);
                         sd.FontUnderlined = new Font("MS Sans Serif", 8.25f, FontStyle.Underline);
+                        string color = request.QueryString["textcolor"] ?? "#ff8000";
+                        sd.TextForeColor = color.ColorFromNameOrValues();
                         ExtendedControls.ExtPictureBox imagebox = new ExtendedControls.ExtPictureBox();
 
                         List<string> bodytypes = new List<string>();

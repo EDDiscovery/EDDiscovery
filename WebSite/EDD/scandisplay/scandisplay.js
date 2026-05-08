@@ -20,11 +20,14 @@ import { WSURIFromLocation } from "/jslib/websockets.js"
 import { FetchState, StoreState, FetchNumber } from "/jslib/localstorage.js"
 import { ShowPopup, HidePopup } from "/jslib/popups.js"
 import { Debounce } from "/jslib/debounce.js"
+import { SetupTheme, menuicon, GetThemeColor } from "/theme.js"
 
 var websocket;
 
 function OnLoad()
 {
+    SetupTheme();
+
     var header = document.getElementsByTagName("header");
     WriteHeader(header[0]);
     var nav = document.getElementsByTagName("nav");
@@ -34,7 +37,7 @@ function OnLoad()
 
     var div = CreateDiv("menubutton", "menubutton1");
 
-    div.appendChild(CreateImage("/Images/menu.png", "Menu", null, togglemenu, null, null, "menubutton"));
+    div.appendChild(CreateImage(menuicon, "Menu", null, togglemenu, null, null, "menubutton"));
 
     WriteMenu(div, "scandisplaymenu", "navmenu",
         [
@@ -166,9 +169,12 @@ function RequestImage(entry)
     var valuelimit = FetchState("scandisplay_valuelimit", 50001);
     console.log("Value limit is " + valuelimit);
 
+    var color = GetThemeColor("--textcolor");
+
     var req = "/systemmap/image.png?entry=" + entry + "&width=" + width + "&starsize=" + size + "&showmoons=" + showmoon + "&showbodyicons=" + bodyicons +
         "&showmaterials=" + showmaterials + "&showgravity=" + gvalue + "&showhabzone=" + habzone + "&showstarclass=" + starclass + "&showplanetclass=" + planetclass +
         "&showasteroidbodies=" + asteroidbodies + 
+        "&textcolor=" + encodeURIComponent(color) +
         "&showdistance=" + distance + "&SPANSH=" + webbodies + "&valuelimit=" + valuelimit + "&reqtime=" + new Date().getTime();
 
     lastobjectlist = null;      // indicate don't have a list now

@@ -1,9 +1,10 @@
 
 /* Style the article section */
 
-body {
-    background-color: black;
-    color: darkorange;
+body
+{
+    background-color: var(--backcolor);
+    color: var(--textcolor);
     font-family: Arial,Helvetica,Sans-serif;
     margin: 0px;
     overflow: hidden;
@@ -63,14 +64,15 @@ aside tr td:last-of-type {
 }
 
 /* EDSM Buttons on aside */
-.edsmetcbuttons {
+.edsmetcbuttons
+{
     width: 6em;
     margin: 1px 0px 1px 10px;
     line-height: 1;
-    background-color: orange;
-    border: 1px solid darkorange;
+    background-color: var(--textbuttonback);
+    border: 1px solid var(--textbuttonborder);
     border-radius: 4px;
-    color: #000;
+    color: var(--textbutton);
     text-decoration: none;
 }
 

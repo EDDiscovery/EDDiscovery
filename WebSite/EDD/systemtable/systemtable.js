@@ -48,8 +48,8 @@ export function FillSystemTable(jdata)
         asidetable.appendChild(TableRow2tdjson(jdata, "Star System:", "SystemData", "System"));
 
         var list = [
-            CreateAnchor("EDSM", "https://www.edsm.net/system?systemName=" + encodeURI(jdata.SystemData.System), true, "edsmetcbuttons"),
-            CreateAnchor("Inara", "https://inara.cz/elite/starsystem/?search=" + encodeURI(jdata.SystemData.System), true, "edsmetcbuttons"),
+            CreateAnchor("EDSM", "https://www.edsm.net/system?systemName=" + encodeURIComponent(jdata.SystemData.System), true, "edsmetcbuttons"),
+            CreateAnchor("Inara", "https://inara.cz/elite/starsystem/?search=" + encodeURIComponent(jdata.SystemData.System), true, "edsmetcbuttons"),
             CreateAnchor("Spansh", "https://spansh.co.uk/system/" + jdata.SystemData.SystemAddress, true, "edsmetcbuttons")
         ];
 

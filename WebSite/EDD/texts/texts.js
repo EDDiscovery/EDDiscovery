@@ -21,12 +21,15 @@ import { ShowPopup } from "/jslib/popups.js"
 import { CreateDiv, CreateImage } from "/jslib/elements.js"
 import { FetchNumber, StoreState } from "/jslib/localstorage.js"
 import { WriteMenu, ToggleMenu, GetMenuItemCheckState, CloseMenus } from "/jslib/menus.js"
+import { SetupTheme , menuicon } from "/theme.js"
 
     
 var websocket;
 
 export function OnLoad()
 {
+    SetupTheme();
+
     var header = document.getElementsByTagName("header");
     WriteHeader(header[0]);
     var nav = document.getElementsByTagName("nav");
@@ -34,7 +37,7 @@ export function OnLoad()
 
     var div = CreateDiv("menubutton", "menubutton1");
 
-    div.appendChild(CreateImage("/Images/menu.png", "Menu", null, togglemenu, null, null, "menubutton"));
+    div.appendChild(CreateImage(menuicon, "Menu", null, togglemenu, null, null, "menubutton"));
 
     WriteMenu(div, "textsmenu", "navmenu", [
         ["submenu", "statussize", "Set grid display width..", "submenutextsdisplaysize"],
