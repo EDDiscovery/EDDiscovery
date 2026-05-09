@@ -41,13 +41,19 @@ export function OnLoad()
     div.appendChild(menuelement);
 
     WriteMenu(div, "journalmenu", "navmenu", [
-        ["submenu", "statussize", "Set grid display width..", "submenujournaldisplaysize"],
+        ["submenu", "statussize", "Set grid display width..", "submenujournaldisplaysize", "alignleft"],
+        ["submenu", "theme", "Change theme..", "themeselect", "alignleft"],                        
+    ]);
+
+    nav[0].appendChild(div);
+
+    WriteMenu(document.body, "themeselect", "submenu", [
         ["button", "standardtheme", "Standard Theme", selectstdtheme ],
         ["button", "standardtheme", "Red Theme", selectredtheme ],
         ["button", "standardtheme", "EDSM Theme", selectedsmtheme ],
     ]);
 
-    WriteMenu(document.body, "submenujournaldisplaysize", "navmenu",
+    WriteMenu(document.body, "submenujournaldisplaysize", "submenu",
         [
             ["radio", "100", "Full Width", journaldisplaysizedisplaychange, "journaldisplaysizegroup", "70"],
             ["radio", "85", "85%", journaldisplaysizedisplaychange, "journaldisplaysizegroup"],
@@ -58,8 +64,7 @@ export function OnLoad()
             ["radio", "50", "50%", journaldisplaysizedisplaychange, "journaldisplaysizegroup"],
         ]);
 
-    nav[0].appendChild(div);
-
+    
     var footer = document.getElementsByTagName("footer");
     WriteFooter(footer[0],[["+1000",request1000more]]);
 

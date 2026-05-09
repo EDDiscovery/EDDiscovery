@@ -31,14 +31,14 @@ function OnLoad()
 
     WriteMenu(div, "gridmenu", "navmenu",
         [
-            ["submenu", "size", "Set icon size", "gridsizemenu"],
+            ["submenu", "size", "Set icon size..", "gridsizemenu", "alignleft"],
         ]);
 
     nav[0].appendChild(div);
 
     /* attach to mainbody, not div, because we need page absolute positioning */
 
-    WriteMenu(document.body, "gridsizemenu", "navmenu",
+    WriteMenu(document.body, "gridsizemenu", "submenu",
         [
             ["radio", "16", "16", sizedisplaychange, "sizegroup", "48"],
             ["radio", "32", "32", sizedisplaychange, "sizegroup"],

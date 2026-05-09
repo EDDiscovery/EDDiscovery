@@ -39,10 +39,10 @@ export function OnLoad()
     div.appendChild(CreateImage(menuicon, "Menu", null, togglemenu, null, null, "menubutton"));
 
     WriteMenu(div, "missionmenu", "navmenu", [
-        ["submenu", "statussize", "Set grid display width..", "submenumissiondisplaysize"],
+        ["submenu", "statussize", "Set grid display width..", "submenumissiondisplaysize", "alignleft"],
     ]);
 
-    WriteMenu(document.body, "submenumissiondisplaysize", "navmenu",
+    WriteMenu(document.body, "submenumissiondisplaysize", "submenu",
         [
             ["radio", "100", "Full Width", missiondisplaysizedisplaychange, "missiondisplaysizegroup", "70"],
             ["radio", "85", "85%", missiondisplaysizedisplaychange, "missiondisplaysizegroup"],

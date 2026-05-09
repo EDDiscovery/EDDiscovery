@@ -131,8 +131,10 @@ nav * a {
 nav .menubutton {
     /* div needs to be inline so it flows against the ul's */
     display: inline;
-    /* force it right a bit*/
-    margin-left: 10px;
+    /* force it right a bit. Note float:right made it go right side */
+    float: right;
+    margin-right: 10px;
+    /* margin-left: 20px;  */
     /* allow children to position against it */
     position: relative;
 }
@@ -145,26 +147,54 @@ nav .menubutton img:hover {
     background-color: var(--tabhover);
 }
 
-/* styling of the nav menu */
-.navmenu {
+/* styling of the main menu */
+.navmenu
+{
     display: none;
     position: absolute;
-    top: 24px;      /* relative positioning from nav div */
-    left: 0px;
+    /* relative positioning from nav div. Note right:0px will cause it to do a right menu */
+    top:24px;
+    right: 0px;
     background-color: var(--dropdownmenuback);
     color: var(--dropdownmenutext);
     z-index: 1;
 }
 
 /* styling of each menu line */
-.navmenu div {
+.navmenu div
+{
     display: inline-block;
-    margin: 3px 10px 3px 0px;       /* this seems to work for hover */
+    margin: 3px 10px 3px 0px; /* this seems to work for hover */
     width: 100%; /* makes it take up the whole width of div, important for hover */
     white-space: nowrap; /* stop CSS trying to minize width, make it print it all on one line, so autowidth */
 }
 
-.navmenu div:hover {
+.navmenu div:hover
+{
+    background-color: var(--dropdownmenuhover);
+}
+
+/* styling of the sub menu */
+.submenu
+{
+    display: none;
+    position: absolute;
+    background-color: var(--dropdownmenuback);
+    color: var(--dropdownmenutext);
+    z-index: 1;
+}
+
+/* styling of each menu line */
+.submenu div
+{
+    display: inline-block;
+    margin: 3px 10px 3px 0px; /* this seems to work for hover */
+    width: 100%; /* makes it take up the whole width of div, important for hover */
+    white-space: nowrap; /* stop CSS trying to minize width, make it print it all on one line, so autowidth */
+}
+
+.submenu div:hover
+{
     background-color: var(--dropdownmenuhover);
 }
 

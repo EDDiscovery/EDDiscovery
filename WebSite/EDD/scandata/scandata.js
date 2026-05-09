@@ -43,11 +43,11 @@ function OnLoad()
         ["checkbox", "materials", "Show materials", scanmenuchange, false],
         ["checkbox", "value", "Show Value", scanmenuchange, true],
         ["checkbox", "EDSM", "Check Web for bodies", scanmenuchange, false],
-        ["submenu", "statussize", "Set grid display width..", "submenugriddisplaysize"],
+        ["submenu", "statussize", "Set grid display width..", "submenugriddisplaysize", "alignleft"],
 
     ]);
 
-    WriteMenu(document.body, "submenugriddisplaysize", "navmenu",
+    WriteMenu(document.body, "submenugriddisplaysize", "submenu",
         [
             ["radio", "100", "Full Width", griddisplaysizedisplaychange, "griddisplaysizegroup", "70"],
             ["radio", "85", "85%", griddisplaysizedisplaychange, "griddisplaysizegroup"],

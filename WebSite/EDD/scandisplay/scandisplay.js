@@ -52,14 +52,14 @@ function OnLoad()
             ["checkbox", "distance", "Show distance of bodies", scandisplaychange, true],
             ["checkbox", "edsm", "Check Web For bodies", scandisplaychange, false],
             ["button", "value", "Set Valuable Limit", setvaluelimit, false],
-            ["submenu", "size", "Set body image size..", "submenusize"],                        // submenu called submenusize, see below
-            ["submenu", "statussize", "Set star display width..", "submenustardisplaysize"],    // submenu see below
+            ["submenu", "size", "Set body image size..", "submenusize", "alignleft"],                        // submenu called submenusize, see below
+            ["submenu", "statussize", "Set star display width..", "submenustardisplaysize", "alignleft"],    // submenu see below
         ]);
 
     nav[0].appendChild(div);        // attach to nav bar
 
     // submenu of set body image size
-    WriteMenu(document.body, "submenusize", "navmenu",
+    WriteMenu(document.body, "submenusize", "submenu",
         [
             ["radio", "16", "16", sizedisplaychange, "sizegroup", "48"],
             ["radio", "32", "32", sizedisplaychange, "sizegroup"],
@@ -71,7 +71,7 @@ function OnLoad()
         ]);
 
     // submenu of set star display width
-    WriteMenu(document.body, "submenustardisplaysize", "navmenu",
+    WriteMenu(document.body, "submenustardisplaysize", "submenu",
         [
             ["radio", "100", "Full Width", stardisplaysizedisplaychange, "stardisplaysizegroup", "70"],
             ["radio", "85", "85%", stardisplaysizedisplaychange, "stardisplaysizegroup"],

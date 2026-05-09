@@ -56,8 +56,8 @@ import { FetchState } from "/jslib/localstorage.js"
 //      input class = menuclass+"_radio"
 //      label id = menunameid + "_" + id + "_label"
 //      label class = menuclass + "_label"
-//    ["submenu", "size", "Set Size", "submenusize"],
-//      item[1] is menu item name, item[2] is text, item[3] is submenu name
+//    ["submenu", "size", "Set Size", "submenusize" [,"alignleft"]],
+//      item[1] is menu item name, item[2] is text, item[3] is submenu name, item[4] is "alignleft" to make a left sided menu
 //      label id = menunameid + "_" + id + "_submenu"
 //      label class = menuclass + "_submenu"
 //    ["button", "click", "Click here", functocall],
@@ -110,6 +110,7 @@ export function WriteMenu(appendto, menunameid, menuclass, menulist)
         else if (item[0] == "submenu")
         {
             var lb = CreateLabel(menuclass + "_submenu", mid + "_submenu", null, item[2], OpenSubMenu, item[3]);
+            lb.leftmenualignment = ( item.length>4 && item[4] == "alignleft");
             lb.style.padding = "0px 0px 0px 20px";
             itemdiv.appendChild(lb);
         }
@@ -205,21 +206,35 @@ export function OpenSubMenu(mouseevent)
 {
     var ct = mouseevent.currentTarget;
     var openingmenu = ct.parentNode.parentNode;
-    var submenu = ct.tag;
-    console.log("MI " + ct.id + " open " + submenu + " from menu " + openingmenu.id);
+    var submenuname = ct.tag;
 
     CloseMenusBelow(openingmenu.id);
 
-    var menu = document.getElementById(submenu);
-    if (menu != null)
+    var submenu = document.getElementById(submenuname);
+
+    console.log("MI `" + ct.id + "` open `" + submenuname + "` from menu `" + openingmenu.id + "` alignleft " + ct.leftmenualignment);
+    if (submenu != null)
     {
-        var ctbounds = ct.getBoundingClientRect();        
-        var menubounds = openingmenu.getBoundingClientRect();
-        menu.style.display = "inline-block";
-        menu.style.left = menubounds.right + "px";
-        menu.style.top = ctbounds.top + "px";
-        menusopen.push(submenu);
-        console.log("SubMenu " + submenu + " open");
+        var ctbounds = ct.getBoundingClientRect();        // where the current block is
+
+        var topmenubounds = openingmenu.getBoundingClientRect();    // size of the top menu
+
+        submenu.style.display = "inline-block";        // this makes it show
+
+        var submenubounds = submenu.getBoundingClientRect();       // now its shown we can get its size.. before its shown, it has no size..
+    
+        if ( ct.leftmenualignment )
+        {
+            submenu.style.left = (topmenubounds.left - submenubounds.width - 0)  + "px";
+        }
+        else
+        {        
+            submenu.style.left = topmenubounds.right + "px";
+        }
+
+        submenu.style.top = ctbounds.top + "px";
+        menusopen.push(submenuname);
+        console.log("SubMenu " + submenuname + " open");
     }
     else
         console.log("ERROR: No such Menu " + id);

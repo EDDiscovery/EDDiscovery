@@ -40,14 +40,14 @@ export function OnLoad()
     div.appendChild(CreateImage(menuicon, "Menu", null, togglemenu, null, null, "menubutton"));
 
     WriteMenu(div, "textsmenu", "navmenu", [
-        ["submenu", "statussize", "Set grid display width..", "submenutextsdisplaysize"],
+        ["submenu", "statussize", "Set grid display width..", "submenutextsdisplaysize", "alignleft"],
         ["checkbox", "showinfo", "Show system info messages", textsmenuchange, true],
         ["checkbox", "shownfz", "Show no fire zone messages", textsmenuchange, true],
      //   ["checkbox", "showec", "Show entering channel messages", textsmenuchange, true],
 
     ]);
 
-    WriteMenu(document.body, "submenutextsdisplaysize", "navmenu",
+    WriteMenu(document.body, "submenutextsdisplaysize", "submenu",
         [
             ["radio", "100", "Full Width", textsdisplaysizedisplaychange, "textsdisplaysizegroup", "70"],
             ["radio", "85", "85%", textsdisplaysizedisplaychange, "textsdisplaysizegroup"],
