@@ -17,7 +17,7 @@ import { CreateImage, CreatePara, CreateDiv } from "/jslib/elements.js"
 import { WSURIFromLocation } from "/jslib/websockets.js"
 import { ShowPopup, HidePopup } from "/jslib/popups.js"
 import { Debounce } from "/jslib/debounce.js"
-import { SetupTheme, GetThemeColor } from "/theme.js"
+import { SetupTheme, GetThemeProperty } from "/theme.js"
 
 var websocket;
 
@@ -86,13 +86,17 @@ function RequestImage()
 {
     var jimgdiv = document.getElementById("modulebmp");
     var width = jimgdiv.clientWidth;
-    var color = GetThemeColor("--textcolor");
+    
+    var color = GetThemeProperty("--textcolor");
+    var font = GetThemeProperty("--font");
 
     console.log("Width for module display is " + width);
 
     lastobjectlist = null;      // indicate don't have a list now
 
-    var req = "/modulemap/image.png?textcolor=" + encodeURIComponent(color) + "&width=" + width;
+    var req = "/modulemap/image.png?textcolor=" + encodeURIComponent(color) + 
+               "&font=" + encodeURIComponent(font) +
+                "&width=" + width;
     var img = jimgdiv.childNodes[0];
     console.log("Reload image source" + req);
     img.src = req;

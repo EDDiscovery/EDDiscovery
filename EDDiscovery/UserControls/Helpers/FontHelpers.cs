@@ -14,6 +14,7 @@
  * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
+using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.JournalEvents;
@@ -33,7 +34,7 @@ namespace EDDiscovery.UserControls
             {
                 try
                 {
-                    return new Font(values[0], values[1].InvariantParseFloat(12),(FontStyle)Enum.Parse(typeof(FontStyle),values[2]));
+                    return BaseUtils.FontLoader.GetFont(values[0], values[1].InvariantParseFloat(12),(FontStyle)Enum.Parse(typeof(FontStyle),values[2]));
                 }
                 catch( Exception ex)
                 {
@@ -50,36 +51,7 @@ namespace EDDiscovery.UserControls
 
         public static Font FontSelection(Control parent, Font curfont, int min = 4, int max = 36, bool musthaveregular = false)
         {
-            using (FontDialog fd = new FontDialog())
-            {
-                fd.Font = BaseUtils.FontLoader.GetFont(curfont.Name, curfont.SizeInPoints);
-                fd.MinSize = min;
-                fd.MaxSize = max;
-                DialogResult result;
-
-                try
-                {
-                    result = fd.ShowDialog(parent);
-                }
-                catch (ArgumentException ex)
-                {
-                    MessageBox.Show(ex.Message);
-                    return null;
-                }
-
-                if (result == DialogResult.OK)
-                {
-                    if (!musthaveregular || fd.Font.Style == FontStyle.Regular)
-                    {
-                        return fd.Font;
-                    }
-                    else
-                        ExtendedControls.MessageBoxTheme.Show(parent, "Font does not have regular style");
-                }
-
-                return null;
-            }
-
+            return FontLoader.FontSelection(parent,curfont,min,max,musthaveregular);
         }
     }
 

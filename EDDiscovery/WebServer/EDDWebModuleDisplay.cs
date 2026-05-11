@@ -59,8 +59,9 @@ namespace EDDiscovery.WebServer
                     smd.BoxBackColor1 = Color.FromArgb(255, 64, 64, 64);
                     smd.BoxBackColor2 = Color.FromArgb(255, 48, 48, 48);
                     smd.BoxBorderColor = Color.FromArgb(255, 128,128, 128);
-                    smd.Font = new System.Drawing.Font("Arial", 8);
-                    smd.FontLarge = new System.Drawing.Font("Arial", 12);
+                    string font = request.QueryString["font"] ?? "MS Sans Serif";
+                    smd.Font = FontLoader.GetFont(font, 8);
+                    smd.FontLarge = FontLoader.GetFont(font, 12);
 
                     int width = (request.QueryString["width"] ?? "800").InvariantParseInt(800);
                     string color = request.QueryString["textcolor"] ?? "#ff8000";

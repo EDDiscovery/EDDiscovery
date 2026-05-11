@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls.Map3D
         {
         }
 
-        public Font Font { get; set; } = new Font("Arial", 8.5f);
+        public Font Font { get; set; } = BaseUtils.FontLoader.GetFont("Arial", 8.5f);
         public bool GetGalObjectTypeEnableState(string id) { return !State.ContainsKey(id) || State[id] == true; }
 
         public bool Enable { get { return objectshader.Enable; } }

@@ -463,7 +463,7 @@ namespace EDDiscovery.UserControls
                 string themename = comboBoxTheme.Items[comboBoxTheme.SelectedIndex].ToString();
 
                 string fontwanted = null;                                               // don't check custom, only a stored theme..
-                if (!themename.Equals("Custom") && !DiscoveryForm.ThemeList.IsFontAvailableInTheme(themename, out fontwanted))
+                if (!themename.Equals("Custom") && !DiscoveryForm.ThemeList.IsFontAvailable(themename, out fontwanted))
                 {
                     string warning = string.Format(
                           ("The font used by this theme is not available on your system." + Environment.NewLine +

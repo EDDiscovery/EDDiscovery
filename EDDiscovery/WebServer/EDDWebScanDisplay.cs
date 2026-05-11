@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2019-2021 EDDiscovery development team
+ * Copyright 2019-2026 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- *
  */
 
 using BaseUtils;
@@ -88,9 +86,11 @@ namespace EDDiscovery.WebServer
                         sd.ShowWebBodies = checkweb;
                         sd.SimplifyDiagram = true;
                         sd.SetSize(starsize);
-                        sd.Font = new Font("MS Sans Serif", 8.25f);
-                        sd.FontLarge = new Font("MS Sans Serif", 10f);
-                        sd.FontUnderlined = new Font("MS Sans Serif", 8.25f, FontStyle.Underline);
+                        string font = request.QueryString["font"] ?? "MS Sans Serif";
+
+                        sd.Font = FontLoader.GetFont(font, 8);
+                        sd.FontLarge = FontLoader.GetFont(font, 10);
+                        sd.FontUnderlined = FontLoader.GetFont(font, 8, FontStyle.Underline);
                         string color = request.QueryString["textcolor"] ?? "#ff8000";
                         sd.TextForeColor = color.ColorFromNameOrValues();
                         ExtendedControls.ExtPictureBox imagebox = new ExtendedControls.ExtPictureBox();

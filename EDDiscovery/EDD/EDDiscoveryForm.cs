@@ -227,6 +227,15 @@ namespace EDDiscovery
             System.Diagnostics.Trace.WriteLine($"EDD UI Culture is {CultureInfo.CurrentCulture.Name} {System.Threading.Thread.CurrentThread.CurrentUICulture.Name}");
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load IconsStart");
 
+            var zys = FontLoader.GetFont("Zen Dots", 12);
+
+            // font load
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                var bytes = EDDiscovery.Properties.Resources.ZenDots_Regular;
+                FontLoader.AddMemoryFont(bytes);
+            }
+
             GlobalBookMarkList.LoadBookmarks();
             GlobalCaptainsLogList.LoadLog();
 
@@ -330,7 +339,7 @@ namespace EDDiscovery
 
             if (!EDDOptions.Instance.NoTheme)
             {
-                bool fontav = FontLoader.IsFontAvailable("Verdana", 8F, FontStyle.Regular);
+                bool fontav = FontLoader.IsFontAvailable("Verdana");
                 string deftheme = Environment.OSVersion.Platform == PlatformID.Win32NT && fontav ? "Elite Verdana Small" : "Windows Default";
                 ThemeList.SetThemeByName(deftheme);                // this is the default theme we use normally
                 var theme = GetThemeFromDB();

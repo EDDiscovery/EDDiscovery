@@ -12,6 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
+using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
 using ExtendedControls;
@@ -185,10 +186,11 @@ namespace EDDiscovery.UserControls
                         notfound.Add(m);        // not found, add to list for bottom
                 }
 
-                FontFamily ff = new FontFamily(this.Font.Name);
                 bool buyonly = checkBoxBuyOnly.Checked;
                 bool hasdemand = checkBoxHasDemand.Checked;
 
+                Font italic = FontLoader.IsFontAvailable(this.Font.Name, FontStyle.Italic) ? FontLoader.GetFont(this.Font.Name, this.Font.Size, FontStyle.Italic) : null;
+                
                 foreach (CCommodities c in list)
                 {
                     // logic here is:
@@ -216,10 +218,10 @@ namespace EDDiscovery.UserControls
 
                         DataGridViewRow rw = dataGridView.Rows[dataGridView.Rows.Add(rowobj)];
 
-                        if (c.ComparisionRightOnly && ff != null && ff.IsStyleAvailable(FontStyle.Italic))
+                        if (c.ComparisionRightOnly && italic != null)
                         {
                             for (int i = 1; i < dataGridView.Columns.Count; i++)
-                                rw.Cells[i].Style.Font = new Font(this.Font, FontStyle.Italic);
+                                rw.Cells[i].Style.Font = italic;
                         }
 
                         // rw.Cells[0].Value = mc?.TranslatedType + " " + rw.Index.ToString(); // debug

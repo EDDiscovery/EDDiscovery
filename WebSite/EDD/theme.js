@@ -1,36 +1,38 @@
-﻿import { FetchNumber, StoreState } from "/jslib/localstorage.js"
+﻿import { FetchNumber, FetchState, StoreState } from "/jslib/localstorage.js"
 
 export var menuicon;
 
-export function Theme(themeno)
+export function Theme(themeno, headervisibility)
 {
     var r = document.querySelector(':root');
-    if ( themeno == 0 )
-    {
-      r.style.setProperty('--textcolor', 'darkorange');
-      r.style.setProperty('--titlecolor', 'darkorange');
-      r.style.setProperty('--backcolor', 'black');
-      r.style.setProperty('--tabcolor', '#ff9c08');
-      r.style.setProperty('--tabhighlighted', '#ffe028');
-      r.style.setProperty('--tabhover', '#ffbc48');
-      r.style.setProperty('--tabtext', '#000000');
-      r.style.setProperty('--textbuttonback', 'darkorange');
-      r.style.setProperty('--textbutton', 'black');
-      r.style.setProperty('--textbuttonborder', 'lightorange');
-      r.style.setProperty('--actionsbackground', '#ffac28');
-      r.style.setProperty('--actionstext', '#000000');
-      r.style.setProperty('--gridborders', 'rgb(200,128,0)');
-      r.style.setProperty('--gridbuttonborders', 'rgb(200,128,0)');
-      r.style.setProperty('--headerbackground', 'rgb(40,40,40)');
-      r.style.setProperty('--scrollbartrack', 'rgb(40,40,40)');
-      r.style.setProperty('--scrollthumb', 'darkorange');
-      r.style.setProperty('--scrollthumbhover', 'rgb(255,160,0)');
-      r.style.setProperty('--dropdownmenuback', 'darkorange');
-      r.style.setProperty('--dropdownmenutext', 'black');
-      r.style.setProperty('--dropdownmenuhover', '#ffe028');
-      menuicon = "/Images/menu.png";
-    }
-    else if ( themeno == 1 )
+
+    // base theme 0 set up - elite orange
+
+    r.style.setProperty('--textcolor', 'darkorange');
+    r.style.setProperty('--titlecolor', 'darkorange');
+    r.style.setProperty('--backcolor', 'black');
+    r.style.setProperty('--tabcolor', '#ff9c08');
+    r.style.setProperty('--tabhighlighted', '#ffe028');
+    r.style.setProperty('--tabhover', '#ffbc48');
+    r.style.setProperty('--tabtext', '#000000');
+    r.style.setProperty('--textbuttonback', 'darkorange');
+    r.style.setProperty('--textbutton', 'black');
+    r.style.setProperty('--textbuttonborder', 'lightorange');
+    r.style.setProperty('--actionsbackground', '#ffac28');
+    r.style.setProperty('--actionstext', '#000000');
+    r.style.setProperty('--gridborders', 'rgb(200,128,0)');
+    r.style.setProperty('--gridbuttonborders', 'rgb(200,128,0)');
+    r.style.setProperty('--headerbackground', 'rgb(40,40,40)');
+    r.style.setProperty('--scrollbartrack', 'rgb(40,40,40)');
+    r.style.setProperty('--scrollthumb', 'darkorange');
+    r.style.setProperty('--scrollthumbhover', 'rgb(255,160,0)');
+    r.style.setProperty('--dropdownmenuback', 'darkorange');
+    r.style.setProperty('--dropdownmenutext', 'black');
+    r.style.setProperty('--dropdownmenuhover', '#ffe028');
+    r.style.setProperty('--font', 'Verdana');           // base font verdata
+    menuicon = "/Images/menuorange.png";  // standard orange menu icon
+
+    if ( themeno % 3 == 1 )     // red
     {
       r.style.setProperty('--textcolor', '#C00000');
       r.style.setProperty('--titlecolor', 'darkorange');
@@ -55,7 +57,7 @@ export function Theme(themeno)
       r.style.setProperty('--dropdownmenuhover', '#c00000');
       menuicon = "/Images/menured.png";
     }
-    else if ( themeno == 2 )
+    else if ( themeno % 3 == 2 )    // edsm
     {
       r.style.setProperty('--textcolor', 'rgb(200,200,200)');
       r.style.setProperty('--backcolor', 'rgb(28,30,34)');
@@ -78,22 +80,36 @@ export function Theme(themeno)
       r.style.setProperty('--dropdownmenuback', 'rgb(192,196,196)');
       r.style.setProperty('--dropdownmenutext', 'black');
       r.style.setProperty('--dropdownmenuhover', '#404040');
+      r.style.setProperty('--font', 'Verdana');
       menuicon = "/Images/menugray.png";
     }
 
+    var fontfamily = Math.floor( themeno/3 );
+    // themes 0-2 are base font, 3-5 are eurocaps, 6-8 is Tacoma
+    if ( fontfamily == 1)          
+      r.style.setProperty('--font', 'Euro Caps');       // header.css defines 'Euro Caps' font
+    else if ( fontfamily == 2 )          
+      r.style.setProperty('--font', 'Tahoma');
+    else if ( fontfamily == 3 )          
+      r.style.setProperty('--font', 'Zen Dots');
+
+    r.style.setProperty('--headervisibility' , headervisibility ? 'block' : 'none' );
 }
+
 export function SetupTheme()
 {
-    var themeno = FetchNumber("themeselected",0)
-    Theme(themeno);
+    var themeno = FetchNumber("themeselected",0);
+    var headervisible = FetchState("journalmenu.themeheader.checkboxstate",true);      // std name given to checkbox, from index.js WriteMenu
+    Theme(themeno, headervisible);
 }
 export function SetTheme(themeno)
 {
     StoreState("themeselected",themeno)
-    Theme(themeno);
+    SetupTheme();
 }
 
-export function GetThemeColor(name)
+
+export function GetThemeProperty(name)
 {
     var r = document.querySelector(':root');
     return r.style.getPropertyValue(name);

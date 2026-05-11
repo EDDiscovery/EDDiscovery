@@ -5,7 +5,7 @@ body
 {
     background-color: var(--backcolor);
     color: var(--textcolor);
-    font-family: Arial,Helvetica,Sans-serif;
+    font-family: var(--font),var(--fontbackup),Arial;
     margin: 0px;
     overflow: hidden;
 }

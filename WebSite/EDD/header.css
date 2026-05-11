@@ -1,5 +1,17 @@
 
-/* Everyone includes the header, so its an opportunity to add CSS vars to everything */
+/* Everyone includes the header, so its an opportunity to add CSS common vars and fonts to everything */
+
+@font-face
+{
+    font-family: 'Euro Caps'; /* set name */
+    src: url('/EUROCAPS.woff') format('woff');
+}
+
+@font-face
+{
+    font-family: 'Zen Dots'; /* set name */
+    src: url('/ZenDots-Regular.woff') format('woff');
+}
 
 :root
 {
@@ -24,6 +36,15 @@
     --dropdownmenuback: darkorange;
     --dropdownmenutext: black;
     --dropdownmenuhover: #ffe028;
+
+    /*   
+    see https://www.w3schools.com/cssref/css_websafe_fonts.php
+    */
+
+    --font: 'Tahoma';
+    --fontbackup: 'Verdana';
+
+    --headervisibility: block;
 }
 
 /* there is nothing in the header, since the two bits below float */
@@ -35,6 +56,7 @@ header {
     background-color: var(--headerbackground);
     color: var(--titlecolor);
     overflow: auto;
+    display: var(--headervisibility);
 }
 
 /* title */
@@ -48,25 +70,15 @@ header h1:first-of-type
     font-size: 20pt;
     font-style: italic;
     font-weight: normal;
+    
 }
 
-/* fullscreenbutton and logo */
+/* logo */
 header h1:last-of-type {
     float: right;
     margin: 2px;
 }
 
-/* fullscreen button */
-header h1 input
-{
-    background-color: var(--textbuttonback);
-    margin: 0px 10px;
-    border: 1px solid var(--textbuttonborder);
-    color: var(--textbutton);
-    border-radius: 8px;
-    transform: translateY(-50%);
-    -ms-transform: translateY(-50%);
-}
 
 /* ************************************************** Set up Nav styling */
 nav

@@ -12,15 +12,14 @@
  * governing permissions and limitations under the License.
  */
 
-import { ToggleFullscreen } from "/jslib/screencontrol.js"
 import { CreateButton , CreateAnchor } from "/jslib/elements.js"
 
+//remove full screen button, add to menu?
+// send font to modules/scandisplay
 export function WriteHeader(header)
 {
-    var html = "<h1> Elite Dangerous Discovery </h1>" +
-        "<h1> <input type=\"button\" value=\"fullscreen\" id=\"fullscreen_button\" /><img src=\"/Images/EdLogo600.png\" alt=\"EDD\" width=\"80\"> </h1>";
+    var html = "<h1> Elite Dangerous Discovery </h1> <h1> <img src=\"/Images/EdLogo600.png\" alt=\"EDD\" width=\"80\"> </h1>";
     header.insertAdjacentHTML("beforeend",html);
-    document.getElementById('fullscreen_button').onclick = ToggleFullscreen;
 }
 
 export function WriteNav(nav, tab)

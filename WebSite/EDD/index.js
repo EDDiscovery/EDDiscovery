@@ -22,6 +22,8 @@ import { CreateDiv, CreateImage } from "/jslib/elements.js"
 import { FetchNumber, StoreState } from "/jslib/localstorage.js"
 import { WriteMenu, ToggleMenu, GetMenuItemCheckState, CloseMenus } from "/jslib/menus.js"
 import { SetupTheme, SetTheme, menuicon } from "/theme.js"
+import { ToggleFullscreen } from "/jslib/screencontrol.js"
+
     
 var websocket;
 var menuelement;
@@ -43,14 +45,25 @@ export function OnLoad()
     WriteMenu(div, "journalmenu", "navmenu", [
         ["submenu", "statussize", "Set grid display width..", "submenujournaldisplaysize", "alignleft"],
         ["submenu", "theme", "Change theme..", "themeselect", "alignleft"],                        
+        ["button", "theme", "Toggle full screen mode",() => {ToggleFullscreen(); CloseMenus();} ],
+        ["checkbox", "themeheader", "Header Visible", selectthemeheader, true],
     ]);
 
     nav[0].appendChild(div);
 
     WriteMenu(document.body, "themeselect", "submenu", [
-        ["button", "standardtheme", "Standard Theme", selectstdtheme ],
-        ["button", "standardtheme", "Red Theme", selectredtheme ],
-        ["button", "standardtheme", "EDSM Theme", selectedsmtheme ],
+        ["button", "theme", "Verdana Elite Theme", selecttheme , 0 ],
+        ["button", "theme", "Verdana Red Theme", selecttheme , 1 ],
+        ["button", "theme", "Verdana EDSM Theme", selecttheme , 2],
+        ["button", "theme", "Eurocaps Elite Theme", selecttheme , 3 ],
+        ["button", "theme", "Eurocaps Red Theme", selecttheme , 4 ],
+        ["button", "theme", "Eurocaps EDSM Theme", selecttheme , 5],
+        ["button", "theme", "Tahoma Elite Theme", selecttheme , 6 ],
+        ["button", "theme", "Tahoma Red Theme", selecttheme , 7 ],
+        ["button", "theme", "Tahoma EDSM Theme", selecttheme , 8 ],
+        ["button", "theme", "Zen Elite Theme", selecttheme , 9 ],
+        ["button", "theme", "Zen Red Theme", selecttheme , 10 ],
+        ["button", "theme", "Zen EDSM Theme", selecttheme , 11 ],
     ]);
 
     WriteMenu(document.body, "submenujournaldisplaysize", "submenu",
@@ -172,21 +185,21 @@ function journaldisplaysizedisplaychange(mouseevent)
 } 
 
 
-function selectstdtheme()
+function selecttheme(mouseevent)
 {
-    SetTheme(0);
+    var ct = mouseevent.currentTarget;
+    var themeno = ct.tag;
+    SetTheme(themeno);
     menuelement.src = menuicon;
     CloseMenus();
 }
-function selectredtheme()
+
+function selectthemeheader(mouseevent)
 {
-    SetTheme(1);
-    menuelement.src = menuicon;
+    var ct = mouseevent.currentTarget;
+    console.log("Selectthemeheader " + ct.id + " tag " + ct.tag);
+    if (ct.tag != null)
+        StoreState(ct.tag, ct.checked);
     CloseMenus();
-}
-function selectedsmtheme()
-{
-    SetTheme(2);
-    menuelement.src = menuicon;
-    CloseMenus();
+    SetupTheme();
 }

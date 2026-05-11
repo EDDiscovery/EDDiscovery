@@ -20,7 +20,7 @@ import { WSURIFromLocation } from "/jslib/websockets.js"
 import { FetchState, StoreState, FetchNumber } from "/jslib/localstorage.js"
 import { ShowPopup, HidePopup } from "/jslib/popups.js"
 import { Debounce } from "/jslib/debounce.js"
-import { SetupTheme, menuicon, GetThemeColor } from "/theme.js"
+import { SetupTheme, menuicon, GetThemeProperty } from "/theme.js"
 
 var websocket;
 
@@ -51,7 +51,7 @@ function OnLoad()
             ["checkbox", "planetclass", "Show classes of planets", scandisplaychange, true],
             ["checkbox", "distance", "Show distance of bodies", scandisplaychange, true],
             ["checkbox", "edsm", "Check Web For bodies", scandisplaychange, false],
-            ["button", "value", "Set Valuable Limit", setvaluelimit, false],
+            ["button", "value", "Set Valuable Limit", setvaluelimit],
             ["submenu", "size", "Set body image size..", "submenusize", "alignleft"],                        // submenu called submenusize, see below
             ["submenu", "statussize", "Set star display width..", "submenustardisplaysize", "alignleft"],    // submenu see below
         ]);
@@ -169,12 +169,14 @@ function RequestImage(entry)
     var valuelimit = FetchState("scandisplay_valuelimit", 50001);
     console.log("Value limit is " + valuelimit);
 
-    var color = GetThemeColor("--textcolor");
+    var color = GetThemeProperty("--textcolor");
+    var font = GetThemeProperty("--font");
 
     var req = "/systemmap/image.png?entry=" + entry + "&width=" + width + "&starsize=" + size + "&showmoons=" + showmoon + "&showbodyicons=" + bodyicons +
         "&showmaterials=" + showmaterials + "&showgravity=" + gvalue + "&showhabzone=" + habzone + "&showstarclass=" + starclass + "&showplanetclass=" + planetclass +
         "&showasteroidbodies=" + asteroidbodies + 
         "&textcolor=" + encodeURIComponent(color) +
+        "&font=" + encodeURIComponent(font) +
         "&showdistance=" + distance + "&SPANSH=" + webbodies + "&valuelimit=" + valuelimit + "&reqtime=" + new Date().getTime();
 
     lastobjectlist = null;      // indicate don't have a list now

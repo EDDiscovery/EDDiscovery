@@ -173,7 +173,7 @@ void main(void)
             texcoords = new GLTexture2DArray();
             texcoords.CreateOrUpdateTexture(200, 25, 9, OpenTK.Graphics.OpenGL4.SizedInternalFormat.Rgba8);        // size and number, and the texcoord will own them, so it will dispose of them
 
-            gridfnt = f ?? new Font("MS Sans Serif", 16);
+            gridfnt = f ?? BaseUtils.FontLoader.GetFont("MS Sans Serif", 16);
 
             for (int i = 0; i < 9; i++)
             {

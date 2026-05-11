@@ -57,7 +57,7 @@ namespace EDDiscovery.UserControls.Map3D
             items.Add(textrenderer);
 
             StringFormat fmt = new StringFormat(StringFormatFlags.NoWrap) { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center };
-            Font fnt = new Font("MS Sans Serif", 12F);
+            Font fnt = BaseUtils.FontLoader.GetFont("MS Sans Serif", 12F);
 
             int cindex = 0;
 

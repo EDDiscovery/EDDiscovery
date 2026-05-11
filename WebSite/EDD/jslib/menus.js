@@ -60,8 +60,8 @@ import { FetchState } from "/jslib/localstorage.js"
 //      item[1] is menu item name, item[2] is text, item[3] is submenu name, item[4] is "alignleft" to make a left sided menu
 //      label id = menunameid + "_" + id + "_submenu"
 //      label class = menuclass + "_submenu"
-//    ["button", "click", "Click here", functocall],
-//      item[1] is menu item name, item[2] is text, item[3] is callback
+//    ["button", "click", "Click here", functocall,[,tag]],
+//      item[1] is menu item name, item[2] is text, item[3] is callback, item[4] optional is tag
 //      label id = menunameid + "_" + id + "_button"
 //      label class = menuclass + "_button"
 
@@ -118,6 +118,7 @@ export function WriteMenu(appendto, menunameid, menuclass, menulist)
         {
             var lb = CreateLabel(menuclass + "_button", mid + "_button", null, item[2], item[3]);
             lb.style.padding = "0px 0px 0px 20px";
+            lb.tag = item[4]
             itemdiv.appendChild(lb);
         }
         else

@@ -65,7 +65,7 @@ namespace EDDiscovery.Properties {
         ///Cmdr Robby
         ///
         ///Developers for this release series:
-        ///Eahlstan, Jugom, Flynn
+        ///Eahlstan, Shufton
         ///
         ///Images Captured by:
         ///Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
@@ -77,7 +77,7 @@ namespace EDDiscovery.Properties {
         ///Cmdr Finwen  (Robert Wahlström)
         ///
         ///Previous Contributors:
-        ///Merovech, Bravada Cadelanne,  [rest of string was truncated]&quot;;.
+        ///Jugom, Flynn, Merovech, Bravada Ca [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Credits {
             get {
@@ -334,6 +334,16 @@ namespace EDDiscovery.Properties {
         public static string URLWebView2 {
             get {
                 return ResourceManager.GetString("URLWebView2", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] ZenDots_Regular {
+            get {
+                object obj = ResourceManager.GetObject("ZenDots_Regular", resourceCulture);
+                return ((byte[])(obj));
             }
         }
     }

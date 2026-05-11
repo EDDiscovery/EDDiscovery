@@ -167,7 +167,7 @@ namespace EDDiscovery.UserControls.Map3D
             // provide opening animation
             pform.ScaleWindow = new SizeF(0.0f, 0.0f);
             pform.Animators.Add(new GLControlAnimateScale(10, 400, true, new SizeF(1, 1)));
-            pform.Font = new Font("Arial", 10f);
+            pform.Font = BaseUtils.FontLoader.GetFont("Arial", 10f);
 
             // and closing animation
             pform.FormClosing += (f,e) => {
