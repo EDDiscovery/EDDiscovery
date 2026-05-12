@@ -1075,7 +1075,7 @@ namespace EDDiscovery.UserControls
 
         private void extButtonFont_Click(object sender, EventArgs e)
         {
-            Font f = BaseUtils.FontDialog.SelectFont(this.FindForm(), displayfont ?? this.Font);
+            Font f = BaseUtils.FontDialog.SelectFont(this.FindForm(), displayfont ?? this.Font, true);
             string setting = BaseUtils.FontHandler.GetFontSettingString(f);
             //System.Diagnostics.Debug.WriteLine($"Spanel Font selected {setting}");
             PutSetting(dbFont, setting);
