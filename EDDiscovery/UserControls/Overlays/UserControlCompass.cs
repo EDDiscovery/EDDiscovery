@@ -95,7 +95,8 @@ namespace EDDiscovery.UserControls
         protected override void LoadLayout()
         {
             base.LoadLayout();
-            displayfont = FontHelpers.GetFont(GetSetting(dbFont, ""), null);        // null if not set, keep selection in displayfont
+            displayfont = BaseUtils.FontHandler.GetFontFromSetting(GetSetting(dbFont, ""), null);        // null if not set
+
             if (displayfont != null)
                 compassControl.Font = displayfont;
         }
@@ -544,9 +545,9 @@ namespace EDDiscovery.UserControls
 
         private void extButtonFont_Click(object sender, EventArgs e)
         {
-            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);     // will be null on cancel
-            string setting = FontHelpers.GetFontSettingString(f);
-            //System.Diagnostics.Debug.WriteLine($"Surveyor Font selected {setting}");
+            Font f = BaseUtils.FontDialog.SelectFont(this.FindForm(), displayfont ?? this.Font);
+            string setting = BaseUtils.FontHandler.GetFontSettingString(f);
+            //System.Diagnostics.Debug.WriteLine($"Compass Font selected {setting}");
             PutSetting(dbFont, setting);
             displayfont = f;
             compassControl.Font = displayfont ?? this.Font;     // set control font

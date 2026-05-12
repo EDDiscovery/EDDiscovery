@@ -38,7 +38,7 @@ namespace EDDiscovery.UserControls.Map3D
     {
         private Vector3 InvalidPos = new Vector3(-1000000, -1000000, -1000000);
         public Vector3 CurrentPos { get; set; } = new Vector3(-1000000, -1000000, -1000000);
-        public Font Font { get; set; } = BaseUtils.FontLoader.GetFont("Arial", 8.5f);
+        public Font Font { get; set; } = BaseUtils.FontHandler.GetFont("Arial", 8.5f);
         public Color ForeText { get; set; } = Color.FromArgb(255,220,220,220);
         public Color BackText { get; set; } = Color.Transparent;
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f / 4f);

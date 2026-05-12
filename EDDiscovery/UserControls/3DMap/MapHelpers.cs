@@ -355,7 +355,7 @@ namespace EDDiscovery.UserControls.Map3D
                             int bitmapwidth = sp.NextIntComma(",") ?? 1024;
                             int bitmapheight = sp.NextInt(",") ?? 256;
 
-                            Font fnt = BaseUtils.FontLoader.GetFont(fontname, (float)size);
+                            Font fnt = BaseUtils.FontHandler.GetFont(fontname, (float)size);
                             Color fore = Color.FromName(forecolour);
                             Color back = Color.FromName(backcolour);
                             StringFormat fmt = format.StringFormatFromName();

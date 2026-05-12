@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
             extCheckBoxWordWrap.Checked = GetSetting(dbWordWrap, false);
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_CheckedChanged;
 
-            displayfont = FontHelpers.GetFont(GetSetting(dbFont, ""), null);        // null if not set
+            displayfont = BaseUtils.FontHandler.GetFontFromSetting(GetSetting(dbFont, ""), null);        // null if not set
         }
 
         protected override void InitialDisplay()
@@ -423,9 +423,9 @@ namespace EDDiscovery.UserControls
 
         private void extButtonFont_Click(object sender, EventArgs e)
         {
-            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);     // will be null on cancel
-            string setting = FontHelpers.GetFontSettingString(f);
-            //System.Diagnostics.Debug.WriteLine($"Surveyor Font selected {setting}");
+            Font f = BaseUtils.FontDialog.SelectFont(this.FindForm(), displayfont ?? this.Font);
+            string setting = BaseUtils.FontHandler.GetFontSettingString(f);
+            System.Diagnostics.Debug.WriteLine($"Travel Panel Font selected {setting}");
             PutSetting(dbFont, setting);
             displayfont = f;
             UpdateDisplay();

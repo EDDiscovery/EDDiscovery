@@ -88,9 +88,9 @@ namespace EDDiscovery.WebServer
                         sd.SetSize(starsize);
                         string font = request.QueryString["font"] ?? "MS Sans Serif";
 
-                        sd.Font = FontLoader.GetFont(font, 8);
-                        sd.FontLarge = FontLoader.GetFont(font, 10);
-                        sd.FontUnderlined = FontLoader.GetFont(font, 8, FontStyle.Underline);
+                        sd.Font = FontHandler.GetFont(font, 8);
+                        sd.FontLarge = FontHandler.GetFont(font, 10);
+                        sd.FontUnderlined = FontHandler.GetFont(font, 8, FontStyle.Underline);
                         string color = request.QueryString["textcolor"] ?? "#ff8000";
                         sd.TextForeColor = color.ColorFromNameOrValues();
                         ExtendedControls.ExtPictureBox imagebox = new ExtendedControls.ExtPictureBox();

@@ -47,7 +47,7 @@ namespace EDDiscovery.UserControls.Map3D
         public DateTime TravelPathEndDateUTC { get; set; } = DateTime.UtcNow.AddMonths(1);
         public bool TravelPathStartDateEnable { get; set; } = false;
         public bool TravelPathEndDateEnable { get; set; } = false;
-        public Font Font { get; set; } = BaseUtils.FontLoader.GetFont("Arial", 8.5f);
+        public Font Font { get; set; } = BaseUtils.FontHandler.GetFont("Arial", 8.5f);
         public Color ForeText { get; set; } = Color.White;
         public Color BackText { get; set; } = Color.Transparent;
         public Vector3 LabelSize { get; set; } = new Vector3(5, 0, 5f/4f);

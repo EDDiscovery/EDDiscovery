@@ -32,6 +32,7 @@ namespace EDDiscovery.UserControls
         private const string dbFilter = "EventFilter2";
         private const string dbFieldFilter = "FieldFilter";
         private const string dbUserGroups = "UserGroups";
+        private const string dbFont = "font";
 
         private JournalFilterSelector cfs;
         private ConditionLists fieldfilter = new ConditionLists();
@@ -154,7 +155,7 @@ namespace EDDiscovery.UserControls
                 catch { }
             }
 
-            displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
+            displayfont = FontHandler.GetFontFromSetting(GetSetting(dbFont, ""), null);        // null if not set
 
             string filter = GetSetting(dbFieldFilter, "");
             if (filter.Length > 0)
@@ -1074,10 +1075,10 @@ namespace EDDiscovery.UserControls
 
         private void extButtonFont_Click(object sender, EventArgs e)
         {
-            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);
-            string setting = FontHelpers.GetFontSettingString(f);
-            System.Diagnostics.Debug.WriteLine($"Spanel Font selected {setting}");
-            PutSetting("font", setting);
+            Font f = BaseUtils.FontDialog.SelectFont(this.FindForm(), displayfont ?? this.Font);
+            string setting = BaseUtils.FontHandler.GetFontSettingString(f);
+            //System.Diagnostics.Debug.WriteLine($"Spanel Font selected {setting}");
+            PutSetting(dbFont, setting);
             displayfont = f;
             Display(current_historylist);
         }

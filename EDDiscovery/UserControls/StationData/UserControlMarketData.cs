@@ -189,7 +189,7 @@ namespace EDDiscovery.UserControls
                 bool buyonly = checkBoxBuyOnly.Checked;
                 bool hasdemand = checkBoxHasDemand.Checked;
 
-                Font italic = FontLoader.IsFontAvailable(this.Font.Name, FontStyle.Italic) ? FontLoader.GetFont(this.Font.Name, this.Font.Size, FontStyle.Italic) : null;
+                Font italic = FontHandler.IsFontAvailable(this.Font.Name, FontStyle.Italic) ? FontHandler.GetFont(this.Font.Name, this.Font.Size, FontStyle.Italic) : null;
                 
                 foreach (CCommodities c in list)
                 {

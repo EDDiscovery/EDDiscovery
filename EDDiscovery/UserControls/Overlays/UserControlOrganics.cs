@@ -38,6 +38,7 @@ namespace EDDiscovery.UserControls
         private string dbStartDateOn = "StartDateChecked";
         private string dbEndDate = "EndDate";
         private string dbEndDateOn = "EndDateChecked";
+        private string dbFont = "font";
 
         private bool intransparent = false;
 
@@ -69,7 +70,7 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry += Discoveryform_OnNewEntry;
             rollUpPanelTop.SetToolTip(toolTip);
 
-            displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);
+            displayfont = BaseUtils.FontHandler.GetFontFromSetting(GetSetting(dbFont, ""), null);        // null if not set
 
             // pickers we don't worry about the Kind, we use the picker convert functions later 
             extDateTimePickerStartDate.Value = GetSetting(dbStartDate, EDDConfig.Instance.ConvertTimeToSelectedFromUTC(DateTime.UtcNow));
@@ -413,10 +414,10 @@ namespace EDDiscovery.UserControls
 
         private void extButtonFont_Click(object sender, EventArgs e)
         {
-            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);
-            string setting = FontHelpers.GetFontSettingString(f);
+            Font f = BaseUtils.FontDialog.SelectFont(this.FindForm(), displayfont ?? this.Font);
+            string setting = BaseUtils.FontHandler.GetFontSettingString(f);
             //System.Diagnostics.Debug.WriteLine($"Organics Font selected {setting}");
-            PutSetting("font", setting);
+            PutSetting(dbFont, setting);
             displayfont = f;
             DrawBodyInfo();
         }

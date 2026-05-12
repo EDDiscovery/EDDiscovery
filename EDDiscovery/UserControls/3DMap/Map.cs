@@ -398,7 +398,7 @@ namespace EDDiscovery.UserControls.Map3D
             float labelh = galaxysunsize * 10 / 6;
             float labelhoff = -(Math.Max(travelsunsize,galaxysunsize)/2.0f + labelh / 2.0f);
             Size labelbitmapsize = new Size(160, 16);
-            Font labelfont = BaseUtils.FontLoader.GetFont("Arial", 8.25f);
+            Font labelfont = BaseUtils.FontHandler.GetFont("Arial", 8.25f);
             float tapesize = 0.25f;
 
             if ((parts & Parts.TravelPath) != 0)
@@ -474,7 +474,7 @@ namespace EDDiscovery.UserControls.Map3D
             // menu system
 
             displaycontrol = new GLControlDisplay(items, glwfc, matrixcalc, true, 0.00001f, 0.00001f);       // hook form to the window - its the master
-            displaycontrol.Font = BaseUtils.FontLoader.GetFont("Arial", 10f);
+            displaycontrol.Font = BaseUtils.FontHandler.GetFont("Arial", 10f);
             displaycontrol.Focusable = true;          // we want to be able to focus and receive key presses.
             displaycontrol.SetFocus();
 

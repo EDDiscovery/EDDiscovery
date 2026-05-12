@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2016 - 2024 EDDiscovery development team
+ * Copyright 2016 - 2024 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using EliteDangerousCore;
 using System.Collections.Generic;
 using QuickJSON;
+using BaseUtils;
 
 namespace EDDiscovery.UserControls
 {
@@ -35,6 +36,7 @@ namespace EDDiscovery.UserControls
         private const string AllNonZeroMarker = "AllNonZero";
         private const string dbSplitter = "Splitter";
         private const string dbMaterialView = "MaterialView";
+        private const string dbFont = "font";
 
         private const int MCGrid_MCDType = 0;       // MCD grid MCD tag cell index
         private const int MCGrid_MCMR = 1;           // MCD grid MCD with count tag, may be null
@@ -210,7 +212,7 @@ namespace EDDiscovery.UserControls
                 displayinshoppinglist = new HashSet<string>();
 
             // font 
-            displayfont = FontHelpers.GetFont(GetSetting("font", ""), null);        // null if not set
+            displayfont = FontHandler.GetFontFromSetting(GetSetting(dbFont, ""), null);        // null if not set
         }
 
         protected override void LoadLayout()
@@ -609,10 +611,10 @@ namespace EDDiscovery.UserControls
 
         private void extButtonFont_Click(object sender, EventArgs e)
         {
-            Font f = FontHelpers.FontSelection(this.FindForm(), displayfont ?? this.Font);     // will be null on cancel
-            string setting = FontHelpers.GetFontSettingString(f);
+            Font f = BaseUtils.FontDialog.SelectFont(this.FindForm(), displayfont ?? this.Font);
+            string setting = BaseUtils.FontHandler.GetFontSettingString(f);
             //System.Diagnostics.Debug.WriteLine($"Surveyor Font selected {setting}");
-            PutSetting("font", setting);
+            PutSetting(dbFont, setting);
             displayfont = f;
             Display(last_mcl);
         }

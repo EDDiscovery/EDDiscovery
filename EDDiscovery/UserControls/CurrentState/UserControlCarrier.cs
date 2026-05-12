@@ -290,8 +290,8 @@ namespace EDDiscovery.UserControls
 
         private void ClearDisplayFontJournalCAPI()         // the lot
         {
-            bigfont = BaseUtils.FontLoader.GetFont(ExtendedControls.Theme.Current.FontName, 16f);
-            normfont = BaseUtils.FontLoader.GetFont(ExtendedControls.Theme.Current.FontName, 12f);
+            bigfont = BaseUtils.FontHandler.GetFont(ExtendedControls.Theme.Current.FontName, 16f);
+            normfont = BaseUtils.FontHandler.GetFont(ExtendedControls.Theme.Current.FontName, 12f);
 
             using (Font medium = ExtendedControls.Theme.Current.GetScaledFont(1.2f))
             {

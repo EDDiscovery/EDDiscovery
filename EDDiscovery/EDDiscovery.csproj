@@ -345,7 +345,6 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="UserControls\Helpers\DataGridViewJumpToDialog.cs" />
-    <Compile Include="UserControls\Helpers\FontHelpers.cs" />
     <Compile Include="UserControls\Helpers\PaintEventColumn.cs" />
     <Compile Include="UserControls\Helpers\CSVHelpers.cs" />
     <Compile Include="UserControls\Helpers\MissionListUserControl.cs">
