@@ -58,24 +58,31 @@ namespace EDDiscovery.UserControls
             }
 
             toolStripMenuItemStartStop.Visible = rightclickhe != null;
-            quickMarkToolStripMenuItem.Visible = rightclickhe != null;
-            quickMarkToolStripMenuItem.Checked = rightclickhe != null && quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
-            mapGotoStartoolStripMenuItem.Visible = (rightclickhe != null && rightclickhe.System.HasCoordinate);
-            viewOnEDSMToolStripMenuItem.Visible = (rightclickhe != null);
-            viewOnSpanshToolStripMenuItem.Visible = (rightclickhe != null);
-            viewScanDisplayToolStripMenuItem.Visible = (rightclickhe != null);
-            toolStripMenuItemStartStop.Visible = (rightclickhe != null);
-            removeJournalEntryToolStripMenuItem.Visible = (rightclickhe != null);
-            runActionsOnThisEntryToolStripMenuItem.Visible = (rightclickhe != null);
-            setNoteToolStripMenuItem.Visible = (rightclickhe != null);
-            copyJournalEntryToClipboardToolStripMenuItem.Visible = (rightclickhe != null);
-            createEditBookmarkToolStripMenuItem.Visible = (rightclickhe != null);
+
+            // on clicking on a right he
+            viewOnEDSMToolStripMenuItem.Visible = 
+            viewOnSpanshToolStripMenuItem.Visible = 
+            viewScanDisplayToolStripMenuItem.Visible = 
+            removeJournalEntryToolStripMenuItem.Visible = 
+            runActionsOnThisEntryToolStripMenuItem.Visible = 
+            quickMarkToolStripMenuItem.Visible =
+            copyJournalEntryToClipboardToolStripMenuItem.Visible = 
+            createEditBookmarkToolStripMenuItem.Visible = 
+            setNoteToolStripMenuItem.Visible = 
+            gotoNextStartStopMarkerToolStripMenuItem.Visible = rightclickhe != null;
+
+            // checkboxes
+            quickMarkToolStripMenuItem.Checked = rightclickhe != null && quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);
+
+            // other conditions
+
+            mapGotoStartoolStripMenuItem.Visible = rightclickhe != null && rightclickhe.System.HasCoordinate;
             gotoEntryNumberToolStripMenuItem.Visible = dataGridViewTravel.Rows.Count > 0;
             removeSortingOfColumnsToolStripMenuItem.Visible = dataGridViewTravel.SortedColumn != null;
-            gotoNextStartStopMarkerToolStripMenuItem.Visible = (rightclickhe != null);
 
             openInNotepadTheJournalFileToolStripMenuItem.Visible =
             writeEventInfoToLogDebugToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks && rightclickhe != null;
+
             openInNotepadTheJournalFileToolStripMenuItem.Enabled = rightclickhe?.journalEntry.FullPath.HasChars() ?? false;
 
             runSelectionThroughEDDNThruTestToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks && rightclickhe != null && EDDNClass.IsEDDNMessage(rightclickhe.EntryType);
@@ -83,7 +90,6 @@ namespace EDDiscovery.UserControls
             runActionsAcrossSelectionToolSpeechStripMenuItem.Visible =
             runSelectionThroughInaraSystemToolStripMenuItem.Visible =
             runEntryThroughProfileSystemToolStripMenuItem.Visible =
-            runSelectionThroughEDDNThruTestToolStripMenuItem.Visible =
             sendJournalEntriesToDLLsToolStripMenuItem.Visible =
             travelGridInDebugModeToolStripMenuItem.Visible =
             runSelectionThroughEDAstroDebugToolStripMenuItem.Visible = EDDOptions.Instance.EnableTGRightDebugClicks;

@@ -604,13 +604,14 @@ namespace EDDiscovery.UserControls
 
         private void historyContextMenu_Opening(object sender, CancelEventArgs e)
         {
-            quickMarkToolStripMenuItem.Visible = rightclickhe != null;
-            quickMarkToolStripMenuItem.Checked = rightclickhe != null && quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
-            toolStripMenuItemStartStop.Visible = rightclickhe != null;
-            mapGotoStartoolStripMenuItem.Visible = rightclickhe != null && rightclickhe.System.HasCoordinate;
-            viewOnEDSMToolStripMenuItem.Visible = rightclickhe != null;
-            viewOnSpanshToolStripMenuItem.Visible = rightclickhe != null;
+            quickMarkToolStripMenuItem.Visible = 
+            toolStripMenuItemStartStop.Visible = 
+            viewOnEDSMToolStripMenuItem.Visible = 
+            viewOnSpanshToolStripMenuItem.Visible = 
             viewScanDisplayToolStripMenuItem.Visible = rightclickhe != null;
+
+            quickMarkToolStripMenuItem.Checked = rightclickhe != null && quickMarkJIDs.Contains(rightclickhe.journalEntry.Id);              // set the check 
+            mapGotoStartoolStripMenuItem.Visible = rightclickhe != null && rightclickhe.System.HasCoordinate;
             removeSortingOfColumnsToolStripMenuItem.Visible = dataGridViewJournal.SortedColumn != null;
             jumpToEntryToolStripMenuItem.Visible = dataGridViewJournal.Rows.Count > 0;
         }
