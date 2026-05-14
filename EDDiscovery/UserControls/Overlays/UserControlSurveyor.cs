@@ -975,7 +975,14 @@ namespace EDDiscovery.UserControls
 
                     // mirrors scandisplaynodes
 
-                    var notexpired = signallist.Where(x => (!x.SignalName.Contains("-class") && (!x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow)) || (x.SignalName.Contains("-class") && x.RecordedUTC > DateTime.UtcNow.AddDays(-14))).ToList();
+                    // was:
+                    //var notexpired = signallist.Where(x => (!x.SignalName.Contains("-class") && (!x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow)) || 
+                    //(x.SignalName.Contains("-class") && x.RecordedUTC > DateTime.UtcNow.AddDays(-14))).ToList();
+
+                    // should be:
+                    var notexpired = signallist.Where(x => (x.ClassOfSignal != SignalDefinitions.Classification.Megaship && (!x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow)) ||
+                                                            (x.ClassOfSignal == SignalDefinitions.Classification.Megaship && x.RecordedUTC > DateTime.UtcNow.AddDays(-14))).ToList();
+
                     notexpired.Sort(delegate (FSSSignal l, FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
 
                     var expired = signallist.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
@@ -998,7 +1005,7 @@ namespace EDDiscovery.UserControls
                             if (pos++ == expiredpos)
                                 ldrawsystemsignallist = ldrawsystemsignallist.AppendPrePad("Expired".Tx()+": ", Environment.NewLine + Environment.NewLine);
 
-                            ldrawsystemsignallist = ldrawsystemsignallist.AppendPrePad(fsssig.ToString(true), Environment.NewLine);
+                            ldrawsystemsignallist = ldrawsystemsignallist.AppendPrePad(fsssig.ToString(), Environment.NewLine);
                         }
                     }
                 }

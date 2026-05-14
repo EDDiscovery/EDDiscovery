@@ -47,6 +47,7 @@ namespace EDDiscovery.UserControls
                 new ExtendedControls.CheckedIconUserControl.Item("planetclass", "Show Classes of Planets".Tx(), global::EDDiscovery.Icons.Controls.ShowPlanetClasses),
                 new ExtendedControls.CheckedIconUserControl.Item("dist", "Show distance of bodies".Tx(), global::EDDiscovery.Icons.Controls.ShowDistances),
                 new ExtendedControls.CheckedIconUserControl.Item("starsondiffline", "Show bodyless stars on separate lines".Tx(), global::EDDiscovery.Icons.Controls.ShowStarClasses),
+                new ExtendedControls.CheckedIconUserControl.Item("showoldersignals", "Show signal icons for expired signals".Tx(), global::EDDiscovery.Icons.Controls.FSSBodySignals),
                 new ExtendedControls.CheckedIconUserControl.Item("simplify", "Display simplifed diagram", global::EDDiscovery.Icons.Controls.ShowStarClasses),
                 }, 
                 Setting,
@@ -78,6 +79,7 @@ namespace EDDiscovery.UserControls
             sduc.SystemDisplay.ShowDist = displayfilters.Contains("dist") || all;
             sduc.SystemDisplay.NoPlanetStarsOnSameLine = displayfilters.Contains("starsondiffline") || all;
             sduc.SystemDisplay.SimplifyDiagram = displayfilters.Contains("simplify") || all;
+            sduc.SystemDisplay.ShowExpiredSignalIcons = displayfilters.Contains("showoldersignals") || all;
         }
 
     }

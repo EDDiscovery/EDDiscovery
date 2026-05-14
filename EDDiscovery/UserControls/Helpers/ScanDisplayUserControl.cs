@@ -25,6 +25,8 @@ namespace EDDiscovery.UserControls
     {
         public EliteDangerousCore.StarScan2.SystemDisplay SystemDisplay { get; private set; }
 
+        public Size ImageSize => imagebox.Image?.Size ?? Size.Empty;
+
         public int WidthAvailable { get { return this.Width - vScrollBarCustom.Width; } }   // available display width
 
         #region Init

@@ -125,8 +125,9 @@ namespace EDDiscovery.UserControls
             if (!closing && showing_system != null)
             {
                 int newspace = panelStars.WidthAvailable;
+                var usedspace = panelStars.ImageSize;
 
-                if (newspace < panelStars.SystemDisplay.DisplayAreaUsed.X || newspace > panelStars.SystemDisplay.DisplayAreaUsed.X +  panelStars.SystemDisplay.StarSize.Width)
+                if (newspace < usedspace.Width || newspace > usedspace.Width +  panelStars.SystemDisplay.StarSize.Width)
                 {
                     DrawSystem();
                 }
