@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlSurveyor
+    partial class SurveyorPanel
     {
         /// <summary> 
         /// Required designer variable.

@@ -384,6 +384,15 @@
     <Compile Include="UserControls\LogsBookmarks\Log.Designer.cs">
       <DependentUpon>Log.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Overlays\SurveyorPanelRoute.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Overlays\SurveyorPanelTargetFuel.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Overlays\SurveyorPanelUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\Overlays\TravelPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -748,11 +757,11 @@
     <Compile Include="UserControls\Overlays\UserControlSpanel.Designer.cs">
       <DependentUpon>UserControlSpanel.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Overlays\UserControlSurveyor.cs">
+    <Compile Include="UserControls\Overlays\SurveyorPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Overlays\UserControlSurveyor.Designer.cs">
-      <DependentUpon>UserControlSurveyor.cs</DependentUpon>
+    <Compile Include="UserControls\Overlays\SurveyorPanel.Designer.cs">
+      <DependentUpon>SurveyorPanel.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Overlays\UserControlSysInfo.cs">
       <SubType>UserControl</SubType>
@@ -1054,8 +1063,8 @@
     <EmbeddedResource Include="UserControls\Overlays\UserControlOrganics.resx">
       <DependentUpon>UserControlOrganics.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Overlays\UserControlSurveyor.resx">
-      <DependentUpon>UserControlSurveyor.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\Overlays\SurveyorPanel.resx">
+      <DependentUpon>SurveyorPanel.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\UserControlSysInfo.resx">
       <DependentUpon>UserControlSysInfo.cs</DependentUpon>
