@@ -266,8 +266,9 @@ namespace EDDiscovery.UserControls
                 if (res == DialogResult.OK)
                 {
                     string sname = f.Get("Sys");
-                    if ( sname.HasChars() && DiscoveryForm.History.StarScan2.GetISystem(sname)!=null )
-                    { 
+                    
+                    if ( sname.HasChars() )         // any text now we try, the FindSyncScan will report either nothing or do an spansh/edsm lookup
+                    {
                         showing_matcomds = null;
                         showing_system = new EliteDangerousCore.SystemClass(sname);
                         override_system = true;
