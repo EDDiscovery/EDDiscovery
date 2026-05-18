@@ -111,8 +111,10 @@ namespace EDDiscovery
         private Timer periodicchecktimer;
         private bool in_system_sync = false;        // between start/end sync of databases
 
-        private AudioExtensions.IAudioDriver audiodriverwave;
-        private AudioExtensions.AudioQueue audioqueuewave;
+        private AudioExtensions.IAudioDriver audiodriverwave1;
+        private AudioExtensions.IAudioDriver audiodriverwave2;
+        private AudioExtensions.AudioQueue audioqueuewave1;
+        private AudioExtensions.AudioQueue audioqueuewave2;
         private AudioExtensions.IAudioDriver audiodriverspeech;
         private AudioExtensions.AudioQueue audioqueuespeech;
         private AudioExtensions.SpeechSynthesizer speechsynth;
@@ -375,7 +377,8 @@ namespace EDDiscovery
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
             if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5 && !EDDOptions.Instance.NoSound)
             {
-                audiodriverwave = AudioHelper.GetAudioDriver(LogLineHighlight, EDDConfig.Instance.DefaultWaveDevice);
+                audiodriverwave1 = AudioHelper.GetAudioDriver(LogLineHighlight, EDDConfig.Instance.DefaultWaveDevice);
+                audiodriverwave2 = AudioHelper.GetAudioDriver(LogLineHighlight, EDDConfig.Instance.DefaultWaveDevice);
                 audiodriverspeech = AudioHelper.GetAudioDriver(LogLineHighlight, EDDConfig.Instance.DefaultVoiceDevice);
 
                 var windowsspeechengine = AudioHelper.GetWindowsSpeechEngine(LogLineHighlight);
@@ -384,7 +387,8 @@ namespace EDDiscovery
             }
             else
             {
-                audiodriverwave = new AudioExtensions.AudioDriverDummy();
+                audiodriverwave1 = new AudioExtensions.AudioDriverDummy();
+                audiodriverwave2 = new AudioExtensions.AudioDriverDummy();
                 audiodriverspeech = new AudioExtensions.AudioDriverDummy();
                 speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
             }
@@ -394,7 +398,8 @@ namespace EDDiscovery
             speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
 #endif
 
-            audioqueuewave = new AudioExtensions.AudioQueue(audiodriverwave);
+            audioqueuewave1 = new AudioExtensions.AudioQueue(audiodriverwave1);
+            audioqueuewave2 = new AudioExtensions.AudioQueue(audiodriverwave2);
             audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
 
             // Frontier bindings
@@ -989,11 +994,14 @@ namespace EDDiscovery
             DLLManager.UnLoad();
 
             audioqueuespeech.StopAll();
-            audioqueuewave.StopAll();
+            audioqueuewave1.StopAll();
+            audioqueuewave2.StopAll();
             audioqueuespeech.Dispose();     // in order..
             audiodriverspeech.Dispose();
-            audioqueuewave.Dispose();
-            audiodriverwave.Dispose();
+            audioqueuewave1.Dispose();
+            audiodriverwave1.Dispose();
+            audioqueuewave2.Dispose();
+            audiodriverwave2.Dispose();
 
             speechsynth.Dispose();
 

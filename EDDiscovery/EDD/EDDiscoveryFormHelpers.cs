@@ -484,7 +484,7 @@ namespace EDDiscovery
             return new Actions.ActionController(this, uiform,
                                                 appfolder, manageappfolder,otherinstalledfilesfolder, 
                                                 globalvars,
-                                                audioqueuewave, audioqueuespeech, speechsynth, frontierbindings, EDDOptions.Instance.NoSound,
+                                                audioqueuewave1, audioqueuewave2, audioqueuespeech, speechsynth, frontierbindings, EDDOptions.Instance.NoSound,
                                                 logger,
                                                 this.Icon, new Type[] { });
         }

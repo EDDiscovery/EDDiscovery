@@ -42,7 +42,8 @@ namespace EDDiscovery.Actions
             // pack must be there, enabled, version must parse, and pack version must parse
             return (pack?.Enabled == true && v != null && pv != null) ? pv < v : false;
         }
-        public override AudioExtensions.AudioQueue AudioQueueWave { get;  }
+        public override AudioExtensions.AudioQueue AudioQueueWave1 { get; }
+        public override AudioExtensions.AudioQueue AudioQueueWave2 { get; }
         public override AudioExtensions.AudioQueue AudioQueueSpeech { get;  }
         public override AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get; }
         public AudioExtensions.IVoiceRecognition VoiceRecon { get; }
@@ -55,7 +56,8 @@ namespace EDDiscovery.Actions
                                 string approotfolder,  // null if don't allow management, else root for Manage/Edit Addons
                                 string otherinstalledfilesfolder, // null if don't do it
                                 string globalvars,      // null if none, else load these global vars
-                                AudioExtensions.AudioQueue wave, AudioExtensions.AudioQueue speech, AudioExtensions.SpeechSynthesizer synth, 
+                                AudioExtensions.AudioQueue wave1, AudioExtensions.AudioQueue wave2, 
+                                AudioExtensions.AudioQueue speech, AudioExtensions.SpeechSynthesizer synth, 
                                 BindingsFile frontierbindings, 
                                 bool nosound,
                                 Action<string> logger,
@@ -68,7 +70,8 @@ namespace EDDiscovery.Actions
             this.keyignoredforms = keyignoredforms;
             this.logLineOut = logger;
 
-            AudioQueueWave = wave;
+            AudioQueueWave1 = wave1;
+            AudioQueueWave2 = wave2;
             AudioQueueSpeech = speech;
             SpeechSynthesizer = synth;
             FrontierBindings = frontierbindings;
@@ -106,6 +109,7 @@ namespace EDDiscovery.Actions
             ActionBase.AddCommand("Materials", typeof(ActionMaterials), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("MenuItem", typeof(ActionMenuItem), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Perform", typeof(ActionPerform), ActionBase.ActionType.Cmd);
+            ActionBase.AddCommand("Play2", typeof(ActionPlay2), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Play", typeof(ActionPlay), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Popout", typeof(ActionPopout), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("ProgramWindow", typeof(ActionProgramwindow), ActionBase.ActionType.Cmd);
@@ -509,7 +513,8 @@ namespace EDDiscovery.Actions
                 {
                     actionrun?.TerminateAll();
                     AudioQueueSpeech?.StopAll();
-                    AudioQueueWave?.StopAll();
+                    AudioQueueWave1?.StopAll();
+                    AudioQueueWave2?.StopAll();
 
                     ReLoad(false);      // reload from disk, new ones if required, refresh old ones and keep the vars
                     CreatePanelsFromActionFiles();
@@ -608,14 +613,14 @@ namespace EDDiscovery.Actions
                 return null;
         }
 
-        // configure, using global vars, or passed values. If vcname == null the peristent variables are set on OK
+        // configure using wave1, using global vars, or passed values. If vcname == null the peristent variables are set on OK
         public Tuple<string, string> ConfigureWave(bool nodevice, string title, string vcvolume = null, string vceffects = null)
         {
             string volume = vcvolume ?? Globals.GetString(ActionPlay.globalvarplayvolume, "60");
             Variables effects = new Variables(vceffects ?? PersistentVariables.GetString(ActionPlay.globalvarplayeffects, ""), Variables.FromMode.MultiEntryComma);
 
             ExtendedAudioForms.WaveConfigureDialog dlg = new ExtendedAudioForms.WaveConfigureDialog();
-            dlg.Init(true, nodevice, AudioQueueWave,
+            dlg.Init(true, nodevice, AudioQueueWave1,
                         title, this.Icon,
                         "",
                         false, AudioExtensions.AudioQueue.Priority.Normal, "", "",
@@ -629,7 +634,7 @@ namespace EDDiscovery.Actions
                     SetPeristentGlobal(ActionPlay.globalvarplayeffects, dlg.Effects.ToString());
                 }
 
-                EDDConfig.Instance.DefaultWaveDevice = AudioQueueWave.Driver.GetAudioEndpoint();
+                EDDConfig.Instance.DefaultWaveDevice = AudioQueueWave1.Driver.GetAudioEndpoint();
 
                 return new Tuple<string, string>(dlg.Volume, dlg.Effects.ToString());
             }
