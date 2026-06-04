@@ -165,6 +165,12 @@ namespace EDDiscovery
             //DebuggerHelpers.OutputControl += "StarScan";        // turn on debugging
 
 
+            {
+                //EliteDangerousCore.StarScan2.StarScan ss2 = new EliteDangerousCore.StarScan2.StarScan();
+                //var blist = SpanshClass.ConvertDumpToJournalRecords(new SystemClass("Leesti"), false);
+            }
+
+
         }
 
         public void PostShownDebug()
