@@ -378,7 +378,7 @@ namespace EDDiscovery.UserControls
 
             if ( sysnode != null )
             {
-                sysnode.DumpTree();
+                System.Diagnostics.Debug.WriteLine(sysnode.PrintTree());
 
                 Forms.ImportExportForm frm = new Forms.ImportExportForm();
                 frm.Export(new string[] {

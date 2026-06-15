@@ -208,7 +208,7 @@ namespace EDDiscovery.Actions
                     ap.AddDataOfType(sc.Materials, typeof(Dictionary<string,double>), storename + "_Materials");
                 }
 
-                ap[storename + "_text"] = sc.DisplayText();
+                ap[storename + "_text"] = sc.DisplayText(showwebbodies: true);
                 ap[storename + "_value"] = sc.EstimatedValue.ToStringInvariant();
             }
 #endif

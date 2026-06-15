@@ -357,7 +357,7 @@ namespace EDDiscovery.UserControls
                         if (bn.Features != null)
                         {
                             bdDetails.AppendCR();
-                            JournalScan.DisplaySurfaceFeatures(bdDetails, bn.Features, 0, false);
+                            JournalScan.DisplaySurfaceFeatures(bdDetails, bn.Features, edsmSpanshButton.WebLookup, 0, false);
                         }
                         if (bn.Organics != null)        // organic scans done
                         {
@@ -443,7 +443,7 @@ namespace EDDiscovery.UserControls
                     if (bn.Features != null)
                     {
                         bdDetails.AppendCR();
-                        JournalScan.DisplaySurfaceFeatures(bdDetails, bn.Features, 0, false);
+                        JournalScan.DisplaySurfaceFeatures(bdDetails, bn.Features, edsmSpanshButton.WebLookup, 0, false);
                     }
                     if (bn.Organics != null)
                     {
@@ -507,7 +507,7 @@ namespace EDDiscovery.UserControls
                     rw.Cells[2].Value = texttoadd[1];
                     rw.Cells[3].Value = texttoadd[2];
                     rw.Cells[4].Value = texttoadd[3];
-                    var tooltiptext = bn.Scan?.DisplayText(historicmcl, curmcl);
+                    var tooltiptext = bn.Scan?.DisplayText(edsmSpanshButton.WebLookup, historicmcl, curmcl);
                     if (tooltiptext != null)
                         rw.Cells[4].Tag = rw.Cells[4].ToolTipText = tooltiptext;
 

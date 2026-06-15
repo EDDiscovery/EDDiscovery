@@ -54,7 +54,7 @@ namespace EDDiscovery
                                 var entry = new EliteDangerousCore.JournalEvents.JournalEDDCommodityPrices(servertime,
                                                 mk.ID, mk.Name, mk.Name, system, EDCommander.CurrentCmdrID, mk.Commodities);
 
-                                var jo = entry.ToJSON();        // get json of it, and add it to the db
+                                var jo = entry.CreateJSON();        // get json of it, and add it to the db
                                 entry.Add(jo);
 
                                 InvokeAsyncOnUiThread(() =>
@@ -99,7 +99,7 @@ namespace EDDiscovery
                                     var list = modules.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLowerInvariant(), x.Cost)).ToArray();
                                     var outfitting = new EliteDangerousCore.JournalEvents.JournalOutfitting(servertime, station, station, system, sh.ID, list, EDCommander.CurrentCmdrID);
 
-                                    var jo = outfitting.ToJSON();        // get json of it, and add it to the db
+                                    var jo = outfitting.CreateJSON();        // get json of it, and add it to the db
                                     outfitting.Add(jo);
 
                                     InvokeAsyncOnUiThread(() =>
@@ -121,7 +121,7 @@ namespace EDDiscovery
 
                                     var shipyardevent = new EliteDangerousCore.JournalEvents.JournalShipyard(servertime, station, station, system, sh.ID, list, EDCommander.CurrentCmdrID, allowcobramkiv.Value);
 
-                                    var jo = shipyardevent.ToJSON();        // get json of it, and add it to the db
+                                    var jo = shipyardevent.CreateJSON();        // get json of it, and add it to the db
                                     shipyardevent.Add(jo);
 
                                     InvokeAsyncOnUiThread(() =>

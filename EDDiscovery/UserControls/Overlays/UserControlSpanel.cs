@@ -852,7 +852,7 @@ namespace EDDiscovery.UserControls
         {
             if ( IsSurfaceScanOn )
             {
-                scantext = scan.DisplayText(historicmatlist: DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast());
+                scantext = scan.DisplayText(showwebbodies:true, historicmatlist: DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast());
                 Display(current_historylist);
                 SetSurfaceScanBehaviour();  // set up timers etc.
             }

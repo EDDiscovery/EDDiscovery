@@ -164,11 +164,31 @@ namespace EDDiscovery
             // { string system = "Tethlon"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
             //DebuggerHelpers.OutputControl += "StarScan";        // turn on debugging
 
+            //So, check that the new leesti spansh does not overwrite journal scans/stations
+            //{
+            //    EliteDangerousCore.StarScan2.StarScan ss2 = new EliteDangerousCore.StarScan2.StarScan();
+            //    var sys = new SystemClass("Leesti");
 
-            {
-                //EliteDangerousCore.StarScan2.StarScan ss2 = new EliteDangerousCore.StarScan2.StarScan();
-                //var blist = SpanshClass.ConvertDumpToJournalRecords(new SystemClass("Leesti"), false);
-            }
+            //    // read in journal records for it
+            //    EliteDangerousCore.StarScan2.Tests.TestScan(ss2, sys.Name, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{sys.Name}Missing.json", @"c:\code", false, 1920, false);
+
+            //    // dump from journal
+            //    var res = ss2.FindSystemSynchronous(sys, false);
+            //    if (res != null)
+            //        res.DumpTree();
+
+            //    // Demonstrates not overriting scans but augmenting other data
+
+            //    var res2 = ss2.FindSystemSynchronous(sys, true);
+            //    if (res2 != null)
+            //    {
+            //        res2.DumpTree();
+            //        res2.DrawSystemToFile($@"c:\code\{sys.Name}_nwb.png", showwebbodies: false);
+            //        res2.DrawSystemToFile($@"c:\code\{sys.Name}_wb.png", showwebbodies: true);
+            //    }
+
+            //    //var blist = SpanshClass.ConvertDumpToJournalRecords(, false);
+            //}
 
 
         }

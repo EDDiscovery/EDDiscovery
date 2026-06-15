@@ -895,7 +895,7 @@ namespace EDDiscovery.UserControls
                     if ( ExtendedControls.MessageBoxTheme.Show(FindForm(), "Confirm sell of ship".Tx()+": "+ Environment.NewLine + last_displayship.ShipNameIdentType , "Warning".Tx(), MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes ) 
                     {
                         var je = new EliteDangerousCore.JournalEvents.JournalShipyardSell(DateTime.UtcNow, last_displayship.ShipFD, last_displayship.ID, 0, EDCommander.CurrentCmdrID);
-                        var jo = je.Json();
+                        var jo = je.CreateJSON();
                         je.Add(jo);
                         DiscoveryForm.NewEntry(je);
                     }
