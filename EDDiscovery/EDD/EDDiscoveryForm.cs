@@ -392,7 +392,8 @@ namespace EDDiscovery
                 speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
             }
 #else
-            audiodriverwave = new AudioExtensions.AudioDriverDummy();
+            audiodriverwave1 = new AudioExtensions.AudioDriverDummy();
+            audiodriverwave2 = new AudioExtensions.AudioDriverDummy();
             audiodriverspeech = new AudioExtensions.AudioDriverDummy();
             speechsynth = new AudioExtensions.SpeechSynthesizer(new AudioExtensions.DummySpeechEngine());
 #endif
