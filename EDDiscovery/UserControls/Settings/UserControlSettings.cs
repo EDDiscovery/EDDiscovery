@@ -77,7 +77,8 @@ namespace EDDiscovery.UserControls
                 comboBoxCustomLanguage.SelectedIndex = comboBoxCustomLanguage.Items.Count - 1;
             comboBoxCustomLanguage.SelectedIndexChanged += ComboBoxCustomLanguage_SelectedIndexChanged;
 
-            DiscoveryForm.OnRefreshCommanders += DiscoveryForm_OnRefreshCommanders;
+            DiscoveryForm.OnHistoryChange += DiscoveryForm_OnHistoryChange;
+            DiscoveryForm.OnNewCommanderDuringPlayDetected += DiscoveryForm_OnNewCommanderDuringPlayDetected;
 
             checkBoxOrderRowsInverted.Checked = EDDConfig.Instance.OrderRowsInverted;
             checkBoxMinimizeToNotifyIcon.Checked = EDDConfig.Instance.MinimizeToNotifyIcon;
@@ -156,21 +157,25 @@ namespace EDDiscovery.UserControls
             p.Text = ""; p.Image = ExtendedControls.TabStrip.HelpIcon; p.Tag = tag;
         }
 
-
         protected override void InitialDisplay()
         {
         }
 
         protected override void Closing()
         {
-            DiscoveryForm.OnRefreshCommanders -= DiscoveryForm_OnRefreshCommanders;
+            DiscoveryForm.OnHistoryChange -= DiscoveryForm_OnHistoryChange;
+            DiscoveryForm.OnNewCommanderDuringPlayDetected -= DiscoveryForm_OnNewCommanderDuringPlayDetected;
 
             var frm = FindForm();
             if (typeof(ExtendedControls.SmartSysMenuForm).IsAssignableFrom(frm?.GetType()))
                 (frm as ExtendedControls.SmartSysMenuForm).TopMostChanged -= ParentForm_TopMostChanged;
         }
 
-        private void DiscoveryForm_OnRefreshCommanders()
+        private void DiscoveryForm_OnHistoryChange()
+        {
+            UpdateCommandersListBox();
+        }
+        private void DiscoveryForm_OnNewCommanderDuringPlayDetected()
         {
             UpdateCommandersListBox();
         }

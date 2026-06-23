@@ -182,11 +182,6 @@ namespace EDDiscovery
                     var t3 = BaseUtils.AppTicks.TickCountLapDelta("CTNE");
                     System.Diagnostics.Trace.WriteLine($"{Environment.TickCount} ** EndProcess {he.EntryType} {he.EventTimeUTC} {t3.Item1} {(t3.Item3 > 99 ? "!!!!!!!!!!!!!" : "")}");
                 }
-
-                if (historyentry.EntryType == JournalTypeEnum.LoadGame) // and issue this on Load game
-                {
-                    OnRefreshCommanders?.Invoke();
-                }
             }
         }
 

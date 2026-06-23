@@ -25,11 +25,6 @@ namespace EDDiscovery
 {
     public partial class EDDiscoveryForm
     {
-        private void Controller_RefreshCommanders()
-        {
-            UpdateCommandersListBox();             // in case a new commander has been detected
-        }
-
         private void Controller_RefreshStarting()
         {
             RefreshButton(false);
@@ -42,7 +37,9 @@ namespace EDDiscovery
 
             PostHistoryLoadDebug();
 
-            RefreshButton(true);
+            UpdateCommandersListBox();             // in case a new commander has been detected
+            RefreshButton(true);                    // and set the buttons up
+
             actioncontroller.ActionRunOnRefresh();
 
             if (EDCommander.Current.SyncToInara && History.GetLast != null)

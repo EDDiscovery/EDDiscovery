@@ -44,24 +44,28 @@ namespace EDDiscovery
         // IN ORDER OF CALLING DURING A REFRESH
 
         public event Action OnRefreshStarting;                              // UI. Called before worker thread starts, processing history (EDDiscoveryForm uses this to disable buttons and action refreshstart)
-        public event Action OnRefreshCommanders;                            // UI. Called when refresh worker completes before final history is made And when a loadgame is seen.
-                                                                            // Commanders may have been added. 
-        public event Action OnHistoryChange;                                // UI. MAJOR. UC. Mirrored. Called AFTER history is complete, or via RefreshDisplays if a forced refresh is needed.  UC's use this
-        public event Action OnRefreshComplete;                              // UI. Called AFTER history is complete.. Form uses this to know the whole process is over, and buttons may be turned on, actions may be run, etc
 
-        // DURING A new Journal entry by the monitor, in order..
+        public event Action OnPreHistoryChange;                             // UI. Called when history has been replaced. Also via RefreshDisplays if a forced refresh is needed.  
+                                                                            //              UC MUST not call any panel communication so all UCs get this before any other calls
+        public event Action OnHistoryChange;                                // UI. Called after OnPreHistoryChange is complete.
+                                                                            //              UC can call panel comms so we may get for instance history grid change notifications
+        public event Action OnRefreshComplete;                              // UI. Called when refresh is complete. Form uses this to know the whole process is over, and buttons may be turned on, actions may be run, etc
 
-        public event Action<UIEvent> OnNewUIEvent;                          // UI. MAJOR. UC. Mirrored. Always called irrespective of commander
+        // UI events
 
-        // In order. Current commander only
+        public event Action<UIEvent> OnNewUIEvent;                          // UI. Called irrespective of commander
 
-        public event Action OnNewCommanderDuringPlayDetected;               // UI. Called during play when a new commander has been found (not during history load)
+        // NewJournalEntry from scanner: Any commander, first sent
+
+        public event Action OnNewCommanderDuringPlayDetected;               // UI. Called during play when any new commander has been found (not during history load)
+        
+        // NewJournalEntry from scanner for current commander only, continues:
+
         public event Action<JournalEntry> OnNewJournalEntryUnfiltered;      // UI. Called when a new journal entry is read.  Not filtered by history merge system
         public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered;      // UI. Called when a new history entry is created and databases into it updated, but before adding.  Not filtered by history merging system
-        public event Action<HistoryEntry> OnNewEntry;                       // UI. MAJOR. UC. Mirrored. Called after HE has been added to the history list.  Post merging/filtering
+        public event Action<HistoryEntry> OnNewEntry;                       // UI. Called after HE has been added to the history list.  Post merging/filtering
         public event Action<HistoryEntry> OnNewEntrySecond;                 // UI. Called after OnNewEntry for more processing. Post filtering
-        // If a UC is a Cursor Control type, then OnNewEntry should also fire the cursor control OnChangedSelection, OnTravelSelectionChanged after onNewEntry has been received by the cursor UC
-
+        
         // Status/Logging updates. These can be run in a thread.  EDF invokes them
 
         public event Action<string> LogLineHighlight;                       
@@ -105,6 +109,9 @@ namespace EDDiscovery
 
         public void RefreshDisplays()
         {
+            // we invoke this one first, UCs are not allowed to orginate panel comms
+            OnPreHistoryChange?.Invoke();
+            // then the main one most use
             OnHistoryChange?.Invoke();
         }
 

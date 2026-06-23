@@ -454,6 +454,8 @@ namespace EDDiscovery.UserControls
                 if (he.Status.StationName_Localised != null)
                     colTime += $"s`{he.Status.StationName_Localised}`, {he.Status.FDStationType}\r\n";
 
+                colTime += $"sh`{he.Status.ShipTypeFD}`, Lander {he.Status.LandedInLander}\r\n";
+
                 if ( he.Status.DockingPad>0)
                     colTime += $"DPad: {he.Status.DockingPad}\r\n";
 

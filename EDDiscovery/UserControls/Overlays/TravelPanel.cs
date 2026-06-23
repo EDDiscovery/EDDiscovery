@@ -34,11 +34,15 @@ namespace EDDiscovery.UserControls
         }
         protected override void Init()
         {
+            edsmSpanshButton.Init(this, "EDSMSpansh", "");
+            edsmSpanshButton.ValueChanged += (s, ch) =>
+            {
+                UpdateDisplay();
+            };
+
             DiscoveryForm.OnNewUIEvent += DiscoveryForm_OnNewUIEvent;
+            DiscoveryForm.OnPreHistoryChange += DiscoveryForm_OnPreHistoryChange;         // we use this before other panels as we are also trapping new entry (new june 26)
             DiscoveryForm.OnNewEntry += DiscoveryForm_OnNewEntry;
-#if DEBUG
-            DiscoveryForm.OnHistoryChange += DiscoveryForm_OnHistoryChange;         // panel normally tracks the top
-#endif
 
             // if opened after start, we need to pick up state from discoveryform
 
@@ -61,7 +65,7 @@ namespace EDDiscovery.UserControls
         protected override void Closing()
         {
             DiscoveryForm.OnNewUIEvent -= DiscoveryForm_OnNewUIEvent;
-            DiscoveryForm.OnHistoryChange -= DiscoveryForm_OnHistoryChange;
+            DiscoveryForm.OnPreHistoryChange -= DiscoveryForm_OnPreHistoryChange;
             DiscoveryForm.OnNewEntry -= DiscoveryForm_OnNewEntry;
         }
 
@@ -72,7 +76,7 @@ namespace EDDiscovery.UserControls
             this.BackColor = curcol;
         }
 
-        private void DiscoveryForm_OnHistoryChange()
+        private void DiscoveryForm_OnPreHistoryChange()
         {
             lasthe = DiscoveryForm.History.GetLast;
             UpdateDisplay();
@@ -97,18 +101,16 @@ namespace EDDiscovery.UserControls
 
         public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
-#if DEBUG
             lasthe = he;
             System.Diagnostics.Debug.WriteLine($"TravelPanel Receive HE {lasthe.EventTimeUTC} {lasthe.EventSummary} {lasthe.System.Name}");
             UpdateDisplay();
-#endif
         }
 
         async void UpdateDisplay()
         {
             extPictureBox.ClearImageList();
 
-            EliteDangerousCore.StarScan2.SystemNode sysnode = lasthe != null ? await DiscoveryForm.History.StarScan2.FindSystemAsync(lasthe.System, false) : null;
+            EliteDangerousCore.StarScan2.SystemNode sysnode = lasthe != null ? await DiscoveryForm.History.StarScan2.FindSystemAsync(lasthe.System, edsmSpanshButton.WebLookup) : null;
             if (IsClosed || sysnode == null || lasthe == null)
             {
                 extPictureBox.Render();
@@ -123,7 +125,6 @@ namespace EDDiscovery.UserControls
             var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
             Font dfont = displayfont ?? this.Font;
 
-
             ExtendedControls.ImageElement.List el = new ExtendedControls.ImageElement.List();
 
             var currentsystemclass = lasthe.Status.LastFSDJump;
@@ -137,8 +138,8 @@ namespace EDDiscovery.UserControls
 
                 if (scan != null)
                 {
-                    startext += $" {scan.StarClassificationAbv}" + Environment.NewLine;
-                    startext += $" {scan.nStellarMass:N2} sm {scan.nAbsoluteMagnitude:N2} m {scan.nAge:N0} my" + Environment.NewLine;
+                    startext += $": {scan.StarClassificationAbv}" + Environment.NewLine;
+                    startext += $"{scan.nStellarMass:N2} sm {scan.nAbsoluteMagnitude:N2} m {scan.nAge:N0} my" + Environment.NewLine;
                 }
                 else
                     startext += Environment.NewLine;
@@ -156,56 +157,77 @@ namespace EDDiscovery.UserControls
                         );
             }
 
-            var currentlocationclass = lasthe.Status.CurrentLocation;
+            IBodyLocation currentlocationclass = lasthe.Status.CurrentLocation;
 
             if (currentlocationclass != null)
             {
                 BodyNode bn = currentlocationclass.BodyID != null ? sysnode.FindBody(currentlocationclass.BodyID.Value) : null;
+                JournalScan scan = bn?.Scan;
 
                 string loctext = "????";
                 Image image = null;
 
                 // possible location types are listed in HES
 
-                if (currentlocationclass is JournalLocation jloc)           // Location can be Location or SupercruiseExit
+                if (currentlocationclass is JournalLocation jloc)           // Location can due to Location or SupercruiseExit
                 {
-                    loctext = $"{currentlocationclass.BodyName} {currentlocationclass.BodyType}";
+                    loctext = $"{currentlocationclass.BodyName}, {currentlocationclass.BodyType}";
 
-                    if (bn?.Scan != null)
-                    {
+                    if (scan != null)
                         image = bn.Scan.GetImage();
-                    }
                 }
-                else if (currentlocationclass is JournalFSDJump || currentlocationclass is JournalCarrierJump)
+                else if (currentlocationclass is JournalLocOrJump jjump)
                 {
-                    var jjump = currentlocationclass as JournalLocOrJump;
-                    // else SupercruiseExit, Locatio
-
-                    loctext = $"{currentlocationclass.BodyName} {currentlocationclass.BodyType}";
+                    loctext = $"{currentlocationclass.BodyName}, {currentlocationclass.BodyType}";
                 }
                 else if (currentlocationclass is JournalApproachBody jab)
                 {
+                    loctext = $"{currentlocationclass.BodyName}, {currentlocationclass.BodyType}";
 
+                    if (scan != null)
+                    {
+                        if (scan.IsPlanet)
+                        {
+                            loctext += Environment.NewLine + $"{scan.DisplayShortInformation(null)}";
+                        }
+                        image = bn.Scan.GetImage();
+                    }
                 }
                 else if (currentlocationclass is JournalApproachSettlement jas)
                 {
-
+                    loctext += Environment.NewLine + $"{jas.Name}, {jas.StationFaction}, {AllegianceDefinitions.ToEnglish(jas.StationAllegiance)}";
+                    string iname = StationDefinitions.StationImageName(StationDefinitions.StarportTypes.OnFootSettlement);
+                    BaseUtils.Icons.IconSet.TryGetImage(iname, out image);      // may not have an image 
                 }
                 else if (currentlocationclass is JournalSupercruiseExit jse)
                 {
+                    loctext = $"{currentlocationclass.BodyName}, {currentlocationclass.BodyType}";
 
+                    if (jse.BodyType == BodyDefinitions.BodyType.Station)
+                    {
+                        string iname = StationDefinitions.StationImageName(StationDefinitions.StarportTypes.Coriolis);
+                        BaseUtils.Icons.IconSet.TryGetImage(iname, out image);      // may not have an image 
+                    }
+                    else if (jse.BodyType == BodyDefinitions.BodyType.Planet)
+                    {
+                        if (bn?.Scan != null)
+                            image = bn.Scan.GetImage();
+                    }
                 }
                 else if (currentlocationclass is JournalDocked jdck)
                 {
                     loctext += Environment.NewLine + $"{jdck.StationName_Localised} {StationDefinitions.ToLocalisedLanguage(jdck.FDStationType)}, {jdck.StationFaction}, {AllegianceDefinitions.ToEnglish(jdck.StationAllegiance)}";
-
                     string iname = StationDefinitions.StationImageName(jdck.FDStationType);
-                    BaseUtils.Icons.IconSet.TryGetImage(iname, out image);      // may not have an image so 
+                    BaseUtils.Icons.IconSet.TryGetImage(iname, out image);      // may not have an image 
                 }
                 else
                 {
                     System.Diagnostics.Debug.Assert(false, $"TravelPanel unexpected Location class {currentlocationclass.GetType().Name}");
                 }
+
+                loctext = currentlocationclass.GetType().Name + ": " + loctext;
+
+                System.Diagnostics.Debug.WriteLine($"TravelPanel writing {loctext}");
 
                 el.AddPictureTextHorzDivider(new Rectangle(new Point(pos.X, el.Max.Y + 4), textsize),
                             image, new Size(dfont.Height * 3, dfont.Height * 3),

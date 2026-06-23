@@ -227,7 +227,7 @@ namespace EDDiscovery
                                                         linkedcmdrid, cmdr.Name,
                                                         EDDOptions.Instance.HistoryLoadDayLimit > 0 ? EDDOptions.Instance.HistoryLoadDayLimit : EDDConfig.Instance.FullHistoryLoadDayLimit,
                                                         essentialitemslist,
-                                                        cmdr.LinkedCommanderEndTime,
+                                                        cmdr.LinkedCommanderEndTime, EDDOptions.Instance.MinJournalDateUTC,
                                                         EDDOptions.Instance.MultithreadedJournalRead
                                                         );
                     }
@@ -237,7 +237,7 @@ namespace EDDiscovery
                                                     args.CurrentCommander, cmdr.Name,
                                                     EDDOptions.Instance.HistoryLoadDayLimit > 0 ? EDDOptions.Instance.HistoryLoadDayLimit : EDDConfig.Instance.FullHistoryLoadDayLimit,
                                                     essentialitemslist,
-                                                    EDDOptions.Instance.MaxJournalDateUTC,
+                                                    EDDOptions.Instance.MaxJournalDateUTC, EDDOptions.Instance.MinJournalDateUTC,
                                                     EDDOptions.Instance.MultithreadedJournalRead
                                                     );
 
@@ -293,13 +293,9 @@ namespace EDDiscovery
 
                     EdsmLogFetcher.StopCheck();     // ensure edsm has stopped. previosly asked to stop above by an async call
 
-                    System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Refresh commanders Invoke");
-
-                    OnRefreshCommanders?.Invoke();
-
                     System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC History Change Invoke");
 
-                    OnHistoryChange?.Invoke();
+                    RefreshDisplays();      // calling OnPreHistoryChange and OnHistoryChange
 
                     System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC History Change Completed");
                 }

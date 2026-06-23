@@ -73,9 +73,10 @@ namespace EDDiscovery
         public event Action<string, Color> OnNewLogEntry;               // Mirrored. New log entry generated.
         #endregion
 
-        #region Events due to EDDiscoveryControl 
-        public event Action OnRefreshCommanders { add { Controller.OnRefreshCommanders += value; } remove { Controller.OnRefreshCommanders -= value; } }       
+        #region Events due to EDDiscoveryController
+        public event Action OnPreHistoryChange { add { Controller.OnPreHistoryChange += value; } remove { Controller.OnPreHistoryChange -= value; } }
         public event Action OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
+        public event Action OnNewCommanderDuringPlayDetected { add { Controller.OnNewCommanderDuringPlayDetected += value; } remove { Controller.OnNewCommanderDuringPlayDetected -= value; } }
         public event Action<HistoryEntry> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
         public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered { add { Controller.OnNewHistoryEntryUnfiltered += value; } remove { Controller.OnNewHistoryEntryUnfiltered -= value; } }
         public event Action<JournalEntry> OnNewJournalEntryUnfiltered { add { Controller.OnNewJournalEntryUnfiltered += value; } remove { Controller.OnNewJournalEntryUnfiltered -= value; } }
@@ -135,9 +136,10 @@ namespace EDDiscovery
 
             Controller.OnFinalClose += Controller_FinalClose;
 
-            Controller.OnRefreshCommanders += Controller_RefreshCommanders;
-            Controller.OnRefreshComplete += Controller_RefreshComplete;
             Controller.OnRefreshStarting += Controller_RefreshStarting;
+            Controller.OnRefreshComplete += Controller_RefreshComplete;
+
+            Controller.OnNewCommanderDuringPlayDetected += () => { UpdateCommandersListBox(); };
 
             Controller.OnSyncStarting += () => {  in_system_sync = true; };
             Controller.OnSyncComplete += (c1,c2) => { in_system_sync = false; };
