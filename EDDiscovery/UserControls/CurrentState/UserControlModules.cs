@@ -462,7 +462,7 @@ namespace EDDiscovery.UserControls
             buttonExtConfigure.Visible = si.State == Ship.ShipState.Owned;
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = si.CheckMinimumModulesForCoriolisEDSY();          //ORDER is important due to flow control panel
             extButtonLoadLoadout.Visible = true;
-            extPanelRollUpStats.Visible = !ItemData.IsSRVOrFighter(si.ShipFD);
+            extPanelRollUpStats.Visible = !ItemData.IsSRVOrFighterOrLander(si.ShipFD);
             labelVehicle.Visible = true;
             extButtonSaveLoadout.Visible = true;
             extButtonDeleteLoadout.Visible = displaydeleteloadoutbutton;

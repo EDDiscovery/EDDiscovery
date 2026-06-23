@@ -40,7 +40,7 @@ namespace EDDiscovery.Actions
                 vars[prefix + "LocalTime"] = he.EventTimeUTC.ToLocalTime().ToStringUSInvariant();
                 vars[prefix + "GameTime"] = he.EventTimeUTC.AddYears(1286).ToStringUSInvariant();
                 vars[prefix + "DockedState"] = he.Status.IsDocked.ToStringIntValue();
-                vars[prefix + "LandedState"] = he.Status.IsLandedInShipOrSRV.ToStringIntValue();
+                vars[prefix + "LandedState"] = he.Status.IsLandedInShipOrSRVOrLander.ToStringIntValue();
                 vars[prefix + "Hyperspace"] = he.Status.IsInSupercruise.ToStringIntValue();
                 vars[prefix + "WhereAmI"] = he.WhereAmI ?? "";
                 vars[prefix + "BodyType"] = he.Status.BodyType ?? "";

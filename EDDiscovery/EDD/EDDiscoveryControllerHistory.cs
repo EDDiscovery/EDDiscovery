@@ -225,7 +225,7 @@ namespace EDDiscovery
                                                         linkedcmdrid, cmdr.Name,
                                                         EDDOptions.Instance.HistoryLoadDayLimit > 0 ? EDDOptions.Instance.HistoryLoadDayLimit : EDDConfig.Instance.FullHistoryLoadDayLimit,
                                                         essentialitemslist,
-                                                        cmdr.LinkedCommanderEndTime
+                                                        cmdr.LinkedCommanderEndTime, null
                                                         );
                     }
 
@@ -234,7 +234,7 @@ namespace EDDiscovery
                                                     args.CurrentCommander, cmdr.Name,
                                                     EDDOptions.Instance.HistoryLoadDayLimit > 0 ? EDDOptions.Instance.HistoryLoadDayLimit : EDDConfig.Instance.FullHistoryLoadDayLimit,
                                                     essentialitemslist,
-                                                    EDDOptions.Instance.MaxJournalDateUTC
+                                                    EDDOptions.Instance.MaxJournalDateUTC, EDDOptions.Instance.MinJournalDateUTC
                                                     );
 
                     // now, if its a fresh one, we may have created a new linked commander. If that ends up being the current commander, we have not fully loaded properly

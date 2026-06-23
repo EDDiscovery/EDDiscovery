@@ -194,7 +194,7 @@ namespace EDDiscovery.WebServer
             response["OnFoot"] = he.Status.OnFoot;      // nov 23
             response["OnFootFleetCarrier"] = he.Status.OnFootFleetCarrier;
             response["IsDocked"] = he.Status.IsDocked;
-            response["IsLandedInShipOrSRV"] = he.Status.IsLandedInShipOrSRV;
+            response["IsLandedInShipOrSRV"] = he.Status.IsLandedInShipOrSRVOrLander;
             response["BookedDropship"] = he.Status.BookedDropship;
             response["BookedTaxi"] = he.Status.BookedTaxi;
             response["FSDJumpNextSystemName"] = he.Status.FSDJumpNextSystemName;
