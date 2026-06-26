@@ -164,6 +164,7 @@ namespace EDDiscovery
             // { string system = "Tethlon"; EliteDangerousCore.StarScan2.Tests.TestScan(system, $@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", @"c:\code\AA", false, 1920, false); }
             //DebuggerHelpers.OutputControl += "StarScan";        // turn on debugging
 
+
             //So, check that the new leesti spansh does not overwrite journal scans/stations
             //{
             //    EliteDangerousCore.StarScan2.StarScan ss2 = new EliteDangerousCore.StarScan2.StarScan();
@@ -190,6 +191,10 @@ namespace EDDiscovery
             //    //var blist = SpanshClass.ConvertDumpToJournalRecords(, false);
             //}
 
+            //EliteDangerousCore.StarScan2.StarScan ss2 = new EliteDangerousCore.StarScan2.StarScan();
+            //var sys = new SystemClass("Maraudi");
+            //var res = ss2.FindSystemSynchronous(sys, true);
+            //res.DrawSystemToFile($@"c:\code\{sys.Name}_wb.png", showwebbodies: true);
 
         }
 

@@ -84,9 +84,14 @@ namespace EDDiscovery.UserControls
 
         private void DiscoveryForm_OnNewEntry(HistoryEntry he)
         {
+#if DEBUG
+#else
             lasthe = DiscoveryForm.History.GetLast;
             System.Diagnostics.Debug.WriteLine($"Travel Panel NewHistory {lasthe.EventTimeUTC}");
-            UpdateDisplay();
+
+            if ( he.journalEntry.EventTypeID != JournalTypeEnum.EDDDestinationSelected)     // don't repeat the UI push
+                UpdateDisplay();
+#endif
         }
 
         private void DiscoveryForm_OnNewUIEvent(EliteDangerousCore.UIEvent ui)
@@ -101,9 +106,13 @@ namespace EDDiscovery.UserControls
 
         public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
+#if DEBUG
             lasthe = he;
             System.Diagnostics.Debug.WriteLine($"TravelPanel Receive HE {lasthe.EventTimeUTC} {lasthe.EventSummary} {lasthe.System.Name}");
-            UpdateDisplay();
+
+            if (he.journalEntry.EventTypeID != JournalTypeEnum.EDDDestinationSelected)     // don't repeat the UI push
+                UpdateDisplay();
+#endif
         }
 
         async void UpdateDisplay()
@@ -127,29 +136,39 @@ namespace EDDiscovery.UserControls
 
             ExtendedControls.ImageElement.List el = new ExtendedControls.ImageElement.List();
 
-            var currentsystemclass = lasthe.Status.LastFSDJump;
-            if (currentsystemclass != null)
             {
-                var starbody = sysnode.GetStarWithZeroDistls() ?? sysnode.GetBodesSimplifiedTopStar();          // zerols star or any star
-                var scan = starbody?.Scan;
-                string starimage = scan != null ? scan.StarTypeImageName : "Bodies.Stars.Unknown";
+                string startext = string.Empty;
+                Image starimage = null;
 
-                string startext = $"System {currentsystemclass.StarSystem} @ {currentsystemclass.StarPos.X:N2}, {currentsystemclass.StarPos.Y:N2}, {currentsystemclass.StarPos.Z:N2}";
-
-                if (scan != null)
+                var currentsystemclass = lasthe.Status.LastFSDJump;
+                if (currentsystemclass != null)
                 {
-                    startext += $": {scan.StarClassificationAbv}" + Environment.NewLine;
-                    startext += $"{scan.nStellarMass:N2} sm {scan.nAbsoluteMagnitude:N2} m {scan.nAge:N0} my" + Environment.NewLine;
+                    var starbody = sysnode.GetStarWithZeroDistls() ?? sysnode.GetBodesSimplifiedTopStar();          // zerols star or any star
+                    var scan = starbody?.Scan;
+
+                    startext = $"System {currentsystemclass.StarSystem} @ {currentsystemclass.StarPos.X:N2}, {currentsystemclass.StarPos.Y:N2}, {currentsystemclass.StarPos.Z:N2}";
+
+                    if (scan != null)
+                    {
+                        startext += $": {scan.StarClassificationAbv}" + Environment.NewLine;
+                        startext += $"{scan.nStellarMass:N2} sm {scan.nAbsoluteMagnitude:N2} m {scan.nAge:N0} my" + Environment.NewLine;
+                    }
+                    else
+                        startext += Environment.NewLine;
+
+                    string facstate = currentsystemclass.FactionState == FactionDefinitions.State.Unknown ? "" : (FactionDefinitions.ToLocalisedLanguage(currentsystemclass.FactionState) + ", ");
+
+                    startext += $"{currentsystemclass.Faction}, {facstate}{currentsystemclass.Government_Localised}, {currentsystemclass.Population:N0}";
+
+                    starimage = BaseUtils.Icons.IconSet.GetImage(scan != null ? scan.StarTypeImageName : "Bodies.Stars.Unknown");
                 }
                 else
-                    startext += Environment.NewLine;
-
-                string facstate =currentsystemclass.FactionState == FactionDefinitions.State.Unknown ? "" : (FactionDefinitions.ToLocalisedLanguage(currentsystemclass.FactionState) + ", ");
-
-                startext += $"{currentsystemclass.Faction}, {facstate}{currentsystemclass.Government_Localised}, {currentsystemclass.Population:N0}";
+                {
+                    startext = "No FSD Jump";
+                }
 
                 el.AddPictureTextHorzDivider(new Rectangle(pos, textsize),
-                    BaseUtils.Icons.IconSet.GetImage(starimage), new Size(dfont.Height * 4, dfont.Height * 4),
+                        starimage, new Size(dfont.Height * 4, dfont.Height * 4),
                         startext,
                         dfont, extCheckBoxWordWrap.Checked, alignment,
                         true,
@@ -161,76 +180,86 @@ namespace EDDiscovery.UserControls
 
             if (currentlocationclass != null)
             {
-                BodyNode bn = currentlocationclass.BodyID != null ? sysnode.FindBody(currentlocationclass.BodyID.Value) : null;
-                JournalScan scan = bn?.Scan;
+                BodyNode bn = currentlocationclass.BodyID != null ? sysnode.FindBody(currentlocationclass.BodyID.Value) : null;     // may be null
+                JournalScan scan = bn?.Scan;    // may be null
 
-                string loctext = "????";
-                Image image = null;
+                string loctext = $"@ {currentlocationclass.BodyName}";
+                Image locimage = null;
 
-                // possible location types are listed in HES
+                // possible location types are all IBodyLocation
+                //      ApproachBody, ApproachSettlement, SupercruiseExit
+                //      Docked/Location (both ILocDocked)       Location is also JournalLocOrJump
+                //      FSDJump/Carrier Jump (both JournalLocOrJump)
 
-                if (currentlocationclass is JournalLocation jloc)           // Location can due to Location or SupercruiseExit
+                if (currentlocationclass is ILocDocked jld)           // Location or Docking 
                 {
-                    loctext = $"{currentlocationclass.BodyName}, {currentlocationclass.BodyType}";
-
-                    if (scan != null)
-                        image = bn.Scan.GetImage();
+                    if (jld.Docked == true)
+                    {
+                        loctext += $": {jld.StationName_Localised}" + Environment.NewLine + $"{StationDefinitions.ToLocalisedLanguage(jld.FDStationType)}, {jld.StationFaction}, {AllegianceDefinitions.ToEnglish(jld.StationAllegiance)}";
+                        string iname = StationDefinitions.StationImageName(jld.FDStationType);
+                        BaseUtils.Icons.IconSet.TryGetImage(iname, out locimage);      // may not have an image 
+                    }
+                    else
+                    {
+                        if (scan != null)
+                            locimage = bn.Scan.GetImage();
+                    }
                 }
-                else if (currentlocationclass is JournalLocOrJump jjump)
+                else if (currentlocationclass is JournalLocOrJump jlj)    // FSDJump or Carrier Jump
                 {
-                    loctext = $"{currentlocationclass.BodyName}, {currentlocationclass.BodyType}";
+                    if (jlj.Faction.HasChars())
+                    {
+                        loctext += Environment.NewLine + $"{jlj.Faction}, {AllegianceDefinitions.ToLocalisedLanguage(jlj.Allegiance)}, {EconomyDefinitions.ToLocalisedLanguage(jlj.Economy)}"
+                                            + $", {SecurityDefinitions.ToLocalisedLanguage(jlj.Security)}), {jlj.Population:N0} ";
+                    }
+
+                    if (scan != null && bn.BodyID != 0)
+                        locimage = bn.Scan.GetImage();
                 }
                 else if (currentlocationclass is JournalApproachBody jab)
                 {
-                    loctext = $"{currentlocationclass.BodyName}, {currentlocationclass.BodyType}";
-
                     if (scan != null)
                     {
                         if (scan.IsPlanet)
                         {
                             loctext += Environment.NewLine + $"{scan.DisplayShortInformation(null)}";
                         }
-                        image = bn.Scan.GetImage();
+                        locimage = bn.Scan.GetImage();
                     }
                 }
                 else if (currentlocationclass is JournalApproachSettlement jas)
                 {
-                    loctext += Environment.NewLine + $"{jas.Name}, {jas.StationFaction}, {AllegianceDefinitions.ToEnglish(jas.StationAllegiance)}";
+                    loctext += $": {jas.Name}" + Environment.NewLine + $"{jas.StationFaction}, {AllegianceDefinitions.ToEnglish(jas.StationAllegiance)}, {EconomyDefinitions.ToLocalisedLanguage(jas.StationEconomy)}";
+                    loctext += Environment.NewLine + $"@ {jas.Latitude:N2}, {jas.Longitude:N2}";
                     string iname = StationDefinitions.StationImageName(StationDefinitions.StarportTypes.OnFootSettlement);
-                    BaseUtils.Icons.IconSet.TryGetImage(iname, out image);      // may not have an image 
+                    BaseUtils.Icons.IconSet.TryGetImage(iname, out locimage);      // may not have an image 
                 }
                 else if (currentlocationclass is JournalSupercruiseExit jse)
                 {
-                    loctext = $"{currentlocationclass.BodyName}, {currentlocationclass.BodyType}";
+                    loctext += $": {currentlocationclass.BodyType}";
 
                     if (jse.BodyType == BodyDefinitions.BodyType.Station)
                     {
                         string iname = StationDefinitions.StationImageName(StationDefinitions.StarportTypes.Coriolis);
-                        BaseUtils.Icons.IconSet.TryGetImage(iname, out image);      // may not have an image 
+                        BaseUtils.Icons.IconSet.TryGetImage(iname, out locimage);      // may not have an image 
                     }
                     else if (jse.BodyType == BodyDefinitions.BodyType.Planet)
                     {
                         if (bn?.Scan != null)
-                            image = bn.Scan.GetImage();
+                            locimage = bn.Scan.GetImage();
                     }
-                }
-                else if (currentlocationclass is JournalDocked jdck)
-                {
-                    loctext += Environment.NewLine + $"{jdck.StationName_Localised} {StationDefinitions.ToLocalisedLanguage(jdck.FDStationType)}, {jdck.StationFaction}, {AllegianceDefinitions.ToEnglish(jdck.StationAllegiance)}";
-                    string iname = StationDefinitions.StationImageName(jdck.FDStationType);
-                    BaseUtils.Icons.IconSet.TryGetImage(iname, out image);      // may not have an image 
                 }
                 else
                 {
                     System.Diagnostics.Debug.Assert(false, $"TravelPanel unexpected Location class {currentlocationclass.GetType().Name}");
                 }
 
-                loctext = currentlocationclass.GetType().Name + ": " + loctext;
+                //loctext = currentlocationclass.GetType().Name + ": " + loctext; //DEBUG
 
                 System.Diagnostics.Debug.WriteLine($"TravelPanel writing {loctext}");
 
-                el.AddPictureTextHorzDivider(new Rectangle(new Point(pos.X, el.Max.Y + 4), textsize),
-                            image, new Size(dfont.Height * 3, dfont.Height * 3),
+                el.AddPictureTextHorzDivider(new Rectangle(new Point(pos.X, el.MaxOrDefault.Y + 4), textsize),
+                            locimage, new Size(dfont.Height * 3, dfont.Height * 3),
                             loctext,
                             dfont, extCheckBoxWordWrap.Checked, alignment,
                             true,
@@ -238,162 +267,106 @@ namespace EDDiscovery.UserControls
                             );
             }
 
-            System.Diagnostics.Debug.WriteLine($"Update picture box @ {lasthe.EventTimeUTC} {lasthe.EventSummary} {lasthe.System.Name}");
+            {
+                if (uistatus.DestinationName.HasChars() && uistatus.DestinationSystemAddress.HasValue)
+                {
+                    var uis = uistatus;     // async below may result in a change to this, protect, found during debugging! This async stuff is evil
+                    var ss = await DiscoveryForm.History.StarScan2.FindSystemAsync(new SystemClass(uis.DestinationSystemAddress.Value), edsmSpanshButton.WebLookup);
+                    if (IsClosed)
+                        return;
 
+                    string desttext = ">>> " + uistatus.DestinationName_Localised;
+                    Image destimage = null;
+
+                    if (ss != null)    // we have it, find info on system
+                    {
+                        System.Diagnostics.Debug.WriteLine($"Travel Panel Dest found system  {ss.System.Name} {uis.DestinationSystemAddress} ");
+
+                        BodyNode bn = uistatus.DestinationBodyID != null ? ss.FindBody(uistatus.DestinationBodyID.Value) : null;     // may be null
+
+                        // targetting a barycentre, replace with the best star if possible by finding something with a scan at DistLS = 0 
+                        if (bn?.BodyType == BodyDefinitions.BodyType.Barycentre)
+                        {
+                            var better = ss.Bodies(x => x.DistLS == 0).FirstOrDefault();        
+                            if ( better != null)
+                                bn = better;
+                        }
+
+                        JournalScan scan = bn?.Scan;    // may be null
+
+                        if (bn?.BodyType == BodyDefinitions.BodyType.PlanetaryRing)
+                        {
+                            desttext += ": " + "Planetary Ring";
+                        }
+                        else if (bn?.BodyType == BodyDefinitions.BodyType.StellarRing)
+                        {
+                            desttext += ": " + "Belt Cluster";
+                        }
+                        else if (bn?.BodyType == BodyDefinitions.BodyType.AsteroidCluster)
+                        {
+                            desttext += ": " + "Belt Cluster Body";
+                        }
+                        else if (bn?.BodyType == BodyDefinitions.BodyType.Barycentre)
+                        {
+                            desttext += ": " + "Barycentre";
+                        }
+                        else if (bn?.BodyType == BodyDefinitions.BodyType.Star )
+                        {
+                            desttext += ": " + "Star";
+                        }
+                        else
+                        {
+                            // if we know the name is body of bn is null
+                            bool destisbody = bn != null ? bn.CanonicalNameOrOwnName.EqualsIIC(uistatus.DestinationName) : true;
+
+                            if (!destisbody)
+                                desttext += ": " + "Orbiting/On Surface of" + ": ";
+                        }
+
+                        if (scan != null)
+                        {
+                            destimage = bn.Scan.GetImage();
+                            desttext += Environment.NewLine + $"{scan.DisplayShortInformation(null)}";
+                        }
+                        else if (bn != null)
+                        {
+                            desttext += Environment.NewLine + "No Scan data";
+                        }
+                        else
+                        {
+                            // may be an orbital stations
+                            IBodyFeature orbitalstation = uistatus.DestinationBodyID != null ? ss.GetOrbitalStation(uistatus.DestinationBodyID.Value) : null;
+                            if (orbitalstation is JournalDocked jld)      // paranoia to make sure its a journal docked - should always be
+                            {
+                                //desttext += Environment.NewLine + "Orbital station";
+                                desttext += Environment.NewLine + $"{StationDefinitions.ToLocalisedLanguage(jld.FDStationType)}, {jld.StationFaction}, {AllegianceDefinitions.ToEnglish(jld.StationAllegiance)}";
+                                string iname = StationDefinitions.StationImageName(jld.FDStationType);
+                                BaseUtils.Icons.IconSet.TryGetImage(iname, out destimage);      // may not have an image 
+
+                            }
+                        }
+                    }
+                    else
+                    {   // no info
+                    }
+
+                    el.AddPictureTextHorzDivider(new Rectangle(new Point(pos.X, el.MaxOrDefault.Y + 4), textsize),
+                                destimage, new Size(dfont.Height * 3, dfont.Height * 3),
+                                desttext,
+                                dfont, extCheckBoxWordWrap.Checked, alignment,
+                                false,
+                                textcolour, backcolour
+                                );
+
+                }
+            }
+
+
+            System.Diagnostics.Debug.WriteLine($"Update picture box @ {lasthe.EventTimeUTC} {lasthe.EventSummary} {lasthe.System.Name}");
             extPictureBox.AddRange(el);
             extPictureBox.Render();
-
-
-
-
-
-
-
-
-
-
-            ////if (data != null)
-            ////{
-            //    var system  
-
-
-            //    if ( lasthe.Status.IsDocked)
-            //    {
-            //        //IBodyFeature bf = data.GetFeature(lasthe.Status.)
-            //    }
-
-
-            //    //string text = "";
-            //    //if (uistatus.MajorMode == UIMode.MajorModeType.MainShip)
-            //    //{
-            //    //    if (uistatus.Mode == UIMode.ModeType.MainShipNormalSpace)
-            //    //    {
-            //    //        text = "Normal space";
-            //    //        // show destination if set, if approach body show that, get body info from scan data
-            //    //    }
-            //    //    else if (uistatus.Mode == UIMode.ModeType.MainShipDockedStarPort)
-            //    //    {
-            //    //        if ( data.FindCanonicalBodyName)
-            //    //        text = "Docked Starport";
-            //    //        // show information about the station, economy, etc
-            //    //    }
-            //    //    else if (uistatus.Mode == UIMode.ModeType.MainShipDockedPlanet)
-            //    //    {
-            //    //        text = "Docked Planet";
-            //    //        // show information about the station, economy, etc
-            //    //    }
-            //    //    else if (uistatus.Mode == UIMode.ModeType.MainShipSupercruise)
-            //    //    {
-            //    //        bool injump = uistatus.Flags.Contains(UITypeEnum.FsdJump);
-            //    //        if (injump)
-            //    //            text = "Jumping to ";
-            //    //        else
-            //    //            text = "Supercruising"; // tbd to?
-
-            //    //        // show destination if set, if approach body show that, get body info from scan data
-            //    //    }
-            //    //    else if (uistatus.Mode == UIMode.ModeType.MainShipLanded)
-            //    //    {
-            //    //        text = "Landed";
-            //    //        // show destination if set, if approach body show that, get body info from scan data
-            //    //    }
-            //    //}
-            //    //else if (uistatus.MajorMode == UIMode.MajorModeType.SRV)
-            //    //{
-            //    //    text = "SRV";
-            //    //    // show information about lat/long
-            //    //}
-            //    //else if (uistatus.MajorMode == UIMode.MajorModeType.Fighter)
-            //    //{
-            //    //    text = "Fighter";
-            //    //    // show information about stuff
-            //    //}
-            //    //if (uistatus.MajorMode == UIMode.MajorModeType.OnFoot)
-            //    //{
-            //    //    text = "OnFoot";
-            //    //    // show information about planet or station
-            //    //}
-            //}
-
-            //if (uistatus.DestinationName.HasChars() && uistatus.DestinationSystemAddress.HasValue)
-            //{
-            //    var uis = uistatus;     // async below may result in a change to this, protect, found during debugging! This async stuff is evil
-
-            //    var ss = await DiscoveryForm.History.StarScan2.FindSystemAsync(new SystemClass(uis.DestinationSystemAddress.Value), WebExternalDataLookup.Spansh);
-
-            //    if (IsClosed)
-            //        return;
-
-            //    if (ss != null)    // we have it, find info on system
-            //    {
-            //        System.Diagnostics.Debug.WriteLine($"Travel Panel Dest found system  {ss.System.Name} {uis.DestinationSystemAddress} ");
-
-            //        //  body name destination or $POI $MULTIPLAYER etc
-            //        // Now (oct 25) its localised, but if not, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
-
-            //        string destname = uis.DestinationName_Localised.Alt(JournalFieldNaming.SignalBodyName(uis.DestinationName));
-
-            //        System.Diagnostics.Debug.WriteLine($".. Travel Destination non star {destname}");
-
-            //        if (uis.DestinationBodyID == 0)
-            //        {
-            //            // system itself
-            //        }
-            //        else
-            //        {
-            //            EliteDangerousCore.StarScan2.BodyNode body = ss.FindBody(uis.DestinationBodyID.Value);
-            //            if (body != null)
-            //            {
-            //                // body itself
-            //            }
-            //        }
-
-            //        IBodyFeature feature = ss.GetFeature(destname);
-            //        if (feature != null)
-            //        {
-            //            System.Diagnostics.Debug.WriteLine($".. feature found {feature.Name} {feature.BodyName} {feature.BodyType}");
-            //        }
-            //    }
-
-
-
-            //var sd = new EliteDangerousCore.StarScan2.SystemDisplay();
-            //    sd.SetSize(48);
-            //    sd.Font = this.Font;
-            //    sd.TextBackColor = Color.Transparent;
-            //    ExtPictureBox pb = new ExtPictureBox();
-            //    sd.DrawSystemRender(pb, 800, ss);
-
-            //        //System.Diagnostics.Debug.Write("Dumping images");
-            //        //pb.Image.Save(@"c:\code\dump\systemdisplay.png");
-
-            //        int count = 0;
-            //        foreach (var bodys in ss.Bodies())
-            //        {
-            //        //tbd    sd.DrawSingleObject( pb, bodys, new Point(0,0));
-            //            if (pb.Image != null)
-            //            {
-            //                //pb.Image.Save($"c:\\code\\dump\\image_{count}_{bodys.Name()}.png");
-            //                System.Diagnostics.Debug.WriteLine($"dump {count} {bodys.OwnName} parent `{bodys.Parent?.OwnName}` scan data `{bodys.Scan?.BodyName}`");
-            //                count++;
-            //            }
-            //        }
-            //        System.Diagnostics.Debug.Write("End dump");
-
-            //        // if we find it, we are targetting a body (note orbiting stations are not added to the nodesbyid even though they get bodyids)
-
-
-            //        if (body != null)
-            //        {
-            //            System.Diagnostics.Debug.WriteLine($".. body found  {body.OwnName} {body.CanonicalName}");
-
-            //            if (body.Scan != null)
-            //            {
-            //                System.Diagnostics.Debug.WriteLine($".. body dist {body.Scan.DistanceFromArrivalLS.ToString("N0")} ls");
-            //            }
-
-            // all the stuff about the station
         }
+
 
         #region UI
         private void extButtonAlignment_Click(object sender, EventArgs e)
