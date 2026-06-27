@@ -294,6 +294,9 @@ namespace EDDiscovery.UserControls
 
                         JournalScan scan = bn?.Scan;    // may be null
 
+                        bool destisbody = bn != null ? bn.CanonicalNameOrOwnName.EqualsIIC(uistatus.DestinationName) : true;
+                        var classification = SignalDefinitions.ClassifyStationName(uistatus.DestinationName_Localised);
+
                         if (bn?.BodyType == BodyDefinitions.BodyType.PlanetaryRing)
                         {
                             desttext += ": " + "Planetary Ring";
@@ -310,17 +313,29 @@ namespace EDDiscovery.UserControls
                         {
                             desttext += ": " + "Barycentre";
                         }
-                        else if (bn?.BodyType == BodyDefinitions.BodyType.Star )
+                        else if (bn?.BodyType == BodyDefinitions.BodyType.Star)
                         {
-                            desttext += ": " + "Star";
-                        }
-                        else
-                        {
-                            // if we know the name is body of bn is null
-                            bool destisbody = bn != null ? bn.CanonicalNameOrOwnName.EqualsIIC(uistatus.DestinationName) : true;
-
                             if (!destisbody)
-                                desttext += ": " + "Orbiting/On Surface of" + ": ";
+                            {
+                                desttext += ": " + (classification == SignalDefinitions.Classification.Carrier ? "Carrier" + " " : "") +
+                                    "Orbiting" + ": ";
+                            }
+                            else
+                                desttext += ": " + "Star";
+                        }
+                        else if (bn?.BodyType == BodyDefinitions.BodyType.Planet)
+                        {
+                            if (!destisbody)
+                            {
+                                desttext += ": " + (classification == SignalDefinitions.Classification.Carrier ? "Carrier" + " " + "Orbiting" :
+                                            "Station" + " " + "Orbiting" + " " + "or on surface" + " of") + ": ";
+                            }
+                            else
+                                desttext += ": " + "Planet";
+                        }
+
+                        else 
+                        {
                         }
 
                         if (scan != null)
