@@ -477,7 +477,7 @@ namespace EDDiscovery.UserControls
                     extDateTimePickerStartDate.Checked = false;
 
                 extDateTimePickerEndDate.Checked = false;
-                comboBoxTime.Text = "";
+             //   comboBoxTime.Text = "";
 
                 updatedprogramatically = false;
                 SaveStartStopDate();

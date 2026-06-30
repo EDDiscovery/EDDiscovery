@@ -482,10 +482,10 @@ namespace EDDiscovery.UserControls
             if (debugmode)
             {
                 colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss:fff");
-                colTime += Environment.NewLine + $"{he.Status.TravelState} @ {he.System.Name}:{he.System.SystemAddress}\r\n"
+                colTime += Environment.NewLine 
                                + $"b{he.Status.BodyName},{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}\r\n"
                                + $"s{he.Status.StationName_Localised},{he.Status.StationType}\r\n"
-                               + $"sh{he.Status.ShipTypeFD} {he.Status.LandedInLander}\r\n"
+                               + $"sh{he.Status.ShipTypeFD} SI {he.ShipInformation?.ShipFD}:{he.ShipInformation?.SubVehicle}\r\n"
                                + $"mc{he.MaterialCommodity}/w{he.Weapons}/s{he.Suits}/l{he.Loadouts}/e{he.Engineering}/ml{he.MissionList}\r\n"
                                + $"b{he.journalEntry.IsBeta}/h{ he.journalEntry.IsHorizons}/o{ he.journalEntry.IsOdyssey}\r\n"
                                + $"bkt{he.Status.BookedTaxi} d {he.Status.BookedDropship} mp {he.Status.IsInMultiPlayer}\r\n"
@@ -494,7 +494,8 @@ namespace EDDiscovery.UserControls
                                + $"tv{he.isTravelling} dist {he.TravelledDistance} sec {he.TravelledTimeSec} jmps {he.TravelledJumps}"
                                ;
 
-                colDescription = he.journalEntry.EventTypeStr.SplitCapsWord() == he.EventSummary ? he.EventSummary : (he.journalEntry.EventTypeStr + Environment.NewLine + he.EventSummary);
+                colInformation = $"{he.Status.TravelState} @ {he.System.Name}:{he.System.SystemAddress}\r\n" + colInformation;
+                colDescription = he.EventSummary + Environment.NewLine + "(" + he.journalEntry.EventTypeStr + ")";
 
                 var js = he.journalEntry.GetJsonCloned();
                 js.Remove("event", "timestamp");
