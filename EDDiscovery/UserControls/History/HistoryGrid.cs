@@ -444,7 +444,7 @@ namespace EDDiscovery.UserControls
             if (debugmode)
             {
                 colTime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss");
-                colTime += Environment.NewLine + $"{he.Status.TravelState} @ {he.System.Name}:{he.System.SystemAddress}\r\n";
+                colTime += Environment.NewLine + $"@ {he.System.Name}:{he.System.SystemAddress}\r\n";
 
                 colTime += $"b`{he.Status.WhereAmI}`,{he.Status.BodyType},{he.Status.BodyID},ba {he.Status.BodyApproached}\r\n";
 
@@ -454,7 +454,7 @@ namespace EDDiscovery.UserControls
                 if (he.Status.StationName_Localised != null)
                     colTime += $"s`{he.Status.StationName_Localised}`, {he.Status.FDStationType}\r\n";
 
-                colTime += $"sh`{he.Status.ShipTypeFD}`, Lander {he.Status.LandedInLander}\r\n";
+                colTime += $"sh`{he.Status.ShipTypeFD}` {he.ShipInformation?.ShipFD}:{he.ShipInformation?.SubVehicle}\r\n";
 
                 if ( he.Status.DockingPad>0)
                     colTime += $"DPad: {he.Status.DockingPad}\r\n";
@@ -473,7 +473,13 @@ namespace EDDiscovery.UserControls
                         ;
 
                 colNote = colInformation;
-                colInformation = "";
+
+                var js = he.journalEntry.GetJsonCloned();
+                js.Remove("event", "timestamp");
+                string j = js.ToString().Replace(",\"", ", \"");
+                colNote = j.Left(1000);
+
+                colDescription += $"\r\n\r\n{he.Status.TravelState}";
 
                 var cl = he.Status.CurrentLocation; colInformation += cl == null ? "NO LOCATION\r\n" : $"LC {cl.EventTimeUTC.ToString("HH:mm:ss")} {cl.EventTypeStr} bn:`{cl.BodyName}`:{cl.BodyID}:{cl.BodyType} N:`{cl.Name}` sf:`{cl.StationFaction}` {cl.FDStationType}\r\n";
                 var si = he.Status.LastFSDJump; colInformation += si == null ? "NO FSDINFO\r\n" : $"FSD {si.EventTimeUTC.ToString("HH:mm:ss")} {si.EventTypeStr} `{si.StarSystem}` f:`{si.Faction}` {si.Allegiance} {si.Economy} {si.Government}\r\n";
