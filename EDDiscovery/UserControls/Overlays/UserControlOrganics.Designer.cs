@@ -114,7 +114,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxWordWrap.CheckColor2 = System.Drawing.Color.DarkBlue;
-            this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
             this.extCheckBoxWordWrap.DisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
             this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
@@ -181,12 +180,12 @@ namespace EDDiscovery.UserControls
             this.extScrollBar.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBar.Name = "extScrollBar";
             this.extScrollBar.Size = new System.Drawing.Size(48, 20);
+            this.extScrollBar.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBar.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBar.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBar.SliderDrawAngle = 90F;
             this.extScrollBar.SmallChange = 16;
             this.extScrollBar.TabIndex = 1;
-            this.extScrollBar.Text = "";
             this.extScrollBar.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.extScrollBar.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBar.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
@@ -229,6 +228,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBar.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBar.Name = "vScrollBar";
             this.vScrollBar.Size = new System.Drawing.Size(24, 643);
+            this.vScrollBar.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.vScrollBar.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBar.SliderColor2 = System.Drawing.Color.DarkGray;
             this.vScrollBar.SliderDrawAngle = 90F;
@@ -363,6 +363,7 @@ namespace EDDiscovery.UserControls
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
             this.rollUpPanelTop.ThemeColorSet = -1;
+            this.rollUpPanelTop.ThisThemed = true;
             this.rollUpPanelTop.UnrollHoverDelay = 1000;
             // 
             // panelControls
@@ -433,7 +434,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxShowIncomplete.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxShowIncomplete.CheckColor = System.Drawing.Color.DarkBlue;
             this.extCheckBoxShowIncomplete.CheckColor2 = System.Drawing.Color.DarkBlue;
-            this.extCheckBoxShowIncomplete.Cursor = System.Windows.Forms.Cursors.Default;
             this.extCheckBoxShowIncomplete.DisabledScaling = 0.5F;
             this.extCheckBoxShowIncomplete.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
             this.extCheckBoxShowIncomplete.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
@@ -466,7 +466,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.DisplayMember = "";
             this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTime.GradientDirection = 90F;
-            this.comboBoxTime.Location = new System.Drawing.Point(39, 1);
+            this.comboBoxTime.Location = new System.Drawing.Point(618, 1);
             this.comboBoxTime.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.comboBoxTime.MouseOverScalingColor = 1.3F;
             this.comboBoxTime.Name = "comboBoxTime";
@@ -483,12 +483,12 @@ namespace EDDiscovery.UserControls
             // 
             this.flowLayoutPanelGridControl.AutoSize = true;
             this.flowLayoutPanelGridControl.BackColor = System.Drawing.SystemColors.Control;
-            this.flowLayoutPanelGridControl.Controls.Add(this.labelTime);
-            this.flowLayoutPanelGridControl.Controls.Add(this.comboBoxTime);
             this.flowLayoutPanelGridControl.Controls.Add(this.labelStart);
             this.flowLayoutPanelGridControl.Controls.Add(this.extDateTimePickerStartDate);
             this.flowLayoutPanelGridControl.Controls.Add(this.labelEnd);
             this.flowLayoutPanelGridControl.Controls.Add(this.extDateTimePickerEndDate);
+            this.flowLayoutPanelGridControl.Controls.Add(this.labelTime);
+            this.flowLayoutPanelGridControl.Controls.Add(this.comboBoxTime);
             this.flowLayoutPanelGridControl.Controls.Add(this.extCheckBoxShowIncomplete);
             this.flowLayoutPanelGridControl.Controls.Add(this.labelValue);
             this.flowLayoutPanelGridControl.Dock = System.Windows.Forms.DockStyle.Top;
@@ -500,7 +500,7 @@ namespace EDDiscovery.UserControls
             // labelTime
             // 
             this.labelTime.AutoSize = true;
-            this.labelTime.Location = new System.Drawing.Point(3, 1);
+            this.labelTime.Location = new System.Drawing.Point(582, 1);
             this.labelTime.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.labelTime.Name = "labelTime";
             this.labelTime.Size = new System.Drawing.Size(30, 13);
@@ -510,7 +510,7 @@ namespace EDDiscovery.UserControls
             // labelStart
             // 
             this.labelStart.AutoSize = true;
-            this.labelStart.Location = new System.Drawing.Point(105, 6);
+            this.labelStart.Location = new System.Drawing.Point(3, 6);
             this.labelStart.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.labelStart.Name = "labelStart";
             this.labelStart.Size = new System.Drawing.Size(29, 13);
@@ -525,7 +525,7 @@ namespace EDDiscovery.UserControls
             this.extDateTimePickerStartDate.CustomFormat = "dd MMMM yyyy HH:mm:ss";
             this.extDateTimePickerStartDate.DisabledScaling = 0.5F;
             this.extDateTimePickerStartDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.extDateTimePickerStartDate.Location = new System.Drawing.Point(140, 3);
+            this.extDateTimePickerStartDate.Location = new System.Drawing.Point(38, 3);
             this.extDateTimePickerStartDate.Name = "extDateTimePickerStartDate";
             this.extDateTimePickerStartDate.SelectedColor = System.Drawing.Color.Yellow;
             this.extDateTimePickerStartDate.ShowCheckBox = true;
@@ -538,7 +538,7 @@ namespace EDDiscovery.UserControls
             // labelEnd
             // 
             this.labelEnd.AutoSize = true;
-            this.labelEnd.Location = new System.Drawing.Point(396, 6);
+            this.labelEnd.Location = new System.Drawing.Point(294, 6);
             this.labelEnd.Margin = new System.Windows.Forms.Padding(3, 6, 3, 0);
             this.labelEnd.Name = "labelEnd";
             this.labelEnd.Size = new System.Drawing.Size(26, 13);
@@ -553,7 +553,7 @@ namespace EDDiscovery.UserControls
             this.extDateTimePickerEndDate.CustomFormat = "dd MMMM yyyy HH:mm:ss";
             this.extDateTimePickerEndDate.DisabledScaling = 0.5F;
             this.extDateTimePickerEndDate.Format = System.Windows.Forms.DateTimePickerFormat.Custom;
-            this.extDateTimePickerEndDate.Location = new System.Drawing.Point(428, 3);
+            this.extDateTimePickerEndDate.Location = new System.Drawing.Point(326, 3);
             this.extDateTimePickerEndDate.Name = "extDateTimePickerEndDate";
             this.extDateTimePickerEndDate.SelectedColor = System.Drawing.Color.Yellow;
             this.extDateTimePickerEndDate.ShowCheckBox = true;
