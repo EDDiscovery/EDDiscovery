@@ -179,7 +179,7 @@ namespace EDDiscovery.UserControls
                 List<MaterialCommodityMicroResource> notfound = new List<MaterialCommodityMicroResource>();
                 foreach (MaterialCommodityMicroResource m in mclist)
                 {
-                    int index = list.FindIndex(x => x.fdname.EqualsAlphaNumOnlyNoCase(m.Details.FDName));   // try and match, remove any spaces/_ and lower case it for matching
+                    int index = list.FindIndex(x => x.fdname.Equals(m.Details.FDName));   // try and match, remove any spaces/_ and lower case it for matching
                     if (index >= 0)
                         list[index].CargoCarried = m.Count; // found it, set cargo count..
                     else if ( m.Details.Type != MaterialCommodityMicroResourceType.ItemType.Drones) // don't add drones
@@ -234,7 +234,7 @@ namespace EDDiscovery.UserControls
                     }
                     else
                     {
-                        System.Diagnostics.Debug.WriteLine($"Do not display {c.fdname}");
+                        //System.Diagnostics.Debug.WriteLine($"Do not display {c.fdname.Str()}");
                     }
                 }
 

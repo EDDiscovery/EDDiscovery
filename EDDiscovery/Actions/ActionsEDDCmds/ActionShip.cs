@@ -76,14 +76,12 @@ namespace EDDiscovery.Actions
                         values[prefix + "Found"] = (si != null) ? "1" : "0";
                     }
 
-                    values[prefix + "Ships"] = lst.Ships.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                    values[prefix + "Ships"] = lst.Count.ToString(System.Globalization.CultureInfo.InvariantCulture);
 
-                    int ind = 0;
-                    foreach(EliteDangerousCore.Ship si in lst.Ships.Values )
+                    for( int ind = 0; ind < lst.Count; ind++)
                     {
                         string p = prefix + "Ships[" + ind.ToString() + "]_";
-                        ActionVars.ShipBasicInformation(values, si, p);
-                        ind++;
+                        ActionVars.ShipBasicInformation(values, lst[ind], p);
                     }
 
                     ap.Add(values);

@@ -93,19 +93,19 @@ namespace EDDiscovery.UserControls
             {
                 var weaponlist = DiscoveryForm.History.WeaponList.weapons.Get(last_weapons,x => x.Sold == false); // get unsold weapons
 
-                foreach (var w in weaponlist)
+                foreach (var kvp in weaponlist)
                 {
-                    var weaponinfo = ItemData.GetWeapon(w.Value.FDName);        // may be null
-                    var weapondp = weaponinfo?.GetStats(w.Value.Class);     // may be null
-                    if (weapondp != null && w.Value.WeaponMods != null)     // apply engineering to weapon stats
-                        weapondp = weapondp.ApplyEngineering(w.Value.WeaponMods);
+                    var weaponinfo = ItemData.GetWeapon(kvp.Value.FDName);        // may be null
+                    var weapondp = weaponinfo?.GetStats(kvp.Value.Class);     // may be null
+                    if (weapondp != null && kvp.Value.WeaponMods != null)     // apply engineering to weapon stats
+                        weapondp = weapondp.ApplyEngineering(kvp.Value.WeaponMods);
 
-                    string smods = w.Value.WeaponMods != null ? string.Join(", ", w.Value.WeaponMods.Select(x=>Recipes.GetBetterNameForEngineeringRecipe(x))) : "";
-                    object[] rowobj = new object[] {  EDDConfig.Instance.ConvertTimeToSelectedFromUTC(w.Value.EventTime).ToString(),
-                                               w.Value.FriendlyName, //+ ":" + (w.Value.ID%10000) ,
-                                               w.Value.Class,
+                    string smods = kvp.Value.WeaponMods != null ? string.Join(", ", kvp.Value.WeaponMods.Select(x=>EngineeringRecipe.GetBetterNameForEngineeringRecipeFDName(x))) : "";
+                    object[] rowobj = new object[] {  EDDConfig.Instance.ConvertTimeToSelectedFromUTC(kvp.Value.EventTime).ToString(),
+                                               kvp.Value.FriendlyName, //+ ":" + (w.Value.ID%10000) ,
+                                               kvp.Value.Class,
                                                smods,
-                                               w.Value.Price.ToString("N0"),
+                                               kvp.Value.Price.ToString("N0"),
                                                weaponinfo !=null ? (weaponinfo.Primary?"Primary":"Secondary") : "",    
                                                weaponinfo !=null ? weaponinfo.Class.ToString().SplitCapsWord() : "",
                                                weaponinfo !=null ? weaponinfo.DamageType.ToString().SplitCapsWord() : "",
@@ -168,7 +168,7 @@ namespace EDDiscovery.UserControls
                     string stime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(s.EventTime).ToString();
                     string sname = s.FriendlyName;// + ":"+ (s.ID % 1000000).ToStringInvariant();
                     string sprice = s.Price.ToString("N0");
-                    string smods = s.SuitMods != null ? string.Join(", ", s.SuitMods.Select(x=> Recipes.GetBetterNameForEngineeringRecipe(x))) : "";
+                    string smods = s.SuitMods != null ? string.Join(", ", s.SuitMods.Select(x=> EngineeringRecipe.GetBetterNameForEngineeringRecipeFDName(x))) : "";
 
                     var loadouts = DiscoveryForm.History.SuitLoadoutList.GetLoadoutsForSuit(last_loadout, s.ID);
 
@@ -185,20 +185,20 @@ namespace EDDiscovery.UserControls
                     {
                         int i = 0;
 
-                        foreach (var l in loadouts)
+                        foreach (var kvp in loadouts)
                         {
                             object[] rowobj = new object[] { };
 
                             var rw = dataGridViewSuits.RowTemplate.Clone() as DataGridViewRow;
                             rw.CreateCells(dataGridViewSuits,
                                                 stime,      //0
-                                                (cursuit == s.ID && curloadout == l.Value.ID ? "*** " : "") + sname,
+                                                (cursuit == s.ID && curloadout == kvp.Value.ID ? "*** " : "") + sname,
                                                 smods,
                                                 sprice,
-                                                l.Value.Name + "(" + ((l.Value.ID % 10000).ToString()) + ")",
-                                                l.Value.GetModuleDescription("primaryweapon1"),
-                                                l.Value.GetModuleDescription("primaryweapon2"),
-                                                l.Value.GetModuleDescription("secondaryweapon")
+                                                kvp.Value.Name + "(" + ((kvp.Value.ID.Value % 10000).ToString()) + ")",
+                                                kvp.Value.GetModuleDescription(SuitLoadout.SuitSlot.PrimaryWeapon1),
+                                                kvp.Value.GetModuleDescription(SuitLoadout.SuitSlot.PrimaryWeapon2),
+                                                kvp.Value.GetModuleDescription(SuitLoadout.SuitSlot.SecondaryWeapon)
                                                 );
 
 
@@ -207,7 +207,7 @@ namespace EDDiscovery.UserControls
                                 rw.Cells[1].Style.Alignment = DataGridViewContentAlignment.MiddleRight;
 
                             rw.Tag = s;
-                            rw.Cells[1].ToolTipText = "ID:" + s.ID.ToStringInvariant();
+                            rw.Cells[1].ToolTipText = "ID:" + s.ID.Value.ToStringInvariant();
                             rw.Cells[1].Tag = dataGridViewSuits.RowCount.ToStringInvariant();        // use a numeric tag to sort it
 
                             dataGridViewSuits.Rows.Add(rw);

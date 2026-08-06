@@ -191,10 +191,9 @@ namespace EDDiscovery.UserControls
             else if (comboBoxShips.Text == allmodulestext)      // this displays the stored modules, as well as all other ship modules, at top of history
             {
                 ShipList shm = DiscoveryForm.History.ShipInformationList;
-                var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
                 List<object> curref = new List<object>();       // repeat the objects used in the display
-                foreach (var si in ownedships)  
+                foreach (var si in shm.OwnedSpaceShips())  
                     curref.Add(si);
                 foreach (ShipModulesInStore.StoredModule sm in shm.StoredModules.StoredModules)
                     curref.Add(sm);
@@ -279,12 +278,12 @@ namespace EDDiscovery.UserControls
                     foreach (ShipModulesInStore.StoredModule sm in mi.StoredModules)
                     {
                         object[] rowobj = {
-                                JournalFieldNaming.GetForeignModuleType(sm.NameFD),
-                                JournalFieldNaming.GetForeignModuleName(sm.NameFD,sm.Name_Localised),
+                                sm.NameFD.GetForeignModuleType(),
+                                sm.NameFD.GetForeignModuleName(sm.Name_Localised),
                                 sm.StarSystem.Alt("In Transit".Tx()), 
                                 sm.TransferTimeString ,
                                 sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
-                                sm.EngineerModifications.Alt(""),
+                                sm.EngineerModifications?.NameAndLevel() ?? "",
                                 sm.TransferCost>0 ? sm.TransferCost.ToString("N0") : "",
                                 "" };
                         dataGridViewModules.Rows.Add(rowobj);
@@ -298,9 +297,8 @@ namespace EDDiscovery.UserControls
                 sortmodecol = "AASANANA";           // default is alpha, alpha, slot (via TAG), Alpha Num Alpha Num, Alpha
 
                 ShipList shm = DiscoveryForm.History.ShipInformationList;
-                var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
 
-                foreach (var si in ownedships)
+                foreach (var si in shm.OwnedSpaceShips())
                 {
                     foreach (var key in si.Modules.Keys)
                     {
@@ -315,12 +313,12 @@ namespace EDDiscovery.UserControls
                     string info = sm.StarSystem.Alt("In Transit".Tx());
                     info = info.AppendPrePad(sm.TransferTimeString, ":");
                     object[] rowobj = {
-                                JournalFieldNaming.GetForeignModuleType(sm.NameFD),
-                                JournalFieldNaming.GetForeignModuleName(sm.NameFD,sm.Name_Localised),
+                                sm.NameFD.GetForeignModuleType(),
+                                sm.NameFD.GetForeignModuleName(sm.Name_Localised),
                                 "Stored".Tx(),
                                  info ,
                                 sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
-                                sm.EngineerModifications.Alt(""),
+                                sm.EngineerModifications?.NameAndLevel() ?? "",
                                 sm.TransferCost>0 ? sm.TransferCost.ToString("N0") : "",
                                 "" };
                     dataGridViewModules.Rows.Add(rowobj);
@@ -392,13 +390,10 @@ namespace EDDiscovery.UserControls
                 HideShipRelatedButtonsAndPanels(false);
                 splitContainer.Panel1Collapsed = false;
 
-                ShipList shm = DiscoveryForm.History.ShipInformationList;
-                var ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
-
                 SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Name".Tx(), "Ident".Tx(), "Mass".Tx(), "Location".Tx(), "Cost".Tx());
                 sortmodecol = "PAAAANAN";      // P = sort on column 1 fixed
 
-                foreach (var ship in ownedships)
+                foreach (var ship in DiscoveryForm.History.ShipInformationList.OwnedSpaceShips())
                 {
                     var rw = dataGridViewModules.RowTemplate.Clone() as DataGridViewRow;           // need to add like this due to different types of cells
                     var pcb = new DataGridViewPictureBoxCell();
@@ -488,7 +483,7 @@ namespace EDDiscovery.UserControls
             buttonExtConfigure.Visible = shipinstance.State == Ship.ShipState.Owned;
             buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = shipinstance.CheckMinimumModulesForCoriolisEDSY();          //ORDER is important due to flow control panel
             extButtonLoadLoadout.Visible = true;
-            extPanelRollUpStats.Visible = !ItemData.IsSRVOrFighterOrLander(shipinstance.ShipFD);
+            extPanelRollUpStats.Visible = shipinstance.ShipFD.Type == VehicleFDName.VehicleType.Ship;
             labelVehicle.Visible = true;
             extButtonSaveLoadout.Visible = true;
             extButtonDeleteLoadout.Visible = displaydeleteloadoutbutton;
@@ -650,8 +645,9 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            object[] rowobj = { JournalFieldNaming.GetForeignModuleType(sm.ItemFD),
-                                JournalFieldNaming.GetForeignModuleName(sm.ItemFD,sm.LocalisedItem),
+            object[] rowobj = {
+                                sm.ItemFD.GetForeignModuleType(),
+                                sm.ItemFD.GetForeignModuleName(sm.LocalisedItem),
                                 ShipSlots.ToLocalisedLanguage(sm.SlotFD),
                                 infoentry,
                                 sm.Mass() > 0 ? (sm.Mass().ToString("0.#")+"t") : "",                                
@@ -670,7 +666,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewModules.Rows[row].Cells[5].ToolTipText = engtooltip;
             }
 
-            System.Diagnostics.Debug.WriteLine($"Add Module {sm.ItemFD} {sm.SlotFD} {sm.LocalisedItem}");
+         //   System.Diagnostics.Debug.WriteLine($"Add Module {sm.ItemFD.Str()} {sm.SlotFD} {sm.LocalisedItem}");
         }
 
         void SetColHeaders(params string[] list)
@@ -730,9 +726,8 @@ namespace EDDiscovery.UserControls
             comboBoxShips.Items.Add(allmodulestext);
             comboBoxShips.Items.Add(allknownmodulestext);
 
-            IEnumerable<Ship> ownedships = (from x1 in shm.Ships where x1.Value.State == Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
-            IEnumerable<Ship> soldships = (from x1 in shm.Ships where x1.Value.State != Ship.ShipState.Owned && ItemData.IsShip(x1.Value.ShipFD) select x1.Value);
-            // withdrawn, appears loadouts no longer written for these. var fightersrvs = (from x1 in shm.Ships where ItemData.IsSRVOrFighter(x1.Value.ShipFD) select x1.Value);
+            IEnumerable<Ship> ownedships = shm.OwnedSpaceShips();
+            IEnumerable<Ship> soldships = shm.SoldDestroyedSpaceShips();
 
             var now = (from x1 in ownedships where x1.StoredAtSystem == null select x1.ShipNameIdentType);
             comboBoxShips.Items.AddRange(now);
@@ -1038,8 +1033,8 @@ namespace EDDiscovery.UserControls
                                 return null;
                         };
 
-                        var x = DiscoveryForm.History.ShipInformationList.Ships.GetEnumerator();
-                        x.MoveNext();
+                        var ownedship = DiscoveryForm.History.ShipInformationList.OwnedSpaceShips().ToArray();
+                        int count = 0;
 
                         grd.GetPostHeader += delegate (int r)
                         {
@@ -1047,14 +1042,10 @@ namespace EDDiscovery.UserControls
                                 return new Object[] { };
                             else if (r == 1)
                                 return new Object[] { "Ships:" };
-
-                            while (x.MoveNext())
-                            {
-                                if (x.Current.Value.State == Ship.ShipState.Owned)
-                                    return new Object[] { x.Current.Value.ShipFullInfo() };
-                            }
-
-                            return null;
+                            else if (count < ownedship.Length)
+                                return new Object[] { ownedship[count++].ShipFullInfo() };
+                            else
+                                return null;
                         };
 
                         grd.WriteGrid(frm.Path, frm.AutoOpen, FindForm());

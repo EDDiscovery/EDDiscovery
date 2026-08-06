@@ -433,6 +433,9 @@ namespace EDDiscovery.UserControls
         {
             mapGotoStartoolStripMenuItem.Enabled = rightclickbookmark != null;
             viewOnEDSMToolStripMenuItem.Enabled = rightclickbookmark != null && rightclickbookmark.IsStar;
+            viewScanOfSystemToolStripMenuItem.Enabled = rightclickbookmark != null;
+            viewOnSpanshToolStripMenuItem.Enabled = rightclickbookmark != null;
+            addToExpeditionToolStripMenuItem.Enabled = rightclickbookmark != null;
         }
 
         private void viewScanOfSystemToolStripMenuItem_Click(object sender, EventArgs e)
@@ -442,7 +445,7 @@ namespace EDDiscovery.UserControls
 
         private void toolStripMenuItemGotoStar3dmap_Click(object sender, EventArgs e)
         {
-            DiscoveryForm.Open3DMap(new EliteDangerousCore.SystemClass("Unknown", null, rightclickbookmark.X, rightclickbookmark.Y, rightclickbookmark.Z));
+            DiscoveryForm.Open3DMap(new EliteDangerousCore.SystemClass(rightclickbookmark.X, rightclickbookmark.Y, rightclickbookmark.Z));
         }
 
         private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
@@ -479,7 +482,7 @@ namespace EDDiscovery.UserControls
 
                 if (bm != null && !bm.IsRegion)
                 {
-                    ISystem system = new SystemClass(bm.StarName, null, bm.X, bm.Y, bm.Z);
+                    ISystem system = new SystemClass(bm.X, bm.Y, bm.Z, bm.StarName);
                     syslist.Add(system);
                 }
             }

@@ -23,10 +23,10 @@ namespace EDDiscovery.UserControls.Colonisation
 {
     public class ColonisationData
     {
-        public Dictionary<long, ColonisationSystemData> Systems { get; set; } = new Dictionary<long, ColonisationSystemData>();
+        public Dictionary<SystemAddress, ColonisationSystemData> Systems { get; set; } = new Dictionary<SystemAddress, ColonisationSystemData>();
         public ColonisationSystemData LastCreatedSystem { get; set; } = null;
 
-        private HashSet<long> normalsystem = new HashSet<long>();
+        private HashSet<SystemAddress> normalsystem = new HashSet<SystemAddress>();
 
         public class Ret
         {
@@ -49,19 +49,19 @@ namespace EDDiscovery.UserControls.Colonisation
         // and return if a port has been modified (add or modified) - may be null
         public Ret Add(HistoryEntry he, List<HistoryEntry> hl, bool debug = false)
         {
-            if (!he.System.SystemAddress.HasValue)      // check we have a system value to do work with, we may have come in 1/2 way thru and not know the system yet
+            if (!he.System.HasAddress)      // check we have a system value to do work with, we may have come in 1/2 way thru and not know the system yet
             {
             }
             else if (he.journalEntry is JournalColonisationSystemClaim jas)
             {
-                global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation claim {jas.StarSystem}");
+                //global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation claim {jas.StarSystem}");
                 bool newsystem = MakeSystem(hl, new SystemClass(jas.StarSystem, jas.SystemAddress), out ColonisationSystemData sys);
                 return new Ret(newsystem, sys, null);
             }
             else if (he.journalEntry is JournalColonisationBeaconDeployed br)
             {
-                global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation beacon deployed {he.System.Name}");
-                if (Systems.TryGetValue(he.System.SystemAddress.Value, out ColonisationSystemData sys))
+                //global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation beacon deployed {he.System.Name}");
+                if (Systems.TryGetValue(he.System.SystemAddress, out ColonisationSystemData sys))
                 {
                     sys.BeaconDeployed = true;
                     return new Ret(false, sys, null);
@@ -72,16 +72,16 @@ namespace EDDiscovery.UserControls.Colonisation
                 //global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} {ld.MarketID} {ld.MarketClass()} Colonisation docked `{ld.StationName}` {ld.FDStationType} @ {ld.StarSystem} ");
 
                 // if we have a valid system and market, and not in our list of normal systems to ignore
-                if (ld.SystemAddress.HasValue && ld.MarketID.HasValue && !normalsystem.Contains(ld.SystemAddress.Value))
+                if (ld.SystemAddress.IsValid && ld.MarketID.HasValue && !normalsystem.Contains(ld.SystemAddress))
                 {
                     var cls = ld.MarketClass();
                     if (cls == StationDefinitions.Classification.NormalPort)       // is this market ID a normal port?
                     {
-                        normalsystem.Add(ld.SystemAddress.Value);           // add to banned list
-                        if (Systems.ContainsKey(ld.SystemAddress.Value))   // if we already added it..
+                        normalsystem.Add(ld.SystemAddress);           // add to banned list
+                        if (Systems.ContainsKey(ld.SystemAddress))   // if we already added it..
                         {
-                            global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} {ld.MarketID} {ld.MarketClass()} Colonisation docked remove previous system as normal port found `{ld.StationName}` {ld.FDStationType} @ {ld.StarSystem}");
-                            Systems.Remove(ld.SystemAddress.Value);
+                            //global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} {ld.MarketID} {ld.MarketClass()} Colonisation docked remove previous system as normal port found `{ld.StationName}` {ld.FDStationType} @ {ld.StarSystem}");
+                            Systems.Remove(ld.SystemAddress);
                             return new Ret(true, null, null);
                         }
                         else
@@ -93,13 +93,13 @@ namespace EDDiscovery.UserControls.Colonisation
 
                     else if (cls == StationDefinitions.Classification.SpaceConstructionDepot || cls == StationDefinitions.Classification.ColonisationShip || cls == StationDefinitions.Classification.ColonisationPort)
                     {
-                        if (!Systems.ContainsKey(ld.SystemAddress.Value)) global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} {ld.MarketID} {ld.MarketClass()} Colonisation docked created new system entry`{ld.StationName}` {ld.FDStationType} @ {ld.StarSystem}");
+                        if (!Systems.ContainsKey(ld.SystemAddress)) global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} {ld.MarketID} {ld.MarketClass()} Colonisation docked created new system entry`{ld.StationName}` {ld.FDStationType} @ {ld.StarSystem}");
 
                         bool newsystem = MakeSystem(hl, he.System, out ColonisationSystemData sys);     // make the system
-                        bool newport = MakePort(sys, hl, ld.MarketID.Value, he.WhereAmI, out ColonisationPortData port);    // make the port..
+                        bool newport = MakePort(sys, hl, ld.MarketID, he.WhereAmI, out ColonisationPortData port);    // make the port..
 
                         port.LastDockedOrLocation = ld;
-                        global::System.Diagnostics.Debug.WriteLine($"Colonisation LocDock on Port {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} {port.Name} {port.MarketID}");
+                        //global::System.Diagnostics.Debug.WriteLine($"Colonisation LocDock on Port {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} {port.Name} {port.MarketID}");
                         return new Ret(newsystem, sys, port);
                     }
                 }
@@ -140,12 +140,12 @@ namespace EDDiscovery.UserControls.Colonisation
                         {
                             //global::System.Diagnostics.Debug.WriteLine($"Colonisation Depot Rename Port {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cd.MarketID} {cd.ConstructionProgress}");
                             port.Name = he.WhereAmI;
-                            port.MarketID = he.Status.MarketID.Value;
+                            port.MarketID = he.Status.MarketID;
                             return new Ret(newsystem, sys, port);
                         }
                         else
                         {
-                            global::System.Diagnostics.Debug.WriteLine($"Colonisation Depot ERROR no port found with associated text {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cd.MarketID} {cd.ConstructionProgress}");
+                            //global::System.Diagnostics.Debug.WriteLine($"Colonisation Depot ERROR no port found with associated text {he.EventTimeUTC} {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cd.MarketID} {cd.ConstructionProgress}");
                             return new Ret(newsystem, sys, null);
                         }
                     }
@@ -158,7 +158,7 @@ namespace EDDiscovery.UserControls.Colonisation
                     bool newsystem = MakeSystem(hl, he.System, out ColonisationSystemData sys);     // make the system
                     bool newport = MakePort(sys, hl, cb.MarketID, he.WhereAmI, out ColonisationPortData port);
                     port.Contributions.Add(cb);
-                    global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation Contribution {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cb.MarketID}");
+                    //global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation Contribution {he.System} {he.WhereAmI} {he.Status.MarketID} CMID {cb.MarketID}");
                     return new Ret(newsystem, sys, port);
                 }
                 else
@@ -169,12 +169,12 @@ namespace EDDiscovery.UserControls.Colonisation
 
             else if (he.journalEntry is JournalLocOrJump fsd)     // on Location or FSDJump, update the loc or jump entry
             {
-                if (fsd.SystemAddress.HasValue)
+                if (fsd.SystemAddress.IsValid)
                 {
-                    if (Systems.TryGetValue(fsd.SystemAddress.Value, out ColonisationSystemData sys))
+                    if (Systems.TryGetValue(fsd.SystemAddress, out ColonisationSystemData sys))
                     {
                         sys.LastLocOrJump = he;
-                        global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation FSD/Loc update info on {he.System} {he.WhereAmI}");
+                        //global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} Colonisation FSD/Loc update info on {he.System} {he.WhereAmI}");
                         return new Ret(false, sys, null);
                     }
                 }
@@ -186,9 +186,9 @@ namespace EDDiscovery.UserControls.Colonisation
         // make a system and return if its new.
         private bool MakeSystem(List<HistoryEntry> hl, ISystem system, out ColonisationSystemData sys)
         {
-            if (!Systems.TryGetValue(system.SystemAddress.Value, out sys))
+            if (!Systems.TryGetValue(system.SystemAddress, out sys))
             {
-                Systems.Add(system.SystemAddress.Value, sys = new ColonisationSystemData() { System = system });
+                Systems.Add(system.SystemAddress, sys = new ColonisationSystemData() { System = system });
                 sys.LastLocOrJump = hl.Find(x => x.IsFSD && x.System.SystemAddress == system.SystemAddress);    // may be null
                 LastCreatedSystem = sys;
                 return true;
@@ -196,7 +196,7 @@ namespace EDDiscovery.UserControls.Colonisation
             return false;
         }
 
-        private static bool MakePort( ColonisationSystemData sys, List<HistoryEntry> hl, long marketid, string marketname, out ColonisationPortData port)
+        private static bool MakePort( ColonisationSystemData sys, List<HistoryEntry> hl, MarketID marketid, string marketname, out ColonisationPortData port)
         {
             if (!sys.Ports.TryGetValue(marketid, out port))        // if not in there
             {
@@ -215,7 +215,7 @@ namespace EDDiscovery.UserControls.Colonisation
             {
                 if (port.Name != marketname)
                 {
-                    global::System.Diagnostics.Debug.WriteLine($"Colonisation SystemAndPort {sys.System.Name}:{marketid} {marketname} changed name from {port.Name}");
+                    //global::System.Diagnostics.Debug.WriteLine($"Colonisation SystemAndPort {sys.System.Name}:{marketid} {marketname} changed name from {port.Name}");
                     port.Name = marketname;
                 }
 
@@ -229,7 +229,7 @@ namespace EDDiscovery.UserControls.Colonisation
     public class ColonisationSystemData
     {
         public ISystem System { get; set; }
-        public Dictionary<long, ColonisationPortData> Ports { get; set; } = new Dictionary<long, ColonisationPortData>();
+        public Dictionary<MarketID, ColonisationPortData> Ports { get; set; } = new Dictionary<MarketID, ColonisationPortData>();
 
         public HistoryEntry LastLocOrJump { get; set; }
 
@@ -241,7 +241,7 @@ namespace EDDiscovery.UserControls.Colonisation
     public class ColonisationPortData
     {
         public string Name { get; set; }                                    // name of port. Found by looking at HE information when depot is received.  Can change when progress=1
-        public long MarketID { get; set; }                                  // market ID of port - can change when progress=1
+        public MarketID MarketID { get; set; }                                  // market ID of port - can change when progress=1
         public JournalColonisationConstructionDepot State { get; set; }     // holds last Depot IF any - ignore MarketID, may be wrong, progress, Complete/Failed and resources
         public List<JournalColonisationContribution> Contributions { get; set; } = new List<JournalColonisationContribution>();
         public ILocDocked LastDockedOrLocation { get; set; }

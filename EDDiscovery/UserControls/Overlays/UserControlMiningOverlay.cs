@@ -122,7 +122,7 @@ namespace EDDiscovery.UserControls
 
                 if (newlist != null)        // only if no history would we get null, unlikely since he has been tested, but still..
                 {
-                    int limpetsleft = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(newheabove.MaterialCommodity,"drones")?.Count ?? 0;
+                    int limpetsleft = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(newheabove.MaterialCommodity, MaterialCommodityMicroResourceType.Drones)?.Count ?? 0;
                     int cargo = DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(newheabove.MaterialCommodity);
                     int cargocap = newheabove.ShipInformation?.CalculateCargoCapacity() ?? 0;// so if we don't have a ShipInformation, use 0
                     int cargoleft = cargocap - cargo; 
@@ -418,7 +418,7 @@ namespace EDDiscovery.UserControls
 
         class MaterialsFound
         {
-            public string matnamefd2;               // material name
+            public FDName matnamefd2;               // material name
             public string friendlyname;
 
             public double amountrefined;            // amount refined. Double because i've seen entries with floats
@@ -433,14 +433,14 @@ namespace EDDiscovery.UserControls
 
             public int[] content;                  // number in each cat, high/med/low
 
-            public static MaterialsFound Find(string fdname, List<MaterialsFound> list)
+            public static MaterialsFound Find(MCFDName fdname, List<MaterialsFound> list)
             {
-                MaterialsFound mat = list.Find(x => x.matnamefd2.Equals(fdname, StringComparison.InvariantCultureIgnoreCase));
+                MaterialsFound mat = list.Find(x => x.matnamefd2.Equals(fdname));
                 if (mat == null)
                 {
                     mat = new MaterialsFound();
                     mat.matnamefd2 = fdname;
-                    mat.friendlyname = MaterialCommodityMicroResourceType.GetByFDName(fdname)?.TranslatedName ?? fdname;
+                    mat.friendlyname = MaterialCommodityMicroResourceType.GetByFDName(fdname)?.TranslatedName ?? fdname.ID;
                     mat.prospectedamounts = new List<double>();
                     mat.content = new int[3];
                     list.Add(mat);
@@ -485,7 +485,7 @@ namespace EDDiscovery.UserControls
                                 //System.Diagnostics.Debug.WriteLine("Prospected {0} {1} {2}", m.Name, m.Proportion, pa.Content );
                             }
 
-                            if (pa.MotherlodeMaterial.HasChars())
+                            if (pa.MotherlodeMaterial?.IsValid == true)        // may not be present
                             {
                                 var matpa = MaterialsFound.Find(pa.MotherlodeMaterial, found);
                                 matpa.motherloadasteroids++;
@@ -748,7 +748,7 @@ namespace EDDiscovery.UserControls
                             ret[0] = (r + 1).ToString("N0");
                             ret[1] = jp.EventTimeUTC.ToStringZulu();
                             ret[2] = jp.Content.ToString();
-                            ret[3] = MaterialCommodityMicroResourceType.GetByFDName(jp.MotherlodeMaterial)?.TranslatedName ?? jp.MotherlodeMaterial;
+                            ret[3] = jp.MotherlodeMaterial?.IsValid == true ? (MaterialCommodityMicroResourceType.GetByFDName(jp.MotherlodeMaterial)?.TranslatedName??"") : "";
 
                             for (int m = 0; m < prosmat.Count; m++)
                             {

@@ -37,7 +37,7 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
 
-            bool winborder = ExtendedControls.Theme.Current.ApplyDialog(this);
+            bool winborder = ExtendedControls.Theme.Current.ApplyStd(this);
             panelTop.Visible = !winborder;
 
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this, 3);

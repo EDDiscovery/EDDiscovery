@@ -51,7 +51,9 @@ namespace EDDiscovery.UserControls
             extCheckBoxMoreInfo.Checked = GetSetting(dbMoreInfo, false);
             extCheckBoxMoreInfo.Click += extCheckBoxMoreInfo_Click;
 
-            List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.Engineers).Distinct().ToList();
+            var engrec = EngineeringRecipe.GetPlayerEngineering().ToList();
+
+            List<string> engineers = engrec.SelectMany(r => r.EngineersNames).Distinct().ToList();
             engineers.Sort();
             efs = new RecipeFilterSelector(engineers);
             efs.UC.AddGroupItem(string.Join(";",ItemData.ShipEngineers()), "Ship Engineers");
@@ -139,7 +141,9 @@ namespace EDDiscovery.UserControls
 
             //System.Diagnostics.Debug.WriteLine($"Cleaned {BaseUtils.AppTicks.TickCountLap("s1")}");
 
-            List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.Engineers).Distinct().ToList();
+            var engrec = EngineeringRecipe.GetPlayerEngineering().ToList();
+
+            List<string> engineers = engrec.SelectMany(r => r.EngineersNames).Distinct().ToList();
             engineers.Sort();
             engineerpanels = new List<EngineerStatusPanel>();
 
@@ -159,7 +163,7 @@ namespace EDDiscovery.UserControls
 
                     ep.Init(name, ei, GetSetting(dbWSave + "_" + name, ""), colsetting);
                     ep.UpdateWordWrap(extCheckBoxWordWrap.Checked);
-                    ep.SaveSettings += () => { PutSetting(dbWSave + "_" + name, ep.WantedPerRecipe.ToString(",")); };
+                    ep.SaveSettings += () => { PutSetting(dbWSave + "_" + name, ep.WantedPerRecipe.ToStringFromArray(",")); };
                     ep.AskForRedisplay += () => { UpdateDisplay(); };
 
                     ep.ColumnSetupChanged += (panel) =>
@@ -215,10 +219,8 @@ namespace EDDiscovery.UserControls
 
                 if (lastengprog != null && engineerpanels[i].EngineerInfo != null)      // if we have progress, and its an engineer
                 {
-                    var state = (lastengprog.journalEntry as EliteDangerousCore.JournalEvents.JournalEngineerProgress).Progress(engineer);
-                    if (state == EliteDangerousCore.JournalEvents.JournalEngineerProgress.InviteState.UnknownEngineer)
-                        state = EliteDangerousCore.JournalEvents.JournalEngineerProgress.InviteState.None;      // frontier are not telling, presume none
-                    status = state.ToString();
+                    var state = (lastengprog.journalEntry as EliteDangerousCore.JournalEvents.JournalEngineerProgress).GetProgress(new EngineerFDName(engineer));
+                    status = state?.ToString() ?? "None";
                 }
 
                 var mcllist = last_he != null ? DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity) : null;
@@ -230,7 +232,7 @@ namespace EDDiscovery.UserControls
                     if (ep.Name.Contains("Guardian") || ep.Name.Equals("Human"))
                         crafts = DiscoveryForm.History.Engineering.Get(last_he.Engineering, EngineerCrafting.TechBrokerID);
                     else
-                        crafts = DiscoveryForm.History.Engineering.Get(last_he.Engineering, ep.Name);
+                        crafts = DiscoveryForm.History.Engineering.Get(last_he.Engineering, new EngineerFDName(ep.Name));
                 }
                 
                 ep.UpdateStatus(status, system, mcllist,crafts);

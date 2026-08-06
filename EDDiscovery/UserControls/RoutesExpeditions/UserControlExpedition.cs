@@ -192,7 +192,7 @@ namespace EDDiscovery.UserControls
 
         private void Autoupdate_Tick(object sender, EventArgs e)            // tick tock to get edsm data very slowly!
         {
-            // if we are not EDSM checking, or nothing is outstanding, we can check to see if we can process
+            // if we are not EDSM/Spansh checking, or nothing is outstanding, we can check to see if we can process
 
             if (edsmSpanshButton.IsNoneSet || outstandingprocessing == 0)      // if not doing web, or no outstandings
             {
@@ -415,7 +415,7 @@ namespace EDDiscovery.UserControls
                 row.Cells[Visits.Index].Value = DiscoveryForm.History.Visits(sys.Name).ToString("0");
 
                 //  if we don't have a co-ord, or we don't have a system address, see if we can find it in db
-                if (!sys.HasCoordinate || !sys.SystemAddress.HasValue)
+                if (!sys.HasCoordinate || !sys.HasAddress)
                 {
                     System.Diagnostics.Debug.WriteLine($"..{AppTicks.MSd} Looking up async for {sys.Name} {lookup}");
                     var syslookup = await SystemCache.FindSystemAsync(sys.Name, DiscoveryForm.GalacticMapping, lookup);
@@ -522,10 +522,9 @@ namespace EDDiscovery.UserControls
                     double? ypos = ((string)row.Cells[ColumnY.Index].Value).ParseDoubleNull(System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number);
                     double? zpos = ((string)row.Cells[ColumnZ.Index].Value).ParseDoubleNull(System.Globalization.CultureInfo.CurrentCulture, System.Globalization.NumberStyles.Number);
 
-                    bool knownpos = xpos != null && ypos != null && zpos != null;
-                    long? id64 = row.Cells[id64imported].Tag as long?;      // we may have an id 64 tag if it was imported from somewhere
+                    SystemAddress id64 = row.Cells[id64imported].Tag as SystemAddress;      // we may have an id 64 tag if it was imported from somewhere
 
-                    return knownpos ? new SystemClass(name, id64, xpos.Value,ypos.Value,zpos.Value) : new SystemClass(name, id64);
+                    return SystemClass.Create(xpos, ypos, zpos, id64, name);
                 }
             }
             return null;
@@ -1153,7 +1152,7 @@ namespace EDDiscovery.UserControls
 
             rows = dataGridView.SelectedRowAndCount(true, true, -1, false);
             viewOnEDSMToolStripMenuItem.Enabled = viewSystemToolStripMenuItem.Enabled = rows.Item1 >= 0 && rows.Item2 == 1 && dataGridView.Rows[rows.Item1].Tag != null && rows.Item1 != dataGridView.NewRowIndex;
-            viewOnSpanshToolStripMenuItem.Enabled = viewSystemToolStripMenuItem.Enabled && (dataGridView.Rows[rows.Item1].Tag as ISystem).SystemAddress.HasValue;
+            viewOnSpanshToolStripMenuItem.Enabled = viewSystemToolStripMenuItem.Enabled && (dataGridView.Rows[rows.Item1].Tag as ISystem).HasAddress;
         }
 
         private void copyToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1236,10 +1235,10 @@ namespace EDDiscovery.UserControls
             if (obj == null)
                 return;
 
-            ISystem sc = SystemCache.FindSystem((string)obj,DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);     // use EDSM directly if required
+            ISystem sc = SystemCache.FindSystem((string)obj,DiscoveryForm.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All);     // use EDSM/Spansh directly if required
 
             if (sc == null)
-                sc = new SystemClass((string)obj,0,0,0);
+                sc = new SystemClass(0,0,0, (string)obj);
 
             BookmarkHelpers.ShowBookmarkForm(this.FindForm(), DiscoveryForm, sc, null);
             UpdateAllRows();
@@ -1255,7 +1254,7 @@ namespace EDDiscovery.UserControls
         private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
         {
             var rows = dataGridView.SelectedRowAndCount(true, true, -1, false);
-            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem((dataGridView.Rows[rows.Item1].Tag as ISystem).SystemAddress.Value);
+            EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem((dataGridView.Rows[rows.Item1].Tag as ISystem).SystemAddress);
         }
 
         private void viewOnEDSMToolStripMenuItem_Click(object sender, EventArgs e)

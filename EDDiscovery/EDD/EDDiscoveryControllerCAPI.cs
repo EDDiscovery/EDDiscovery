@@ -52,7 +52,7 @@ namespace EDDiscovery
                                 servertime = servertime.Year < 2020 ? DateTime.UtcNow : servertime;     // it may be MinDate if frontier changes something, protect
 
                                 var entry = new EliteDangerousCore.JournalEvents.JournalEDDCommodityPrices(servertime,
-                                                mk.ID, mk.Name, mk.Name, system, EDCommander.CurrentCmdrID, mk.Commodities);
+                                                new MarketID(mk.ID), mk.Name, mk.Name, system, EDCommander.CurrentCmdrID, mk.Commodities);
 
                                 var jo = entry.CreateJSON();        // get json of it, and add it to the db
                                 entry.Add(jo);
@@ -97,7 +97,7 @@ namespace EDDiscovery
                                 if ( modules?.Count > 0 )
                                 {
                                     var list = modules.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLowerInvariant(), x.Cost)).ToArray();
-                                    var outfitting = new EliteDangerousCore.JournalEvents.JournalOutfitting(servertime, station, station, system, sh.ID, list, EDCommander.CurrentCmdrID);
+                                    var outfitting = new EliteDangerousCore.JournalEvents.JournalOutfitting(servertime, station, station, system, new MarketID(sh.ID), list, EDCommander.CurrentCmdrID);
 
                                     var jo = outfitting.CreateJSON();        // get json of it, and add it to the db
                                     outfitting.Add(jo);
@@ -117,9 +117,9 @@ namespace EDDiscovery
 
                                 if (ships?.Count > 0 && allowcobramkiv.HasValue)              // if we have ships.. and we know the state of the allowcobramk4 flag..
                                 {
-                                    var list = ships.Select(x => new Tuple<long, string, long>(x.ID, x.Name.ToLowerInvariant(), x.BaseValue)).ToArray();
+                                    var list = ships.Select(x => new Tuple<long, VehicleFDName, long>(x.ID, new VehicleFDName(x.Name), x.BaseValue)).ToArray();
 
-                                    var shipyardevent = new EliteDangerousCore.JournalEvents.JournalShipyard(servertime, station, station, system, sh.ID, list, EDCommander.CurrentCmdrID, allowcobramkiv.Value);
+                                    var shipyardevent = new EliteDangerousCore.JournalEvents.JournalShipyard(servertime, station, station, system, new MarketID(sh.ID), list, EDCommander.CurrentCmdrID, allowcobramkiv.Value);
 
                                     var jo = shipyardevent.CreateJSON();        // get json of it, and add it to the db
                                     shipyardevent.Add(jo);

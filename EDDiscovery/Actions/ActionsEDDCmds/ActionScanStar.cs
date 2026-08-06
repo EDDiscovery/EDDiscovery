@@ -83,9 +83,9 @@ namespace EDDiscovery.Actions
 
                     var scan = (ap.ActionController as ActionController).HistoryList.StarScan2;
 
-                    long? systemaddr = cmdname.InvariantParseLongNull();    // if it converts to long, then its a system address.
+                    ulong? systemaddr = cmdname.InvariantParseULongNull();    // if it converts to long, then its a system address.
 
-                    var system = systemaddr > 0 ? new SystemClass(systemaddr.Value) : new SystemClass(cmdname);      // by name or by system address
+                    var system = systemaddr.HasValue ? new SystemClass(new SystemAddress(systemaddr.Value)) : new SystemClass(cmdname);      // by name or by system address
 
                     var sn = scan.FindSystemSynchronous(system, edsm || spansh);
 

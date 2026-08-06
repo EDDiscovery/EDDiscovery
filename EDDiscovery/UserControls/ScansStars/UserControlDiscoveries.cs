@@ -238,6 +238,8 @@ namespace EDDiscovery.UserControls
             if (!updategrid)
                 dataGridView.Rows.Clear();
 
+            dataViewScrollerPanel.Suspend();
+
             DataGridViewColumn sortcol = dataGridView.SortedColumn != null ? dataGridView.SortedColumn : dataGridView.Columns[0];
             SortOrder sortorder = dataGridView.SortedColumn != null ? dataGridView.SortOrder : SortOrder.Descending;
 
@@ -328,6 +330,8 @@ namespace EDDiscovery.UserControls
                 labelCount.Text = "Total".Tx()+ " " + dataGridView.Rows.Count.ToString();
             else
                 labelCount.Text = "";
+
+            dataViewScrollerPanel.Resume();
 
             dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;

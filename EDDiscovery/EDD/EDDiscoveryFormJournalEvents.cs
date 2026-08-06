@@ -75,24 +75,7 @@ namespace EDDiscovery
                 if (edsm.ValidCredentials)
                     EDSMSend();
             }
-
-            if (EDDOptions.Instance.AutoLoadNextCommander)      // this loads, after 2 seconds, the next commander, for debugging
-            {
-                nextcmdload?.Stop();
-                nextcmdload?.Dispose();
-                nextcmdload = new System.Windows.Forms.Timer();
-                nextcmdload.Interval = 2000;
-                nextcmdload.Tick += (s, e) =>
-                {
-                    if (comboBoxCommander.SelectedIndex < comboBoxCommander.Items.Count - 1)
-                        comboBoxCommander.SelectedIndex = comboBoxCommander.SelectedIndex + 1;
-                    nextcmdload.Stop();
-                };
-                nextcmdload.Start();
-            }
         }
-
-        System.Windows.Forms.Timer nextcmdload;     // for debugging above
 
         public void NewEntry(JournalEntry e)       // programatically do a new entry
         {
@@ -188,7 +171,7 @@ namespace EDDiscovery
             BaseUtils.Variables cv = new BaseUtils.Variables();
 
             string prefix = "EventClass_";
-            cv.AddPropertiesFieldsOfClass(uievent, prefix, new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5);
+            cv.AddPropertiesFieldsOfClass(uievent, prefix, new HashSet<Type> { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5);
             cv[prefix + "UIDisplayed"] = "0";
             actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent, cv);
             actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv);

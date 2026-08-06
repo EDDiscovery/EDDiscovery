@@ -61,7 +61,7 @@ namespace EDDiscovery.UserControls.Helpers
 
             // we place fdname of commodity with translated name
             var comitems = MaterialCommodityMicroResourceType.GetCommodities(MaterialCommodityMicroResourceType.SortMethod.AlphabeticalRaresLast)
-                            .Select(x => new CheckedIconUserControl.Item(x.FDName, x.TranslatedName));
+                            .Select(x => new CheckedIconUserControl.Item(x.FDName.ID, x.TranslatedName));
 
             extButtonCommoditiesBuy.InitAllNoneAllBack(comitems,
                 GetFilter(FilterSettings.CommoditiesBuy),
@@ -74,14 +74,14 @@ namespace EDDiscovery.UserControls.Helpers
             // we place fdname of module and the translated text
             // note the bodges - only get the lightweight armour, and then mangle the text
             var moditems = ItemData.GetShipModules(compressarmourtosidewinderonly:true).
-                                Select(x => new CheckedIconUserControl.Item(x.Key, x.Value.TranslatedModName.Replace("Sidewinder ","")));
+                                Select(x => new CheckedIconUserControl.Item(x.Key.ID, x.Value.TranslatedModName.Replace("Sidewinder ","")));
 
             extButtonOutfitting.InitAllNoneAllBack(moditems,
                 GetFilter(FilterSettings.Outfitting),
                 (newsetting, ch) => { SetFilter(FilterSettings.Outfitting, newsetting, ch); }, sortitems:true);
 
             // we place the spaceship fdname with its string name
-            var ships = ItemData.GetSpaceships().Select(x =>  new CheckedIconUserControl.Item(x.FDID,x.Name));
+            var ships = ItemData.GetSpaceships().Select(x =>  new CheckedIconUserControl.Item(x.FDID.ID,x.Name));
 
             extButtonShipyard.InitAllNoneAllBack(ships,
                 GetFilter(FilterSettings.Shipyard),
@@ -212,29 +212,33 @@ namespace EDDiscovery.UserControls.Helpers
                     bool filterin = station.DistanceToArrival <= valueBoxMaxLs.Value;
 
                     if (!extButtonType.IsDisabled)
-                        filterin &= extButtonType.Get().HasChars() && extButtonType.Get().SplitNoEmptyStartFinish(extButtonType.SettingsSplittingChar).Contains(station.FDStationType.ToString(), StringComparison.InvariantCultureIgnoreCase) >= 0;
+                        filterin &= extButtonType.Get().HasChars() && extButtonType.Get().SplitNoEmptyStartFinish(extButtonType.SettingsSplittingChar).ComparisionContains(station.FDStationType.ToString(), StringComparison.InvariantCultureIgnoreCase) >= 0;
 
                     if (!extButtonCommoditiesBuy.IsDisabled)
-                        filterin &= extButtonCommoditiesBuy.Get().HasChars() && station.HasAnyItemInStock(extButtonCommoditiesBuy.Get().SplitNoEmptyStartFinish(extButtonCommoditiesBuy.SettingsSplittingChar));
+                        filterin &= extButtonCommoditiesBuy.Get().HasChars() && station.HasAnyItemInStock(extButtonCommoditiesBuy.Get().SplitNoEmptyStartFinish(extButtonCommoditiesBuy.SettingsSplittingChar).Select(x => new MCFDName(x)).ToArray());
 
                     if (!extButtonCommoditiesSell.IsDisabled)
-                        filterin &= extButtonCommoditiesSell.Get().HasChars() && station.HasAnyItemWithDemandAndPrice(extButtonCommoditiesSell.Get().SplitNoEmptyStartFinish(extButtonCommoditiesSell.SettingsSplittingChar));
+                        filterin &= extButtonCommoditiesSell.Get().HasChars() && station.HasAnyItemWithDemandAndPrice(extButtonCommoditiesSell.Get().SplitNoEmptyStartFinish(extButtonCommoditiesSell.SettingsSplittingChar).Select(x => new MCFDName(x)).ToArray());
 
                     if (!extButtonOutfitting.IsDisabled)
-                        filterin &= extButtonOutfitting.Get().HasChars() && station.HasAnyModuleTypes(outfittinglist);
+                        filterin &= extButtonOutfitting.Get().HasChars() && station.HasAnyModuleTypes(outfittinglist.Select(x => new ModFDName(x)).ToArray());
 
                     if (!extButtonShipyard.IsDisabled)
-                        filterin &= extButtonShipyard.Get().HasChars() && station.HasAnyShipTypes(extButtonShipyard.Get().SplitNoEmptyStartFinish(extButtonShipyard.SettingsSplittingChar));
+                        filterin &= extButtonShipyard.Get().HasChars() && station.HasAnyShipTypes(extButtonShipyard.Get().SplitNoEmptyStartFinish(extButtonShipyard.SettingsSplittingChar).Select(x => new VehicleFDName(x)).ToArray());
 
                     if (!extButtonEconomy.IsDisabled)
-                        filterin &= extButtonEconomy.Get().HasChars() && station.HasAnyEconomyTypes(extButtonEconomy.Get().SplitNoEmptyStartFinish(extButtonEconomy.SettingsSplittingChar));
+                        filterin &= extButtonEconomy.Get().HasChars() && station.HasAnyEconomyTypes(extButtonEconomy.Get().SplitNoEmptyStartFinish(extButtonEconomy.SettingsSplittingChar).Select(x=> EconomyDefinitions.ToEnum(x)).ToArray());
 
                     if (!extButtonServices.IsDisabled)
-                        filterin &= extButtonServices.Get().HasChars() && station.HasAnyServicesTypes(extButtonServices.Get().SplitNoEmptyStartFinish(extButtonServices.SettingsSplittingChar));
+                        ////filterin &= extButtonServices.Get().HasChars() && station.HasAnyServicesTypes(extButtonServices.Get().SplitNoEmptyStartFinish(extButtonServices.SettingsSplittingChar).Select(x=> StationDefinitions.StationServicesToEnum(x)).ToArray());
 
                     if (filterin)
                     {
                         string ss = station.StationServices != null ? string.Join(", ", station.StationServices.Select(x => StationDefinitions.ToLocalisedLanguage(x))) : "";
+
+                        var cp1 = new MCFDName(ColPrice1.Tag as string);
+                        var cp2 = new MCFDName(ColPrice2.Tag as string);
+                        var cp3 = new MCFDName(ColPrice3.Tag as string);
 
                         object[] cells = new object[]
                         {
@@ -247,12 +251,13 @@ namespace EDDiscovery.UserControls.Helpers
                             station.Latitude.HasValue ? station.Latitude.Value.ToString("N4") : "",
                             station.Longitude.HasValue ? station.Longitude.Value.ToString("N4") : "",
                             station.MarketStateString,
-                            ColPrice1.Tag != null ? station.GetItemPriceString((string)ColPrice1.Tag,showcommoditiesselltostation) ?? "" : "",
-                            ColPrice1.Tag != null ? station.GetItemStockDemandString((string)ColPrice1.Tag,showcommoditiesselltostation) ?? "" : "",
-                            ColPrice2.Tag != null ? station.GetItemPriceString((string)ColPrice2.Tag,showcommoditiesselltostation) ?? "" : "",
-                            ColPrice2.Tag != null ? station.GetItemStockDemandString((string)ColPrice2.Tag,showcommoditiesselltostation) ?? "" : "",
-                            ColPrice3.Tag != null ? station.GetItemPriceString((string)ColPrice3.Tag,showcommoditiesselltostation) ?? "" : "",
-                            ColPrice3.Tag != null ? station.GetItemStockDemandString((string)ColPrice3.Tag,showcommoditiesselltostation) ?? "" : "",
+                        
+                            ColPrice1.Tag != null ? station.GetItemPriceString(cp1,showcommoditiesselltostation) ?? "" : "",
+                            ColPrice1.Tag != null ? station.GetItemStockDemandString(cp1,showcommoditiesselltostation) ?? "" : "",
+                            ColPrice2.Tag != null ? station.GetItemPriceString(cp2,showcommoditiesselltostation) ?? "" : "",
+                            ColPrice2.Tag != null ? station.GetItemStockDemandString(cp2,showcommoditiesselltostation) ?? "" : "",
+                            ColPrice3.Tag != null ? station.GetItemPriceString(cp3,showcommoditiesselltostation) ?? "" : "",
+                            ColPrice3.Tag != null ? station.GetItemStockDemandString(cp3,showcommoditiesselltostation) ?? "" : "",
                             station.OutfittingStateString,
                             station.ShipyardStateString,
                             AllegianceDefinitions.ToLocalisedLanguage(station.Allegiance),
@@ -274,11 +279,11 @@ namespace EDDiscovery.UserControls.Helpers
                         if ( station.EconomyList!=null)
                             rw.Cells[colEconomy.Index].ToolTipText = string.Join(Environment.NewLine, station.EconomyList.Select(x=>$"{x.Name_Localised} : {(x.Proportion*100.0):N1}%"));
                         if (ColPrice1.Tag != null)
-                            rw.Cells[ColPrice1.Index].ToolTipText = rw.Cells[ColStockDemand1.Index].ToolTipText = station.GetItemString((string)ColPrice1.Tag);
+                            rw.Cells[ColPrice1.Index].ToolTipText = rw.Cells[ColStockDemand1.Index].ToolTipText = station.GetItemString(cp1);
                         if (ColPrice2.Tag != null)
-                            rw.Cells[ColPrice2.Index].ToolTipText = rw.Cells[ColStockDemand2.Index].ToolTipText = station.GetItemString((string)ColPrice2.Tag);
+                            rw.Cells[ColPrice2.Index].ToolTipText = rw.Cells[ColStockDemand2.Index].ToolTipText = station.GetItemString(cp2);
                         if (ColPrice3.Tag != null)
-                            rw.Cells[ColPrice3.Index].ToolTipText = rw.Cells[ColStockDemand3.Index].ToolTipText = station.GetItemString((string)ColPrice3.Tag);
+                            rw.Cells[ColPrice3.Index].ToolTipText = rw.Cells[ColStockDemand3.Index].ToolTipText = station.GetItemString(cp3);
                     }
                 }
             }
@@ -417,8 +422,8 @@ namespace EDDiscovery.UserControls.Helpers
                 var rarecommodities = MaterialCommodityMicroResourceType.GetRareCommodities(MaterialCommodityMicroResourceType.SortMethod.Alphabetical);
 
                 // tag consists of english name <separ> fdname
-                int max = f.AddBools(commodities.Select(x => x.EnglishName + separ + x.FDName).ToArray(), commodities.Select(x => x.TranslatedName).ToArray(), commoditiesstate, 4, 24, 1000, 4, 200, "S_");
-                f.AddBools(rarecommodities.Select(x => x.EnglishName + separ + x.FDName).ToArray(), rarecommodities.Select(x => x.TranslatedName).ToArray(), commoditiesstate, max + 16, 24, 500, 4, 200, "S_");
+                int max = f.AddBools(commodities.Select(x => x.EnglishName + separ + x.FDName.ID).ToArray(), commodities.Select(x => x.TranslatedName).ToArray(), commoditiesstate, 4, 24, 1000, 4, 200, "S_");
+                f.AddBools(rarecommodities.Select(x => x.EnglishName + separ + x.FDName.ID).ToArray(), rarecommodities.Select(x => x.TranslatedName).ToArray(), commoditiesstate, max + 16, 24, 500, 4, 200, "S_");
 
                 f.Add(new ConfigurableEntryList.Entry("B_Buy", showcommoditiesselltostation, "Sell to Station", new Point(600, 4), new Size(100, 22), "Set = Search for stations with a station buy price and has demand, Clear = Search for stations with stock to sell") { PlacedInPanel = ConfigurableEntryList.Entry.PanelType.Top });
 
@@ -480,8 +485,8 @@ namespace EDDiscovery.UserControls.Helpers
                 f.Add(new ConfigurableEntryList.Entry("B_Buy", showcommoditiesselltostation, "Sell to Station", new Point(600, 4), new Size(160, 22), 
                                     $"Set = Show price station buys the commodity at {Environment.NewLine} Clear = Show station sell price") { PlacedInPanel = ConfigurableEntryList.Entry.PanelType.Top });
 
-                int max = f.AddBools(commodities.Select(x => x.FDName).ToArray(), commodities.Select(x => x.TranslatedName).ToArray(), showcommoditiesstate, 4, 24, 1000, 4, 200, "S_");
-                f.AddBools(rarecommodities.Select(x => x.FDName).ToArray(), rarecommodities.Select(x => x.TranslatedName).ToArray(), showcommoditiesstate, max + 16, 24, 500, 4, 200, "S_");
+                int max = f.AddBools(commodities.Select(x => x.FDName.ID).ToArray(), commodities.Select(x => x.TranslatedName).ToArray(), showcommoditiesstate, 4, 24, 1000, 4, 200, "S_");
+                f.AddBools(rarecommodities.Select(x => x.FDName.ID).ToArray(), rarecommodities.Select(x => x.TranslatedName).ToArray(), showcommoditiesstate, max + 16, 24, 500, 4, 200, "S_");
                 f.Add(new ConfigurableEntryList.Entry("OK", typeof(ExtButton), "Show", new Point(300, 4), new Size(80, 24), null) { PlacedInPanel = ConfigurableEntryList.Entry.PanelType.Top });
 
                 f.Trigger += (d, ctrlname, text) => { f.RadioButton("S_", ctrlname, 3); };

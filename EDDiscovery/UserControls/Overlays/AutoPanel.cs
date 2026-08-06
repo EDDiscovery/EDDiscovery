@@ -54,21 +54,21 @@ namespace EDDiscovery.UserControls
 
         static Dictionary<PanelMode, PanelInformation.PanelIDs> modetopanels = new Dictionary<PanelMode, PanelInformation.PanelIDs>
         {
-            [PanelMode.Unknown] = PanelInformation.PanelIDs.TravelPanel,
-            [PanelMode.Supercruising] = PanelInformation.PanelIDs.TravelPanel,
-            [PanelMode.FSDJump] = PanelInformation.PanelIDs.TravelPanel,
-            [PanelMode.NormalSpace] = PanelInformation.PanelIDs.TravelPanel,
-            [PanelMode.Landed] = PanelInformation.PanelIDs.TravelPanel,
+            [PanelMode.Unknown] = PanelInformation.PanelIDs.Travel,
+            [PanelMode.Supercruising] = PanelInformation.PanelIDs.Travel,
+            [PanelMode.FSDJump] = PanelInformation.PanelIDs.Travel,
+            [PanelMode.NormalSpace] = PanelInformation.PanelIDs.Travel,
+            [PanelMode.Landed] = PanelInformation.PanelIDs.Travel,
             [PanelMode.Surveying] = PanelInformation.PanelIDs.Surveyor,
             [PanelMode.Compass] = PanelInformation.PanelIDs.Compass,
             [PanelMode.Combat] = PanelInformation.PanelIDs.CombatPanel,
-            [PanelMode.Docked] = PanelInformation.PanelIDs.TravelPanel,
+            [PanelMode.Docked] = PanelInformation.PanelIDs.Travel,
             [PanelMode.OnFootInterior] = PanelInformation.PanelIDs.Log,
             [PanelMode.Mining] = PanelInformation.PanelIDs.MiningOverlay,
-            [PanelMode.GlideMode] = PanelInformation.PanelIDs.TravelPanel,
+            [PanelMode.GlideMode] = PanelInformation.PanelIDs.Travel,
             [PanelMode.Organics] = PanelInformation.PanelIDs.Organics,
             [PanelMode.OnGroundCombat] = PanelInformation.PanelIDs.CombatPanel,
-            [PanelMode.Docking] = PanelInformation.PanelIDs.DockingPanel,
+            [PanelMode.Docking] = PanelInformation.PanelIDs.Docking,
         };
 
         private PanelMode mode = PanelMode.Unknown;

@@ -383,7 +383,7 @@ namespace EDDiscovery.UserControls
             last_he = he;
             var hl = DiscoveryForm.History;
 
-            if (last_he != null)
+            if (he != null)
             {
                 SetControlText(he.System.Name);
 
@@ -404,8 +404,8 @@ namespace EDDiscovery.UserControls
 
                 textBoxBody.Text = he.WhereAmI + " (" + he.Status.BodyType + ")";
 
-                bool hasmarketid = he?.Status.MarketID.HasValue ?? false;
-                bool hasbodyormarketid = hasmarketid || he.FullBodyID.HasValue;
+                bool hasmarketid = he.Status.MarketID?.HasValue == true;
+                bool hasbodyormarketid = hasmarketid || he.FullBodyID?.IsValid == true;
 
                 extButtonInaraStation.Enabled = hasmarketid;
                 extButtonSpanshStation.Enabled = hasbodyormarketid;
@@ -516,13 +516,13 @@ namespace EDDiscovery.UserControls
                     labelShip.Text = "On Foot".Tx();   
 
                     var cursuit = hl.SuitList.CurrentID(he.Suits);                     // get current suit ID, or 0 if none
-                    if (cursuit != 0)
+                    if (cursuit.IsValid)
                     {
                         var suit = hl.SuitList.Suit(cursuit,he.Suits);                // get suit
                         textBoxShip.Text = suit?.FriendlyName ?? "???";
                         var curloadout = DiscoveryForm.History.SuitLoadoutList.CurrentID(he.Loadouts);         // get current loadout ID, or 0 if none
 
-                        if ( curloadout != 0 )
+                        if ( curloadout.IsValid )
                         {
                             var loadout = hl.SuitLoadoutList.Loadout(curloadout, he.Loadouts);
                             textBoxShip.Text += ":" + (loadout?.Name ?? "???");
@@ -591,7 +591,7 @@ namespace EDDiscovery.UserControls
                             // else body name destination or $POI $MULTIPLAYER etc
                             // Now (oct 25) its localised, but if not, so attempt a rename for those $xxx forms ($Multiplayer.. $POI)
 
-                            destname = lastdestination.Name_Localised.Alt(JournalFieldNaming.SignalBodyName(lastdestination.Name));
+                            destname = lastdestination.Name_Localised.Alt(Identifiers.TransformSignalBodyName(lastdestination.Name));
 
                             //System.Diagnostics.Debug.WriteLine($"Sysinfo destination {lastdestination.Name} -> {destname}");
 
@@ -696,8 +696,8 @@ namespace EDDiscovery.UserControls
 
         private void extButtonSpanshSystem_Click(object sender, EventArgs e)
         {
-            if (last_he != null && last_he.System.SystemAddress.HasValue)
-                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(last_he.System.SystemAddress.Value);
+            if (last_he != null && last_he.System.HasAddress)
+                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(last_he.System.SystemAddress);
         }
 
         private void extButtonInaraStation_Click(object sender, EventArgs e)
@@ -715,8 +715,8 @@ namespace EDDiscovery.UserControls
             {
                 if (last_he.Status.MarketID != null)
                     EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForStationByMarketID(last_he.Status.MarketID.Value);
-                else if (last_he.FullBodyID.HasValue)
-                    EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForStationByFullBodyID(last_he.FullBodyID.Value);
+                else if (last_he.FullBodyID?.IsValid == true)
+                    EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForStationByFullBodyID(last_he.FullBodyID);
             }
         }
 

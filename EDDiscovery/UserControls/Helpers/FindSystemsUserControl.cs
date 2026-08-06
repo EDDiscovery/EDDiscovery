@@ -142,7 +142,8 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtVisitedClick(object sender, EventArgs e)
         {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : 
+                                new SystemClass(numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
 
             if (sys != null)
             {
@@ -155,7 +156,8 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtDBClick(object sender, EventArgs e)
         {
-            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : new SystemClass("Unknown", null, numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
+            ISystem sys = textBoxSystemName.Text.Length > 0 ? SystemCache.FindSystem(textBoxSystemName.Text, discoveryform.GalacticMapping, EliteDangerousCore.WebExternalDataLookup.All) : 
+                    new SystemClass(numberBoxDoubleX.Value, numberBoxDoubleY.Value, numberBoxDoubleZ.Value);     // find centre, i.e less 1 ly distance
 
             if (sys != null)
             {

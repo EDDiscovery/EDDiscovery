@@ -168,10 +168,9 @@ namespace EDDiscovery
             if ( name.EqualsIIC("All"))
             {
                 JObject ships = new JObject();
-                int index = 0;
-                foreach( var sh in History.ShipInformationList.Ships)
+                for( int index = 0; index < History.ShipInformationList.Count; index++)
                 {
-                    ships[index++.ToStringInvariant()] = JToken.FromObject(sh.Value, true, new Type[] { }, 5, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                    ships[index.ToStringInvariant()] = JToken.FromObject(History.ShipInformationList[index], true, new Type[] { }, 5, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
                 }
 
                 //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllshiploadout.json", ships.ToString(true));
@@ -243,7 +242,7 @@ namespace EDDiscovery
                 //systemaddress = 10477373803; weblookup = 1; // debug
 
                 ISystem sysc = systemname.IsEmpty() && systemaddress == 0 ? History.CurrentSystem() :
-                                        new SystemClass(systemname, systemaddress > 0 ? systemaddress : default(long?));
+                                        new SystemClass(systemname, new SystemAddress((ulong)systemaddress));
 
                 JToken json = null;
 
@@ -280,7 +279,7 @@ namespace EDDiscovery
                 //systemaddress = 10477373803; weblookup = 1; // debug
 
                 ISystem sysc = systemname.IsEmpty() && systemaddress == 0 ? History.CurrentSystem() :
-                                        new SystemClass(systemname, systemaddress > 0 ? systemaddress : default(long?));
+                                        new SystemClass(systemname,  new SystemAddress((ulong)systemaddress));
 
                 JToken json = null;
 
@@ -366,7 +365,7 @@ namespace EDDiscovery
 
             var list = History.Visited.Values;
             int toskip = howmany > list.Count || howmany < 0 ? list.Count : list.Count-howmany;
-            var vlist = list.Skip(toskip).Select(x => new VisitedSystem(x.System.Name,x.System.SystemAddress??-1,x.System.X,x.System.Y,x.System.Z)).ToList();
+            var vlist = list.Skip(toskip).Select(x => new VisitedSystem(x.System.Name,x.System.HasAddress ? (long)x.System.SystemAddress.Value : -1,x.System.X,x.System.Y,x.System.Z)).ToList();
             var visited = JToken.FromObject(vlist, true, new Type[] { typeof(System.Drawing.Image) }, 12, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
             var str = visited.ToString();
             //BaseUtils.FileHelpers.TryWriteToFile(@"c:\code\dllvisited.json", str);

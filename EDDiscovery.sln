@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.32413.511
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.37216.2 d17.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDDiscovery", "EDDiscovery\EDDiscovery.csproj", "{6EE10D92-E3E4-44D9-8E6B-851801B0B510}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -35,6 +35,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CAPI", "CAPI\CAPI\CAPI.csproj", "{465C72D9-F10B-4CC6-A5DC-16ED65881655}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NetMQUtils", "BaseUtilities\NetMQUtils\NetMQUtils.csproj", "{0CD3F803-ED26-4B4B-85B2-D22C9156BC7E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTest", "UnitTest\UnitTest.csproj", "{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -202,6 +204,18 @@ Global
 		{0CD3F803-ED26-4B4B-85B2-D22C9156BC7E}.Release|x64.Build.0 = Release|Any CPU
 		{0CD3F803-ED26-4B4B-85B2-D22C9156BC7E}.Release|x86.ActiveCfg = Release|Any CPU
 		{0CD3F803-ED26-4B4B-85B2-D22C9156BC7E}.Release|x86.Build.0 = Release|Any CPU
+		{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}.Debug|x64.Build.0 = Debug|Any CPU
+		{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}.Debug|x86.Build.0 = Debug|Any CPU
+		{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}.Release|x64.ActiveCfg = Release|Any CPU
+		{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}.Release|x64.Build.0 = Release|Any CPU
+		{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}.Release|x86.ActiveCfg = Release|Any CPU
+		{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

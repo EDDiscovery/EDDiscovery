@@ -748,9 +748,9 @@ namespace EDDiscovery.UserControls
                     case "scandata":
                         {
                             string system = json["system"].Str();
-                            long? systemid = json["systemid"].LongNull();
+                            ulong? systemid = json["systemid"].ULongNull();
                             WebExternalDataLookup wdl = json["weblookup"].EnumStr<WebExternalDataLookup>(WebExternalDataLookup.None, true);
-                            var sc = new SystemClass(system, systemid);
+                            var sc = new SystemClass(system, new SystemAddress(systemid));
                             var node = await hl.StarScan2.FindSystemAsync(sc, wdl != WebExternalDataLookup.None);
                             if (IsClosed)
                                 return;
@@ -771,10 +771,10 @@ namespace EDDiscovery.UserControls
                     case "spanshdump":
                         {
                             string system = json["system"].Str();
-                            long? systemid = json["systemid"].LongNull();
+                            ulong? systemid = json["systemid"].ULongNull();
                             bool weblookup = json["weblookup"].Bool();
                             bool cachelookup = json["cachelookup"].Bool();
-                            var sys = new SystemClass(system, systemid > 0 ? systemid : default(long?));
+                            var sys = new SystemClass(system, new SystemAddress(systemid));
                             var dump = await SpanshClass.GetSpanshDumpAsync(sys, weblookup, cachelookup);
                             if (IsClosed)
                                 return;

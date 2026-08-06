@@ -63,7 +63,7 @@ namespace EDDiscovery.UserControls
                             "Geological","Biological","Thargoid","Human","Guardian",
                         };
 
-                    string[] fdname = { "Water", "LiquidOxygen", "methanolmonohydratecrystals", "MethaneClathrate",     // icy
+                    var fdname = new string[]{ "Water", "LiquidOxygen", "methanolmonohydratecrystals", "MethaneClathrate",     // icy
                                             "Bromellite", "Grandidierite", "lowtemperaturediamond", "Opal",
                                             "Alexandrite", "Tritium",
                                             "Bauxite","Indite","Alexandrite","Monazite","Musgravite","Benitoite","Serendibite","Rhodplumsite",          // rocky

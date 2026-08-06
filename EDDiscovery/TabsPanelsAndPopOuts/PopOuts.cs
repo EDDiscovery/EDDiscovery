@@ -67,7 +67,7 @@ namespace EDDiscovery
             {
                 // new method saves the pop out number list
                 var list = usercontrolsforms.PopOutNumberList(pi.PopoutID);
-                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(PopOutSaveID(pi.PopoutID), list.ToString(","));
+                EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(PopOutSaveID(pi.PopoutID), list.ToStringFromArray(","));
             }
         }
 

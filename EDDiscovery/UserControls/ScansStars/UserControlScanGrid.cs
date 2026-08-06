@@ -144,7 +144,7 @@ namespace EDDiscovery.UserControls
             List<MaterialCommodityMicroResource> historicmcl = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity);
             List<MaterialCommodityMicroResource> curmcl = DiscoveryForm.History.MaterialCommoditiesMicroResources.GetLast();
 
-            HashSet<string> jumponiums = new HashSet<string>();     // accumulate jumponium in a hash set to prevent repeats
+            HashSet<MCFDName> jumponiums = new HashSet<MCFDName>();     // accumulate jumponium in a hash set to prevent repeats
 
             var systemdisplay = new EliteDangerousCore.StarScan2.SystemDisplay();
             systemdisplay.ValueLimit = GetSetting(dbValueLimit, 50000);
@@ -381,7 +381,7 @@ namespace EDDiscovery.UserControls
                         if (bn.Scan.HasMaterials)
                         {
                             var ret = "";
-                            foreach (KeyValuePair<string, double> mat in bn.Scan.Materials)
+                            foreach (KeyValuePair<MCFDName, double> mat in bn.Scan.Materials)
                             {
                                 var mc = MaterialCommodityMicroResourceType.GetByFDName(mat.Key);
                                 if (mc?.IsJumponium == true)

@@ -88,7 +88,7 @@ namespace EDDiscovery.WebServer
 
             JObject systemdata = new JObject();
             systemdata["System"] = he.System.Name;
-            systemdata["SystemAddress"] = he.System.SystemAddress;
+            systemdata["SystemAddress"] = he.System.SystemAddress.Value;
             systemdata["PosX"] = he.System.X.ToStringInvariant("0.00");
             systemdata["PosY"] = he.System.Y.ToStringInvariant("0.00");
             systemdata["PosZ"] = he.System.Z.ToStringInvariant("0.00");
@@ -105,7 +105,7 @@ namespace EDDiscovery.WebServer
             sysstate["Economy"] = economy;
             sysstate["Faction"] = faction;
             sysstate["Security"] = security;
-            sysstate["MarketID"] = he.Status.MarketID;
+            sysstate["MarketID"] = he.Status.MarketID?.Value ?? 0;
             response["EDDB"] = sysstate;
 
             var mcl = hl.MaterialCommoditiesMicroResources.Get(he.MaterialCommodity);

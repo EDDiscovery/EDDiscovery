@@ -53,6 +53,11 @@ namespace EDDiscovery
                 ChangeToCommander(itm[0].Id);
             }
         }
+        public void SelectNextCommander()
+        {
+            if (comboBoxCommander.SelectedIndex < comboBoxCommander.Items.Count - 1)
+                comboBoxCommander.SelectedIndex = comboBoxCommander.SelectedIndex + 1;
+        }
 
         public void RefreshButton(bool state)
         {
