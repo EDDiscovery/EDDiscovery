@@ -21,5 +21,6 @@ del /s /y obj bin
 cd ..\..\EliteDangerousCore\EliteDangerous
 del /s /y obj bin
 cd ..\..
+del /s /y /x packages
 
 
