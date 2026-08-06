@@ -27,9 +27,9 @@ namespace EDDiscovery.UserControls
 {
     public partial class UserControlShoppingList : UserControlCommonBase
     {
-        private List<Tuple<Recipes.Recipe, int>> EngineeringWanted = new List<Tuple<Recipes.Recipe, int>>();
-        private List<Tuple<Recipes.Recipe, int>> SynthesisWanted = new List<Tuple<Recipes.Recipe, int>>();
-        private List<Recipes.Recipe> TechBrokerWanted = new List<Recipes.Recipe>();
+        private List<Tuple<RecipeBase, int>> EngineeringWanted = new List<Tuple<RecipeBase, int>>();
+        private List<Tuple<RecipeBase, int>> SynthesisWanted = new List<Tuple<RecipeBase, int>>();
+        private List<RecipeBase> TechBrokerWanted = new List<RecipeBase>();
         private bool showMaxInjections;
         private bool showPlanetMats;
         private bool hidePlanetMatsWithNoCapacity;
@@ -145,13 +145,13 @@ namespace EDDiscovery.UserControls
             Display();
         }
 
-        private void Engineering_OnWantedChange(List<Tuple<Recipes.Recipe, int>> wanted)
+        private void Engineering_OnWantedChange(List<Tuple<RecipeBase, int>> wanted)
         {
             EngineeringWanted = wanted;
             Display();
         }
 
-        private void Synthesis_OnWantedChange(List<Tuple<Recipes.Recipe, int>> wanted)
+        private void Synthesis_OnWantedChange(List<Tuple<RecipeBase, int>> wanted)
         {
             SynthesisWanted = wanted;
             Display();
@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
 
                 Color textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                 Color backcolour = this.BackColor;
-                List<Tuple<Recipes.Recipe, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
+                List<Tuple<RecipeBase, int>> totalWanted = EngineeringWanted.Concat(SynthesisWanted).ToList();
 
                 var shoppinglist = MaterialCommoditiesRecipe.GetShoppingList(totalWanted, mcl);
 
@@ -265,9 +265,9 @@ namespace EDDiscovery.UserControls
                 {
                     var totals2 = MaterialCommoditiesRecipe.TotalList(mcl);                  // start with totals present
 
-                    var basic = MaterialCommoditiesRecipe.HowManyLeft(Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.Level == "Basic"),0, mcl, totals2);
-                    var standard = MaterialCommoditiesRecipe.HowManyLeft(Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.Level == "Standard"),0, mcl, totals2);
-                    var premium = MaterialCommoditiesRecipe.HowManyLeft(Recipes.SynthesisRecipes.First(r => r.Name == "FSD" && r.Level == "Premium"),0, mcl, totals2);
+                    var basic = MaterialCommoditiesRecipe.HowManyLeft(SynthesisRecipe.GetPlayerSynthesis().First(r => r.Name == "FSD" && r.Level == SynthesisRecipe.SynthesisLevel.Basic),0, mcl, totals2);
+                    var standard = MaterialCommoditiesRecipe.HowManyLeft(SynthesisRecipe.GetPlayerSynthesis().First(r => r.Name == "FSD" && r.Level == SynthesisRecipe.SynthesisLevel.Standard),0, mcl, totals2);
+                    var premium = MaterialCommoditiesRecipe.HowManyLeft(SynthesisRecipe.GetPlayerSynthesis().First(r => r.Name == "FSD" && r.Level == SynthesisRecipe.SynthesisLevel.Premium),0, mcl, totals2);
                     wantedList.Append(Environment.NewLine +
                         string.Format("Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium".Tx(), basic.Item1, standard.Item1, premium.Item1));
                 }
@@ -275,15 +275,14 @@ namespace EDDiscovery.UserControls
                 if (showPlanetMats && sd != null && sd.HasMaterials)
                 {
                     wantedList.Append(Environment.NewLine + Environment.NewLine + string.Format("Materials on {0}".Tx(), last_he.WhereAmI) + Environment.NewLine);
-                    foreach (KeyValuePair<string, double> mat in sd.Materials)
+                    foreach (KeyValuePair<MCFDName, double> mat in sd.Materials)
                     {
                         int? onHand = mcl.Where(m => m.Details.FDName == mat.Key).FirstOrDefault()?.Count;
                         MaterialCommodityMicroResourceType md = GetByFDName(mat.Key);
                         int max = md.MaterialLimitOrNull() ?? 250;      // protect against a rouge material creeping in
                         if (!hidePlanetMatsWithNoCapacity || (onHand.HasValue ? onHand.Value : 0) < max)
                         {
-                            wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", System.Threading.Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(mat.Key.ToLowerInvariant()),
-                                                                            mat.Value.ToString("N1"), (onHand.HasValue ? onHand.Value : 0), max);
+                            wantedList.AppendFormat("   {0} {1}% ({2}/{3})\n", md?.TranslatedName ?? mat.Key.SplitCapsWordFull(), mat.Value.ToString("N1"), (onHand.HasValue ? onHand.Value : 0), max);
                         }
                     }
                 }

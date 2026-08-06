@@ -356,10 +356,16 @@ namespace EDDiscovery.UserControls
 
                 System.Diagnostics.Trace.WriteLine(BaseUtils.AppTicks.TickCount + " TG TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
-                while( queuedadds.Count>0)              // finally, dequeue any adds added
+                while (queuedadds.Count > 0)              // finally, dequeue any adds added
                 {
                     System.Diagnostics.Debug.WriteLine("TG Dequeue paused adds");
                     AddEntry(queuedadds.Dequeue());
+                }
+
+                if (EDDOptions.Instance.AutoLoadNextCommander)
+                {
+                    if ( DiscoveryForm.History.CommanderId>=-99 && DisplayNumber == 1050)
+                        DiscoveryForm.SelectNextCommander();
                 }
             });
 
@@ -454,7 +460,7 @@ namespace EDDiscovery.UserControls
                 if (he.Status.StationName_Localised != null)
                     colTime += $"s`{he.Status.StationName_Localised}`, {he.Status.FDStationType}\r\n";
 
-                colTime += $"sh`{he.Status.ShipTypeFD}` {he.ShipInformation?.ShipFD}:{he.ShipInformation?.SubVehicle}\r\n";
+                colTime += $"sh`{he.Status.ShipTypeFD?.ID}` {he.ShipInformation?.ShipFD?.ID}:{he.ShipInformation?.SubVehicle}\r\n";
 
                 if ( he.Status.DockingPad>0)
                     colTime += $"DPad: {he.Status.DockingPad}\r\n";

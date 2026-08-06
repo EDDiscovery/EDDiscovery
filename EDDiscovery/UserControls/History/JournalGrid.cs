@@ -661,8 +661,8 @@ namespace EDDiscovery.UserControls
 
         private void viewOnSpanshToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (rightclickhe.System.SystemAddress.HasValue)
-                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(rightclickhe.System.SystemAddress.Value);
+            if (rightclickhe.System.HasAddress)
+                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(rightclickhe.System);
         }
 
         private void toolStripMenuItemStartStop_Click(object sender, EventArgs e)       // sync with history grid call

@@ -38,6 +38,8 @@ namespace EDDiscovery.UserControls
             bool regionmarker = false;                  // if region marker..
             DateTime timeutc;
 
+
+
             if (bkmark == null)                         // new bookmark
             {
                 timeutc = DateTime.UtcNow;

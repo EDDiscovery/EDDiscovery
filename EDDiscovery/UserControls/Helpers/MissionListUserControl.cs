@@ -96,7 +96,7 @@ namespace EDDiscovery.UserControls.Helpers
                                     ms.OriginatingSystem.Name + ": " + ms.OriginatingStation,
                                     ms.Mission.Faction,
                                     ms.DestinationSystemStationSettlement(),
-                                    ms.Mission.TargetFaction,
+                                    ms.Mission.TargetFaction ?? "",
                                     previousmissions ? ms.StateText() : ms.Mission.Reward.GetValueOrDefault().ToString("N0"),
                                     ms.MissionInfoColumn()
                 };

@@ -139,7 +139,7 @@ namespace EDDiscovery
             DDEServer = new BaseUtils.DDE.DDEServer();          // will be started in shown
         }
 
-        // called by EDDForm during shown
+        // called by EDDForm during shown, Main Thread
         public void PostInit_Shown()        
         {
             EDDConfig.Instance.Update();    // lost in the midst of time why  
@@ -206,6 +206,9 @@ namespace EDDiscovery
         private void BackgroundWorkerThread()
         {
             Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background worker thread start");
+
+            // set up the TLU data, DB access here
+            TravelLogUnit.Initialise();   
 
             // check first and download items
 

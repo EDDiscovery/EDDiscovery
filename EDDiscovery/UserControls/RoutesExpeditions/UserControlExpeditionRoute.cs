@@ -35,7 +35,7 @@ namespace EDDiscovery.UserControls
             foreach (var system in sysnames)
             {
                 object[] data;
-                long? id64 = null;
+                SystemAddress sa = null;
 
                 if (system is string)
                 {
@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
                 else
                 {
                     var se = (ISystem)system;
-                    id64 = se.SystemAddress;
+                    sa = se.SystemAddress;
                     string note = se.Tag as string ?? "";// Tag may have info in it for notes, if so, use it
                     bool known = se.HasCoordinate;
                     data = new object[] { se.Name, note , known ? se.X.ToString("N5") : "", known ? se.Y.ToString("N5") : "", known ? se.Z.ToString("N5"): "" };         
@@ -61,11 +61,11 @@ namespace EDDiscovery.UserControls
                     if (insertIndex < 0)
                     {
                         int rowno = dataGridView.Rows.Add(data);
-                        dataGridView.Rows[rowno].Cells[id64imported].Tag = id64;
+                        dataGridView.Rows[rowno].Cells[id64imported].Tag = sa;
                     }
                     else
                     {
-                        dataGridView.Rows[insertIndex].Cells[id64imported].Tag = id64;
+                        dataGridView.Rows[insertIndex].Cells[id64imported].Tag = sa;
                         dataGridView.Rows.Insert(insertIndex++, data);
                     }
 

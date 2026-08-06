@@ -459,7 +459,7 @@ namespace EDDiscovery.UserControls
                     {
                         JournalScan leftscan = lefthe.journalEntry as JournalScan;
                         JournalScan rightscan = righthe.journalEntry as JournalScan;
-                        Type[] ignoretypes = new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) };
+                        HashSet<Type> ignoretypes = new HashSet<Type> { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) };
 
                         // sorteval already has varsinuse computed, extract variables from scans
 

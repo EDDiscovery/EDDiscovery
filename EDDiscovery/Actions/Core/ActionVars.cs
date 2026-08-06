@@ -50,14 +50,14 @@ namespace EDDiscovery.Actions
                 vars[prefix + "StationType"] = he.Status.FDStationType.ToString();
                 vars[prefix + "StationFaction"] = he.Status.StationFaction ?? "";
                 vars[prefix + "ShipType"] = he.Status.ShipType ?? "";
-                vars[prefix + "ShipTypeFD"] = he.Status.ShipTypeFD ?? "";
+                vars[prefix + "ShipTypeFD"] = he.Status.ShipTypeFD?.ID ?? "";
                 vars[prefix + "OnFoot"] = he.Status.OnFoot.ToStringIntValue();
                 vars[prefix + "IsSRV"] = he.Status.IsSRV.ToStringIntValue();
                 vars[prefix + "IsFighter"] = he.Status.IsFighter.ToStringIntValue();
                 vars[prefix + "BodyApproached"] = he.Status.BodyApproached.ToStringIntValue();
                 vars[prefix + "BookedDropship"] = he.Status.BookedDropship.ToStringIntValue();
                 vars[prefix + "BookedTaxi"] = he.Status.BookedTaxi.ToStringIntValue();
-                vars[prefix + "ShipId"] = he.Status.ShipID.ToString(ct);
+                vars[prefix + "ShipId"] = (he.Status.ShipID?.Value ?? ulong.MaxValue).ToStringInvariant();
                 vars[prefix + "IndexOf"] = he.EntryNumber.ToString(ct);
                 vars[prefix + "Index"] = he.Index.ToString(ct);
 
@@ -83,14 +83,14 @@ namespace EDDiscovery.Actions
                 vars[prefix + "Group"] = he.Status.Group;
                 vars[prefix + "OnCrewWithCaptain"] = he.Status.OnCrewWithCaptain ?? "";
                 vars[prefix + "Wanted"] = he.Status.Wanted.ToStringIntValue();
-                vars[prefix + "MarketId"] = he.Status.MarketID.HasValue ? he.Status.MarketID.ToStringInvariant() : "0";
+                vars[prefix + "MarketId"] = he.Status.MarketID?.ToString() ?? "0";
 
                 vars[prefix + "Note"] = he.GetNoteText();
 
                 vars[prefix + "EventDescription"] = he.GetInfo();
                 vars[prefix + "EventDetailedInfo"] = he.GetDetailed() ?? "";
 
-                vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new Type[] { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5);      //depth seems good enough
+                vars.AddPropertiesFieldsOfClass(he.journalEntry, prefix + "Class_", new HashSet<Type> { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5);      //depth seems good enough
 
                 // being backwards compatible to actions packs BEFORE the V3 change to remove JS vars
                 // these were the ones used in the pack..
@@ -111,7 +111,7 @@ namespace EDDiscovery.Actions
 
                 vars[prefix + "StarSystem"] = s.Name;
                 vars[prefix + "StarSystemEDSMID"] = "0";
-                vars[prefix + "StarSystemAddress"] = (s.SystemAddress ?? 0).ToStringInvariant();
+                vars[prefix + "StarSystemAddress"] = s.SystemAddress.IsValid ? s.SystemAddress.ToString() : "0";
                 vars[prefix + "xpos"] = s.X.ToStringInvariantNAN("0.###");
                 vars[prefix + "ypos"] = s.Y.ToStringInvariantNAN("0.###");
                 vars[prefix + "zpos"] = s.Z.ToStringInvariantNAN("0.###");
@@ -126,7 +126,7 @@ namespace EDDiscovery.Actions
             if (si != null)
             {
                 ship = si.ShipType.Alt("Unknown");
-                id = si.ID.ToString(System.Globalization.CultureInfo.InvariantCulture);
+                id = si.ID.ToString() ?? "0";
                 name = si.ShipUserName.Alt("");
                 ident = si.ShipUserIdent.Alt("");
                 sv = si.SubVehicle.ToString();
@@ -195,7 +195,7 @@ namespace EDDiscovery.Actions
 
                 vars[mp + "Name"] = ms.Mission.Name;
                 vars[mp + "NameLocalised"] = ms.Mission.LocalisedName;
-                vars[mp + "ID"] = ms.Mission.MissionId.ToStringInvariant();
+                vars[mp + "ID"] = ms.Mission.MissionID.ToString() ?? "0";
                 vars[mp + "UTC"] = ms.Mission.EventTimeUTC.ToStringUSInvariant();
                 vars[mp + "Local"] = ms.Mission.EventTimeLocal.ToStringUSInvariant();
                 vars[mp + "ExpiryUTC"] = ms.Mission.Expiry.ToStringUSInvariant();
@@ -211,12 +211,10 @@ namespace EDDiscovery.Actions
                 vars[mp + "Commodity"] = ms.Mission.CommodityLocalised.Alt(ms.Mission.FriendlyCommodity);
                 vars[mp + "CommodityTranslated"] = ms.Mission.FriendlyCommodity;
 
-                vars[mp + "TargetType"] = ms.Mission.TargetType;
-                vars[mp + "TargetTypeFriendly"] = ms.Mission.TargetTypeFriendly;
-                vars[mp + "TargetTypeLocalised"] = ms.Mission.TargetTypeLocalised;
-                vars[mp + "TargetFaction"] = ms.Mission.TargetFaction;
-                vars[mp + "Target"] = ms.Mission.Target;
-                vars[mp + "TargetFriendly"] = ms.Mission.TargetFriendly;
+                vars[mp + "TargetType"] = ms.Mission.TargetType != MissionDefinitions.TargetType.NotGiven ? ms.Mission.TargetType.ToString() : "";
+                vars[mp + "TargetTypeFriendly"] = vars[mp + "TargetTypeLocalised"] = ms.Mission.TargetTypeFriendly ?? "";
+                vars[mp + "TargetFaction"] = ms.Mission.TargetFaction ?? "";
+                vars[mp + "Target"] = ms.Mission.Target ?? "";
                 vars[mp + "TargetLocalised"] = ms.Mission.TargetLocalised;
                 vars[mp + "KillCount"] = ms.Mission.KillCount != null ? ms.Mission.KillCount.Value.ToStringInvariant() : "";
 

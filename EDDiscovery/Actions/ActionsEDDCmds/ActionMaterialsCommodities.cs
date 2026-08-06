@@ -95,7 +95,7 @@ namespace EDDiscovery.Actions
                         string postfix = (i + 1).ToString(System.Globalization.CultureInfo.InvariantCulture);
                         ap[prefix + "Name" + postfix] = list[i].Details.TranslatedName;
                         ap[prefix + "Category" + postfix] = list[i].Details.Category.ToString();
-                        ap[prefix + "fdname" + postfix] = list[i].Details.FDName;
+                        ap[prefix + "fdname" + postfix] = list[i].Details.FDName.ID;
                         ap[prefix + "type" + postfix] = list[i].Details.Type.ToString().SplitCapsWord();
                         ap[prefix + "shortname" + postfix] = list[i].Details.Shortname;
                     }

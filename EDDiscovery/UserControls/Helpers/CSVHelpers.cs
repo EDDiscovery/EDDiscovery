@@ -260,31 +260,31 @@ namespace EDDiscovery.UserControls
 
                             if (ShowPlanets)
                             {
-                                writer.Write(csv.Format(scan.GetMaterial("Carbon")));
-                                writer.Write(csv.Format(scan.GetMaterial("Iron")));
-                                writer.Write(csv.Format(scan.GetMaterial("Nickel")));
-                                writer.Write(csv.Format(scan.GetMaterial("Phosphorus")));
-                                writer.Write(csv.Format(scan.GetMaterial("Sulphur")));
-                                writer.Write(csv.Format(scan.GetMaterial("Arsenic")));
-                                writer.Write(csv.Format(scan.GetMaterial("Chromium")));
-                                writer.Write(csv.Format(scan.GetMaterial("Germanium")));
-                                writer.Write(csv.Format(scan.GetMaterial("Manganese")));
-                                writer.Write(csv.Format(scan.GetMaterial("Selenium")));
-                                writer.Write(csv.Format(scan.GetMaterial("Vanadium")));
-                                writer.Write(csv.Format(scan.GetMaterial("Zinc")));
-                                writer.Write(csv.Format(scan.GetMaterial("Zirconium")));
-                                writer.Write(csv.Format(scan.GetMaterial("Cadmium")));
-                                writer.Write(csv.Format(scan.GetMaterial("Mercury")));
-                                writer.Write(csv.Format(scan.GetMaterial("Molybdenum")));
-                                writer.Write(csv.Format(scan.GetMaterial("Niobium")));
-                                writer.Write(csv.Format(scan.GetMaterial("Tin")));
-                                writer.Write(csv.Format(scan.GetMaterial("Tungsten")));
-                                writer.Write(csv.Format(scan.GetMaterial("Antimony")));
-                                writer.Write(csv.Format(scan.GetMaterial("Polonium")));
-                                writer.Write(csv.Format(scan.GetMaterial("Ruthenium")));
-                                writer.Write(csv.Format(scan.GetMaterial("Technetium")));
-                                writer.Write(csv.Format(scan.GetMaterial("Tellurium")));
-                                writer.Write(csv.Format(scan.GetMaterial("Yttrium")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Carbon")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Iron")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Nickel")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Phosphorus")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Sulphur")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Arsenic")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Chromium")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Germanium")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Manganese")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Selenium")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Vanadium")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Zinc")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Zirconium")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Cadmium")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Mercury")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Molybdenum")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Niobium")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Tin")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Tungsten")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Antimony")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Polonium")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Ruthenium")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Technetium")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Tellurium")));
+                                writer.Write(csv.Format(scan.GetMaterialStr("Yttrium")));
                             }
                             writer.WriteLine();
                         }

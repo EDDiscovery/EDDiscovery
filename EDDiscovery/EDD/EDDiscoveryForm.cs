@@ -297,7 +297,7 @@ namespace EDDiscovery
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Initialise Item Data and components");
             msg.Invoke("Loading Items");
 
-            MaterialCommodityMicroResourceType.Initialise();     // lets statically fill the table way before anyone wants to access it
+            MaterialCommodityMicroResourceType.Initialise();    // lets statically fill the table way before anyone wants to access it
             ItemData.Initialise();                              // let the item data initialise
             Stars.Prepopulate();                                // we do it this way instead of statically because we don't want them autofilled
             Planets.Prepopulate();
@@ -642,6 +642,8 @@ namespace EDDiscovery
             };
 
             helpTabToolStripMenuItem.Click += (s, e) => { tabControlMain.HelpOn(this, contextMenuStripTabs.PointToScreen(new Point(0, 0)), tabControlMain.LastTabClicked); };
+
+
 
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Finish ED Init");
 

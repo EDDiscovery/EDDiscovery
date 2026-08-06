@@ -165,7 +165,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="QuickJSON, Version=2.10.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>$(SolutionDir)\packages\RJKJSoft.QuickJSON.2.10.0\lib\net48\QuickJSON.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\RJKJSoft.QuickJSON.3.0.0\lib\net48\QuickJSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -733,11 +733,11 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UserControls\Helpers\TravelHistoryFilter.cs" />
-    <Compile Include="UserControls\Overlays\UserControlCompass.cs">
+    <Compile Include="UserControls\Overlays\Compass.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Overlays\UserControlCompass.Designer.cs">
-      <DependentUpon>UserControlCompass.cs</DependentUpon>
+    <Compile Include="UserControls\Overlays\Compass.Designer.cs">
+      <DependentUpon>Compass.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\Overlays\UserControlNotePanel.cs">
       <SubType>UserControl</SubType>
@@ -1039,8 +1039,8 @@
     <EmbeddedResource Include="UserControls\History\HistoryGrid.resx">
       <DependentUpon>HistoryGrid.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Overlays\UserControlCompass.resx">
-      <DependentUpon>UserControlCompass.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\Overlays\Compass.resx">
+      <DependentUpon>Compass.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\Overlays\AutoPanel.resx">
       <DependentUpon>AutoPanel.cs</DependentUpon>

@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
 
             public override string ToString()                   // serialise to string
             {
-                return fromelement?.FDName + "," + element?.FDName + "," + offer.ToStringInvariant() + "," + receive.ToStringInvariant();
+                return fromelement?.FDName.ID + "," + element?.FDName.ID + "," + offer.ToStringInvariant() + "," + receive.ToStringInvariant();
             }
 
             public bool FromString(string s)                    // serialise from string
@@ -52,8 +52,8 @@ namespace EDDiscovery.UserControls
                 string[] parts = s.Split(',');
                 if (parts.Length == 4)
                 {
-                    fromelement = MaterialCommodityMicroResourceType.GetByFDName(parts[0]);
-                    element = MaterialCommodityMicroResourceType.GetByFDName(parts[1]);
+                    fromelement = MaterialCommodityMicroResourceType.GetByFDName(new MCFDName(parts[0]));
+                    element = MaterialCommodityMicroResourceType.GetByFDName(new MCFDName(parts[1]));
                     return fromelement != null && element != null && parts[2].InvariantParse(out offer) && parts[3].InvariantParse(out receive);
                 }
                 else
@@ -175,14 +175,23 @@ namespace EDDiscovery.UserControls
             }
         }
 
+        private class MaterialsByType
+        {
+            public MaterialCommodityMicroResourceType.MaterialGroupType Type { get; set; }
+            public MaterialCommodityMicroResourceType[] Items;
+        }
+
         private void DisplayTradeSelection(MaterialCommodityMicroResourceType highlight = null)  // last_he and current_mcl can be null
         {
             int sel = extComboBoxTraderType.SelectedIndex;
 
-            var mcl = new List<Tuple<MaterialCommodityMicroResourceType.MaterialGroupType, MaterialCommodityMicroResourceType[]>>();      // list of groups vs data
-            Dictionary<MaterialCommodityMicroResourceType.MaterialGroupType, string> mattxgroupnames = new Dictionary<MaterialCommodityMicroResourceType.MaterialGroupType, string>(); // translated names of groups
+            var matbygrouptype = new List<MaterialsByType>();      // list of groups vs data
 
-            foreach ( var t in Enum.GetValues(typeof(MaterialCommodityMicroResourceType.MaterialGroupType)))     // relies on MCD being in order
+            // translated names of groups
+            Dictionary<MaterialCommodityMicroResourceType.MaterialGroupType, string> mattxgroupnames = new Dictionary<MaterialCommodityMicroResourceType.MaterialGroupType, string>(); 
+
+            // relies on MCD being in order
+            foreach ( var t in Enum.GetValues(typeof(MaterialCommodityMicroResourceType.MaterialGroupType)))     
             {
                 var matgroup = (MaterialCommodityMicroResourceType.MaterialGroupType)t;
                 bool ok = (sel == 0 && matgroup >= MaterialCommodityMicroResourceType.MaterialGroupType.RawCategory1 && matgroup <= MaterialCommodityMicroResourceType.MaterialGroupType.RawCategory7);
@@ -191,13 +200,14 @@ namespace EDDiscovery.UserControls
                 if ( ok )
                 {
                     var list = MaterialCommodityMicroResourceType.Get(x => x.MaterialGroup == matgroup);
-                  //  System.Diagnostics.Debug.WriteLine($"\nMTrader {matgroup} = {String.Join(",",list.Select(x=>x.FDName))}");
-                    mcl.Add(new Tuple<MaterialCommodityMicroResourceType.MaterialGroupType, MaterialCommodityMicroResourceType[]>(matgroup,list));
+                    matbygrouptype.Add(new MaterialsByType() { Type = matgroup, Items = list });
                     mattxgroupnames[matgroup] = list[0].TranslatedMaterialGroup;
                 }
             }
 
-            var curmcl = last_mcl != null ? DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_mcl.Value) : null;       // get mcl at last_mcl position. May be null if we don't have any list
+            // get mcl at last_mcl position. May be null if we don't have any list
+
+            var curmcl = last_mcl != null ? DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_mcl.Value) : null;       
 
             Font titlefont = ExtendedControls.Theme.Current.GetFont;
             Font badgefont = ExtendedControls.Theme.Current.GetScaledFont(16f / 12f, max:21);
@@ -210,7 +220,7 @@ namespace EDDiscovery.UserControls
             int vpos = 0;
             int maxhpos = 0;
 
-            foreach (var t in mcl)      // for each type of material/commd
+            foreach (var t in matbygrouptype)      // for each type of material/commd (Category)
             {
                 int hpos = 0;
                 int nextvpos = vpos;
@@ -221,7 +231,7 @@ namespace EDDiscovery.UserControls
                     int tlen;
                     using (Brush b = new SolidBrush(orange))
                     {
-                        string s = mattxgroupnames[t.Item1];
+                        string s = mattxgroupnames[t.Type]; // get name of type translated
                         s = s.Substring(s.IndexOf(" ") + 1);
                         tlen = (int)(g.MeasureString(s, titlefont).Width+2);
                         g.DrawString(s, titlefont, b, new Point(ie.Bounds.Left, ie.Bounds.Top));
@@ -232,19 +242,20 @@ namespace EDDiscovery.UserControls
                         g.DrawLine(p, new Point(tlen, ie.Bounds.Top + titlefont.Height / 2), new Point(maxhpos, ie.Bounds.Top + titlefont.Height / 2));
                     }
 
-                }, new Rectangle(0, vpos, 2000, 24), t.Item1.ToString());
+                }, new Rectangle(0, vpos, 2000, 24), t.Type.ToString());
 
                 vpos += titlefont.Height + 6;
 
                 string backname = "encodedbackground";
-                if (t.Item1.ToString().Contains("Manu"))
+                if (t.Type.ToString().Contains("Manu"))
                     backname = "manubackground";
-                else if (t.Item1.ToString().Contains("Raw"))
+                else if (t.Type.ToString().Contains("Raw"))
                     backname = "rawbackground";
 
                 Bitmap background = BaseUtils.Icons.IconSet.GetImage("Controls.MaterialTrader." + backname ) as Bitmap;
 
-                foreach ( var mat in t.Item2 )
+                // for all mats
+                foreach ( var mat in t.Items )
                 {
                     int offer = 0, receive = 0;
                     string name = mat.TranslatedName;
@@ -269,7 +280,7 @@ namespace EDDiscovery.UserControls
 
                     if (selected != null)
                     {
-                        bool difflevel = selected.type != t.Item1;
+                        bool difflevel = selected.type != t.Type;
 
                         if (lvl < selected.level)
                         {
@@ -286,7 +297,7 @@ namespace EDDiscovery.UserControls
                                 receive /= 3;
                             }
                         }
-                        else if (selected.type == t.Item1)
+                        else if (selected.type == t.Type)
                         {
                             name = "Cancel";
                             wash = Color.FromArgb(80, 0, 32, 0);
@@ -307,7 +318,7 @@ namespace EDDiscovery.UserControls
                     Bitmap bmp = DrawBadge(background, badgefont, offer, receive, lvl, name, mattotal, wash);
 
                     var ie = extPictureTrades.AddImage(new Rectangle(hpos, vpos, background.Width, background.Height), bmp, imgowned: true);
-                    ie.Tag = new ElementTrade { type = t.Item1, element = mat, level = lvl, offer = offer, receive = receive };
+                    ie.Tag = new ElementTrade { type = t.Type, element = mat, level = lvl, offer = offer, receive = receive };
 
                     maxhpos = Math.Max(maxhpos, hpos + bmp.Width);
                     hpos += bmp.Width + hbadgemargin;

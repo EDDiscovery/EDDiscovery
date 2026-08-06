@@ -88,9 +88,9 @@ namespace EDDiscovery
             SpanshStations=60,
             TestOverlay = 61,
             Colonisation = 62,
-            AutoPanel = 63,
-            DockingPanel = 64,
-            TravelPanel = 66,
+            //AutoPanel = 63,
+            Docking = 64,
+            Travel = 66,
             Squadrons = 67,
             PowerplayMerits = 68,
             // ****** ADD More here DO NOT RENUMBER *****
@@ -176,9 +176,9 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Compass, typeof(UserControlCompass), "Compass", "Compass", "Compass overlay to show bearing to planetary coordinates") },
             { new PanelInfo( PanelIDs.MissionOverlay, typeof(UserControlMissionOverlay), "Mission Overlay", "MissionOV", "Mission List overlay") },
             { new PanelInfo( PanelIDs.MiningOverlay, typeof(UserControlMiningOverlay), "Mining Overlay", "MiningOV", "Mining overlay") },
-            { new PanelInfo( PanelIDs.DockingPanel, typeof(DockingPanel), "Docking Panel", "DockingPanel", "Docking Panel shows pad location" ) },
+            { new PanelInfo( PanelIDs.Docking, typeof(DockingPanel), "Docking Panel", "DockingPanel", "Docking Panel shows pad location" ) },
           //  { new PanelInfo( PanelIDs.AutoPanel, typeof(AutoPanel), "Auto Panel", "AutoPanel", "Auto Panel" ) },      // NOT YET
-            { new PanelInfo( PanelIDs.TravelPanel, typeof(TravelPanel), "Travel Panel", "TravelPanel", "Travel Panel showing current position information" ) },
+            { new PanelInfo( PanelIDs.Travel, typeof(TravelPanel), "Travel Panel", "TravelPanel", "Travel Panel showing current position information" ) },
 
 #if DEBUG
             { new PanelInfo( PanelIDs.TestOverlay, typeof(UserControlTestOverlay), "Test Overlay", "TestOverlay", "Test Overlay" ) },

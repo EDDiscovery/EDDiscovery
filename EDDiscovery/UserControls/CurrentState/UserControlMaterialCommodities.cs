@@ -33,10 +33,11 @@ namespace EDDiscovery.UserControls
         private const string dbUserGroups = "UserGroups";
         private const string dbWantedList = "WantedList";
         private const string dbDisplayInTransparent = "DisplayInTransparent";
-        private const string AllNonZeroMarker = "AllNonZero";
         private const string dbSplitter = "Splitter";
         private const string dbMaterialView = "MaterialView";
         private const string dbFont = "font";
+
+        private MCFDName AllNonZeroMarker = new MCFDName("AllNonZero");
 
         private const int MCGrid_MCDType = 0;       // MCD grid MCD tag cell index
         private const int MCGrid_MCMR = 1;           // MCD grid MCD with count tag, may be null
@@ -48,8 +49,8 @@ namespace EDDiscovery.UserControls
 
         private uint? last_mcl = null;
 
-        private Dictionary<string, int> wantedamounts;      // list of wanted items
-        private HashSet<string> displayinshoppinglist;       // list of items to list in transparent mode
+        private Dictionary<FDName, int> wantedamounts;      // list of wanted items
+        private HashSet<FDName> displayinshoppinglist;       // list of items to list in transparent mode
 
         private Font displayfont;
 
@@ -104,17 +105,17 @@ namespace EDDiscovery.UserControls
 
             if (showall)
             {
-                cfs.UC.AddGroupItem(String.Join(";", matitems.Select(x => x.FDName)) + ";", "All Materials".Tx());
-                cfs.UC.AddGroupItem(String.Join(";", comitems.Select(x => x.FDName)) + ";", "All Commodities".Tx());
-                cfs.UC.AddGroupItem(String.Join(";", mritems.Select(x => x.FDName)) + ";", "All Microresources".Tx());
+                cfs.UC.AddGroupItem(String.Join(";", matitems.Select(x => x.FDName.ID)) + ";", "All Materials".Tx());
+                cfs.UC.AddGroupItem(String.Join(";", comitems.Select(x => x.FDName.ID)) + ";", "All Commodities".Tx());
+                cfs.UC.AddGroupItem(String.Join(";", mritems.Select(x => x.FDName.ID)) + ";", "All Microresources".Tx());
             }
 
             if (PanelMode == PanelType.Materials || showall)        // add materials
             {
                 foreach (var t in matcats)
                 {
-                    string[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfCategory(t.Item1, true);
-                    cfs.UC.AddGroupItem(String.Join(";", members) + ";", t.Item2 + matpostfix);
+                    FDName[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfCategory(t.Item1, true);
+                    cfs.UC.AddGroupItem(String.Join(";", members.Select(x=>x.ID).ToArray()) + ";", t.Item2 + matpostfix);
                 }
 
                 AddtoCFS(matitems, mattypes, true, true);
@@ -123,7 +124,7 @@ namespace EDDiscovery.UserControls
             if (PanelMode == PanelType.Commodities || showall)      // add commodities
             {
                 MaterialCommodityMicroResourceType[] rare = comitems.Where(x => x.IsRareCommodity).ToArray();
-                cfs.UC.AddGroupItem(String.Join(";", rare.Select(x => x.FDName).ToArray()) + ";", "Rare".Tx()+ compostfix);
+                cfs.UC.AddGroupItem(String.Join(";", rare.Select(x => x.FDName.ID).ToArray()) + ";", "Rare".Tx()+ compostfix);
 
                 AddtoCFS(comitems, comtypes, false, true);
             }
@@ -132,8 +133,8 @@ namespace EDDiscovery.UserControls
             {
                 foreach (var t in mrcats)
                 {
-                    string[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfCategory(t.Item1, true);
-                    cfs.UC.AddGroupItem(String.Join(";", members) + ";", t.Item2 + mrpostfix);
+                    FDName[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfCategory(t.Item1, true);
+                    cfs.UC.AddGroupItem(String.Join(";", members.Select(x=>x.ID).ToArray()) + ";", t.Item2 + mrpostfix);
                 }
 
                 AddtoCFS(mritems, null, true, false);
@@ -200,16 +201,16 @@ namespace EDDiscovery.UserControls
             // from the wanted list, set wanted amounts
 
             JToken json = JToken.Parse(GetSetting(dbWantedList, ""), QuickJSON.JToken.ParseOptions.CheckEOL);
-            wantedamounts = json?.ToObject<Dictionary<string, int>>();
+            wantedamounts = json?.ToObject<Dictionary<FDName, int>>();
             if (wantedamounts == null)
-                wantedamounts = new Dictionary<string, int>();
+                wantedamounts = new Dictionary<FDName, int>();
 
             // from the display list of materials in the upper display panel, configure variable
 
             json = JToken.Parse(GetSetting(dbDisplayInTransparent, ""), QuickJSON.JToken.ParseOptions.CheckEOL);
-            displayinshoppinglist = json?.ToObject<HashSet<string>>();
+            displayinshoppinglist = json?.ToObject<HashSet<FDName>>();
             if (displayinshoppinglist == null)
-                displayinshoppinglist = new HashSet<string>();
+                displayinshoppinglist = new HashSet<FDName>();
 
             // font 
             displayfont = FontHandler.GetFontFromSetting(GetSetting(dbFont, ""), null);        // null if not set
@@ -373,11 +374,11 @@ namespace EDDiscovery.UserControls
                     contentlist = contentlist.AppendPrePad(string.Format("{0} {1}", mcmrt.TranslatedName, totalcount), Environment.NewLine);
                 }
 
-                if (all || filter.Contains(mcmrt.FDName))      // and see if they are in the filter
+                if (all || filter.Contains(mcmrt.FDName.ID))      // and see if they are in the filter
                 {
                     if (showzeros || totalcount > 0)       // if display zero, or we have some..
                     {
-                        string recipes = Recipes.UsedInRecipesByFDName(mcmrt.FDName, Environment.NewLine);   // empty or text
+                        string recipes = RecipeBase.UsedInRecipesByFDName(mcmrt.FDName, Environment.NewLine);   // empty or text
                         object[] rowobj;
 
                         if (PanelMode == PanelType.Materials)
@@ -544,7 +545,7 @@ namespace EDDiscovery.UserControls
                         pcell.TextToRightPreferentially = true;
                         progressrow.Cells.Add(pcell);
 
-                        string recipes = Recipes.UsedInRecipesByFDName(mcmrt.FDName, Environment.NewLine);    // may be empty. Not null
+                        string recipes = RecipeBase.UsedInRecipesByFDName(mcmrt.FDName, Environment.NewLine);    // may be empty. Not null
                         if (recipes.HasChars())
                         {
                             pcell.ToolTipText = tbc.ToolTipText = recipes;
@@ -783,7 +784,7 @@ namespace EDDiscovery.UserControls
         }
         private void clearAllDisplayItemsInShoppingListToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            displayinshoppinglist = new HashSet<string>();
+            displayinshoppinglist = new HashSet<FDName>();
             Display(last_mcl, false);
         }
 
@@ -852,8 +853,8 @@ namespace EDDiscovery.UserControls
             {
                 foreach (var t in types)
                 {
-                    string[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfType(t.Item1, true);
-                    cfs.UC.AddGroupItem(String.Join(";", members) + ";", t.Item2);
+                    FDName[] members = MaterialCommodityMicroResourceType.GetFDNameMembersOfType(t.Item1, true);
+                    cfs.UC.AddGroupItem(String.Join(";", members.Select(x=>x.ID).ToArray()) + ";", t.Item2);
                 }
             }
 
@@ -868,7 +869,7 @@ namespace EDDiscovery.UserControls
                 if (postfix.Length > 0)
                     postfix = " (" + postfix + ")";
 
-                cfs.UC.Add(x.FDName, x.TranslatedName + postfix);
+                cfs.UC.Add(x.FDName.ID, x.TranslatedName + postfix);
             }
         }
 

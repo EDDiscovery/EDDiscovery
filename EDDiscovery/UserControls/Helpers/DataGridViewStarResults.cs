@@ -87,7 +87,7 @@ namespace EDDiscovery.UserControls.Search
         {
             rightclicktag = RightClickRowValid ? Rows[RightClickRow].Tag : null;
 
-            ContextMenuStrip.Items[2].Visible = SystemClassFrom(rightclicktag)?.SystemAddress.HasValue ?? false;        // spansh
+            ContextMenuStrip.Items[2].Visible = SystemClassFrom(rightclicktag)?.HasAddress ?? false;        // spansh
             ContextMenuStrip.Items[4].Visible = GotoEntryClicked != null;
         }
 
@@ -119,9 +119,9 @@ namespace EDDiscovery.UserControls.Search
         {
             var sys = SystemClassFrom(rightclicktag);       // if rightclicktag == null, then we get null.
 
-            if (sys != null && sys.SystemAddress != null)
+            if (sys != null && sys.HasAddress)
             {
-                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(sys.SystemAddress.Value);
+                EliteDangerousCore.Spansh.SpanshClass.LaunchBrowserForSystem(sys.SystemAddress);
             }
         }
 
@@ -248,7 +248,7 @@ namespace EDDiscovery.UserControls.Search
                             data.Add(sys.X);
                             data.Add(sys.Y);
                             data.Add(sys.Z);
-                            data.Add(sys.SystemAddress ?? 0);
+                            data.Add(sys.SystemAddress.Value);
                         }
 
                         return data.ToArray();

@@ -26,7 +26,7 @@ namespace EDDiscovery.UserControls
         public bool DontShowShoppingList { get; set; } = false;
         public bool isHistoric { get; set; } = false;
 
-        public Action<List<Tuple<Recipes.Recipe, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
+        public Action<List<Tuple<RecipeBase, int>>> OnDisplayComplete;  // called when display complete, for use by other UCs using this
 
         public Dictionary<MaterialCommodityMicroResourceType, int> NeededResources;        // computed during display
 
@@ -54,6 +54,8 @@ namespace EDDiscovery.UserControls
 
         private HistoryEntry last_he = null;
 
+        private List<EngineeringRecipe> engrec = null;
+
         #region Init
 
         public UserControlEngineering()
@@ -69,16 +71,18 @@ namespace EDDiscovery.UserControls
             UpdateWordWrap();
             extCheckBoxWordWrap.Click += extCheckBoxWordWrap_Click;
 
-            RowToRecipe = GetSetting(dbOSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
-            if (RowToRecipe.Max() >= Recipes.EngineeringRecipes.Count || RowToRecipe.Min() < 0 || RowToRecipe.Distinct().Count() != Recipes.EngineeringRecipes.Count)       // if not distinct..
+            engrec = EngineeringRecipe.GetPlayerEngineering().ToList();
+
+            RowToRecipe = GetSetting(dbOSave, "").RestoreArrayFromString(0, engrec.Count);
+            if (RowToRecipe.Max() >= engrec.Count || RowToRecipe.Min() < 0 || RowToRecipe.Distinct().Count() != engrec.Count)       // if not distinct..
             {
                 for (int i = 0; i < RowToRecipe.Length; i++)          // reset
                     RowToRecipe[i] = i;
             }
 
-            WantedPerRecipe = GetSetting(dbWSave, "").RestoreArrayFromString(0, Recipes.EngineeringRecipes.Count);
+            WantedPerRecipe = GetSetting(dbWSave, "").RestoreArrayFromString(0, engrec.Count);
 
-            List<string> engineers = Recipes.EngineeringRecipes.SelectMany(r => r.Engineers).Distinct().ToList();
+            List<string> engineers = engrec.SelectMany(r => r.EngineersNames).Distinct().ToList();
             engineers.Sort();
             efs = new RecipeFilterSelector(engineers);
             efs.SaveSettings += (newvalue, e) => { PutSetting(dbEngFilterSave, newvalue); Display(); };
@@ -86,33 +90,33 @@ namespace EDDiscovery.UserControls
             lfs = new RecipeFilterSelector(levels);
             lfs.SaveSettings += (newvalue, e) => { PutSetting(dbLevelFilterSave, newvalue); Display(); };
 
-            List<string> modules = Recipes.EngineeringRecipes.SelectMany(r => r.Modules).Distinct().ToList();
+            List<string> modules = engrec.SelectMany(r => r.ModulesTranslated).Distinct().ToList();
             modules.Sort();
             mfs = new RecipeFilterSelector(modules);
             mfs.SaveSettings += (newvalue, e) => { PutSetting(dbModFilterSave, newvalue); Display(); };
 
-            var upgrades = Recipes.EngineeringRecipes.Select(r => r.Name).Distinct().ToList();
+            var upgrades = engrec.Select(r => r.Name).Distinct().ToList();
             upgrades.Sort();
             ufs = new RecipeFilterSelector(upgrades);
             ufs.SaveSettings += (newvalue, e) => { PutSetting(dbUpgradeFilterSave, newvalue); Display(); };
 
-            List<string> matLongNames = Recipes.EngineeringRecipes.SelectMany(r => r.Ingredients).Select(x=>x.TranslatedName).Distinct().ToList();
+            List<string> matLongNames = engrec.SelectMany(r => r.Ingredients).Select(x=>x.TranslatedName).Distinct().ToList();
             matLongNames.Sort();
             matfs = new RecipeFilterSelector(matLongNames);
             matfs.SaveSettings += (newvalue, e) => { PutSetting(dbMaterialFilterSave, newvalue); Display(); };
 
-            for (int rowno = 0; rowno < Recipes.EngineeringRecipes.Count; rowno++)         // pre-fill array.. preventing the crash on cell edit when you
+            for (int rowno = 0; rowno < engrec.Count; rowno++)         // pre-fill array.. preventing the crash on cell edit when you
             {
                 int recipeno = RowToRecipe[rowno];
-                Recipes.EngineeringRecipe r = Recipes.EngineeringRecipes[recipeno];
+                EngineeringRecipe r = engrec[recipeno];
 
                 int rown = dataGridViewEngineering.Rows.Add();
                 DataGridViewRow row = dataGridViewEngineering.Rows[rown];
                 row.Cells[UpgradeCol.Index].Value = r.Name; // debug rno + ":" + r.name;
-                row.Cells[ModuleCol.Index].Value = r.ModuleList;
-                row.Cells[LevelCol.Index].Value = r.Level;
-                row.Cells[EngineersCol.Index].Tag = r.Engineers;        // keep list in tag
-                row.Cells[EngineersCol.Index].Value = string.Join(Environment.NewLine, r.Engineers);
+                row.Cells[ModuleCol.Index].Value = r.ModuleListSplitCaps;
+                row.Cells[LevelCol.Index].Value = r.LevelAsString;
+                row.Cells[EngineersCol.Index].Tag = r.EngineersNames.ToArray();        // keep list in tag
+                row.Cells[EngineersCol.Index].Value = string.Join(Environment.NewLine, r.EngineersNames);
                 row.Tag = recipeno;
                 row.Visible = false;
             }
@@ -142,8 +146,8 @@ namespace EDDiscovery.UserControls
             DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
 
-            PutSetting(dbOSave, RowToRecipe.ToString(","));
-            PutSetting(dbWSave, WantedPerRecipe.ToString(","));
+            PutSetting(dbOSave, RowToRecipe.ToStringFromArray(","));
+            PutSetting(dbWSave, WantedPerRecipe.ToStringFromArray(","));
             PutSetting(dbHistoricMatsSave, isHistoric);
         }
 
@@ -196,7 +200,7 @@ namespace EDDiscovery.UserControls
             //DONT turn on sorting in the future, thats not how it works.  You click and drag to sort manually since it gives you
             // the order of recipies.
 
-            List<Tuple<Recipes.Recipe, int>> wantedList = null;
+            List<Tuple<RecipeBase, int>> wantedList = null;
 
             if (last_he != null)
             {
@@ -207,7 +211,7 @@ namespace EDDiscovery.UserControls
 
                 var totals = MaterialCommoditiesRecipe.TotalList(mcllist);                  // start with totals present
 
-                wantedList = new List<Tuple<Recipes.Recipe, int>>();
+                wantedList = new List<Tuple<RecipeBase, int>>();
 
                 string engineers = GetSetting(dbEngFilterSave, "All");
                 List<string> engList = engineers.Split(';').ToList<string>();
@@ -222,7 +226,7 @@ namespace EDDiscovery.UserControls
 
                 NeededResources = new Dictionary<MaterialCommodityMicroResourceType, int>();
 
-                for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
+                for (int i = 0; i < engrec.Count; i++)
                 {
                     int rno = (int)dataGridViewEngineering.Rows[i].Tag;
 
@@ -232,29 +236,29 @@ namespace EDDiscovery.UserControls
                     {
                         if (engineers != "All")
                         {
-                            var included = engList.Intersect<string>(Recipes.EngineeringRecipes[rno].Engineers.ToList<string>());
+                            var included = engList.Intersect<string>(engrec[rno].EngineersNames.ToList<string>());
                             visible &= included.Count() > 0;
                         }
 
                         if (modules != "All")
                         { 
-                            var included = modList.Intersect<string>(Recipes.EngineeringRecipes[rno].Modules.ToList<string>());
+                            var included = modList.Intersect<string>(engrec[rno].ModulesTranslated.ToList<string>());
                             visible &= included.Count() > 0;
                         }
 
                         if (levels != "All")
                         { 
-                            visible &= lvlArray.Contains(Recipes.EngineeringRecipes[rno].Level);
+                            visible &= lvlArray.Contains(engrec[rno].LevelAsString);
                         }
 
                         if (upgrades != "All")
                         { 
-                            visible &= upgArray.Contains(Recipes.EngineeringRecipes[rno].Name);
+                            visible &= upgArray.Contains(engrec[rno].Name);
                         }
 
                         if (materials != "All")
                         {
-                            var inglongname = Recipes.EngineeringRecipes[rno].Ingredients.Select(x => x.TranslatedName);
+                            var inglongname = engrec[rno].Ingredients.Select(x => x.TranslatedName);
                             var included = matList.Intersect<string>(inglongname);
                             visible &= included.Count() > 0;
                         }
@@ -264,9 +268,9 @@ namespace EDDiscovery.UserControls
 
                     if (visible)
                     {
-                        Recipes.Recipe r = Recipes.EngineeringRecipes[i];
+                        RecipeBase r = engrec[i];
 
-                        var res = MaterialCommoditiesRecipe.HowManyLeft(Recipes.EngineeringRecipes[rno], WantedPerRecipe[rno], mcllist, totals, NeededResources);
+                        var res = MaterialCommoditiesRecipe.HowManyLeft(engrec[rno], WantedPerRecipe[rno], mcllist, totals, NeededResources);
                         //  System.Diagnostics.Debug.WriteLine($"{i} Recipe {rno} executed {WantedPerRecipe[rno]}; {res.Item2}, {res.Item3} ");
 
                         dataGridViewEngineering[MaxCol.Index, i].Value = res.Item1.ToString();
@@ -283,7 +287,7 @@ namespace EDDiscovery.UserControls
                     // add to wanted list, either if visible or we don't show shopping list (therefore embedded)
                     if (WantedPerRecipe[rno] > 0 && (visible || DontShowShoppingList))      
                     {
-                        wantedList.Add(new Tuple<Recipes.Recipe, int>(Recipes.EngineeringRecipes[rno], WantedPerRecipe[rno]));
+                        wantedList.Add(new Tuple<RecipeBase, int>(engrec[rno], WantedPerRecipe[rno]));
                     }
 
                     if (lastengprog != null)
@@ -296,7 +300,7 @@ namespace EDDiscovery.UserControls
 
                 if (!DontShowShoppingList)
                 {
-                    dataGridViewEngineering.RowCount = Recipes.EngineeringRecipes.Count;         // truncate previous shopping list..
+                    dataGridViewEngineering.RowCount = engrec.Count;         // truncate previous shopping list..
                     foreach (var kvp in NeededResources)        // and add new..
                     {
                         var cur = mcllist.Find((x) => x.Details == kvp.Key);    // may be null
@@ -377,7 +381,7 @@ namespace EDDiscovery.UserControls
         {
             rowFrom = dataGridViewEngineering.HitTest(e.X, e.Y).RowIndex;
 
-            if (rowFrom >= 0 && rowFrom < Recipes.EngineeringRecipes.Count)        // only can drag Recipes.EngineeringRecipes area..
+            if (rowFrom >= 0 && rowFrom < engrec.Count)        // only can drag engrec area..
             {
                 Size dragSize = SystemInformation.DragSize;
                 moveMoveDragBox = new Rectangle(new Point(e.X - (dragSize.Width / 2),
@@ -399,13 +403,13 @@ namespace EDDiscovery.UserControls
             //System.Diagnostics.Debug.WriteLine(Environment.TickCount + " drop at " + droprow);
 
             // If the drag operation was a move then remove and insert the row.
-            if (e.Effect == DragDropEffects.Move && droprow>=0 && droprow < Recipes.EngineeringRecipes.Count )
+            if (e.Effect == DragDropEffects.Move && droprow>=0 && droprow < engrec.Count )
             {
                 DataGridViewRow rowTo = e.Data.GetData( typeof(DataGridViewRow)) as DataGridViewRow;
                 dataGridViewEngineering.Rows.RemoveAt(rowFrom);
                 dataGridViewEngineering.Rows.Insert(droprow, rowTo);
 
-                for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
+                for (int i = 0; i < engrec.Count; i++)
                     RowToRecipe[i] = (int)dataGridViewEngineering.Rows[i].Tag;          // reset the order array
 
                 Display();
@@ -444,7 +448,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonClear_Click(object sender, EventArgs e)
         {
-            for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
+            for (int i = 0; i < engrec.Count; i++)
             {
                 int rno = (int)dataGridViewEngineering.Rows[i].Tag;
                 WantedPerRecipe[rno] = 0;
@@ -480,7 +484,7 @@ namespace EDDiscovery.UserControls
                 if ( e.ColumnIndex == RecipeCol.Index)
                 {
                     int rno = (int)row.Tag;
-                    Recipes.EngineeringRecipe r = Recipes.EngineeringRecipes[rno];
+                    EngineeringRecipe r = engrec[rno];
                     dataGridViewEngineering.Rows[e.RowIndex].Cells[e.ColumnIndex].Value = r.IngredientsStringLong;
                 }
 

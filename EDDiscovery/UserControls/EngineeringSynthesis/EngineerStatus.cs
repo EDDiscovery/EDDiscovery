@@ -111,11 +111,13 @@ namespace EDDiscovery.UserControls
 
             int wno = 0;
 
-            for (int i = 0; i < Recipes.EngineeringRecipes.Count; i++)
+            var engrec = EngineeringRecipe.GetPlayerEngineering().ToList();
+
+            for (int i = 0; i < engrec.Count; i++)
             {
-                if (Recipes.EngineeringRecipes[i].Engineers.Contains(name))
+                if (engrec[i].EngineersNames.Contains(name))
                 {
-                    Recipes.EngineeringRecipe r = Recipes.EngineeringRecipes[i];
+                    EngineeringRecipe r = engrec[i];
 
                     var row = dataGridViewEngineering.Rows[dataGridViewEngineering.Rows.Add()];
 
@@ -124,12 +126,12 @@ namespace EDDiscovery.UserControls
                     // index into WantedPerRecipe - use this not the row.index as sort will affect that - bug aug 24
                     row.Cells[0].Tag = wno++;
                     // keep engineers list in tag   - can't see aug 24 why but keep for now
-                    row.Cells[EngineersCol.Index].Tag = r.Engineers;        
+                    row.Cells[EngineersCol.Index].Tag = r.EngineersNames;        
 
                     row.Cells[UpgradeCol.Index].Value = r.Name + ":" + row.Index; 
-                    row.Cells[ModuleCol.Index].Value = r.ModuleList;
-                    row.Cells[LevelCol.Index].Value = r.Level;              // use current culture
-                    row.Cells[EngineersCol.Index].Value = string.Join(Environment.NewLine, r.Engineers);
+                    row.Cells[ModuleCol.Index].Value = r.ModuleListSplitCaps;
+                    row.Cells[LevelCol.Index].Value = r.LevelAsString;              // use current culture
+                    row.Cells[EngineersCol.Index].Value = string.Join(Environment.NewLine, r.EngineersNames);
 
                     row.Cells[RecipeCol.Index].ToolTipText = r.IngredientsStringLong;
                 }
@@ -208,7 +210,7 @@ namespace EDDiscovery.UserControls
 
                 foreach (DataGridViewRow row in dataGridViewEngineering.Rows)
                 {
-                    Recipes.EngineeringRecipe r = row.Tag as Recipes.EngineeringRecipe;
+                    EngineeringRecipe r = row.Tag as EngineeringRecipe;
 
                     string tooltip = "";
                     int craftcount = 0;
@@ -220,7 +222,7 @@ namespace EDDiscovery.UserControls
                         {
                             if (cb.Engineering != null)     // may be null due to bad engineering info from journal
                             {
-                                if (cb.Engineering.BlueprintName.Equals(r.FDName, StringComparison.InvariantCultureIgnoreCase) && cb.Engineering.Level == r.LevelInt)
+                                if (cb.Engineering.BlueprintName.Equals(r.FDName) && cb.Engineering.Level == r.Level)
                                 {
                                     tooltip = tooltip.AppendPrePad(c.EventTimeUTC.ToString() + " " + (c.ShipInformation?.Name ?? "?") + " " + (cb.Engineering.ExperimentalEffect_Localised ?? ""), Environment.NewLine);
                                     craftcount++;
@@ -231,9 +233,9 @@ namespace EDDiscovery.UserControls
                         {
                             var tb = c.journalEntry as EliteDangerousCore.JournalEvents.JournalTechnologyBroker;
                             //string unl = string.Join(",", tb.ItemsUnlocked.Select(x=>x.Name));  System.Diagnostics.Debug.WriteLine($"{unl} {r.fdname}");
-                            if (tb.ItemsUnlocked != null && Array.FindIndex(tb.ItemsUnlocked, x => x.Name.Equals(r.FDName, StringComparison.InvariantCultureIgnoreCase)) >= 0)
+                            if (tb.ItemsUnlocked != null && Array.FindIndex(tb.ItemsUnlocked, x => x.Name.Equals(r.FDName)) >= 0)
                             {
-                                tooltip = tooltip.AppendPrePad(c.EventTimeUTC.ToString() + " " + (tb.BrokerType ?? "") + " " + string.Join(",", tb.ItemsUnlocked.Select(x => x.Name_Localised)));
+                                tooltip = tooltip.AppendPrePad(c.EventTimeUTC.ToString() + " " + tb.BrokerType.ToString() + " " + string.Join(",", tb.ItemsUnlocked.Select(x => x.Name_Localised)));
                                 craftcount++;
                             }
                         }
@@ -327,7 +329,7 @@ namespace EDDiscovery.UserControls
             if (e.RowIndex > 0)
             {
                 DataGridViewRow row = dataGridViewEngineering.Rows[e.RowIndex];
-                Recipes.EngineeringRecipe r = (Recipes.EngineeringRecipe)row.Tag;
+                EngineeringRecipe r = (EngineeringRecipe)row.Tag;
 
                 if (e.ColumnIndex == RecipeCol.Index)
                 {

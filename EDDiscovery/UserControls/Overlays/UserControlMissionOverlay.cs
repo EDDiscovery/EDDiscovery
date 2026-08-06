@@ -163,7 +163,7 @@ namespace EDDiscovery.UserControls
 
                     string mainpart = BaseUtils.FieldBuilder.Build(
                                         "< ", ms.DestinationSystemStationSettlement(),
-                                        " ", factionInformationToolStripMenuItem.Checked ? ms.Mission.TargetFaction : null,
+                                        " ", factionInformationToolStripMenuItem.Checked ? (ms.Mission.TargetFaction??"") : null,
                                         "< ", ms.Mission.TargetLocalised,
                                         "< ", ms.Mission.KillCount?.ToString("N") ?? null,
                                         " ", ms.Mission.CommodityLocalised,

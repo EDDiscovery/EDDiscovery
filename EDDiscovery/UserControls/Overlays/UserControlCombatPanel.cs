@@ -342,9 +342,9 @@ namespace EDDiscovery.UserControls
             MissionState ml = currentcombatfilter.MissionKey != null ? DiscoveryForm.History.MissionListAccumulator.GetMission(currentcombatfilter.MissionKey) : null;
 
             if ( ml != null &&
-                 ((he.EntryType == JournalTypeEnum.MissionAccepted && (he.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionAccepted).MissionId == ml.Mission.MissionId)
-                 || (he.EntryType == JournalTypeEnum.MissionCompleted && (he.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionCompleted).MissionId == ml.Mission.MissionId)
-                 || (he.EntryType == JournalTypeEnum.MissionRedirected && (he.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionRedirected).MissionId == ml.Mission.MissionId)
+                 ((he.EntryType == JournalTypeEnum.MissionAccepted && (he.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionAccepted).MissionID == ml.Mission.MissionID)
+                 || (he.EntryType == JournalTypeEnum.MissionCompleted && (he.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionCompleted).MissionID == ml.Mission.MissionID)
+                 || (he.EntryType == JournalTypeEnum.MissionRedirected && (he.journalEntry as EliteDangerousCore.JournalEvents.JournalMissionRedirected).MissionID == ml.Mission.MissionID)
                ))
             { 
             }
@@ -751,12 +751,12 @@ namespace EDDiscovery.UserControls
             {
                 Type = EntryType.Mission;
                 Name = m.Mission.Name + ":" + m.Mission.Faction;
-                if (m.Mission.Target.Length > 0)
+                if (m.Mission.Target != null)
                     Name += ":" + m.Mission.Target;
                 starttime = m.Mission.EventTimeUTC;
                 endtime = m.Mission.Expiry;                 // NOTE expiry time of mission, not used however to gate below, we use Mission
                 MissionKey = MissionListAccumulator.Key(m.Mission);
-                TargetFaction = m.Mission.TargetFaction;
+                TargetFaction = m.Mission.TargetFaction ?? "";
             }
 
             public CombatFilterEntry(List<string> filtarray, int i)

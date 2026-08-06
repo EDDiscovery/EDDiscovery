@@ -98,7 +98,7 @@ namespace EDDiscovery.UserControls
         {
             if (ui is UIOverallStatus os)      // if opened at start we get this, and we get it every time flags changes
             {
-                System.Diagnostics.Debug.WriteLine($"AutoPanel UI {ui.EventTypeID} : {ui.ToString()}");
+                //System.Diagnostics.Debug.WriteLine($"TravelPanel UI {ui.EventTypeID} : {ui.ToString()}");
                 uistatus = os;
                 UpdateDisplay();
             }
@@ -108,7 +108,7 @@ namespace EDDiscovery.UserControls
         {
 #if DEBUG
             lasthe = he;
-            System.Diagnostics.Debug.WriteLine($"TravelPanel Receive HE {lasthe.EventTimeUTC} {lasthe.EventSummary} {lasthe.System.Name}");
+            //System.Diagnostics.Debug.WriteLine($"TravelPanel Receive HE {lasthe.EventTimeUTC} {lasthe.EventSummary} {lasthe.System.Name}");
 
             if (he.journalEntry.EventTypeID != JournalTypeEnum.EDDDestinationSelected)     // don't repeat the UI push
                 UpdateDisplay();
@@ -256,7 +256,7 @@ namespace EDDiscovery.UserControls
 
                 //loctext = currentlocationclass.GetType().Name + ": " + loctext; //DEBUG
 
-                System.Diagnostics.Debug.WriteLine($"TravelPanel writing {loctext}");
+                //System.Diagnostics.Debug.WriteLine($"TravelPanel writing {loctext}");
 
                 el.AddPictureTextHorzDivider(new Rectangle(new Point(pos.X, el.MaxOrDefault.Y + 4), textsize),
                             locimage, new Size(dfont.Height * 3, dfont.Height * 3),
@@ -268,10 +268,10 @@ namespace EDDiscovery.UserControls
             }
 
             {
-                if (uistatus.DestinationName.HasChars() && uistatus.DestinationSystemAddress.HasValue)
+                if (uistatus.DestinationName.HasChars() && uistatus.DestinationSystemAddress.IsValid)
                 {
                     var uis = uistatus;     // async below may result in a change to this, protect, found during debugging! This async stuff is evil
-                    var ss = await DiscoveryForm.History.StarScan2.FindSystemAsync(new SystemClass(uis.DestinationSystemAddress.Value), edsmSpanshButton.WebLookup);
+                    var ss = await DiscoveryForm.History.StarScan2.FindSystemAsync(new SystemClass(uis.DestinationSystemAddress), edsmSpanshButton.WebLookup);
                     if (IsClosed)
                         return;
 
@@ -295,7 +295,7 @@ namespace EDDiscovery.UserControls
                         JournalScan scan = bn?.Scan;    // may be null
 
                         bool destisbody = bn != null ? bn.CanonicalNameOrOwnName.EqualsIIC(uistatus.DestinationName) : true;
-                        var classification = SignalDefinitions.ClassifyStationName(uistatus.DestinationName_Localised);
+                        var classification = Signal.ClassifyStationName(new SignalFDName(uistatus.DestinationName_Localised));
 
                         if (bn?.BodyType == BodyDefinitions.BodyType.PlanetaryRing)
                         {
@@ -317,7 +317,7 @@ namespace EDDiscovery.UserControls
                         {
                             if (!destisbody)
                             {
-                                desttext += ": " + (classification == SignalDefinitions.Classification.Carrier ? "Carrier" + " " : "") +
+                                desttext += ": " + (classification == Signal.Classification.Carrier ? "Carrier" + " " : "") +
                                     "Orbiting" + ": ";
                             }
                             else
@@ -327,7 +327,7 @@ namespace EDDiscovery.UserControls
                         {
                             if (!destisbody)
                             {
-                                desttext += ": " + (classification == SignalDefinitions.Classification.Carrier ? "Carrier" + " " + "Orbiting" :
+                                desttext += ": " + (classification == Signal.Classification.Carrier ? "Carrier" + " " + "Orbiting" :
                                             "Station" + " " + "Orbiting" + " " + "or on surface" + " of") + ": ";
                             }
                             else

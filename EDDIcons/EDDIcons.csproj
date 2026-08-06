@@ -262,7 +262,7 @@
     <EmbeddedResource Include="Panels\StarList.png" />
     <EmbeddedResource Include="Panels\Statistics.png" />
     <EmbeddedResource Include="Panels\Synthesis.png" />
-    <EmbeddedResource Include="Panels\TravelGrid.png" />
+    <EmbeddedResource Include="Panels\HistoryGrid.png" />
     <EmbeddedResource Include="Panels\Trilateration.png" />
     <EmbeddedResource Include="Panels\Trippanel.png" />
   </ItemGroup>
@@ -476,6 +476,8 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Panels\Travel.png" />
+    <EmbeddedResource Include="Panels\Docking.png" />
     <EmbeddedResource Include="Ships\mediumtransport01.jpg" />
     <EmbeddedResource Include="Ships\smallcombat01_nx.jpg" />
     <EmbeddedResource Include="Stations\AsteroidBase.jpg" />

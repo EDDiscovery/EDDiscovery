@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
 
         private void DiscoveryForm_OnNewEntry(HistoryEntry he)
         {
-            System.Diagnostics.Debug.WriteLine($"Autopanel NewHistory {he.EventTimeUTC}");
+            //System.Diagnostics.Debug.WriteLine($"Dockingpanel NewHistory {he.EventTimeUTC}");
             lasthe = DiscoveryForm.History.GetLast;
             UpdateDisplay();
         }
@@ -92,7 +92,7 @@ namespace EDDiscovery.UserControls
         {
             if (ui is UIOverallStatus os)      // if opened at start we get this, and we get it every time flags changes
             {
-                System.Diagnostics.Debug.WriteLine($"AutoPanel UI {ui.EventTypeID} : {ui.ToString()}");
+                //System.Diagnostics.Debug.WriteLine($"DockingPanel UI {ui.EventTypeID} : {ui.ToString()}");
                 uistatus = os;
                 UpdateDisplay();
             }

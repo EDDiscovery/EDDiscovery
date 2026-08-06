@@ -70,7 +70,7 @@ namespace EDDiscovery.UserControls
                     return new Object[] { rw.Cells[0].Value,rw.Cells[1].Value,
                                           rw.Cells[2].Value,rw.Cells[3].Value,rw.Cells[4].Value,
                                           rw.Cells[5].Value,rw.Cells[6].Value ,rw.Cells[7].Value ,rw.Cells[8].Value ,
-                                            sys?.SystemAddress ?? 0 };
+                                            sys?.SystemAddress.Value.ToString() ?? ""};
                 };
 
                 grd.GetHeader += delegate (int c)

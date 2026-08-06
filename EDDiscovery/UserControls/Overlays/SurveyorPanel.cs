@@ -741,7 +741,7 @@ namespace EDDiscovery.UserControls
                 {
                     string[] filter = fsssignalstodisplay.Split(';');
 
-                    var signallist = systemnode.FSSSignals ?? new List<FSSSignal>();         // This can be null, if so, make an empty array so the where does not except.
+                    var signallist = systemnode.FSSSignals ?? new List<Signal>();         // This can be null, if so, make an empty array so the where does not except.
 
                     // mirrors scandisplaynodes
 
@@ -750,13 +750,13 @@ namespace EDDiscovery.UserControls
                     //(x.SignalName.Contains("-class") && x.RecordedUTC > DateTime.UtcNow.AddDays(-14))).ToList();
 
                     // should be:
-                    var notexpired = signallist.Where(x => (x.ClassOfSignal != SignalDefinitions.Classification.Megaship && (!x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow)) ||
-                                                            (x.ClassOfSignal == SignalDefinitions.Classification.Megaship && x.RecordedUTC > DateTime.UtcNow.AddDays(-14))).ToList();
+                    var notexpired = signallist.Where(x => (x.ClassOfSignal != Signal.Classification.Megaship && (!x.TimeRemaining.HasValue || x.ExpiryUTC >= DateTime.UtcNow)) ||
+                                                            (x.ClassOfSignal == Signal.Classification.Megaship && x.RecordedUTC > DateTime.UtcNow.AddDays(-14))).ToList();
 
-                    notexpired.Sort(delegate (FSSSignal l, FSSSignal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
+                    notexpired.Sort(delegate (Signal l, Signal r) { return l.ClassOfSignal.CompareTo(r.ClassOfSignal); });
 
                     var expired = signallist.Where(x => x.TimeRemaining.HasValue && x.ExpiryUTC < DateTime.UtcNow).ToList();
-                    expired.Sort(delegate (FSSSignal l, FSSSignal r) { return r.ExpiryUTC.CompareTo(l.ExpiryUTC); });
+                    expired.Sort(delegate (Signal l, Signal r) { return r.ExpiryUTC.CompareTo(l.ExpiryUTC); });
 
                     int expiredpos = notexpired.Count;
                     notexpired.AddRange(expired);
@@ -764,7 +764,7 @@ namespace EDDiscovery.UserControls
                     int pos = 0;
                     foreach (var fsssig in notexpired)
                     {
-                        if (filter.ComparisionContains(fsssig.SignalName.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
+                        if (filter.ComparisionContains(fsssig.SignalName.ID.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                             filter.ComparisionContains(fsssig.SignalName_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                             filter.ComparisionContains(fsssig.SpawningState_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||
                             filter.ComparisionContains(fsssig.SpawningFaction_Localised.Alt("!~~"), StringComparison.InvariantCultureIgnoreCase) >= 0 ||

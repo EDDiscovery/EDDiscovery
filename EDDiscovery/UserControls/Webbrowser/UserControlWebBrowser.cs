@@ -171,8 +171,8 @@ namespace EDDiscovery.UserControls
             }
             else if (source == "Spansh")
             {
-                if (sys.SystemAddress.HasValue)
-                    url = EliteDangerousCore.Spansh.SpanshClass.URLForSystem(sys.SystemAddress.Value);
+                if (sys.HasAddress)
+                    url = EliteDangerousCore.Spansh.SpanshClass.URLForSystem(sys.SystemAddress);
                 else
                     url = EliteDangerousCore.Spansh.SpanshClass.RootURL;
 

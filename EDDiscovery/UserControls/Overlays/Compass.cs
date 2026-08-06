@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
             if ( mode != null )
             {
                 elitemode = mode;
-                System.Diagnostics.Debug.WriteLine($"Compass Elitemode {elitemode.MajorMode} {elitemode.Mode}");
+                //System.Diagnostics.Debug.WriteLine($"Compass Elitemode {elitemode.MajorMode} {elitemode.Mode}");
                 SetCompassVisibility();
             }
 
@@ -179,7 +179,7 @@ namespace EDDiscovery.UserControls
             {
                 position = pos;
 
-                System.Diagnostics.Debug.WriteLine($"Compass lat {pos.Location.Latitude}, {pos.Location.Longitude} A {pos.Location.Altitude} H {pos.Heading} R {pos.PlanetRadius} BN {pos.BodyName}");
+                //System.Diagnostics.Debug.WriteLine($"Compass lat {pos.Location.Latitude}, {pos.Location.Longitude} A {pos.Location.Altitude} H {pos.Heading} R {pos.PlanetRadius} BN {pos.BodyName}");
 
                 UpdateCompass();
                 SetCompassVisibility();
@@ -190,7 +190,7 @@ namespace EDDiscovery.UserControls
             if ( bn != null )
             {
                 current_body = bn.BodyName;
-                System.Diagnostics.Debug.WriteLine($"Compass changed body name {current_body}");
+                //System.Diagnostics.Debug.WriteLine($"Compass changed body name {current_body}");
 
                 PopulateBookmarkComboSetBookmarkEnable();
 
@@ -206,7 +206,7 @@ namespace EDDiscovery.UserControls
             if ( gui != null )
             {
                 guistate = gui.GUIFocus;
-                System.Diagnostics.Debug.WriteLine($"Compass changed GUI state {guistate}");
+                //System.Diagnostics.Debug.WriteLine($"Compass changed GUI state {guistate}");
                 SetCompassVisibility();
             }
         }
@@ -360,7 +360,7 @@ namespace EDDiscovery.UserControls
 
             buttonNewBookmark.Enabled = current_sys != null;
 
-            System.Diagnostics.Debug.WriteLine($"Compass populate bookmark sys {current_sys?.Name} body {current_body}");
+            //System.Diagnostics.Debug.WriteLine($"Compass populate bookmark sys {current_sys?.Name} body {current_body}");
 
             if (current_sys != null)
             {
@@ -372,7 +372,7 @@ namespace EDDiscovery.UserControls
                     if (current_body != null)
                     {
                         string planetname = current_body.ReplaceIfStartsWith(current_sys.Name, "");
-                        System.Diagnostics.Debug.WriteLine($"..Compass Combobox check for planet '{planetname}'");
+                        //System.Diagnostics.Debug.WriteLine($"..Compass Combobox check for planet '{planetname}'");
                         if ( planetname.HasChars() && planetMarks != null )
                         {
                             // display all, but prioritise upwards ones on the same planet
@@ -397,7 +397,7 @@ namespace EDDiscovery.UserControls
                             {
                                 foreach (PlanetMarks.Location loc in pl.Locations.OrderBy(l => l.Name))
                                 {
-                                    System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {pl.Name}: {loc.Name}");
+                                    //System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {pl.Name}: {loc.Name}");
                                     comboBoxBookmarks.Items.Add($"{pl.Name}: {loc.Name} @ {loc.Latitude:0.####}, {loc.Longitude:0.####}");
                                     comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = loc.Latitude, Longitude = loc.Longitude });                                    
                                 }
@@ -414,13 +414,13 @@ namespace EDDiscovery.UserControls
 
                     if ( scannode != null)
                     {
-                        System.Diagnostics.Debug.WriteLine($"..Compass Found scannode for {current_body}");
+                        //System.Diagnostics.Debug.WriteLine($"..Compass Found scannode for {current_body}");
 
                         foreach (var sf in scannode.Features.EmptyIfNull())
                         {
                             if (sf.HasLatLong)  // only want positions
                             {
-                                System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {sf.Name_Localised}");
+                                //System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {sf.Name_Localised}");
                                 comboBoxBookmarks.Items.Add($"{sf.Name_Localised} @ {sf.Latitude.Value:0.####}, {sf.Longitude.Value:0.####}");
                                 comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = sf.Latitude.Value, Longitude = sf.Longitude.Value });
                             }
@@ -430,13 +430,13 @@ namespace EDDiscovery.UserControls
                     {
                         foreach( var bodies in sysnode.Bodies(x=>x.IsPlanetOrMoon))
                         {
-                            System.Diagnostics.Debug.WriteLine($"..Compass no current body processing {bodies.CanonicalNameNoSystemName()}");
+                            //System.Diagnostics.Debug.WriteLine($"..Compass no current body processing {bodies.CanonicalNameNoSystemName()}");
 
                             foreach (var sf in bodies.Features.EmptyIfNull())
                             {
                                 if (sf.HasLatLong)  // only want positions
                                 {
-                                    System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {sf.Name_Localised}");
+                                    //System.Diagnostics.Debug.WriteLine($"..Compass Combobox Add {sf.Name_Localised}");
                                     comboBoxBookmarks.Items.Add($"{bodies.Name()}: {sf.Name_Localised} @ {sf.Latitude.Value:0.####}, {sf.Longitude.Value:0.####}");
                                     comboboxpositions.Add(new EliteDangerousCore.UIEvents.UIPosition.Position() { Latitude = sf.Latitude.Value, Longitude = sf.Longitude.Value });
                                 }

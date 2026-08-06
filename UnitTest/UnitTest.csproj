@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{FEEA90EB-62BD-4BA7-AE14-D1EE96D50D3B}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>UnitTest</RootNamespace>
+    <AssemblyName>UnitTest</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="QuickJSON, Version=2.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>$(SolutionDir)\packages\RJKJSoft.QuickJSON.3.0.0\lib\net48\QuickJSON.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="UnitShips.cs" />
+    <Compile Include="UnitModules.cs" />
+    <Compile Include="UnitEngineer.cs" />
+    <Compile Include="UnitCarrier.cs" />
+    <Compile Include="UnitTestMCMR.cs" />
+    <Compile Include="UnitSuitsWeapons.cs" />
+    <Compile Include="UnitTestReadAllEventFiles.cs" />
+    <Compile Include="UnitTestVariousEvents.cs" />
+    <Compile Include="UnitTestMissions.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UnitTestRoot.cs" />
+    <Compile Include="UnitTests.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UnitTests.Designer.cs">
+      <DependentUpon>UnitTests.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="UnitTests.resx">
+      <DependentUpon>UnitTests.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj">
+      <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
+      <Name>BaseUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BaseUtilities\SQLLite\SQLLite.csproj">
+      <Project>{3d79de63-5eec-4f30-a879-fb4c6ba4b2dc}</Project>
+      <Name>SQLLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EliteDangerousCore\EDDDLLInterfaces\EDDDLLInterfaces.csproj">
+      <Project>{829041b1-d4a5-48d9-8260-b5eeff28bcd8}</Project>
+      <Name>EDDDLLInterfaces</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EliteDangerousCore\EliteDangerous\EliteDangerous.csproj">
+      <Project>{019917a4-7342-4f67-8aaf-9e20c016a935}</Project>
+      <Name>EliteDangerous</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtendedControls\ExtendedControls\ExtendedControls.csproj">
+      <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
+      <Name>ExtendedControls</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ExtendedControls\ExtendedForms\ExtendedForms.csproj">
+      <Project>{298c11c9-b58f-415c-8458-1cae3c6cab62}</Project>
+      <Name>ExtendedForms</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

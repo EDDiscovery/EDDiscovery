@@ -46,7 +46,7 @@ namespace EDDiscovery.UserControls.Map3D
                 var route = parent.DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.NavRoute)?.journalEntry as EliteDangerousCore.JournalEvents.JournalNavRoute;
                 if (route?.Route != null) // If a navroute with a valid route..
                 {
-                    var syslist = route.Route.Select(x => new SystemClass(x.StarSystem, null, x.StarPos.X, x.StarPos.Y, x.StarPos.Z, SystemSource.FromJournal, x.EDStarClass)).Cast<ISystem>().ToList();
+                    var syslist = route.Route.Select(x => new SystemClass(x.StarPos.X, x.StarPos.Y, x.StarPos.Z, x.StarSystem, SystemSource.FromJournal, x.EDStarClass)).Cast<ISystem>().ToList();
                     navroute.CreatePath(syslist, Color.Purple, galmapobjects?.PositionsWithEnable);
                 }
             }
