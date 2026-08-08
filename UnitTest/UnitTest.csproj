@@ -49,12 +49,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitShips.cs" />
-    <Compile Include="UnitModules.cs" />
-    <Compile Include="UnitEngineer.cs" />
-    <Compile Include="UnitCarrier.cs" />
+    <Compile Include="UnitTestStarScan.cs" />
+    <Compile Include="UnitTestEngineering.cs" />
+    <Compile Include="UnitTestShips.cs" />
+    <Compile Include="UnitTestModules.cs" />
+    <Compile Include="UnitTestEngineerJournalEntries.cs" />
+    <Compile Include="UnitTestCarrier.cs" />
     <Compile Include="UnitTestMCMR.cs" />
-    <Compile Include="UnitSuitsWeapons.cs" />
+    <Compile Include="UnitTestSuitsWeapons.cs" />
     <Compile Include="UnitTestReadAllEventFiles.cs" />
     <Compile Include="UnitTestVariousEvents.cs" />
     <Compile Include="UnitTestMissions.cs">
@@ -91,6 +93,49 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="StarScans\Amitrite.json" />
+    <None Include="StarScans\Artemis.json" />
+    <None Include="StarScans\Asellus Primus.json" />
+    <None Include="StarScans\Caelottixa.json" />
+    <None Include="StarScans\Carthage.json" />
+    <None Include="StarScans\Ceut.json" />
+    <None Include="StarScans\Dahan.json" />
+    <None Include="StarScans\Dryaea Aowsy JQ-P d5-0.json" />
+    <None Include="StarScans\Eorm Chruia DT-G d11-4215.json" />
+    <None Include="StarScans\Eorm Chruia DT-G d11-490.json" />
+    <None Include="StarScans\Eorm Chruia EE-F d12-1139.json" />
+    <None Include="StarScans\Eorm Chruia OJ-Q e5-391.json" />
+    <None Include="StarScans\Epsilon Indi.json" />
+    <None Include="StarScans\Hagr.json" />
+    <None Include="StarScans\HIP 1885.json" />
+    <None Include="StarScans\hip 23759.json" />
+    <None Include="StarScans\karka.json" />
+    <None Include="StarScans\lanciansene.json" />
+    <None Include="StarScans\Lave.json" />
+    <None Include="StarScans\Leesti.json" />
+    <None Include="StarScans\LeestiMissing.json" />
+    <None Include="StarScans\LHS 3006.json" />
+    <None Include="StarScans\LHS 3447.json" />
+    <None Include="StarScans\LP 98-132.json" />
+    <None Include="StarScans\MY Apodis.json" />
+    <None Include="StarScans\Nuenets.json" />
+    <None Include="StarScans\pallaeni.json" />
+    <None Include="StarScans\Piculta.json" />
+    <None Include="StarScans\Prieluia QI-Q c19-31.json" />
+    <None Include="StarScans\Prism.json" />
+    <None Include="StarScans\PrismEdit.json" />
+    <None Include="StarScans\rasmussen.json" />
+    <None Include="StarScans\Scheau Prao Me-M c22-21.json" />
+    <None Include="StarScans\Sharur.json" />
+    <None Include="StarScans\Shrogaei YG-L d8-5499.json" />
+    <None Include="StarScans\Skaude AA-A h294.json" />
+    <None Include="StarScans\Sol.json" />
+    <None Include="StarScans\Synth.json" />
+    <None Include="StarScans\synth1.json" />
+    <None Include="StarScans\Synth2.json" />
+    <None Include="StarScans\Tethlon.json" />
+    <None Include="StarScans\UCAC3 70-2386.json" />
+    <None Include="StarScans\wolf 1278.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -103,6 +148,10 @@
     <ProjectReference Include="..\BaseUtilities\SQLLite\SQLLite.csproj">
       <Project>{3d79de63-5eec-4f30-a879-fb4c6ba4b2dc}</Project>
       <Name>SQLLite</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EDDIcons\EDDIcons.csproj">
+      <Project>{646f71be-f102-444e-9254-818e5a320ab8}</Project>
+      <Name>EDDIcons</Name>
     </ProjectReference>
     <ProjectReference Include="..\EliteDangerousCore\EDDDLLInterfaces\EDDDLLInterfaces.csproj">
       <Project>{829041b1-d4a5-48d9-8260-b5eeff28bcd8}</Project>

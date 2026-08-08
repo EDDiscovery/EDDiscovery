@@ -8,7 +8,7 @@ namespace UnitTest
     public static class UnitTestEngineer
     {
         [BaseUtils.UnitTests.Test]
-        public static void TestEngineer()
+        public static void TestEngineerJournalRecords()
         {
             CheckSection("Engineer");
             {

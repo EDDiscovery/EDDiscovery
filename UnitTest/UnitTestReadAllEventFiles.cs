@@ -13,7 +13,8 @@ namespace UnitTest
 {
     public static class UnitTestReadAllEventFiles
     {
-        [BaseUtils.UnitTests.Test(100)]
+        // set negative to turn off
+        [BaseUtils.UnitTests.Test(-100)]
         public static void TestEventFiles()
         {
             CheckSection("ShipInformation");

@@ -63,6 +63,15 @@ namespace UnitTest
         {
             base.OnShown(e);
 
+            EDDiscovery.Icons.ForceInclusion.Include();      // Force the assembly into the project by a empty call
+            BaseUtils.Icons.IconSet.CreateSingleton();
+            System.Reflection.Assembly iconasm = BaseUtils.ResourceHelpers.GetAssemblyByName("EDDiscovery.Icons");
+            BaseUtils.Icons.IconSet.Instance.LoadIconsFromAssembly(iconasm);
+            BaseUtils.Icons.IconSet.Instance.AddAlias("settings", "Controls.Settings");             // from use by action system..
+            BaseUtils.Icons.IconSet.Instance.AddAlias("missioncompleted", "Journal.MissionCompleted");
+            BaseUtils.Icons.IconSet.Instance.AddAlias("speaker", "Legacy.speaker");
+            BaseUtils.Icons.IconSet.Instance.AddAlias("Default", "Legacy.star");        // MUST be present
+
             MaterialCommodityMicroResourceType.Initialise();
             ItemData.Initialise();
             Stars.Prepopulate();                                // we do it this way instead of statically because we don't want them autofilled
@@ -111,7 +120,7 @@ namespace UnitTest
                 }
                 catch(Exception ex)
                 {
-                    Log($"!!Exception running test {testset+1}:{tests[testset].Name}" + Environment.NewLine + ex.Message + Environment.NewLine + ex.StackTrace);
+                    Log($"!!Exception running test {testset+1}:{tests[testset].Name}" + Environment.NewLine + ex.InnerException.Message + Environment.NewLine + ex.InnerException.StackTrace);
                     testfailures++;
                 }
 

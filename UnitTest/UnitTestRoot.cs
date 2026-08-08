@@ -7,7 +7,7 @@ namespace UnitTest
 {
     public static class UnitTestRoot
     {
-        [BaseUtils.UnitTests.Test(10)]
+        [BaseUtils.UnitTests.Test(99)]
         public static void Root()
         {
 
