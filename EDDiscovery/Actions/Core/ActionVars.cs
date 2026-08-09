@@ -111,7 +111,7 @@ namespace EDDiscovery.Actions
 
                 vars[prefix + "StarSystem"] = s.Name;
                 vars[prefix + "StarSystemEDSMID"] = "0";
-                vars[prefix + "StarSystemAddress"] = s.SystemAddress.IsValid ? s.SystemAddress.ToString() : "0";
+                vars[prefix + "StarSystemAddress"] = s.SystemAddress.ToString();
                 vars[prefix + "xpos"] = s.X.ToStringInvariantNAN("0.###");
                 vars[prefix + "ypos"] = s.Y.ToStringInvariantNAN("0.###");
                 vars[prefix + "zpos"] = s.Z.ToStringInvariantNAN("0.###");
@@ -126,7 +126,7 @@ namespace EDDiscovery.Actions
             if (si != null)
             {
                 ship = si.ShipType.Alt("Unknown");
-                id = si.ID.ToString() ?? "0";
+                id = si.ID.ToString();
                 name = si.ShipUserName.Alt("");
                 ident = si.ShipUserIdent.Alt("");
                 sv = si.SubVehicle.ToString();
@@ -195,7 +195,7 @@ namespace EDDiscovery.Actions
 
                 vars[mp + "Name"] = ms.Mission.Name;
                 vars[mp + "NameLocalised"] = ms.Mission.LocalisedName;
-                vars[mp + "ID"] = ms.Mission.MissionID.ToString() ?? "0";
+                vars[mp + "ID"] = ms.Mission.MissionID.ToString();
                 vars[mp + "UTC"] = ms.Mission.EventTimeUTC.ToStringUSInvariant();
                 vars[mp + "Local"] = ms.Mission.EventTimeLocal.ToStringUSInvariant();
                 vars[mp + "ExpiryUTC"] = ms.Mission.Expiry.ToStringUSInvariant();

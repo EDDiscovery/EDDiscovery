@@ -111,13 +111,29 @@ namespace UnitTest
                     string name = System.IO.Path.GetFileNameWithoutExtension(f);
                     if (!name.StartsWithIIC("Synth"))
                     {
-                        TestScan(null, f, @"c:\code\Images", false, 1920, false);
+                        var sn = TestScan(null, f, @"c:\code\Images", false, 1920, false);
+                        if (sn != null)
+                        {
+                            if ( name == "Leesti")
+                            {
+                                CheckThat(sn.System.Name).Is("Leesti");
+                                CheckThat(sn.FSSSignals.Count).Is(1);
+                                CheckThat(sn.OrbitingStations.Count).Is(1);
+                                var bd = sn.FindBody(0);
+                                CheckThat(bd).IsNotNull();
+                                CheckThat(bd.BodyType).Is(BodyDefinitions.BodyType.Star);
+                                bd = sn.FindBody(9);
+                                CheckThat(bd.BodyType).Is(BodyDefinitions.BodyType.Planet);
+                                CheckThat(bd.CanonicalName).Is("Leesti 1 a");
+                                CheckThat(bd.OwnName).Is("a");
+                            }
+                        }
                     }
                 }
             }
         }
 
-        static public void TestScan(EliteDangerousCore.StarScan2.StarScan ss, string jsonfile, string outpath, bool draweachone, int width, bool showmaterials = true)
+        static public EliteDangerousCore.StarScan2.SystemNode TestScan(EliteDangerousCore.StarScan2.StarScan ss, string jsonfile, string outpath, bool draweachone, int width, bool showmaterials = true)
         {
             if (File.Exists(jsonfile))
             {
@@ -132,19 +148,19 @@ namespace UnitTest
                 ISystem syst = null;
                 ss.ProcessFromHistory(hist, (ss2, mhe) =>
                 {
-                    syst =  ss2.GetISystem(mhe.Item2.System.Name);
+                    syst = ss2.GetISystem(mhe.Item2.System.Name);
                     if (syst != null)
                     {
-                        EliteDangerousCore.StarScan2.SystemNode sssol = ss2.FindSystemSynchronous(syst, false);
+                        var node = ss2.FindSystemSynchronous(syst, false);
 
-                        if (sssol.BodyGeneration != gen | sssol.SignalGeneration != siggen)
+                        if (node.BodyGeneration != gen | node.SignalGeneration != siggen)
                         {
-                            gen = sssol.BodyGeneration;
-                            siggen = sssol.SignalGeneration;
+                            gen = node.BodyGeneration;
+                            siggen = node.SignalGeneration;
                             if (draweachone && outfolderexists)
                             {
-                                string path = Path.Combine(outpath, sssol.System.Name.SafeFileString()) + $"-{mhe.Item1}.png";
-                                sssol.DrawSystemToFile(path, width, showmaterials);
+                                string path = Path.Combine(outpath, node.System.Name.SafeFileString()) + $"-{mhe.Item1}.png";
+                                node.DrawSystemToFile(path, width, showmaterials);
                             }
                         }
                     }
@@ -152,15 +168,18 @@ namespace UnitTest
 
                 ss.AssignPending();
 
+                EliteDangerousCore.StarScan2.SystemNode final = ss.FindSystemSynchronous(syst, false);
+
                 if (!draweachone && outfolderexists)
                 {
-                    EliteDangerousCore.StarScan2.SystemNode sssol = ss.FindSystemSynchronous(syst, false);
-                    string path = Path.Combine(outpath, sssol.System.Name.SafeFileString()) + ".png";
-                    sssol.DrawSystemToFile(path, width, showmaterials);
+                    string path = Path.Combine(outpath, final.System.Name.SafeFileString()) + ".png";
+                    final.DrawSystemToFile(path, width, showmaterials);
                 }
 
-                //ss.De.DumpTree();
+                return final;
             }
+            else
+                return null;
         }
 
     }
