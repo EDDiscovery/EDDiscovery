@@ -99,7 +99,8 @@ namespace UnitTest
         [BaseUtils.UnitTests.Test(60)]
         public static void TestStarJsons()
         {
-           // Debugger.OutputControl += "StarScan";        // turn on debugging
+            CheckSection("ScanScan Test Stars JSON");
+            // Debugger.OutputControl += "StarScan";        // turn on debugging
 
             string folder = $@"..\..\..\UnitTest\StarScans\";
 

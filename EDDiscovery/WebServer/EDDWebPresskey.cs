@@ -46,19 +46,19 @@ namespace EDDiscovery.WebServer
 
             string keyname = (string)message["key"];
 
-            var bindings = discoveryform.ActionController.FrontierBindings;
+            var bindings = discoveryform.FrontierBindings;
 
             string pname = "elitedangerous64";
 
-            if (bindings.KeyNames.Contains(keyname))       // first check its a valid name..
+            var entry = bindings.FindAction(keyname, true);   // just give me keyboard bindings, thats all i can do
+
+            if ( entry != null)
             {
-                List<Tuple<BindingsFile.Device, BindingsFile.Assignment>> matches
-                            = bindings.FindAssignedFunc(keyname, BindingsFile.KeyboardDeviceName);   // just give me keyboard bindings, thats all i can do
+                var dkplist = entry.FindKeyboardAssignment();       // must have a keyboard set 
 
-                if (matches != null)      // null if no matches to keyboard is found
+                if (dkplist != null)
                 {
-                    Keys[] keys = (from x in matches[0].Item2.keys select x.Key.ToVkey()).ToArray();        // bindings returns keys
-
+                    Keys[] keys = dkplist.Select(k => k.Key.ToVkey()).ToArray();
                     if (!keys.Contains(Keys.None)) // if no errors
                     {
                         string keyseq = keys.GenerateSequence();
@@ -66,15 +66,18 @@ namespace EDDiscovery.WebServer
                         string res = BaseUtils.EnhancedSendKeys.SendToProcess(keyseq, keydelay, shiftdelay, updelay, pname);
                         response["status"] = res.HasChars() ? "100" : "400";
                     }
-
-
+                    else
+                        response["status"] = "400";
                 }
+                else
+                    response["status"] = "400";
             }
             else
             {
                 string res = BaseUtils.EnhancedSendKeys.SendToProcess(keyname, keydelay, shiftdelay, updelay, pname);
                 response["status"] = res.HasChars() ? "100" : "400";
             }
+
 
             return response;
         }

@@ -13,6 +13,7 @@
  */
 
 using System;
+using System.Drawing.Text;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -139,7 +140,8 @@ namespace EDDiscovery
         public string ShipLoadoutsDirectory() { return SubAppDirectory("Loadouts"); }
         static public string ExeDirectory() { return System.AppDomain.CurrentDomain.BaseDirectory;  }
         public string[] TranslatorFolders() { return new string[] { TranslatorDirectory(), ExeDirectory() }; }
-
+        public string FrontierBindingsFolder { get; set; }
+        
         #endregion
 
         #region Public interface
@@ -295,7 +297,11 @@ namespace EDDiscovery
             {
                 ScanCachePath = Path.Combine(AppDataDirectory, "WebScans");
             }
+
+            FrontierBindingsFolder = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier Developments", "Elite Dangerous", "Options", "Bindings");
+
             EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
+
         }
 
 

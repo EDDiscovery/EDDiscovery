@@ -1,5 +1,6 @@
 ﻿using EliteDangerousCore;
 using EliteDangerousCore.JournalEvents;
+using System;
 using System.Collections.Generic;
 using static BaseUtils.UnitTests.CheckerHelpers;
 
@@ -10,6 +11,40 @@ namespace UnitTest
         [BaseUtils.UnitTests.Test(99)]
         public static void Root()
         {
+            CheckSection("Misc");
+            {
+
+                ShipSlots.Slot s = ShipSlots.Slot.BiologicalScanner;
+                long? v = 20000;
+                string txt = "Hello";
+                string res = "";
+
+                long tick = Environment.TickCount;
+                //for (int i = 0; i < 1000000; i++)
+                {
+                    //res = BaseUtils.FieldBuilder.Build("A:", txt, "B:;;,-20:N0;Value>10000", v, "Enum:", s);
+                    res = BaseUtils.FieldBuilder.Build("A:", txt, "B:;;N0;Value>10000", v, "Enum:", s);
+                }
+
+                tick = Environment.TickCount - tick;
+                System.Diagnostics.Debug.WriteLine($"In {tick} result {res}");
+
+                res = BaseUtils.FieldBuilder.Build("A:", txt, "B:;;,-20:N0;Value>10000", v, "Enum:", s);
+                CheckThat(res).Is("A:Hello, B:20,000              , Enum:BiologicalScanner");
+                res = BaseUtils.FieldBuilder.Build("A:", txt, "B:;;,-20:N0;Value>10000", v, "Enum:; postfix;,-20;;SCF", s);
+                CheckThat(res).Is("A:Hello, B:20,000              , Enum:Biological Scanner postfix");
+                res = BaseUtils.FieldBuilder.Build("A:", txt, "B:;;,-20:N0;Value>10000", v, "Enum:;postfix;,-25", s);
+                CheckThat(res).Is("A:Hello, B:20,000              , Enum:BiologicalScanner        postfix");
+                res = BaseUtils.FieldBuilder.Build("A:;postfix;,20", txt);
+                CheckThat(res).Is("A:               Hellopostfix");
+
+
+
+                var ct = System.Globalization.CultureInfo.GetCultureInfo("de");
+                string x = string.Format(ct, "{0,-20:N0}", v, v);
+                x = string.Format(ct, "{0,-20}", "Hello there");
+                System.Diagnostics.Debug.WriteLine($"In `{x}`");
+            }
 
             CheckSection("FDName");
 
@@ -90,6 +125,7 @@ namespace UnitTest
                 cat = "$MICRORESOURCE_CATEGORY_Data;";
                 CheckThat(MaterialCommodityMicroResourceType.ToCategory(cat)).Is(MaterialCommodityMicroResourceType.CatType.Data);
             }
+
 
         }
     }

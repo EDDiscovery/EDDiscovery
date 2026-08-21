@@ -165,7 +165,7 @@
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
     <Reference Include="QuickJSON, Version=3.0.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\RJKJSoft.QuickJSON.3.0.1\lib\net48\QuickJSON.dll</HintPath>
+      <HintPath>$(SolutionDir)\packages\RJKJSoft.QuickJSON.3.0.1\lib\net48\QuickJSON.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -449,6 +449,12 @@
     </Compile>
     <Compile Include="UserControls\ScansStars\UserControlDiscoveries.Designer.cs">
       <DependentUpon>UserControlDiscoveries.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserControls\Settings\Bindings.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UserControls\Settings\Bindings.Designer.cs">
+      <DependentUpon>Bindings.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\StationData\UserControlSpanshStations.cs">
       <SubType>UserControl</SubType>
@@ -862,11 +868,11 @@
     <Compile Include="UserControls\Screenshots\UserControlScreenshot.Designer.cs">
       <DependentUpon>UserControlScreenshot.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\Settings\UserControlSettings.cs">
+    <Compile Include="UserControls\Settings\Settings.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\Settings\UserControlSettings.Designer.cs">
-      <DependentUpon>UserControlSettings.cs</DependentUpon>
+    <Compile Include="UserControls\Settings\Settings.Designer.cs">
+      <DependentUpon>Settings.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\StationData\UserControlMarketData.cs">
       <SubType>UserControl</SubType>
@@ -1084,6 +1090,9 @@
     <EmbeddedResource Include="UserControls\ScansStars\UserControlDiscoveries.resx">
       <DependentUpon>UserControlDiscoveries.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserControls\Settings\Bindings.resx">
+      <DependentUpon>Bindings.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserControls\StationData\UserControlSpanshStations.resx">
       <DependentUpon>UserControlSpanshStations.cs</DependentUpon>
     </EmbeddedResource>
@@ -1126,8 +1135,8 @@
     <EmbeddedResource Include="UserControls\Screenshots\UserControlScreenshot.resx">
       <DependentUpon>UserControlScreenshot.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\Settings\UserControlSettings.resx">
-      <DependentUpon>UserControlSettings.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\Settings\Settings.resx">
+      <DependentUpon>Settings.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\StationData\UserControlMarketData.resx">
       <DependentUpon>UserControlMarketData.cs</DependentUpon>

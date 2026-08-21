@@ -93,6 +93,7 @@ namespace EDDiscovery
             Travel = 66,
             Squadrons = 67,
             PowerplayMerits = 68,
+            Bindings = 69,
             // ****** ADD More here DO NOT RENUMBER *****
         };
 
@@ -185,7 +186,8 @@ namespace EDDiscovery
 #endif
 
             { new PanelInfo( "Settings") },
-            { new PanelInfo( PanelIDs.Settings, typeof(UserControlSettings), "Settings", "SettingsPanel", "Settings for ED Discovery ") },
+            { new PanelInfo( PanelIDs.Settings, typeof(Settings), "Settings", "SettingsPanel", "Settings for ED Discovery ") },
+            { new PanelInfo( PanelIDs.Bindings, typeof(Bindings), "Bindings", "BindingsPanel", "Key and Joystick Bindings for Elite") },
 
             { new PanelInfo( "Screenshots") },
             { new PanelInfo( PanelIDs.ScreenShot, typeof(UserControlScreenshot), "Screen Shot", "ScreenShot", "Screen shot") },

@@ -42,6 +42,9 @@ namespace EDDiscovery
 
         public ExtendedControls.ThemeList ThemeList { get; private set; }
 
+        public BindingsFile FrontierBindings { get; private set; }
+        private Tuple<string, DateTime, int> FrontierStartPresetFile { get; set; }
+
         public UserControls.HistoryGrid PrimaryHistoryGrid { get { return tabControlMain.PrimarySplitterTab.GetHistoryGrid; } }
         public UserControls.UserControlContainerSplitter PrimarySplitter { get { return tabControlMain.PrimarySplitterTab; } }
 
@@ -117,7 +120,6 @@ namespace EDDiscovery
         private AudioExtensions.AudioQueue audioqueuespeech;
         private AudioExtensions.SpeechSynthesizer speechsynth;
 
-        private BindingsFile frontierbindings;
 
         private Dictionary<string, string> installdeinstallsettings;
 
@@ -402,15 +404,7 @@ namespace EDDiscovery
             audioqueuewave2 = new AudioExtensions.AudioQueue(audiodriverwave2);
             audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
 
-            // Frontier bindings
-
-            frontierbindings = new BindingsFile();
-
-            frontierbindings.LoadBindingsFile(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier Developments", "Elite Dangerous", "Options", "Bindings"), true);
-
-            //System.Diagnostics.Debug.WriteLine("Bindings" + frontierbindings.ListBindings());
-            //System.Diagnostics.Debug.WriteLine("Key Names" + frontierbindings.ListKeyNames("{","}"));
-
+            LoadFrontierBindings();     // load the bindings into EDD
 
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load action controller");
 
@@ -763,15 +757,8 @@ namespace EDDiscovery
             // Bindings
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Bindings");
 
-            if (actioncontroller.FrontierBindings.FileLoaded != null)
-            {
-                if (actioncontroller.FrontierBindings.FileLoaded.HasChars() )
-                    LogLine("Loaded Bindings " + actioncontroller.FrontierBindings.FileLoaded);
-                else
-                    LogLine("No Bindings File Found");
-                if (actioncontroller.FrontierBindings.ErrorList.HasChars())
-                    LogLineHighlight("Bindings Errors " + Environment.NewLine + actioncontroller.FrontierBindings.ErrorList);
-            }
+            if (FrontierBindings.IsLoaded)
+                LogLine("Loaded Bindings " + FrontierBindings.FileName);
             else
                 LogLine("Frontier bindings did not load");
 
@@ -875,6 +862,16 @@ namespace EDDiscovery
                 {
                     if (actioncontroller.CheckForActionFilesChange()) // autoreload edited action files..
                         buttonReloadActions_Click(null, null);
+                }
+
+                if ( FrontierBindings.IsOutOfDate() ||          // if date time of this has changed, or the start preset has changed
+                            (FrontierStartPresetFile != null && File.GetLastWriteTimeUtc(FrontierStartPresetFile.Item1) > FrontierStartPresetFile.Item2) )
+                {
+                    LoadFrontierBindings();
+                    if (FrontierBindings.IsLoaded)
+                        LogLine("Loaded Bindings " + FrontierBindings.FileName);
+                    else
+                        LogLine("Frontier bindings did not load");
                 }
             };
 
@@ -1296,14 +1293,9 @@ namespace EDDiscovery
         {
             ExtendedControls.InfoForm ifrm = new ExtendedControls.InfoForm();
             string t = actioncontroller.FrontierBindings.ListBindings();
-            if (actioncontroller.FrontierBindings.ErrorList.HasChars())
-            {
-                t = actioncontroller.FrontierBindings.ErrorList + Environment.NewLine + t;
-            }
             ifrm.Info("Bindings", this.Icon, t);
             ifrm.Show(this);
         }
-
 
 #endregion
 
@@ -1369,7 +1361,9 @@ namespace EDDiscovery
         {       // horrible circular ref to this sub func then back up.. can't think of a fix for now.
             TabPage t = tabControlMain.GetMajorTab(PanelInformation.PanelIDs.Settings);
             if (t != null)
-                (t.Controls[0] as UserControls.UserControlSettings).DisableNotifyIcon();
+            {
+                (t.Controls[0] as UserControls.Settings).DisableNotifyIcon();
+            }
         }
 
         private void notifyIconMenu_Open_Click(object sender, EventArgs e)

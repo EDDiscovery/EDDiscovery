@@ -20,6 +20,8 @@ using ExtendedControls;
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Reflection.Emit;
+using System.Text;
 using System.Windows.Forms;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Tab;
 
@@ -158,7 +160,8 @@ namespace EDDiscovery.UserControls
 
                     string facstate = currentsystemclass.FactionState == FactionDefinitions.State.Unknown ? "" : (FactionDefinitions.ToLocalisedLanguage(currentsystemclass.FactionState) + ", ");
 
-                    startext += $"{currentsystemclass.Faction}, {facstate}{currentsystemclass.Government_Localised}, {currentsystemclass.Population:N0}";
+
+                    startext += BaseUtils.FieldBuilder.Build("Faction" + ":", currentsystemclass.Faction, "Gov" + ":", currentsystemclass.Government_Localised, "Population" + ":" + ";;N0;Value>0", currentsystemclass.Population);
 
                     starimage = BaseUtils.Icons.IconSet.GetImage(scan != null ? scan.StarTypeImageName : "Bodies.Stars.Unknown");
                 }

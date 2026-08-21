@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlSettings
+    partial class Settings
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlSettings));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Settings));
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.btnDeleteCommander = new ExtendedControls.ExtButton();
             this.buttonEditCommander = new ExtendedControls.ExtButton();

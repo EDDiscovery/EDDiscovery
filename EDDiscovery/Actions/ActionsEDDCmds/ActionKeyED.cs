@@ -43,31 +43,28 @@ namespace EDDiscovery.Actions
                     {
                         string binding = s.Substring(1, endindex - 1);
 
-                        if (!bindingsfile.KeyNames.Contains(binding))       // first check its a valid name..
-                        {
+                        BindingEntry entry = bindingsfile.FindAction(binding);      // find binding
+
+                        if ( entry == null)
                             return new Tuple<string, string>(null, "Binding name " + binding + " is not an known binding");
-                        }
 
-                        List<Tuple<Device, Assignment>> matches 
-                                    = bindingsfile.FindAssignedFunc(binding, KeyboardDeviceName);   // just give me keyboard bindings, thats all i can do
+                        var dkplist = entry.FindKeyboardAssignment();       // must have a keyboard set 
 
-                        if ( matches != null )      // null if no matches to keyboard is found
+                        if ( dkplist != null)
                         {
-                            // pick out the keys and convert them from text to Vkey (they are in Vkey naming format)
-                            Keys[] keys = (from x in matches[0].Item2.keys select x.Key.ToVkey()).ToArray();        // bindings returns keys
+                            Keys[] keys = dkplist.Select(k=>k.Key.ToVkey()).ToArray();
 
-                            if ( !keys.Contains(Keys.None)) // if no errors
+                            if (!keys.Contains(Keys.None)) // if no errors
                             {
                                 s = s.Substring(endindex + 1);      // remove {binding}
-
                                 string keyseq = keys.GenerateSequence();
-                               // System.Diagnostics.Debug.WriteLine("Frontier " + binding + "->" + keyseq);
+                                // System.Diagnostics.Debug.WriteLine("Frontier " + binding + "->" + keyseq);
                                 return new Tuple<string, string>(keyseq, null);
                             }
                             else
                             {
-                                string[] names = (from x in matches[0].Item2.keys select x.Key).ToArray();
-                                return new Tuple<string, string>(null, "Key name(s) not recognised: " + String.Join(",",names) );
+                                string[] names = dkplist.Select(k=>k.Key).ToArray();
+                                return new Tuple<string, string>(null, "Key name(s) not recognised: " + String.Join(",", names));
                             }
                         }
                         else
@@ -84,7 +81,11 @@ namespace EDDiscovery.Actions
 
         static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, EliteDangerousCore.BindingsFile bf)
         {
-            List<string> decorated = (from x in bf.KeyNames select "{"+x+"}").ToList();
+            List<string> decorated = new List<string> { "kwk" };
+            
+            // tbd
+                                                            //
+                                                            //(from x in bf.KeyNames select "{"+x+"}").ToList();
             decorated.Sort();
             return Menu(parent, ic, userdata, decorated, new AKP() { bindingsfile = bf });
         

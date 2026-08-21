@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2015 - 2016 EDDiscovery development team
+ * Copyright 2015 - 2026 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,8 +10,6 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
 
 using System;
@@ -79,23 +77,30 @@ namespace EDDiscovery.Actions
                         partial = true;
                     }
 
-                    List<BindingsFile.Assignment> matches = bf.Find(cmdname, partial);
+                    List<BindingsFile.DeviceKeySet> matches = bf.FindDeviceKey(null, cmdname, partial);
 
                     if (matches.Count > 0)
                     {
-                        foreach (BindingsFile.Assignment a in matches)
+                        foreach (BindingsFile.DeviceKeySet a in matches)
                         {
-                            ap[prefix + "Binding" + matchno.ToStringInvariant()] = a.ToString();
-                            list += a.ToString() + Environment.NewLine;
+                            string keylist = a.Primary ? a.Entry.PrimaryKeyList() : a.Entry.SecondaryKeyList();
+                            ap[prefix + "Binding" + matchno.ToStringInvariant()] = keylist + 
+                                "=" + a.Entry.Name.ToString();
+                            list += keylist + "=" + a.Entry.Name + Environment.NewLine;
                             matchno++;
                         }
                     }
 
-                    Dictionary<string, string> values = bf.BindingValue(cmdname, partial);
-                    foreach(string k in values.Keys)
-                    {
-                        ap[prefix + k] = values[k];
-                        list += k + "=" + values[k] + Environment.NewLine;
+                    foreach( var entry in bf.Assignments)
+                    { 
+                        foreach(var kvp in entry.Values)
+                        {
+                            if ( partial ? kvp.Key.StartsWithIIC(cmdname) : kvp.Key.EqualsIIC(cmdname))
+                            {
+                                ap[prefix + kvp.Key] = kvp.Value;
+                                list += kvp.Key + "=" + kvp.Value + Environment.NewLine;
+                            }
+                        }
                     }
 
                     cmdname = sp.NextQuotedWord();

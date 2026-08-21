@@ -1,8 +1,11 @@
 ﻿using BaseUtils;
 using EliteDangerousCore;
+using ExtendedControls;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -10,6 +13,7 @@ namespace UnitTest
 {
     public partial class UnitTests : Form
     {
+        ThemeList theme;
         public UnitTests()
         {
             InitializeComponent();
@@ -24,38 +28,9 @@ namespace UnitTest
             richTextBox1.AppendText(x);
             richTextBox1.AppendText(Environment.NewLine);
             richTextBox1.Select(richTextBox1.Text.Length, richTextBox1.Text.Length);
+            richTextBox1.ScrollToCaret();
             System.Diagnostics.Debug.WriteLine($"UnitTest Log : {x}");
             Application.DoEvents();
-        }
-
-        class EliteConfig : IEliteConfig
-        {
-            public WebExternalDataLookup WebLookup => WebExternalDataLookup.None;
-            public DateTime ConvertTimeToSelectedFromUTC(DateTime t)
-            {
-                return t;
-            }
-        }
-
-        class EliteOptions : IEliteOptions
-        {
-            public string SystemDatabasePath => throw new NotImplementedException();
-
-            public string UserDatabasePath => throw new NotImplementedException();
-
-            public bool ForceBetaOnCommander => throw new NotImplementedException();
-
-            public bool DisableJournalMerge => throw new NotImplementedException();
-
-            public bool DisableJournalRemoval => throw new NotImplementedException();
-
-            public bool DisableBetaCommanderCheck => throw new NotImplementedException();
-
-            public string ScanCachePath => throw new NotImplementedException();
-
-            public bool ScanCacheEnabled => throw new NotImplementedException();
-
-            public bool SetEDDNforNewCommanders => throw new NotImplementedException();
         }
 
 
@@ -80,18 +55,29 @@ namespace UnitTest
             EliteConfigInstance.InstanceOptions = new EliteOptions();
             EliteConfigInstance.InstanceConfig = new EliteConfig();
 
-            timer.Tick += T_Tick;
-            timer.Start();
-
             BaseUtils.UnitTests.Check.TestResult = Test;            // hook up responders to checkers
             BaseUtils.UnitTests.Check.NewSection = Section;
 
             // all test marked with 
             tests = BaseUtils.UnitTests.Check.GetTests(Assembly.GetExecutingAssembly());
 
-            
+            theme = new ThemeList();
+            theme.LoadBaseThemes();
+            theme.SetThemeByName("Elite Verdana Small");
+            Theme.Current.WindowsFrame = true;
+            Theme.Current.ApplyStd(this);
+
+            timer.Tick += T_Tick;
+
+            buttonStart_Click(null, null);
+        }
+        private void buttonStart_Click(object sender, EventArgs e)
+        {
+            buttonStart.Enabled = false;
+            timer.Start();
             Log("Begin");
         }
+
 
         int testset = 0;
         int testno = 0;
@@ -124,11 +110,12 @@ namespace UnitTest
                     testfailures++;
                 }
 
-                Section("?");
-
                 int time = AppTicks.TickCountLapDelta("UnitTests").Item2;
 
-                Log($"Completed {testset+1}:{tests[testset].Name} in {time}ms Failures {testfailures}/{testno}");
+                Section("?");
+
+                Log($"Completed {testset+1}:{tests[testset].Name} in {time}ms Totals failed {testfailures} out of {totaltests} tests");
+                
 
                 testset++;
                 timer.Start();
@@ -146,7 +133,7 @@ namespace UnitTest
 
         private void Section(string newsection)
         {
-            if (testno > 0)
+            if (testno > 0 )
             {
                 totaltests += testno;
                 totalfailures += testfailures;
@@ -175,6 +162,37 @@ namespace UnitTest
             bool ret = je != null && je is T;
             return ret;
         }
+
+        class EliteConfig : IEliteConfig
+        {
+            public WebExternalDataLookup WebLookup => WebExternalDataLookup.None;
+            public DateTime ConvertTimeToSelectedFromUTC(DateTime t)
+            {
+                return t;
+            }
+        }
+
+        class EliteOptions : IEliteOptions
+        {
+            public string SystemDatabasePath => throw new NotImplementedException();
+
+            public string UserDatabasePath => throw new NotImplementedException();
+
+            public bool ForceBetaOnCommander => throw new NotImplementedException();
+
+            public bool DisableJournalMerge => throw new NotImplementedException();
+
+            public bool DisableJournalRemoval => throw new NotImplementedException();
+
+            public bool DisableBetaCommanderCheck => throw new NotImplementedException();
+
+            public string ScanCachePath => throw new NotImplementedException();
+
+            public bool ScanCacheEnabled => throw new NotImplementedException();
+
+            public bool SetEDDNforNewCommanders => throw new NotImplementedException();
+        }
+
 
     }
 
