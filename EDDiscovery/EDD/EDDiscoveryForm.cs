@@ -14,6 +14,7 @@
 
 using ActionLanguage.Manager;
 using BaseUtils;
+using DirectInputDevices;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
 using ExtendedControls;
@@ -43,6 +44,7 @@ namespace EDDiscovery
         public ExtendedControls.ThemeList ThemeList { get; private set; }
 
         public BindingsFile FrontierBindings { get; private set; }
+        public InputDeviceList InputDeviceList { get; private set; }
         private Tuple<string, DateTime, int> FrontierStartPresetFile { get; set; }
 
         public UserControls.HistoryGrid PrimaryHistoryGrid { get { return tabControlMain.PrimarySplitterTab.GetHistoryGrid; } }
@@ -406,11 +408,24 @@ namespace EDDiscovery
 
             LoadFrontierBindings();     // load the bindings into EDD
 
+            InputDeviceList = new InputDeviceList();
+
+            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            {
+                DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(InputDeviceList);
+                DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(InputDeviceList);              // Created.. not started..
+                DirectInputDevices.InputDeviceMouse.CreateMouse(InputDeviceList);
+                InputDeviceList.Start();
+            }
+
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load action controller");
 
             // install extra functions
 
             Functions.GetCFH = ConditionEDDFunctions.DefaultGetCFH;
+
+            InputDeviceList idl = new InputDeviceList();
+
 
             // create the action controller and install commands before we execute tabs, since some tabs need these set up
 
@@ -758,7 +773,12 @@ namespace EDDiscovery
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Bindings");
 
             if (FrontierBindings.IsLoaded)
-                LogLine("Loaded Bindings " + FrontierBindings.FileName);
+            {
+                if ( FrontierBindings.IsEditable)
+                    LogLine("Loaded Bindings " + FrontierBindings.FileName);
+                else
+                    LogLineHighlight($"Loaded Bindings but not editable - unknown frontier culture ID `{FrontierBindings.KeyboardCulture}` {InputLanguage.CurrentInputLanguage.LayoutName} {InputLanguage.CurrentInputLanguage.Culture.Name} {FrontierBindings.FileName}");
+            }
             else
                 LogLine("Frontier bindings did not load");
 
@@ -1001,6 +1021,8 @@ namespace EDDiscovery
             audiodriverwave1.Dispose();
             audioqueuewave2.Dispose();
             audiodriverwave2.Dispose();
+
+            InputDeviceList.Stop();
 
             speechsynth.Dispose();
 

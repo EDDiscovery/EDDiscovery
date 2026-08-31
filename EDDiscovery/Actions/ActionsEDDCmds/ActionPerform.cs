@@ -143,11 +143,22 @@ namespace EDDiscovery.Actions
                         ac.EditSpeechText();
 
                     else if (cmdname.Equals("enableeliteinput"))
-                        ac.EliteInput(true, true);
+                    {
+                        ap.ActionFile.SetFileVariable("_ELITEINPUT","1");                       // actionfrominputdevices.cs need to see this to dispatch 
+                        ap.ActionFile.SetFileVariable("_ELITEINPUTAXIS","1");                  // record for use if it want is, no other action now
+                        ac.EliteInput();
+                    }
                     else if (cmdname.Equals("enableeliteinputnoaxis"))
-                        ac.EliteInput(true, false);
+                    {
+                        ap.ActionFile.SetFileVariable("_ELITEINPUT","1");                  // record for use if it want is, no other action now
+                        ac.EliteInput();
+                    }
                     else if (cmdname.Equals("disableeliteinput"))
-                        ac.EliteInput(false, false);
+                    {
+                        ap.ActionFile.SetFileVariable("_ELITEINPUT","0");                  // record for use if it want is, no other action now
+                        ap.ActionFile.SetFileVariable("_ELITEINPUTAXIS","0");                  // record for use if it want is, no other action now
+                        ac.EliteInput();
+                    }
                     else if (cmdname.Equals("listeliteinput"))
                     {
                         ap["EliteInput"] = ac.EliteInputList();

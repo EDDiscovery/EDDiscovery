@@ -341,8 +341,8 @@ namespace EDDiscovery
         public int ActionRunOnEntry(HistoryEntry he, ActionLanguage.ActionEvent av)
         { return actioncontroller.ActionRunOnEntry(he, av); }
 
-        public int ActionRun(ActionLanguage.ActionEvent ev, BaseUtils.Variables additionalvars = null, string flagstart = null, bool now = false)
-        { return actioncontroller.ActionRun(ev, null, additionalvars, flagstart, now); }
+        public int ActionRun(ActionLanguage.ActionEvent ev, BaseUtils.Variables additionalvars = null, string actionvarnamepresent = null, bool now = false)
+        { return actioncontroller.ActionRun(ev, null, additionalvars, actionvarnamepresent, now); }
 
         #endregion
 
@@ -477,12 +477,13 @@ namespace EDDiscovery
      
         #region Action Controller make
 
-        public Actions.ActionController MakeAC(Form uiform, string appfolder, string manageappfolder, string otherinstalledfilesfolder, string globalvars, Action<string> logger)
+        public Actions.ActionController MakeAC(Form uiform, string appfolder, string manageappfolder, string otherinstalledfilesfolder, 
+                                                    string globalvars, Action<string> logger)
         {
             return new Actions.ActionController(this, uiform,
                                                 appfolder, manageappfolder,otherinstalledfilesfolder, 
                                                 globalvars,
-                                                audioqueuewave1, audioqueuewave2, audioqueuespeech, speechsynth, FrontierBindings, EDDOptions.Instance.NoSound,
+                                                audioqueuewave1, audioqueuewave2, audioqueuespeech, speechsynth, FrontierBindings, InputDeviceList, EDDOptions.Instance.NoSound,
                                                 logger,
                                                 this.Icon, new Type[] { });
         }
@@ -494,13 +495,16 @@ namespace EDDiscovery
         {
             FrontierBindings = new BindingsFile();
             // we remember details on startpreset.start because this can change which binding file is used
-            FrontierStartPresetFile = BindingsFile.FindStartPreset(EDDOptions.Instance.FrontierBindingsFolder, true);     
-            
+            FrontierStartPresetFile = BindingsFile.FindStartPreset(EDDOptions.Instance.FrontierBindingsFolder, true);
+
             // and we load if found
             if (FrontierStartPresetFile != null)
             {
                 string file = BindingsFile.FindBindingsFile(FrontierStartPresetFile);       // this may return null, which read can handle
-                FrontierBindings.Read(file);       // may fail, check IsLoaded
+                if (FrontierBindings.Read(file) == null)
+                {
+                    FrontierBindings.AssignVKeys();
+                }
             }
         }
 

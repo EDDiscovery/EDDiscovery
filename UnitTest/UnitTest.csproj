@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTestFrontierKeys.cs" />
     <Compile Include="UnitTestBindingsFile.cs" />
     <Compile Include="UnitTestStarScan.cs" />
     <Compile Include="UnitTestEngineering.cs" />
@@ -145,6 +146,10 @@
     <ProjectReference Include="..\BaseUtilities\BaseUtilities\BaseUtils.csproj">
       <Project>{c657c881-f3e1-45ba-aca5-966348010414}</Project>
       <Name>BaseUtils</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\BaseUtilities\DirectInput\DirectInput.csproj">
+      <Project>{390b1547-a455-45e3-974f-e1f9b1613ad5}</Project>
+      <Name>DirectInput</Name>
     </ProjectReference>
     <ProjectReference Include="..\BaseUtilities\SQLLite\SQLLite.csproj">
       <Project>{3d79de63-5eec-4f30-a879-fb4c6ba4b2dc}</Project>

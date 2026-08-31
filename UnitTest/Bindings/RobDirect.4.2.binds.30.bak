@@ -634,7 +634,9 @@
   <HeadlookSensitivity Value="1.00000000" />
   <HeadlookSmoothing Value="1" />
   <HeadLookReset>
-    <Primary Device="Keyboard" Key="Key_F11" />
+    <Primary Device="Keyboard" Key="Key_F11">
+      <Modifier Device="Keyboard" Key="Key_LeftShift" />
+    </Primary>
     <Secondary Device="{NoDevice}" Key="" />
   </HeadLookReset>
   <HeadLookPitchUp>

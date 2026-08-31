@@ -58,7 +58,7 @@ namespace EDDiscovery.WebServer
 
                 if (dkplist != null)
                 {
-                    Keys[] keys = dkplist.Select(k => k.Key.ToVkey()).ToArray();
+                    Keys[] keys = dkplist.Keys.Select(k => k.VKeyName.ToVkey()).ToArray();
                     if (!keys.Contains(Keys.None)) // if no errors
                     {
                         string keyseq = keys.GenerateSequence();

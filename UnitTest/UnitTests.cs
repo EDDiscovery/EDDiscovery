@@ -1,4 +1,5 @@
 ﻿using BaseUtils;
+using DirectInputDevices;
 using EliteDangerousCore;
 using ExtendedControls;
 using System;
@@ -24,15 +25,16 @@ namespace UnitTest
         private void Log(string x, Font fnt = null)
         {
             if (fnt != null)
-                richTextBox1.SelectionFont = fnt;
-            richTextBox1.AppendText(x);
-            richTextBox1.AppendText(Environment.NewLine);
-            richTextBox1.Select(richTextBox1.Text.Length, richTextBox1.Text.Length);
-            richTextBox1.ScrollToCaret();
-            System.Diagnostics.Debug.WriteLine($"UnitTest Log : {x}");
+                richTextBoxLog.SelectionFont = fnt;
+            richTextBoxLog.AppendText(x);
+            richTextBoxLog.AppendText(Environment.NewLine);
+            richTextBoxLog.Select(richTextBoxLog.Text.Length, richTextBoxLog.Text.Length);
+            richTextBoxLog.ScrollToCaret();
+          //  System.Diagnostics.Debug.WriteLine($"UnitTest Log : {x}");
             Application.DoEvents();
         }
 
+        bool showbinding = false;
 
         protected override void OnShown(EventArgs e)
         {
@@ -64,12 +66,128 @@ namespace UnitTest
             theme = new ThemeList();
             theme.LoadBaseThemes();
             theme.SetThemeByName("Elite Verdana Small");
-            Theme.Current.WindowsFrame = true;
+            //Theme.Current.WindowsFrame = true;
             Theme.Current.ApplyStd(this);
 
             timer.Tick += T_Tick;
 
-            buttonStart_Click(null, null);
+
+            //if (false)
+            //{
+            //    InputMapDialog im = new InputMapDialog();
+            //    im.AllowAxis = true;
+            //    im.ShowPressOrRelease = false;
+            //    im.ShowOKCancel = false;
+            //    im.EscapeQuits = true;
+
+            //    im.Title = "Move Joystick Axis";
+            //    im.AxisOnly = true;
+
+            //    Theme.Current.ApplyDialog(im);
+            //    if (im.ShowDialog(this) == DialogResult.OK)
+            //    {
+            //        System.Diagnostics.Debug.WriteLine($"Device `{im.DeviceName}` key `{im.KeyName}`");
+            //        if (im.DeviceName == "Keyboard")
+            //        {
+            //            var vkey = KeyObjectExtensions.ToVkey(im.KeyName);
+            //            System.Diagnostics.Debug.WriteLine($"  .. vkey {vkey} = {KeyObjectExtensions.VKeyToString(vkey)} = {FrontierKeyConversion.KeysToFrontier(im.KeyName)}");
+
+            //        }
+            //    }
+            //    else
+            //    {
+            //        System.Diagnostics.Debug.WriteLine($"CANCEL!");
+            //    }
+            //}
+
+            {
+                foreach( InputLanguage x in InputLanguage.InstalledInputLanguages)
+                {
+                    System.Diagnostics.Debug.Write($"Tuple.Create({x.LayoutName.AlwaysQuoteString()},{x.Culture.Name.AlwaysQuoteString()}),");
+                }
+                System.Diagnostics.Debug.WriteLine("");
+                System.Diagnostics.Debug.WriteLine($"Input lang {InputLanguage.CurrentInputLanguage.LayoutName} {InputLanguage.CurrentInputLanguage.Culture.Name}");
+            }
+
+            if (showbinding)
+            {
+                InputDeviceList inputdevices = new DirectInputDevices.InputDeviceList();
+                InputDeviceJoystickWindows.CreateJoysticks(inputdevices);
+
+                List<string> devices = new List<string>();
+                foreach (var device in inputdevices)
+                {
+                    System.Diagnostics.Debug.WriteLine($"{device.ID.Name} {device.ID.VendorId} {device.ID.ProductId} {device.ID.VendorProductId}");
+                    
+                    // does frontier know about it?
+                    string bestname = BindingsFile.FrontierDeviceName(device.ID.ProductId, device.ID.VendorId);
+
+                    if (bestname != null)           // if frontier knows it, add its name, else add usb identity which frontier appears to use
+                        devices.Add(bestname);
+                    else
+                        devices.Add(device.ID.VendorProductId);
+
+                    bindingsEditor.ConvertDeviceNameList[device.ID.VendorProductId] = device.ID.Name;       // allow the productvendorid pair to be converted to device name just for the bindings editor
+                }
+
+                bindingsEditor.ConvertDeviceNameList["{NoDevice}"] = "---";
+
+                InputDeviceKeyboard.CreateKeyboard(inputdevices);              
+                InputDeviceMouse.CreateMouse(inputdevices);
+
+                inputdevices.Start();
+
+                panelTest.Visible = false;
+                bindingsEditor.Dock = DockStyle.Fill;
+
+                bindingsEditor.DeviceInput += (bf,entry) =>
+                {
+                    InputMapDialog im = new InputMapDialog();
+                    im.Init(inputdevices);
+                    im.AllowAxis = im.AxisOnly= entry.IsBinding;
+                    im.ShowPressOrRelease = false;
+                    im.ShowOKCancel = false;
+                    im.EscapeQuits = true;
+                    Theme.Current.ApplyDialog(im);
+                    if (im.ShowDialog(this) == DialogResult.OK)
+                    {
+                        string devicename = im.Device.Name;
+                        if ( !bindingsEditor.DevicesNamesConverted.Contains(devicename))
+                        {
+                            // same way its done in operation to map to a frontier device
+                            string bestname = bindingsEditor.FindDevice(im.Device.Name, im.Device.ID.Instanceguid, im.Device.ID.Productguid, im.Device.ID.ProductId, im.Device.ID.VendorId);
+                            if (bestname == null)
+                                ExtendedControls.MessageBoxTheme.Show($"Cannot find frontier device name for device\r\nUse Frontier editor to add device first", "Cannot find device", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            devicename = bestname;
+                        }
+
+                        if (devicename != null)
+                        {
+                            string frontiername = im.Device.Name == "Keyboard" ? FrontierKeyConversion.KeysToFrontier(bf.KeyboardLayout, im.KeyName) : im.KeyName;
+
+                            if (!frontiername.StartsWith("!"))
+                            {
+                                BindingsFile.DeviceKeyPair dvp = new BindingsFile.DeviceKeyPair(devicename, frontiername);
+                                return dvp;
+                            }
+                            else
+                                ExtendedControls.MessageBoxTheme.Show($"Cannot find mapping to key name", "Cannot find device", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
+                    }
+                    return null;
+                };
+
+                //string folder = @"c:\code\eddiscovery\unittest\bindings";
+                string folder = @"C:\Users\RK\AppData\Local\Frontier Developments\Elite Dangerous\Options\Bindings";
+                var frontierpresetfilebindingfilename = EliteDangerousCore.BindingsFile.FindBindingsFile(folder, true);
+                bindingsEditor.Init(folder, frontierpresetfilebindingfilename, devices);
+            }
+            else
+            {
+                bindingsEditor.Visible = false;
+                panelTest.Dock = DockStyle.Fill;
+                buttonStart_Click(null, null);
+            }
         }
         private void buttonStart_Click(object sender, EventArgs e)
         {

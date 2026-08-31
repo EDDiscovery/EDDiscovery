@@ -77,13 +77,13 @@ namespace EDDiscovery.Actions
                         partial = true;
                     }
 
-                    List<BindingsFile.DeviceKeySet> matches = bf.FindDeviceKey(null, cmdname, partial);
+                    List<BindingsFile.DeviceKeySet> matches = bf.FindDeviceVKey(null, cmdname, partial);
 
                     if (matches.Count > 0)
                     {
                         foreach (BindingsFile.DeviceKeySet a in matches)
                         {
-                            string keylist = a.Primary ? a.Entry.PrimaryKeyList() : a.Entry.SecondaryKeyList();
+                            string keylist = a.Keys.KeyDescription();
                             ap[prefix + "Binding" + matchno.ToStringInvariant()] = keylist + 
                                 "=" + a.Entry.Name.ToString();
                             list += keylist + "=" + a.Entry.Name + Environment.NewLine;

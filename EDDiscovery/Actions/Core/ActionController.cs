@@ -14,9 +14,8 @@
 
 using ActionLanguage;
 using BaseUtils;
-using BaseUtils.Win32Constants;
+using DirectInputDevices;
 using EliteDangerousCore;
-using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -48,7 +47,6 @@ namespace EDDiscovery.Actions
         public override AudioExtensions.SpeechSynthesizer SpeechSynthesizer { get; }
         public AudioExtensions.IVoiceRecognition VoiceRecon { get; }
         public BindingsFile FrontierBindings { get; }
-
         public ActionController(
                                 EDDiscoveryForm eddiscoveryform,        // need this for access to data
                                 Form uiform,        // what UI form is the parent
@@ -59,6 +57,7 @@ namespace EDDiscovery.Actions
                                 AudioExtensions.AudioQueue wave1, AudioExtensions.AudioQueue wave2, 
                                 AudioExtensions.AudioQueue speech, AudioExtensions.SpeechSynthesizer synth, 
                                 BindingsFile frontierbindings, 
+                                InputDeviceList inputDevices,
                                 bool nosound,
                                 Action<string> logger,
                                 System.Drawing.Icon ic, Type[] keyignoredforms = null) : base(uiform, ic)
@@ -76,8 +75,7 @@ namespace EDDiscovery.Actions
             SpeechSynthesizer = synth;
             FrontierBindings = frontierbindings;
 
-            inputdevices = new DirectInputDevices.InputDeviceList(a => DiscoveryForm.BeginInvoke(a));
-            inputdevicesactions = new Actions.ActionsFromInputDevices(inputdevices, frontierbindings, this);
+            inputdevicesactions = new Actions.ActionsFromInputDevices(inputDevices, frontierbindings, this);
 
             // we own the voice recon
 #if !NO_SYSTEM_SPEECH
@@ -321,7 +319,7 @@ namespace EDDiscovery.Actions
                     ExtendedControls.Theme.Current.ApplyDialog(mp);
                     if ( mp.ShowDialog(DiscoveryForm) == DialogResult.OK )
                     {
-                        return new string[] { mp.DeviceName, mp.ButtonName, mp.Press.ToStringIntValue() };
+                        return new string[] { mp.Device.Name, mp.KeyName, mp.Press.ToStringIntValue() };
                     }
                     else
                         return null;
@@ -682,22 +680,25 @@ namespace EDDiscovery.Actions
             ActionRun(ActionEventEDList.onRefreshEnd);
         }
 
-        public int ActionRunOnEntry(HistoryEntry he, ActionEvent ev, string flagstart = null, bool now = false)      
+        public int ActionRunOnEntry(HistoryEntry he, ActionEvent ev, string eventmusthavethisvariable = null, bool now = false)      
         {
-            return ActionRun(ev, he, null, flagstart, now);
+            return ActionRun(ev, he, null, eventmusthavethisvariable, now);
         }
 
-        // override base
-        public override int ActionRun(ActionEvent ev, Variables additionalvars = null, string flagstart = null, bool now = false)              
-        { return ActionRun(ev, null, additionalvars, flagstart, now); }
+        public override int ActionRun(ActionEvent ev, Variables additionalvars = null, string eventmusthavethisvariable = null, bool now = false)
+        { return ActionRun(ev, null, additionalvars, eventmusthavethisvariable, now); }
+
+        public int ActionRun(ActionEvent ev, Variables additionalvars, Variables staticvarmustbepresent)
+        { return ActionRun(ev, null, additionalvars, null,false, staticvarmustbepresent); }
 
         public int ActionRun(ActionEvent ev, 
                                 HistoryEntry he = null, 
                                 Variables additionalvars = null,
-                                string actionvarnamepresent = null,                    // action var present, if not null, must be there
-                                bool now = false)       
+                                string eventmusthavethisvariable = null,                    // action var present, if not null, must be there in the EVENT command
+                                bool now = false,
+                                Variables staticvarmustbepresent = null)                       // varname=
         {
-            List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.TriggerName, actionvarnamepresent);      // look thru all actions, find matching ones
+            List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.TriggerName, eventmusthavethisvariable, staticvarmustbepresent);      // look thru all actions, find matching ones
 
             if (ale.Count > 0)
             {
@@ -748,9 +749,6 @@ namespace EDDiscovery.Actions
         // close down, return global variables to store
         public string CloseDown()
         {
-            inputdevicesactions.Stop();
-            inputdevices.Clear();
-
             VoiceRecon.Close();
 
             System.Diagnostics.Debug.WriteLine(Environment.TickCount % 10000 + " AC Closedown complete");
@@ -787,38 +785,30 @@ namespace EDDiscovery.Actions
 
         #region Elite Input 
 
-        private bool axisison = false;      // record if anywant wants axis events
 
-        public void EliteInput(bool on, bool axisevents)
+        // see if any files want elite input
+        public void EliteInput()    
         {
             inputdevicesactions.Stop();
-            inputdevices.Clear();
-
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            foreach (var af in actionfiles.Enumerable)
             {
-                if (on)
+                if (af.FileVariables.TryGet("_ELITEINPUT", out string s) ? s.Equals("1") : false)
                 {
-                    axisison |= axisevents;
-
-                    DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(inputdevices, axisison);
-                    DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(inputdevices);              // Created.. not started..
-                    DirectInputDevices.InputDeviceMouse.CreateMouse(inputdevices);
                     inputdevicesactions.Start();
+                    return;
                 }
-                else
-                    axisison = false;
             }
         }
 
-        public string EliteInputList() { return inputdevices.ListDevices(); }
+        public string EliteInputList() { return inputdevicesactions.InputDeviceList.ListDevices(); }
         public string EliteInputCheck() { return inputdevicesactions.CheckBindings(); }
         public string EliteInputButtons()
         {
             string s = "";
-            foreach (var i in inputdevices)
+            foreach (var i in inputdevicesactions.InputDeviceList)
             {
                 var list = i.EventButtonNames();
-                var dlist = list.Select(x => i.Name() + ":" + x);
+                var dlist = list.Select(x => i.Name + ":" + x);
                 s = s.AppendPrePad(string.Join(",", dlist), ",");
             }
 
@@ -834,8 +824,7 @@ namespace EDDiscovery.Actions
         private string otherinstalledfilesfolder;   // other installed files
         private string errorlist;       // set on Reload, use to display warnings at right point
         private string lasteditedpack;
-        private DirectInputDevices.InputDeviceList inputdevices;
-        private Actions.ActionsFromInputDevices inputdevicesactions;
+        private ActionsFromInputDevices inputdevicesactions;
         private Type[] keyignoredforms;
         private Action<string> logLineOut;
 

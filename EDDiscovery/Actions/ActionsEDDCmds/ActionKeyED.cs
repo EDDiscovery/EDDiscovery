@@ -52,7 +52,7 @@ namespace EDDiscovery.Actions
 
                         if ( dkplist != null)
                         {
-                            Keys[] keys = dkplist.Select(k=>k.Key.ToVkey()).ToArray();
+                            Keys[] keys = dkplist.Keys.Select(k=>k.VKeyName.ToVkey()).ToArray();
 
                             if (!keys.Contains(Keys.None)) // if no errors
                             {
@@ -63,7 +63,7 @@ namespace EDDiscovery.Actions
                             }
                             else
                             {
-                                string[] names = dkplist.Select(k=>k.Key).ToArray();
+                                string[] names = dkplist.Keys.Select(k=>k.VKeyName).ToArray();
                                 return new Tuple<string, string>(null, "Key name(s) not recognised: " + String.Join(",", names));
                             }
                         }
