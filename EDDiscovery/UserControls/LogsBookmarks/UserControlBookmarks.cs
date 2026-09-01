@@ -448,6 +448,9 @@ namespace EDDiscovery.UserControls
         {
             mapGotoStartoolStripMenuItem.Enabled = rightclickbookmark != null;
             viewOnEDSMToolStripMenuItem.Enabled = rightclickbookmark != null && rightclickbookmark.IsStar;
+            viewScanOfSystemToolStripMenuItem.Enabled = rightclickbookmark != null;
+            viewOnSpanshToolStripMenuItem.Enabled = rightclickbookmark != null;
+            addToExpeditionToolStripMenuItem.Enabled = rightclickbookmark != null;
         }
 
         private void viewScanOfSystemToolStripMenuItem_Click(object sender, EventArgs e)
