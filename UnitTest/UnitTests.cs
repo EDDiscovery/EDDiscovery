@@ -34,8 +34,6 @@ namespace UnitTest
             Application.DoEvents();
         }
 
-        bool showbinding = false;
-
         protected override void OnShown(EventArgs e)
         {
             base.OnShown(e);
@@ -71,35 +69,6 @@ namespace UnitTest
 
             timer.Tick += T_Tick;
 
-
-            //if (false)
-            //{
-            //    InputMapDialog im = new InputMapDialog();
-            //    im.AllowAxis = true;
-            //    im.ShowPressOrRelease = false;
-            //    im.ShowOKCancel = false;
-            //    im.EscapeQuits = true;
-
-            //    im.Title = "Move Joystick Axis";
-            //    im.AxisOnly = true;
-
-            //    Theme.Current.ApplyDialog(im);
-            //    if (im.ShowDialog(this) == DialogResult.OK)
-            //    {
-            //        System.Diagnostics.Debug.WriteLine($"Device `{im.DeviceName}` key `{im.KeyName}`");
-            //        if (im.DeviceName == "Keyboard")
-            //        {
-            //            var vkey = KeyObjectExtensions.ToVkey(im.KeyName);
-            //            System.Diagnostics.Debug.WriteLine($"  .. vkey {vkey} = {KeyObjectExtensions.VKeyToString(vkey)} = {FrontierKeyConversion.KeysToFrontier(im.KeyName)}");
-
-            //        }
-            //    }
-            //    else
-            //    {
-            //        System.Diagnostics.Debug.WriteLine($"CANCEL!");
-            //    }
-            //}
-
             {
                 foreach( InputLanguage x in InputLanguage.InstalledInputLanguages)
                 {
@@ -109,7 +78,8 @@ namespace UnitTest
                 System.Diagnostics.Debug.WriteLine($"Input lang {InputLanguage.CurrentInputLanguage.LayoutName} {InputLanguage.CurrentInputLanguage.Culture.Name}");
             }
 
-            if (showbinding)
+            string cmdline = Environment.CommandLine;
+            if (cmdline.ContainsIIC("Binding"))
             {
                 InputDeviceList inputdevices = new DirectInputDevices.InputDeviceList();
                 InputDeviceJoystickWindows.CreateJoysticks(inputdevices);

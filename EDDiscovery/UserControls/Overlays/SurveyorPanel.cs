@@ -813,7 +813,7 @@ namespace EDDiscovery.UserControls
                         v["Body"] = kvp.Key;
                         v["BodyShortName"] = kvp.Key.ReplaceIfStartsWith(sys.Name).Trim();
                         System.Diagnostics.Debug.WriteLine($"Surveryor Run Action on Body {kvp.Key} Trigger {v.ToString()}");
-                        DiscoveryForm.ActionRun(Actions.ActionEventEDList.onSurveyor, v);
+                        DiscoveryForm.ActionController.ActionRun(Actions.ActionEventEDList.onSurveyor, v);
                     }
                 }
 

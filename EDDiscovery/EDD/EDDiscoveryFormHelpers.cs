@@ -330,19 +330,9 @@ namespace EDDiscovery
                 "TopLevelMenuName" , it.OwnerItem.Name,
             });
 
-            actioncontroller.ActionRun(Actions.ActionEventEDList.onMenuItem, null,vars);
+            actioncontroller.ActionRun(Actions.ActionEventEDList.onMenuItem, vars);
         }
 
-
-        #endregion
-
-        #region Actions
-
-        public int ActionRunOnEntry(HistoryEntry he, ActionLanguage.ActionEvent av)
-        { return actioncontroller.ActionRunOnEntry(he, av); }
-
-        public int ActionRun(ActionLanguage.ActionEvent ev, BaseUtils.Variables additionalvars = null, string actionvarnamepresent = null, bool now = false)
-        { return actioncontroller.ActionRun(ev, null, additionalvars, actionvarnamepresent, now); }
 
         #endregion
 

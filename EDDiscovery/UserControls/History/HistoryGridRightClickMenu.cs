@@ -522,7 +522,7 @@ namespace EDDiscovery.UserControls
 
                         DiscoveryForm.ActionController.SetPeristentGlobal("GlobalSaySaid", "");
                         BaseUtils.FunctionHandlers.SetRandom(new Random(rw.Index + 1));
-                        DiscoveryForm.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
+                        DiscoveryForm.ActionController.ActionRunOnEntry(he, Actions.ActionEventEDList.UserRightClick(he));
 
                         string json = he.journalEntry.GetJsonString();
 
@@ -549,7 +549,7 @@ namespace EDDiscovery.UserControls
 
         private void runActionsOnThisEntryToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DiscoveryForm.ActionRunOnEntry(rightclickhe, Actions.ActionEventEDList.UserRightClick(rightclickhe));
+            DiscoveryForm.ActionController.ActionRunOnEntry(rightclickhe, Actions.ActionEventEDList.UserRightClick(rightclickhe));
         }
 
         #endregion

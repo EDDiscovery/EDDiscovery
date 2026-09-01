@@ -82,7 +82,7 @@ namespace EDDiscovery.UserControls
         {
             UserControlForm tcf = (UserControlForm)sender;
             forms.Remove(tcf);
-            discoveryform.ActionRun(Actions.ActionEventEDList.onPopDown, new BaseUtils.Variables(new string[] { "PopOutName", tcf.DBRefName.Substring(9), "PopOutTitle", tcf.WinTitle }));
+            discoveryform.ActionController.ActionRun(Actions.ActionEventEDList.onPopDown, new BaseUtils.Variables(new string[] { "PopOutName", tcf.DBRefName.Substring(9), "PopOutTitle", tcf.WinTitle }));
         }
 
 

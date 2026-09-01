@@ -548,7 +548,7 @@ namespace EDDiscovery.Actions
                 }
             }
 
-            ActionRun(ActionEventEDList.onInstall, null, new Variables(new string[] { "InstallList", changes, "UpdateList", updates, "RemoveList", removes }));
+            ActionRun(ActionEventEDList.onInstall, new Variables(new string[] { "InstallList", changes, "UpdateList", updates, "RemoveList", removes }));
             ActionConfigureKeys();
         }
 
@@ -680,23 +680,23 @@ namespace EDDiscovery.Actions
             ActionRun(ActionEventEDList.onRefreshEnd);
         }
 
+        public int ActionRun(ActionEvent ev)
+        { return ActionRunInt(ev); }
+        public int ActionRun(ActionEvent ev, HistoryEntry he, Variables additionalvars)
+        { return ActionRunInt(ev, he, additionalvars); }
         public int ActionRunOnEntry(HistoryEntry he, ActionEvent ev, string eventmusthavethisvariable = null, bool now = false)      
-        {
-            return ActionRun(ev, he, null, eventmusthavethisvariable, now);
-        }
-
-        public override int ActionRun(ActionEvent ev, Variables additionalvars = null, string eventmusthavethisvariable = null, bool now = false)
-        { return ActionRun(ev, null, additionalvars, eventmusthavethisvariable, now); }
-
+        { return ActionRunInt(ev, he, null, eventmusthavethisvariable, now);  }
+        public override int ActionRun(ActionEvent ev, Variables additionalvars, string eventmusthavethisvariable = null, bool now = false)
+        { return ActionRunInt(ev, null, additionalvars, eventmusthavethisvariable, now); }
         public int ActionRun(ActionEvent ev, Variables additionalvars, Variables staticvarmustbepresent)
-        { return ActionRun(ev, null, additionalvars, null,false, staticvarmustbepresent); }
+        { return ActionRunInt(ev, null, additionalvars, null,false, staticvarmustbepresent); }
 
-        public int ActionRun(ActionEvent ev, 
+        private int ActionRunInt(ActionEvent ev, 
                                 HistoryEntry he = null, 
                                 Variables additionalvars = null,
                                 string eventmusthavethisvariable = null,                    // action var present, if not null, must be there in the EVENT command
                                 bool now = false,
-                                Variables staticvarmustbepresent = null)                       // varname=
+                                Variables staticvarmustbepresent = null)                    // file variables must be present with this value
         {
             List<ActionFileList.MatchingSets> ale = actionfiles.GetMatchingConditions(ev.TriggerName, eventmusthavethisvariable, staticvarmustbepresent);      // look thru all actions, find matching ones
 

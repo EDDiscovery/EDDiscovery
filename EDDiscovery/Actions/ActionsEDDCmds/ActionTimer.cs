@@ -190,7 +190,7 @@ namespace EDDiscovery.Actions
             TimerInfo ti = t.Tag as TimerInfo;
 
            // System.Diagnostics.Debug.WriteLine($"Timer ticked {ti.timerid} {ti.name} {ti.vars.ToString()}");
-            (ti.ap.ActionController as ActionController).ActionRun(Actions.ActionEventEDList.onTimer, ti.he, ti.vars, now: false);    // queue at end an event
+            (ti.ap.ActionController as ActionController).ActionRun(Actions.ActionEventEDList.onTimer, ti.he, ti.vars);    // queue at end an event
 
             timers.Remove(t);   // done with it
             t.Dispose();

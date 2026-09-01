@@ -542,6 +542,10 @@ SECTION ActionPackVariablesForm
 
 EA3E71F3439195: "Global User variables to pass to program on run" @
 
+SECTION Misc
+
+22244282A69ADA: "Pick commander to move all their history to current commander:"
+
 include translation-example-uc.tlp
 
 include translation-example-je.tlp

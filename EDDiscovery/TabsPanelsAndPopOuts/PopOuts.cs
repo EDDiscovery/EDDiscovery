@@ -145,7 +145,7 @@ namespace EDDiscovery
 
                 ucf.Show();                                     // this ends up, via Form Shown, calls LoadLayout in the UCCB.
 
-                discoveryform.ActionRun(Actions.ActionEventEDList.onPopUp,  new BaseUtils.Variables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", number.ToString()} ));
+                discoveryform.ActionController.ActionRun(Actions.ActionEventEDList.onPopUp,  new BaseUtils.Variables(new string[] { "PopOutName", refname , "PopOutTitle", windowtitle, "PopOutIndex", number.ToString()} ));
             }
 
             return uccb;
