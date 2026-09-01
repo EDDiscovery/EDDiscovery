@@ -48,9 +48,10 @@ namespace EDDiscovery.UserControls
                         devices.Add(device.ID.VendorProductId);
 
                     // allow the productvendorid pair to be converted to device name
-                    bindingsEditor.ConvertDeviceNameList[device.ID.VendorProductId] = device.ID.Name;       
+                    bindingsEditor.ConvertDeviceNameList[device.ID.VendorProductId] = device.ID.Name;
                 }
             }
+            bindingsEditor.ConvertDeviceNameList["{NoDevice}"] = "-";
 
             bindingsEditor.Init(EDDOptions.Instance.FrontierBindingsFolder, frontierpresetfilebindingfilename, new System.Collections.Generic.List<string>());
             bindingsEditor.ChangedBindings += (s) =>
