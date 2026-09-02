@@ -4,7 +4,7 @@ SECTION UserControlBookmarks
 .ColType: "Bookmark Type" => "Lesezeichentyp"
 .ColBookmarkName: "Bookmark Name" => "Lesezeichenname"
 .ColDescription: "Description" => "Beschreibung"
-.ColPlanetMarks: "Planet Marks" @
+.ColPlanetMarks: "Planet Marks" => "Planetenmarker"
 .labelSearch: "Search" => "Suche"
 .buttonDelete.ToolTip: "Delete selected bookmark" => "Lösche ausgewähltes Lesezeichen"
 .buttonNew.ToolTip: "New Bookmark" => "Neues Lesezeichen"
@@ -610,7 +610,7 @@ SECTION UserControlPanelSelector
 
 SECTION UserControlRoute
 
-.extButtonSpanshRockyHMC: "Rocky HMC" @
+.extButtonSpanshRockyHMC: "Rocky HMC" => "Gestein PHM"
 
 .M1: "Nearest to Waypoint" => "Nähester Wegpunkt"
 .M2: "Minimum Deviation from Path" => "Geringste Abweichung vom Pfad"
