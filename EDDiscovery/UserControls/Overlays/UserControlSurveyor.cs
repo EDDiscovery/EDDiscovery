@@ -786,6 +786,7 @@ namespace EDDiscovery.UserControls
                         bool hashumansignals = sn.CountHumanSignals > 0;
                         bool hasothersignals = sn.CountOtherSignals > 0;
                         bool hasminingsignals = sn.CountUncategorisedSignals > 0;
+                        bool hasplanetaryminingsignals = sn.CountPlanetaryMiningSignals > 0;
 
                         bool matchedgeosignals = hasgeosignals && IsSet(CtrlList.GeoSignals);           // these are filters, to determine if to display
                         bool matchedbiosignals = hasbiosignals && IsSet(CtrlList.BioSignals);
@@ -794,6 +795,7 @@ namespace EDDiscovery.UserControls
                         bool matchedhumansignals = hashumansignals && IsSet(CtrlList.signals);
                         bool matchedothersignals = hasothersignals && IsSet(CtrlList.signals);
                         bool matchedminingsignals = hasminingsignals && IsSet(CtrlList.signals);
+                        bool matchedplanetaryminingsignals = hasplanetaryminingsignals && IsSet(CtrlList.signals);
 
                         bool matchedlandablewithatmosphere = sd.IsLandable && sd.HasAtmosphericComposition && IsSet(CtrlList.isLandableWithAtmosphere);
                         bool matchedlandablevolcanism = sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism);
@@ -858,7 +860,7 @@ namespace EDDiscovery.UserControls
                                 (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && IsSet(CtrlList.showEccentricity)) ||
                                 (sd.CanBeTerraformable && IsSet(CtrlList.showTerraformable)) ||
                                 (sd.IsPlanet && IsSet(CtrlList.lowradius) && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
-                                matchedgeosignals || matchedbiosignals || matchedthargoidsignals || matchedguardiansignals || matchedhumansignals || matchedothersignals || matchedminingsignals ||
+                                matchedgeosignals || matchedbiosignals || matchedthargoidsignals || matchedguardiansignals || matchedhumansignals || matchedothersignals || matchedminingsignals || matchedplanetaryminingsignals ||
                                 (sd.IsStar && IsSet(CtrlList.allstars)) ||
                                 (sd.IsPlanet && IsSet(CtrlList.allplanets)) ||
                                 (sd.IsBeltCluster && IsSet(CtrlList.beltclusters));
@@ -881,6 +883,7 @@ namespace EDDiscovery.UserControls
                                     matchedhumansignals || (hashumansignals && IsSet(CtrlList.showsignals)),
                                     matchedothersignals || (hasothersignals && IsSet(CtrlList.showsignals)),
                                     false,      // so this is the surveyor, we don't want to bompsamther with showing if its got organics, since you have to scan them
+                                    matchedplanetaryminingsignals || (hasplanetaryminingsignals && IsSet(CtrlList.showsignals)),
                                     IsSet(CtrlList.volcanism) || matchedlandablevolcanism || matchedvolcanism, // any of these causes a show
                                     IsSet(CtrlList.showValues),        // show values
                                     IsSet(CtrlList.moreinfo),   // show extra info such as mass/radius
