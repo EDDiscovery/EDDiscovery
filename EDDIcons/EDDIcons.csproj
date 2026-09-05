@@ -476,6 +476,7 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\LaunchVessel.png" />
     <EmbeddedResource Include="Ships\lander01.jpg" />
     <EmbeddedResource Include="Ships\mediumtransport01.jpg" />
     <EmbeddedResource Include="Ships\smallcombat01_nx.jpg" />
