@@ -53,7 +53,7 @@ namespace EDDiscovery.UserControls
             }
             bindingsEditor.ConvertDeviceNameList["{NoDevice}"] = "-";
 
-            bindingsEditor.Init(EDDOptions.Instance.FrontierBindingsFolder, frontierpresetfilebindingfilename, new System.Collections.Generic.List<string>());
+            bindingsEditor.Init(EDDOptions.Instance.FrontierBindingsFolder, frontierpresetfilebindingfilename, new System.Collections.Generic.List<string>(), null);
             bindingsEditor.ChangedBindings += (s) =>
             {
                 if (DiscoveryForm.FrontierBindings.FileName.EqualsIIC(s) || !DiscoveryForm.FrontierBindings.IsLoaded)      // if same name, or not loaded, try and load

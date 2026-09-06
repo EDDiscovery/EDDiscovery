@@ -147,10 +147,11 @@ namespace UnitTest
                     return null;
                 };
 
-                //string folder = @"c:\code\eddiscovery\unittest\bindings";
+                string jsonkeynames = FileHelpers.TryReadAllTextFromFile(@"c:\code\keynames.json");
+
                 string folder = @"C:\Users\RK\AppData\Local\Frontier Developments\Elite Dangerous\Options\Bindings";
                 var frontierpresetfilebindingfilename = EliteDangerousCore.BindingsFile.FindBindingsFile(folder, true);
-                bindingsEditor.Init(folder, frontierpresetfilebindingfilename, devices);
+                bindingsEditor.Init(folder, frontierpresetfilebindingfilename, devices, jsonkeynames);
             }
             else
             {
