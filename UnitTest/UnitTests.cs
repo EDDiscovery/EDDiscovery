@@ -20,19 +20,6 @@ namespace UnitTest
             InitializeComponent();
         }
 
-        [System.Diagnostics.DebuggerHidden()]
-
-        private void Log(string x, Font fnt = null)
-        {
-            if (fnt != null)
-                richTextBoxLog.SelectionFont = fnt;
-            richTextBoxLog.AppendText(x);
-            richTextBoxLog.AppendText(Environment.NewLine);
-            richTextBoxLog.Select(richTextBoxLog.Text.Length, richTextBoxLog.Text.Length);
-            richTextBoxLog.ScrollToCaret();
-          //  System.Diagnostics.Debug.WriteLine($"UnitTest Log : {x}");
-            Application.DoEvents();
-        }
 
         protected override void OnShown(EventArgs e)
         {
@@ -55,33 +42,25 @@ namespace UnitTest
             EliteConfigInstance.InstanceOptions = new EliteOptions();
             EliteConfigInstance.InstanceConfig = new EliteConfig();
 
-            BaseUtils.UnitTests.Check.TestResult = Test;            // hook up responders to checkers
-            BaseUtils.UnitTests.Check.NewSection = Section;
-
-            // all test marked with 
-            tests = BaseUtils.UnitTests.Check.GetTests(Assembly.GetExecutingAssembly());
-
             theme = new ThemeList();
             theme.LoadBaseThemes();
             theme.SetThemeByName("Elite Verdana Small");
             //Theme.Current.WindowsFrame = true;
             Theme.Current.ApplyStd(this);
 
-            timer.Tick += T_Tick;
-
-            {
-                foreach( InputLanguage x in InputLanguage.InstalledInputLanguages)
-                {
-                    System.Diagnostics.Debug.Write($"Tuple.Create({x.LayoutName.AlwaysQuoteString()},{x.Culture.Name.AlwaysQuoteString()}),");
-                }
-                System.Diagnostics.Debug.WriteLine("");
-                System.Diagnostics.Debug.WriteLine($"Input lang {InputLanguage.CurrentInputLanguage.LayoutName} {InputLanguage.CurrentInputLanguage.Culture.Name}");
-            }
+            //{
+            //    foreach( InputLanguage x in InputLanguage.InstalledInputLanguages)
+            //    {
+            //        System.Diagnostics.Debug.Write($"Tuple.Create({x.LayoutName.AlwaysQuoteString()},{x.Culture.Name.AlwaysQuoteString()}),");
+            //    }
+            //    System.Diagnostics.Debug.WriteLine("");
+            //    System.Diagnostics.Debug.WriteLine($"Input lang {InputLanguage.CurrentInputLanguage.LayoutName} {InputLanguage.CurrentInputLanguage.Culture.Name}");
+            //}
 
             string cmdline = Environment.CommandLine;
             if (cmdline.ContainsIIC("Binding"))
             {
-                InputDeviceList inputdevices = new DirectInputDevices.InputDeviceList();
+                inputdevices = new DirectInputDevices.InputDeviceList();
                 InputDeviceJoystickWindows.CreateJoysticks(inputdevices);
 
                 List<string> devices = new List<string>();
@@ -147,19 +126,30 @@ namespace UnitTest
                     return null;
                 };
 
-                string jsonkeynames = FileHelpers.TryReadAllTextFromFile(@"c:\code\keynames.json");
+                string bindingfolder = @"C:\Users\RK\AppData\Local\Frontier Developments\Elite Dangerous\Options\Bindings";
+                var frontierpresetfilebindingfilename = EliteDangerousCore.BindingsFile.FindBindingsFile(bindingfolder, true);
+                string curset = FileHelpers.TryReadAllTextFromFile(testfolder + "keynames.json");
+                string defset = FileHelpers.TryReadAllTextFromFile(testfolder + "defkeynames.json");
 
-                string folder = @"C:\Users\RK\AppData\Local\Frontier Developments\Elite Dangerous\Options\Bindings";
-                var frontierpresetfilebindingfilename = EliteDangerousCore.BindingsFile.FindBindingsFile(folder, true);
-                bindingsEditor.Init(folder, frontierpresetfilebindingfilename, devices, jsonkeynames);
+                bindingsEditor.Init(bindingfolder, frontierpresetfilebindingfilename, devices, curset, defset );
             }
             else
             {
+                BaseUtils.UnitTests.Check.TestResult = Test;            // hook up responders to checkers
+                BaseUtils.UnitTests.Check.NewSection = Section;
+
+                // all test marked with 
+                tests = BaseUtils.UnitTests.Check.GetTests(Assembly.GetExecutingAssembly());
+
+                timer.Tick += T_Tick;
+
                 bindingsEditor.Visible = false;
                 panelTest.Dock = DockStyle.Fill;
                 buttonStart_Click(null, null);
             }
         }
+
+        #region Unittests
         private void buttonStart_Click(object sender, EventArgs e)
         {
             buttonStart.Enabled = false;
@@ -167,15 +157,19 @@ namespace UnitTest
             Log("Begin");
         }
 
+        [System.Diagnostics.DebuggerHidden()]
 
-        int testset = 0;
-        int testno = 0;
-        int testfailures = 0;
-        int totaltests = 0;
-        int totalfailures = 0;
-        string section = "";
-        Timer timer = new Timer() { Interval = 100 };
-        List<MethodInfo> tests;
+        private void Log(string x, Font fnt = null)
+        {
+            if (fnt != null)
+                richTextBoxLog.SelectionFont = fnt;
+            richTextBoxLog.AppendText(x);
+            richTextBoxLog.AppendText(Environment.NewLine);
+            richTextBoxLog.Select(richTextBoxLog.Text.Length, richTextBoxLog.Text.Length);
+            richTextBoxLog.ScrollToCaret();
+            //  System.Diagnostics.Debug.WriteLine($"UnitTest Log : {x}");
+            Application.DoEvents();
+        }
 
         private void T_Tick(object sender, EventArgs e)
         {
@@ -252,6 +246,8 @@ namespace UnitTest
             return ret;
         }
 
+        #endregion
+
         class EliteConfig : IEliteConfig
         {
             public WebExternalDataLookup WebLookup => WebExternalDataLookup.None;
@@ -282,6 +278,27 @@ namespace UnitTest
             public bool SetEDDNforNewCommanders => throw new NotImplementedException();
         }
 
+        private void extButtonDrawnClose_Click(object sender, EventArgs e)
+        {
+            inputdevices?.Stop();
+            Close();
+            if ( bindingsEditor!=null)
+            {
+                FileHelpers.TryWriteToFile(testfolder + "keynames.json", bindingsEditor.KeyNames());
+            }
+        }
+
+        int testset = 0;
+        int testno = 0;
+        int testfailures = 0;
+        int totaltests = 0;
+        int totalfailures = 0;
+        string section = "";
+        Timer timer = new Timer() { Interval = 100 };
+        List<MethodInfo> tests;
+
+        InputDeviceList inputdevices;
+        string testfolder = $@"..\..\..\UnitTest\Bindings\";
 
     }
 

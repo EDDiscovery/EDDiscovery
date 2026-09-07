@@ -32,7 +32,11 @@
             this.buttonStart = new System.Windows.Forms.Button();
             this.bindingsEditor = new EliteDangerousCore.BindingsEditor();
             this.panelTest = new System.Windows.Forms.Panel();
+            this.panelTop = new System.Windows.Forms.Panel();
+            this.extButtonDrawn1 = new ExtendedControls.ExtButtonDrawn();
+            this.imageViewer1 = new ExtendedControls.ImageViewer();
             this.panelTest.SuspendLayout();
+            this.panelTop.SuspendLayout();
             this.SuspendLayout();
             // 
             // richTextBoxLog
@@ -62,20 +66,62 @@
             this.bindingsEditor.ChangedDefault = null;
             this.bindingsEditor.DeviceInput = null;
             this.bindingsEditor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.bindingsEditor.Location = new System.Drawing.Point(0, 74);
+            this.bindingsEditor.Location = new System.Drawing.Point(0, 98);
             this.bindingsEditor.Name = "bindingsEditor";
-            this.bindingsEditor.Size = new System.Drawing.Size(1505, 919);
+            this.bindingsEditor.Size = new System.Drawing.Size(1505, 895);
             this.bindingsEditor.TabIndex = 3;
             // 
             // panelTest
             // 
+            this.panelTest.Controls.Add(this.imageViewer1);
             this.panelTest.Controls.Add(this.richTextBoxLog);
             this.panelTest.Controls.Add(this.buttonStart);
             this.panelTest.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panelTest.Location = new System.Drawing.Point(0, 0);
+            this.panelTest.Location = new System.Drawing.Point(0, 24);
             this.panelTest.Name = "panelTest";
             this.panelTest.Size = new System.Drawing.Size(1505, 74);
             this.panelTest.TabIndex = 4;
+            // 
+            // panelTop
+            // 
+            this.panelTop.Controls.Add(this.extButtonDrawn1);
+            this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panelTop.Location = new System.Drawing.Point(0, 0);
+            this.panelTop.Name = "panelTop";
+            this.panelTop.Size = new System.Drawing.Size(1505, 24);
+            this.panelTop.TabIndex = 5;
+            // 
+            // extButtonDrawn1
+            // 
+            this.extButtonDrawn1.AutoEllipsis = false;
+            this.extButtonDrawn1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawn1.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawn1.BorderWidth = 1;
+            this.extButtonDrawn1.ButtonDisabledScaling = 0.25F;
+            this.extButtonDrawn1.Image = null;
+            this.extButtonDrawn1.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
+            this.extButtonDrawn1.Location = new System.Drawing.Point(1469, 4);
+            this.extButtonDrawn1.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawn1.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawn1.MouseSelectedColorEnable = true;
+            this.extButtonDrawn1.Name = "extButtonDrawn1";
+            this.extButtonDrawn1.Selectable = true;
+            this.extButtonDrawn1.Size = new System.Drawing.Size(18, 18);
+            this.extButtonDrawn1.TabIndex = 0;
+            this.extButtonDrawn1.Text = "extButtonDrawn1";
+            this.extButtonDrawn1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawn1.UseMnemonic = true;
+            this.extButtonDrawn1.Click += new System.EventHandler(this.extButtonDrawnClose_Click);
+            // 
+            // imageViewer1
+            // 
+            this.imageViewer1.Location = new System.Drawing.Point(1301, 14);
+            this.imageViewer1.MaxZoom = 400;
+            this.imageViewer1.MinZoom = 10;
+            this.imageViewer1.Name = "imageViewer1";
+            this.imageViewer1.Size = new System.Drawing.Size(496, 369);
+            this.imageViewer1.TabIndex = 3;
+            this.imageViewer1.ZoomIncrement = 10;
             // 
             // UnitTests
             // 
@@ -84,10 +130,13 @@
             this.ClientSize = new System.Drawing.Size(1505, 993);
             this.Controls.Add(this.bindingsEditor);
             this.Controls.Add(this.panelTest);
+            this.Controls.Add(this.panelTop);
             this.Name = "UnitTests";
             this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "Unit Test";
             this.panelTest.ResumeLayout(false);
+            this.panelTest.PerformLayout();
+            this.panelTop.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -98,6 +147,9 @@
         private System.Windows.Forms.Button buttonStart;
         private EliteDangerousCore.BindingsEditor bindingsEditor;
         private System.Windows.Forms.Panel panelTest;
+        private ExtendedControls.ImageViewer imageViewer1;
+        private System.Windows.Forms.Panel panelTop;
+        private ExtendedControls.ExtButtonDrawn extButtonDrawn1;
     }
 }
 
