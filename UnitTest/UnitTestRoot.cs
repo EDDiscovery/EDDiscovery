@@ -18,6 +18,21 @@ namespace UnitTest
                 long? v = 20000;
                 string txt = "Hello";
                 string res = "";
+                bool istrue = true;
+                bool isfalse = false;
+
+                res = BaseUtils.FieldBuilder.Build(";true", istrue);
+                CheckThat(res).Is("true");
+                res = BaseUtils.FieldBuilder.Build(";true", istrue, "Value:", 10);
+                CheckThat(res).Is("true, Value:10");
+                res = BaseUtils.FieldBuilder.Build("String:", "str", "false;true", istrue, "Value:", 10);
+                CheckThat(res).Is("String:str, true, Value:10");
+                res = BaseUtils.FieldBuilder.Build("String:", "str", "false;true", isfalse, "Value:", 10);
+                CheckThat(res).Is("String:str, false, Value:10");
+                res = BaseUtils.FieldBuilder.Build("String:", "str", "<..false;true", isfalse, "Value:", 10);
+                CheckThat(res).Is("String:str..false, Value:10");
+                res = BaseUtils.FieldBuilder.Build("String:", "str", "<..false;true", isfalse, "<..Value:;ms", 10);
+                CheckThat(res).Is("String:str..false..Value:10ms");
 
                 long tick = Environment.TickCount;
                 //for (int i = 0; i < 1000000; i++)
