@@ -21,6 +21,7 @@ using System.Windows.Forms;
 using BaseUtils;
 using ActionLanguage;
 using EliteDangerousCore;
+using EliteDangerousCore.Bindings;
 
 namespace EDDiscovery.Actions
 {

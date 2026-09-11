@@ -16,6 +16,7 @@ using ActionLanguage;
 using BaseUtils;
 using DirectInputDevices;
 using EliteDangerousCore;
+using EliteDangerousCore.Bindings;
 using System;
 using System.Collections.Generic;
 using System.Linq;

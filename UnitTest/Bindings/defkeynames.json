@@ -1,203 +1,566 @@
-[
-  {
-    "Devices":"231D0201,231D0200",
-    "Keys":
+{
+  "Version":"1.0.0.0",
+  "Devices":
+  [
     {
-      "Joy_1":
+      "Devices":"CHProThrottle1",
+      "Buttons": 19,
+      "POV" : 1,
+      "Axis" : "X,Y,Z",
+      "Keys":
       {
-        "Rename":"Trigger",
-        "Hint":"Main Fire Button"
+        "Joy_1":
+        {
+          "Rename":"Top Hat Right",
+          "Hint":"Top Hat"
+        },
+        "Joy_2":
+        {
+          "Rename":"Top Hat Down",
+          "Hint":"Top Hat"
+        },
+        "Joy_3":
+        {
+          "Rename":"Top Hat Left",
+          "Hint":"Top Hat"
+        },
+        "Joy_4":
+        {
+          "Rename":"Top Hat Up",
+          "Hint":"Top Hat"
+        },
+        "Joy_5":
+        {
+          "Rename":"Bottom Hat Right",
+          "Hint":"Bottom Hat"
+        },
+        "Joy_6":
+        {
+          "Rename":"Bottom Hat Down",
+          "Hint":"Bottom Hat"
+        },
+        "Joy_7":
+        {
+          "Rename":"Bottom Hat Left",
+          "Hint":"Bottom Hat"
+        },
+        "Joy_8":
+        {
+          "Rename":"Bottom Hat Up",
+          "Hint":"Bottom Hat"
+        },
+        "Joy_9":
+        {
+          "Rename":"Index Hat Down",
+          "Hint":"Index Hat"
+        },
+        "Joy_10":
+        {
+          "Rename":"Index Hat Right",
+          "Hint":"Index Hat"
+        },
+        "Joy_11":
+        {
+          "Rename":"Index Hat Up",
+          "Hint":"Index Hat"
+        },
+        "Joy_12":
+        {
+          "Rename":"Index Hat Left",
+          "Hint":"Index Hat"
+        },
+        "Joy_13":
+        {
+          "Rename":"Joystick Push",
+          "Hint":"Joystick"
+        },
+        "Joy_14":
+        {
+          "Rename":"Right Finger",
+          "Hint":"Finger Buttons"
+        },
+        "Joy_15":
+        {
+          "Rename":"Middle Finger",
+          "Hint":"Finger Buttons"
+        },
+        "Joy_16":
+        {
+          "Rename":"Left Finger",
+          "Hint":"Finger Buttons"
+        },
+        "Joy_17":
+        {
+          "Rename":"Joystick Push 1",
+          "Hint":"Joystick"
+        },
+        "Joy_18":
+        {
+          "Rename":"Joystick Push 2",
+          "Hint":"Joystick"
+        },
+        "Joy_19":
+        {
+          "Rename":"Joystick Push 3",
+          "Hint":"Joystick"
+        },
+        "Joy_XAxis":
+        {
+          "Rename":"Thumb X",
+          "Hint":"Thumb Joystick"
+        },
+        "Joy_YAxis":
+        {
+          "Rename":"Thumb Y",
+          "Hint":"Thumb Joystick"
+        },
+        "Joy_ZAxis":
+        {
+          "Rename":"Throttle",
+          "Hint":"Throttle"
+        },
       },
-      "Joy_2":
+    },
+    {
+      "Devices":"Logitech710WirelessGamepad",
+      "1Buttons": 12,
+      "1POV" : 1,
+      "1Axis" : "X,Y,Z,RZ",
+      "Keys":
       {
-        "Rename":"Trigger Double Press",
-        "Hint":"Main Fire Button"
-      },
-      "Joy_3":
+        "Joy_1":
+        {
+          "Rename":"Button 1",
+          "Hint":"Right Quad"
+        },
+        "Joy_2":
+        {
+          "Rename":"Button 2",
+          "Hint":"Right Quad"
+        },
+        "Joy_3":
+        {
+          "Rename":"Button 3",
+          "Hint":"Right Quad"
+        },
+        "Joy_4":
+        {
+          "Rename":"Button 4",
+          "Hint":"Right Quad"
+        },
+        "Joy_5":
+        {
+          "Rename":"Top Left Fire",
+          "Hint":"Left Finger Buttons"
+        },
+        "Joy_6":
+        {
+          "Rename":"Top Right Fire",
+          "Hint":"Right Finger Buttons"
+        },
+        "Joy_7":
+        {
+          "Rename":"Bottom Left Fire",
+          "Hint":"Left Finger Buttons"
+        },
+        "Joy_8":
+        {
+          "Rename":"Bottom Right Fire",
+          "Hint":"Right Finger Buttons"
+        },
+        "Joy_9":
+        {
+          "Rename":"Button 9",
+          "Hint":"Left Selection Buttons"
+        },
+        "Joy_10":
+        {
+          "Rename":"Button 10",
+          "Hint":"Right Selection Buttons"
+        },
+        "Joy_11":
+        {
+          "Rename":"Press Left Stick",
+          "Hint":"Left Stick"
+        },
+        "Joy_12":
+        {
+          "Rename":"Press Right Stick",
+          "Hint":"Right Stick"
+        },
+
+        "Joy_ZAxis":
+        {
+          "Rename":"Right Stick X Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_RZAxis":
+        {
+          "Rename":"Right Stick Y Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_XAxis":
+        {
+          "Rename":"Left Stick X Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_YAxis":
+        {
+          "Rename":"Left Stick Y Axis",
+          "Hint":"Joystick"
+        },
+
+        "Joy_POV1Left":
+        {
+          "Rename":"POV Left",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Right":
+        {
+          "Rename":"POV Right",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Up":
+        {
+          "Rename":"POV Up",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Down":
+        {
+          "Rename":"POV Down",
+          "Hint":"Top POV Hat"
+        }
+
+      }
+    },
+    {
+      "Devices":"T16000M",
+      "Keys":
       {
-        "Rename":"Red Button",
-        "Hint":"Left Joystick"
-      },
-      "Joy_4":
+        "Joy_1":
+        {
+          "Rename":"Trigger",
+          "Hint":"Main Fire Button"
+        },
+        "Joy_2":
+        {
+          "Rename":"Secondary Fire",
+          "Hint":"Secondary Fire Button"
+        },
+        "Joy_3":
+        {
+          "Rename":"Left Button",
+          "Hint":"Top Left Button"
+        },
+        "Joy_4":
+        {
+          "Rename":"Right Button",
+          "Hint":"Top Right Button"
+        },
+        
+        "Joy_5":
+        {
+          "Rename":"LB Top Left Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_6":
+        {
+          "Rename":"LB Top Middle Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_7":
+        {
+          "Rename":"LB Top Right Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_8":
+        {
+          "Rename":"LB Bottom Right Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_9":
+        {
+          "Rename":"LB Bottom Middle Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_10":
+        {
+          "Rename":"LB Bottom Left Button",
+          "Hint":"LB Buttons"
+        },
+
+        "Joy_11":
+        {
+          "Rename":"RB Top Right Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_12":
+        {
+          "Rename":"RB Top Middle Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_13":
+        {
+          "Rename":"RB Top Left Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_14":
+        {
+          "Rename":"RB Bottom Left Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_15":
+        {
+          "Rename":"RB Bottom Middle Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_16":
+        {
+          "Rename":"RB Bottom Right Button",
+          "Hint":"RB Buttons"
+        },
+
+        "Joy_RZAxis":
+        {
+          "Rename":"Stick Twist",
+          "Hint":"Joystick"
+        },
+        "Joy_XAxis":
+        {
+          "Rename":"Stick X Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_YAxis":
+        {
+          "Rename":"Stick Y Axis",
+          "Hint":"Joystick"
+        },
+
+        "Joy_POV1Left":
+        {
+          "Rename":"POV Left",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Right":
+        {
+          "Rename":"POV Right",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Up":
+        {
+          "Rename":"POV Up",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Down":
+        {
+          "Rename":"POV Down",
+          "Hint":"Top POV Hat"
+        }
+      }
+    },
+    {
+      "Devices":"231D0201,231D0200",
+      "Buttons": 32,
+      "POV" : 1,
+      "Axis" : "X,Y,Z,RX,RY,RZ",
+      "Keys":
       {
-        "Rename":"Right Index",
-        "Hint":"Right Index Figure Button"
-      },
-      "Joy_5":
-      {
-        "Rename":"Pinky Finger",
-        "Hint":"Bottom Joystick"
-      },
-      "Joy_6":
-      {
-        "Rename":"A3_Up",
-        "Hint":"Middle Hat"
-      },
-      "Joy_7":
-      {
-        "Rename":"A3_Right",
-        "Hint":"Middle Hat"
-      },
-      "Joy_8":
-      {
-        "Rename":"A3_Down",
-        "Hint":"Middle Hat"
-      },
-      "Joy_9":
-      {
-        "Rename":"A3_Left",
-        "Hint":"Middle Hat"
-      },
-      "Joy_10":
-      {
-        "Rename":"A3_Push",
-        "Hint":"Middle Hat"
-      },
-      "Joy_11":
-      {
-        "Rename":"A4_Up",
-        "Hint":"Right Hat"
-      },
-      "Joy_12":
-      {
-        "Rename":"A4_Right",
-        "Hint":"Right Hat"
-      },
-      "Joy_13":
-      {
-        "Rename":"A4_Down",
-        "Hint":"Right Hat"
-      },
-      "Joy_14":
-      {
-        "Rename":"A4_Left",
-        "Hint":"Right Hat"
-      },
-      "Joy_15":
-      {
-        "Rename":"A4_Push",
-        "Hint":"Right Hat"
-      },
-      "Joy_16":
-      {
-        "Rename":"C1_Up",
-        "Hint":"Thumb Hat"
-      },
-      "Joy_17":
-      {
-        "Rename":"C1_Right",
-        "Hint":"Thumb Hat"
-      },
-      "Joy_18":
-      {
-        "Rename":"C1_Down",
-        "Hint":"Thumb Hat"
-      },
-      "Joy_19":
-      {
-        "Rename":"C1_Left",
-        "Hint":"Thumb Hat"
-      },
-      "Joy_20":
-      {
-        "Rename":"C1_Push",
-        "Hint":"Thumb Hat"
-      },
-      "Joy_21":
-      {
-        "Rename":"Rapid Fire_Up",
-        "Hint":"Top Trigger"
-      },
-      "Joy_22":
-      {
-        "Rename":"Rapid Fire_Down",
-        "Hint":"Top Trigger"
-      },
-      "Joy_23":
-      {
-        "Rename":"Roll Up",
-        "Hint":"Bottom Right Roll Button Base"
-      },
-      "Joy_24":
-      {
-        "Rename":"Roll Down",
-        "Hint":"Bottom Right Roll Button Base"
-      },
-      "Joy_25":
-      {
-        "Rename":"Toggle Up",
-        "Hint":"Toggle Switch Left Base"
-      },
-      "Joy_26":
-      {
-        "Rename":"Toggle Down",
-        "Hint":"Toggle Switch Left Base"
-      },
-      "Joy_27":
-      {
-        "Rename":"F1",
-        "Hint":"Base switches"
-      },
-      "Joy_28":
-      {
-        "Rename":"F2",
-        "Hint":"Base switches"
-      },
-      "Joy_29":
-      {
-        "Rename":"F3",
-        "Hint":"Base switches"
-      },
-      "Joy_RZAxis":
-      {
-        "Rename":"Stick Twist",
-        "Hint":"Joystick"
-      },
-      "Joy_XAxis":
-      {
-        "Rename":"Stick X Axis",
-        "Hint":"Joystick"
-      },
-      "Joy_YAxis":
-      {
-        "Rename":"Stick Y Axis",
-        "Hint":"Joystick"
-      },
-      "Joy_ZAxis":
-      {
-        "Rename":"Base Axis",
-        "Hint":"Base of Joystick"
-      },
-      "Joy_POV1Left":
-      {
-        "Rename":"A1_Left (POV)",
-        "Hint":"Left Hat (POV Mode)"
-      },
-      "Joy_POV1Right":
-      {
-        "Rename":"A1_Right (POV)",
-        "Hint":"Left Hat (POV Mode)"
-      },
-      "Joy_POV1Up":
-      {
-        "Rename":"A1_Up (POV)",
-        "Hint":"Left Hat (POV Mode)"
-      },
-      "Joy_POV1Down":
-      {
-        "Rename":"A1_Down (POV)",
-        "Hint":"Left Hat (POV Mode)"
-      },
-      "Joy_RXAxis":
-      {
-        "Rename":"A1_X Axis (Analog)",
-        "Hint":"Left Hat (Analog Mode)"
-      },
-      "Joy_RYAxis":
-      {
-        "Rename":"A1_Y Axis (Analog)",
-        "Hint":"Left Hat (Analog Mode)"
+        "Joy_1":
+        {
+          "Rename":"Trigger",
+          "Hint":"Main Fire Button"
+        },
+        "Joy_2":
+        {
+          "Rename":"Trigger Double Press",
+          "Hint":"Main Fire Button"
+        },
+        "Joy_3":
+        {
+          "Rename":"Red Button",
+          "Hint":"Left Joystick"
+        },
+        "Joy_4":
+        {
+          "Rename":"Right Index",
+          "Hint":"Right Index Figure Button"
+        },
+        "Joy_5":
+        {
+          "Rename":"Pinky Finger",
+          "Hint":"Bottom Joystick"
+        },
+        "Joy_6":
+        {
+          "Rename":"A3_Up",
+          "Hint":"Middle Hat"
+        },
+        "Joy_7":
+        {
+          "Rename":"A3_Right",
+          "Hint":"Middle Hat"
+        },
+        "Joy_8":
+        {
+          "Rename":"A3_Down",
+          "Hint":"Middle Hat"
+        },
+        "Joy_9":
+        {
+          "Rename":"A3_Left",
+          "Hint":"Middle Hat"
+        },
+        "Joy_10":
+        {
+          "Rename":"A3_Push",
+          "Hint":"Middle Hat"
+        },
+        "Joy_11":
+        {
+          "Rename":"A4_Up",
+          "Hint":"Right Hat"
+        },
+        "Joy_12":
+        {
+          "Rename":"A4_Right",
+          "Hint":"Right Hat"
+        },
+        "Joy_13":
+        {
+          "Rename":"A4_Down",
+          "Hint":"Right Hat"
+        },
+        "Joy_14":
+        {
+          "Rename":"A4_Left",
+          "Hint":"Right Hat"
+        },
+        "Joy_15":
+        {
+          "Rename":"A4_Push",
+          "Hint":"Right Hat"
+        },
+        "Joy_16":
+        {
+          "Rename":"C1_Up",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_17":
+        {
+          "Rename":"C1_Right",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_18":
+        {
+          "Rename":"C1_Down",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_19":
+        {
+          "Rename":"C1_Left",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_20":
+        {
+          "Rename":"C1_Push",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_21":
+        {
+          "Rename":"Rapid Fire_Up",
+          "Hint":"Top Trigger"
+        },
+        "Joy_22":
+        {
+          "Rename":"Rapid Fire_Down",
+          "Hint":"Top Trigger"
+        },
+        "Joy_23":
+        {
+          "Rename":"Roll Up",
+          "Hint":"Bottom Right Roll Button Base"
+        },
+        "Joy_24":
+        {
+          "Rename":"Roll Down",
+          "Hint":"Bottom Right Roll Button Base"
+        },
+        "Joy_25":
+        {
+          "Rename":"Toggle Up",
+          "Hint":"Toggle Switch LB"
+        },
+        "Joy_26":
+        {
+          "Rename":"Toggle Down",
+          "Hint":"Toggle Switch LB"
+        },
+        "Joy_27":
+        {
+          "Rename":"F1",
+          "Hint":"Base switches"
+        },
+        "Joy_28":
+        {
+          "Rename":"F2",
+          "Hint":"Base switches"
+        },
+        "Joy_29":
+        {
+          "Rename":"F3",
+          "Hint":"Base switches"
+        },
+        "Joy_RZAxis":
+        {
+          "Rename":"Stick Twist",
+          "Hint":"Joystick"
+        },
+        "Joy_XAxis":
+        {
+          "Rename":"Stick X Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_YAxis":
+        {
+          "Rename":"Stick Y Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_ZAxis":
+        {
+          "Rename":"Base Slider",
+          "Hint":"Base of Joystick"
+        },
+        "Joy_POV1Left":
+        {
+          "Rename":"A1_Left (POV)",
+          "Hint":"Left Hat (POV Mode)"
+        },
+        "Joy_POV1Right":
+        {
+          "Rename":"A1_Right (POV)",
+          "Hint":"Left Hat (POV Mode)"
+        },
+        "Joy_POV1Up":
+        {
+          "Rename":"A1_Up (POV)",
+          "Hint":"Left Hat (POV Mode)"
+        },
+        "Joy_POV1Down":
+        {
+          "Rename":"A1_Down (POV)",
+          "Hint":"Left Hat (POV Mode)"
+        },
+        "Joy_RXAxis":
+        {
+          "Rename":"A1_X Axis (Analog)",
+          "Hint":"Left Hat (Analog Mode)"
+        },
+        "Joy_RYAxis":
+        {
+          "Rename":"A1_Y Axis (Analog)",
+          "Hint":"Left Hat (Analog Mode)"
+        }
       }
     }
-  }
-]
+  ]
+}

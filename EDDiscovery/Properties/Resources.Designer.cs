@@ -86,6 +86,42 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///  &quot;Version&quot;:&quot;1.0.0.0&quot;,
+        ///  &quot;Devices&quot;:
+        ///  [
+        ///    {
+        ///      &quot;Devices&quot;:&quot;CHProThrottle1&quot;,
+        ///      &quot;Buttons&quot;: 19,
+        ///      &quot;POV&quot; : 1,
+        ///      &quot;Axis&quot; : &quot;X,Y,Z&quot;,
+        ///      &quot;Keys&quot;:
+        ///      {
+        ///        &quot;Joy_1&quot;:
+        ///        {
+        ///          &quot;Rename&quot;:&quot;Top Hat Right&quot;,
+        ///          &quot;Hint&quot;:&quot;Top Hat&quot;
+        ///        },
+        ///        &quot;Joy_2&quot;:
+        ///        {
+        ///          &quot;Rename&quot;:&quot;Top Hat Down&quot;,
+        ///          &quot;Hint&quot;:&quot;Top Hat&quot;
+        ///        },
+        ///        &quot;Joy_3&quot;:
+        ///        {
+        ///          &quot;Rename&quot;:&quot;Top Hat Left&quot;,
+        ///          &quot;Hint&quot;:&quot;Top Hat&quot;
+        ///        },
+        ///        &quot;Joy_4&quot;:
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string defkeynames {
+            get {
+                return ResourceManager.GetString("defkeynames", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap EDCD {

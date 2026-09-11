@@ -49,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTestBindingsEditor.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UnitTestBindingsEditor.Designer.cs">
+      <DependentUpon>UnitTestBindingsEditor.cs</DependentUpon>
+    </Compile>
     <Compile Include="UnitTestFrontierKeys.cs" />
     <Compile Include="UnitTestBindingsFile.cs" />
     <Compile Include="UnitTestStarScan.cs" />
@@ -73,6 +79,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="UnitTestBindingsEditor.resx">
+      <DependentUpon>UnitTestBindingsEditor.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UnitTests.resx">
       <DependentUpon>UnitTests.cs</DependentUpon>
     </EmbeddedResource>

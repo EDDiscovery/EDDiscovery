@@ -16,13 +16,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using BaseUtils;
-using AudioExtensions;
 using ActionLanguage;
-using static EliteDangerousCore.BindingsFile;
+using EliteDangerousCore.Bindings;
 
 namespace EDDiscovery.Actions
 {
@@ -32,7 +29,7 @@ namespace EDDiscovery.Actions
 
         class AKP : BaseUtils.EnhancedSendKeysParser.IAdditionalKeyParser      // AKP parser to pass to SendKeys
         {
-            public EliteDangerousCore.BindingsFile bindingsfile;
+            public EliteDangerousCore.Bindings.BindingsFile bindingsfile;
 
             public Tuple<string, string> Parse(ref string s)
             {
@@ -43,7 +40,7 @@ namespace EDDiscovery.Actions
                     {
                         string binding = s.Substring(1, endindex - 1);
 
-                        BindingEntry entry = bindingsfile.FindAction(binding);      // find binding
+                        BindingsFile.BindingEntry entry = bindingsfile.FindAction(binding);      // find binding
 
                         if ( entry == null)
                             return new Tuple<string, string>(null, "Binding name " + binding + " is not an known binding");
@@ -79,7 +76,7 @@ namespace EDDiscovery.Actions
             }
         }
 
-        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, EliteDangerousCore.BindingsFile bf)
+        static public string Menu(Form parent, System.Drawing.Icon ic, string userdata, BindingsFile bf)
         {
             List<string> decorated = new List<string> { "kwk" };
             
@@ -112,7 +109,7 @@ namespace EDDiscovery.Actions
         }
 
         // check binding in userdata for consistency.
-        static public string VerifyBinding(string userdata, EliteDangerousCore.BindingsFile bf)    // empty string okay
+        static public string VerifyBinding(string userdata, BindingsFile bf)    // empty string okay
         {
             string keys;
             Variables statementvars;

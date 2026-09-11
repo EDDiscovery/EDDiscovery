@@ -1161,6 +1161,7 @@
     <None Include="Resources\Credits.txt" />
     <None Include="Resources\EDCD.PNG" />
     <None Include="Resources\EDD Licence Mono.txt" />
+    <None Include="Resources\defkeynames.txt" />
     <Content Include="UserControls\ExtPanel\ZMQInterface.txt" />
     <EmbeddedResource Include="UserControls\ScansStars\UserControl2DMap.resx">
       <DependentUpon>UserControl2DMap.cs</DependentUpon>

@@ -3,39 +3,10 @@
   "Devices":
   [
     {
-      "Devices":"231D0210",
-      "Buttons":20,
-      "POV":0,
-      "Axis":"X,Y,Z",
-      "Keys":
-      {
-        "Joy_XAxis":
-        {
-          "Rename":"x",
-          "Hint":""
-        },
-        "Joy_YAxis":
-        {
-          "Rename":"y",
-          "Hint":""
-        },
-        "Joy_ZAxis":
-        {
-          "Rename":"z",
-          "Hint":""
-        },
-        "Joy_RXAxis":
-        {
-          "Rename":"rx",
-          "Hint":""
-        }
-      }
-    },
-    {
       "Devices":"CHProThrottle1",
-      "Buttons":19,
-      "POV":1,
-      "Axis":"X,Y,Z",
+      "Buttons": 19,
+      "POV" : 1,
+      "Axis" : "X,Y,Z",
       "Keys":
       {
         "Joy_1":
@@ -147,14 +118,14 @@
         {
           "Rename":"Throttle",
           "Hint":"Throttle"
-        }
-      }
+        },
+      },
     },
     {
       "Devices":"Logitech710WirelessGamepad",
-      "Buttons":0,
-      "POV":0,
-      "Axis":"",
+      "1Buttons": 12,
+      "1POV" : 1,
+      "1Axis" : "X,Y,Z,RZ",
       "Keys":
       {
         "Joy_1":
@@ -217,6 +188,7 @@
           "Rename":"Press Right Stick",
           "Hint":"Right Stick"
         },
+
         "Joy_ZAxis":
         {
           "Rename":"Right Stick X Axis",
@@ -237,6 +209,7 @@
           "Rename":"Left Stick Y Axis",
           "Hint":"Joystick"
         },
+
         "Joy_POV1Left":
         {
           "Rename":"POV Left",
@@ -257,13 +230,11 @@
           "Rename":"POV Down",
           "Hint":"Top POV Hat"
         }
+
       }
     },
     {
       "Devices":"T16000M",
-      "Buttons":0,
-      "POV":0,
-      "Axis":"",
       "Keys":
       {
         "Joy_1":
@@ -286,6 +257,7 @@
           "Rename":"Right Button",
           "Hint":"Top Right Button"
         },
+        
         "Joy_5":
         {
           "Rename":"LB Top Left Button",
@@ -316,6 +288,7 @@
           "Rename":"LB Bottom Left Button",
           "Hint":"LB Buttons"
         },
+
         "Joy_11":
         {
           "Rename":"RB Top Right Button",
@@ -346,6 +319,7 @@
           "Rename":"RB Bottom Right Button",
           "Hint":"RB Buttons"
         },
+
         "Joy_RZAxis":
         {
           "Rename":"Stick Twist",
@@ -361,6 +335,12 @@
           "Rename":"Stick Y Axis",
           "Hint":"Joystick"
         },
+        "Joy_UAxis":
+        {
+          "Rename":"Base Slider",
+          "Hint":"Base"
+        },
+
         "Joy_POV1Left":
         {
           "Rename":"POV Left",
@@ -385,9 +365,9 @@
     },
     {
       "Devices":"231D0201,231D0200",
-      "Buttons":32,
-      "POV":1,
-      "Axis":"X,Y,Z,RX,RY,RZ",
+      "Buttons": 32,
+      "POV" : 1,
+      "Axis" : "X,Y,Z,RX,RY,RZ",
       "Keys":
       {
         "Joy_1":

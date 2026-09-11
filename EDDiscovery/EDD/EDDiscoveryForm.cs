@@ -43,7 +43,7 @@ namespace EDDiscovery
 
         public ExtendedControls.ThemeList ThemeList { get; private set; }
 
-        public BindingsFile FrontierBindings { get; private set; }
+        public EliteDangerousCore.Bindings.BindingsFile FrontierBindings { get; private set; }
         public InputDeviceList InputDeviceList { get; private set; }
         private Tuple<string, DateTime, int> FrontierStartPresetFile { get; set; }
 

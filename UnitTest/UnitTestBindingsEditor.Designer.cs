@@ -1,21 +1,6 @@
-﻿/*
- * Copyright © 2016 - 2017 EDDiscovery development team
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
- * file except in compliance with the License. You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software distributed under
- * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
- * ANY KIND, either express or implied. See the License for the specific language
- * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
- */
-namespace EDDiscovery.UserControls
+﻿namespace UnitTest
 {
-    partial class Bindings
+    partial class UnitTestBindingsEditor
     {
         /// <summary> 
         /// Required designer variable.
@@ -48,19 +33,22 @@ namespace EDDiscovery.UserControls
             // 
             // bindingsEditor
             // 
+            this.bindingsEditor.ChangedBindings = null;
+            this.bindingsEditor.ChangedDefault = null;
+            this.bindingsEditor.DeviceInput = null;
             this.bindingsEditor.Dock = System.Windows.Forms.DockStyle.Fill;
             this.bindingsEditor.Location = new System.Drawing.Point(0, 0);
             this.bindingsEditor.Name = "bindingsEditor";
-            this.bindingsEditor.Size = new System.Drawing.Size(660, 432);
-            this.bindingsEditor.TabIndex = 0;
+            this.bindingsEditor.Size = new System.Drawing.Size(1254, 737);
+            this.bindingsEditor.TabIndex = 4;
             // 
-            // Bindings
+            // UnitTestBindingsEditor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.bindingsEditor);
-            this.Name = "Bindings";
-            this.Size = new System.Drawing.Size(660, 432);
+            this.Name = "UnitTestBindingsEditor";
+            this.Size = new System.Drawing.Size(1254, 737);
             this.ResumeLayout(false);
 
         }

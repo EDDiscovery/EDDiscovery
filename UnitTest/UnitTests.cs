@@ -1,12 +1,9 @@
 ﻿using BaseUtils;
-using DirectInputDevices;
 using EliteDangerousCore;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using System.Reflection;
 using System.Windows.Forms;
 
@@ -46,7 +43,6 @@ namespace UnitTest
             theme.LoadBaseThemes();
             theme.SetThemeByName("Elite Verdana Small");
             //Theme.Current.WindowsFrame = true;
-            Theme.Current.ApplyStd(this);
 
             //{
             //    foreach( InputLanguage x in InputLanguage.InstalledInputLanguages)
@@ -60,81 +56,20 @@ namespace UnitTest
             string cmdline = Environment.CommandLine;
             if (cmdline.ContainsIIC("Binding"))
             {
-                inputdevices = new DirectInputDevices.InputDeviceList();
-                InputDeviceJoystickWindows.CreateJoysticks(inputdevices);
-
-                List<string> devices = new List<string>();
-                foreach (var device in inputdevices)
-                {
-                    System.Diagnostics.Debug.WriteLine($"{device.ID.Name} {device.ID.VendorId} {device.ID.ProductId} {device.ID.VendorProductId}");
-                    
-                    // does frontier know about it?
-                    string bestname = BindingsFile.FrontierDeviceName(device.ID.ProductId, device.ID.VendorId);
-
-                    if (bestname != null)           // if frontier knows it, add its name, else add usb identity which frontier appears to use
-                        devices.Add(bestname);
-                    else
-                        devices.Add(device.ID.VendorProductId);
-
-                    bindingsEditor.ConvertDeviceNameList[device.ID.VendorProductId] = device.ID.Name;       // allow the productvendorid pair to be converted to device name just for the bindings editor
-                }
-
-                bindingsEditor.ConvertDeviceNameList["{NoDevice}"] = "---";
-
-                InputDeviceKeyboard.CreateKeyboard(inputdevices);              
-                InputDeviceMouse.CreateMouse(inputdevices);
-
-                inputdevices.Start();
-
                 panelTest.Visible = false;
-                bindingsEditor.Dock = DockStyle.Fill;
+                utbe= new UnitTestBindingsEditor();
+                Controls.Add(utbe);
+                Controls.SetChildIndex(utbe, 0);
+                utbe.Dock = DockStyle.Fill;
 
-                bindingsEditor.DeviceInput += (bf,entry) =>
-                {
-                    InputMapDialog im = new InputMapDialog();
-                    im.Init(inputdevices);
-                    im.AllowAxis = im.AxisOnly= entry.IsBinding;
-                    im.ShowPressOrRelease = false;
-                    im.ShowOKCancel = false;
-                    im.EscapeQuits = true;
-                    Theme.Current.ApplyDialog(im);
-                    if (im.ShowDialog(this) == DialogResult.OK)
-                    {
-                        string devicename = im.Device.Name;
-                        if ( !bindingsEditor.DevicesNamesConverted.Contains(devicename))
-                        {
-                            // same way its done in operation to map to a frontier device
-                            string bestname = bindingsEditor.FindDevice(im.Device.Name, im.Device.ID.Instanceguid, im.Device.ID.Productguid, im.Device.ID.ProductId, im.Device.ID.VendorId);
-                            if (bestname == null)
-                                ExtendedControls.MessageBoxTheme.Show($"Cannot find frontier device name for device\r\nUse Frontier editor to add device first", "Cannot find device", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            devicename = bestname;
-                        }
+                Theme.Current.ApplyStd(this);
 
-                        if (devicename != null)
-                        {
-                            string frontiername = im.Device.Name == "Keyboard" ? FrontierKeyConversion.KeysToFrontier(bf.KeyboardLayout, im.KeyName) : im.KeyName;
-
-                            if (!frontiername.StartsWith("!"))
-                            {
-                                BindingsFile.DeviceKeyPair dvp = new BindingsFile.DeviceKeyPair(devicename, frontiername);
-                                return dvp;
-                            }
-                            else
-                                ExtendedControls.MessageBoxTheme.Show($"Cannot find mapping to key name", "Cannot find device", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
-                    }
-                    return null;
-                };
-
-                string bindingfolder = @"C:\Users\RK\AppData\Local\Frontier Developments\Elite Dangerous\Options\Bindings";
-                var frontierpresetfilebindingfilename = EliteDangerousCore.BindingsFile.FindBindingsFile(bindingfolder, true);
-                string curset = FileHelpers.TryReadAllTextFromFile(testfolder + "keynames.json");
-                string defset = FileHelpers.TryReadAllTextFromFile(testfolder + "defkeynames.json");
-
-                bindingsEditor.Init(bindingfolder, frontierpresetfilebindingfilename, devices, curset, defset );
+                utbe.Init();
             }
             else
             {
+                Theme.Current.ApplyStd(this);
+
                 BaseUtils.UnitTests.Check.TestResult = Test;            // hook up responders to checkers
                 BaseUtils.UnitTests.Check.NewSection = Section;
 
@@ -143,19 +78,13 @@ namespace UnitTest
 
                 timer.Tick += T_Tick;
 
-                bindingsEditor.Visible = false;
                 panelTest.Dock = DockStyle.Fill;
-                buttonStart_Click(null, null);
+                timer.Start();
+                Log("Begin");
             }
         }
 
         #region Unittests
-        private void buttonStart_Click(object sender, EventArgs e)
-        {
-            buttonStart.Enabled = false;
-            timer.Start();
-            Log("Begin");
-        }
 
         [System.Diagnostics.DebuggerHidden()]
 
@@ -280,12 +209,8 @@ namespace UnitTest
 
         private void extButtonDrawnClose_Click(object sender, EventArgs e)
         {
-            inputdevices?.Stop();
+            utbe?.Stop();
             Close();
-            if ( bindingsEditor!=null)
-            {
-                FileHelpers.TryWriteToFile(testfolder + "keynames.json", bindingsEditor.KeyNames());
-            }
         }
 
         int testset = 0;
@@ -297,8 +222,7 @@ namespace UnitTest
         Timer timer = new Timer() { Interval = 100 };
         List<MethodInfo> tests;
 
-        InputDeviceList inputdevices;
-        string testfolder = $@"..\..\..\UnitTest\Bindings\";
+        UnitTestBindingsEditor utbe = null;
 
     }
 

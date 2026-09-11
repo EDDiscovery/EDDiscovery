@@ -14,6 +14,7 @@
 
 using DirectInputDevices;
 using EliteDangerousCore;
+using EliteDangerousCore.Bindings;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -47,14 +48,14 @@ namespace EDDiscovery.Actions
         {
             string ret = "";
 
-            foreach (string frontierdevice in bindings.DeviceListNoDevice)     
+            foreach (var device in bindings.DeviceListNoDevice)     
             {
-                IInputDevice idi = GetInputDeviceFromBindingDevice(frontierdevice); // find best match of physical device
+                IInputDevice idi = GetInputDeviceFromBindingDevice(device); // find best match of physical device
 
                 if (idi == null)
-                    ret += "ERROR: Missing physical device for FD Device " + frontierdevice + Environment.NewLine;
+                    ret += "ERROR: Missing physical device for FD Device " + device.FrontierName + Environment.NewLine;
                 else
-                    ret += "Match of FD Device " + frontierdevice + " to " + idi.ID.Name + Environment.NewLine;
+                    ret += "Match of FD Device " + device.FrontierName + " to " + idi.ID.Name + Environment.NewLine;
             }
             return ret;
         }
@@ -103,7 +104,7 @@ namespace EDDiscovery.Actions
                         );
 
                 var id = ide.Device.ID;
-                string frontierdevice = bindings.FindDevice(id.Name, id.Instanceguid, id.Productguid, id.ProductId, id.VendorId);
+                string frontierdevice = bindings.GetDeviceName(id.Name, id.Instanceguid, id.Productguid, id.ProductId, id.VendorId);
 
                 //System.Diagnostics.Debug.WriteLine($"ActionsInputDevice {frontierdevice}:{keyname}");
 
@@ -229,13 +230,14 @@ namespace EDDiscovery.Actions
             return true;
         }
 
-        // given a frontier device name, get back match or null to a InputDevice
-        IInputDevice GetInputDeviceFromBindingDevice(string frontierdevicename)
+        // given a device find Input device matching.
+        // reverse of bindings.GetDeviceName
+        IInputDevice GetInputDeviceFromBindingDevice(Device device)
         {
             IInputDevice i = InputDeviceList.Find(x =>
             {
-                string device = bindings.FindDevice(x.ID.Name, x.ID.Instanceguid, x.ID.Productguid,x.ID.ProductId,x.ID.VendorId);
-                return device != null && device.Equals(frontierdevicename);
+                string devicename = bindings.GetDeviceName(x.ID.Name, x.ID.Instanceguid, x.ID.Productguid,x.ID.ProductId,x.ID.VendorId);
+                return devicename != null && devicename.Equals(device.FrontierName);
             });
 
             return i;

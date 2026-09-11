@@ -13,6 +13,7 @@
  */
 
 using DirectInputDevices;
+using EliteDangerousCore.Bindings;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -30,30 +31,24 @@ namespace EDDiscovery.UserControls
 
         protected override void Init()
         {
-            var frontierpresetfilebindingfilename = EliteDangerousCore.BindingsFile.FindBindingsFile(EDDOptions.Instance.FrontierBindingsFolder, true);
+            var frontierpresetfilebindingfilename = BindingsFile.FindBindingsFile(EDDOptions.Instance.FrontierBindingsFolder, true);
 
-            List<string> devices = new List<string>();
+            List<Device> deviceparas = new List<Device>();
+            deviceparas.Add(new Device());
+
             foreach (var device in DiscoveryForm.InputDeviceList)
             {
-                if (device.ID.GameControl)
-                {
-                    System.Diagnostics.Debug.WriteLine($"{device.ID.Name} {device.ID.VendorId} {device.ID.ProductId} {device.ID.VendorProductId}");
+                System.Diagnostics.Debug.WriteLine($"{device.ID.Name} {device.ID.VendorId} {device.ID.ProductId} {device.ID.VendorProductId}");
 
-                    // does frontier know about it?
-                    string bestname = EliteDangerousCore.BindingsFile.FrontierDeviceName(device.ID.ProductId, device.ID.VendorId);
+                // does frontier know about it?
+                string frontiername = FrontierDeviceNames.DeviceName(device.ID.ProductId, device.ID.VendorId) ?? device.ID.VendorProductId;
 
-                    if (bestname != null) // if frontier knows it, add its name, else add usb identity which frontier appears to use
-                        devices.Add(bestname);
-                    else
-                        devices.Add(device.ID.VendorProductId);
-
-                    // allow the productvendorid pair to be converted to device name
-                    bindingsEditor.ConvertDeviceNameList[device.ID.VendorProductId] = device.ID.Name;
-                }
+                deviceparas.Add(new Device(frontiername, device.ID.Name, device.AxisPresent, device.POVCount, device.ButtonCount));
             }
-            bindingsEditor.ConvertDeviceNameList["{NoDevice}"] = "-";
 
-            bindingsEditor.Init(EDDOptions.Instance.FrontierBindingsFolder, frontierpresetfilebindingfilename, new System.Collections.Generic.List<string>(), null);
+            deviceparas.Add(new Device("Keyboard", true, false));
+            deviceparas.Add(new Device("Mouse", false, true));
+
             bindingsEditor.ChangedBindings += (s) =>
             {
                 if (DiscoveryForm.FrontierBindings.FileName.EqualsIIC(s) || !DiscoveryForm.FrontierBindings.IsLoaded)      // if same name, or not loaded, try and load
@@ -63,6 +58,12 @@ namespace EDDiscovery.UserControls
             {
                 if (!DiscoveryForm.FrontierBindings.FileName.EqualsIIC(s))      // if default is not the same as the current filename.
                     DiscoveryForm.LoadFrontierBindings();       // reload, 
+            };
+
+            bindingsEditor.ResetKeyNames += () =>
+            {
+                string defnames2 = Properties.Resources.defkeynames;            // reset the set to the program default
+                keynames.Set(defnames2);
             };
 
             bindingsEditor.DeviceInput += (bf, entry) =>
@@ -76,51 +77,64 @@ namespace EDDiscovery.UserControls
                 ExtendedControls.Theme.Current.ApplyStd(im);
                 if (im.ShowDialog(this) == DialogResult.OK)
                 {
-                    string devicename = im.Device.Name;
-                    if (!bindingsEditor.DevicesNamesConverted.Contains(devicename))
-                    {
-                        // same way its done in operation to map to a frontier device
-                        string bestname = bindingsEditor.FindDevice(im.Device.Name, im.Device.ID.Instanceguid, im.Device.ID.Productguid, im.Device.ID.ProductId, im.Device.ID.VendorId);
-                        if (bestname == null)
-                            ExtendedControls.MessageBoxTheme.Show($"Cannot find frontier device name for device\r\nUse Frontier editor to add device first", "Cannot find device", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        devicename = bestname;
-                    }
+                    string frontierdevicename = bindingsEditor.GetDeviceName(im.Device.Name, im.Device.ID.Instanceguid, im.Device.ID.Productguid, im.Device.ID.ProductId, im.Device.ID.VendorId);
 
-                    if (devicename != null)
+                    if (frontierdevicename != null)
                     {
-                        string frontiername = im.Device.Name == "Keyboard" ? EliteDangerousCore.FrontierKeyConversion.KeysToFrontier(bf.KeyboardLayout, im.KeyName) : im.KeyName;
+                        string frontierkeyname = im.Device.Name == "Keyboard" ? FrontierKeyConversion.KeysToFrontier(bf.KeyboardLayout, im.KeyName) : im.KeyName;
 
-                        if (!frontiername.StartsWith("!"))
+                        if (!frontierkeyname.StartsWith("!"))
                         {
-                            EliteDangerousCore.BindingsFile.DeviceKeyPair dvp = new EliteDangerousCore.BindingsFile.DeviceKeyPair(devicename, frontiername);
-                            return dvp;
+                            return Tuple.Create(frontierdevicename, frontierkeyname);
                         }
                         else
+                        {
                             ExtendedControls.MessageBoxTheme.Show($"Cannot find mapping to key name", "Cannot find device", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        }
                     }
+                    else
+                        ExtendedControls.MessageBoxTheme.Show($"Cannot find frontier device name for device\r\nUse Frontier editor to add device first", "Cannot find device", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 return null;
             };
 
-        }
 
-        protected override void InitialDisplay()
-        {
+            string userset = GetSettingGlobal("DeviceKeyNames", "{}");
+            //keynames.Set(userset);
+
+            // we ship with a set, if its not present in the user set, update the user set
+            string defnames = Properties.Resources.defkeynames;
+            DeviceKeyNames defrenames = new DeviceKeyNames();
+            defrenames.Set(defnames);
+            foreach (DeviceKeyNames.DeviceNameSet key in defrenames)
+            {
+                if (keynames.GetByDeviceList(key.DeviceList) == null)
+                {
+                    keynames.Add(key);
+                }
+            }
+
+            bindingsEditor.Init(EDDOptions.Instance.FrontierBindingsFolder, frontierpresetfilebindingfilename, deviceparas, keynames);
         }
 
         protected override void Closing()
         {
+            string json = keynames.Get();
+            PutSettingGlobal("DeviceKeyNames", json);
         }
 
         public override bool AllowClose()
         {
             if ( bindingsEditor.IsDirty)
             {
-
+                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), "Unsaved changed to bindings, Do you want to abandon them?", 
+                                    "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Exclamation);
+                return result == DialogResult.OK;
             }
 
             return true;
         }
 
+        DeviceKeyNames keynames = new DeviceKeyNames();
     }
 }

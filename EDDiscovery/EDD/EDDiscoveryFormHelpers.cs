@@ -13,6 +13,7 @@
  */
 
 using EliteDangerousCore;
+using EliteDangerousCore.Bindings;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
 using System;

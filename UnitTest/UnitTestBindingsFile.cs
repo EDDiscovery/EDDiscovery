@@ -1,4 +1,5 @@
 ﻿using EliteDangerousCore;
+using EliteDangerousCore.Bindings;
 using EliteDangerousCore.JournalEvents;
 using System;
 using System.Collections.Generic;
