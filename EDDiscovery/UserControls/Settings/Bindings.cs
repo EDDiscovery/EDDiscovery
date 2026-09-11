@@ -37,17 +37,14 @@ namespace EDDiscovery.UserControls
             deviceparas.Add(new Device());
 
             foreach (var device in DiscoveryForm.InputDeviceList)
-            {
+            { 
                 System.Diagnostics.Debug.WriteLine($"{device.ID.Name} {device.ID.VendorId} {device.ID.ProductId} {device.ID.VendorProductId}");
 
-                // does frontier know about it?
-                string frontiername = FrontierDeviceNames.DeviceName(device.ID.ProductId, device.ID.VendorId) ?? device.ID.VendorProductId;
+            // does frontier know about it?
+                string frontiername = device.ID.Name == "Keyboard" || device.ID.Name == "Mouse" ? device.ID.Name : FrontierDeviceNames.DeviceName(device.ID.ProductId, device.ID.VendorId) ?? device.ID.VendorProductId;
 
                 deviceparas.Add(new Device(frontiername, device.ID.Name, device.AxisPresent, device.POVCount, device.ButtonCount));
             }
-
-            deviceparas.Add(new Device("Keyboard", true, false));
-            deviceparas.Add(new Device("Mouse", false, true));
 
             bindingsEditor.ChangedBindings += (s) =>
             {

@@ -20,6 +20,8 @@ namespace UnitTest
         {
             inputdevices = new DirectInputDevices.InputDeviceList();
             InputDeviceJoystickWindows.CreateJoysticks(inputdevices);
+            InputDeviceKeyboard.CreateKeyboard(inputdevices);
+            InputDeviceMouse.CreateMouse(inputdevices);
 
             List<Device> deviceparas = new List<Device>();
             deviceparas.Add(new Device());
@@ -29,16 +31,10 @@ namespace UnitTest
                 System.Diagnostics.Debug.WriteLine($"{device.ID.Name} {device.ID.VendorId} {device.ID.ProductId} {device.ID.VendorProductId}");
 
                 // does frontier know about it?
-                string frontiername = FrontierDeviceNames.DeviceName(device.ID.ProductId, device.ID.VendorId) ?? device.ID.VendorProductId;
+                string frontiername = device.ID.Name == "Keyboard" || device.ID.Name == "Mouse" ? device.ID.Name : FrontierDeviceNames.DeviceName(device.ID.ProductId, device.ID.VendorId) ?? device.ID.VendorProductId;
 
                 deviceparas.Add(new Device(frontiername, device.ID.Name, device.AxisPresent,  device.POVCount, device.ButtonCount));
             }
-
-            deviceparas.Add(new Device("Keyboard", true, false));
-            deviceparas.Add(new Device("Mouse", false, true));
-
-            InputDeviceKeyboard.CreateKeyboard(inputdevices);
-            InputDeviceMouse.CreateMouse(inputdevices);
 
             inputdevices.Start();
 
