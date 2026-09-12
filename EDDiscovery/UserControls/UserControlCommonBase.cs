@@ -622,6 +622,7 @@ namespace EDDiscovery.UserControls
             return s;
         }
 
+        // give an enum list, iterate and set up a bool ctrl set with on/offs
         public bool[] GetSettingAsCtrlSet<T>(Func<T,bool> defaultvalue) where T:Enum
         {
             var ctrlset = new bool[Enum.GetNames(typeof(T)).Length];

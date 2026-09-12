@@ -76,8 +76,11 @@ namespace EDDiscovery.UserControls
         {
             System.Diagnostics.Debug.WriteLine($"Transparent mode {on}");
             this.BackColor = curcol;
+            this.panelControls.Visible = !on;
+            UpdateDisplay();
         }
 
+        // Historychanged, UCs not allowed to push any events, so all get called this BEFORE the main history change
         private void DiscoveryForm_OnPreHistoryChange()
         {
             lasthe = DiscoveryForm.History.GetLast;
@@ -87,6 +90,7 @@ namespace EDDiscovery.UserControls
         private void DiscoveryForm_OnNewEntry(HistoryEntry he)
         {
 #if DEBUG
+            // in debug move we follow the history cursor, in normal mode we follow the last pushed entry
 #else
             lasthe = DiscoveryForm.History.GetLast;
             System.Diagnostics.Debug.WriteLine($"Travel Panel NewHistory {lasthe.EventTimeUTC}");
@@ -109,9 +113,9 @@ namespace EDDiscovery.UserControls
         public override void ReceiveHistoryEntry(EliteDangerousCore.HistoryEntry he)
         {
 #if DEBUG
+            // in debug move we follow the history cursor, in normal mode we follow the last pushed entry
             lasthe = he;
             //System.Diagnostics.Debug.WriteLine($"TravelPanel Receive HE {lasthe.EventTimeUTC} {lasthe.EventSummary} {lasthe.System.Name}");
-
             if (he.journalEntry.EventTypeID != JournalTypeEnum.EDDDestinationSelected)     // don't repeat the UI push
                 UpdateDisplay();
 #endif
@@ -132,12 +136,13 @@ namespace EDDiscovery.UserControls
 
             Point pos = new Point(3, 3);
             Size textsize = new Size(Math.Max(extPictureBox.Width - 6, 24), 10000);
-            var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
+            var textcolour = IsTransparentModeOn ? Theme.Current.SPanelColor : Theme.Current.LabelColor;
             var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
             Font dfont = displayfont ?? this.Font;
 
             ExtendedControls.ImageElement.List el = new ExtendedControls.ImageElement.List();
 
+            if (IsSet(CtrlList.showstars))
             {
                 string startext = string.Empty;
                 Image starimage = null;
@@ -181,7 +186,7 @@ namespace EDDiscovery.UserControls
 
             IBodyLocation currentlocationclass = lasthe.Status.CurrentLocation;
 
-            if (currentlocationclass != null)
+            if (IsSet(CtrlList.showlocation) && currentlocationclass != null)
             {
                 BodyNode bn = currentlocationclass.BodyID != null ? sysnode.FindBody(currentlocationclass.BodyID.Value) : null;     // may be null
                 JournalScan scan = bn?.Scan;    // may be null
@@ -270,6 +275,7 @@ namespace EDDiscovery.UserControls
                             );
             }
 
+            if (IsSet(CtrlList.showtarget))
             {
                 if (uistatus.DestinationName.HasChars() && uistatus.DestinationSystemAddress.IsValid)
                 {
@@ -387,9 +393,20 @@ namespace EDDiscovery.UserControls
 
 
         #region UI
+
+        private void extButtonShowControl_Click(object sender, EventArgs e)
+        {
+            CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
+            displayfilter.UC.Add(CtrlList.showstars.ToString(), "Show System Information", BaseUtils.Icons.IconSet.GetImage("Bodies.Stars.B"));
+            displayfilter.UC.Add(CtrlList.showlocation.ToString(), "Show Location Information", BaseUtils.Icons.IconSet.GetImage("Bodies.Planets.Terrestrial.HMCv10"));
+            displayfilter.UC.Add(CtrlList.showtarget.ToString(), "Show Target Information", BaseUtils.Icons.IconSet.GetImage("Bodies.Planets.Terrestrial.HMCv10"));
+            CommonCtrl(displayfilter, extButtonAlignment);
+        }
+
+
         private void extButtonAlignment_Click(object sender, EventArgs e)
         {
-            ExtendedControls.CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
+            CheckedIconNewListBoxForm displayfilter = new CheckedIconNewListBoxForm();
 
             string lt = CtrlList.alignleft.ToString();
             string ct = CtrlList.aligncenter.ToString();
@@ -452,8 +469,13 @@ namespace EDDiscovery.UserControls
 
         protected enum CtrlList
         {
+            showstars, showlocation, showtarget,
             alignleft, aligncenter, alignright,
         };
+        private bool IsSet(CtrlList v)
+        {
+            return ctrlset[(int)v];
+        }
 
         #endregion
 
@@ -469,5 +491,7 @@ namespace EDDiscovery.UserControls
         private const char SettingsSplittingChar = '\u2188';     // pick a crazy one soe
 
         #endregion
+
+
     }
 }
