@@ -67,7 +67,8 @@ namespace EDDiscovery.UserControls
             {
                 InputMapDialog im = new InputMapDialog();
                 im.Init(DiscoveryForm.InputDeviceList);
-                im.AllowAxis = im.AxisOnly = entry.IsBinding;
+                im.AllowAxis = true;
+                im.AllowKeyboard = im.AllowMouse = !entry.IsBinding;
                 im.ShowPressOrRelease = false;
                 im.ShowOKCancel = false;
                 im.EscapeQuits = true;
@@ -82,7 +83,7 @@ namespace EDDiscovery.UserControls
 
                         if (!frontierkeyname.StartsWith("!"))
                         {
-                            return Tuple.Create(frontierdevicename, frontierkeyname);
+                            return Tuple.Create(frontierdevicename, frontierkeyname, im.DirectionPositive);
                         }
                         else
                         {
@@ -97,7 +98,7 @@ namespace EDDiscovery.UserControls
 
 
             string userset = GetSettingGlobal("DeviceKeyNames", "{}");
-            //keynames.Set(userset);
+            keynames.Set(userset);
 
             // we ship with a set, if its not present in the user set, update the user set
             string defnames = Properties.Resources.defkeynames;
@@ -105,7 +106,7 @@ namespace EDDiscovery.UserControls
             defrenames.Set(defnames);
             foreach (DeviceKeyNames.DeviceNameSet key in defrenames)
             {
-                if (keynames.GetByDeviceList(key.DeviceList) == null)
+                if (keynames.GetDevice(key.Device) == null)
                 {
                     keynames.Add(key);
                 }

@@ -3,587 +3,8707 @@
   "Devices":
   [
     {
-      "Devices":"231D0210",
-      "Buttons":20,
-      "POV":0,
-      "Axis":"X,Y,Z",
-      "Keys":
-      {
-        "Joy_XAxis":
-        {
-          "Rename":"x",
-          "Hint":""
-        },
-        "Joy_YAxis":
-        {
-          "Rename":"y",
-          "Hint":""
-        },
-        "Joy_ZAxis":
-        {
-          "Rename":"z",
-          "Hint":""
-        },
-        "Joy_RXAxis":
-        {
-          "Rename":"rx",
-          "Hint":""
-        }
-      }
-    },
-    {
-      "Devices":"CHProThrottle1",
-      "Buttons":19,
-      "POV":1,
-      "Axis":"X,Y,Z",
-      "Keys":
-      {
-        "Joy_1":
-        {
-          "Rename":"Top Hat Right",
-          "Hint":"Top Hat"
-        },
-        "Joy_2":
-        {
-          "Rename":"Top Hat Down",
-          "Hint":"Top Hat"
-        },
-        "Joy_3":
-        {
-          "Rename":"Top Hat Left",
-          "Hint":"Top Hat"
-        },
-        "Joy_4":
-        {
-          "Rename":"Top Hat Up",
-          "Hint":"Top Hat"
-        },
-        "Joy_5":
-        {
-          "Rename":"Bottom Hat Right",
-          "Hint":"Bottom Hat"
-        },
-        "Joy_6":
-        {
-          "Rename":"Bottom Hat Down",
-          "Hint":"Bottom Hat"
-        },
-        "Joy_7":
-        {
-          "Rename":"Bottom Hat Left",
-          "Hint":"Bottom Hat"
-        },
-        "Joy_8":
-        {
-          "Rename":"Bottom Hat Up",
-          "Hint":"Bottom Hat"
-        },
-        "Joy_9":
-        {
-          "Rename":"Index Hat Down",
-          "Hint":"Index Hat"
-        },
-        "Joy_10":
-        {
-          "Rename":"Index Hat Right",
-          "Hint":"Index Hat"
-        },
-        "Joy_11":
-        {
-          "Rename":"Index Hat Up",
-          "Hint":"Index Hat"
-        },
-        "Joy_12":
-        {
-          "Rename":"Index Hat Left",
-          "Hint":"Index Hat"
-        },
-        "Joy_13":
-        {
-          "Rename":"Joystick Push",
-          "Hint":"Joystick"
-        },
-        "Joy_14":
-        {
-          "Rename":"Right Finger",
-          "Hint":"Finger Buttons"
-        },
-        "Joy_15":
-        {
-          "Rename":"Middle Finger",
-          "Hint":"Finger Buttons"
-        },
-        "Joy_16":
-        {
-          "Rename":"Left Finger",
-          "Hint":"Finger Buttons"
-        },
-        "Joy_17":
-        {
-          "Rename":"Joystick Push 1",
-          "Hint":"Joystick"
-        },
-        "Joy_18":
-        {
-          "Rename":"Joystick Push 2",
-          "Hint":"Joystick"
-        },
-        "Joy_19":
-        {
-          "Rename":"Joystick Push 3",
-          "Hint":"Joystick"
-        },
-        "Joy_XAxis":
-        {
-          "Rename":"Thumb X",
-          "Hint":"Thumb Joystick"
-        },
-        "Joy_YAxis":
-        {
-          "Rename":"Thumb Y",
-          "Hint":"Thumb Joystick"
-        },
-        "Joy_ZAxis":
-        {
-          "Rename":"Throttle",
-          "Hint":"Throttle"
-        }
-      }
-    },
-    {
-      "Devices":"Logitech710WirelessGamepad",
-      "Buttons":0,
-      "POV":0,
-      "Axis":"",
-      "Keys":
-      {
-        "Joy_1":
-        {
-          "Rename":"Button 1",
-          "Hint":"Right Quad"
-        },
-        "Joy_2":
-        {
-          "Rename":"Button 2",
-          "Hint":"Right Quad"
-        },
-        "Joy_3":
-        {
-          "Rename":"Button 3",
-          "Hint":"Right Quad"
-        },
-        "Joy_4":
-        {
-          "Rename":"Button 4",
-          "Hint":"Right Quad"
-        },
-        "Joy_5":
-        {
-          "Rename":"Top Left Fire",
-          "Hint":"Left Finger Buttons"
-        },
-        "Joy_6":
-        {
-          "Rename":"Top Right Fire",
-          "Hint":"Right Finger Buttons"
-        },
-        "Joy_7":
-        {
-          "Rename":"Bottom Left Fire",
-          "Hint":"Left Finger Buttons"
-        },
-        "Joy_8":
-        {
-          "Rename":"Bottom Right Fire",
-          "Hint":"Right Finger Buttons"
-        },
-        "Joy_9":
-        {
-          "Rename":"Button 9",
-          "Hint":"Left Selection Buttons"
-        },
-        "Joy_10":
-        {
-          "Rename":"Button 10",
-          "Hint":"Right Selection Buttons"
-        },
-        "Joy_11":
-        {
-          "Rename":"Press Left Stick",
-          "Hint":"Left Stick"
-        },
-        "Joy_12":
-        {
-          "Rename":"Press Right Stick",
-          "Hint":"Right Stick"
-        },
-        "Joy_ZAxis":
-        {
-          "Rename":"Right Stick X Axis",
-          "Hint":"Joystick"
-        },
-        "Joy_RZAxis":
-        {
-          "Rename":"Right Stick Y Axis",
-          "Hint":"Joystick"
-        },
-        "Joy_XAxis":
-        {
-          "Rename":"Left Stick X Axis",
-          "Hint":"Joystick"
-        },
-        "Joy_YAxis":
-        {
-          "Rename":"Left Stick Y Axis",
-          "Hint":"Joystick"
-        },
-        "Joy_POV1Left":
-        {
-          "Rename":"POV Left",
-          "Hint":"Top POV Hat"
-        },
-        "Joy_POV1Right":
-        {
-          "Rename":"POV Right",
-          "Hint":"Top POV Hat"
-        },
-        "Joy_POV1Up":
-        {
-          "Rename":"POV Up",
-          "Hint":"Top POV Hat"
-        },
-        "Joy_POV1Down":
-        {
-          "Rename":"POV Down",
-          "Hint":"Top POV Hat"
-        }
-      }
-    },
-    {
-      "Devices":"T16000M",
-      "Buttons":0,
-      "POV":0,
-      "Axis":"",
-      "Keys":
-      {
-        "Joy_1":
-        {
-          "Rename":"Trigger",
-          "Hint":"Main Fire Button"
-        },
-        "Joy_2":
-        {
-          "Rename":"Secondary Fire",
-          "Hint":"Secondary Fire Button"
-        },
-        "Joy_3":
-        {
-          "Rename":"Left Button",
-          "Hint":"Top Left Button"
-        },
-        "Joy_4":
-        {
-          "Rename":"Right Button",
-          "Hint":"Top Right Button"
-        },
-        "Joy_5":
-        {
-          "Rename":"LB Top Left Button",
-          "Hint":"LB Buttons"
-        },
-        "Joy_6":
-        {
-          "Rename":"LB Top Middle Button",
-          "Hint":"LB Buttons"
-        },
-        "Joy_7":
-        {
-          "Rename":"LB Top Right Button",
-          "Hint":"LB Buttons"
-        },
-        "Joy_8":
-        {
-          "Rename":"LB Bottom Right Button",
-          "Hint":"LB Buttons"
-        },
-        "Joy_9":
-        {
-          "Rename":"LB Bottom Middle Button",
-          "Hint":"LB Buttons"
-        },
-        "Joy_10":
-        {
-          "Rename":"LB Bottom Left Button",
-          "Hint":"LB Buttons"
-        },
-        "Joy_11":
-        {
-          "Rename":"RB Top Right Button",
-          "Hint":"RB Buttons"
-        },
-        "Joy_12":
-        {
-          "Rename":"RB Top Middle Button",
-          "Hint":"RB Buttons"
-        },
-        "Joy_13":
-        {
-          "Rename":"RB Top Left Button",
-          "Hint":"RB Buttons"
-        },
-        "Joy_14":
-        {
-          "Rename":"RB Bottom Left Button",
-          "Hint":"RB Buttons"
-        },
-        "Joy_15":
-        {
-          "Rename":"RB Bottom Middle Button",
-          "Hint":"RB Buttons"
-        },
-        "Joy_16":
-        {
-          "Rename":"RB Bottom Right Button",
-          "Hint":"RB Buttons"
-        },
-        "Joy_RZAxis":
-        {
-          "Rename":"Stick Twist",
-          "Hint":"Joystick"
-        },
-        "Joy_XAxis":
-        {
-          "Rename":"Stick X Axis",
-          "Hint":"Joystick"
-        },
-        "Joy_YAxis":
-        {
-          "Rename":"Stick Y Axis",
-          "Hint":"Joystick"
-        },
-        "Joy_POV1Left":
-        {
-          "Rename":"POV Left",
-          "Hint":"Top POV Hat"
-        },
-        "Joy_POV1Right":
-        {
-          "Rename":"POV Right",
-          "Hint":"Top POV Hat"
-        },
-        "Joy_POV1Up":
-        {
-          "Rename":"POV Up",
-          "Hint":"Top POV Hat"
-        },
-        "Joy_POV1Down":
-        {
-          "Rename":"POV Down",
-          "Hint":"Top POV Hat"
-        }
-      }
-    },
-    {
-      "Devices":"231D0201,231D0200",
-      "Buttons":32,
+      "Device":"054C0CE6",
+      "Name":"Sony DualSense",
+      "Buttons":15,
       "POV":1,
       "Axis":"X,Y,Z,RX,RY,RZ",
       "Keys":
       {
         "Joy_1":
         {
-          "Rename":"Trigger",
-          "Hint":"Main Fire Button"
+          "Name":"Square",
+          "Icon":"[ps4Square]",
+          "IconOnly":true
         },
         "Joy_2":
         {
-          "Rename":"Trigger Double Press",
-          "Hint":"Main Fire Button"
+          "Name":"Cross",
+          "Icon":"[ps4Cross]",
+          "IconOnly":true
         },
         "Joy_3":
         {
-          "Rename":"Red Button",
-          "Hint":"Left Joystick"
+          "Name":"Circle",
+          "Icon":"[ps4Circle]",
+          "IconOnly":true
         },
         "Joy_4":
         {
-          "Rename":"Right Index",
-          "Hint":"Right Index Figure Button"
+          "Name":"Triangle",
+          "Icon":"[ps4Triangle]",
+          "IconOnly":true
         },
         "Joy_5":
         {
-          "Rename":"Pinky Finger",
-          "Hint":"Bottom Joystick"
+          "Name":"L 1",
+          "Icon":"[ps4L1]",
+          "IconOnly":true
         },
         "Joy_6":
         {
-          "Rename":"A3_Up",
-          "Hint":"Middle Hat"
+          "Name":"R 1",
+          "Icon":"[ps4R1]",
+          "IconOnly":true
         },
         "Joy_7":
         {
-          "Rename":"A3_Right",
-          "Hint":"Middle Hat"
+          "Name":"L 2",
+          "Icon":"[ps4L2]",
+          "IconOnly":true
         },
         "Joy_8":
         {
-          "Rename":"A3_Down",
-          "Hint":"Middle Hat"
+          "Name":"R 2",
+          "Icon":"[ps4R2]",
+          "IconOnly":true
         },
         "Joy_9":
         {
-          "Rename":"A3_Left",
-          "Hint":"Middle Hat"
+          "Name":"Share",
+          "Icon":"[ps4Share]",
+          "IconOnly":true
         },
         "Joy_10":
         {
-          "Rename":"A3_Push",
-          "Hint":"Middle Hat"
+          "Name":"Options",
+          "Icon":"[ps4Options]",
+          "IconOnly":true
         },
         "Joy_11":
         {
-          "Rename":"A4_Up",
-          "Hint":"Right Hat"
+          "Name":"L 3",
+          "Icon":"[ps4L3]",
+          "IconOnly":true
         },
         "Joy_12":
         {
-          "Rename":"A4_Right",
-          "Hint":"Right Hat"
+          "Name":"R 3",
+          "Icon":"[ps4R3]",
+          "IconOnly":true
         },
         "Joy_13":
         {
-          "Rename":"A4_Down",
-          "Hint":"Right Hat"
+          "Name":"PS Button"
         },
         "Joy_14":
         {
-          "Rename":"A4_Left",
-          "Hint":"Right Hat"
+          "Name":"Touchpad",
+          "Icon":"[ps4Touchpad]",
+          "IconOnly":true
         },
         "Joy_15":
         {
-          "Rename":"A4_Push",
-          "Hint":"Right Hat"
-        },
-        "Joy_16":
-        {
-          "Rename":"C1_Up",
-          "Hint":"Thumb Hat"
-        },
-        "Joy_17":
-        {
-          "Rename":"C1_Right",
-          "Hint":"Thumb Hat"
-        },
-        "Joy_18":
-        {
-          "Rename":"C1_Down",
-          "Hint":"Thumb Hat"
-        },
-        "Joy_19":
-        {
-          "Rename":"C1_Left",
-          "Hint":"Thumb Hat"
-        },
-        "Joy_20":
-        {
-          "Rename":"C1_Push",
-          "Hint":"Thumb Hat"
-        },
-        "Joy_21":
-        {
-          "Rename":"Rapid Fire_Up",
-          "Hint":"Top Trigger"
-        },
-        "Joy_22":
-        {
-          "Rename":"Rapid Fire_Down",
-          "Hint":"Top Trigger"
-        },
-        "Joy_23":
-        {
-          "Rename":"Roll Up",
-          "Hint":"Bottom Right Roll Button Base"
-        },
-        "Joy_24":
-        {
-          "Rename":"Roll Down",
-          "Hint":"Bottom Right Roll Button Base"
-        },
-        "Joy_25":
-        {
-          "Rename":"Toggle Up",
-          "Hint":"Toggle Switch LB"
-        },
-        "Joy_26":
-        {
-          "Rename":"Toggle Down",
-          "Hint":"Toggle Switch LB"
-        },
-        "Joy_27":
-        {
-          "Rename":"F1",
-          "Hint":"Base switches"
-        },
-        "Joy_28":
-        {
-          "Rename":"F2",
-          "Hint":"Base switches"
-        },
-        "Joy_29":
-        {
-          "Rename":"F3",
-          "Hint":"Base switches"
-        },
-        "Joy_RZAxis":
-        {
-          "Rename":"Stick Twist",
-          "Hint":"Joystick"
-        },
-        "Joy_XAxis":
-        {
-          "Rename":"Stick X Axis",
-          "Hint":"Joystick"
-        },
-        "Joy_YAxis":
-        {
-          "Rename":"Stick Y Axis",
-          "Hint":"Joystick"
-        },
-        "Joy_ZAxis":
-        {
-          "Rename":"Base Slider",
-          "Hint":"Base of Joystick"
-        },
-        "Joy_POV1Left":
-        {
-          "Rename":"A1_Left (POV)",
-          "Hint":"Left Hat (POV Mode)"
-        },
-        "Joy_POV1Right":
-        {
-          "Rename":"A1_Right (POV)",
-          "Hint":"Left Hat (POV Mode)"
+          "Name":"Mute Button"
         },
         "Joy_POV1Up":
         {
-          "Rename":"A1_Up (POV)",
-          "Hint":"Left Hat (POV Mode)"
+          "Name":"U",
+          "Icon":"[ps4PadU]",
+          "IconOnly":true
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"R",
+          "Icon":"[ps4PadR]",
+          "IconOnly":true
         },
         "Joy_POV1Down":
         {
-          "Rename":"A1_Down (POV)",
-          "Hint":"Left Hat (POV Mode)"
+          "Name":"D",
+          "Icon":"[ps4PadD]",
+          "IconOnly":true
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"L",
+          "Icon":"[ps4PadL]",
+          "IconOnly":true
+        },
+        "Joy_XAxis":
+        {
+          "Name":"LX Axis",
+          "Icon":"[ps4LXAxis]",
+          "IconOnly":true
+        },
+        "Joy_YAxis":
+        {
+          "Name":"LY Axis",
+          "Icon":"[ps4LYAxis]",
+          "IconOnly":true
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"RX Axis",
+          "Icon":"[ps4RXAxis]",
+          "IconOnly":true
         },
         "Joy_RXAxis":
         {
-          "Rename":"A1_X Axis (Analog)",
+          "Name":"L 2",
+          "Icon":"[ps4L2]",
+          "IconOnly":true
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"R 2",
+          "Icon":"[ps4R2]",
+          "IconOnly":true
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"RY Axis",
+          "Icon":"[ps4RYAxis]",
+          "IconOnly":true
+        }
+      }
+    },
+    {
+      "Device":"054C0DF2",
+      "Name":"Sony DualSense Edge",
+      "Buttons":15,
+      "POV":1,
+      "Axis":"X,Y,Z,RX,RY,RZ",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"Square",
+          "Icon":"[ps4Square]",
+          "IconOnly":true
+        },
+        "Joy_2":
+        {
+          "Name":"Cross",
+          "Icon":"[ps4Cross]",
+          "IconOnly":true
+        },
+        "Joy_3":
+        {
+          "Name":"Circle",
+          "Icon":"[ps4Circle]",
+          "IconOnly":true
+        },
+        "Joy_4":
+        {
+          "Name":"Triangle",
+          "Icon":"[ps4Triangle]",
+          "IconOnly":true
+        },
+        "Joy_5":
+        {
+          "Name":"L 1",
+          "Icon":"[ps4L1]",
+          "IconOnly":true
+        },
+        "Joy_6":
+        {
+          "Name":"R 1",
+          "Icon":"[ps4R1]",
+          "IconOnly":true
+        },
+        "Joy_7":
+        {
+          "Name":"L 2",
+          "Icon":"[ps4L2]",
+          "IconOnly":true
+        },
+        "Joy_8":
+        {
+          "Name":"R 2",
+          "Icon":"[ps4R2]",
+          "IconOnly":true
+        },
+        "Joy_9":
+        {
+          "Name":"Share",
+          "Icon":"[ps4Share]",
+          "IconOnly":true
+        },
+        "Joy_10":
+        {
+          "Name":"Options",
+          "Icon":"[ps4Options]",
+          "IconOnly":true
+        },
+        "Joy_11":
+        {
+          "Name":"L 3",
+          "Icon":"[ps4L3]",
+          "IconOnly":true
+        },
+        "Joy_12":
+        {
+          "Name":"R 3",
+          "Icon":"[ps4R3]",
+          "IconOnly":true
+        },
+        "Joy_13":
+        {
+          "Name":"PS Button"
+        },
+        "Joy_14":
+        {
+          "Name":"Touchpad",
+          "Icon":"[ps4Touchpad]",
+          "IconOnly":true
+        },
+        "Joy_15":
+        {
+          "Name":"Mute Button"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"U",
+          "Icon":"[ps4PadU]",
+          "IconOnly":true
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"R",
+          "Icon":"[ps4PadR]",
+          "IconOnly":true
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"D",
+          "Icon":"[ps4PadD]",
+          "IconOnly":true
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"L",
+          "Icon":"[ps4PadL]",
+          "IconOnly":true
+        },
+        "Joy_XAxis":
+        {
+          "Name":"LX Axis",
+          "Icon":"[ps4LXAxis]",
+          "IconOnly":true
+        },
+        "Joy_YAxis":
+        {
+          "Name":"LY Axis",
+          "Icon":"[ps4LYAxis]",
+          "IconOnly":true
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"RX Axis",
+          "Icon":"[ps4RXAxis]",
+          "IconOnly":true
+        },
+        "Joy_RXAxis":
+        {
+          "Name":"L 2",
+          "Icon":"[ps4L2]",
+          "IconOnly":true
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"R 2",
+          "Icon":"[ps4R2]",
+          "IconOnly":true
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"RY Axis",
+          "Icon":"[ps4RYAxis]",
+          "IconOnly":true
+        }
+      }
+    },
+    {
+      "Device":"09111844",
+      "Name":"Footcontrol USB [VendorID: 0911, ProductID: 1844]",
+      "Buttons":3,
+      "POV":0,
+      "Axis":"",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"FOOT LEFT"
+        },
+        "Joy_2":
+        {
+          "Name":"FOOT RIGHT"
+        },
+        "Joy_3":
+        {
+          "Name":"FOOT MIDDLE"
+        }
+      }
+    },
+    {
+      "Device":"10F57055",
+      "Name":"TurtleBeach VelocityOne FlightStick",
+      "Buttons":22,
+      "POV":1,
+      "Axis":"X,Y,Z,RX,RY,RZ,U,V",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"VOneFS H2 X"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"VOneFS H2 Y"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"VOneFS LThrottle"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"VOneFS UAxis"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"VOneFS VAxis"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"VOneFS X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"VOneFS Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"VOneFS Rz",
+          "Icon":"[x52prorz]"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"VOneFS H1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"VOneFS H1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"VOneFS H1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"VOneFS H1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_1":
+        {
+          "Name":"VOneFS B1"
+        },
+        "Joy_2":
+        {
+          "Name":"VOneFS B2"
+        },
+        "Joy_3":
+        {
+          "Name":"VOneFS B3"
+        },
+        "Joy_4":
+        {
+          "Name":"VOneFS B4"
+        },
+        "Joy_5":
+        {
+          "Name":"VOneFS B5"
+        },
+        "Joy_6":
+        {
+          "Name":"VOneFS B6"
+        },
+        "Joy_7":
+        {
+          "Name":"VOneFS B7"
+        },
+        "Joy_8":
+        {
+          "Name":"VOneFS B8"
+        },
+        "Joy_9":
+        {
+          "Name":"VOneFS B9 LTOGA"
+        },
+        "Joy_10":
+        {
+          "Name":"VOneFS B10 LFULL REV"
+        },
+        "Joy_11":
+        {
+          "Name":"VOneFS B11 RTOGA"
+        },
+        "Joy_12":
+        {
+          "Name":"VOneFS B12 RFULL REV"
+        },
+        "Joy_13":
+        {
+          "Name":"VOneFS En U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_14":
+        {
+          "Name":"VOneFS En D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_15":
+        {
+          "Name":"VOneFS En Click"
+        },
+        "Joy_16":
+        {
+          "Name":"VOneFS B16"
+        },
+        "Joy_17":
+        {
+          "Name":"VOneFS B17"
+        },
+        "Joy_18":
+        {
+          "Name":"VOneFS Trigger"
+        },
+        "Joy_19":
+        {
+          "Name":"VOneFS H2 Click"
+        },
+        "Joy_20":
+        {
+          "Name":"VOneFS Xbox"
+        },
+        "Joy_21":
+        {
+          "Name":"VOneFS Back",
+          "Icon":"[xb1Back]"
+        },
+        "Joy_22":
+        {
+          "Name":"VOneFS Start",
+          "Icon":"[xb1Start]"
+        }
+      }
+    },
+    {
+      "Device":"231D0126",
+      "Name":"VKB Gunfighter Space Combat Grip Premium (Right)",
+      "Buttons":27,
+      "POV":1,
+      "Axis":"X,Y,RX,RY,RZ",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"SCG Thumbstick X"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"SCG Thumbstick Y"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"SCG Rz",
+          "Icon":"[x52prorz]"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"SCG X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"SCG Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"SCG A1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"SCG A1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"SCG A1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"SCG A1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_1":
+        {
+          "Name":"SCG Fire 1"
+        },
+        "Joy_2":
+        {
+          "Name":"SCG Fire 2"
+        },
+        "Joy_3":
+        {
+          "Name":"SCG A2 (thumb red)"
+        },
+        "Joy_4":
+        {
+          "Name":"SCG B1 (right side)"
+        },
+        "Joy_5":
+        {
+          "Name":"SCG D1 (pinky)"
+        },
+        "Joy_6":
+        {
+          "Name":"SCG A4 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_7":
+        {
+          "Name":"SCG A4 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_8":
+        {
+          "Name":"SCG A4 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_9":
+        {
+          "Name":"SCG A4 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_10":
+        {
+          "Name":"SCG A4 Click"
+        },
+        "Joy_11":
+        {
+          "Name":"SCG A3 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_12":
+        {
+          "Name":"SCG A3 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_13":
+        {
+          "Name":"SCG A3 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_14":
+        {
+          "Name":"SCG A3 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_15":
+        {
+          "Name":"SCG A3 Click"
+        },
+        "Joy_21":
+        {
+          "Name":"SCG C1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_22":
+        {
+          "Name":"SCG C1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_23":
+        {
+          "Name":"SCG C1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_24":
+        {
+          "Name":"SCG C1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_25":
+        {
+          "Name":"SCG C1 Click"
+        },
+        "Joy_26":
+        {
+          "Name":"SCG Push Brake"
+        },
+        "Joy_27":
+        {
+          "Name":"SCG Pull Brake"
+        }
+      }
+    },
+    {
+      "Device":"231D012C",
+      "Name":"VKB STECS Regular Throttle System Mini Plus (Left)",
+      "Buttons":41,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"LSTECS OTS Vertical",
+          "Icon":"[x52prox]"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"LSTECS OTS Horizontal",
+          "Icon":"[x52proy]"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"LSTECS Right",
+          "Icon":"[xb1htsThr]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"LSTECS Left",
+          "Icon":"[xb1htsThr]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"LSTECS Scoll Z",
+          "Icon":"[xb1htsThr]"
+        },
+        "Joy_1":
+        {
+          "Name":"LSTECS SYS",
+          "Icon":"[x360Back]"
+        },
+        "Joy_2":
+        {
+          "Name":"LSTECS START",
+          "Icon":"[ps4Circle]"
+        },
+        "Joy_3":
+        {
+          "Name":"LSTECS Mode 1"
+        },
+        "Joy_4":
+        {
+          "Name":"LSTECS Mode 2"
+        },
+        "Joy_5":
+        {
+          "Name":"LSTECS Mode 3"
+        },
+        "Joy_6":
+        {
+          "Name":"LSTECS Mode 4"
+        },
+        "Joy_7":
+        {
+          "Name":"LSTECS Mode 5"
+        },
+        "Joy_8":
+        {
+          "Name":"LSTECS PUSH CCW"
+        },
+        "Joy_9":
+        {
+          "Name":"LSTECS PUSH CW"
+        },
+        "Joy_10":
+        {
+          "Name":"LSTECS SAFE",
+          "Icon":"[ps4Circle]"
+        },
+        "Joy_11":
+        {
+          "Name":"LSTECS #1",
+          "Icon":"[hts4Square]"
+        },
+        "Joy_12":
+        {
+          "Name":"LSTECS #2",
+          "Icon":"[hts4Square]"
+        },
+        "Joy_13":
+        {
+          "Name":"LSTECS #3",
+          "Icon":"[hts4Square]"
+        },
+        "Joy_14":
+        {
+          "Name":"LSTECS #4",
+          "Icon":"[hts4Square]"
+        },
+        "Joy_15":
+        {
+          "Name":"LSTECS ARMED",
+          "Icon":"[ps4Circle]"
+        },
+        "Joy_21":
+        {
+          "Name":"LSTECS Back Trig L",
+          "Icon":"[x360LBump]"
+        },
+        "Joy_22":
+        {
+          "Name":"LSTECS Front Trig L",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_23":
+        {
+          "Name":"LSTECS Weapon Select",
+          "Icon":"[ps4Circle]"
+        },
+        "Joy_24":
+        {
+          "Name":"LSTECS RST"
+        },
+        "Joy_25":
+        {
+          "Name":"LSTECS Enc1 U",
+          "Icon":"[xb1PadU]"
+        },
+        "Joy_26":
+        {
+          "Name":"LSTECS Enc1 D",
+          "Icon":"[xb1PadD]"
+        },
+        "Joy_27":
+        {
+          "Name":"LSTECS Enc2 U",
+          "Icon":"[xb1PadU]"
+        },
+        "Joy_28":
+        {
+          "Name":"LSTECS Enc2 D",
+          "Icon":"[xb1PadD]"
+        },
+        "Joy_29":
+        {
+          "Name":"LSTECS Back Trig R",
+          "Icon":"[x360RBump]"
+        },
+        "Joy_30":
+        {
+          "Name":"LSTECS Front Trig R",
+          "Icon":"[x360RThumb]"
+        },
+        "Joy_31":
+        {
+          "Name":"LSTECS ENT"
+        },
+        "Joy_33":
+        {
+          "Name":"LSTECS BRK Hat Switch",
+          "Icon":"[hts4HatSwitch]"
+        },
+        "Joy_34":
+        {
+          "Name":"LSTECS MB1"
+        },
+        "Joy_35":
+        {
+          "Name":"LSTECS RADIO"
+        },
+        "Joy_36":
+        {
+          "Name":"LSTECS MB2"
+        },
+        "Joy_37":
+        {
+          "Name":"LSTECS OP EXEC",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_38":
+        {
+          "Name":"LSTECS BRK L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_39":
+        {
+          "Name":"LSTECS BRK D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_40":
+        {
+          "Name":"LSTECS BRK R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_41":
+        {
+          "Name":"LSTECS BRK U",
+          "Icon":"[ps4PadU]"
+        }
+      }
+    },
+    {
+      "Device":"231D012D",
+      "Name":"VKB STECS Modern Throttle System Standard",
+      "Buttons":62,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"LSTECS MB1 X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"LSTECS MB1 Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"LSTECS Throttle L",
+          "Icon":"[x52proy]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"LSTECS Throttle R",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"LSTECS Thumb WH"
+        },
+        "Joy_1":
+        {
+          "Name":"LSTECS Sys"
+        },
+        "Joy_2":
+        {
+          "Name":"LSTECS Start"
+        },
+        "Joy_3":
+        {
+          "Name":"LSTECS Mode 1"
+        },
+        "Joy_4":
+        {
+          "Name":"LSTECS Mode 2"
+        },
+        "Joy_5":
+        {
+          "Name":"LSTECS Mode 3"
+        },
+        "Joy_6":
+        {
+          "Name":"LSTECS Mode 4"
+        },
+        "Joy_7":
+        {
+          "Name":"LSTECS Mode 5"
+        },
+        "Joy_8":
+        {
+          "Name":"LSTECS Back TrigL"
+        },
+        "Joy_9":
+        {
+          "Name":"LSTECS Front TrigL"
+        },
+        "Joy_10":
+        {
+          "Name":"LSTECS Weapon Select"
+        },
+        "Joy_11":
+        {
+          "Name":"LSTECS RST"
+        },
+        "Joy_12":
+        {
+          "Name":"LSTECS ENC WH U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_13":
+        {
+          "Name":"LSTECS ENC WH D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_14":
+        {
+          "Name":"LSTECS ENC WH-side U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_15":
+        {
+          "Name":"LSTECS ENC WH-side D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_16":
+        {
+          "Name":"LSTECS Back TrigR"
+        },
+        "Joy_17":
+        {
+          "Name":"LSTECS Front TrigR"
+        },
+        "Joy_18":
+        {
+          "Name":"LSTECS ENT"
+        },
+        "Joy_19":
+        {
+          "Name":"LSTECS OTS Click"
+        },
+        "Joy_20":
+        {
+          "Name":"LSTECS BRK Click"
+        },
+        "Joy_21":
+        {
+          "Name":"LSTECS MB1 Click"
+        },
+        "Joy_22":
+        {
+          "Name":"LSTECS RADIO Click"
+        },
+        "Joy_23":
+        {
+          "Name":"LSTECS MB2 Click"
+        },
+        "Joy_24":
+        {
+          "Name":"LSTECS OP EXEC",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_25":
+        {
+          "Name":"LSTECS BRK U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_26":
+        {
+          "Name":"LSTECS BRK D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_27":
+        {
+          "Name":"LSTECS BRK R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_28":
+        {
+          "Name":"LSTECS BRK L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_29":
+        {
+          "Name":"LSTECS RADIO D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_30":
+        {
+          "Name":"LSTECS RADIO U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_31":
+        {
+          "Name":"LSTECS MB2 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_32":
+        {
+          "Name":"LSTECS MB2 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_33":
+        {
+          "Name":"LSTECS MB2 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_34":
+        {
+          "Name":"LSTECS MB2 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_35":
+        {
+          "Name":"LSTECS OTS D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_36":
+        {
+          "Name":"LSTECS OTS L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_37":
+        {
+          "Name":"LSTECS OTS U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_38":
+        {
+          "Name":"LSTECS OTS R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_39":
+        {
+          "Name":"LSTECS A1"
+        },
+        "Joy_40":
+        {
+          "Name":"LSTECS A2"
+        },
+        "Joy_41":
+        {
+          "Name":"LSTECS C1"
+        },
+        "Joy_42":
+        {
+          "Name":"LSTECS B1"
+        },
+        "Joy_43":
+        {
+          "Name":"LSTECS B2"
+        },
+        "Joy_44":
+        {
+          "Name":"LSTECS B3"
+        },
+        "Joy_45":
+        {
+          "Name":"LSTECS B4"
+        },
+        "Joy_46":
+        {
+          "Name":"LSTECS B5"
+        },
+        "Joy_47":
+        {
+          "Name":"LSTECS SW1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_48":
+        {
+          "Name":"Joy_48"
+        },
+        "Joy_49":
+        {
+          "Name":"LSTECS SW1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_50":
+        {
+          "Name":"LSTECS SW1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_51":
+        {
+          "Name":"Joy_51"
+        },
+        "Joy_52":
+        {
+          "Name":"LSTECS SW1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_53":
+        {
+          "Name":"LSTECS TGL UP"
+        },
+        "Joy_54":
+        {
+          "Name":"LSTECS TGL DN"
+        },
+        "Joy_55":
+        {
+          "Name":"LSTECS EN1 Rot CCW"
+        },
+        "Joy_56":
+        {
+          "Name":"LSTECS EN1 Rot CW"
+        },
+        "Joy_57":
+        {
+          "Name":"LSTECS EN2 Rot CCW"
+        },
+        "Joy_58":
+        {
+          "Name":"LSTECS EN2 Rot CW"
+        },
+        "Joy_59":
+        {
+          "Name":"LSTECS EN1 Click"
+        },
+        "Joy_60":
+        {
+          "Name":"LSTECS EN2 Click"
+        },
+        "Joy_61":
+        {
+          "Name":"LSTECS LEV UP"
+        },
+        "Joy_62":
+        {
+          "Name":"LSTECS LEV DOWN"
+        }
+      }
+    },
+    {
+      "Device":"231D0136",
+      "Name":"VKB STECS Space Throttle Grip Mini (Left)",
+      "Buttons":29,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"STECS SpaceBrake"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"STECS Laser Power"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"STECS X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"STECS Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"STECS Z",
+          "Icon":"[x52z]"
+        },
+        "Joy_1":
+        {
+          "Name":"STECS Sys"
+        },
+        "Joy_2":
+        {
+          "Name":"STECS Start"
+        },
+        "Joy_3":
+        {
+          "Name":"STECS Mode 1"
+        },
+        "Joy_4":
+        {
+          "Name":"STECS Mode 2"
+        },
+        "Joy_5":
+        {
+          "Name":"STECS Mode 3"
+        },
+        "Joy_6":
+        {
+          "Name":"STECS Mode 4"
+        },
+        "Joy_7":
+        {
+          "Name":"STECS Mode 5"
+        },
+        "Joy_8":
+        {
+          "Name":"STECS B1"
+        },
+        "Joy_9":
+        {
+          "Name":"STECS Trigger"
+        },
+        "Joy_10":
+        {
+          "Name":"STECS B2"
+        },
+        "Joy_11":
+        {
+          "Name":"STECS Speed Lim L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_12":
+        {
+          "Name":"STECS Speed Lim U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_13":
+        {
+          "Name":"STECS Speed Lim D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_14":
+        {
+          "Name":"STECS PHat L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_15":
+        {
+          "Name":"STECS Hat1 L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_16":
+        {
+          "Name":"STECS PHat U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_17":
+        {
+          "Name":"STECS PHat D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_18":
+        {
+          "Name":"STECS PHat L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_19":
+        {
+          "Name":"STECS PHat R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_20":
+        {
+          "Name":"STECS Hat1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_21":
+        {
+          "Name":"STECS Hat1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_22":
+        {
+          "Name":"STECS Hat1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_23":
+        {
+          "Name":"STECS Hat1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_24":
+        {
+          "Name":"STECS H1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_25":
+        {
+          "Name":"STECS H1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_26":
+        {
+          "Name":"STECS H1 L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_27":
+        {
+          "Name":"STECS H2 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_28":
+        {
+          "Name":"STECS H2 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_29":
+        {
+          "Name":"STECS H2 L Thumb",
+          "Icon":"[x360LThumb]"
+        }
+      }
+    },
+    {
+      "Device":"231D0137",
+      "Name":"VKB STECS Space Throttle Grip Mini Plus (Left)",
+      "Buttons":42,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"LSTECS SpaceBrake"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"LSTECS Laser Power"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"LSTECS X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"LSTECS Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"LSTECS Throttle"
+        },
+        "Joy_1":
+        {
+          "Name":"LSTECS Sys"
+        },
+        "Joy_2":
+        {
+          "Name":"LSTECS Start"
+        },
+        "Joy_3":
+        {
+          "Name":"LSTECS Mode 1"
+        },
+        "Joy_4":
+        {
+          "Name":"LSTECS Mode 2"
+        },
+        "Joy_5":
+        {
+          "Name":"LSTECS Mode 3"
+        },
+        "Joy_6":
+        {
+          "Name":"LSTECS Mode 4"
+        },
+        "Joy_7":
+        {
+          "Name":"LSTECS Mode 5"
+        },
+        "Joy_8":
+        {
+          "Name":"LSTECS Rot CCW"
+        },
+        "Joy_9":
+        {
+          "Name":"LSTECS Rot CW"
+        },
+        "Joy_10":
+        {
+          "Name":"LSTECS Safe"
+        },
+        "Joy_11":
+        {
+          "Name":"LSTECS #1"
+        },
+        "Joy_12":
+        {
+          "Name":"LSTECS #2"
+        },
+        "Joy_13":
+        {
+          "Name":"LSTECS #3"
+        },
+        "Joy_14":
+        {
+          "Name":"LSTECS #4"
+        },
+        "Joy_15":
+        {
+          "Name":"LSTECS Armed"
+        },
+        "Joy_16":
+        {
+          "Name":"LSTECS Rot U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_17":
+        {
+          "Name":"LSTECS Rot D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_18":
+        {
+          "Name":"LSTECS Rot R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_19":
+        {
+          "Name":"LSTECS Rot L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_20":
+        {
+          "Name":"LSTECS Rot Click"
+        },
+        "Joy_21":
+        {
+          "Name":"LSTECS B1"
+        },
+        "Joy_22":
+        {
+          "Name":"LSTECS Trigger"
+        },
+        "Joy_23":
+        {
+          "Name":"LSTECS B2"
+        },
+        "Joy_24":
+        {
+          "Name":"LSTECS Speed Lim L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_25":
+        {
+          "Name":"LSTECS Speed Lim U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_26":
+        {
+          "Name":"LSTECS Speed Lim D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_27":
+        {
+          "Name":"LSTECS PHat L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_28":
+        {
+          "Name":"LSTECS Hat1 L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_29":
+        {
+          "Name":"LSTECS PHat U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_30":
+        {
+          "Name":"LSTECS PHat D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_31":
+        {
+          "Name":"LSTECS PHat L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_32":
+        {
+          "Name":"LSTECS PHat R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_33":
+        {
+          "Name":"LSTECS Hat1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_34":
+        {
+          "Name":"LSTECS Hat1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_35":
+        {
+          "Name":"LSTECS Hat1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_36":
+        {
+          "Name":"LSTECS Hat1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_37":
+        {
+          "Name":"LSTECS H1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_38":
+        {
+          "Name":"LSTECS H1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_39":
+        {
+          "Name":"LSTECS H1 L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_40":
+        {
+          "Name":"LSTECS H2 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_41":
+        {
+          "Name":"LSTECS H2 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_42":
+        {
+          "Name":"LSTECS H2 L Thumb",
+          "Icon":"[x360LThumb]"
+        }
+      }
+    },
+    {
+      "Device":"231D0138",
+      "Name":"VKB STECS Space Throttle Grip Standard (Left)",
+      "Buttons":53,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"STECS - Base Sys"
+        },
+        "Joy_2":
+        {
+          "Name":"STECS - Base Start"
+        },
+        "Joy_3":
+        {
+          "Name":"STECS - Base Mode 1"
+        },
+        "Joy_4":
+        {
+          "Name":"STECS - Base Mode 2"
+        },
+        "Joy_5":
+        {
+          "Name":"STECS - Base Mode 3"
+        },
+        "Joy_6":
+        {
+          "Name":"STECS - Base Mode 4"
+        },
+        "Joy_7":
+        {
+          "Name":"STECS - Base Mode 5"
+        },
+        "Joy_8":
+        {
+          "Name":"STECS - B1"
+        },
+        "Joy_9":
+        {
+          "Name":"STECS - Trigger"
+        },
+        "Joy_10":
+        {
+          "Name":"STECS - B2"
+        },
+        "Joy_11":
+        {
+          "Name":"STECS - Speed Push"
+        },
+        "Joy_12":
+        {
+          "Name":"STECS - Speed Up"
+        },
+        "Joy_13":
+        {
+          "Name":"STECS - Speed Down"
+        },
+        "Joy_14":
+        {
+          "Name":"STECS - Index Push"
+        },
+        "Joy_15":
+        {
+          "Name":"STECS - HAT1 Push"
+        },
+        "Joy_16":
+        {
+          "Name":"STECS - Index Fore"
+        },
+        "Joy_17":
+        {
+          "Name":"STECS - Index Back"
+        },
+        "Joy_18":
+        {
+          "Name":"STECS - Index Left"
+        },
+        "Joy_19":
+        {
+          "Name":"STECS - Index Right"
+        },
+        "Joy_20":
+        {
+          "Name":"STECS - HAT1 Back"
+        },
+        "Joy_21":
+        {
+          "Name":"STECS - HAT1 Fore"
+        },
+        "Joy_22":
+        {
+          "Name":"STECS - HAT1 Down"
+        },
+        "Joy_23":
+        {
+          "Name":"STECS - HAT1 Up"
+        },
+        "Joy_24":
+        {
+          "Name":"STECS - H1 Down"
+        },
+        "Joy_25":
+        {
+          "Name":"STECS - H1 Up"
+        },
+        "Joy_26":
+        {
+          "Name":"STECS - H1 Push"
+        },
+        "Joy_27":
+        {
+          "Name":"STECS - H2 Back"
+        },
+        "Joy_28":
+        {
+          "Name":"STECS - H2 Fore"
+        },
+        "Joy_29":
+        {
+          "Name":"STECS - H2 Push"
+        },
+        "Joy_30":
+        {
+          "Name":"STECS - STEM A1"
+        },
+        "Joy_31":
+        {
+          "Name":"STECS - STEM A2"
+        },
+        "Joy_32":
+        {
+          "Name":"STECS - STEM C1"
+        },
+        "Joy_33":
+        {
+          "Name":"STECS - STEM B1"
+        },
+        "Joy_34":
+        {
+          "Name":"STECS - STEM B2"
+        },
+        "Joy_35":
+        {
+          "Name":"STECS - STEM B3"
+        },
+        "Joy_36":
+        {
+          "Name":"STECS - STEM B4"
+        },
+        "Joy_37":
+        {
+          "Name":"STECS - STEM B5"
+        },
+        "Joy_38":
+        {
+          "Name":"STECS - STEM Sw1 Up"
+        },
+        "Joy_39":
+        {
+          "Name":"STECS - STEM Sw1 Mid"
+        },
+        "Joy_40":
+        {
+          "Name":"STECS - STEM Sw1 Down"
+        },
+        "Joy_41":
+        {
+          "Name":"STECS - STEM Sw2 Up"
+        },
+        "Joy_42":
+        {
+          "Name":"STECS - STEM Sw2 Mid"
+        },
+        "Joy_43":
+        {
+          "Name":"STECS - STEM Sw2 Down"
+        },
+        "Joy_44":
+        {
+          "Name":"STECS - STEM Tgl Up"
+        },
+        "Joy_45":
+        {
+          "Name":"STECS - STEM Tgl Down"
+        },
+        "Joy_46":
+        {
+          "Name":"STECS - STEM Enc1 CCW"
+        },
+        "Joy_47":
+        {
+          "Name":"STECS - STEM Enc1 CW"
+        },
+        "Joy_48":
+        {
+          "Name":"STECS - STEM Enc2 CCW"
+        },
+        "Joy_49":
+        {
+          "Name":"STECS - STEM Enc2 CW"
+        },
+        "Joy_50":
+        {
+          "Name":"STECS - STEM Enc1 Push"
+        },
+        "Joy_51":
+        {
+          "Name":"STECS - STEM Enc2 Push"
+        },
+        "Joy_52":
+        {
+          "Name":"STECS - STEM Flap Up"
+        },
+        "Joy_53":
+        {
+          "Name":"STECS - STEM Flap Down"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"STECS - X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"STECS - Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"STECS - Z",
+          "Icon":"[x52z]"
+        },
+        "Joy_RXAxis":
+        {
+          "Name":"STECS - Space Brake"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"STECS - Laser Power"
+        }
+      }
+    },
+    {
+      "Device":"231D0139",
+      "Name":"VKB STECS Space Throttle Grip Max (Left) [VendorID: 231D, ProductID: 0139]",
+      "Buttons":66,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"STGL SYS"
+        },
+        "Joy_2":
+        {
+          "Name":"STGL START"
+        },
+        "Joy_3":
+        {
+          "Name":"STGL MODE 1"
+        },
+        "Joy_4":
+        {
+          "Name":"STGL MODE 2"
+        },
+        "Joy_5":
+        {
+          "Name":"STGL MODE 3"
+        },
+        "Joy_6":
+        {
+          "Name":"STGL MODE 4"
+        },
+        "Joy_7":
+        {
+          "Name":"STGL MODE 5"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"STGL X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"STGL Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"STGL Z",
+          "Icon":"[x52z]"
+        },
+        "Joy_21":
+        {
+          "Name":"STGL B1"
+        },
+        "Joy_22":
+        {
+          "Name":"STGL TRIGGER"
+        },
+        "Joy_23":
+        {
+          "Name":"STGL B2"
+        },
+        "Joy_24":
+        {
+          "Name":"STGL SPEED LIM PUSH"
+        },
+        "Joy_25":
+        {
+          "Name":"STGL SPEED LIM UP"
+        },
+        "Joy_26":
+        {
+          "Name":"STGL SPEED LIM DOWN"
+        },
+        "Joy_27":
+        {
+          "Name":"STGL POINTER PUSH"
+        },
+        "Joy_28":
+        {
+          "Name":"STGL HAT1 PUSH"
+        },
+        "Joy_29":
+        {
+          "Name":"STGL POINTER U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_30":
+        {
+          "Name":"STGL POINTER D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_31":
+        {
+          "Name":"STGL POINTER L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_32":
+        {
+          "Name":"STGL POINTER R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_33":
+        {
+          "Name":"STGL HAT1 BACK"
+        },
+        "Joy_34":
+        {
+          "Name":"STGL HAT1 FORE"
+        },
+        "Joy_35":
+        {
+          "Name":"STGL HAT1 DOWN"
+        },
+        "Joy_36":
+        {
+          "Name":"STGL HAT1 UP"
+        },
+        "Joy_37":
+        {
+          "Name":"STGL H1 DOWN"
+        },
+        "Joy_38":
+        {
+          "Name":"STGL H1 Up"
+        },
+        "Joy_39":
+        {
+          "Name":"STGL H1 PUSH"
+        },
+        "Joy_40":
+        {
+          "Name":"STGL H2 BACK"
+        },
+        "Joy_41":
+        {
+          "Name":"STGL H2 FORE"
+        },
+        "Joy_42":
+        {
+          "Name":"STGL H2 PUSH"
+        },
+        "Joy_RXAxis":
+        {
+          "Name":"STGL BRAKE"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"STGL LASER",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_8":
+        {
+          "Name":"ATEM MSE CCW"
+        },
+        "Joy_9":
+        {
+          "Name":"ATEM MSE CW"
+        },
+        "Joy_10":
+        {
+          "Name":"ATEM SAFE"
+        },
+        "Joy_11":
+        {
+          "Name":"ATEM 1"
+        },
+        "Joy_12":
+        {
+          "Name":"ATEM 2"
+        },
+        "Joy_13":
+        {
+          "Name":"ATEM 3"
+        },
+        "Joy_14":
+        {
+          "Name":"ATEM 4"
+        },
+        "Joy_15":
+        {
+          "Name":"ATEM ARMED"
+        },
+        "Joy_16":
+        {
+          "Name":"ATEM MSE U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_17":
+        {
+          "Name":"ATEM MSE D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_18":
+        {
+          "Name":"ATEM MSE R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_19":
+        {
+          "Name":"ATEM MSE L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_20":
+        {
+          "Name":"ATEM MSE PUSH"
+        },
+        "Joy_43":
+        {
+          "Name":"STEM A1"
+        },
+        "Joy_44":
+        {
+          "Name":"STEM A2"
+        },
+        "Joy_45":
+        {
+          "Name":"STEM C1"
+        },
+        "Joy_46":
+        {
+          "Name":"STEM B1"
+        },
+        "Joy_47":
+        {
+          "Name":"STEM B2"
+        },
+        "Joy_48":
+        {
+          "Name":"STEM B3"
+        },
+        "Joy_49":
+        {
+          "Name":"STEM B4"
+        },
+        "Joy_50":
+        {
+          "Name":"STEM B5"
+        },
+        "Joy_51":
+        {
+          "Name":"STEM SW1 UP"
+        },
+        "Joy_52":
+        {
+          "Name":"STEM SW1 PUSH"
+        },
+        "Joy_53":
+        {
+          "Name":"STEM SW1 DOWN"
+        },
+        "Joy_54":
+        {
+          "Name":"STEM SW2 UP"
+        },
+        "Joy_55":
+        {
+          "Name":"STEM SW2 PUSH"
+        },
+        "Joy_56":
+        {
+          "Name":"STEM SW2 DOWN"
+        },
+        "Joy_57":
+        {
+          "Name":"STEM TGL UP"
+        },
+        "Joy_58":
+        {
+          "Name":"STEM TGL DOWN"
+        },
+        "Joy_59":
+        {
+          "Name":"STEM EN1 CCW"
+        },
+        "Joy_60":
+        {
+          "Name":"STEM EN1 CW"
+        },
+        "Joy_61":
+        {
+          "Name":"STEM EN2 CCW"
+        },
+        "Joy_62":
+        {
+          "Name":"STEM EN2 CW"
+        },
+        "Joy_63":
+        {
+          "Name":"STEM EN1 PUSH"
+        },
+        "Joy_64":
+        {
+          "Name":"STEM EN2 PUSH"
+        },
+        "Joy_65":
+        {
+          "Name":"STEM LEVER UP"
+        },
+        "Joy_66":
+        {
+          "Name":"STEM LEVER DOWN"
+        }
+      }
+    },
+    {
+      "Device":"231D013A",
+      "Name":"VKB STECS Space Throttle Grip Mini (Right)",
+      "Buttons":29,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"STECS SpaceBrake"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"STECS Laser Power"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"STECS X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"STECS Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"STECS Z",
+          "Icon":"[x52z]"
+        },
+        "Joy_1":
+        {
+          "Name":"STECS Sys"
+        },
+        "Joy_2":
+        {
+          "Name":"STECS Start"
+        },
+        "Joy_3":
+        {
+          "Name":"STECS Mode 1"
+        },
+        "Joy_4":
+        {
+          "Name":"STECS Mode 2"
+        },
+        "Joy_5":
+        {
+          "Name":"STECS Mode 3"
+        },
+        "Joy_6":
+        {
+          "Name":"STECS Mode 4"
+        },
+        "Joy_7":
+        {
+          "Name":"STECS Mode 5"
+        },
+        "Joy_8":
+        {
+          "Name":"STECS B1"
+        },
+        "Joy_9":
+        {
+          "Name":"STECS Trigger"
+        },
+        "Joy_10":
+        {
+          "Name":"STECS B2"
+        },
+        "Joy_11":
+        {
+          "Name":"STECS Speed Lim L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_12":
+        {
+          "Name":"STECS Speed Lim U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_13":
+        {
+          "Name":"STECS Speed Lim D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_14":
+        {
+          "Name":"STECS PHat L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_15":
+        {
+          "Name":"STECS Hat1 L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_16":
+        {
+          "Name":"STECS PHat U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_17":
+        {
+          "Name":"STECS PHat D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_18":
+        {
+          "Name":"STECS PHat R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_19":
+        {
+          "Name":"STECS PHat L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_20":
+        {
+          "Name":"STECS Hat1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_21":
+        {
+          "Name":"STECS Hat1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_22":
+        {
+          "Name":"STECS Hat1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_23":
+        {
+          "Name":"STECS Hat1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_24":
+        {
+          "Name":"STECS H1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_25":
+        {
+          "Name":"STECS H1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_26":
+        {
+          "Name":"STECS H1 L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_27":
+        {
+          "Name":"STECS H2 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_28":
+        {
+          "Name":"STECS H2 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_29":
+        {
+          "Name":"STECS H2 L Thumb",
+          "Icon":"[x360LThumb]"
+        }
+      }
+    },
+    {
+      "Device":"231D013B",
+      "Name":"VKB STECS Space Throttle Grip Mini Plus (Right)",
+      "Buttons":42,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"RSTECS SpaceBrake"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"RSTECS Laser Power"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"RSTECS X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"RSTECS Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"RSTECS Throttle"
+        },
+        "Joy_1":
+        {
+          "Name":"RSTECS Sys"
+        },
+        "Joy_2":
+        {
+          "Name":"RSTECS Start"
+        },
+        "Joy_3":
+        {
+          "Name":"RSTECS Mode 1"
+        },
+        "Joy_4":
+        {
+          "Name":"RSTECS Mode 2"
+        },
+        "Joy_5":
+        {
+          "Name":"RSTECS Mode 3"
+        },
+        "Joy_6":
+        {
+          "Name":"RSTECS Mode 4"
+        },
+        "Joy_7":
+        {
+          "Name":"RSTECS Mode 5"
+        },
+        "Joy_8":
+        {
+          "Name":"RSTECS Rot CCW"
+        },
+        "Joy_9":
+        {
+          "Name":"RSTECS Rot CW"
+        },
+        "Joy_10":
+        {
+          "Name":"RSTECS Safe"
+        },
+        "Joy_11":
+        {
+          "Name":"RSTECS #1"
+        },
+        "Joy_12":
+        {
+          "Name":"RSTECS #2"
+        },
+        "Joy_13":
+        {
+          "Name":"RSTECS #3"
+        },
+        "Joy_14":
+        {
+          "Name":"RSTECS #4"
+        },
+        "Joy_15":
+        {
+          "Name":"RSTECS Armed"
+        },
+        "Joy_16":
+        {
+          "Name":"RSTECS Rot U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_17":
+        {
+          "Name":"RSTECS Rot D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_18":
+        {
+          "Name":"RSTECS Rot R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_19":
+        {
+          "Name":"RSTECS Rot L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_20":
+        {
+          "Name":"RSTECS Rot Click"
+        },
+        "Joy_21":
+        {
+          "Name":"RSTECS B1"
+        },
+        "Joy_22":
+        {
+          "Name":"RSTECS Trigger"
+        },
+        "Joy_23":
+        {
+          "Name":"RSTECS B2"
+        },
+        "Joy_24":
+        {
+          "Name":"RSTECS Speed Lim L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_25":
+        {
+          "Name":"RSTECS Speed Lim U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_26":
+        {
+          "Name":"RSTECS Speed Lim D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_27":
+        {
+          "Name":"RSTECS PHat L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_28":
+        {
+          "Name":"RSTECS Hat1 L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_29":
+        {
+          "Name":"RSTECS PHat U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_30":
+        {
+          "Name":"RSTECS PHat D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_31":
+        {
+          "Name":"RSTECS PHat R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_32":
+        {
+          "Name":"RSTECS PHat L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_33":
+        {
+          "Name":"RSTECS Hat1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_34":
+        {
+          "Name":"RSTECS Hat1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_35":
+        {
+          "Name":"RSTECS Hat1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_36":
+        {
+          "Name":"RSTECS Hat1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_37":
+        {
+          "Name":"RSTECS H1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_38":
+        {
+          "Name":"RSTECS H1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_39":
+        {
+          "Name":"RSTECS H1 L Thumb",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_40":
+        {
+          "Name":"RSTECS H2 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_41":
+        {
+          "Name":"RSTECS H2 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_42":
+        {
+          "Name":"RSTECS H2 L Thumb",
+          "Icon":"[x360LThumb]"
+        }
+      }
+    },
+    {
+      "Device":"231D013C",
+      "Name":"VKB STECS Space Throttle Grip Standard (Right)",
+      "Buttons":53,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"STECS - Base Sys"
+        },
+        "Joy_2":
+        {
+          "Name":"STECS - Base Start"
+        },
+        "Joy_3":
+        {
+          "Name":"STECS - Base Mode 1"
+        },
+        "Joy_4":
+        {
+          "Name":"STECS - Base Mode 2"
+        },
+        "Joy_5":
+        {
+          "Name":"STECS - Base Mode 3"
+        },
+        "Joy_6":
+        {
+          "Name":"STECS - Base Mode 4"
+        },
+        "Joy_7":
+        {
+          "Name":"STECS - Base Mode 5"
+        },
+        "Joy_8":
+        {
+          "Name":"STECS - B1"
+        },
+        "Joy_9":
+        {
+          "Name":"STECS - Trigger"
+        },
+        "Joy_10":
+        {
+          "Name":"STECS - B2"
+        },
+        "Joy_11":
+        {
+          "Name":"STECS - Speed Push"
+        },
+        "Joy_12":
+        {
+          "Name":"STECS - Speed Up"
+        },
+        "Joy_13":
+        {
+          "Name":"STECS - Speed Down"
+        },
+        "Joy_14":
+        {
+          "Name":"STECS - Index Push"
+        },
+        "Joy_15":
+        {
+          "Name":"STECS - HAT1 Push"
+        },
+        "Joy_16":
+        {
+          "Name":"STECS - Index Fore"
+        },
+        "Joy_17":
+        {
+          "Name":"STECS - Index Back"
+        },
+        "Joy_18":
+        {
+          "Name":"STECS - Index Right"
+        },
+        "Joy_19":
+        {
+          "Name":"STECS - Index Left"
+        },
+        "Joy_20":
+        {
+          "Name":"STECS - HAT1 Back"
+        },
+        "Joy_21":
+        {
+          "Name":"STECS - HAT1 Fore"
+        },
+        "Joy_22":
+        {
+          "Name":"STECS - HAT1 Down"
+        },
+        "Joy_23":
+        {
+          "Name":"STECS - HAT1 Up"
+        },
+        "Joy_24":
+        {
+          "Name":"STECS - H1 Down"
+        },
+        "Joy_25":
+        {
+          "Name":"STECS - H1 Up"
+        },
+        "Joy_26":
+        {
+          "Name":"STECS - H1 Push"
+        },
+        "Joy_27":
+        {
+          "Name":"STECS - H2 Back"
+        },
+        "Joy_28":
+        {
+          "Name":"STECS - H2 Fore"
+        },
+        "Joy_29":
+        {
+          "Name":"STECS - H2 Push"
+        },
+        "Joy_30":
+        {
+          "Name":"STECS - STEM A1"
+        },
+        "Joy_31":
+        {
+          "Name":"STECS - STEM A2"
+        },
+        "Joy_32":
+        {
+          "Name":"STECS - STEM C1"
+        },
+        "Joy_33":
+        {
+          "Name":"STECS - STEM B1"
+        },
+        "Joy_34":
+        {
+          "Name":"STECS - STEM B2"
+        },
+        "Joy_35":
+        {
+          "Name":"STECS - STEM B3"
+        },
+        "Joy_36":
+        {
+          "Name":"STECS - STEM B4"
+        },
+        "Joy_37":
+        {
+          "Name":"STECS - STEM B5"
+        },
+        "Joy_38":
+        {
+          "Name":"STECS - STEM Sw1 Up"
+        },
+        "Joy_39":
+        {
+          "Name":"STECS - STEM Sw1 Mid"
+        },
+        "Joy_40":
+        {
+          "Name":"STECS - STEM Sw1 Down"
+        },
+        "Joy_41":
+        {
+          "Name":"STECS - STEM Sw2 Up"
+        },
+        "Joy_42":
+        {
+          "Name":"STECS - STEM Sw2 Mid"
+        },
+        "Joy_43":
+        {
+          "Name":"STECS - STEM Sw2 Down"
+        },
+        "Joy_44":
+        {
+          "Name":"STECS - STEM Tgl Up"
+        },
+        "Joy_45":
+        {
+          "Name":"STECS - STEM Tgl Down"
+        },
+        "Joy_46":
+        {
+          "Name":"STECS - STEM Enc1 CCW"
+        },
+        "Joy_47":
+        {
+          "Name":"STECS - STEM Enc1 CW"
+        },
+        "Joy_48":
+        {
+          "Name":"STECS - STEM Enc2 CCW"
+        },
+        "Joy_49":
+        {
+          "Name":"STECS - STEM Enc2 CW"
+        },
+        "Joy_50":
+        {
+          "Name":"STECS - STEM Enc1 Push"
+        },
+        "Joy_51":
+        {
+          "Name":"STECS - STEM Enc2 Push"
+        },
+        "Joy_52":
+        {
+          "Name":"STECS - STEM Flap Up"
+        },
+        "Joy_53":
+        {
+          "Name":"STECS - STEM Flap Down"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"STECS - X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"STECS - Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"STECS - Z",
+          "Icon":"[x52z]"
+        },
+        "Joy_RXAxis":
+        {
+          "Name":"STECS - Space Brake"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"STECS - Laser Power"
+        }
+      }
+    },
+    {
+      "Device":"231D0200",
+      "Name":"VKB Gladiator NXT EVO Space Combat Grip Premium (Right)",
+      "Buttons":31,
+      "POV":4,
+      "Axis":"X,Y,Z,RX,RY,RZ,U,V",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"VKB A1_X Axis (Analog)",
           "Hint":"Left Hat (Analog Mode)"
         },
         "Joy_RYAxis":
         {
-          "Rename":"A1_Y Axis (Analog)",
+          "Name":"VKB A1_Y Axis (Analog)",
           "Hint":"Left Hat (Analog Mode)"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"VKB Stick Twist",
+          "Hint":"Joystick",
+          "Icon":"[x52prorz]"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"VKB UAxis"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"VKB VAxis"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"VKB Stick X Axis",
+          "Hint":"Joystick",
+          "Icon":"[hts4JoyX]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"VKB Stick Y Axis",
+          "Hint":"Joystick",
+          "Icon":"[hts4JoyY]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"VKB Base Slider",
+          "Hint":"Base of Joystick"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"VKB A1_Up (POV)",
+          "Hint":"Left Hat (POV Mode)"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"VKB A1_Right (POV)",
+          "Hint":"Left Hat (POV Mode)"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"VKB A1_Down (POV)",
+          "Hint":"Left Hat (POV Mode)"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"VKB A1_Left (POV)",
+          "Hint":"Left Hat (POV Mode)"
+        },
+        "Joy_POV2Up":
+        {
+          "Name":"VKB A4 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV2Right":
+        {
+          "Name":"VKB A4 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV2Down":
+        {
+          "Name":"VKB A4 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV2Left":
+        {
+          "Name":"VKB A4 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV3Up":
+        {
+          "Name":"VKB A3 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV3Right":
+        {
+          "Name":"VKB A3 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV3Down":
+        {
+          "Name":"VKB A3 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV3Left":
+        {
+          "Name":"VKB A3 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV4Up":
+        {
+          "Name":"VKB C1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV4Right":
+        {
+          "Name":"VKB C1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV4Down":
+        {
+          "Name":"VKB C1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV4Left":
+        {
+          "Name":"VKB C1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_1":
+        {
+          "Name":"VKB Trigger",
+          "Hint":"Main Fire Button",
+          "Icon":"[x52b2]"
+        },
+        "Joy_2":
+        {
+          "Name":"VKB Trigger Double Press",
+          "Hint":"Main Fire Button",
+          "Icon":"[x52b2]"
+        },
+        "Joy_3":
+        {
+          "Name":"VKB Red Button",
+          "Hint":"Left Joystick"
+        },
+        "Joy_4":
+        {
+          "Name":"VKB Right Index",
+          "Hint":"Right Index Figure Button"
+        },
+        "Joy_5":
+        {
+          "Name":"VKB Pinky Finger",
+          "Hint":"Bottom Joystick"
+        },
+        "Joy_6":
+        {
+          "Name":"VKB A3_Up",
+          "Hint":"Middle Hat",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_7":
+        {
+          "Name":"VKB A3_Right",
+          "Hint":"Middle Hat",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_8":
+        {
+          "Name":"VKB A3_Down",
+          "Hint":"Middle Hat",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_9":
+        {
+          "Name":"VKB A3_Left",
+          "Hint":"Middle Hat",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_10":
+        {
+          "Name":"VKB A3_Push",
+          "Hint":"Middle Hat"
+        },
+        "Joy_11":
+        {
+          "Name":"VKB A4_Up",
+          "Hint":"Right Hat"
+        },
+        "Joy_12":
+        {
+          "Name":"VKB A4_Right",
+          "Hint":"Right Hat"
+        },
+        "Joy_13":
+        {
+          "Name":"VKB A4_Down",
+          "Hint":"Right Hat"
+        },
+        "Joy_14":
+        {
+          "Name":"VKB A4_Left",
+          "Hint":"Right Hat"
+        },
+        "Joy_15":
+        {
+          "Name":"VKB A4_Push",
+          "Hint":"Right Hat"
+        },
+        "Joy_16":
+        {
+          "Name":"VKB C1_Up",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_17":
+        {
+          "Name":"VKB C1_Right",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_18":
+        {
+          "Name":"VKB C1_Down",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_19":
+        {
+          "Name":"VKB C1_Left",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_20":
+        {
+          "Name":"VKB C1_Push",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_21":
+        {
+          "Name":"VKB Rapid Fire_Up",
+          "Hint":"Top Trigger"
+        },
+        "Joy_22":
+        {
+          "Name":"VKB Rapid Fire_Down",
+          "Hint":"Top Trigger"
+        },
+        "Joy_23":
+        {
+          "Name":"VKB Roll Up",
+          "Hint":"Bottom Right Roll Button Base"
+        },
+        "Joy_24":
+        {
+          "Name":"VKB Roll Down",
+          "Hint":"Bottom Right Roll Button Base"
+        },
+        "Joy_25":
+        {
+          "Name":"VKB Toggle Up",
+          "Hint":"Toggle Switch LB"
+        },
+        "Joy_26":
+        {
+          "Name":"VKB Toggle Down",
+          "Hint":"Toggle Switch LB"
+        },
+        "Joy_27":
+        {
+          "Name":"VKB F1",
+          "Hint":"Base switches"
+        },
+        "Joy_28":
+        {
+          "Name":"VKB F2",
+          "Hint":"Base switches"
+        },
+        "Joy_29":
+        {
+          "Name":"VKB F3",
+          "Hint":"Base switches"
+        },
+        "Joy_30":
+        {
+          "Name":"VKB Unused1",
+          "Hint":"Unknown"
+        },
+        "Joy_31":
+        {
+          "Name":"VKB C1 Long press",
+          "Hint":"Thumb Hat"
+        }
+      }
+    },
+    {
+      "Device":"231D0201",
+      "Name":"VKB Gladiator NXT EVO Space Combat Grip Premium (Left)",
+      "Buttons":31,
+      "POV":4,
+      "Axis":"X,Y,Z,RX,RY,RZ,U,V",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"LGNX Thumbstick X"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"LGNX Thumbstick Y"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"LGNX Rz",
+          "Icon":"[x52prorz]"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"LGNX UAxis"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"LGNX VAxis"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"LGNX X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"LGNX Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"LGNX Throttle"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"LGNX A1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"LGNX A1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"LGNX A1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"LGNX A1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV2Up":
+        {
+          "Name":"LGNX A4 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV2Right":
+        {
+          "Name":"LGNX A4 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV2Down":
+        {
+          "Name":"LGNX A4 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV2Left":
+        {
+          "Name":"LGNX A4 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV3Up":
+        {
+          "Name":"LGNX A3 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV3Right":
+        {
+          "Name":"LGNX A3 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV3Down":
+        {
+          "Name":"LGNX A3 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV3Left":
+        {
+          "Name":"LGNX A3 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV4Up":
+        {
+          "Name":"LGNX C1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV4Right":
+        {
+          "Name":"LGNX C1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV4Down":
+        {
+          "Name":"LGNX C1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV4Left":
+        {
+          "Name":"LGNX C1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_1":
+        {
+          "Name":"LGNX Fire 1"
+        },
+        "Joy_2":
+        {
+          "Name":"LGNX Fire 2"
+        },
+        "Joy_3":
+        {
+          "Name":"LGNX A2 (thumb red)"
+        },
+        "Joy_4":
+        {
+          "Name":"LGNX B1 (right side)"
+        },
+        "Joy_5":
+        {
+          "Name":"LGNX D1 (pinky)"
+        },
+        "Joy_6":
+        {
+          "Name":"LGNX A3 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_7":
+        {
+          "Name":"LGNX A3 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_8":
+        {
+          "Name":"LGNX A3 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_9":
+        {
+          "Name":"LGNX A3 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_10":
+        {
+          "Name":"LGNX A3 Click"
+        },
+        "Joy_11":
+        {
+          "Name":"LGNX A4 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_12":
+        {
+          "Name":"LGNX A4 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_13":
+        {
+          "Name":"LGNX A4 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_14":
+        {
+          "Name":"LGNX A4 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_15":
+        {
+          "Name":"LGNX A4 Click"
+        },
+        "Joy_16":
+        {
+          "Name":"LGNX C1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_17":
+        {
+          "Name":"LGNX C1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_18":
+        {
+          "Name":"LGNX C1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_19":
+        {
+          "Name":"LGNX C1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_20":
+        {
+          "Name":"LGNX C1 Click"
+        },
+        "Joy_21":
+        {
+          "Name":"LGNX Push Brake"
+        },
+        "Joy_22":
+        {
+          "Name":"LGNX Pull Brake"
+        },
+        "Joy_23":
+        {
+          "Name":"LGNX En1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_24":
+        {
+          "Name":"LGNX En1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_25":
+        {
+          "Name":"LGNX En2 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_26":
+        {
+          "Name":"LGNX En2 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_27":
+        {
+          "Name":"LGNX F1"
+        },
+        "Joy_28":
+        {
+          "Name":"LGNX F2"
+        },
+        "Joy_29":
+        {
+          "Name":"LGNX F3"
+        },
+        "Joy_30":
+        {
+          "Name":"LGNX 30"
+        },
+        "Joy_31":
+        {
+          "Name":"LGNX C1 Long Press"
+        }
+      }
+    },
+    {
+      "Device":"231D0220",
+      "Name":"VKB Gladiator NXT EVO Space Combat Grip Premium (Right) + GNX FSM-GA module [VendorID: 231D, ProductID: 0220]",
+      "Buttons":64,
+      "POV":4,
+      "Axis":"X,Y,Z,RX,RY,RZ,U,V",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"SCGR THUMBSTICK X"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"SCGR THUMBSTICK Y"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"SCGR Rz",
+          "Icon":"[x52prorz]"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"SCGR UAxis"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"SCGR VAxis"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"SCGR X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"SCGR Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"SCGR A1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"SCGR A1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"SCGR A1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"SCGR A1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV2Up":
+        {
+          "Name":"SCGR A4 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV2Right":
+        {
+          "Name":"SCGR A4 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV2Down":
+        {
+          "Name":"SCGR A4 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV2Left":
+        {
+          "Name":"SCGR A4 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV3Up":
+        {
+          "Name":"SCGR A3 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV3Right":
+        {
+          "Name":"SCGR A3 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV3Down":
+        {
+          "Name":"SCGR A3 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV3Left":
+        {
+          "Name":"SCGR A3 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV4Up":
+        {
+          "Name":"SCGR C1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV4Right":
+        {
+          "Name":"SCGR C1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV4Down":
+        {
+          "Name":"SCGR C1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV4Left":
+        {
+          "Name":"SCGR C1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_1":
+        {
+          "Name":"SCGR FIRE 1"
+        },
+        "Joy_2":
+        {
+          "Name":"SCGR FIRE 2"
+        },
+        "Joy_3":
+        {
+          "Name":"SCGR A2 (thumb red)"
+        },
+        "Joy_4":
+        {
+          "Name":"SCGR B1 (right side)"
+        },
+        "Joy_5":
+        {
+          "Name":"SCGR D1 (pinky)"
+        },
+        "Joy_6":
+        {
+          "Name":"SCGR A3 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_7":
+        {
+          "Name":"SCGR A3 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_8":
+        {
+          "Name":"SCGR A3 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_9":
+        {
+          "Name":"SCGR A3 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_10":
+        {
+          "Name":"SCGR A3 (push)"
+        },
+        "Joy_11":
+        {
+          "Name":"SCGR A4 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_12":
+        {
+          "Name":"SCGR A4 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_13":
+        {
+          "Name":"SCGR A4 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_14":
+        {
+          "Name":"SCGR A4 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_15":
+        {
+          "Name":"SCGR A4 (push)"
+        },
+        "Joy_16":
+        {
+          "Name":"SCGR C1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_17":
+        {
+          "Name":"SCGR C1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_18":
+        {
+          "Name":"SCGR C1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_19":
+        {
+          "Name":"SCGR C1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_20":
+        {
+          "Name":"SCGR C1 PUSH"
+        },
+        "Joy_21":
+        {
+          "Name":"SCGR RAPIDFIRE PUSH"
+        },
+        "Joy_22":
+        {
+          "Name":"SCGR RAPIDFIRE PULL"
+        },
+        "Joy_23":
+        {
+          "Name":"SCGR En1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_24":
+        {
+          "Name":"SCGR En1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_25":
+        {
+          "Name":"SCGR En2 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_26":
+        {
+          "Name":"SCGR En2 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_27":
+        {
+          "Name":"SCGR F1"
+        },
+        "Joy_28":
+        {
+          "Name":"SCGR F2"
+        },
+        "Joy_29":
+        {
+          "Name":"SCGR F3"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"SCGR THROTTLE"
+        },
+        "Joy_41":
+        {
+          "Name":"FSM HDG"
+        },
+        "Joy_42":
+        {
+          "Name":"FSM TRK"
+        },
+        "Joy_43":
+        {
+          "Name":"FSM NAV"
+        },
+        "Joy_44":
+        {
+          "Name":"FSM APR"
+        },
+        "Joy_45":
+        {
+          "Name":"FSM ALT"
+        },
+        "Joy_46":
+        {
+          "Name":"FSM LVL"
+        },
+        "Joy_47":
+        {
+          "Name":"FSM VNAV"
+        },
+        "Joy_48":
+        {
+          "Name":"FSM IAS"
+        },
+        "Joy_49":
+        {
+          "Name":"FSM AP"
+        },
+        "Joy_50":
+        {
+          "Name":"FSM FD"
+        },
+        "Joy_51":
+        {
+          "Name":"FSM YD"
+        },
+        "Joy_52":
+        {
+          "Name":"FSM VS"
+        },
+        "Joy_53":
+        {
+          "Name":"FSM AVIONIC"
+        },
+        "Joy_54":
+        {
+          "Name":"FSM LANDING LIGHTS"
+        },
+        "Joy_55":
+        {
+          "Name":"FSM STROBE"
+        },
+        "Joy_56":
+        {
+          "Name":"FSM NAV LIGHTS"
+        },
+        "Joy_57":
+        {
+          "Name":"FSM HDG/TRK CCW"
+        },
+        "Joy_58":
+        {
+          "Name":"FSM HDG/TRK CW"
+        },
+        "Joy_59":
+        {
+          "Name":"FSM ALT SEL CCW"
+        },
+        "Joy_60":
+        {
+          "Name":"FSM ALT SEL CW"
+        },
+        "Joy_61":
+        {
+          "Name":"FSM VS DN",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_62":
+        {
+          "Name":"FSM VS UP",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_63":
+        {
+          "Name":"FSM HDG/TRK PUSH"
+        },
+        "Joy_64":
+        {
+          "Name":"FSM ALT SEL PUSH"
+        }
+      }
+    },
+    {
+      "Device":"231D3200",
+      "Name":"VKB Gladiator NXT EVO Space Combat Grip Premium OmniThrottle (Right)",
+      "Buttons":31,
+      "POV":4,
+      "Axis":"X,Y,Z,RX,RY,RZ,U,V",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"VKB Thumbstick X"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"VKB Thumbstick Y"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"VKB Rz",
+          "Icon":"[x52prorz]"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"VKB UAxis"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"VKB VAxis"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"VKB X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"VKB Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"VKB Throttle"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"VKB A1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"VKB A1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"VKB A1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"VKB A1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV2Up":
+        {
+          "Name":"VKB A4 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV2Right":
+        {
+          "Name":"VKB A4 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV2Down":
+        {
+          "Name":"VKB A4 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV2Left":
+        {
+          "Name":"VKB A4 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV3Up":
+        {
+          "Name":"VKB A3 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV3Right":
+        {
+          "Name":"VKB A3 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV3Down":
+        {
+          "Name":"VKB A3 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV3Left":
+        {
+          "Name":"VKB A3 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV4Up":
+        {
+          "Name":"VKB C1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV4Right":
+        {
+          "Name":"VKB C1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV4Down":
+        {
+          "Name":"VKB C1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV4Left":
+        {
+          "Name":"VKB C1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_1":
+        {
+          "Name":"VKB Fire 1"
+        },
+        "Joy_2":
+        {
+          "Name":"VKB Fire 2"
+        },
+        "Joy_3":
+        {
+          "Name":"VKB A2 (thumb red)"
+        },
+        "Joy_4":
+        {
+          "Name":"VKB B1 (right side)"
+        },
+        "Joy_5":
+        {
+          "Name":"VKB D1 (pinky)"
+        },
+        "Joy_6":
+        {
+          "Name":"VKB A3 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_7":
+        {
+          "Name":"VKB A3 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_8":
+        {
+          "Name":"VKB A3 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_9":
+        {
+          "Name":"VKB A3 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_10":
+        {
+          "Name":"VKB A3 Click"
+        },
+        "Joy_11":
+        {
+          "Name":"VKB A4 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_12":
+        {
+          "Name":"VKB A4 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_13":
+        {
+          "Name":"VKB A4 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_14":
+        {
+          "Name":"VKB A4 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_15":
+        {
+          "Name":"VKB A4 Click"
+        },
+        "Joy_16":
+        {
+          "Name":"VKB C1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_17":
+        {
+          "Name":"VKB C1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_18":
+        {
+          "Name":"VKB C1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_19":
+        {
+          "Name":"VKB C1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_20":
+        {
+          "Name":"VKB C1 Click"
+        },
+        "Joy_21":
+        {
+          "Name":"VKB Push Brake"
+        },
+        "Joy_22":
+        {
+          "Name":"VKB Pull Brake"
+        },
+        "Joy_23":
+        {
+          "Name":"VKB En1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_24":
+        {
+          "Name":"VKB En1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_25":
+        {
+          "Name":"VKB En2 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_26":
+        {
+          "Name":"VKB En2 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_27":
+        {
+          "Name":"VKB F1"
+        },
+        "Joy_28":
+        {
+          "Name":"VKB F2"
+        },
+        "Joy_29":
+        {
+          "Name":"VKB F3"
+        },
+        "Joy_30":
+        {
+          "Name":"VKB 30"
+        },
+        "Joy_31":
+        {
+          "Name":"VKB C1 Long Press"
+        }
+      }
+    },
+    {
+      "Device":"231D3201",
+      "Name":"VKB Gladiator NXT EVO Space Combat Grip Premium OmniThrottle (Left)",
+      "Buttons":31,
+      "POV":4,
+      "Axis":"X,Y,Z,RX,RY,RZ,U,V",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"LGNX Thumbstick X"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"LGNX Thumbstick Y"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"LGNX Rz",
+          "Icon":"[x52prorz]"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"LGNX UAxis"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"LGNX VAxis"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"LGNX X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"LGNX Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"LGNX Throttle"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"LGNX A1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"LGNX A1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"LGNX A1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"LGNX A1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV2Up":
+        {
+          "Name":"LGNX A4 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV2Right":
+        {
+          "Name":"LGNX A4 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV2Down":
+        {
+          "Name":"LGNX A4 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV2Left":
+        {
+          "Name":"LGNX A4 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV3Up":
+        {
+          "Name":"LGNX A3 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV3Right":
+        {
+          "Name":"LGNX A3 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV3Down":
+        {
+          "Name":"LGNX A3 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV3Left":
+        {
+          "Name":"LGNX A3 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_POV4Up":
+        {
+          "Name":"LGNX C1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV4Right":
+        {
+          "Name":"LGNX C1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV4Down":
+        {
+          "Name":"LGNX C1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV4Left":
+        {
+          "Name":"LGNX C1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_1":
+        {
+          "Name":"LGNX Fire 1"
+        },
+        "Joy_2":
+        {
+          "Name":"LGNX Fire 2"
+        },
+        "Joy_3":
+        {
+          "Name":"LGNX A2 (thumb red)"
+        },
+        "Joy_4":
+        {
+          "Name":"LGNX B1 (right side)"
+        },
+        "Joy_5":
+        {
+          "Name":"LGNX D1 (pinky)"
+        },
+        "Joy_6":
+        {
+          "Name":"LGNX A3 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_7":
+        {
+          "Name":"LGNX A3 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_8":
+        {
+          "Name":"LGNX A3 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_9":
+        {
+          "Name":"LGNX A3 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_10":
+        {
+          "Name":"LGNX A3 Click"
+        },
+        "Joy_11":
+        {
+          "Name":"LGNX A4 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_12":
+        {
+          "Name":"LGNX A4 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_13":
+        {
+          "Name":"LGNX A4 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_14":
+        {
+          "Name":"LGNX A4 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_15":
+        {
+          "Name":"LGNX A4 Click"
+        },
+        "Joy_16":
+        {
+          "Name":"LGNX C1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_17":
+        {
+          "Name":"LGNX C1 R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_18":
+        {
+          "Name":"LGNX C1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_19":
+        {
+          "Name":"LGNX C1 L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_20":
+        {
+          "Name":"LGNX C1 Click"
+        },
+        "Joy_21":
+        {
+          "Name":"LGNX Push Brake"
+        },
+        "Joy_22":
+        {
+          "Name":"LGNX Pull Brake"
+        },
+        "Joy_23":
+        {
+          "Name":"LGNX En1 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_24":
+        {
+          "Name":"LGNX En1 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_25":
+        {
+          "Name":"LGNX En2 U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_26":
+        {
+          "Name":"LGNX En2 D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_27":
+        {
+          "Name":"LGNX F1"
+        },
+        "Joy_28":
+        {
+          "Name":"LGNX F2"
+        },
+        "Joy_29":
+        {
+          "Name":"LGNX F3"
+        },
+        "Joy_30":
+        {
+          "Name":"LGNX 30"
+        },
+        "Joy_31":
+        {
+          "Name":"LGNX C1 Long Press"
+        }
+      }
+    },
+    {
+      "Device":"334400D4",
+      "Name":"VPC WarBRD Constellation Alpha Prime (Right)",
+      "Buttons":32,
+      "POV":4,
+      "Axis":"X,Y,Z,RX,RY,RZ,U,V",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"POV Hat X"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"POV Hat Y"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"Stick RZAxis"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"Pinky Axis"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"unused vaxis"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"X",
+          "Icon":"[x52x]",
+          "IconOnly":true
+        },
+        "Joy_YAxis":
+        {
+          "Name":"Y",
+          "Icon":"[x52y]",
+          "IconOnly":true
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"Rz",
+          "Icon":"[x52rz]",
+          "IconOnly":true
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"unused pvo1up"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"unused pvo1right"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"unused pvo1down"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"Joy_POV1Left"
+        },
+        "Joy_POV2Up":
+        {
+          "Name":"unused pvo2up"
+        },
+        "Joy_POV2Right":
+        {
+          "Name":"unused pvo2right"
+        },
+        "Joy_POV2Down":
+        {
+          "Name":"unused pvo2down"
+        },
+        "Joy_POV2Left":
+        {
+          "Name":"unused pvo2left"
+        },
+        "Joy_POV3Up":
+        {
+          "Name":"unused pvo3up"
+        },
+        "Joy_POV3Right":
+        {
+          "Name":"unused pvo3right"
+        },
+        "Joy_POV3Down":
+        {
+          "Name":"unused pvo3down"
+        },
+        "Joy_POV3Left":
+        {
+          "Name":"Joy_POV3Left"
+        },
+        "Joy_POV4Up":
+        {
+          "Name":"unused pvo4up"
+        },
+        "Joy_POV4Right":
+        {
+          "Name":"unused pvo4right"
+        },
+        "Joy_POV4Down":
+        {
+          "Name":"unused pvo4down"
+        },
+        "Joy_POV4Left":
+        {
+          "Name":"unused pvo4left"
+        },
+        "Joy_1":
+        {
+          "Name":"Trigger Lever In"
+        },
+        "Joy_2":
+        {
+          "Name":"Trigger Lever Hold"
+        },
+        "Joy_3":
+        {
+          "Name":"Trigger Lever Squeeze"
+        },
+        "Joy_4":
+        {
+          "Name":"Trigger 1"
+        },
+        "Joy_5":
+        {
+          "Name":"Trigger 2"
+        },
+        "Joy_6":
+        {
+          "Name":"Stick 6"
+        },
+        "Joy_7":
+        {
+          "Name":"B 3",
+          "Icon":"[x52b3]",
+          "IconOnly":true
+        },
+        "Joy_8":
+        {
+          "Name":"unused joy 8"
+        },
+        "Joy_9":
+        {
+          "Name":"B 20",
+          "Icon":"[x52prob20]",
+          "IconOnly":true
+        },
+        "Joy_10":
+        {
+          "Name":"B 23",
+          "Icon":"[x52prob23]",
+          "IconOnly":true
+        },
+        "Joy_11":
+        {
+          "Name":"B 22",
+          "Icon":"[x52prob22]",
+          "IconOnly":true
+        },
+        "Joy_12":
+        {
+          "Name":"B 21",
+          "Icon":"[x52prob21]",
+          "IconOnly":true
+        },
+        "Joy_13":
+        {
+          "Name":"B 4",
+          "Icon":"[x52b4]",
+          "IconOnly":true
+        },
+        "Joy_14":
+        {
+          "Name":"unused joy 14"
+        },
+        "Joy_15":
+        {
+          "Name":"B 20",
+          "Icon":"[x52b20]",
+          "IconOnly":true
+        },
+        "Joy_16":
+        {
+          "Name":"B 23",
+          "Icon":"[x52b23]",
+          "IconOnly":true
+        },
+        "Joy_17":
+        {
+          "Name":"B 22",
+          "Icon":"[x52b22]",
+          "IconOnly":true
+        },
+        "Joy_18":
+        {
+          "Name":"B 21",
+          "Icon":"[x52b21]",
+          "IconOnly":true
+        },
+        "Joy_19":
+        {
+          "Name":"B 19",
+          "Icon":"[x52prob19]",
+          "IconOnly":true
+        },
+        "Joy_20":
+        {
+          "Name":"unused joy 20"
+        },
+        "Joy_21":
+        {
+          "Name":"Wheel Up"
+        },
+        "Joy_22":
+        {
+          "Name":"Wheel Down"
+        },
+        "Joy_23":
+        {
+          "Name":"Thumb Press"
+        },
+        "Joy_24":
+        {
+          "Name":"B 24",
+          "Icon":"[x52prob24]",
+          "IconOnly":true
+        },
+        "Joy_25":
+        {
+          "Name":"B 27",
+          "Icon":"[x52prob27]",
+          "IconOnly":true
+        },
+        "Joy_26":
+        {
+          "Name":"B 26",
+          "Icon":"[x52prob26]",
+          "IconOnly":true
+        },
+        "Joy_27":
+        {
+          "Name":"B 25",
+          "Icon":"[x52prob25]",
+          "IconOnly":true
+        },
+        "Joy_28":
+        {
+          "Name":"R Thumb",
+          "Icon":"[ps4RThumb]",
+          "IconOnly":true
+        },
+        "Joy_29":
+        {
+          "Name":"R Thumb U",
+          "Icon":"[ps4RThumbU]",
+          "IconOnly":true
+        },
+        "Joy_30":
+        {
+          "Name":"R Thumb D",
+          "Icon":"[ps4RThumbD]",
+          "IconOnly":true
+        },
+        "Joy_31":
+        {
+          "Name":"Pinky Button"
+        },
+        "Joy_32":
+        {
+          "Name":"Pinky Lever"
+        }
+      }
+    },
+    {
+      "Device":"334401F8",
+      "Name":"VPC Rudder Pedals ACE",
+      "Buttons":0,
+      "POV":0,
+      "Axis":"Z,U,V",
+      "Keys":
+      {
+        "Joy_UAxis":
+        {
+          "Name":"Toe Brake Right"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"Toe Brake Left"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"Hts Rud Ax",
+          "Icon":"[xb1htsRudAx]",
+          "IconOnly":true
+        },
+        "Pos_Joy_UAxis":
+        {
+          "Name":"Toe Brake Release Right"
+        },
+        "Pos_Joy_VAxis":
+        {
+          "Name":"Toe Brake Release Left"
+        },
+        "Pos_Joy_ZAxis":
+        {
+          "Name":"Hts Rud Ax +",
+          "Icon":"[xb1htsRudAx+]",
+          "IconOnly":true
+        },
+        "Neg_Joy_UAxis":
+        {
+          "Name":"Toe Brake Push Right"
+        },
+        "Neg_Joy_VAxis":
+        {
+          "Name":"Toe Brake Push Left"
+        },
+        "Neg_Joy_ZAxis":
+        {
+          "Name":"Hts Rud Ax",
+          "Icon":"[xb1htsRudAx-]",
+          "IconOnly":true
+        }
+      }
+    },
+    {
+      "Device":"3344025A",
+      "Name":"Virpil Universal Control Panel #2",
+      "Buttons":42,
+      "POV":0,
+      "Axis":"",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"B1",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_2":
+        {
+          "Name":"B2",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_3":
+        {
+          "Name":"B3",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_4":
+        {
+          "Name":"B4",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_5":
+        {
+          "Name":"B5",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_6":
+        {
+          "Name":"B6",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_7":
+        {
+          "Name":"B7",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_8":
+        {
+          "Name":"B8",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_9":
+        {
+          "Name":"B9",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_10":
+        {
+          "Name":"B10",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_11":
+        {
+          "Name":"B 9",
+          "Icon":"[x52b9]",
+          "IconOnly":true
+        },
+        "Joy_12":
+        {
+          "Name":"B 9",
+          "Icon":"[x52prob9]",
+          "IconOnly":true
+        },
+        "Joy_13":
+        {
+          "Name":"B 10",
+          "Icon":"[x52prob10]",
+          "IconOnly":true
+        },
+        "Joy_14":
+        {
+          "Name":"B 10",
+          "Icon":"[x52b10]",
+          "IconOnly":true
+        },
+        "Joy_15":
+        {
+          "Name":"B 11",
+          "Icon":"[x52b11]",
+          "IconOnly":true
+        },
+        "Joy_16":
+        {
+          "Name":"B 11",
+          "Icon":"[x52prob11]",
+          "IconOnly":true
+        },
+        "Joy_17":
+        {
+          "Name":"B 12",
+          "Icon":"[x52prob12]",
+          "IconOnly":true
+        },
+        "Joy_18":
+        {
+          "Name":"B 12",
+          "Icon":"[x52b12]",
+          "IconOnly":true
+        },
+        "Joy_19":
+        {
+          "Name":"B 13",
+          "Icon":"[x52b13]",
+          "IconOnly":true
+        },
+        "Joy_20":
+        {
+          "Name":"B 13",
+          "Icon":"[x52prob13]",
+          "IconOnly":true
+        },
+        "Joy_21":
+        {
+          "Name":"B 14",
+          "Icon":"[x52prob14]",
+          "IconOnly":true
+        },
+        "Joy_22":
+        {
+          "Name":"B 14",
+          "Icon":"[x52b14]",
+          "IconOnly":true
+        },
+        "Joy_23":
+        {
+          "Name":"Guarded switch 1",
+          "Icon":"[x52z]"
+        },
+        "Joy_24":
+        {
+          "Name":"Emergency 1",
+          "Icon":"[x52proy+]"
+        },
+        "Joy_25":
+        {
+          "Name":"Guarded switch 2",
+          "Icon":"[x52z]"
+        },
+        "Joy_26":
+        {
+          "Name":"Emergency 2",
+          "Icon":"[x52proy+]"
+        },
+        "Joy_27":
+        {
+          "Name":"T9 left",
+          "Icon":"[x52prox-]"
+        },
+        "Joy_28":
+        {
+          "Name":"T9 right",
+          "Icon":"[x52prox+]"
+        },
+        "Joy_29":
+        {
+          "Name":"T10 left",
+          "Icon":"[x52prox-]"
+        },
+        "Joy_30":
+        {
+          "Name":"T10 right",
+          "Icon":"[x52prox+]"
+        },
+        "Joy_31":
+        {
+          "Name":"E1 push",
+          "Icon":"[x52prory]"
+        },
+        "Joy_32":
+        {
+          "Name":"E1 a-clockwise",
+          "Icon":"[x52prory-]"
+        },
+        "Joy_33":
+        {
+          "Name":"E1 clockwise",
+          "Icon":"[x52prory+]"
+        },
+        "Joy_34":
+        {
+          "Name":"E2 push",
+          "Icon":"[x52prory]"
+        },
+        "Joy_35":
+        {
+          "Name":"E2 a-clockwise",
+          "Icon":"[x52prory-]"
+        },
+        "Joy_36":
+        {
+          "Name":"E2 clockwise",
+          "Icon":"[x52prory+]"
+        },
+        "Joy_37":
+        {
+          "Name":"E3 push",
+          "Icon":"[x52prory]"
+        },
+        "Joy_38":
+        {
+          "Name":"E3 a-clockwise",
+          "Icon":"[x52prory-]"
+        },
+        "Joy_39":
+        {
+          "Name":"E3 clockwise",
+          "Icon":"[x52prory+]"
+        },
+        "Joy_40":
+        {
+          "Name":"Landing off",
+          "Icon":"[hts4ThrottleY]"
+        },
+        "Joy_41":
+        {
+          "Name":"Landing up",
+          "Icon":"[hts4ThrottleD]"
+        },
+        "Joy_42":
+        {
+          "Name":"Landing down",
+          "Icon":"[hts4ThrottleU]"
+        }
+      }
+    },
+    {
+      "Device":"33440388",
+      "Name":"VPC Stick MT-50CM3 with Constellation Alpha (Right)",
+      "Buttons":31,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY,U",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"Alpha RX Axis",
+          "Icon":"[ps4RXAxis]"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"Alpha RY Axis",
+          "Icon":"[ps4RYAxis]"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"Alpha Brake B 6",
+          "Icon":"[x52prob6]"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"CM3 X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"CM3 Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"Alpha Rz",
+          "Icon":"[x52prorz]"
+        },
+        "Pos_Joy_RXAxis":
+        {
+          "Name":"Alpha R Thumb R",
+          "Icon":"[ps4RThumbR]"
+        },
+        "Pos_Joy_RYAxis":
+        {
+          "Name":"Alpha R Thumb D",
+          "Icon":"[ps4RThumbD]"
+        },
+        "Pos_Joy_UAxis":
+        {
+          "Name":"Alpha Brake B 6",
+          "Icon":"[x52prob6]"
+        },
+        "Pos_Joy_XAxis":
+        {
+          "Name":"CM3 X +",
+          "Icon":"[x52prox+]"
+        },
+        "Pos_Joy_YAxis":
+        {
+          "Name":"CM3 Y",
+          "Icon":"[x52proy-]"
+        },
+        "Pos_Joy_ZAxis":
+        {
+          "Name":"Alpha Rz +",
+          "Icon":"[x52prorz+]"
+        },
+        "Neg_Joy_RXAxis":
+        {
+          "Name":"Alpha R Thumb L",
+          "Icon":"[ps4RThumbL]"
+        },
+        "Neg_Joy_RYAxis":
+        {
+          "Name":"Alpha R Thumb U",
+          "Icon":"[ps4RThumbU]"
+        },
+        "Neg_Joy_UAxis":
+        {
+          "Name":"Alpha Brake B 6",
+          "Icon":"[x52prob6]"
+        },
+        "Neg_Joy_XAxis":
+        {
+          "Name":"CM3 X",
+          "Icon":"[x52prox-]"
+        },
+        "Neg_Joy_YAxis":
+        {
+          "Name":"CM3 Y +",
+          "Icon":"[x52proy+]"
+        },
+        "Neg_Joy_ZAxis":
+        {
+          "Name":"Alpha Rz",
+          "Icon":"[x52prorz-]"
+        },
+        "Joy_1":
+        {
+          "Name":"Alpha Flip - Up",
+          "Icon":"[x52prob1]"
+        },
+        "Joy_2":
+        {
+          "Name":"Alpha Flip - Pull",
+          "Icon":"[x52prob1]"
+        },
+        "Joy_3":
+        {
+          "Name":"Alpha - Stage 1",
+          "Icon":"[x52prob1]"
+        },
+        "Joy_4":
+        {
+          "Name":"Alpha - Stage 2",
+          "Icon":"[x52prob15]"
+        },
+        "Joy_5":
+        {
+          "Name":"Alpha R Thumb",
+          "Icon":"[ps4RThumb]"
+        },
+        "Joy_6":
+        {
+          "Name":"Alpha B 4",
+          "Icon":"[x52prob4]"
+        },
+        "Joy_7":
+        {
+          "Name":"Alpha Face Push",
+          "Icon":"[x52prob26]"
+        },
+        "Joy_8":
+        {
+          "Name":"Alpha Face B 24",
+          "Icon":"[x52prob24]"
+        },
+        "Joy_9":
+        {
+          "Name":"Alpha Face B 25",
+          "Icon":"[x52prob25]"
+        },
+        "Joy_10":
+        {
+          "Name":"Alpha Face B 26",
+          "Icon":"[x52prob26]"
+        },
+        "Joy_11":
+        {
+          "Name":"Alpha Face B 27",
+          "Icon":"[x52prob27]"
+        },
+        "Joy_12":
+        {
+          "Name":"Alpha B 3",
+          "Icon":"[x52prob3]"
+        },
+        "Joy_13":
+        {
+          "Name":"Alpha Push",
+          "Icon":"[x52prop1d]"
+        },
+        "Joy_14":
+        {
+          "Name":"Alpha P 1 U",
+          "Icon":"[x52prop1u]"
+        },
+        "Joy_15":
+        {
+          "Name":"Alpha P 1 R",
+          "Icon":"[x52prop1r]"
+        },
+        "Joy_16":
+        {
+          "Name":"Alpha P 1 D",
+          "Icon":"[x52prop1d]"
+        },
+        "Joy_17":
+        {
+          "Name":"Alpha P 1 L",
+          "Icon":"[x52prop1l]"
+        },
+        "Joy_18":
+        {
+          "Name":"Alpha Index Push",
+          "Icon":"[x52b22]"
+        },
+        "Joy_19":
+        {
+          "Name":"Alpha Index B 20",
+          "Icon":"[x52b20]"
+        },
+        "Joy_20":
+        {
+          "Name":"Alpha Index B 22",
+          "Icon":"[x52b22]"
+        },
+        "Joy_21":
+        {
+          "Name":"Alpha Push 1",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_22":
+        {
+          "Name":"Alpha Push 2",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_23":
+        {
+          "Name":"Alpha Down",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_24":
+        {
+          "Name":"Alpha Up",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_25":
+        {
+          "Name":"Alpha Side Push",
+          "Icon":"[x52prob26]"
+        },
+        "Joy_26":
+        {
+          "Name":"Alpha Side B 24",
+          "Icon":"[x52prob24]"
+        },
+        "Joy_27":
+        {
+          "Name":"Alpha Side B 25",
+          "Icon":"[x52prob25]"
+        },
+        "Joy_28":
+        {
+          "Name":"Alpha Side B 26",
+          "Icon":"[x52prob26]"
+        },
+        "Joy_29":
+        {
+          "Name":"Alpha Side B 27",
+          "Icon":"[x52prob27]"
+        },
+        "Joy_30":
+        {
+          "Name":"Alpha B 5",
+          "Icon":"[x52prob5]"
+        },
+        "Joy_31":
+        {
+          "Name":"Alpha Brake B 6",
+          "Icon":"[x52prob6]"
+        }
+      }
+    },
+    {
+      "Device":"3344425C",
+      "Name":"RIGHT VPC Control Panel 3",
+      "Buttons":47,
+      "POV":0,
+      "Axis":"X,Y,RX,RY",
+      "Keys":
+      {
+        "Joy_XAxis":
+        {
+          "Name":"CP3 Black U",
+          "Icon":"[x52prou]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"CP3 Yellow U",
+          "Icon":"[x52prou]"
+        },
+        "Joy_RXAxis":
+        {
+          "Name":"CP3 Blue U",
+          "Icon":"[x52prou]"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"CP3 Red U",
+          "Icon":"[x52prou]"
+        },
+        "Pos_Joy_XAxis":
+        {
+          "Name":"CP3 Black U +",
+          "Icon":"[x52prou+]"
+        },
+        "Pos_Joy_YAxis":
+        {
+          "Name":"CP3 Yellow U +",
+          "Icon":"[x52prou+]"
+        },
+        "Pos_Joy_RXAxis":
+        {
+          "Name":"CP3 Blue U +",
+          "Icon":"[x52prou+]"
+        },
+        "Pos_Joy_RYAxis":
+        {
+          "Name":"CP3 Red U +",
+          "Icon":"[x52prou+]"
+        },
+        "Neg_Joy_XAxis":
+        {
+          "Name":"CP3 Black U",
+          "Icon":"[x52prou-]"
+        },
+        "Neg_Joy_YAxis":
+        {
+          "Name":"CP3 Yellow U",
+          "Icon":"[x52prou-]"
+        },
+        "Neg_Joy_RXAxis":
+        {
+          "Name":"CP3 Blue U",
+          "Icon":"[x52prou-]"
+        },
+        "Neg_Joy_RYAxis":
+        {
+          "Name":"CP3 Red U",
+          "Icon":"[x52prou-]"
+        },
+        "Joy_1":
+        {
+          "Name":"CP3 B1"
+        },
+        "Joy_2":
+        {
+          "Name":"CP3 B2"
+        },
+        "Joy_3":
+        {
+          "Name":"CP3 B3"
+        },
+        "Joy_4":
+        {
+          "Name":"CP3 B4"
+        },
+        "Joy_5":
+        {
+          "Name":"CP3 B5"
+        },
+        "Joy_6":
+        {
+          "Name":"CP3 B6"
+        },
+        "Joy_7":
+        {
+          "Name":"CP3 B7"
+        },
+        "Joy_8":
+        {
+          "Name":"CP3 B8"
+        },
+        "Joy_9":
+        {
+          "Name":"CP3 B9"
+        },
+        "Joy_10":
+        {
+          "Name":"CP3 B10"
+        },
+        "Joy_11":
+        {
+          "Name":"CP3 B11"
+        },
+        "Joy_12":
+        {
+          "Name":"CP3 B12"
+        },
+        "Joy_13":
+        {
+          "Name":"CP3 B13"
+        },
+        "Joy_14":
+        {
+          "Name":"CP3 T1 - Up"
+        },
+        "Joy_15":
+        {
+          "Name":"CP3 T1 - Mid"
+        },
+        "Joy_16":
+        {
+          "Name":"CP3 T1 - Down"
+        },
+        "Joy_17":
+        {
+          "Name":"CP3 T2 - Up"
+        },
+        "Joy_18":
+        {
+          "Name":"CP3 T2 - Down"
+        },
+        "Joy_19":
+        {
+          "Name":"CP3 T3 - Up"
+        },
+        "Joy_20":
+        {
+          "Name":"CP3 T3 - Down"
+        },
+        "Joy_21":
+        {
+          "Name":"CP3 T4 - Up"
+        },
+        "Joy_22":
+        {
+          "Name":"CP3 T4 - Down"
+        },
+        "Joy_23":
+        {
+          "Name":"CP3 T5 - Up"
+        },
+        "Joy_24":
+        {
+          "Name":"CP3 T5 - Down"
+        },
+        "Joy_25":
+        {
+          "Name":"CP3 T6 - Up"
+        },
+        "Joy_26":
+        {
+          "Name":"CP3 T6 - Down"
+        },
+        "Joy_27":
+        {
+          "Name":"CP3 T7 - Up"
+        },
+        "Joy_28":
+        {
+          "Name":"CP3 T7 - Down"
+        },
+        "Joy_29":
+        {
+          "Name":"CP3 T8 - Up"
+        },
+        "Joy_30":
+        {
+          "Name":"CP3 T8 - Down"
+        },
+        "Joy_31":
+        {
+          "Name":"CP3 TH - L"
+        },
+        "Joy_32":
+        {
+          "Name":"CP3 TH - |"
+        },
+        "Joy_33":
+        {
+          "Name":"CP3 TH - R"
+        },
+        "Joy_34":
+        {
+          "Name":"CP3 MASTER ARM - Up"
+        },
+        "Joy_35":
+        {
+          "Name":"CP3 MASTER ARM - Mid"
+        },
+        "Joy_36":
+        {
+          "Name":"CP3 MASTER ARM - Down"
+        },
+        "Joy_37":
+        {
+          "Name":"CP3 1 B 8",
+          "Icon":"[x52prob8]"
+        },
+        "Joy_38":
+        {
+          "Name":"CP3 1 Ry",
+          "Icon":"[x52prory-]"
+        },
+        "Joy_39":
+        {
+          "Name":"CP3 1 Ry +",
+          "Icon":"[x52prory+]"
+        },
+        "Joy_40":
+        {
+          "Name":"CP3 2 B 8",
+          "Icon":"[x52prob8]"
+        },
+        "Joy_41":
+        {
+          "Name":"CP3 2 Ry",
+          "Icon":"[x52prory-]"
+        },
+        "Joy_42":
+        {
+          "Name":"CP3 2 Ry +",
+          "Icon":"[x52prory+]"
+        },
+        "Joy_43":
+        {
+          "Name":"CP3 MODE - 1"
+        },
+        "Joy_44":
+        {
+          "Name":"CP3 MODE - 2"
+        },
+        "Joy_45":
+        {
+          "Name":"CP3 MODE - 3"
+        },
+        "Joy_46":
+        {
+          "Name":"CP3 MODE - 4"
+        },
+        "Joy_47":
+        {
+          "Name":"CP3 MODE - 5"
+        }
+      }
+    },
+    {
+      "Device":"334443F5",
+      "Name":"RIGHT VPC Stick WarBRD-D with Constellation Alpha Prime (Right)",
+      "Buttons":32,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY,U",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"Alpha R RX Axis",
+          "Icon":"[ps4RXAxis]"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"Alpha R RY Axis",
+          "Icon":"[ps4RYAxis]"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"Alpha R Brake B 6",
+          "Icon":"[x52prob6]"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"WarBRD-D R X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"WarBRD-D R Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"Alpha R Rz",
+          "Icon":"[x52prorz]"
+        },
+        "Pos_Joy_RXAxis":
+        {
+          "Name":"Alpha R R Thumb R",
+          "Icon":"[ps4RThumbR]"
+        },
+        "Pos_Joy_RYAxis":
+        {
+          "Name":"Alpha R R Thumb D",
+          "Icon":"[ps4RThumbD]"
+        },
+        "Pos_Joy_UAxis":
+        {
+          "Name":"Alpha R Brake B 6",
+          "Icon":"[x52prob6]"
+        },
+        "Pos_Joy_XAxis":
+        {
+          "Name":"WarBRD-D R X +",
+          "Icon":"[x52prox+]"
+        },
+        "Pos_Joy_YAxis":
+        {
+          "Name":"WarBRD-D R Y",
+          "Icon":"[x52proy-]"
+        },
+        "Pos_Joy_ZAxis":
+        {
+          "Name":"Alpha R Rz +",
+          "Icon":"[x52prorz+]"
+        },
+        "Neg_Joy_RXAxis":
+        {
+          "Name":"Alpha R R Thumb L",
+          "Icon":"[ps4RThumbL]"
+        },
+        "Neg_Joy_RYAxis":
+        {
+          "Name":"Alpha R R Thumb U",
+          "Icon":"[ps4RThumbU]"
+        },
+        "Neg_Joy_UAxis":
+        {
+          "Name":"Alpha R Brake B 6",
+          "Icon":"[x52prob6]"
+        },
+        "Neg_Joy_XAxis":
+        {
+          "Name":"WarBRD-D R X",
+          "Icon":"[x52prox-]"
+        },
+        "Neg_Joy_YAxis":
+        {
+          "Name":"WarBRD-D R Y +",
+          "Icon":"[x52proy+]"
+        },
+        "Neg_Joy_ZAxis":
+        {
+          "Name":"Alpha R Rz",
+          "Icon":"[x52prorz-]"
+        },
+        "Joy_1":
+        {
+          "Name":"Alpha R Flip Up",
+          "Icon":"[x52prob1]"
+        },
+        "Joy_2":
+        {
+          "Name":"Alpha R Flip Center",
+          "Icon":"[x52prob1]"
+        },
+        "Joy_3":
+        {
+          "Name":"Alpha R Flip Pull",
+          "Icon":"[x52prob1]"
+        },
+        "Joy_4":
+        {
+          "Name":"Alpha R Stage 1",
+          "Icon":"[x52prob1]"
+        },
+        "Joy_5":
+        {
+          "Name":"Alpha R Stage 2",
+          "Icon":"[x52prob15]"
+        },
+        "Joy_6":
+        {
+          "Name":"Alpha R R Thumb",
+          "Icon":"[ps4RThumb]"
+        },
+        "Joy_7":
+        {
+          "Name":"Alpha R B 3",
+          "Icon":"[x52prob3]"
+        },
+        "Joy_8":
+        {
+          "Name":"Alpha R Push B 22",
+          "Icon":"[x52prob22]"
+        },
+        "Joy_9":
+        {
+          "Name":"Alpha R B 20",
+          "Icon":"[x52prob20]"
+        },
+        "Joy_10":
+        {
+          "Name":"Alpha R B 23",
+          "Icon":"[x52prob23]"
+        },
+        "Joy_11":
+        {
+          "Name":"Alpha R B 22",
+          "Icon":"[x52prob22]"
+        },
+        "Joy_12":
+        {
+          "Name":"Alpha R B 21",
+          "Icon":"[x52prob21]"
+        },
+        "Joy_13":
+        {
+          "Name":"Alpha R B 4",
+          "Icon":"[x52prob4]"
+        },
+        "Joy_14":
+        {
+          "Name":"Alpha R Push B 22",
+          "Icon":"[x52b22]"
+        },
+        "Joy_15":
+        {
+          "Name":"Alpha R B 20",
+          "Icon":"[x52b20]"
+        },
+        "Joy_16":
+        {
+          "Name":"Alpha R B 23",
+          "Icon":"[x52b23]"
+        },
+        "Joy_17":
+        {
+          "Name":"Alpha R B 22",
+          "Icon":"[x52b22]"
+        },
+        "Joy_18":
+        {
+          "Name":"Alpha R B 21",
+          "Icon":"[x52b21]"
+        },
+        "Joy_19":
+        {
+          "Name":"Alpha R Push 1",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_20":
+        {
+          "Name":"Alpha R Push 2",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_21":
+        {
+          "Name":"Alpha R Up",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_22":
+        {
+          "Name":"Alpha R Down",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_23":
+        {
+          "Name":"Alpha R Push B 26",
+          "Icon":"[x52prob26]"
+        },
+        "Joy_24":
+        {
+          "Name":"Alpha R B 24",
+          "Icon":"[x52prob24]"
+        },
+        "Joy_25":
+        {
+          "Name":"Alpha R B 27",
+          "Icon":"[x52prob27]"
+        },
+        "Joy_26":
+        {
+          "Name":"Alpha R B 26",
+          "Icon":"[x52prob26]"
+        },
+        "Joy_27":
+        {
+          "Name":"Alpha R B 25",
+          "Icon":"[x52prob25]"
+        },
+        "Joy_28":
+        {
+          "Name":"Alpha R Index Push",
+          "Icon":"[x52b22]"
+        },
+        "Joy_29":
+        {
+          "Name":"Alpha R Index B 20",
+          "Icon":"[x52b20]"
+        },
+        "Joy_30":
+        {
+          "Name":"Alpha R Index B 22",
+          "Icon":"[x52b22]"
+        },
+        "Joy_31":
+        {
+          "Name":"Alpha R B 5",
+          "Icon":"[x52prob5]"
+        },
+        "Joy_32":
+        {
+          "Name":"Alpha R Brake B 6",
+          "Icon":"[x52prob6]"
+        }
+      }
+    },
+    {
+      "Device":"33448196",
+      "Name":"LEFT VPC VMAX Prime Throttle",
+      "Buttons":51,
+      "POV":0,
+      "Axis":"X,Y,RX,RY,RZ,U,V",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"VMAX L Z",
+          "Icon":"[x52proz]"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"VMAX R Z",
+          "Icon":"[x52proz]"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"VMAX U",
+          "Icon":"[x52prou]"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"VMAX Left Rx",
+          "Icon":"[x52prorx]"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"VMAX Top Rx",
+          "Icon":"[x52prorx]"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"VMAX RX Axis",
+          "Icon":"[ps4RXAxis]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"VMAX RY Axis",
+          "Icon":"[ps4RYAxis]"
+        },
+        "Pos_Joy_RXAxis":
+        {
+          "Name":"VMAX L Z +",
+          "Icon":"[x52proz+]"
+        },
+        "Pos_Joy_RYAxis":
+        {
+          "Name":"VMAX R Z +",
+          "Icon":"[x52proz+]"
+        },
+        "Pos_Joy_RZAxis":
+        {
+          "Name":"VMAX U +",
+          "Icon":"[x52prou+]"
+        },
+        "Pos_Joy_UAxis":
+        {
+          "Name":"VMAX Left Rx",
+          "Icon":"[x52prorx-]"
+        },
+        "Pos_Joy_VAxis":
+        {
+          "Name":"VMAX Top Rx +",
+          "Icon":"[x52prorx+]"
+        },
+        "Pos_Joy_XAxis":
+        {
+          "Name":"VMAX R Thumb R",
+          "Icon":"[ps4RThumbR]"
+        },
+        "Pos_Joy_YAxis":
+        {
+          "Name":"VMAX R Thumb D",
+          "Icon":"[ps4RThumbD]"
+        },
+        "Neg_Joy_RXAxis":
+        {
+          "Name":"VMAX L Z",
+          "Icon":"[x52proz-]"
+        },
+        "Neg_Joy_RYAxis":
+        {
+          "Name":"VMAX R Z",
+          "Icon":"[x52proz-]"
+        },
+        "Neg_Joy_RZAxis":
+        {
+          "Name":"VMAX U",
+          "Icon":"[x52prou-]"
+        },
+        "Neg_Joy_UAxis":
+        {
+          "Name":"VMAX Left Rx +",
+          "Icon":"[x52prorx+]"
+        },
+        "Neg_Joy_VAxis":
+        {
+          "Name":"VMAX Top Rx",
+          "Icon":"[x52prorx-]"
+        },
+        "Neg_Joy_XAxis":
+        {
+          "Name":"VMAX R Thumb L",
+          "Icon":"[ps4RThumbL]"
+        },
+        "Neg_Joy_YAxis":
+        {
+          "Name":"VMAX R Thumb U",
+          "Icon":"[ps4RThumbU]"
+        },
+        "Joy_1":
+        {
+          "Name":"VMAX B 7",
+          "Icon":"[x52prob7]"
+        },
+        "Joy_2":
+        {
+          "Name":"VMAX Left B 31",
+          "Icon":"[x52prob31]"
+        },
+        "Joy_3":
+        {
+          "Name":"VMAX B 4",
+          "Icon":"[x52prob4]"
+        },
+        "Joy_4":
+        {
+          "Name":"VMAX Push B 26",
+          "Icon":"[x52prob26]"
+        },
+        "Joy_5":
+        {
+          "Name":"VMAX B 24",
+          "Icon":"[x52prob24]"
+        },
+        "Joy_6":
+        {
+          "Name":"VMAX B 25",
+          "Icon":"[x52prob25]"
+        },
+        "Joy_7":
+        {
+          "Name":"VMAX B 26",
+          "Icon":"[x52prob26]"
+        },
+        "Joy_8":
+        {
+          "Name":"VMAX B 27",
+          "Icon":"[x52prob27]"
+        },
+        "Joy_9":
+        {
+          "Name":"VMAX Top B 31",
+          "Icon":"[x52prob31]"
+        },
+        "Joy_10":
+        {
+          "Name":"VMAX Push B 22",
+          "Icon":"[x52b22]"
+        },
+        "Joy_11":
+        {
+          "Name":"VMAX B 20",
+          "Icon":"[x52b20]"
+        },
+        "Joy_13":
+        {
+          "Name":"VMAX B 22",
+          "Icon":"[x52b22]"
+        },
+        "Joy_15":
+        {
+          "Name":"VMAX R Thumb",
+          "Icon":"[ps4RThumb]"
+        },
+        "Joy_16":
+        {
+          "Name":"VMAX B 3",
+          "Icon":"[x52prob3]"
+        },
+        "Joy_17":
+        {
+          "Name":"VMAX B 5",
+          "Icon":"[x52prob5]"
+        },
+        "Joy_18":
+        {
+          "Name":"VMAX Push B 22",
+          "Icon":"[x52prob22]"
+        },
+        "Joy_19":
+        {
+          "Name":"VMAX B 20",
+          "Icon":"[x52prob20]"
+        },
+        "Joy_20":
+        {
+          "Name":"VMAX B 21",
+          "Icon":"[x52prob21]"
+        },
+        "Joy_21":
+        {
+          "Name":"VMAX B 22",
+          "Icon":"[x52prob22]"
+        },
+        "Joy_22":
+        {
+          "Name":"VMAX B 23",
+          "Icon":"[x52prob23]"
+        },
+        "Joy_23":
+        {
+          "Name":"VMAX B1"
+        },
+        "Joy_24":
+        {
+          "Name":"VMAX B2"
+        },
+        "Joy_25":
+        {
+          "Name":"VMAX B3"
+        },
+        "Joy_26":
+        {
+          "Name":"VMAX B4"
+        },
+        "Joy_27":
+        {
+          "Name":"VMAX B5"
+        },
+        "Joy_28":
+        {
+          "Name":"VMAX B6"
+        },
+        "Joy_29":
+        {
+          "Name":"VMAX STORES JETT B7"
+        },
+        "Joy_30":
+        {
+          "Name":"VMAX T1 - Up"
+        },
+        "Joy_31":
+        {
+          "Name":"VMAX T1 - Down"
+        },
+        "Joy_32":
+        {
+          "Name":"VMAX T2 - Up"
+        },
+        "Joy_33":
+        {
+          "Name":"VMAX T2 - Down"
+        },
+        "Joy_34":
+        {
+          "Name":"VMAX T3 - Up"
+        },
+        "Joy_35":
+        {
+          "Name":"VMAX T3 - Down"
+        },
+        "Joy_36":
+        {
+          "Name":"VMAX T4 - Up"
+        },
+        "Joy_37":
+        {
+          "Name":"VMAX T4 - Down"
+        },
+        "Joy_38":
+        {
+          "Name":"VMAX T5 - Up"
+        },
+        "Joy_39":
+        {
+          "Name":"VMAX T5 - Down"
+        },
+        "Joy_40":
+        {
+          "Name":"VMAX APU"
+        },
+        "Joy_41":
+        {
+          "Name":"VMAX 1 B 8",
+          "Icon":"[x52prob8]"
+        },
+        "Joy_42":
+        {
+          "Name":"VMAX 1 Ry",
+          "Icon":"[x52prory-]"
+        },
+        "Joy_43":
+        {
+          "Name":"VMAX 1 Ry +",
+          "Icon":"[x52prory+]"
+        },
+        "Joy_44":
+        {
+          "Name":"VMAX 2 B 8",
+          "Icon":"[x52prob8]"
+        },
+        "Joy_45":
+        {
+          "Name":"VMAX 2 Ry",
+          "Icon":"[x52prory-]"
+        },
+        "Joy_46":
+        {
+          "Name":"VMAX 2 Ry +",
+          "Icon":"[x52prory+]"
+        },
+        "Joy_47":
+        {
+          "Name":"VMAX MODE - 1"
+        },
+        "Joy_48":
+        {
+          "Name":"VMAX MODE - 2"
+        },
+        "Joy_49":
+        {
+          "Name":"VMAX MODE - 3"
+        },
+        "Joy_50":
+        {
+          "Name":"VMAX MODE - 4"
+        },
+        "Joy_51":
+        {
+          "Name":"VMAX MODE - 5"
+        }
+      }
+    },
+    {
+      "Device":"334483F4",
+      "Name":"LEFT VPC Stick WarBRD-D with Constellation Alpha Prime (Left)",
+      "Buttons":32,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY,U",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"Alpha L RX Axis",
+          "Icon":"[ps4RXAxis]"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"Alpha L RY Axis",
+          "Icon":"[ps4RYAxis]"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"Alpha L Brake B 6",
+          "Icon":"[x52prob6]"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"WarBRD-D L X",
+          "Icon":"[x52prox]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"WarBRD-D L Y",
+          "Icon":"[x52proy]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"Alpha L Rz",
+          "Icon":"[x52prorz]"
+        },
+        "Pos_Joy_RXAxis":
+        {
+          "Name":"Alpha L R Thumb R",
+          "Icon":"[ps4RThumbR]"
+        },
+        "Pos_Joy_RYAxis":
+        {
+          "Name":"Alpha L R Thumb D",
+          "Icon":"[ps4RThumbD]"
+        },
+        "Pos_Joy_UAxis":
+        {
+          "Name":"Alpha L Brake B 6",
+          "Icon":"[x52prob6]"
+        },
+        "Pos_Joy_XAxis":
+        {
+          "Name":"WarBRD-D L X +",
+          "Icon":"[x52prox+]"
+        },
+        "Pos_Joy_YAxis":
+        {
+          "Name":"WarBRD-D L Y",
+          "Icon":"[x52proy-]"
+        },
+        "Pos_Joy_ZAxis":
+        {
+          "Name":"Alpha L Rz +",
+          "Icon":"[x52prorz+]"
+        },
+        "Neg_Joy_RXAxis":
+        {
+          "Name":"Alpha L R Thumb L",
+          "Icon":"[ps4RThumbL]"
+        },
+        "Neg_Joy_RYAxis":
+        {
+          "Name":"Alpha L R Thumb U",
+          "Icon":"[ps4RThumbU]"
+        },
+        "Neg_Joy_UAxis":
+        {
+          "Name":"Alpha L Brake B 6",
+          "Icon":"[x52prob6]"
+        },
+        "Neg_Joy_XAxis":
+        {
+          "Name":"WarBRD-D L X",
+          "Icon":"[x52prox-]"
+        },
+        "Neg_Joy_YAxis":
+        {
+          "Name":"WarBRD-D L Y +",
+          "Icon":"[x52proy+]"
+        },
+        "Neg_Joy_ZAxis":
+        {
+          "Name":"Alpha L Rz",
+          "Icon":"[x52prorz-]"
+        },
+        "Joy_1":
+        {
+          "Name":"Alpha L Flip Up",
+          "Icon":"[x52prob1]"
+        },
+        "Joy_2":
+        {
+          "Name":"Alpha L Flip Center",
+          "Icon":"[x52prob1]"
+        },
+        "Joy_3":
+        {
+          "Name":"Alpha L Flip Pull",
+          "Icon":"[x52prob1]"
+        },
+        "Joy_4":
+        {
+          "Name":"Alpha L Stage 1",
+          "Icon":"[x52prob1]"
+        },
+        "Joy_5":
+        {
+          "Name":"Alpha L Stage 2",
+          "Icon":"[x52prob15]"
+        },
+        "Joy_6":
+        {
+          "Name":"Alpha L R Thumb",
+          "Icon":"[ps4RThumb]"
+        },
+        "Joy_7":
+        {
+          "Name":"Alpha L B 3",
+          "Icon":"[x52prob3]"
+        },
+        "Joy_8":
+        {
+          "Name":"Alpha L Push B 22",
+          "Icon":"[x52prob22]"
+        },
+        "Joy_9":
+        {
+          "Name":"Alpha L B 20",
+          "Icon":"[x52prob20]"
+        },
+        "Joy_10":
+        {
+          "Name":"Alpha L B 21",
+          "Icon":"[x52prob21]"
+        },
+        "Joy_11":
+        {
+          "Name":"Alpha L B 22",
+          "Icon":"[x52prob22]"
+        },
+        "Joy_12":
+        {
+          "Name":"Alpha L B 23",
+          "Icon":"[x52prob23]"
+        },
+        "Joy_13":
+        {
+          "Name":"Alpha L B 4",
+          "Icon":"[x52prob4]"
+        },
+        "Joy_14":
+        {
+          "Name":"Alpha L Push B 22",
+          "Icon":"[x52b22]"
+        },
+        "Joy_15":
+        {
+          "Name":"Alpha L B 20",
+          "Icon":"[x52b20]"
+        },
+        "Joy_16":
+        {
+          "Name":"Alpha L B 21",
+          "Icon":"[x52b21]"
+        },
+        "Joy_17":
+        {
+          "Name":"Alpha L B 22",
+          "Icon":"[x52b22]"
+        },
+        "Joy_18":
+        {
+          "Name":"Alpha L B 23",
+          "Icon":"[x52b23]"
+        },
+        "Joy_19":
+        {
+          "Name":"Alpha L Push 1",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_20":
+        {
+          "Name":"Alpha L Push 2",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_21":
+        {
+          "Name":"Alpha L Up",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_22":
+        {
+          "Name":"Alpha L Down",
+          "Icon":"[x52prob19]"
+        },
+        "Joy_23":
+        {
+          "Name":"Alpha L Push B 26",
+          "Icon":"[x52prob26]"
+        },
+        "Joy_24":
+        {
+          "Name":"Alpha L B 24",
+          "Icon":"[x52prob24]"
+        },
+        "Joy_25":
+        {
+          "Name":"Alpha L B 25",
+          "Icon":"[x52prob25]"
+        },
+        "Joy_26":
+        {
+          "Name":"Alpha L B 26",
+          "Icon":"[x52prob26]"
+        },
+        "Joy_27":
+        {
+          "Name":"Alpha L B 27",
+          "Icon":"[x52prob27]"
+        },
+        "Joy_28":
+        {
+          "Name":"Alpha L Index Push",
+          "Icon":"[x52b22]"
+        },
+        "Joy_29":
+        {
+          "Name":"Alpha L Index B 20",
+          "Icon":"[x52b20]"
+        },
+        "Joy_30":
+        {
+          "Name":"Alpha L Index B 22",
+          "Icon":"[x52b22]"
+        },
+        "Joy_31":
+        {
+          "Name":"Alpha L B 5",
+          "Icon":"[x52prob5]"
+        },
+        "Joy_32":
+        {
+          "Name":"Alpha L Brake B 6",
+          "Icon":"[x52prob6]"
+        }
+      }
+    },
+    {
+      "Device":"4098BD64",
+      "Name":"Winwing WINCTRL Orion Throttle Base II + F15EX HANDLE L + F15EX HANDLE",
+      "Buttons":111,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY,RZ,U,V",
+      "Keys":
+      {
+        "Joy_XAxis":
+        {
+          "Name":"Handle R - Joystick X"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"Handle R - Joystick Y"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"Handle R - Left Rotary"
+        },
+        "Joy_3":
+        {
+          "Name":"Handle R - Bottom Switch PULL"
+        },
+        "Joy_4":
+        {
+          "Name":"Handle R - Bottom Switch MID"
+        },
+        "Joy_5":
+        {
+          "Name":"Handle R - Bottom Switch PUSH"
+        },
+        "Joy_6":
+        {
+          "Name":"Handle R - Lower Hat UP"
+        },
+        "Joy_7":
+        {
+          "Name":"Handle R - Lower Hat PUSH"
+        },
+        "Joy_8":
+        {
+          "Name":"Handle R - Lower Hat DOWN"
+        },
+        "Joy_9":
+        {
+          "Name":"Handle R - Lower Hat PULL"
+        },
+        "Joy_10":
+        {
+          "Name":"Handle R - Lower Hat PRESS"
+        },
+        "Joy_11":
+        {
+          "Name":"Handle R - Side Button"
+        },
+        "Joy_12":
+        {
+          "Name":"Handle R - Middle Back Hat UP"
+        },
+        "Joy_13":
+        {
+          "Name":"Handle R - Middle Back Hat PUSH"
+        },
+        "Joy_14":
+        {
+          "Name":"Handle R - Middle Back Hat DOWN"
+        },
+        "Joy_15":
+        {
+          "Name":"Handle R - Middle Back Hat PULL"
+        },
+        "Joy_16":
+        {
+          "Name":"Handle R - Middle Back Hat PRESS"
+        },
+        "Joy_17":
+        {
+          "Name":"Handle R - Middle Front Hat UP"
+        },
+        "Joy_18":
+        {
+          "Name":"Handle R - Middle Front Hat PUSH"
+        },
+        "Joy_19":
+        {
+          "Name":"Handle R - Middle Front Hat DOWN"
+        },
+        "Joy_20":
+        {
+          "Name":"Handle R - Middle Front Hat PULL"
+        },
+        "Joy_21":
+        {
+          "Name":"Handle R - Middle Front Hat PRESS"
+        },
+        "Joy_22":
+        {
+          "Name":"Handle R - Top Switch PUSH"
+        },
+        "Joy_23":
+        {
+          "Name":"Handle R - Top Switch MID"
+        },
+        "Joy_24":
+        {
+          "Name":"Handle R - Top Switch PULL"
+        },
+        "Joy_25":
+        {
+          "Name":"Handle R - Back Small Rotary UP"
+        },
+        "Joy_26":
+        {
+          "Name":"Handle R - Back Small Rotary MID"
+        },
+        "Joy_27":
+        {
+          "Name":"Handle R - Back Small Rotary DOWN"
+        },
+        "Joy_43":
+        {
+          "Name":"Handle R - Back Small Rotary FULL UP"
+        },
+        "Joy_44":
+        {
+          "Name":"Handle R - Back Small Rotary FULL DOWN"
+        },
+        "Joy_28":
+        {
+          "Name":"Handle R - Back Hat UP"
+        },
+        "Joy_29":
+        {
+          "Name":"Handle R - Back Hat PUSH"
+        },
+        "Joy_32":
+        {
+          "Name":"Handle R - Back Hat DOWN"
+        },
+        "Joy_33":
+        {
+          "Name":"Handle R - Back Hat PULL"
+        },
+        "Joy_34":
+        {
+          "Name":"Handle R - Back Hat PRESS"
+        },
+        "Joy_35":
+        {
+          "Name":"Handle R - Analog Stick PRESS"
+        },
+        "Joy_36":
+        {
+          "Name":"Handle R - Analog Stick UP"
+        },
+        "Joy_37":
+        {
+          "Name":"Handle R - Analog Stick RIGHT"
+        },
+        "Joy_38":
+        {
+          "Name":"Handle R - Analog Stick DOWN"
+        },
+        "Joy_39":
+        {
+          "Name":"Handle R - Analog Stick LEFT"
+        },
+        "Joy_40":
+        {
+          "Name":"Handle R - Back Rotary UP"
+        },
+        "Joy_41":
+        {
+          "Name":"Handle R - Back Rotary MID"
+        },
+        "Joy_42":
+        {
+          "Name":"Handle R - Back Rotary DOWN"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"Handle L - Rotary"
+        },
+        "Joy_50":
+        {
+          "Name":"Handle L - Small Button Right"
+        },
+        "Joy_51":
+        {
+          "Name":"Handle L - Back Hat UP"
+        },
+        "Joy_52":
+        {
+          "Name":"Handle L - Back Hat RIGHT"
+        },
+        "Joy_53":
+        {
+          "Name":"Handle L - Back Hat DOWN"
+        },
+        "Joy_54":
+        {
+          "Name":"Handle L - Back Hat LEFT"
+        },
+        "Joy_55":
+        {
+          "Name":"Handle L - Back Hat PRESS"
+        },
+        "Joy_56":
+        {
+          "Name":"Handle L - Small Button Left"
+        },
+        "Joy_57":
+        {
+          "Name":"Handle L - Side Lever UP"
+        },
+        "Joy_58":
+        {
+          "Name":"Handle L - Side Lever MID"
+        },
+        "Joy_59":
+        {
+          "Name":"Handle L - Side Lever DOWN"
+        },
+        "Joy_60":
+        {
+          "Name":"Handle L - Rotary UP"
+        },
+        "Joy_61":
+        {
+          "Name":"Handle L - Rotary MID"
+        },
+        "Joy_62":
+        {
+          "Name":"Handle L - Rotary DOWN"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"Left Throttle"
+        },
+        "Joy_RXAxis":
+        {
+          "Name":"Right Throttle"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"Slider"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"Dial"
+        },
+        "Joy_65":
+        {
+          "Name":"Launch bar UP"
+        },
+        "Joy_66":
+        {
+          "Name":"Launch bar DOWN"
+        },
+        "Joy_67":
+        {
+          "Name":"Hook UP"
+        },
+        "Joy_68":
+        {
+          "Name":"Hook DN"
+        },
+        "Joy_69":
+        {
+          "Name":"Wing Fold FOLD"
+        },
+        "Joy_70":
+        {
+          "Name":"Wing Fold HOLD"
+        },
+        "Joy_71":
+        {
+          "Name":"Wing Fold SPREAD"
+        },
+        "Joy_72":
+        {
+          "Name":"Wing Fold PUSH"
+        },
+        "Joy_73":
+        {
+          "Name":"LDG Gear UP"
+        },
+        "Joy_74":
+        {
+          "Name":"LDG Gear DOWN"
+        },
+        "Joy_75":
+        {
+          "Name":"Park BRK UP"
+        },
+        "Joy_76":
+        {
+          "Name":"Park BRK DOWN"
+        },
+        "Joy_77":
+        {
+          "Name":"Flap UP"
+        },
+        "Joy_78":
+        {
+          "Name":"Flap MID"
+        },
+        "Joy_79":
+        {
+          "Name":"Flap DOWN"
+        },
+        "Joy_80":
+        {
+          "Name":"Front Red Btn"
+        },
+        "Joy_81":
+        {
+          "Name":"A/G"
+        },
+        "Joy_82":
+        {
+          "Name":"A/A"
+        },
+        "Joy_83":
+        {
+          "Name":"HMD -"
+        },
+        "Joy_84":
+        {
+          "Name":"HMD +"
+        },
+        "Joy_85":
+        {
+          "Name":"HMD Press"
+        },
+        "Joy_86":
+        {
+          "Name":"Roll UP"
+        },
+        "Joy_87":
+        {
+          "Name":"Roll MID"
+        },
+        "Joy_88":
+        {
+          "Name":"Roll DOWN"
+        },
+        "Joy_89":
+        {
+          "Name":"A/P UP"
+        },
+        "Joy_90":
+        {
+          "Name":"A/P MID"
+        },
+        "Joy_91":
+        {
+          "Name":"A/P DOWN"
+        },
+        "Joy_92":
+        {
+          "Name":"Adv Mode"
+        },
+        "Joy_93":
+        {
+          "Name":"Master UP"
+        },
+        "Joy_94":
+        {
+          "Name":"Master MID"
+        },
+        "Joy_95":
+        {
+          "Name":"Master DOWN"
+        },
+        "Joy_96":
+        {
+          "Name":"Jett"
+        },
+        "Joy_97":
+        {
+          "Name":"HDG -"
+        },
+        "Joy_98":
+        {
+          "Name":"HDG +"
+        },
+        "Joy_99":
+        {
+          "Name":"HDG Push"
+        },
+        "Joy_100":
+        {
+          "Name":"CWS -"
+        },
+        "Joy_101":
+        {
+          "Name":"CWS +"
+        },
+        "Joy_102":
+        {
+          "Name":"CWS Push"
+        },
+        "Joy_103":
+        {
+          "Name":"Panel LTS -"
+        },
+        "Joy_104":
+        {
+          "Name":"Panel LTS +"
+        },
+        "Joy_105":
+        {
+          "Name":"Panel LTS Push"
+        },
+        "Joy_106":
+        {
+          "Name":"Slider UP"
+        },
+        "Joy_107":
+        {
+          "Name":"Slider MID"
+        },
+        "Joy_108":
+        {
+          "Name":"Slider DOWN"
+        },
+        "Joy_109":
+        {
+          "Name":"Dial UP"
+        },
+        "Joy_110":
+        {
+          "Name":"Dial MID"
+        },
+        "Joy_111":
+        {
+          "Name":"Dial DOWN"
+        }
+      }
+    },
+    {
+      "Device":"4098BEE1",
+      "Name":"Winwing/Winctrl MFD 1",
+      "Buttons":50,
+      "POV":0,
+      "Axis":"",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"WW B1",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_2":
+        {
+          "Name":"WW B2",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_3":
+        {
+          "Name":"WW B3",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_4":
+        {
+          "Name":"WW B4",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_5":
+        {
+          "Name":"WW B5",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_6":
+        {
+          "Name":"WW B6",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_7":
+        {
+          "Name":"WW B7",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_8":
+        {
+          "Name":"WW B8",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_9":
+        {
+          "Name":"WW B9",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_10":
+        {
+          "Name":"WW GAIN up",
+          "Icon":"[x360PadU]"
+        },
+        "Joy_11":
+        {
+          "Name":"WW GAIN down",
+          "Icon":"[x360PadD]"
+        },
+        "Joy_12":
+        {
+          "Name":"WW B12",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_13":
+        {
+          "Name":"WW B13",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_14":
+        {
+          "Name":"WW B14",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_15":
+        {
+          "Name":"WW B15",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_16":
+        {
+          "Name":"WW B16",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_17":
+        {
+          "Name":"WW B17",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_18":
+        {
+          "Name":"WW B18",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_19":
+        {
+          "Name":"WW B19",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_20":
+        {
+          "Name":"WW B20",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_21":
+        {
+          "Name":"WW CONT down",
+          "Icon":"[x360PadD]"
+        },
+        "Joy_22":
+        {
+          "Name":"WW CONT up",
+          "Icon":"[x360PadU]"
+        },
+        "Joy_23":
+        {
+          "Name":"WW B23",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_24":
+        {
+          "Name":"WW B24",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_25":
+        {
+          "Name":"WW B25",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_26":
+        {
+          "Name":"WW B26",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_27":
+        {
+          "Name":"WW B27",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_28":
+        {
+          "Name":"WW B28",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_29":
+        {
+          "Name":"WW B29",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_30":
+        {
+          "Name":"WW B30",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_31":
+        {
+          "Name":"WW B31",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_32":
+        {
+          "Name":"WW SYM down",
+          "Icon":"[x360PadD]"
+        },
+        "Joy_33":
+        {
+          "Name":"WW SYM up",
+          "Icon":"[x360PadU]"
+        },
+        "Joy_34":
+        {
+          "Name":"WW B34",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_35":
+        {
+          "Name":"WW B35",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_36":
+        {
+          "Name":"WW B36",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_37":
+        {
+          "Name":"WW B37",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_38":
+        {
+          "Name":"WW B38",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_39":
+        {
+          "Name":"WW B39",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_40":
+        {
+          "Name":"WW B40",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_41":
+        {
+          "Name":"WW B41",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_42":
+        {
+          "Name":"WW B42",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_43":
+        {
+          "Name":"WW DAY",
+          "Icon":"[x360PadU]"
+        },
+        "Joy_44":
+        {
+          "Name":"WW NGT",
+          "Icon":"[x360PadD]"
+        },
+        "Joy_45":
+        {
+          "Name":"WW SIDE down",
+          "Icon":"[x52u-]"
+        },
+        "Joy_46":
+        {
+          "Name":"WW SIDE mid",
+          "Icon":"[x52u]"
+        },
+        "Joy_47":
+        {
+          "Name":"WW SIDE up",
+          "Icon":"[x52u+]"
+        },
+        "Joy_48":
+        {
+          "Name":"WW KNOB press",
+          "Icon":"[x52b2]"
+        },
+        "Joy_49":
+        {
+          "Name":"WW KNOB left",
+          "Icon":"[x52prorx-]"
+        },
+        "Joy_50":
+        {
+          "Name":"WW KNOB right",
+          "Icon":"[x52prorx+]"
+        }
+      }
+    },
+    {
+      "Device":"4098BEE2",
+      "Name":"Winwing/Winctrl MFD 1",
+      "Buttons":50,
+      "POV":0,
+      "Axis":"",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"WW B1",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_2":
+        {
+          "Name":"WW B2",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_3":
+        {
+          "Name":"WW B3",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_4":
+        {
+          "Name":"WW B4",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_5":
+        {
+          "Name":"WW B5",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_6":
+        {
+          "Name":"WW B6",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_7":
+        {
+          "Name":"WW B7",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_8":
+        {
+          "Name":"WW B8",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_9":
+        {
+          "Name":"WW B9",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_10":
+        {
+          "Name":"WW GAIN up",
+          "Icon":"[x360PadU]"
+        },
+        "Joy_11":
+        {
+          "Name":"WW GAIN down",
+          "Icon":"[x360PadD]"
+        },
+        "Joy_12":
+        {
+          "Name":"WW B12",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_13":
+        {
+          "Name":"WW B13",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_14":
+        {
+          "Name":"WW B14",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_15":
+        {
+          "Name":"WW B15",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_16":
+        {
+          "Name":"WW B16",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_17":
+        {
+          "Name":"WW B17",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_18":
+        {
+          "Name":"WW B18",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_19":
+        {
+          "Name":"WW B19",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_20":
+        {
+          "Name":"WW B20",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_21":
+        {
+          "Name":"WW CONT down",
+          "Icon":"[x360PadD]"
+        },
+        "Joy_22":
+        {
+          "Name":"WW CONT up",
+          "Icon":"[x360PadU]"
+        },
+        "Joy_23":
+        {
+          "Name":"WW B23",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_24":
+        {
+          "Name":"WW B24",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_25":
+        {
+          "Name":"WW B25",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_26":
+        {
+          "Name":"WW B26",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_27":
+        {
+          "Name":"WW B27",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_28":
+        {
+          "Name":"WW B28",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_29":
+        {
+          "Name":"WW B29",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_30":
+        {
+          "Name":"WW B30",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_31":
+        {
+          "Name":"WW B31",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_32":
+        {
+          "Name":"WW SYM down",
+          "Icon":"[x360PadD]"
+        },
+        "Joy_33":
+        {
+          "Name":"WW SYM up",
+          "Icon":"[x360PadU]"
+        },
+        "Joy_34":
+        {
+          "Name":"WW B34",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_35":
+        {
+          "Name":"WW B35",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_36":
+        {
+          "Name":"WW B36",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_37":
+        {
+          "Name":"WW B37",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_38":
+        {
+          "Name":"WW B38",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_39":
+        {
+          "Name":"WW B39",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_40":
+        {
+          "Name":"WW B40",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_41":
+        {
+          "Name":"WW B41",
+          "Icon":"[x360LThumb]"
+        },
+        "Joy_42":
+        {
+          "Name":"WW B42",
+          "Icon":"[xb1LThumb]"
+        },
+        "Joy_43":
+        {
+          "Name":"WW DAY",
+          "Icon":"[x360PadU]"
+        },
+        "Joy_44":
+        {
+          "Name":"WW NGT",
+          "Icon":"[x360PadD]"
+        },
+        "Joy_45":
+        {
+          "Name":"WW SIDE down",
+          "Icon":"[x52u-]"
+        },
+        "Joy_46":
+        {
+          "Name":"WW SIDE mid",
+          "Icon":"[x52u]"
+        },
+        "Joy_47":
+        {
+          "Name":"WW SIDE up",
+          "Icon":"[x52u+]"
+        },
+        "Joy_48":
+        {
+          "Name":"WW KNOB press",
+          "Icon":"[x52b2]"
+        },
+        "Joy_49":
+        {
+          "Name":"WW KNOB left",
+          "Icon":"[x52prorx-]"
+        },
+        "Joy_50":
+        {
+          "Name":"WW KNOB right",
+          "Icon":"[x52prorx+]"
+        }
+      }
+    },
+    {
+      "Device":"4098BF05",
+      "Name":"WINCTRL CarrierAce PTO 2",
+      "Buttons":41,
+      "POV":0,
+      "Axis":"",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"PTO2 PUSH TO JETT"
+        },
+        "Joy_2":
+        {
+          "Name":"PTO2 MASTER CAUTION"
+        },
+        "Joy_3":
+        {
+          "Name":"PTO2 LAUNCH BAR retract"
+        },
+        "Joy_4":
+        {
+          "Name":"PTO2 LAUNCH BAR extend"
+        },
+        "Joy_5":
+        {
+          "Name":"PTO2 FLAP auto"
+        },
+        "Joy_6":
+        {
+          "Name":"PTO2 FLAP half"
+        },
+        "Joy_7":
+        {
+          "Name":"PTO2 FLAP full"
+        },
+        "Joy_8":
+        {
+          "Name":"PTO2 LDG TAXI LT on"
+        },
+        "Joy_9":
+        {
+          "Name":"PTO2 LDG TAXI LT off"
+        },
+        "Joy_10":
+        {
+          "Name":"PTO2 ANTI SKID on"
+        },
+        "Joy_11":
+        {
+          "Name":"PTO2 ANTI SKID off"
+        },
+        "Joy_12":
+        {
+          "Name":"PTO2 HOOK BYPASS field"
+        },
+        "Joy_13":
+        {
+          "Name":"PTO2 HOOK BYPASS carrier"
+        },
+        "Joy_14":
+        {
+          "Name":"PTO2 PROBE extend"
+        },
+        "Joy_15":
+        {
+          "Name":"PTO2 PROBE retract"
+        },
+        "Joy_16":
+        {
+          "Name":"PTO2 PROBE emerg extd"
+        },
+        "Joy_17":
+        {
+          "Name":"PTO2 SELECT JETT l fus msl"
+        },
+        "Joy_18":
+        {
+          "Name":"PTO2 SELECT JETT safe"
+        },
+        "Joy_19":
+        {
+          "Name":"PTO2 SELECT JETT r fus msl"
+        },
+        "Joy_20":
+        {
+          "Name":"PTO2 SELECT JETT rack lchr"
+        },
+        "Joy_21":
+        {
+          "Name":"PTO2 SELECT JETT stores"
+        },
+        "Joy_22":
+        {
+          "Name":"PTO2 JETT"
+        },
+        "Joy_23":
+        {
+          "Name":"PTO2 CTR"
+        },
+        "Joy_24":
+        {
+          "Name":"PTO2 LI"
+        },
+        "Joy_25":
+        {
+          "Name":"PTO2 RI"
+        },
+        "Joy_26":
+        {
+          "Name":"PTO2 LO"
+        },
+        "Joy_27":
+        {
+          "Name":"PTO2 RO"
+        },
+        "Joy_28":
+        {
+          "Name":"PTO2 WING fold"
+        },
+        "Joy_29":
+        {
+          "Name":"PTO2 WING hold"
+        },
+        "Joy_30":
+        {
+          "Name":"PTO2 WING spread"
+        },
+        "Joy_31":
+        {
+          "Name":"PTO2 WING lock"
+        },
+        "Joy_32":
+        {
+          "Name":"PTO2 HOOK up"
+        },
+        "Joy_33":
+        {
+          "Name":"PTO2 HOOK ctr"
+        },
+        "Joy_34":
+        {
+          "Name":"PTO2 HOOK dn"
+        },
+        "Joy_35":
+        {
+          "Name":"PTO2 LDG GEAR up"
+        },
+        "Joy_36":
+        {
+          "Name":"PTO2 LDG GEAR ctr"
+        },
+        "Joy_37":
+        {
+          "Name":"PTO2 LDG GEAR dn"
+        },
+        "Joy_38":
+        {
+          "Name":"PTO2 PARK BRK push"
+        },
+        "Joy_39":
+        {
+          "Name":"PTO2 PARK BRK pull"
+        },
+        "Joy_40":
+        {
+          "Name":"PTO2 PARK BRK lt"
+        },
+        "Joy_41":
+        {
+          "Name":"PTO2 PARK BRK rt"
+        }
+      }
+    },
+    {
+      "Device":"CHProThrottle1",
+      "Name":"CH Products Pro Throttle USB",
+      "Buttons":16,
+      "POV":1,
+      "Axis":"X,Y,Z",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"CH Top Hat Right",
+          "Hint":"Top Hat",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_2":
+        {
+          "Name":"CH Top Hat Down",
+          "Hint":"Top Hat",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_3":
+        {
+          "Name":"CH Top Hat Left",
+          "Hint":"Top Hat",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_4":
+        {
+          "Name":"CH Top Hat Up",
+          "Hint":"Top Hat",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_5":
+        {
+          "Name":"CH Bottom Hat Right",
+          "Hint":"Bottom Hat",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_6":
+        {
+          "Name":"CH Bottom Hat Down",
+          "Hint":"Bottom Hat",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_7":
+        {
+          "Name":"CH Bottom Hat Left",
+          "Hint":"Bottom Hat",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_8":
+        {
+          "Name":"CH Bottom Hat Up",
+          "Hint":"Bottom Hat",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_9":
+        {
+          "Name":"CH Index Hat Down",
+          "Hint":"Index Hat",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_10":
+        {
+          "Name":"CH Index Hat Right",
+          "Hint":"Index Hat",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_11":
+        {
+          "Name":"CH Index Hat Up",
+          "Hint":"Index Hat",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_12":
+        {
+          "Name":"CH Index Hat Left",
+          "Hint":"Index Hat",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_14":
+        {
+          "Name":"CH Right Finger",
+          "Hint":"Finger Buttons",
+          "Icon":"[ps4L1]"
+        },
+        "Joy_15":
+        {
+          "Name":"CH Middle Finger",
+          "Hint":"Finger Buttons",
+          "Icon":"[ps4L2]"
+        },
+        "Joy_16":
+        {
+          "Name":"CH Left Finger",
+          "Hint":"Finger Buttons",
+          "Icon":"[ps4L3]"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"CH Throttle - Cone right"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"CH Throttle - Cone down"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"CH Throttle - Cone left"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"CH Throttle - Cone up"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"CH Thumb X",
+          "Hint":"Thumb Joystick",
+          "Icon":"[x52x]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"CH Thumb Y",
+          "Hint":"Thumb Joystick",
+          "Icon":"[x52y]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"CH Throttle",
+          "Hint":"Throttle",
+          "Icon":"[hts4ThrottleY]"
+        }
+      }
+    },
+    {
+      "Device":"Generic",
+      "Name":"Template for a generic joystick",
+      "Buttons":32,
+      "POV":4,
+      "Axis":"X,Y,Z,RX,RY,RZ,U,V",
+      "Keys":
+      {
+        "Joy_RXAxis":
+        {
+          "Name":"Stick RXAxis"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"Stick RYAxis"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"Stick RZAxis"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"Stick UAxis"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"Stick VAxis"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"Stick XAxis"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"Stick YAxis"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"Stick ZAxis"
+        },
+        "Pos_Joy_RXAxis":
+        {
+          "Name":"Stick RXAxis+"
+        },
+        "Pos_Joy_RYAxis":
+        {
+          "Name":"Stick RYAxis+"
+        },
+        "Pos_Joy_RZAxis":
+        {
+          "Name":"Stick RZAxis+"
+        },
+        "Pos_Joy_UAxis":
+        {
+          "Name":"Stick UAxis+"
+        },
+        "Pos_Joy_VAxis":
+        {
+          "Name":"Stick VAxis+"
+        },
+        "Pos_Joy_XAxis":
+        {
+          "Name":"Stick XAxis+"
+        },
+        "Pos_Joy_YAxis":
+        {
+          "Name":"Stick YAxis+"
+        },
+        "Pos_Joy_ZAxis":
+        {
+          "Name":"Stick ZAxis+"
+        },
+        "Neg_Joy_RXAxis":
+        {
+          "Name":"Stick RXAxis-"
+        },
+        "Neg_Joy_RYAxis":
+        {
+          "Name":"Stick RYAxis-"
+        },
+        "Neg_Joy_RZAxis":
+        {
+          "Name":"Stick RZAxis-"
+        },
+        "Neg_Joy_UAxis":
+        {
+          "Name":"Stick UAxis-"
+        },
+        "Neg_Joy_VAxis":
+        {
+          "Name":"Stick VAxis-"
+        },
+        "Neg_Joy_XAxis":
+        {
+          "Name":"Stick XAxis-"
+        },
+        "Neg_Joy_YAxis":
+        {
+          "Name":"Stick YAxis-"
+        },
+        "Neg_Joy_ZAxis":
+        {
+          "Name":"Stick ZAxis-"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"Stick POV1Up"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"Stick POV1Right"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"Stick POV1Down"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"Stick POV1Left"
+        },
+        "Joy_POV2Up":
+        {
+          "Name":"Stick POV2Up"
+        },
+        "Joy_POV2Right":
+        {
+          "Name":"Stick POV2Right"
+        },
+        "Joy_POV2Down":
+        {
+          "Name":"Stick POV2Down"
+        },
+        "Joy_POV2Left":
+        {
+          "Name":"Stick POV2Left"
+        },
+        "Joy_POV3Up":
+        {
+          "Name":"Stick POV3Up"
+        },
+        "Joy_POV3Right":
+        {
+          "Name":"Stick POV3Right"
+        },
+        "Joy_POV3Down":
+        {
+          "Name":"Stick POV3Down"
+        },
+        "Joy_POV3Left":
+        {
+          "Name":"Stick POV3Left"
+        },
+        "Joy_POV4Up":
+        {
+          "Name":"Stick POV4Up"
+        },
+        "Joy_POV4Right":
+        {
+          "Name":"Stick POV4Right"
+        },
+        "Joy_POV4Down":
+        {
+          "Name":"Stick POV4Down"
+        },
+        "Joy_POV4Left":
+        {
+          "Name":"Stick POV4Left"
+        },
+        "Joy_1":
+        {
+          "Name":"Stick 1"
+        },
+        "Joy_2":
+        {
+          "Name":"Stick 2"
+        },
+        "Joy_3":
+        {
+          "Name":"Stick 3"
+        },
+        "Joy_4":
+        {
+          "Name":"Stick 4"
+        },
+        "Joy_5":
+        {
+          "Name":"Stick 5"
+        },
+        "Joy_6":
+        {
+          "Name":"Stick 6"
+        },
+        "Joy_7":
+        {
+          "Name":"Stick 7"
+        },
+        "Joy_8":
+        {
+          "Name":"Stick 8"
+        },
+        "Joy_9":
+        {
+          "Name":"Stick 9"
+        },
+        "Joy_10":
+        {
+          "Name":"Stick 10"
+        },
+        "Joy_11":
+        {
+          "Name":"Stick 11"
+        },
+        "Joy_12":
+        {
+          "Name":"Stick 12"
+        },
+        "Joy_13":
+        {
+          "Name":"Stick 13"
+        },
+        "Joy_14":
+        {
+          "Name":"Stick 14"
+        },
+        "Joy_15":
+        {
+          "Name":"Stick 15"
+        },
+        "Joy_16":
+        {
+          "Name":"Stick 16"
+        },
+        "Joy_17":
+        {
+          "Name":"Stick 17"
+        },
+        "Joy_18":
+        {
+          "Name":"Stick 18"
+        },
+        "Joy_19":
+        {
+          "Name":"Stick 19"
+        },
+        "Joy_20":
+        {
+          "Name":"Stick 20"
+        },
+        "Joy_21":
+        {
+          "Name":"Stick 21"
+        },
+        "Joy_22":
+        {
+          "Name":"Stick 22"
+        },
+        "Joy_23":
+        {
+          "Name":"Stick 23"
+        },
+        "Joy_24":
+        {
+          "Name":"Stick 24"
+        },
+        "Joy_25":
+        {
+          "Name":"Stick 25"
+        },
+        "Joy_26":
+        {
+          "Name":"Stick 26"
+        },
+        "Joy_27":
+        {
+          "Name":"Stick 27"
+        },
+        "Joy_28":
+        {
+          "Name":"Stick 28"
+        },
+        "Joy_29":
+        {
+          "Name":"Stick 29"
+        },
+        "Joy_30":
+        {
+          "Name":"Stick 30"
+        },
+        "Joy_31":
+        {
+          "Name":"Stick 31"
+        },
+        "Joy_32":
+        {
+          "Name":"Stick 32"
+        }
+      }
+    },
+    {
+      "Device":"SaitekX56Joystick",
+      "Name":"SaitekX56Joystick",
+      "Buttons":21,
+      "POV":1,
+      "Axis":"X,Y,RX,RY,RZ",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"TG1 (Trigger)"
+        },
+        "Joy_2":
+        {
+          "Name":"A"
+        },
+        "Joy_3":
+        {
+          "Name":"B"
+        },
+        "Joy_4":
+        {
+          "Name":"STK (Ministick)"
+        },
+        "Joy_5":
+        {
+          "Name":"D (Pinky)"
+        },
+        "Joy_6":
+        {
+          "Name":"LVR (Pinky Lever)"
+        },
+        "Joy_7":
+        {
+          "Name":"H1 Up"
+        },
+        "Joy_8":
+        {
+          "Name":"H1 Right"
+        },
+        "Joy_9":
+        {
+          "Name":"H1 Down"
+        },
+        "Joy_10":
+        {
+          "Name":"H1 Left"
+        },
+        "Joy_11":
+        {
+          "Name":"H2 Up"
+        },
+        "Joy_12":
+        {
+          "Name":"H2 Right"
+        },
+        "Joy_13":
+        {
+          "Name":"H2 Down"
+        },
+        "Joy_14":
+        {
+          "Name":"H2 Left"
+        },
+        "Joy_15":
+        {
+          "Name":"M1"
+        },
+        "Joy_16":
+        {
+          "Name":"M2"
+        },
+        "Joy_17":
+        {
+          "Name":"S1"
+        },
+        "Joy_18":
+        {
+          "Name":"Joy_18"
+        },
+        "Joy_19":
+        {
+          "Name":"Joy_19"
+        },
+        "Joy_20":
+        {
+          "Name":"Joy_20"
+        },
+        "Joy_21":
+        {
+          "Name":"Joy_21"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"Stick X"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"Stick Y"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"Stick Twist"
+        },
+        "Joy_RXAxis":
+        {
+          "Name":"Joy Ministick X"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"Joy Ministick Y"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"Joy_POV1Up"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"Joy_POV1Right"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"Joy_POV1Down"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"Joy_POV1Left"
+        }
+      }
+    },
+    {
+      "Device":"SaitekX56Throttle",
+      "Name":"SaitekX56Throttle",
+      "Buttons":36,
+      "POV":0,
+      "Axis":"X,Y,Z,RX,RY,RZ,U,V",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"E"
+        },
+        "Joy_2":
+        {
+          "Name":"F (RTY 1 Push)"
+        },
+        "Joy_3":
+        {
+          "Name":"G (RTY 2 Push)"
+        },
+        "Joy_4":
+        {
+          "Name":"I (Middle Finger)"
+        },
+        "Joy_5":
+        {
+          "Name":"H (Index Finger)"
+        },
+        "Joy_6":
+        {
+          "Name":"SW1"
+        },
+        "Joy_7":
+        {
+          "Name":"SW2"
+        },
+        "Joy_8":
+        {
+          "Name":"SW3"
+        },
+        "Joy_9":
+        {
+          "Name":"SW4"
+        },
+        "Joy_10":
+        {
+          "Name":"SW5"
+        },
+        "Joy_11":
+        {
+          "Name":"SW6"
+        },
+        "Joy_12":
+        {
+          "Name":"TGL 1 Up"
+        },
+        "Joy_13":
+        {
+          "Name":"TGL 1 Down"
+        },
+        "Joy_14":
+        {
+          "Name":"TGL 2 Up"
+        },
+        "Joy_15":
+        {
+          "Name":"TGL 2 Down"
+        },
+        "Joy_16":
+        {
+          "Name":"TGL 3 Up"
+        },
+        "Joy_17":
+        {
+          "Name":"TGL 3 Down"
+        },
+        "Joy_18":
+        {
+          "Name":"TGL 4 Up"
+        },
+        "Joy_19":
+        {
+          "Name":"TGL 4 Down"
+        },
+        "Joy_20":
+        {
+          "Name":"H3 Up"
+        },
+        "Joy_21":
+        {
+          "Name":"H3 Right"
+        },
+        "Joy_22":
+        {
+          "Name":"H3 Down"
+        },
+        "Joy_23":
+        {
+          "Name":"H3 Left"
+        },
+        "Joy_24":
+        {
+          "Name":"H4 Up"
+        },
+        "Joy_25":
+        {
+          "Name":"H4 Right"
+        },
+        "Joy_26":
+        {
+          "Name":"H4 Down"
+        },
+        "Joy_27":
+        {
+          "Name":"H4 Left"
+        },
+        "Joy_28":
+        {
+          "Name":"K1 Up"
+        },
+        "Joy_29":
+        {
+          "Name":"K1 Down"
+        },
+        "Joy_30":
+        {
+          "Name":"Scroll Fwd"
+        },
+        "Joy_31":
+        {
+          "Name":"Scroll Back"
+        },
+        "Joy_32":
+        {
+          "Name":"STK (Ministick)"
+        },
+        "Joy_33":
+        {
+          "Name":"SLD (Slider)"
+        },
+        "Joy_34":
+        {
+          "Name":"M1"
+        },
+        "Joy_35":
+        {
+          "Name":"M2"
+        },
+        "Joy_36":
+        {
+          "Name":"S1"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"Throttle R"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"Throttle L"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"F (RTY 1)"
+        },
+        "Joy_RXAxis":
+        {
+          "Name":"Throttle Ministick X"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"Throttle Ministick Y"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"G (RTY 2)"
+        },
+        "Joy_Slider1":
+        {
+          "Name":"Slider"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"RTY 3"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"RTY 4"
+        }
+      }
+    },
+    {
+      "Device":"T16000M",
+      "Name":"Thrustmaster T.16000M joystick",
+      "Buttons":16,
+      "POV":1,
+      "Axis":"X,Y,RZ,U",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"T16 Trigger",
+          "Hint":"Main Fire Button"
+        },
+        "Joy_2":
+        {
+          "Name":"T16 Secondary Fire",
+          "Hint":"Secondary Fire Button"
+        },
+        "Joy_3":
+        {
+          "Name":"T16 Left Button",
+          "Hint":"Top Left Button"
+        },
+        "Joy_4":
+        {
+          "Name":"T16 Right Button",
+          "Hint":"Top Right Button"
+        },
+        "Joy_5":
+        {
+          "Name":"T16 LB Top Left Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_6":
+        {
+          "Name":"T16 LB Top Middle Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_7":
+        {
+          "Name":"T16 LB Top Right Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_8":
+        {
+          "Name":"T16 LB Bottom Right Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_9":
+        {
+          "Name":"T16 LB Bottom Middle Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_10":
+        {
+          "Name":"T16 LB Bottom Left Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_11":
+        {
+          "Name":"T16 RB Top Right Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_12":
+        {
+          "Name":"T16 RB Top Middle Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_13":
+        {
+          "Name":"T16 RB Top Left Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_14":
+        {
+          "Name":"T16 RB Bottom Left Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_15":
+        {
+          "Name":"T16 RB Bottom Middle Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_16":
+        {
+          "Name":"T16 RB Bottom Right Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"T16 POV Up",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"T16 POV Right",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"T16 POV Down",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"T16 POV Left",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"T16 Base Slider",
+          "Hint":"Base"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"T16 Stick X Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"T16 Stick Y Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"T16 Stick Twist",
+          "Hint":"Joystick"
+        }
+      }
+    },
+    {
+      "Device":"T16000MTHROTTLE",
+      "Name":"Thrustmaster TWCS Throttle",
+      "Buttons":14,
+      "POV":1,
+      "Axis":"X,Y,Z,RX,RY,RZ,U,V",
+      "Keys":
+      {
+        "Joy_XAxis":
+        {
+          "Name":"TWCS Ministick X"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"TWCS Ministick Y"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"TWCS Throttle"
+        },
+        "Joy_RXAxis":
+        {
+          "Name":"TWCS Right Pedal"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"TWCS Left Pedal"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"TWCS Paddle"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"TWCS Tuning Wheel"
+        },
+        "Joy_VAxis":
+        {
+          "Name":"TWCS Rudder"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"TWCS Cone U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"TWCS Cone R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"TWCS Cone D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"TWCS Cone L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_1":
+        {
+          "Name":"TWCS Thumb Button"
+        },
+        "Joy_2":
+        {
+          "Name":"TWCS Pinkie"
+        },
+        "Joy_3":
+        {
+          "Name":"TWCS Ring Finger"
+        },
+        "Joy_4":
+        {
+          "Name":"TWCS Rocker U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_5":
+        {
+          "Name":"TWCS Rocker D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_6":
+        {
+          "Name":"TWCS Ministick Click"
+        },
+        "Joy_7":
+        {
+          "Name":"TWCS Saddle U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_8":
+        {
+          "Name":"TWCS Saddle R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_9":
+        {
+          "Name":"TWCS Saddle D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_10":
+        {
+          "Name":"TWCS Saddle L",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_11":
+        {
+          "Name":"TWCS Castle U",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_12":
+        {
+          "Name":"TWCS Castle R",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_13":
+        {
+          "Name":"TWCS Castle D",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_14":
+        {
+          "Name":"TWCS Castle L",
+          "Icon":"[ps4PadL]"
+        }
+      }
+    },
+    {
+      "Device":"VPCThrottle",
+      "Name":"VPC Throttle MT-50CM3 (Left)",
+      "Buttons":81,
+      "POV":0,
+      "Axis":"RX,RY,RZ",
+      "Keys":
+      {
+        "Joy_38":
+        {
+          "Name":"B1-Ch1"
+        },
+        "Joy_39":
+        {
+          "Name":"B2-Ch1"
+        },
+        "Joy_40":
+        {
+          "Name":"B3-Ch1"
+        },
+        "Joy_41":
+        {
+          "Name":"B4-Ch1"
+        },
+        "Joy_42":
+        {
+          "Name":"B5-Ch1"
+        },
+        "Joy_43":
+        {
+          "Name":"B6-Ch1"
+        },
+        "Joy_56":
+        {
+          "Name":"B1-Ch2"
+        },
+        "Joy_57":
+        {
+          "Name":"B2-Ch2"
+        },
+        "Joy_58":
+        {
+          "Name":"B3-Ch2"
+        },
+        "Joy_59":
+        {
+          "Name":"B4-Ch2"
+        },
+        "Joy_60":
+        {
+          "Name":"B5-Ch2"
+        },
+        "Joy_61":
+        {
+          "Name":"B6-Ch2"
+        },
+        "Joy_62":
+        {
+          "Name":"B1-Ch3"
+        },
+        "Joy_63":
+        {
+          "Name":"B2-Ch3"
+        },
+        "Joy_64":
+        {
+          "Name":"B3-Ch3"
+        },
+        "Joy_65":
+        {
+          "Name":"B4-Ch3"
+        },
+        "Joy_66":
+        {
+          "Name":"B5-Ch3"
+        },
+        "Joy_67":
+        {
+          "Name":"B6-Ch3"
+        },
+        "Joy_68":
+        {
+          "Name":"B1-Ch4"
+        },
+        "Joy_69":
+        {
+          "Name":"B2-Ch4"
+        },
+        "Joy_70":
+        {
+          "Name":"B3-Ch4"
+        },
+        "Joy_71":
+        {
+          "Name":"B4-Ch4"
+        },
+        "Joy_72":
+        {
+          "Name":"B5-Ch4"
+        },
+        "Joy_73":
+        {
+          "Name":"B6-Ch4"
+        },
+        "Joy_74":
+        {
+          "Name":"B1-Ch5"
+        },
+        "Joy_75":
+        {
+          "Name":"B2-Ch5"
+        },
+        "Joy_76":
+        {
+          "Name":"B3-Ch5"
+        },
+        "Joy_77":
+        {
+          "Name":"B4-Ch5"
+        },
+        "Joy_78":
+        {
+          "Name":"B5-Ch5"
+        },
+        "Joy_79":
+        {
+          "Name":"B6-Ch5"
+        },
+        "Joy_80":
+        {
+          "Name":"T4 Down"
+        },
+        "Joy_81":
+        {
+          "Name":"T3 Down"
+        },
+        "Joy_50":
+        {
+          "Name":"E1"
+        },
+        "Joy_51":
+        {
+          "Name":"E1 - Counter Clockwise"
+        },
+        "Joy_52":
+        {
+          "Name":"E1 - Clockwise"
+        },
+        "Joy_53":
+        {
+          "Name":"E2"
+        },
+        "Joy_54":
+        {
+          "Name":"E2 - Counter Clockwise"
+        },
+        "Joy_55":
+        {
+          "Name":"E2 - Clockwise"
+        },
+        "Joy_34":
+        {
+          "Name":"T1"
+        },
+        "Joy_35":
+        {
+          "Name":"T2"
+        },
+        "Joy_36":
+        {
+          "Name":"T3 Up"
+        },
+        "Joy_37":
+        {
+          "Name":"T4 Up"
+        },
+        "Joy_44":
+        {
+          "Name":"T5 - Up"
+        },
+        "Joy_45":
+        {
+          "Name":"T5 - Down"
+        },
+        "Joy_46":
+        {
+          "Name":"T6 - Up"
+        },
+        "Joy_47":
+        {
+          "Name":"T6 - Down"
+        },
+        "Joy_48":
+        {
+          "Name":"T7 - Up"
+        },
+        "Joy_49":
+        {
+          "Name":"T7 - Down"
+        },
+        "Joy_RXAxis":
+        {
+          "Name":"Throttle L"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"Throttle R"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"Flaps"
+        },
+        "Joy_1":
+        {
+          "Name":"L 1"
+        },
+        "Joy_2":
+        {
+          "Name":"L Dial - Backward"
+        },
+        "Joy_3":
+        {
+          "Name":"L Dial - Forward"
+        },
+        "Joy_4":
+        {
+          "Name":"L POV Press"
+        },
+        "Joy_5":
+        {
+          "Name":"L POV Back"
+        },
+        "Joy_6":
+        {
+          "Name":"L DIAL - Press"
+        },
+        "Joy_7":
+        {
+          "Name":"L POV Forward"
+        },
+        "Joy_8":
+        {
+          "Name":"R POV1 Press"
+        },
+        "Joy_9":
+        {
+          "Name":"R POV1 Forward"
+        },
+        "Joy_10":
+        {
+          "Name":"R POV1 Right"
+        },
+        "Joy_11":
+        {
+          "Name":"R POV1 Back"
+        },
+        "Joy_12":
+        {
+          "Name":"R POV1 Left"
+        },
+        "Joy_13":
+        {
+          "Name":"R Stick Press"
+        },
+        "Joy_14":
+        {
+          "Name":"R Dial - Forward"
+        },
+        "Joy_15":
+        {
+          "Name":"R Dial - Backward"
+        },
+        "Joy_16":
+        {
+          "Name":"R POV2 - Press"
+        },
+        "Joy_17":
+        {
+          "Name":"R POV2 - Forward"
+        },
+        "Joy_18":
+        {
+          "Name":"R POV2 - Down"
+        },
+        "Joy_19":
+        {
+          "Name":"R POV2 - Back"
+        },
+        "Joy_20":
+        {
+          "Name":"R POV2 - Up"
+        },
+        "Joy_21":
+        {
+          "Name":"R 1"
+        },
+        "Joy_22":
+        {
+          "Name":"R POV3 - Press"
+        },
+        "Joy_23":
+        {
+          "Name":"R POV3 - Down"
+        },
+        "Joy_24":
+        {
+          "Name":"R POV3 - Back"
+        },
+        "Joy_25":
+        {
+          "Name":"R POV3 - Up"
+        },
+        "Joy_26":
+        {
+          "Name":"R POV3 - Forward"
+        },
+        "Joy_27":
+        {
+          "Name":"R POV4 - Press"
+        },
+        "Joy_28":
+        {
+          "Name":"R POV4 - Down"
+        },
+        "Joy_29":
+        {
+          "Name":"R POV4 - Back"
+        },
+        "Joy_30":
+        {
+          "Name":"R POV4 - Up"
+        },
+        "Joy_31":
+        {
+          "Name":"R POV4 - Forward"
+        },
+        "Joy_32":
+        {
+          "Name":"R 2"
+        },
+        "Joy_33":
+        {
+          "Name":"R 3"
+        }
+      }
+    },
+    {
+      "Device":"Logitech710WirelessGamepad",
+      "Name":"Logitech710WirelessGamepad",
+      "Buttons":12,
+      "POV":1,
+      "Axis":"X,Y,Z,RZ",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"LT Button 1",
+          "Hint":"Right Quad"
+        },
+        "Joy_2":
+        {
+          "Name":"LT Button 2",
+          "Hint":"Right Quad"
+        },
+        "Joy_3":
+        {
+          "Name":"LT Button 3",
+          "Hint":"Right Quad"
+        },
+        "Joy_4":
+        {
+          "Name":"LT Button 4",
+          "Hint":"Right Quad"
+        },
+        "Joy_5":
+        {
+          "Name":"LT Top Left Fire",
+          "Hint":"Left Finger Buttons"
+        },
+        "Joy_6":
+        {
+          "Name":"LT Top Right Fire",
+          "Hint":"Right Finger Buttons"
+        },
+        "Joy_7":
+        {
+          "Name":"LT Bottom Left Fire",
+          "Hint":"Left Finger Buttons"
+        },
+        "Joy_8":
+        {
+          "Name":"LT Bottom Right Fire",
+          "Hint":"Right Finger Buttons"
+        },
+        "Joy_9":
+        {
+          "Name":"LT Button 9",
+          "Hint":"Left Selection Buttons"
+        },
+        "Joy_10":
+        {
+          "Name":"LT Button 10",
+          "Hint":"Right Selection Buttons"
+        },
+        "Joy_11":
+        {
+          "Name":"LT Press Left Stick",
+          "Hint":"Left Stick"
+        },
+        "Joy_12":
+        {
+          "Name":"LT Press Right Stick",
+          "Hint":"Right Stick"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"LT Right Stick X Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"LT Right Stick Y Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"LT Left Stick X Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"LT Left Stick Y Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"LT POV Left",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"LT POV Right",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"LT POV Up",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"LT POV Down",
+          "Hint":"Top POV Hat"
         }
       }
     }

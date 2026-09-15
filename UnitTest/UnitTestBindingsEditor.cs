@@ -44,7 +44,8 @@ namespace UnitTest
             {
                 InputMapDialog im = new InputMapDialog();
                 im.Init(inputdevices);
-                im.AllowAxis = im.AxisOnly = entry.IsBinding;
+                im.AllowAxis = true;
+                im.AllowKeyboard = im.AllowMouse = !entry.IsBinding;
                 im.ShowPressOrRelease = false;
                 im.ShowOKCancel = false;
                 im.EscapeQuits = true;
@@ -59,7 +60,7 @@ namespace UnitTest
 
                         if (!frontierkeyname.StartsWith("!"))
                         {
-                            return Tuple.Create(frontierdevicename, frontierkeyname);
+                            return Tuple.Create(frontierdevicename, frontierkeyname, im.DirectionPositive);
                         }
                         else
                         {
@@ -76,8 +77,8 @@ namespace UnitTest
             var frontierpresetfilebindingfilename = EliteDangerousCore.Bindings.BindingsFile.FindBindingsFile(bindingfolder, true);
             string curset = FileHelpers.TryReadAllTextFromFile(testfolder + "keynames.json");
             string defset = FileHelpers.TryReadAllTextFromFile(testfolder + "defkeynames.json");
-            //curset = null;
-            //defset = null;
+           // curset = null;
+          //  defset = null;
 
             DeviceKeyNames keynames = new DeviceKeyNames();
             if (curset != null)
@@ -89,7 +90,7 @@ namespace UnitTest
                 defrenames.Set(defset);
                 foreach (DeviceKeyNames.DeviceNameSet key in defrenames)
                 {
-                    if (keynames.GetByDeviceList(key.DeviceList) == null)
+                    if (keynames.GetDevice(key.Device) == null)
                     {
                         keynames.Add(key);
                     }

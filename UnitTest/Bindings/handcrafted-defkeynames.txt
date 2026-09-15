@@ -1,0 +1,608 @@
+{
+  "Version":"1.0.0.0",
+  "Devices":
+  [
+    {
+      "Device":"CHProThrottle1",
+      "Buttons": 19,
+      "POV" : 1,
+      "Axis" : "X,Y,Z",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"CH Top Hat Right",
+          "Hint":"Top Hat",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_2":
+        {
+          "Name":"CH Top Hat Down",
+          "Hint":"Top Hat",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_3":
+        {
+          "Name":"CH Top Hat Left",
+          "Hint":"Top Hat",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_4":
+        {
+          "Name":"CH Top Hat Up",
+          "Hint":"Top Hat",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_5":
+        {
+          "Name":"CH Bottom Hat Right",
+          "Hint":"Bottom Hat",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_6":
+        {
+          "Name":"CH Bottom Hat Down",
+          "Hint":"Bottom Hat",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_7":
+        {
+          "Name":"CH Bottom Hat Left",
+          "Hint":"Bottom Hat",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_8":
+        {
+          "Name":"CH Bottom Hat Up",
+          "Hint":"Bottom Hat",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_9":
+        {
+          "Name":"CH Index Hat Down",
+          "Hint":"Index Hat",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_10":
+        {
+          "Name":"CH Index Hat Right",
+          "Hint":"Index Hat",
+           "Icon":"[ps4PadR]"
+       },
+        "Joy_11":
+        {
+          "Name":"CH Index Hat Up",
+          "Hint":"Index Hat",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_12":
+        {
+          "Name":"CH Index Hat Left",
+          "Hint":"Index Hat",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_13":
+        {
+          "Name":"CH Joystick Push",
+          "Hint":"Joystick"
+        },
+        "Joy_14":
+        {
+          "Name":"CH Right Finger",
+          "Hint":"Finger Buttons",
+          "Icon":"[ps4L1]"
+        },
+        "Joy_15":
+        {
+          "Name":"CH Middle Finger",
+          "Hint":"Finger Buttons",
+          "Icon":"[ps4L2]"
+        },
+        "Joy_16":
+        {
+          "Name":"CH Left Finger",
+          "Hint":"Finger Buttons",
+          "Icon":"[ps4L3]"
+        },
+        "Joy_17":
+        {
+          "Name":"CH Joystick Push 1",
+          "Hint":"Joystick"
+        },
+        "Joy_18":
+        {
+          "Name":"CH Joystick Push 2",
+          "Hint":"Joystick"
+        },
+        "Joy_19":
+        {
+          "Name":"CH Joystick Push 3",
+          "Hint":"Joystick"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"CH Thumb X",
+          "Hint":"Thumb Joystick",
+          "Icon":"[x52x]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"CH Thumb Y",
+          "Hint":"Thumb Joystick",
+          "Icon":"[x52y]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"CH Throttle",
+          "Icon":"[hts4ThrottleY]",
+          "Hint":"Throttle"
+        },
+      },
+    },
+    {
+      "Device":"Logitech710WirelessGamepad",
+      "Buttons": 12,
+      "POV" : 1,
+      "Axis" : "X,Y,Z,RZ",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"LT Button 1",
+          "Hint":"Right Quad"
+        },
+        "Joy_2":
+        {
+          "Name":"LT Button 2",
+          "Hint":"Right Quad"
+        },
+        "Joy_3":
+        {
+          "Name":"LT Button 3",
+          "Hint":"Right Quad"
+        },
+        "Joy_4":
+        {
+          "Name":"LT Button 4",
+          "Hint":"Right Quad"
+        },
+        "Joy_5":
+        {
+          "Name":"LT Top Left Fire",
+          "Hint":"Left Finger Buttons"
+        },
+        "Joy_6":
+        {
+          "Name":"LT Top Right Fire",
+          "Hint":"Right Finger Buttons"
+        },
+        "Joy_7":
+        {
+          "Name":"LT Bottom Left Fire",
+          "Hint":"Left Finger Buttons"
+        },
+        "Joy_8":
+        {
+          "Name":"LT Bottom Right Fire",
+          "Hint":"Right Finger Buttons"
+        },
+        "Joy_9":
+        {
+          "Name":"LT Button 9",
+          "Hint":"Left Selection Buttons"
+        },
+        "Joy_10":
+        {
+          "Name":"LT Button 10",
+          "Hint":"Right Selection Buttons"
+        },
+        "Joy_11":
+        {
+          "Name":"LT Press Left Stick",
+          "Hint":"Left Stick"
+        },
+        "Joy_12":
+        {
+          "Name":"LT Press Right Stick",
+          "Hint":"Right Stick"
+        },
+
+        "Joy_ZAxis":
+        {
+          "Name":"LT Right Stick X Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"LT Right Stick Y Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"LT Left Stick X Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"LT Left Stick Y Axis",
+          "Hint":"Joystick"
+        },
+
+        "Joy_POV1Left":
+        {
+          "Name":"LT POV Left",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"LT POV Right",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"LT POV Up",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"LT POV Down",
+          "Hint":"Top POV Hat"
+        }
+
+      }
+    },
+    {
+      "Device":"T16000M",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"T16 Trigger",
+          "Hint":"Main Fire Button"
+        },
+        "Joy_2":
+        {
+          "Name":"T16 Secondary Fire",
+          "Hint":"Secondary Fire Button"
+        },
+        "Joy_3":
+        {
+          "Name":"T16 Left Button",
+          "Hint":"Top Left Button"
+        },
+        "Joy_4":
+        {
+          "Name":"T16 Right Button",
+          "Hint":"Top Right Button"
+        },
+        
+        "Joy_5":
+        {
+          "Name":"T16 LB Top Left Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_6":
+        {
+          "Name":"T16 LB Top Middle Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_7":
+        {
+          "Name":"T16 LB Top Right Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_8":
+        {
+          "Name":"T16 LB Bottom Right Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_9":
+        {
+          "Name":"T16 LB Bottom Middle Button",
+          "Hint":"LB Buttons"
+        },
+        "Joy_10":
+        {
+          "Name":"T16 LB Bottom Left Button",
+          "Hint":"LB Buttons"
+        },
+
+        "Joy_11":
+        {
+          "Name":"T16 RB Top Right Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_12":
+        {
+          "Name":"T16 RB Top Middle Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_13":
+        {
+          "Name":"T16 RB Top Left Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_14":
+        {
+          "Name":"T16 RB Bottom Left Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_15":
+        {
+          "Name":"T16 RB Bottom Middle Button",
+          "Hint":"RB Buttons"
+        },
+        "Joy_16":
+        {
+          "Name":"T16 RB Bottom Right Button",
+          "Hint":"RB Buttons"
+        },
+
+        "Joy_RZAxis":
+        {
+          "Name":"T16 Stick Twist",
+          "Hint":"Joystick"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"T16 Stick X Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"T16 Stick Y Axis",
+          "Hint":"Joystick"
+        },
+        "Joy_UAxis":
+        {
+          "Name":"T16 Base Slider",
+          "Hint":"Base"
+        },
+
+        "Joy_POV1Left":
+        {
+          "Name":"T16 POV Left",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"T16 POV Right",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"T16 POV Up",
+          "Hint":"Top POV Hat"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"T16 POV Down",
+          "Hint":"Top POV Hat"
+        }
+      }
+    },
+    {
+      "Device":"231D0200",
+      "Buttons": 32,
+      "POV" : 1,
+      "Axis" : "X,Y,Z,RX,RY,RZ",
+      "Keys":
+      {
+        "Joy_1":
+        {
+          "Name":"VKB Trigger",
+          "Hint":"Main Fire Button",
+          "Icon":"[x52b2]",
+        },
+        "Joy_2":
+        {
+          "Name":"VKB Trigger Double Press",
+          "Hint":"Main Fire Button",
+          "Icon":"[x52b2]",
+        },
+        "Joy_3":
+        {
+          "Name":"VKB Red Button",
+          "Hint":"Left Joystick"
+        },
+        "Joy_4":
+        {
+          "Name":"VKB Right Index",
+          "Hint":"Right Index Figure Button"
+        },
+        "Joy_5":
+        {
+          "Name":"VKB Pinky Finger",
+          "Hint":"Bottom Joystick"
+        },
+        "Joy_6":
+        {
+          "Name":"VKB A3_Up",
+          "Hint":"Middle Hat",
+          "Icon":"[ps4PadU]"
+        },
+        "Joy_7":
+        {
+          "Name":"VKB A3_Right",
+          "Hint":"Middle Hat",
+          "Icon":"[ps4PadR]"
+        },
+        "Joy_8":
+        {
+          "Name":"VKB A3_Down",
+          "Hint":"Middle Hat",
+          "Icon":"[ps4PadD]"
+        },
+        "Joy_9":
+        {
+          "Name":"VKB A3_Left",
+          "Hint":"Middle Hat",
+          "Icon":"[ps4PadL]"
+        },
+        "Joy_10":
+        {
+          "Name":"VKB A3_Push",
+          "Hint":"Middle Hat"
+        },
+        "Joy_11":
+        {
+          "Name":"VKB A4_Up",
+          "Hint":"Right Hat"
+        },
+        "Joy_12":
+        {
+          "Name":"VKB A4_Right",
+          "Hint":"Right Hat"
+        },
+        "Joy_13":
+        {
+          "Name":"VKB A4_Down",
+          "Hint":"Right Hat"
+        },
+        "Joy_14":
+        {
+          "Name":"VKB A4_Left",
+          "Hint":"Right Hat"
+        },
+        "Joy_15":
+        {
+          "Name":"VKB A4_Push",
+          "Hint":"Right Hat"
+        },
+        "Joy_16":
+        {
+          "Name":"VKB C1_Up",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_17":
+        {
+          "Name":"VKB C1_Right",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_18":
+        {
+          "Name":"VKB C1_Down",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_19":
+        {
+          "Name":"VKB C1_Left",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_20":
+        {
+          "Name":"VKB C1_Push",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_21":
+        {
+          "Name":"VKB Rapid Fire_Up",
+          "Hint":"Top Trigger"
+        },
+        "Joy_22":
+        {
+          "Name":"VKB Rapid Fire_Down",
+          "Hint":"Top Trigger"
+        },
+        "Joy_23":
+        {
+          "Name":"VKB Roll Up",
+          "Hint":"Bottom Right Roll Button Base"
+        },
+        "Joy_24":
+        {
+          "Name":"VKB Roll Down",
+          "Hint":"Bottom Right Roll Button Base"
+        },
+        "Joy_25":
+        {
+          "Name":"VKB Toggle Up",
+          "Hint":"Toggle Switch LB"
+        },
+        "Joy_26":
+        {
+          "Name":"VKB Toggle Down",
+          "Hint":"Toggle Switch LB"
+        },
+        "Joy_27":
+        {
+          "Name":"VKB F1",
+          "Hint":"Base switches"
+        },
+        "Joy_28":
+        {
+          "Name":"VKB F2",
+          "Hint":"Base switches"
+        },
+        "Joy_29":
+        {
+          "Name":"VKB F3",
+          "Hint":"Base switches"
+        },
+        "Joy_30":
+        {
+          "Name":"VKB Unused1",
+          "Hint":"Unknown"
+        },
+        "Joy_31":
+        {
+          "Name":"VKB C1 Long press",
+          "Hint":"Thumb Hat"
+        },
+        "Joy_RZAxis":
+        {
+          "Name":"VKB Stick Twist",
+          "Hint":"Joystick",
+          "Icon":"[x52prorz]"
+        },
+        "Joy_XAxis":
+        {
+          "Name":"VKB Stick X Axis",
+          "Hint":"Joystick",
+          "Icon":"[x52x]"
+        },
+        "Joy_YAxis":
+        {
+          "Name":"VKB Stick Y Axis",
+          "Hint":"Joystick",
+          "Icon":"[x52y]"
+        },
+        "Joy_ZAxis":
+        {
+          "Name":"VKB Base Slider",
+          "Hint":"Base of Joystick"
+        },
+        "Joy_POV1Left":
+        {
+          "Name":"VKB A1_Left (POV)",
+          "Hint":"Left Hat (POV Mode)"
+        },
+        "Joy_POV1Right":
+        {
+          "Name":"VKB A1_Right (POV)",
+          "Hint":"Left Hat (POV Mode)"
+        },
+        "Joy_POV1Up":
+        {
+          "Name":"VKB A1_Up (POV)",
+          "Hint":"Left Hat (POV Mode)"
+        },
+        "Joy_POV1Down":
+        {
+          "Name":"VKB A1_Down (POV)",
+          "Hint":"Left Hat (POV Mode)"
+        },
+        "Joy_RXAxis":
+        {
+          "Name":"VKB A1_X Axis (Analog)",
+          "Hint":"Left Hat (Analog Mode)"
+        },
+        "Joy_RYAxis":
+        {
+          "Name":"VKB A1_Y Axis (Analog)",
+          "Hint":"Left Hat (Analog Mode)"
+        }
+      }
+    }
+  ]
+}
