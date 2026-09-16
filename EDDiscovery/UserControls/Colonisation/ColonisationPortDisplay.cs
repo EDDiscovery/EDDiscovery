@@ -70,7 +70,7 @@ namespace EDDiscovery.UserControls.Colonisation
 
                 var selposrl = dataGridViewRL.GetSelectedRowOrCellPosition();                       // returns row/cell (if cell set) null if not
                 var posrltag = selposrl != null ? dataGridViewRL.Rows[selposrl.Item1].Tag : null;      // keep tag of selected
-                var cursort = dataGridViewRL.GetCurrentSort();
+                var cursort = dataGridViewRL.GetSort(0);
 
                 dataGridViewRL.Rows.Clear();
 
@@ -94,7 +94,7 @@ namespace EDDiscovery.UserControls.Colonisation
                         dataGridViewRL.SetCurrentSelOnRow(dataGridViewRL.FindRowWithTag(posrltag), selposrl.Item2);
                     }
 
-                    dataGridViewRL.RestoreSort(cursort);
+                    dataGridViewRL.Sort(cursort);
                 }
 
 
@@ -106,7 +106,7 @@ namespace EDDiscovery.UserControls.Colonisation
             {
                 var selposrl = dataGridViewContributions.GetSelectedRowOrCellPosition();                       // returns row/cell (if cell set) null if not
                 var posrltag = selposrl != null ? dataGridViewContributions.Rows[selposrl.Item1].Tag : null;      // keep tag of selected
-                var cursort = dataGridViewContributions.GetCurrentSort();
+                var cursort = dataGridViewContributions.GetSort();
 
                 DataGridViewColumn sortcol = dataGridViewContributions.SortedColumn != null ? dataGridViewContributions.SortedColumn : dataGridViewContributions.Columns[0];
                 SortOrder sortorder = dataGridViewContributions.SortOrder;
@@ -129,7 +129,7 @@ namespace EDDiscovery.UserControls.Colonisation
                     dataGridViewContributions.SetCurrentSelOnRow(dataGridViewContributions.FindRowWithTag(posrltag), selposrl.Item2);
                 }
 
-                dataGridViewContributions.RestoreSort(cursort);
+                dataGridViewContributions.Sort(cursort);
 
                 extPanelDataGridViewScrollContributions.Visible = dataGridViewContributions.Rows.Count > 0 && extCheckBoxShowContributions.Checked; // don't show if nothing
                 extCheckBoxShowContributions.Visible = dataGridViewContributions.Rows.Count > 0;      // no button if nothing

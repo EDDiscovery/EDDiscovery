@@ -304,7 +304,6 @@ namespace EDDiscovery.UserControls
                         JournalScan scan = bn?.Scan;    // may be null
 
                         bool destisbody = bn != null ? bn.CanonicalNameOrOwnName.EqualsIIC(uistatus.DestinationName) : true;
-                        var classification = Signal.ClassifyStationName(new SignalFDName(uistatus.DestinationName_Localised));
 
                         if (bn?.BodyType == BodyDefinitions.BodyType.PlanetaryRing)
                         {
@@ -326,6 +325,7 @@ namespace EDDiscovery.UserControls
                         {
                             if (!destisbody)
                             {
+                                var classification = Signal.ClassifyStationName(new SignalFDName(uistatus.DestinationName));
                                 desttext += ": " + (classification == Signal.Classification.Carrier ? "Carrier" + " " : "") +
                                     "Orbiting" + ": ";
                             }
@@ -336,8 +336,8 @@ namespace EDDiscovery.UserControls
                         {
                             if (!destisbody)
                             {
-                                desttext += ": " + (classification == Signal.Classification.Carrier ? "Carrier" + " " + "Orbiting" :
-                                            "Station" + " " + "Orbiting" + " " + "or on surface" + " of") + ": ";
+                                var classification = Signal.ClassifySignal(new SignalFDName(uistatus.DestinationName));
+                                desttext += ": " + Signal.ToEnglish(classification);
                             }
                             else
                                 desttext += ": " + "Planet";
