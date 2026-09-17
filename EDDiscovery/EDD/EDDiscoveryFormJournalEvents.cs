@@ -83,8 +83,14 @@ namespace EDDiscovery
         }
 
         // Called by controller before any HL removal reorder. The raw HE stream.  The MCMR etc databases have been updated
-        public void Controller_NewHistoryEntryUnfiltered(HistoryEntry he)
+        public void Form_NewHistoryEntryUnfiltered(HistoryEntry he)
         {
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+
+            // issue to panels the unfiltered event
+
+            OnNewHistoryEntryUnfiltered?.Invoke(he);
+
             //he.FillInformation(out string ed, out string edi);System.Diagnostics.Debug.WriteLine($"HE Unfiltered {he.EntryType} {he.EventSummary} {ed}");
             //System.Diagnostics.Debug.WriteLine($"{Environment.TickCount} EDF Unfiltered {he.EntryType}");
 
@@ -112,8 +118,11 @@ namespace EDDiscovery
         private HistoryEntry queuededdnfsssd = null;        // queued FSS because we can't find the right system
 
         // Called after HE removal/reorder, and after the UI's has had a chance to operate
-        private void Controller_NewEntrySecond(HistoryEntry he)
+        // only form uses this
+        private void Form_NewEntrySecond(HistoryEntry he)
         {
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+
             BaseUtils.AppTicks.TickCountLapDelta("DFS", true);
 
             actioncontroller.ActionRunOnEntry(he, Actions.ActionEventEDList.NewEntry(he));
@@ -166,12 +175,21 @@ namespace EDDiscovery
 
         }
 
-        private void Controller_NewUIEvent(UIEvent uievent)
+        // issued by ControllerNewEntry
+        private void Form_NewUIEvent(UIEvent uievent, StatusReader sr)
         {
-            BaseUtils.Variables cv = new BaseUtils.Variables();
+            Debug.Assert(System.Windows.Forms.Application.MessageLoop);
 
+            // pass it onto other panels - just the uievent for historic reasons
+
+            OnNewUIEvent?.Invoke(uievent);       
+
+            // issue to ACTION
+
+            BaseUtils.Variables cv = new BaseUtils.Variables();
             string prefix = "EventClass_";
             cv.AddPropertiesFieldsOfClass(uievent, prefix, new HashSet<Type> { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5);
+            cv.AddPropertiesFieldsOfClass(sr, "Status_", new HashSet<Type> { typeof(System.Drawing.Icon), typeof(System.Drawing.Image), typeof(System.Drawing.Bitmap), typeof(QuickJSON.JObject) }, 5);
             cv[prefix + "UIDisplayed"] = "0";
             actioncontroller.ActionRun(Actions.ActionEventEDList.onUIEvent, cv);
             actioncontroller.ActionRun(Actions.ActionEventEDList.EliteUIEvent(uievent), cv);
@@ -211,7 +229,7 @@ namespace EDDiscovery
 
             }
         }
-        private void Controller_NewCommanderDuringPlay()
+        private void Form_NewCommanderDuringPlay()
         {
             LogLineHighlight("Right On New Commander!");
             UpdateCommandersListBox();            

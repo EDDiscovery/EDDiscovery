@@ -96,8 +96,8 @@ namespace EDDiscovery.Actions
                 string keyname = ide.EventName();              // same as bindings name..
                                                                // System.Diagnostics.Debug.WriteLine(je.ToString(10) + " " + match);
 
-                //System.Diagnostics.Debug.WriteLine($"\r\nActionInputDevice Generate Action EliteInputRaw {ide.Device.ID.Name} {keyname} {ide.Pressed} axis {ide.Axis}");
-                
+               // System.Diagnostics.Debug.WriteLine($"ActionInputDevice Generate Action EliteInputRaw DV:{ide.Device.ID.Name} Key:`{keyname}` Pr:{ide.Pressed} axis {ide.Axis}");
+
                 ac.ActionRun(Actions.ActionEventEDList.onEliteInputRaw, 
                             new BaseUtils.Variables(new string[] { "Device" , ide.Device.ID.Name, "EventName", keyname , "Pressed" , ide.Pressed?"1":"0", "Value" , ide.Value.ToStringInvariant() }),
                             new BaseUtils.Variables(new string[] { ide.Axis ? "_ELITEINPUTAXIS" : "_ELITEINPUT", "1" })
@@ -131,7 +131,7 @@ namespace EDDiscovery.Actions
 
                             if (pressstate.Item1)     // if all are pressed
                             {
-                                //System.Diagnostics.Debug.WriteLine($"ActionInputDevice All are pressed for {dvs.Entry.Name}");
+                                //System.Diagnostics.Debug.WriteLine($"ActionInputDevice Turn ON {dvs.Entry.Name} {dvs.Keys.KeyDescription()}");
                                 inonstate.Add(dvs);                                 // add to on list the keypresses which worked
                                 ispressable.Add(pressstate.Item2);
                             }
@@ -143,7 +143,7 @@ namespace EDDiscovery.Actions
                                 BindingsFile.DeviceKeySet off = assignmentsinonstate.Find(x => x.Entry.Name == dvs.Entry.Name);
                                 if (off!=null)
                                 {
-                                    //System.Diagnostics.Debug.WriteLine($"ActionInputDevice {dvs.Entry.Name} has turned off");
+                                    //System.Diagnostics.Debug.WriteLine($"ActionInputDevice Turn OFF {dvs.Entry.Name} {dvs.Keys.KeyDescription()}");
                                     assignmentsinonstate.Remove(off);
                                     ac.ActionRun(Actions.ActionEventEDList.onEliteInputOff, new BaseUtils.Variables(new string[] { "Binding", dvs.Entry.Name }),
                                                     new BaseUtils.Variables(new string[] { ide.Axis ? "_ELITEINPUTAXIS" : "_ELITEINPUT", "1" }));
@@ -151,19 +151,20 @@ namespace EDDiscovery.Actions
                             }
                         }
 
-                        List<string> bindingstoexecute = new List<string>();        // logical list of frontier bindings to action
+                        List<BindingsFile.DeviceKeySet> bindingstoexecute = new List<BindingsFile.DeviceKeySet>();        // logical list of frontier bindings to action
 
                         for (int i = 0; i < inonstate.Count; i++)
                         {
                             var onset = inonstate[i];       // list of keypresses
+
                             if (KeyAssignementLongerThan(onset, inonstate))  // we have the best key list
                             {
-                                //System.Diagnostics.Debug.WriteLine($"ActionInputDevice {onset.Entry.Name} has the best keylist");
+                               // System.Diagnostics.Debug.WriteLine($"ActionInputDevice ACTION RUN {onset.Entry.Name}");
 
                                 if (ispressable[i])     // record it was off, to let it turn off
                                     assignmentsinonstate.Add(onset);
 
-                                bindingstoexecute.Add(onset.Entry.Name);
+                                bindingstoexecute.Add(onset);
                             }
                             else
                             {
@@ -171,16 +172,24 @@ namespace EDDiscovery.Actions
                             }
                         }
 
-                        foreach (string frontierbindingname in bindingstoexecute)
+                        foreach (var onset in bindingstoexecute)
                         {
-                            //System.Diagnostics.Debug.WriteLine($"ActionInputDevice Run Action BindingList with {frontierbindingname}");
-                            ac.ActionRun(Actions.ActionEventEDList.onEliteInput, new BaseUtils.Variables(new string[] { "Device" , ide.Device.ID.Name, "Binding" , frontierbindingname , "BindingList" , String.Join(",",bindingstoexecute),
-                                          "EventName", keyname , "Pressed" , ide.Pressed?"1":"0", "Value" , ide.Value.ToStringInvariant() }),
-                                          new BaseUtils.Variables(new string[] { ide.Axis ? "_ELITEINPUTAXIS" : "_ELITEINPUT", "1" }));
+                            //System.Diagnostics.Debug.WriteLine($"ActionInputDevice Run Action BindingList with {onset.Entry.Name}");
+                            ac.ActionRun(Actions.ActionEventEDList.onEliteInput, new BaseUtils.Variables(new string[] 
+                                            {   "Device" , ide.Device.ID.Name, 
+                                                "Binding" , onset.Entry.Name , 
+                                                "BindingList" , String.Join(",",bindingstoexecute),
+                                                "EventName", keyname , 
+                                                "Pressed" , ide.Pressed?"1":"0", 
+                                                "Value" , ide.Value.ToStringInvariant() }),
+                                          new BaseUtils.Variables(new string[] { ide.Axis ? "_ELITEINPUTAXIS" : "_ELITEINPUT", "1" })); // new sept 26 limit issue to files declaring these statics
                         }
                     }
                 }
             }
+
+            //foreach( var x in assignmentsinonstate) System.Diagnostics.Debug.WriteLine($"ActionInputDevice remaining on {x.Entry}");
+            //System.Diagnostics.Debug.WriteLine($"ActionInputDevice Over");
         }
 
         // see if the DKP list is currently pressed
@@ -202,7 +211,7 @@ namespace EDDiscovery.Actions
 
                 if (v.HasValue)         // is pressable
                 {
-                    if (v.Value == false)     // if it
+                    if (v.Value == false)     // if it is not, we are false
                         return Tuple.Create(false, false);
                 }
                 else

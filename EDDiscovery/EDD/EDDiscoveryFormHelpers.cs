@@ -484,7 +484,8 @@ namespace EDDiscovery
         #region Bindings
         public void LoadFrontierBindings()
         {
-            FrontierBindings = new BindingsFile();
+            FrontierBindings.Clear();       // use the same one, because other people have the handle to it!  trap caught sept 26
+
             // we remember details on startpreset.start because this can change which binding file is used
             FrontierStartPresetFile = BindingsFile.FindStartPreset(EDDOptions.Instance.FrontierBindingsFolder, true);
 
@@ -492,9 +493,11 @@ namespace EDDiscovery
             if (FrontierStartPresetFile != null)
             {
                 string file = BindingsFile.FindBindingsFile(FrontierStartPresetFile);       // this may return null, which read can handle
+            
                 if (FrontierBindings.Read(file) == null)
                 {
                     FrontierBindings.AssignVKeys();
+                    System.Diagnostics.Debug.WriteLine($"Bindings: {FrontierBindings.ToXML()}");
                 }
             }
         }

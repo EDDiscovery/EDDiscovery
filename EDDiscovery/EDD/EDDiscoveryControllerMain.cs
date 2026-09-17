@@ -53,7 +53,7 @@ namespace EDDiscovery
 
         // UI events
 
-        public event Action<UIEvent> OnNewUIEvent;                          // UI. Called irrespective of commander
+        public event Action<UIEvent, StatusReader> OnNewUIEvent;            // UI. Called irrespective of commander
 
         // NewJournalEntry from scanner: Any commander, first sent
 

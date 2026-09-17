@@ -187,7 +187,7 @@ namespace EDDiscovery
 
         // New UI event. SR will be null if programatically made
 
-        void NewUIEventFromScanner(UIEvent u, StatusReader _)                  // UI thread new event
+        void NewUIEventFromScanner(UIEvent u, StatusReader sr)                  // UI thread new event
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
             //System.Diagnostics.Debug.WriteLine("Dispatch from controller UI event " + u.EventTypeStr);
@@ -207,7 +207,7 @@ namespace EDDiscovery
                 UIOverallStatus = uos;
             }
 
-            OnNewUIEvent?.Invoke(u);
+            OnNewUIEvent?.Invoke(u,sr);
 
             var t = BaseUtils.AppTicks.TickCountLapDelta("CTUI");
             if (t.Item2 > 25)

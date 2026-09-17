@@ -43,7 +43,7 @@ namespace EDDiscovery
 
         public ExtendedControls.ThemeList ThemeList { get; private set; }
 
-        public EliteDangerousCore.Bindings.BindingsFile FrontierBindings { get; private set; }
+        public EliteDangerousCore.Bindings.BindingsFile FrontierBindings { get; private set; } = new EliteDangerousCore.Bindings.BindingsFile();
         public InputDeviceList InputDeviceList { get; private set; }
         private Tuple<string, DateTime, int> FrontierStartPresetFile { get; set; }
 
@@ -76,16 +76,16 @@ namespace EDDiscovery
         public event Action OnThemeChanged;                             // Note you won't get it on startup because theme is applied to form before tabs/panels are setup
         public event Action<string, Size> ScreenShotCaptured;           // screen shot has been captured
         public event Action<string, Color> OnNewLogEntry;               // Mirrored. New log entry generated.
+        public event Action<UIEvent> OnNewUIEvent;                      // from Form_NewUIEvent pass onto panels
+        public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered;  // from Form_NewHistoryEntryUnfiltered pass onto panels
         #endregion
 
-        #region Events due to EDDiscoveryController
+        #region Events due to EDDiscoveryController, in UI thread
         public event Action OnPreHistoryChange { add { Controller.OnPreHistoryChange += value; } remove { Controller.OnPreHistoryChange -= value; } }
         public event Action OnHistoryChange { add { Controller.OnHistoryChange += value; } remove { Controller.OnHistoryChange -= value; } }
         public event Action OnNewCommanderDuringPlayDetected { add { Controller.OnNewCommanderDuringPlayDetected += value; } remove { Controller.OnNewCommanderDuringPlayDetected -= value; } }
         public event Action<HistoryEntry> OnNewEntry { add { Controller.OnNewEntry += value; } remove { Controller.OnNewEntry -= value; } }
-        public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered { add { Controller.OnNewHistoryEntryUnfiltered += value; } remove { Controller.OnNewHistoryEntryUnfiltered -= value; } }
         public event Action<JournalEntry> OnNewJournalEntryUnfiltered { add { Controller.OnNewJournalEntryUnfiltered += value; } remove { Controller.OnNewJournalEntryUnfiltered -= value; } }
-        public event Action<UIEvent> OnNewUIEvent { add { Controller.OnNewUIEvent += value; } remove { Controller.OnNewUIEvent -= value; } }
         public event Action<bool> OnExpeditionsDownloaded { add { Controller.OnExpeditionsDownloaded += value; } remove { Controller.OnExpeditionsDownloaded -= value; } }
         public event Action<long, long> OnSyncComplete { add { Controller.OnSyncComplete += value; } remove { Controller.OnSyncComplete -= value; } }
 
@@ -148,10 +148,10 @@ namespace EDDiscovery
             Controller.OnSyncStarting += () => {  in_system_sync = true; };
             Controller.OnSyncComplete += (c1,c2) => { in_system_sync = false; };
 
-            Controller.OnNewHistoryEntryUnfiltered += Controller_NewHistoryEntryUnfiltered; // called before being added to the HE, unfiltered, unmerged stream
-            Controller.OnNewEntrySecond += Controller_NewEntrySecond;       // called after UI updates themselves with NewEntry
-            Controller.OnNewUIEvent += Controller_NewUIEvent;       // called if its an UI event
-            Controller.OnNewCommanderDuringPlayDetected += Controller_NewCommanderDuringPlay;
+            Controller.OnNewHistoryEntryUnfiltered += Form_NewHistoryEntryUnfiltered; // called before being added to the HE, unfiltered, unmerged stream
+            Controller.OnNewEntrySecond += Form_NewEntrySecond;       // called after UI updates themselves with NewEntry
+            Controller.OnNewUIEvent += Form_NewUIEvent;       // called if its an UI event
+            Controller.OnNewCommanderDuringPlayDetected += Form_NewCommanderDuringPlay;
 
             Controller.LogLine += (s) => { this.BeginInvoke((MethodInvoker)delegate { LogLine(s); }); };
             Controller.LogLineHighlight += (s) => { this.BeginInvoke((MethodInvoker)delegate { LogLineHighlight(s); }); };
