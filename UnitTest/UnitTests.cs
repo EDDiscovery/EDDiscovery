@@ -43,6 +43,7 @@ namespace UnitTest
             theme.LoadBaseThemes();
             theme.SetThemeByName("Elite Verdana Small");
             //Theme.Current.WindowsFrame = true;
+            //Theme.Current.FontSize = 12;
 
             //{
             //    foreach( InputLanguage x in InputLanguage.InstalledInputLanguages)
