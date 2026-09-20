@@ -14,7 +14,7 @@ F6FDBE48DC54DD: "Delete" => "删除"
 6C82E6DD86807E: "Time" => "时间"
 4276E6AB2A3146: "No Data" => "无数据"
 6EEF6648406C33: "None" => "无"
-DB3D405B106759: "on" => "在"
+DB3D405B106759: "on" => "开启"
 E3DE5AB0CA4C69: "Off" => "关闭"
 BC7819B34FF875: "Unknown" => "未知"
 0EB5ED506E4923: "Information" => "提示"
@@ -345,7 +345,7 @@ A425A7972A5C05: "Modified locally, do you wish to overwrite the changes" => "已
 
 SECTION ImportExportForm
 
-DEADB4817C6BB8: "Export data" => "导出"
+DEADB4817C6BB8: "Export data" => "导出数据"
 F3E4FADB9E370A: "Export" => "导出"
 D82C9379E1E7F3: "Import data" => "导入数据"
 D6FBC9D2BDD580: "Import" => "导入文件"
