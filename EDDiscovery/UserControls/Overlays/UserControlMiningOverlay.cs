@@ -299,7 +299,6 @@ namespace EDDiscovery.UserControls
                         chart.BeginInit();
                         chart.AddChartArea("mining");
                         chart.EnableZoomMouseWheelX();
-                        chart.ZoomMouseWheelXMinimumInterval = 1;
                         chart.SetXAxisInterval(DateTimeIntervalType.Auto, 5);
                         chart.SetXAxisTitle("Content %".Tx());
                         chart.SetYAxisMaxMin(0, 100);

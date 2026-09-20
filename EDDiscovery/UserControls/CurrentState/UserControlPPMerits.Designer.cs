@@ -184,7 +184,7 @@ namespace EDDiscovery.UserControls
             this.copyMeritsReportToolStripMenuItem,
             this.copySystemNameToolStripMenuItem});
             this.contextMenuGrid.Name = "contextMenuGrid";
-            this.contextMenuGrid.Size = new System.Drawing.Size(183, 136);
+            this.contextMenuGrid.Size = new System.Drawing.Size(183, 114);
             this.contextMenuGrid.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuGrid_Opening);
             // 
             // findInHistoryPanelToolStripMenuItem

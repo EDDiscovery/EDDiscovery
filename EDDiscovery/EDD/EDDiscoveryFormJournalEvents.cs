@@ -179,6 +179,7 @@ namespace EDDiscovery
         private void Form_NewUIEvent(UIEvent uievent, StatusReader sr)
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
+            Debug.Assert(sr != null);
 
             // pass it onto other panels - just the uievent for historic reasons
 

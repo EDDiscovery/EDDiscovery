@@ -145,7 +145,7 @@ namespace EDDiscovery.Icons
         public static Image Popout { get { return BaseUtils.Icons.IconSet.GetImage("Controls.Popout"); } }
         public static Image Selector { get { return BaseUtils.Icons.IconSet.GetImage("Controls.Selector"); } }
         public static Image Selector2 { get { return BaseUtils.Icons.IconSet.GetImage("Controls.Selector2"); } }
-        public static Image AddTab { get { return BaseUtils.Icons.IconSet.GetImage("Controls.Addtab"); } }
+        public static Image Addtab { get { return BaseUtils.Icons.IconSet.GetImage("Controls.Addtab"); } }
         public static Image Addtab48 { get { return BaseUtils.Icons.IconSet.GetImage("Controls.Addtab48"); } }
         public static Image Edit { get { return BaseUtils.Icons.IconSet.GetImage("Controls.Edit"); } }
         public static Image EditSystem { get { return BaseUtils.Icons.IconSet.GetImage("Controls.EditSystem"); } }

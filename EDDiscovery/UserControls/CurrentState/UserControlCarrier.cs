@@ -104,8 +104,7 @@ namespace EDDiscovery.UserControls
             extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
 
             extChartLedger.EnableZoomMouseWheelX();
-            extChartLedger.ZoomMouseWheelXMinimumInterval = 5.0 / 60.0 / 24.0;
-
+            
             extChartLedger.SetXAxisInterval(DateTimeIntervalType.Days, 0, IntervalAutoMode.VariableCount);
             extChartLedger.SetXAxisFormat("g");
 

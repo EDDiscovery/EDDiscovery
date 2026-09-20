@@ -450,7 +450,6 @@ namespace EDDiscovery.UserControls
             this.extChartLedger.RightArrowPosition = elementPosition2;
             this.extChartLedger.Size = new System.Drawing.Size(800, 272);
             this.extChartLedger.TabIndex = 11;
-            this.extChartLedger.ZoomMouseWheelXMinimumInterval = 5D;
             this.extChartLedger.ZoomMouseWheelXZoomFactor = 1.5D;
             // 
             // UserControlLedger

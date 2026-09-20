@@ -605,11 +605,11 @@
     <Compile Include="UserControls\CurrentState\UserControlMissions.Designer.cs">
       <DependentUpon>UserControlMissions.cs</DependentUpon>
     </Compile>
-    <Compile Include="UserControls\CurrentState\UserControlShipsAndModules.cs">
+    <Compile Include="UserControls\CurrentState\ShipsAndModules.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="UserControls\CurrentState\UserControlShipsAndModules.Designer.cs">
-      <DependentUpon>UserControlShipsAndModules.cs</DependentUpon>
+    <Compile Include="UserControls\CurrentState\ShipsAndModules.Designer.cs">
+      <DependentUpon>ShipsAndModules.cs</DependentUpon>
     </Compile>
     <Compile Include="UserControls\EngineeringSynthesis\UserControlEngineering.cs">
       <SubType>UserControl</SubType>
@@ -1012,8 +1012,8 @@
     <EmbeddedResource Include="UserControls\CurrentState\UserControlMissions.resx">
       <DependentUpon>UserControlMissions.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="UserControls\CurrentState\UserControlShipsAndModules.resx">
-      <DependentUpon>UserControlShipsAndModules.cs</DependentUpon>
+    <EmbeddedResource Include="UserControls\CurrentState\ShipsAndModules.resx">
+      <DependentUpon>ShipsAndModules.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserControls\EngineeringSynthesis\UserControlEngineering.resx">
       <DependentUpon>UserControlEngineering.cs</DependentUpon>

@@ -215,7 +215,6 @@ namespace EDDiscovery.UserControls
             this.extChartTravelDest.RightArrowPosition = elementPosition2;
             this.extChartTravelDest.Size = new System.Drawing.Size(1059, 201);
             this.extChartTravelDest.TabIndex = 9;
-            this.extChartTravelDest.ZoomMouseWheelXMinimumInterval = 5D;
             this.extChartTravelDest.ZoomMouseWheelXZoomFactor = 1.5D;
             // 
             // vScrollBarGeneral
@@ -568,7 +567,6 @@ namespace EDDiscovery.UserControls
             this.extChartLedger.RightArrowPosition = elementPosition4;
             this.extChartLedger.Size = new System.Drawing.Size(1059, 201);
             this.extChartLedger.TabIndex = 10;
-            this.extChartLedger.ZoomMouseWheelXMinimumInterval = 5D;
             this.extChartLedger.ZoomMouseWheelXZoomFactor = 1.5D;
             // 
             // tabPageTravel
@@ -773,7 +771,6 @@ namespace EDDiscovery.UserControls
             this.extChartScan.RightArrowPosition = elementPosition6;
             this.extChartScan.Size = new System.Drawing.Size(1065, 245);
             this.extChartScan.TabIndex = 0;
-            this.extChartScan.ZoomMouseWheelXMinimumInterval = 5D;
             this.extChartScan.ZoomMouseWheelXZoomFactor = 1.5D;
             // 
             // userControlStatsTimeScan
@@ -899,7 +896,6 @@ namespace EDDiscovery.UserControls
             this.extChartCombat.RightArrowPosition = elementPosition8;
             this.extChartCombat.Size = new System.Drawing.Size(1059, 238);
             this.extChartCombat.TabIndex = 1;
-            this.extChartCombat.ZoomMouseWheelXMinimumInterval = 5D;
             this.extChartCombat.ZoomMouseWheelXZoomFactor = 1.5D;
             // 
             // statsTimeUserControlCombat
@@ -1062,7 +1058,6 @@ namespace EDDiscovery.UserControls
             this.extChartShips.RightArrowPosition = elementPosition10;
             this.extChartShips.Size = new System.Drawing.Size(1059, 249);
             this.extChartShips.TabIndex = 2;
-            this.extChartShips.ZoomMouseWheelXMinimumInterval = 5D;
             this.extChartShips.ZoomMouseWheelXZoomFactor = 1.5D;
             // 
             // labelEndDate

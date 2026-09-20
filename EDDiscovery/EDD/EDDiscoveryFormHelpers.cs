@@ -497,7 +497,7 @@ namespace EDDiscovery
                 if (FrontierBindings.Read(file) == null)
                 {
                     FrontierBindings.AssignVKeys();
-                    System.Diagnostics.Debug.WriteLine($"Bindings: {FrontierBindings.ToXML()}");
+                    //System.Diagnostics.Debug.WriteLine($"Bindings: {FrontierBindings.ToXML()}");
                 }
             }
         }

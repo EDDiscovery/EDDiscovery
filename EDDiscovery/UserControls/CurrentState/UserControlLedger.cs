@@ -78,7 +78,8 @@ namespace EDDiscovery.UserControls
                 extChartLedger.AddChartArea("LedgerCA1");
                 extChartLedger.AddSeries("LedgerS1", "LedgerCA1", SeriesChartType.Line);
                 extChartLedger.EnableZoomMouseWheelX();
-                extChartLedger.ZoomMouseWheelXMinimumInterval = 5.0 / 60.0 / 24.0;
+                extChartLedger.SetXAxisScaleViewMin(2);     // 2 days
+                extChartLedger.SetYAxisScaleViewMin(10000);     // credits
 
                 extChartLedger.SetXAxisInterval(DateTimeIntervalType.Days, 0, IntervalAutoMode.VariableCount);
                 extChartLedger.SetXAxisFormat("g");

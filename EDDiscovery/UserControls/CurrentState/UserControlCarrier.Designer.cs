@@ -642,7 +642,6 @@
             this.extChartLedger.RightArrowPosition = elementPosition2;
             this.extChartLedger.Size = new System.Drawing.Size(839, 216);
             this.extChartLedger.TabIndex = 0;
-            this.extChartLedger.ZoomMouseWheelXMinimumInterval = 5D;
             this.extChartLedger.ZoomMouseWheelXZoomFactor = 1.5D;
             // 
             // panelFinancesTop

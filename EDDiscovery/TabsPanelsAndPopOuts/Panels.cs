@@ -119,7 +119,7 @@ namespace EDDiscovery
             { new PanelInfo( PanelIDs.Ledger, typeof(UserControlLedger), "Ledger", "Ledger", "Ledger of cash related entries") },
             { new PanelInfo( PanelIDs.Missions, typeof(UserControlMissions), "Missions", "Missions", "Mission list") },
             { new PanelInfo( PanelIDs.Factions, typeof(UserControlFactions), "Factions", "Factions", "Faction rewards and trading tally") },
-            { new PanelInfo( PanelIDs.Modules, typeof(UserControlModules), "Ships/Loadout", "Modules", "Ships and their loadouts plus stored modules") },
+            { new PanelInfo( PanelIDs.Modules, typeof(ShipsAndModules), "Ships/Loadout", "Modules", "Ships and their loadouts plus stored modules") },
             { new PanelInfo( PanelIDs.Statistics, typeof(UserControlStats), "Statistics", "Stats", "Statistics Information") },
             { new PanelInfo( PanelIDs.SuitsWeapons, typeof(UserControlSuitsWeapons), "Suits & Weapons", "SuitsWeapons", "Suits, Loadouts, Weapons") },
             { new PanelInfo( PanelIDs.Carrier, typeof(UserControlCarrier), "Carrier", "Carrier", "Data about your fleet carrier") },

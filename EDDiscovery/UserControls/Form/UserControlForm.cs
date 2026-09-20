@@ -278,7 +278,7 @@ namespace EDDiscovery.UserControls
             bool showourtitle = DisplayTitle || showcontrols;
             bool showstatusbar = !wantawindowsborder && inpanelshow;
 
-            System.Diagnostics.Debug.WriteLine($"UCF UpdateTranparency wb:{wantawindowsborder} istr:{IsCurrentlyTransparent} showwb:{showwindowsborder} showc:{showcontrols} showtitle:{showourtitle} showsb:{showstatusbar}");
+            //System.Diagnostics.Debug.WriteLine($"UCF UpdateTranparency wb:{wantawindowsborder} istr:{IsCurrentlyTransparent} showwb:{showwindowsborder} showc:{showcontrols} showtitle:{showourtitle} showsb:{showstatusbar}");
 
             FormBorderStyle = showwindowsborder ? FormBorderStyle.Sizable : FormBorderStyle.None;
 

@@ -185,12 +185,12 @@ namespace EDDiscovery
             }
         }
 
-        // New UI event. SR will be null if programatically made
+        // New UI event. SR must be set
 
-        void NewUIEventFromScanner(UIEvent u, StatusReader sr)                  // UI thread new event
+        void NewUIEventFromScanner(UIEvent u, StatusReader sr)                
         {
             Debug.Assert(System.Windows.Forms.Application.MessageLoop);
-            //System.Diagnostics.Debug.WriteLine("Dispatch from controller UI event " + u.EventTypeStr);
+            Debug.Assert(sr!=null);
 
             BaseUtils.AppTicks.TickCountLapDelta("CTUI", true);
 

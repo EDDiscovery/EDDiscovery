@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright 2016 - 2025 EDDiscovery development team
+ * Copyright 2016 - 2026 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -13,7 +13,6 @@
  */
 
 using EliteDangerousCore;
-using EliteDangerousCore.StarScan2;
 using ExtendedControls;
 using System;
 using System.Collections.Generic;
@@ -25,36 +24,11 @@ using System.Windows.Forms;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlModules : UserControlCommonBase
+    public partial class ShipsAndModules : UserControlCommonBase
     {
-        private string ownedshipstext;
-        private string storedmoduletext;
-        private string travelhistorytext;
-        private string allmodulestext;
-        private string allshipstext;
-        private string allknownmodulestext;
-
-        private string sortmodecol = "";
-
-        private HistoryEntry last_he = null;
-        private Ship last_displayship = null;
-        private int last_cargo = 0;
-        private ItemData.ShipProperties last_moduleshipproperties;
-        private bool last_moduleclickbacks;
-
-        private string dbDisplayFilters = "DisplayFiltersNew";
-        private string dbWordWrap = "WordWrap";
-        private string dbShipSelect = "ShipSelect";
-        private string dbModSplitter = "ModSplitter";
-        private string[] displayfilters;
-
-        private List<object> allmodulesref = new List<object>();
-
-        ShipModuleDisplay smd = new ShipModuleDisplay();
-
         #region Init
 
-        public UserControlModules()
+        public ShipsAndModules()
         {
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
@@ -64,8 +38,8 @@ namespace EDDiscovery.UserControls
 
         protected override void Init()
         {
-
-            ownedshipstext = "Owned Ships".Tx();
+            currentownedshipstext = "Owned Ships".Tx();
+            allownedshipstext = "Owned Ships Current and Sold/Destroyed".Tx();
             allshipstext = "All Ships".Tx();
             storedmoduletext = "Stored Modules".Tx();
             travelhistorytext = "Travel History Entry".Tx();
@@ -96,7 +70,7 @@ namespace EDDiscovery.UserControls
             multiPipControlWep.ValueChanged += (s) => { DisplayShipStats(last_displayship); };
             extButtonDrawnResetPips.Text = "RST";   // done to bypass translation
 
-            HideShipRelatedButtonsAndPanels();
+            HideShipRelatedButtonsAndPanelsClearModuleDiagram();
 
             dataGridViewModules.EnableCellHoverOverCallback();
             dataGridViewModules.HoverOverCell += HoverOverCell;
@@ -105,13 +79,15 @@ namespace EDDiscovery.UserControls
 
             extPictureBoxModules.ClickElement += ModuleDisplayClickElement;
 
-            splitContainer.SplitterDistance(GetSetting(dbModSplitter, 0.4));
+            splitContainerModulesGrid.SplitterDistance(GetSetting(dbModSplitter, 0.4));
+
         }
 
         protected override void LoadLayout()
         {
             dataGridViewModules.RowTemplate.MinimumHeight = Font.ScalePixels(26);
             DGVLoadColumnLayout(dataGridViewModules);
+            ColO1.Visible = ColO2.Visible = false;
         }
 
         protected override void Closing()
@@ -119,7 +95,7 @@ namespace EDDiscovery.UserControls
             if ( comboBoxShips.Text != allknownmodulestext)     // we fiddle with the columns in this view, so don't save
                 DGVSaveColumnLayout(dataGridViewModules);
 
-            PutSetting(dbModSplitter, splitContainer.GetSplitterDistance());
+            PutSetting(dbModSplitter, splitContainerModulesGrid.GetSplitterDistance());
 
             DiscoveryForm.OnThemeChanged -= DiscoveryForm_OnThemeChanged;
             DiscoveryForm.OnNewEntry -= Discoveryform_OnNewEntry;
@@ -184,9 +160,20 @@ namespace EDDiscovery.UserControls
 
             bool update = false;
 
-            if (comboBoxShips.Text == storedmoduletext)         // stored at he
+            // in declaration order at bottom of file
+
+            if (comboBoxShips.Text == currentownedshipstext || comboBoxShips.Text == allownedshipstext )
+            {
+                if ( last_he == null || he.journalEntry is IShipInformation )     // could have affected the ship list.
+                    update = true;      
+            }
+            else if (comboBoxShips.Text == storedmoduletext)         // stored at he
             {
                 update = !Object.ReferenceEquals(he.StoredModules, last_he?.StoredModules);
+            }
+            else if (comboBoxShips.Text == travelhistorytext)           // travel history, it should the the current si vs the last displayed si
+            {
+                update = !Object.ReferenceEquals(he.ShipInformation, last_displayship);
             }
             else if (comboBoxShips.Text == allmodulestext)      // this displays the stored modules, as well as all other ship modules, at top of history
             {
@@ -200,19 +187,11 @@ namespace EDDiscovery.UserControls
 
                 update = !allmodulesref.ReferenceEquals(curref);        // if not identical, something has changed, execute update
             }
-            else if (comboBoxShips.Text == ownedshipstext)
-            {
-                update = true;      // tbd optimise we need a way of knowing ship info has changed
-            }
             else if (comboBoxShips.Text == allshipstext)
             {
                 last_he = he;
                 if (dataGridViewModules.Rows.Count == 0)                // if nothing displayed, display, else ignore subsequence updates
                     Display();
-            }
-            else if (comboBoxShips.Text == travelhistorytext)           // travel history, it should the the current si vs the last displayed si
-            {
-                update = !Object.ReferenceEquals(he.ShipInformation, last_displayship);      
             }
             else if (comboBoxShips.Text == allknownmodulestext ||
                      comboBoxShips.Text.ContainsIIC(".loadout")
@@ -223,7 +202,7 @@ namespace EDDiscovery.UserControls
                     Display();
             }
             else
-            {
+            {                                                           // discrete ship
                 Ship si = DiscoveryForm.History.ShipInformationList.GetShipByNameIdentType(comboBoxShips.Text);      // grab SI of specific ship (may be null)
                 update = !Object.ReferenceEquals(si, last_displayship);      // this vs ship
             }
@@ -246,25 +225,29 @@ namespace EDDiscovery.UserControls
 
             pbsModuleDisplay.Resize -= PbsModuleDisplay_Resize;
 
+            var sortstate = dataGridViewModules.GetSort();
+
             dataGridViewModules.Rows.Clear();
 
             Refresh();
 
             dataViewScrollerPanel.SuspendLayout();
 
+            dataGridViewModules.ContextMenuStrip = null;
+
             last_displayship = null;     // no ship info
             last_moduleshipproperties = null; // no module ship props
 
             allmodulesref.Clear();      // no ref to all modules info
 
-            SetColHeaders(null,null,null,null, null,null,null,null);        //default
+            SetColHeaders(null, null, null, null, null, null, null, null);        //default
             sortmodecol = null; 
 
             Value.Visible = SlotCol.Visible = PriorityEnable.Visible = BluePrint.Visible = true;
 
             if (comboBoxShips.Text == storedmoduletext)
             {
-                HideShipRelatedButtonsAndPanels();
+                HideShipRelatedButtonsAndPanelsClearModuleDiagram();
 
                 if (last_he?.StoredModules != null)
                 {
@@ -292,20 +275,20 @@ namespace EDDiscovery.UserControls
             }
             else if (comboBoxShips.Text == allmodulestext)
             {
-                HideShipRelatedButtonsAndPanels();
+                HideShipRelatedButtonsAndPanelsClearModuleDiagram();
 
                 sortmodecol = "AASANANA";           // default is alpha, alpha, slot (via TAG), Alpha Num Alpha Num, Alpha
 
                 ShipList shm = DiscoveryForm.History.ShipInformationList;
 
-                foreach (var si in shm.OwnedSpaceShips())
+                foreach (var kvp in shm.OwnedSpaceShips())
                 {
-                    foreach (var key in si.Modules.Keys)
+                    foreach (var key in kvp.Value.Modules.Keys)
                     {
-                        ShipModule sm = si.Modules[key];
-                        AddModuleLine(sm, si);
+                        ShipModule sm = kvp.Value.Modules[key];
+                        AddModuleLine(sm, kvp.Value);
                     }
-                    allmodulesref.Add(si);      // we add ref in effect to the list of modules we extracted info from - this is used to see if they changed during the update abovevi
+                    allmodulesref.Add(kvp.Value);      // we add ref in effect to the list of modules we extracted info from - this is used to see if they changed during the update abovevi
                 }
 
                 foreach (ShipModulesInStore.StoredModule sm in shm.StoredModules.StoredModules)
@@ -327,7 +310,7 @@ namespace EDDiscovery.UserControls
             }
             else if (comboBoxShips.Text == allknownmodulestext)
             {
-                HideShipRelatedButtonsAndPanels();
+                HideShipRelatedButtonsAndPanelsClearModuleDiagram();
 
                 Value.Visible = SlotCol.Visible = PriorityEnable.Visible = BluePrint.Visible = false;
                 sortmodecol = "AAAANAAA";
@@ -352,14 +335,13 @@ namespace EDDiscovery.UserControls
             }
             else if ( comboBoxShips.Text == allshipstext)
             {
-                HideShipRelatedButtonsAndPanels(false);
-                splitContainer.Panel1Collapsed = false;
+                HideShipRelatedButtonsAndPanelsClearModuleDiagram(false, false, "Click on a ship to display its modules");
 
                 SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Speed".Tx(),
                                 null, "Class".Tx(), null, "Info".Tx());
                 sortmodecol = "PAANNANA";           // P = sort on column 1 fixed
 
-                foreach(ItemData.ShipProperties shipproperties in ItemData.GetSpaceships())
+                foreach (ItemData.ShipProperties shipproperties in ItemData.GetSpaceships())
                 {
                     var rw = dataGridViewModules.RowTemplate.Clone() as DataGridViewRow;           // need to add like this due to different types of cells
                     var pcb = new DataGridViewPictureBoxCell();
@@ -385,30 +367,35 @@ namespace EDDiscovery.UserControls
                 }
 
             }
-            else if (comboBoxShips.Text == ownedshipstext)
+            else if (comboBoxShips.Text == allownedshipstext || comboBoxShips.Text == currentownedshipstext)
             {
-                HideShipRelatedButtonsAndPanels(false);
-                splitContainer.Panel1Collapsed = false;
+                HideShipRelatedButtonsAndPanelsClearModuleDiagram(false, false, "Click on a ship to display its modules");
 
-                SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Name".Tx(), "Ident".Tx(), "Mass".Tx(), "Location".Tx(), "Cost".Tx());
-                sortmodecol = "PAAAANAN";      // P = sort on column 1 fixed
+                splitContainerModulesGrid.Panel1Collapsed = false;
 
-                foreach (var ship in DiscoveryForm.History.ShipInformationList.OwnedSpaceShips())
+                SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Name".Tx(), "Ident".Tx(), "Mass".Tx(), "Location".Tx(), "Cost".Tx(), "Date Bought", "Date Sold/Destroyed");
+                sortmodecol = "PAAAANANDD";      // P = sort on column 1 fixed
+
+                dataGridViewModules.ContextMenuStrip = contextMenuStripShipList;
+
+                foreach (var kvp in comboBoxShips.Text == allownedshipstext ? DiscoveryForm.History.ShipInformationList.SpaceShips() : DiscoveryForm.History.ShipInformationList.OwnedSpaceShips())
                 {
+                    var ship = kvp.Value;
                     var rw = dataGridViewModules.RowTemplate.Clone() as DataGridViewRow;           // need to add like this due to different types of cells
                     var pcb = new DataGridViewPictureBoxCell();
                     rw.Cells.Add(pcb);
-                    rw.AddTextCells(7);
+                    rw.AddTextCells(9);
                     Image img = ItemData.GetShipImage(ship.ShipFD);
                     pcb.Tag = img;      // directing the hover over to the image
                     pcb.PictureBox.AddImage(new Rectangle(8, 8, 128, 128), img);
                     pcb.PictureBox.Render(minsize: new Size(128 + 8 + 8, 128 + 8 + 8));
 
-                   
                     rw.Cells[1].Value = ship.ShipType;
                     rw.Cells[2].Value = ship.GetShipProperties()?.Manufacturer ?? "Unknown ship";       // ship may be unknown to us
                     rw.Cells[3].Value = ship.ShipUserName;
-                    rw.Cells[4].Value = ship.ShipUserIdent;
+                    string id = ship.ID.ToString() + ShipList.ReuseMarkerIndex(kvp.Key, " / ");
+
+                    rw.Cells[4].Value = ship.ShipUserIdent.HasChars() ? ship.ShipUserIdent + $" ({id})" : $"ID: {id}";
                     rw.Cells[5].Value = "T: " + (ship.HullMass()+ship.ModuleMass()).ToString("N0") + Environment.NewLine +
                                         "H: " + ship.HullMass().ToString("N0") + Environment.NewLine + 
                                         "M: " + ship.ModuleMass().ToString("N0");
@@ -419,9 +406,14 @@ namespace EDDiscovery.UserControls
                                             "M: " + ship.ModulesValue.ToString("N0") 
                                             : "";
 
+                    rw.Cells[8].Value = ship.CreateEvent != null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ship.CreateEvent.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss") : "-";
+                    rw.Cells[9].Value = ship.SoldDestroyedEvent != null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ship.SoldDestroyedEvent.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss") : "-";
+
                     rw.Tag = ship;                      // record for double click
                     dataGridViewModules.Rows.Add(rw);
                 }
+
+                dataGridViewModules.Sort(sortstate);
             }
             else if (comboBoxShips.Text.ContainsIIC(".loadout"))
             {
@@ -487,7 +479,7 @@ namespace EDDiscovery.UserControls
             labelVehicle.Visible = true;
             extButtonSaveLoadout.Visible = true;
             extButtonDeleteLoadout.Visible = displaydeleteloadoutbutton;
-            splitContainer.Panel1Collapsed = false;
+            splitContainerModulesGrid.Panel1Collapsed = false;
         }
 
 
@@ -563,6 +555,7 @@ namespace EDDiscovery.UserControls
 
             double hullmass = si.HullMass();
             double modulemass = si.ModuleMass();
+            //System.Diagnostics.Debug.WriteLine($"Stats Hull Mass {hullmass} Module {modulemass}");
             double? warningpercent = si.FuelWarningPercent > 0 ? si.FuelWarningPercent : default(double?);
             warningpercent = 20;
 
@@ -679,16 +672,25 @@ namespace EDDiscovery.UserControls
             BluePrint.HeaderText = list[5] ?? "BluePrint".Tx();
             Value.HeaderText = list[6] ?? "Value".Tx();
             PriorityEnable.HeaderText = list[7] ?? "P/E".Tx();
+            ColO1.Visible = list.Length > 8;
+            ColO1.HeaderText = list.Length>8 ? list[8] : "";
+            ColO2.Visible = list.Length > 9;
+            ColO2.HeaderText = list.Length>9 ? list[9] : "";
         }
 
-        private void HideShipRelatedButtonsAndPanels(bool showcontrol = true)
+        private void HideShipRelatedButtonsAndPanelsClearModuleDiagram(bool showcontrol = true, bool collapsemodule = true, string moduletexthelper = null)
         {
-            splitContainer.Panel1Collapsed = true;
+            splitContainerModulesGrid.Panel1Collapsed = collapsemodule;
             extPanelRollUpStats.Visible = false;
             extButtonShowControl.Visible = showcontrol;
             extButtonSaveLoadout.Visible = extButtonDeleteLoadout.Visible = extButtonLoadLoadout.Visible =
             labelVehicle.Visible = buttonExtCoriolis.Visible = buttonExtEDShipyard.Visible = buttonExtConfigure.Visible = false;
             extPictureBoxModules.ClearImageList();
+            if ( moduletexthelper!=null)
+            {
+                extPictureBoxModules.AddTextAutoSize(new Point(4, 10), new Size(10000, 10000), moduletexthelper , this.Font, Theme.Current.TextBlockForeColor, Theme.Current.Form, 1.0f);
+                pbsModuleDisplay.Render();
+            }
             pbsModuleDisplay.Render();
         }
 
@@ -720,19 +722,20 @@ namespace EDDiscovery.UserControls
 
             comboBoxShips.Items.Clear();
             comboBoxShips.Items.Add(travelhistorytext);
-            comboBoxShips.Items.Add(ownedshipstext);
+            comboBoxShips.Items.Add(currentownedshipstext);
+            comboBoxShips.Items.Add(allownedshipstext);
             comboBoxShips.Items.Add(allshipstext);
             comboBoxShips.Items.Add(storedmoduletext);
             comboBoxShips.Items.Add(allmodulestext);
             comboBoxShips.Items.Add(allknownmodulestext);
 
-            IEnumerable<Ship> ownedships = shm.OwnedSpaceShips();
-            IEnumerable<Ship> soldships = shm.SoldDestroyedSpaceShips();
+            var ownedships = shm.OwnedSpaceShips();
+            var soldships = shm.SoldDestroyedSpaceShips();
 
-            var now = (from x1 in ownedships where x1.StoredAtSystem == null select x1.ShipNameIdentType);
+            var now = (from x1 in ownedships where x1.Value.StoredAtSystem == null select x1.Value.ShipNameIdentType);
             comboBoxShips.Items.AddRange(now);
 
-            var stored = (from x1 in ownedships where x1.StoredAtSystem != null select x1.ShipNameIdentType);
+            var stored = (from x1 in ownedships where x1.Value.StoredAtSystem != null select x1.Value.ShipNameIdentType);
             comboBoxShips.Items.AddRange(stored);
 
 
@@ -741,7 +744,7 @@ namespace EDDiscovery.UserControls
             foreach (var x in loadoutfiles)
                 comboBoxShips.Items.Add(x.Name);
 
-            comboBoxShips.Items.AddRange(soldships.Select(x => x.ShipNameIdentType).ToList());
+            comboBoxShips.Items.AddRange(soldships.Select(x => x.Value.ShipNameIdentType).ToList());
 
             //comboBoxShips.Items.AddRange(fightersrvs.Select(x => x.ShipNameIdentType).ToList());
 
@@ -937,8 +940,11 @@ namespace EDDiscovery.UserControls
         {
             if (e.RowIndex >= 0 && e.ColumnIndex >= 0)
             {
-                Ship shipinstance = dataGridViewModules.Rows[e.RowIndex].Tag as Ship;        // if row tag is ship (ownedshiptext)
-                ItemData.ShipProperties ship = dataGridViewModules.Rows[e.RowIndex].Tag as ItemData.ShipProperties;        // if row tag is ship prop (all ship text)
+                // if row tag is ship (ownedshiptext)
+                Ship shipinstance = dataGridViewModules.Rows[e.RowIndex].Tag as Ship;
+                // if row tag is ship prop (all ship text)
+                ItemData.ShipProperties ship = dataGridViewModules.Rows[e.RowIndex].Tag as ItemData.ShipProperties;        
+
                 if (shipinstance != null)
                 {
                     DisplayModuleDiagram(shipinstance.GetShipProperties(), shipinstance, false);
@@ -1043,7 +1049,7 @@ namespace EDDiscovery.UserControls
                             else if (r == 1)
                                 return new Object[] { "Ships:" };
                             else if (count < ownedship.Length)
-                                return new Object[] { ownedship[count++].ShipFullInfo() };
+                                return new Object[] { ownedship[count++].Value.ShipFullInfo() };
                             else
                                 return null;
                         };
@@ -1135,6 +1141,30 @@ namespace EDDiscovery.UserControls
 
         #endregion
 
+        #region Right clicks
+
+        private void contextMenuStripShipList_Opening(object sender, CancelEventArgs e)
+        {
+            var ship = dataGridViewModules.ClickedRightRow?.Tag as Ship;        // null if no clicked right row or not ship
+            goToCreationEventToolStripMenuItem.Enabled = ship?.CreateEvent != null;      // paranoia here, it must be set, right?
+            goToSolddestroyedEventToolStripMenuItem.Enabled = ship?.SoldDestroyedEvent != null;
+        }
+
+        private void goToCreationEventToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var ship = dataGridViewModules.ClickedRightRow.Tag as Ship;        // null if no clicked right row or not ship
+            RequestPanelOperationOpen(PanelInformation.PanelIDs.HistoryGrid, new RequestHistoryToJID { JID = ship.CreateEvent.Id, MakeVisible = true });
+        }
+
+        private void goToSolddestroyedEventToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            var ship = dataGridViewModules.ClickedRightRow.Tag as Ship;        // null if no clicked right row or not ship
+            RequestPanelOperationOpen(PanelInformation.PanelIDs.HistoryGrid, new RequestHistoryToJID { JID = ship.SoldDestroyedEvent.Id, MakeVisible = true });
+        }
+
+        #endregion
+
+
         #region Sort
 
         private void dataGridViewModules_SortCompare(object sender, DataGridViewSortCompareEventArgs e)
@@ -1183,6 +1213,10 @@ namespace EDDiscovery.UserControls
                         e.SortResult = 1;
                     e.Handled = true;
                 }
+                else if (sort == 'D')
+                {
+                    e.SortDataGridViewColumnDate();
+                }
                 else if (sort == 'A')
                 {       // default
                 }
@@ -1215,6 +1249,34 @@ namespace EDDiscovery.UserControls
         }
 
         PopUpForm popupform = null;
+
+        #endregion
+
+
+        #region Vars
+
+        private string currentownedshipstext;
+        private string allownedshipstext;
+        private string storedmoduletext;
+        private string travelhistorytext;
+        private string allmodulestext;
+        private string allshipstext;
+        private string allknownmodulestext;
+
+        private string sortmodecol = "";
+
+        private HistoryEntry last_he = null;
+        private Ship last_displayship = null;
+        private int last_cargo = 0;
+        private ItemData.ShipProperties last_moduleshipproperties;
+        private bool last_moduleclickbacks;
+        private string dbDisplayFilters = "DisplayFiltersNew";
+        private string dbWordWrap = "WordWrap";
+        private string dbShipSelect = "ShipSelect";
+        private string dbModSplitter = "ModSplitter";
+        private string[] displayfilters;
+        private List<object> allmodulesref = new List<object>();
+        ShipModuleDisplay smd = new ShipModuleDisplay();
 
         #endregion
 

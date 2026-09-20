@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlModules
+    partial class ShipsAndModules
     {
         /// <summary> 
         /// Required designer variable.
@@ -65,6 +65,8 @@ namespace EDDiscovery.UserControls
             this.BluePrint = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Value = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.PriorityEnable = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColO1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColO2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.extPanelRollUpStats = new ExtendedControls.ExtPanelRollUp();
             this.extProgressBar1 = new ExtendedControls.ExtProgressBar();
@@ -91,20 +93,24 @@ namespace EDDiscovery.UserControls
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.labelShip = new System.Windows.Forms.Label();
             this.labelVehicle = new System.Windows.Forms.Label();
-            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.splitContainerModulesGrid = new System.Windows.Forms.SplitContainer();
             this.pbsModuleDisplay = new ExtendedControls.ExtPictureBoxScroll();
             this.extPictureBoxModules = new ExtendedControls.ExtPictureBox();
             this.extScrollBarModule = new ExtendedControls.ExtScrollBar();
+            this.contextMenuStripShipList = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.goToCreationEventToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.goToSolddestroyedEventToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).BeginInit();
             this.extPanelRollUpStats.SuspendLayout();
             this.panelTop.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
-            this.splitContainer.Panel1.SuspendLayout();
-            this.splitContainer.Panel2.SuspendLayout();
-            this.splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerModulesGrid)).BeginInit();
+            this.splitContainerModulesGrid.Panel1.SuspendLayout();
+            this.splitContainerModulesGrid.Panel2.SuspendLayout();
+            this.splitContainerModulesGrid.SuspendLayout();
             this.pbsModuleDisplay.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxModules)).BeginInit();
+            this.contextMenuStripShipList.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolTip
@@ -120,6 +126,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxShips.DisabledScaling = 0.5F;
             this.comboBoxShips.DisplayMember = "";
+            this.comboBoxShips.DropDownMinimumItemWidth = -1;
             this.comboBoxShips.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxShips.GradientDirection = 90F;
             this.comboBoxShips.Location = new System.Drawing.Point(37, 1);
@@ -132,6 +139,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips.Size = new System.Drawing.Size(188, 21);
             this.comboBoxShips.TabIndex = 0;
             this.comboBoxShips.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.comboBoxShips, "Select ship to view");
             this.toolTip.SetToolTip(this.comboBoxShips, "Select ship to view");
             this.comboBoxShips.ValueMember = "";
             this.comboBoxShips.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
@@ -151,6 +159,7 @@ namespace EDDiscovery.UserControls
             this.extButtonShowControl.Name = "extButtonShowControl";
             this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
             this.extButtonShowControl.TabIndex = 33;
+            this.toolTip.SetToolTip(this.extButtonShowControl, "Display Settings");
             this.toolTip.SetToolTip(this.extButtonShowControl, "Display Settings");
             this.extButtonShowControl.UseVisualStyleBackColor = false;
             this.extButtonShowControl.Click += new System.EventHandler(this.extButtonShowControl_Click);
@@ -186,6 +195,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.TabIndex = 32;
             this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // buttonExtCoriolis
@@ -202,6 +212,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtCoriolis.Name = "buttonExtCoriolis";
             this.buttonExtCoriolis.Size = new System.Drawing.Size(24, 24);
             this.buttonExtCoriolis.TabIndex = 29;
+            this.toolTip.SetToolTip(this.buttonExtCoriolis, "Send to Coriolis");
             this.toolTip.SetToolTip(this.buttonExtCoriolis, "Send to Coriolis");
             this.buttonExtCoriolis.UseVisualStyleBackColor = false;
             this.buttonExtCoriolis.Click += new System.EventHandler(this.buttonExtCoriolis_Click);
@@ -222,6 +233,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtEDShipyard.Size = new System.Drawing.Size(24, 24);
             this.buttonExtEDShipyard.TabIndex = 29;
             this.toolTip.SetToolTip(this.buttonExtEDShipyard, "Send to ED Ship Yard");
+            this.toolTip.SetToolTip(this.buttonExtEDShipyard, "Send to ED Ship Yard");
             this.buttonExtEDShipyard.UseVisualStyleBackColor = false;
             this.buttonExtEDShipyard.Click += new System.EventHandler(this.buttonExtEDShipyard_Click);
             this.buttonExtEDShipyard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExtEDShipyard_MouseDown);
@@ -241,6 +253,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtConfigure.Size = new System.Drawing.Size(24, 24);
             this.buttonExtConfigure.TabIndex = 29;
             this.toolTip.SetToolTip(this.buttonExtConfigure, "Configure extra data missing from Elite Journal Output");
+            this.toolTip.SetToolTip(this.buttonExtConfigure, "Configure extra data missing from Elite Journal Output");
             this.buttonExtConfigure.UseVisualStyleBackColor = false;
             this.buttonExtConfigure.Click += new System.EventHandler(this.buttonExtConfigure_Click);
             // 
@@ -258,6 +271,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 31;
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
             this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
@@ -277,6 +291,7 @@ namespace EDDiscovery.UserControls
             this.extButtonLoadLoadout.Size = new System.Drawing.Size(28, 28);
             this.extButtonLoadLoadout.TabIndex = 31;
             this.toolTip.SetToolTip(this.extButtonLoadLoadout, "Import a ship definition for display");
+            this.toolTip.SetToolTip(this.extButtonLoadLoadout, "Import a ship definition for display");
             this.extButtonLoadLoadout.UseVisualStyleBackColor = true;
             this.extButtonLoadLoadout.Click += new System.EventHandler(this.extButtonLoadLoadout_Click);
             // 
@@ -295,6 +310,7 @@ namespace EDDiscovery.UserControls
             this.extButtonSaveLoadout.Size = new System.Drawing.Size(28, 28);
             this.extButtonSaveLoadout.TabIndex = 31;
             this.toolTip.SetToolTip(this.extButtonSaveLoadout, "Save this loadout to the EDD loadout folder");
+            this.toolTip.SetToolTip(this.extButtonSaveLoadout, "Save this loadout to the EDD loadout folder");
             this.extButtonSaveLoadout.UseVisualStyleBackColor = true;
             this.extButtonSaveLoadout.Click += new System.EventHandler(this.extButtonSaveLoadout_Click);
             // 
@@ -312,6 +328,7 @@ namespace EDDiscovery.UserControls
             this.extButtonDeleteLoadout.Name = "extButtonDeleteLoadout";
             this.extButtonDeleteLoadout.Size = new System.Drawing.Size(28, 28);
             this.extButtonDeleteLoadout.TabIndex = 31;
+            this.toolTip.SetToolTip(this.extButtonDeleteLoadout, "Delete loadout");
             this.toolTip.SetToolTip(this.extButtonDeleteLoadout, "Delete loadout");
             this.extButtonDeleteLoadout.UseVisualStyleBackColor = true;
             this.extButtonDeleteLoadout.Click += new System.EventHandler(this.extButtonDeleteLoadout_Click);
@@ -346,7 +363,9 @@ namespace EDDiscovery.UserControls
             this.Mass,
             this.BluePrint,
             this.Value,
-            this.PriorityEnable});
+            this.PriorityEnable,
+            this.ColO1,
+            this.ColO2});
             this.dataGridViewModules.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewModules.Name = "dataGridViewModules";
             this.dataGridViewModules.PerColumnWordWrapControl = true;
@@ -421,6 +440,18 @@ namespace EDDiscovery.UserControls
             this.PriorityEnable.MinimumWidth = 20;
             this.PriorityEnable.Name = "PriorityEnable";
             this.PriorityEnable.ReadOnly = true;
+            // 
+            // ColO1
+            // 
+            this.ColO1.HeaderText = "<code>";
+            this.ColO1.Name = "ColO1";
+            this.ColO1.ReadOnly = true;
+            // 
+            // ColO2
+            // 
+            this.ColO2.HeaderText = "<code>";
+            this.ColO2.Name = "ColO2";
+            this.ColO2.ReadOnly = true;
             // 
             // vScrollBarCustomMC
             // 
@@ -858,23 +889,23 @@ namespace EDDiscovery.UserControls
             this.labelVehicle.TabIndex = 28;
             this.labelVehicle.Text = "Unknown";
             // 
-            // splitContainer
+            // splitContainerModulesGrid
             // 
-            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer.Location = new System.Drawing.Point(0, 240);
-            this.splitContainer.Name = "splitContainer";
-            this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            this.splitContainerModulesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainerModulesGrid.Location = new System.Drawing.Point(0, 240);
+            this.splitContainerModulesGrid.Name = "splitContainerModulesGrid";
+            this.splitContainerModulesGrid.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // splitContainer.Panel1
+            // splitContainerModulesGrid.Panel1
             // 
-            this.splitContainer.Panel1.Controls.Add(this.pbsModuleDisplay);
+            this.splitContainerModulesGrid.Panel1.Controls.Add(this.pbsModuleDisplay);
             // 
-            // splitContainer.Panel2
+            // splitContainerModulesGrid.Panel2
             // 
-            this.splitContainer.Panel2.Controls.Add(this.dataViewScrollerPanel);
-            this.splitContainer.Size = new System.Drawing.Size(800, 332);
-            this.splitContainer.SplitterDistance = 166;
-            this.splitContainer.TabIndex = 2;
+            this.splitContainerModulesGrid.Panel2.Controls.Add(this.dataViewScrollerPanel);
+            this.splitContainerModulesGrid.Size = new System.Drawing.Size(800, 332);
+            this.splitContainerModulesGrid.SplitterDistance = 166;
+            this.splitContainerModulesGrid.TabIndex = 2;
             // 
             // pbsModuleDisplay
             // 
@@ -934,14 +965,37 @@ namespace EDDiscovery.UserControls
             this.extScrollBarModule.Value = 0;
             this.extScrollBarModule.ValueLimited = 0;
             // 
-            // UserControlModules
+            // contextMenuStripShipList
+            // 
+            this.contextMenuStripShipList.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.goToCreationEventToolStripMenuItem,
+            this.goToSolddestroyedEventToolStripMenuItem});
+            this.contextMenuStripShipList.Name = "contextMenuStripShipList";
+            this.contextMenuStripShipList.Size = new System.Drawing.Size(218, 48);
+            this.contextMenuStripShipList.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStripShipList_Opening);
+            // 
+            // goToCreationEventToolStripMenuItem
+            // 
+            this.goToCreationEventToolStripMenuItem.Name = "goToCreationEventToolStripMenuItem";
+            this.goToCreationEventToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.goToCreationEventToolStripMenuItem.Text = "Go to creation event";
+            this.goToCreationEventToolStripMenuItem.Click += new System.EventHandler(this.goToCreationEventToolStripMenuItem_Click);
+            // 
+            // goToSolddestroyedEventToolStripMenuItem
+            // 
+            this.goToSolddestroyedEventToolStripMenuItem.Name = "goToSolddestroyedEventToolStripMenuItem";
+            this.goToSolddestroyedEventToolStripMenuItem.Size = new System.Drawing.Size(217, 22);
+            this.goToSolddestroyedEventToolStripMenuItem.Text = "Go to sold/destroyed event";
+            this.goToSolddestroyedEventToolStripMenuItem.Click += new System.EventHandler(this.goToSolddestroyedEventToolStripMenuItem_Click);
+            // 
+            // ShipsAndModules
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.splitContainer);
+            this.Controls.Add(this.splitContainerModulesGrid);
             this.Controls.Add(this.extPanelRollUpStats);
             this.Controls.Add(this.panelTop);
-            this.Name = "UserControlModules";
+            this.Name = "ShipsAndModules";
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).EndInit();
@@ -949,12 +1003,13 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUpStats.PerformLayout();
             this.panelTop.ResumeLayout(false);
             this.panelTop.PerformLayout();
-            this.splitContainer.Panel1.ResumeLayout(false);
-            this.splitContainer.Panel2.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
-            this.splitContainer.ResumeLayout(false);
+            this.splitContainerModulesGrid.Panel1.ResumeLayout(false);
+            this.splitContainerModulesGrid.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainerModulesGrid)).EndInit();
+            this.splitContainerModulesGrid.ResumeLayout(false);
             this.pbsModuleDisplay.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.extPictureBoxModules)).EndInit();
+            this.contextMenuStripShipList.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -971,14 +1026,6 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtButton buttonExtCoriolis;
         private System.Windows.Forms.ToolTip toolTip;
         private ExtendedControls.ExtButton buttonExtEDShipyard;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ItemLocalised;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ItemCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn SlotCol;
-        private System.Windows.Forms.DataGridViewTextBoxColumn ItemInfo;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Mass;
-        private System.Windows.Forms.DataGridViewTextBoxColumn BluePrint;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PriorityEnable;
         private System.Windows.Forms.FlowLayoutPanel panelTop;
         private ExtendedControls.ExtButton buttonExtExcel;
         private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
@@ -1006,12 +1053,25 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.LabelData labelDataThrust;
         private ExtendedControls.LabelData labelDataMass;
         private ExtendedControls.ExtButton extButtonDeleteLoadout;
-        private System.Windows.Forms.SplitContainer splitContainer;
+        private System.Windows.Forms.SplitContainer splitContainerModulesGrid;
         private ExtendedControls.ExtPictureBoxScroll pbsModuleDisplay;
         private ExtendedControls.ExtScrollBar extScrollBarModule;
         private ExtendedControls.ExtPictureBox extPictureBoxModules;
         private ExtendedControls.LabelData labelDataPower;
         private System.Windows.Forms.Label labelPower;
         private ExtendedControls.ExtProgressBar extProgressBar1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ItemLocalised;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ItemCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn SlotCol;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ItemInfo;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Mass;
+        private System.Windows.Forms.DataGridViewTextBoxColumn BluePrint;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Value;
+        private System.Windows.Forms.DataGridViewTextBoxColumn PriorityEnable;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColO1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColO2;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripShipList;
+        private System.Windows.Forms.ToolStripMenuItem goToCreationEventToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem goToSolddestroyedEventToolStripMenuItem;
     }
 }

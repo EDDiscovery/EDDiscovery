@@ -79,7 +79,7 @@ namespace EDDiscovery.UserControls
                 CompositeAutoScaleButton cb = CompositeAutoScaleButton.QuickInit(
                             selback,
                             (i == 0) ? "NO ADD ONS!".Tx(): i.ToString() + " Add Ons".Tx(),
-                            new Image[] { EDDiscovery.Icons.Controls.ManageAddOns48 },
+                            new Image[] { EDDiscovery.Icons.Controls.ManageAddOns },
                             new Image[] { EDDiscovery.Icons.Controls.Popout },
                             ButtonPress,
                             2);
@@ -99,7 +99,8 @@ namespace EDDiscovery.UserControls
                             selback,
                             pi.WindowTitle,
                             new Image[] { pi.TabIcon },
-                            pi.PopOutOnly ? new Image[] { EDDiscovery.Icons.Controls.Popout } : new Image[] { EDDiscovery.Icons.Controls.Popout, EDDiscovery.Icons.Controls.Addtab48 },
+                            pi.PopOutOnly ? new Image[] { EDDiscovery.Icons.Controls.Popout } : 
+                                    new Image[] { EDDiscovery.Icons.Controls.Popout, EDDiscovery.Icons.Controls.Addtab },
                             ButtonPress,
                             2);
 
