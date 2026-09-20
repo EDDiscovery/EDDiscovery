@@ -71,6 +71,7 @@ namespace EDDiscovery.UserControls
             this.colName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colDistance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.colVisited = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.colStarType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip.SuspendLayout();
             this.flowLayoutStarDistances.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
@@ -347,7 +348,8 @@ namespace EDDiscovery.UserControls
             this.dataGridViewNearest.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.colName,
             this.colDistance,
-            this.colVisited});
+            this.colVisited,
+            this.colStarType});
             this.dataGridViewNearest.ContextMenuStrip = this.contextMenuStrip;
             dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
             dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
@@ -402,6 +404,13 @@ namespace EDDiscovery.UserControls
             this.colVisited.Name = "colVisited";
             this.colVisited.ReadOnly = true;
             // 
+            // colStarType
+            // 
+            this.colStarType.FillWeight = 25F;
+            this.colStarType.HeaderText = "Star Type";
+            this.colStarType.Name = "colStarType";
+            this.colStarType.ReadOnly = true;
+            // 
             // UserControlStarDistance
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -430,6 +439,7 @@ namespace EDDiscovery.UserControls
         private DataGridViewTextBoxColumn colName;
         private DataGridViewTextBoxColumn colDistance;
         private DataGridViewTextBoxColumn colVisited;
+        private DataGridViewTextBoxColumn colStarType;
         private System.Windows.Forms.Label labelExtMin;
         private ExtendedControls.NumberBoxDouble textMinRadius;
         private System.Windows.Forms.Label labelExtMax;
