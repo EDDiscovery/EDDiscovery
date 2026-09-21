@@ -45,20 +45,11 @@ namespace UnitTest
             //Theme.Current.WindowsFrame = true;
             //Theme.Current.FontSize = 12;
 
-            //{
-            //    foreach( InputLanguage x in InputLanguage.InstalledInputLanguages)
-            //    {
-            //        System.Diagnostics.Debug.Write($"Tuple.Create({x.LayoutName.AlwaysQuoteString()},{x.Culture.Name.AlwaysQuoteString()}),");
-            //    }
-            //    System.Diagnostics.Debug.WriteLine("");
-            //    System.Diagnostics.Debug.WriteLine($"Input lang {InputLanguage.CurrentInputLanguage.LayoutName} {InputLanguage.CurrentInputLanguage.Culture.Name}");
-            //}
-
             string cmdline = Environment.CommandLine;
             if (cmdline.ContainsIIC("Binding"))
             {
                 panelTest.Visible = false;
-                utbe= new UnitTestBindingsEditor();
+                utbe = new UnitTestBindingsEditor();
                 Controls.Add(utbe);
                 Controls.SetChildIndex(utbe, 0);
                 utbe.Dock = DockStyle.Fill;
@@ -66,6 +57,18 @@ namespace UnitTest
                 Theme.Current.ApplyStd(this);
 
                 utbe.Init();
+            }
+            else if (cmdline.ContainsIIC("ModuleDisplay"))
+            {
+                panelTest.Visible = false;
+                utmd = new UnitTestModuleDisplay();
+                Controls.Add(utmd);
+                Controls.SetChildIndex(utmd, 0);
+                utmd.Dock = DockStyle.Fill;
+
+                Theme.Current.ApplyStd(this);
+
+                utmd.Init();
             }
             else
             {
@@ -224,6 +227,7 @@ namespace UnitTest
         List<MethodInfo> tests;
 
         UnitTestBindingsEditor utbe = null;
+        UnitTestModuleDisplay utmd = null;
 
     }
 

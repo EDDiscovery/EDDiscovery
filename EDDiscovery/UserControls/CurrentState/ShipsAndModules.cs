@@ -81,6 +81,7 @@ namespace EDDiscovery.UserControls
 
             splitContainerModulesGrid.SplitterDistance(GetSetting(dbModSplitter, 0.4));
 
+            extProgressBarMSPriorities.SegmentColors = new Color[] { Color.Red, Color.Green, Color.Blue, Color.Yellow, Color.Magenta };
         }
 
         protected override void LoadLayout()
@@ -564,24 +565,39 @@ namespace EDDiscovery.UserControls
 
             labelDataCost.Data = new object[] { si.HullValue, si.ModulesValue, si.HullValue + si.ModulesValue, si.Rebuy };
 
-            if (stats != null)
+            if (stats != null && stats.PowerPlant != null)
             {
-                labelDataPower.Data = new object[] { stats.PowerDrawCore,
-                    stats.PowerPlant.HasValue ? 100.0 *stats.PowerDrawCore / stats.PowerPlant : null,
-                    stats.PowerDrawWeapons ,
-                    stats.PowerPlant.HasValue ? 100.0 *stats.PowerDrawWeapons / stats.PowerPlant : null,
-                    stats.PowerDrawTotal,
-                    stats.PowerPlant.HasValue ? 100.0 *stats.PowerDrawTotal / stats.PowerPlant : null,
+                double u0 = stats.PowerDrawCorePrio[0] + stats.PowerDrawWeaponsPrio[0];
+                double u1= stats.PowerDrawCorePrio[1] + stats.PowerDrawWeaponsPrio[1];
+                double u2 = stats.PowerDrawCorePrio[2] + stats.PowerDrawWeaponsPrio[2];
+                double u3 = stats.PowerDrawCorePrio[3] + stats.PowerDrawWeaponsPrio[3];
+                double u4 = stats.PowerDrawCorePrio[4] + stats.PowerDrawWeaponsPrio[4];
+                double p0 = 100 * u0 / stats.PowerPlant.Value;
+                double p1 = 100 * u1 / stats.PowerPlant.Value;
+                double p2 = 100 * u2 / stats.PowerPlant.Value;
+                double p3 = 100 * u3 / stats.PowerPlant.Value;
+                double p4 = 100 * u4 / stats.PowerPlant.Value;
+
+                labelDataPower.Data = new object[] { 
+                    stats.PowerPlant,
+                    stats.PowerDrawCore,  100.0 *stats.PowerDrawCore / stats.PowerPlant,
+                    stats.PowerDrawWeapons , 100.0 *stats.PowerDrawWeapons / stats.PowerPlant,
+                    stats.PowerDrawTotal,  100.0 *stats.PowerDrawTotal / stats.PowerPlant,
+                    u0,  100.0 *u0 / stats.PowerPlant,
+                    u0+u1,  100.0 *(u0+u1) / stats.PowerPlant,
+                    u0+u1+u2,  100.0 *(u0+u1+u2) / stats.PowerPlant,
                 };
 
-                extProgressBar1.Value = stats.PowerPlant != null ? (int)(100.0 * stats.PowerDrawTotal / stats.PowerPlant) : 0;
-                extProgressBar1.Marker1 = stats.PowerPlant != null ? (int)(100.0 * stats.PowerDrawCore / stats.PowerPlant) : -1;
+                extProgressBarCoreWeapons.Value = (int)(100.0 * stats.PowerDrawTotal / stats.PowerPlant);
+                extProgressBarCoreWeapons.Marker1 = (int)(100.0 * stats.PowerDrawCore / stats.PowerPlant);
+                extProgressBarMSPriorities.SegmentValues = new double[] { p0, p1, p2, p3, p4 };
             }
             else
             {
                 labelDataPower.Data = null;
-                extProgressBar1.Value = 0;
-                extProgressBar1.Marker1 = -1;
+                extProgressBarCoreWeapons.Value = 0;
+                extProgressBarCoreWeapons.Marker1 = -1;
+                extProgressBarMSPriorities.SegmentValues = null;
             }
 
         }
@@ -929,7 +945,14 @@ namespace EDDiscovery.UserControls
                 }
                 else if ( tag is ShipModule sm)
                 {
-                    sm.SetEnabled(sm.Enabled != true);
+                    if (i.Name == "Enable")
+                    {
+                        sm.SetEnabled(sm.Enabled != true);
+                    }
+                    else if (i.Name == "Priority")
+                    {
+                        sm.CyclePriority();
+                    }
                     Display();
                 }
             }

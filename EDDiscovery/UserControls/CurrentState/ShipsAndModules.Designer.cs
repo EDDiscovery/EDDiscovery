@@ -55,6 +55,8 @@ namespace EDDiscovery.UserControls
             this.extButtonLoadLoadout = new ExtendedControls.ExtButton();
             this.extButtonSaveLoadout = new ExtendedControls.ExtButton();
             this.extButtonDeleteLoadout = new ExtendedControls.ExtButton();
+            this.extProgressBarCoreWeapons = new ExtendedControls.ExtProgressBar();
+            this.extProgressBarMSPriorities = new ExtendedControls.ExtProgressBarMultiSegment();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewModules = new BaseUtils.DataGridViewColumnControl();
             this.ItemLocalised = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -69,7 +71,6 @@ namespace EDDiscovery.UserControls
             this.ColO2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
             this.extPanelRollUpStats = new ExtendedControls.ExtPanelRollUp();
-            this.extProgressBar1 = new ExtendedControls.ExtProgressBar();
             this.labelDataArmour = new ExtendedControls.LabelData();
             this.labelDataShields = new ExtendedControls.LabelData();
             this.labelDataPower = new ExtendedControls.LabelData();
@@ -140,7 +141,6 @@ namespace EDDiscovery.UserControls
             this.comboBoxShips.TabIndex = 0;
             this.comboBoxShips.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.toolTip.SetToolTip(this.comboBoxShips, "Select ship to view");
-            this.toolTip.SetToolTip(this.comboBoxShips, "Select ship to view");
             this.comboBoxShips.ValueMember = "";
             this.comboBoxShips.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
@@ -159,7 +159,6 @@ namespace EDDiscovery.UserControls
             this.extButtonShowControl.Name = "extButtonShowControl";
             this.extButtonShowControl.Size = new System.Drawing.Size(28, 28);
             this.extButtonShowControl.TabIndex = 33;
-            this.toolTip.SetToolTip(this.extButtonShowControl, "Display Settings");
             this.toolTip.SetToolTip(this.extButtonShowControl, "Display Settings");
             this.extButtonShowControl.UseVisualStyleBackColor = false;
             this.extButtonShowControl.Click += new System.EventHandler(this.extButtonShowControl_Click);
@@ -195,7 +194,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.TabIndex = 32;
             this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
-            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // buttonExtCoriolis
@@ -212,7 +210,6 @@ namespace EDDiscovery.UserControls
             this.buttonExtCoriolis.Name = "buttonExtCoriolis";
             this.buttonExtCoriolis.Size = new System.Drawing.Size(24, 24);
             this.buttonExtCoriolis.TabIndex = 29;
-            this.toolTip.SetToolTip(this.buttonExtCoriolis, "Send to Coriolis");
             this.toolTip.SetToolTip(this.buttonExtCoriolis, "Send to Coriolis");
             this.buttonExtCoriolis.UseVisualStyleBackColor = false;
             this.buttonExtCoriolis.Click += new System.EventHandler(this.buttonExtCoriolis_Click);
@@ -233,7 +230,6 @@ namespace EDDiscovery.UserControls
             this.buttonExtEDShipyard.Size = new System.Drawing.Size(24, 24);
             this.buttonExtEDShipyard.TabIndex = 29;
             this.toolTip.SetToolTip(this.buttonExtEDShipyard, "Send to ED Ship Yard");
-            this.toolTip.SetToolTip(this.buttonExtEDShipyard, "Send to ED Ship Yard");
             this.buttonExtEDShipyard.UseVisualStyleBackColor = false;
             this.buttonExtEDShipyard.Click += new System.EventHandler(this.buttonExtEDShipyard_Click);
             this.buttonExtEDShipyard.MouseDown += new System.Windows.Forms.MouseEventHandler(this.buttonExtEDShipyard_MouseDown);
@@ -253,7 +249,6 @@ namespace EDDiscovery.UserControls
             this.buttonExtConfigure.Size = new System.Drawing.Size(24, 24);
             this.buttonExtConfigure.TabIndex = 29;
             this.toolTip.SetToolTip(this.buttonExtConfigure, "Configure extra data missing from Elite Journal Output");
-            this.toolTip.SetToolTip(this.buttonExtConfigure, "Configure extra data missing from Elite Journal Output");
             this.buttonExtConfigure.UseVisualStyleBackColor = false;
             this.buttonExtConfigure.Click += new System.EventHandler(this.buttonExtConfigure_Click);
             // 
@@ -271,7 +266,6 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 31;
-            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
             this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
@@ -291,7 +285,6 @@ namespace EDDiscovery.UserControls
             this.extButtonLoadLoadout.Size = new System.Drawing.Size(28, 28);
             this.extButtonLoadLoadout.TabIndex = 31;
             this.toolTip.SetToolTip(this.extButtonLoadLoadout, "Import a ship definition for display");
-            this.toolTip.SetToolTip(this.extButtonLoadLoadout, "Import a ship definition for display");
             this.extButtonLoadLoadout.UseVisualStyleBackColor = true;
             this.extButtonLoadLoadout.Click += new System.EventHandler(this.extButtonLoadLoadout_Click);
             // 
@@ -309,7 +302,6 @@ namespace EDDiscovery.UserControls
             this.extButtonSaveLoadout.Name = "extButtonSaveLoadout";
             this.extButtonSaveLoadout.Size = new System.Drawing.Size(28, 28);
             this.extButtonSaveLoadout.TabIndex = 31;
-            this.toolTip.SetToolTip(this.extButtonSaveLoadout, "Save this loadout to the EDD loadout folder");
             this.toolTip.SetToolTip(this.extButtonSaveLoadout, "Save this loadout to the EDD loadout folder");
             this.extButtonSaveLoadout.UseVisualStyleBackColor = true;
             this.extButtonSaveLoadout.Click += new System.EventHandler(this.extButtonSaveLoadout_Click);
@@ -329,9 +321,63 @@ namespace EDDiscovery.UserControls
             this.extButtonDeleteLoadout.Size = new System.Drawing.Size(28, 28);
             this.extButtonDeleteLoadout.TabIndex = 31;
             this.toolTip.SetToolTip(this.extButtonDeleteLoadout, "Delete loadout");
-            this.toolTip.SetToolTip(this.extButtonDeleteLoadout, "Delete loadout");
             this.extButtonDeleteLoadout.UseVisualStyleBackColor = true;
             this.extButtonDeleteLoadout.Click += new System.EventHandler(this.extButtonDeleteLoadout_Click);
+            // 
+            // extProgressBarCoreWeapons
+            // 
+            this.extProgressBarCoreWeapons.BarBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.extProgressBarCoreWeapons.BarColor = System.Drawing.Color.Green;
+            this.extProgressBarCoreWeapons.BarHeightReserve = 25D;
+            this.extProgressBarCoreWeapons.BarHighlightColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(0)))));
+            this.extProgressBarCoreWeapons.BarMaximumPercent = 400;
+            this.extProgressBarCoreWeapons.BarMaximumPercentNoUpdate = 300;
+            this.extProgressBarCoreWeapons.BarWidthMargin = 4;
+            this.extProgressBarCoreWeapons.BorderColor = System.Drawing.Color.Black;
+            this.extProgressBarCoreWeapons.Limit = 100;
+            this.extProgressBarCoreWeapons.LimitColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.extProgressBarCoreWeapons.LimitHighlightColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
+            this.extProgressBarCoreWeapons.LimitLineColor = System.Drawing.Color.Cyan;
+            this.extProgressBarCoreWeapons.Location = new System.Drawing.Point(9, 197);
+            this.extProgressBarCoreWeapons.Marker1 = -1;
+            this.extProgressBarCoreWeapons.Marker2 = -1;
+            this.extProgressBarCoreWeapons.MarkerLineColor = System.Drawing.Color.Cyan;
+            this.extProgressBarCoreWeapons.MarkerWidth = 2;
+            this.extProgressBarCoreWeapons.Maximum = 110;
+            this.extProgressBarCoreWeapons.Minimum = 0;
+            this.extProgressBarCoreWeapons.Name = "extProgressBarCoreWeapons";
+            this.extProgressBarCoreWeapons.Size = new System.Drawing.Size(264, 24);
+            this.extProgressBarCoreWeapons.TabIndex = 7;
+            this.toolTip.SetToolTip(this.extProgressBarCoreWeapons, "Core Power and Weapon Power. Small line is Core Power point. Large line is 100% p" +
+        "ower usage");
+            this.extProgressBarCoreWeapons.TrackSpeed = 8;
+            this.extProgressBarCoreWeapons.Value = 0;
+            // 
+            // extProgressBarMSPriorities
+            // 
+            this.extProgressBarMSPriorities.BarBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(100)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))), ((int)(((byte)(200)))));
+            this.extProgressBarMSPriorities.BarHeightReserve = 25D;
+            this.extProgressBarMSPriorities.BarMaximumPercent = 400;
+            this.extProgressBarMSPriorities.BarMaximumPercentNoUpdate = 300;
+            this.extProgressBarMSPriorities.BarWidthMargin = 4;
+            this.extProgressBarMSPriorities.BorderColor = System.Drawing.Color.Black;
+            this.extProgressBarMSPriorities.HighlightColor1 = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.extProgressBarMSPriorities.HighlightColor2 = System.Drawing.Color.FromArgb(((int)(((byte)(220)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))), ((int)(((byte)(255)))));
+            this.extProgressBarMSPriorities.Limit = 100;
+            this.extProgressBarMSPriorities.LimitLineColor = System.Drawing.Color.Cyan;
+            this.extProgressBarMSPriorities.Location = new System.Drawing.Point(279, 197);
+            this.extProgressBarMSPriorities.Marker1 = -1;
+            this.extProgressBarMSPriorities.Marker2 = -1;
+            this.extProgressBarMSPriorities.MarkerLineColor = System.Drawing.Color.Cyan;
+            this.extProgressBarMSPriorities.MarkerWidth = 2;
+            this.extProgressBarMSPriorities.Maximum = 110;
+            this.extProgressBarMSPriorities.Name = "extProgressBarMSPriorities";
+            this.extProgressBarMSPriorities.SegmentColors = null;
+            this.extProgressBarMSPriorities.SegmentValues = null;
+            this.extProgressBarMSPriorities.Size = new System.Drawing.Size(486, 23);
+            this.extProgressBarMSPriorities.TabIndex = 8;
+            this.toolTip.SetToolTip(this.extProgressBarMSPriorities, "Power usage by priority (RGBYM)");
+            this.extProgressBarMSPriorities.TrackSpeed = 1;
             // 
             // dataViewScrollerPanel
             // 
@@ -342,7 +388,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
             this.dataViewScrollerPanel.ScrollBarWidth = 24;
-            this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 162);
+            this.dataViewScrollerPanel.Size = new System.Drawing.Size(1177, 181);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
             // 
@@ -373,7 +419,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewModules.RowHeadersVisible = false;
             this.dataGridViewModules.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewModules.SingleRowSelect = true;
-            this.dataGridViewModules.Size = new System.Drawing.Size(776, 162);
+            this.dataGridViewModules.Size = new System.Drawing.Size(1153, 181);
             this.dataGridViewModules.TabIndex = 1;
             this.dataGridViewModules.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellClick);
             this.dataGridViewModules.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewModules_CellDoubleClick);
@@ -465,7 +511,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(776, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(1153, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -473,7 +519,7 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(24, 162);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(24, 181);
             this.vScrollBarCustomMC.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
             this.vScrollBarCustomMC.SliderColor2 = System.Drawing.Color.DarkGray;
@@ -493,7 +539,8 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUpStats.AutoHeightWidthDisable = false;
             this.extPanelRollUpStats.AutoWidth = false;
             this.extPanelRollUpStats.ChildrenThemed = true;
-            this.extPanelRollUpStats.Controls.Add(this.extProgressBar1);
+            this.extPanelRollUpStats.Controls.Add(this.extProgressBarMSPriorities);
+            this.extPanelRollUpStats.Controls.Add(this.extProgressBarCoreWeapons);
             this.extPanelRollUpStats.Controls.Add(this.labelDataArmour);
             this.extPanelRollUpStats.Controls.Add(this.labelDataShields);
             this.extPanelRollUpStats.Controls.Add(this.labelDataPower);
@@ -527,7 +574,7 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUpStats.RollUpDelay = 1000;
             this.extPanelRollUpStats.SecondHiddenMarkerWidth = 0;
             this.extPanelRollUpStats.ShowHiddenMarker = true;
-            this.extPanelRollUpStats.Size = new System.Drawing.Size(800, 210);
+            this.extPanelRollUpStats.Size = new System.Drawing.Size(1177, 227);
             this.extPanelRollUpStats.TabIndex = 2;
             this.extPanelRollUpStats.ThemeColors = new System.Drawing.Color[] {
         System.Drawing.SystemColors.Control,
@@ -537,33 +584,6 @@ namespace EDDiscovery.UserControls
             this.extPanelRollUpStats.ThemeColorSet = -1;
             this.extPanelRollUpStats.ThisThemed = true;
             this.extPanelRollUpStats.UnrollHoverDelay = 1000;
-            // 
-            // extProgressBar1
-            // 
-            this.extProgressBar1.BarColor = System.Drawing.Color.Green;
-            this.extProgressBar1.BarHeightReserve = 25D;
-            this.extProgressBar1.BarHighlightColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(255)))), ((int)(((byte)(0)))));
-            this.extProgressBar1.BarMaximumPercent = 400;
-            this.extProgressBar1.BarMaximumPercentNoUpdate = 300;
-            this.extProgressBar1.BarWidthMargin = 4;
-            this.extProgressBar1.BorderColor = System.Drawing.Color.Black;
-            this.extProgressBar1.Limit = 100;
-            this.extProgressBar1.LimitColor = System.Drawing.Color.FromArgb(((int)(((byte)(128)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.extProgressBar1.LimitHighlightColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(0)))), ((int)(((byte)(0)))));
-            this.extProgressBar1.LimitLineColor = System.Drawing.Color.Cyan;
-            this.extProgressBar1.Location = new System.Drawing.Point(549, 176);
-            this.extProgressBar1.Marker1 = -1;
-            this.extProgressBar1.Marker2 = -1;
-            this.extProgressBar1.MarkerLineColor = System.Drawing.Color.Cyan;
-            this.extProgressBar1.MarkerWidth = 2;
-            this.extProgressBar1.Maximum = 110;
-            this.extProgressBar1.Minimum = 0;
-            this.extProgressBar1.Name = "extProgressBar1";
-            this.extProgressBar1.Size = new System.Drawing.Size(201, 24);
-            this.extProgressBar1.TabIndex = 7;
-            this.extProgressBar1.Text = "extProgressBar1";
-            this.extProgressBar1.TrackSpeed = 8;
-            this.extProgressBar1.Value = 0;
             // 
             // labelDataArmour
             // 
@@ -610,10 +630,11 @@ namespace EDDiscovery.UserControls
             this.labelDataPower.Location = new System.Drawing.Point(66, 178);
             this.labelDataPower.Name = "labelDataPower";
             this.labelDataPower.NoDataText = "-";
-            this.labelDataPower.Size = new System.Drawing.Size(477, 19);
+            this.labelDataPower.Size = new System.Drawing.Size(1200, 19);
             this.labelDataPower.TabIndex = 6;
             this.labelDataPower.TabSpacingData = 12;
-            this.labelDataPower.Text = "Core {0.##|MW}{0.0|%} Weapons {0.##|MW}{0.0|%} Deployed{0.##|MW}{0.0|%}";
+            this.labelDataPower.Text = "Plant {0.##|MW} Core {0.##|MW}{0.0|%} Weapons {0.##|MW}{0.0|%} Deployed{0.##|MW}{" +
+    "0.0|%} P1 {0.##|MW}{0.0|%} P1-2 {0.##|MW}{0.0|%} P1-3 {0.##|MW}{0.0|%}";
             // 
             // labelDataMass
             // 
@@ -866,7 +887,7 @@ namespace EDDiscovery.UserControls
             this.panelTop.Dock = System.Windows.Forms.DockStyle.Top;
             this.panelTop.Location = new System.Drawing.Point(0, 0);
             this.panelTop.Name = "panelTop";
-            this.panelTop.Size = new System.Drawing.Size(800, 30);
+            this.panelTop.Size = new System.Drawing.Size(1177, 30);
             this.panelTop.TabIndex = 30;
             // 
             // labelShip
@@ -892,7 +913,7 @@ namespace EDDiscovery.UserControls
             // splitContainerModulesGrid
             // 
             this.splitContainerModulesGrid.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerModulesGrid.Location = new System.Drawing.Point(0, 240);
+            this.splitContainerModulesGrid.Location = new System.Drawing.Point(0, 257);
             this.splitContainerModulesGrid.Name = "splitContainerModulesGrid";
             this.splitContainerModulesGrid.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
@@ -903,8 +924,8 @@ namespace EDDiscovery.UserControls
             // splitContainerModulesGrid.Panel2
             // 
             this.splitContainerModulesGrid.Panel2.Controls.Add(this.dataViewScrollerPanel);
-            this.splitContainerModulesGrid.Size = new System.Drawing.Size(800, 332);
-            this.splitContainerModulesGrid.SplitterDistance = 166;
+            this.splitContainerModulesGrid.Size = new System.Drawing.Size(1177, 369);
+            this.splitContainerModulesGrid.SplitterDistance = 184;
             this.splitContainerModulesGrid.TabIndex = 2;
             // 
             // pbsModuleDisplay
@@ -916,7 +937,7 @@ namespace EDDiscovery.UserControls
             this.pbsModuleDisplay.Name = "pbsModuleDisplay";
             this.pbsModuleDisplay.ScrollBarEnabled = true;
             this.pbsModuleDisplay.ScrollBarWidth = 48;
-            this.pbsModuleDisplay.Size = new System.Drawing.Size(800, 166);
+            this.pbsModuleDisplay.Size = new System.Drawing.Size(1177, 184);
             this.pbsModuleDisplay.TabIndex = 0;
             this.pbsModuleDisplay.VerticalScrollBarDockRight = true;
             // 
@@ -926,7 +947,7 @@ namespace EDDiscovery.UserControls
             this.extPictureBoxModules.FreezeTracking = false;
             this.extPictureBoxModules.Location = new System.Drawing.Point(0, 0);
             this.extPictureBoxModules.Name = "extPictureBoxModules";
-            this.extPictureBoxModules.Size = new System.Drawing.Size(752, 63);
+            this.extPictureBoxModules.Size = new System.Drawing.Size(1129, 63);
             this.extPictureBoxModules.TabIndex = 1;
             // 
             // extScrollBarModule
@@ -941,8 +962,8 @@ namespace EDDiscovery.UserControls
             this.extScrollBarModule.Dock = System.Windows.Forms.DockStyle.Right;
             this.extScrollBarModule.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extScrollBarModule.HideScrollBar = false;
-            this.extScrollBarModule.LargeChange = 166;
-            this.extScrollBarModule.Location = new System.Drawing.Point(752, 0);
+            this.extScrollBarModule.LargeChange = 184;
+            this.extScrollBarModule.Location = new System.Drawing.Point(1129, 0);
             this.extScrollBarModule.Maximum = 62;
             this.extScrollBarModule.Minimum = 0;
             this.extScrollBarModule.MouseOverButtonColor = System.Drawing.Color.Green;
@@ -950,7 +971,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarModule.MousePressedButtonColor = System.Drawing.Color.Red;
             this.extScrollBarModule.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarModule.Name = "extScrollBarModule";
-            this.extScrollBarModule.Size = new System.Drawing.Size(48, 166);
+            this.extScrollBarModule.Size = new System.Drawing.Size(48, 184);
             this.extScrollBarModule.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarModule.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarModule.SliderColor2 = System.Drawing.Color.DarkGray;
@@ -996,7 +1017,7 @@ namespace EDDiscovery.UserControls
             this.Controls.Add(this.extPanelRollUpStats);
             this.Controls.Add(this.panelTop);
             this.Name = "ShipsAndModules";
-            this.Size = new System.Drawing.Size(800, 572);
+            this.Size = new System.Drawing.Size(1177, 626);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewModules)).EndInit();
             this.extPanelRollUpStats.ResumeLayout(false);
@@ -1059,7 +1080,7 @@ namespace EDDiscovery.UserControls
         private ExtendedControls.ExtPictureBox extPictureBoxModules;
         private ExtendedControls.LabelData labelDataPower;
         private System.Windows.Forms.Label labelPower;
-        private ExtendedControls.ExtProgressBar extProgressBar1;
+        private ExtendedControls.ExtProgressBar extProgressBarCoreWeapons;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemLocalised;
         private System.Windows.Forms.DataGridViewTextBoxColumn ItemCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn SlotCol;
@@ -1073,5 +1094,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.ContextMenuStrip contextMenuStripShipList;
         private System.Windows.Forms.ToolStripMenuItem goToCreationEventToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem goToSolddestroyedEventToolStripMenuItem;
+        private ExtendedControls.ExtProgressBarMultiSegment extProgressBarMSPriorities;
     }
 }

@@ -49,6 +49,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="UnitTestModuleDisplay.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="UnitTestModuleDisplay.Designer.cs">
+      <DependentUpon>UnitTestModuleDisplay.cs</DependentUpon>
+    </Compile>
     <Compile Include="UnitTestBindingsEditor.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -79,6 +85,9 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="UnitTestModuleDisplay.resx">
+      <DependentUpon>UnitTestModuleDisplay.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UnitTestBindingsEditor.resx">
       <DependentUpon>UnitTestBindingsEditor.cs</DependentUpon>
     </EmbeddedResource>
