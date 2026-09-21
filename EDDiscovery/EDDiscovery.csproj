@@ -278,6 +278,9 @@
     <Compile Include="UserControls\Colonisation\UserControlColonisation.Designer.cs">
       <DependentUpon>UserControlColonisation.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\CurrentState\ShipsAndModulesUI.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Include="UserControls\CurrentState\UserControlCarrier.cs">
       <SubType>UserControl</SubType>
     </Compile>
