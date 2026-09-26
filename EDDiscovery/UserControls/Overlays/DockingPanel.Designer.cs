@@ -59,7 +59,7 @@ namespace EDDiscovery.UserControls
             this.orbisDockingPads.Location = new System.Drawing.Point(0, 0);
             this.orbisDockingPads.MediumPad = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
             this.orbisDockingPads.Name = "orbisDockingPads";
-            this.orbisDockingPads.NonSelectedIntensity = 0.4F;
+            this.orbisDockingPads.NonSelectedIntensity = 0.3F;
             this.orbisDockingPads.SelectedIndex = 0;
             this.orbisDockingPads.Size = new System.Drawing.Size(243, 279);
             this.orbisDockingPads.SmallPad = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));

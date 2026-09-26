@@ -224,10 +224,12 @@ namespace EDDiscovery.UserControls
 
                 if (shipinstance != null)
                 {
+                    last_displayship = shipinstance;
                     DisplayModuleDiagram(shipinstance.GetShipProperties(), shipinstance, false);
                 }
                 else if (ship != null)
                 {
+                    last_displayship = null;
                     DisplayModuleDiagram(ship, null, false);
                 }
             }

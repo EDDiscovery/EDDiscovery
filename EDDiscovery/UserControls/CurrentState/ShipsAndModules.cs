@@ -372,16 +372,18 @@ namespace EDDiscovery.UserControls
             }
             else if (comboBoxShips.Text == allownedshipstext || comboBoxShips.Text == currentownedshipstext)
             {
+                bool currentships = comboBoxShips.Text == currentownedshipstext;
+
                 HideShipRelatedButtonsAndPanelsClearModuleDiagram(false, false, "Click on a ship to display its modules");
 
                 splitContainerModulesGrid.Panel1Collapsed = false;
 
-                SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Name".Tx(), "Ident".Tx(), "Mass".Tx(), "Location".Tx(), "Cost".Tx(), "Date Bought", "Date Sold/Destroyed");
+                SetColHeaders("", "Type".Tx(), "Manufacturer".Tx(), "Name".Tx(), "Ident".Tx(), "Mass".Tx(), "Location".Tx(), "Info".Tx(), "Date Bought", currentships ? null : "Date Sold/Destroyed");
                 sortmodecol = "PAAAANANDD";      // P = sort on column 1 fixed
 
                 dataGridViewModules.ContextMenuStrip = contextMenuStripShipList;
 
-                foreach (var kvp in comboBoxShips.Text == allownedshipstext ? DiscoveryForm.History.ShipInformationList.SpaceShips() : DiscoveryForm.History.ShipInformationList.OwnedSpaceShips())
+                foreach (var kvp in currentships ? DiscoveryForm.History.ShipInformationList.OwnedSpaceShips() : DiscoveryForm.History.ShipInformationList.SpaceShips() )
                 {
                     var ship = kvp.Value;
                     var rw = dataGridViewModules.RowTemplate.Clone() as DataGridViewRow;           // need to add like this due to different types of cells
@@ -403,14 +405,21 @@ namespace EDDiscovery.UserControls
                                         "H: " + ship.HullMass().ToString("N0") + Environment.NewLine + 
                                         "M: " + ship.ModuleMass().ToString("N0");
                     rw.Cells[6].Value = ship.InTransit ? "Transit" : ship.StoredAtSystem != null ? (ship.StoredAtSystem + (ship.StoredAtStation != null ? (" " + ship.StoredAtStation) : "")) : "";
-                    rw.Cells[7].Value = ship.HullValue > 0 || ship.ModulesValue > 0 ?
+
+                    string info = ship.HullValue > 0 || ship.ModulesValue > 0 ?
                                             "T: " + (ship.HullValue + ship.ModulesValue).ToString("N0") + Environment.NewLine +
-                                            "H: " + ship.HullValue.ToString("N0") + Environment.NewLine + 
+                                            "H: " + ship.HullValue.ToString("N0") + Environment.NewLine +
                                             "M: " + ship.ModulesValue.ToString("N0") 
                                             : "";
 
+                    double? lyrange = ship.GetJumpRange(0);
+                    if (lyrange.HasValue)
+                        info = info.AppendPrePad($"LY: {lyrange:N2}", Environment.NewLine);
+                    rw.Cells[7].Value = info;
+                                            
                     rw.Cells[8].Value = ship.CreateEvent != null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ship.CreateEvent.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss") : "-";
-                    rw.Cells[9].Value = ship.SoldDestroyedEvent != null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ship.SoldDestroyedEvent.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss") : "-";
+                    if ( !currentships )
+                        rw.Cells[9].Value = ship.SoldDestroyedEvent != null ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ship.SoldDestroyedEvent.EventTimeUTC).ToString("dd/MM/yyyy HH:mm:ss") : "-";
 
                     rw.Tag = ship;                      // record for double click
                     dataGridViewModules.Rows.Add(rw);
@@ -692,7 +701,7 @@ namespace EDDiscovery.UserControls
             PriorityEnable.HeaderText = list[7] ?? "P/E".Tx();
             ColO1.Visible = list.Length > 8;
             ColO1.HeaderText = list.Length>8 ? list[8] : "";
-            ColO2.Visible = list.Length > 9;
+            ColO2.Visible = list.Length > 9 && list[9]!=null;
             ColO2.HeaderText = list.Length>9 ? list[9] : "";
         }
 

@@ -203,7 +203,10 @@ namespace EDDiscovery.UserControls
                 {
                     if (jld.Docked == true)
                     {
-                        loctext += $": {jld.StationName_Localised}" + Environment.NewLine + $"{StationDefinitions.ToLocalisedLanguage(jld.FDStationType)}, {jld.StationFaction}, {AllegianceDefinitions.ToEnglish(jld.StationAllegiance)}";
+                        loctext += $": {jld.StationName_Localised}" + Environment.NewLine + $"{StationDefinitions.ToLocalisedLanguage(jld.FDStationType)}, {jld.StationFaction}";
+                        if (jld.StationAllegiance != AllegianceDefinitions.Allegiance.Unknown)
+                            loctext += ", {AllegianceDefinitions.ToEnglish(jld.StationAllegiance)}";
+
                         string iname = StationDefinitions.StationImageName(jld.FDStationType);
                         BaseUtils.Icons.IconSet.TryGetImage(iname, out locimage);      // may not have an image 
                     }
@@ -363,8 +366,11 @@ namespace EDDiscovery.UserControls
                             if (orbitalstation is JournalDocked jld)      // paranoia to make sure its a journal docked - should always be
                             {
                                 //desttext += Environment.NewLine + "Orbital station";
-                                desttext += Environment.NewLine + $"{StationDefinitions.ToLocalisedLanguage(jld.FDStationType)}, {jld.StationFaction}, {AllegianceDefinitions.ToEnglish(jld.StationAllegiance)}";
-                                string iname = StationDefinitions.StationImageName(jld.FDStationType);
+                                desttext += Environment.NewLine + $"{StationDefinitions.ToLocalisedLanguage(jld.FDStationType)}, {jld.StationFaction}";
+                                if (jld.StationAllegiance != AllegianceDefinitions.Allegiance.Unknown)
+                                    desttext += ", { AllegianceDefinitions.ToEnglish(jld.StationAllegiance)}";
+
+                                    string iname = StationDefinitions.StationImageName(jld.FDStationType);
                                 BaseUtils.Icons.IconSet.TryGetImage(iname, out destimage);      // may not have an image 
 
                             }

@@ -112,12 +112,9 @@ namespace EDDiscovery.Actions
                 {
                     // list all entries associated with the device:key pair including mod keys
 
-                    List<BindingsFile.DeviceKeySet> assignlist = bindings.FindDeviceVKey(frontierdevice, keyname, false);       
+                    List<BindingsFile.DeviceKeySet> assignlist = bindings.FindDeviceVKey(frontierdevice, keyname, false);
 
-                    //foreach(var x in assignlist.EmptyIfNull())
-                    //{
-                    //    System.Diagnostics.Debug.WriteLine($"ActionInputDevice {frontierdevice} {keyname} matched {x.Entry.Name}");
-                    //}
+                    //foreach (var x in assignlist.EmptyIfNull()) System.Diagnostics.Debug.WriteLine($"ActionInputDevice {frontierdevice} {keyname} matched {x.Entry.Name}");
 
                     if (assignlist != null)
                     {
