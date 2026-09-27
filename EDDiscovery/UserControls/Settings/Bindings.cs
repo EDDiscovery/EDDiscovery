@@ -33,28 +33,15 @@ namespace EDDiscovery.UserControls
         {
             var frontierpresetfilebindingfilename = BindingsFile.FindBindingsFile(EDDOptions.Instance.FrontierBindingsFolder, true);
 
-            List<Device> deviceparas = new List<Device>();
-            deviceparas.Add(new Device());
-
-            foreach (var device in DiscoveryForm.InputDeviceList)
-            { 
-                System.Diagnostics.Debug.WriteLine($"{device.ID.Name} {device.ID.VendorId} {device.ID.ProductId} {device.ID.VendorProductId}");
-
-            // does frontier know about it?
-                string frontiername = device.ID.Name == "Keyboard" || device.ID.Name == "Mouse" ? device.ID.Name : FrontierDeviceNames.DeviceName(device.ID.ProductId, device.ID.VendorId) ?? device.ID.VendorProductId;
-
-                deviceparas.Add(new Device(frontiername, device.ID.Name, device.AxisPresent, device.POVCount, device.ButtonCount));
-            }
-
             bindingsEditor.ChangedBindings += (s) =>
             {
                 if (DiscoveryForm.FrontierBindings.FileName.EqualsIIC(s) || !DiscoveryForm.FrontierBindings.IsLoaded)      // if same name, or not loaded, try and load
-                    DiscoveryForm.LoadFrontierBindings();       // reload, 
+                    DiscoveryForm.LoadWarnFrontierBindings();       // reload, 
             };
             bindingsEditor.ChangedDefault += (s) =>
             {
                 if (!DiscoveryForm.FrontierBindings.FileName.EqualsIIC(s))      // if default is not the same as the current filename.
-                    DiscoveryForm.LoadFrontierBindings();       // reload, 
+                    DiscoveryForm.LoadWarnFrontierBindings();       // reload, 
             };
 
             bindingsEditor.ResetKeyNames += () =>
@@ -112,7 +99,13 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-            bindingsEditor.Init(EDDOptions.Instance.FrontierBindingsFolder, frontierpresetfilebindingfilename, deviceparas, keynames);
+            bindingsEditor.Init(EDDOptions.Instance.FrontierBindingsFolder, frontierpresetfilebindingfilename, DiscoveryForm.GetPhysicalDeviceList(), keynames);
+        }
+
+        protected override void InitialDisplay()
+        {
+            base.InitialDisplay();
+            bindingsEditor.SetWarning();
         }
 
         protected override void Closing()

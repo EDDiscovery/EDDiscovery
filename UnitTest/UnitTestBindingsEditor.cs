@@ -33,7 +33,7 @@ namespace UnitTest
                 // does frontier know about it?
                 string frontiername = device.ID.Name == "Keyboard" || device.ID.Name == "Mouse" ? device.ID.Name : FrontierDeviceNames.DeviceName(device.ID.ProductId, device.ID.VendorId) ?? device.ID.VendorProductId;
 
-                deviceparas.Add(new Device(frontiername, device.ID.Name, device.AxisPresent,  device.POVCount, device.ButtonCount));
+                deviceparas.Add(new Device(frontiername, device.ID.Name, device.AxisPresent,  device.POVCount, device.ButtonCount, true));
             }
 
             inputdevices.Start();

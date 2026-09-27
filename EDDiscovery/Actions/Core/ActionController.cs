@@ -59,7 +59,6 @@ namespace EDDiscovery.Actions
                                 AudioExtensions.AudioQueue speech, AudioExtensions.SpeechSynthesizer synth, 
                                 BindingsFile frontierbindings, 
                                 InputDeviceList inputDevices,
-                                bool nosound,
                                 Action<string> logger,
                                 System.Drawing.Icon ic, Type[] keyignoredforms = null) : base(uiform, ic)
         {
@@ -80,7 +79,7 @@ namespace EDDiscovery.Actions
 
             // we own the voice recon
 #if !NO_SYSTEM_SPEECH
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5 && !nosound)
+            if (EDDOptions.Instance.AllowAudio)
                 VoiceRecon = AudioHelper.GetVoiceRecognition(eddiscoveryform.LogLineHighlight);
             else
 #endif

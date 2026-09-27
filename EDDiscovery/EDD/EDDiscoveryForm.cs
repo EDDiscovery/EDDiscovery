@@ -43,7 +43,7 @@ namespace EDDiscovery
 
         public ExtendedControls.ThemeList ThemeList { get; private set; }
 
-        public EliteDangerousCore.Bindings.BindingsFile FrontierBindings { get; private set; } = new EliteDangerousCore.Bindings.BindingsFile();
+        public EliteDangerousCore.Bindings.BindingsFile FrontierBindings { get; private set; }
         public InputDeviceList InputDeviceList { get; private set; }
         private Tuple<string, DateTime, int> FrontierStartPresetFile { get; set; }
 
@@ -111,7 +111,7 @@ namespace EDDiscovery
         private EDDiscoveryController Controller;
         private Actions.ActionController actioncontroller;
         private BaseUtils.GitHubRelease newRelease;
-        private Timer periodicchecktimer;
+        private System.Windows.Forms.Timer  periodicchecktimer;
         private bool in_system_sync = false;        // between start/end sync of databases
 
         private AudioExtensions.IAudioDriver audiodriverwave1;
@@ -235,7 +235,7 @@ namespace EDDiscovery
             var zys = FontHandler.GetFont("Zen Dots", 12);
 
             // font load
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (EDDOptions.Instance.AllowFontLoad)
             {
                 var bytes = EDDiscovery.Properties.Resources.ZenDots_Regular;
                 FontHandler.AddMemoryFont(bytes);
@@ -378,7 +378,7 @@ namespace EDDiscovery
 
 #if !NO_SYSTEM_SPEECH
             // Windows TTS (2000 and above). Speech *recognition* will be Version.Major >= 6 (Vista and above)
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5 && !EDDOptions.Instance.NoSound)
+            if (EDDOptions.Instance.AllowAudio)
             {
                 audiodriverwave1 = AudioHelper.GetAudioDriver(LogLineHighlight, EDDConfig.Instance.DefaultWaveDevice);
                 audiodriverwave2 = AudioHelper.GetAudioDriver(LogLineHighlight, EDDConfig.Instance.DefaultWaveDevice);
@@ -406,17 +406,19 @@ namespace EDDiscovery
             audioqueuewave2 = new AudioExtensions.AudioQueue(audiodriverwave2);
             audioqueuespeech = new AudioExtensions.AudioQueue(audiodriverspeech);
 
-            LoadFrontierBindings();     // load the bindings into EDD
-
             InputDeviceList = new InputDeviceList();
 
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (EDDOptions.Instance.AllowDeviceInput)
             {
                 DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(InputDeviceList);
                 DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(InputDeviceList);              // Created.. not started..
                 DirectInputDevices.InputDeviceMouse.CreateMouse(InputDeviceList);
                 InputDeviceList.Start();
             }
+
+            FrontierBindings = new EliteDangerousCore.Bindings.BindingsFile(null);      // start with nothing, load will reset physical devices
+
+            LoadFrontierBindings();     // load the bindings into EDD
 
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load action controller");
 
@@ -426,12 +428,12 @@ namespace EDDiscovery
 
             InputDeviceList idl = new InputDeviceList();
 
-
             // create the action controller and install commands before we execute tabs, since some tabs need these set up
 
             string eddiscoveryglobalvars = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting("UserGlobalActionVars", "");
             actioncontroller = MakeAC(this,
-                        EDDOptions.Instance.ActionsAppDirectory(), EDDOptions.Instance.AppDataDirectory, EDDOptions.Instance.OtherInstallFilesDirectory(), 
+                        EDDOptions.Instance.ActionsAppDirectory(), EDDOptions.Instance.AppDataDirectory, 
+                        EDDOptions.Instance.OtherInstallFilesDirectory(), 
                         eddiscoveryglobalvars,
                         LogLine);
 
@@ -636,7 +638,7 @@ namespace EDDiscovery
                 }
             }
 
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            if (EDDOptions.Instance.AllowDragReorderTabs)
                 tabControlMain.AllowDragReorder = false;
 
             UpdatePanelListInContextMenuStrip();
@@ -772,15 +774,7 @@ namespace EDDiscovery
             // Bindings
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Bindings");
 
-            if (FrontierBindings.IsLoaded)
-            {
-                if ( FrontierBindings.IsEditable)
-                    LogLine("Loaded Bindings " + FrontierBindings.FileName);
-                else
-                    LogLineHighlight($"Loaded Bindings but not editable - unknown frontier culture ID `{FrontierBindings.KeyboardCulture}` {InputLanguage.CurrentInputLanguage.LayoutName} {InputLanguage.CurrentInputLanguage.Culture.Name} {FrontierBindings.FileName}");
-            }
-            else
-                LogLine("Frontier bindings did not load");
+            FrontierBindingsWarn();
 
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Notifications");
 
@@ -870,31 +864,7 @@ namespace EDDiscovery
 
             periodicchecktimer = new Timer();                   // timer for periodic actions
             periodicchecktimer.Interval = 1000;
-            periodicchecktimer.Tick += (sv, ev) =>
-            {
-                if (!EDDOptions.Instance.DisableTimeDisplay)
-                {
-                    DateTime gameutc = DateTime.UtcNow.AddYears(1286);
-                    labelGameDateTime.Text = gameutc.ToShortDateString() + " " + gameutc.ToShortTimeString();
-                }
-
-                if (buttonReloadActions.Visible)
-                {
-                    if (actioncontroller.CheckForActionFilesChange()) // autoreload edited action files..
-                        buttonReloadActions_Click(null, null);
-                }
-
-                if ( FrontierBindings.IsOutOfDate() ||          // if date time of this has changed, or the start preset has changed
-                            (FrontierStartPresetFile != null && File.GetLastWriteTimeUtc(FrontierStartPresetFile.Item1) > FrontierStartPresetFile.Item2) )
-                {
-                    LoadFrontierBindings();
-                    if (FrontierBindings.IsLoaded)
-                        LogLine("Loaded Bindings " + FrontierBindings.FileName);
-                    else
-                        LogLine("Frontier bindings did not load");
-                }
-            };
-
+            periodicchecktimer.Tick += Periodicchecktimer_Tick;     // over at helpers
             periodicchecktimer.Start();
 
             // Options for automatic stuff
@@ -922,6 +892,7 @@ namespace EDDiscovery
 
             PostShownDebug();
         }
+
 
         private void EDDiscoveryForm_Resize(object sender, EventArgs e)
         {

@@ -121,7 +121,7 @@ namespace EDDiscovery.Actions
 
         static public void ShipBasicInformation(Variables vars, Ship si, string prefix)
         {
-            string ship = "Unknown", id = "0", name = "Unknown", ident = "Unknown", sv = "None", fullinfo = "Unknown", shortname = "Unknown", fuel = "0", cargo = "0", fuellevel = "0";
+            string ship = "Unknown", id = "0", name = "Unknown", ident = "Unknown", sv = "None", fullinfo = "Unknown", shortname = "Unknown", fuel = "0", cargo = "0", fuellevel = "0", manu = "Unknown";
 
             if (si != null)
             {
@@ -131,6 +131,7 @@ namespace EDDiscovery.Actions
                 ident = si.ShipUserIdent.Alt("");
                 sv = si.SubVehicle.ToString();
                 fullinfo = si.ShipFullInfo();
+                manu = si.GetShipProperties().Manufacturer;
                 shortname = si.ShipShortName.Alt("Unknown");
                 fuel = si.FuelCapacity.ToStringInvariant("0.0");
                 fuellevel = si.FuelLevel.ToStringInvariant("0.0");
@@ -141,6 +142,7 @@ namespace EDDiscovery.Actions
             vars[prefix + "Ship_ID"] = id;
             vars[prefix + "Ship_Name"] = name;
             vars[prefix + "Ship_Ident"] = ident;
+            vars[prefix + "Ship_Manufacturer"] = manu;
             vars[prefix + "Ship_SubVehicle"] = sv;
             vars[prefix + "Ship_FullInfo"] = fullinfo;
             vars[prefix + "Ship_ShortName"] = shortname;

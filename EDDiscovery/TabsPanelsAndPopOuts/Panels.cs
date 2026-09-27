@@ -218,7 +218,7 @@ namespace EDDiscovery
             int offset = 0;
             List<int> separs = new List<int>();
 
-            if (Environment.OSVersion.Platform != PlatformID.Win32NT)
+            if (!EDDOptions.Instance.AllowAllPanels)        // if not all panels, remove windows only panels
             {
                 paneldefinition = paneldefinition.Where(e => !WindowsOnlyPanels.Contains(e.PopoutID)).ToList();
             }

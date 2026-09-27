@@ -104,6 +104,12 @@ namespace EDDiscovery
 
         public int ZMQPort { get; set; } = 12300;       // < 10000 does not launch the program, you should be running the script via the debugger
 
+        public bool AllowDeviceInput { get { return Environment.OSVersion.Platform == PlatformID.Win32NT; } }
+        public bool AllowAudio { get { return Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5 && !NoSound; } }
+        public bool AllowFontLoad { get { return Environment.OSVersion.Platform == PlatformID.Win32NT; } }
+        public bool AllowDragReorderTabs { get { return Environment.OSVersion.Platform == PlatformID.Win32NT; } }
+        public bool AllowAllPanels { get { return Environment.OSVersion.Platform == PlatformID.Win32NT; } }
+
         public string SubAppDirectory(string subfolder)     // ensures its there.. name without \ slashes
         {
             string path = Path.Combine(AppDataDirectory, subfolder);

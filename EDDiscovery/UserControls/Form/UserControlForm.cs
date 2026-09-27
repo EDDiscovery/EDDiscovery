@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
 
             DisplayTitle = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(DBRefName + "ShowTitle", true);
 
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+            if (EDDOptions.Instance.AllowDeviceInput)
             {
                 idk = DirectInputDevices.InputDeviceKeyboard.CreateKeyboard();
             }
@@ -406,7 +406,7 @@ namespace EDDiscovery.UserControls
                     {
                         if (IsClickThruOn)
                         {
-                            if (Environment.OSVersion.Platform == PlatformID.Win32NT)
+                            if (EDDOptions.Instance.AllowDeviceInput)
                             {
                                 if (idk.IsKeyPressed(EDDConfig.Instance.ClickThruKey, recheck: true))
                                     inpanelshow = true;

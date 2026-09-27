@@ -32,7 +32,7 @@ namespace UnitTest
             {
                 File.WriteAllText(Path.Combine(folder, "StartPreset.4.Start"), "Test1\r\nTest1\r\nTest1\r\nTest1\r\n");
                 string file = BindingsFile.FindBindingsFile(folder, true);
-                BindingsFile f = new BindingsFile();
+                BindingsFile f = new BindingsFile(null);
                 f.Read(file);
                 CheckThat(f.FileName).IsNotNull();
                 string xml = f.ToXML();

@@ -474,17 +474,61 @@ namespace EDDiscovery
             return new Actions.ActionController(this, uiform,
                                                 appfolder, manageappfolder,otherinstalledfilesfolder, 
                                                 globalvars,
-                                                audioqueuewave1, audioqueuewave2, audioqueuespeech, speechsynth, FrontierBindings, InputDeviceList, EDDOptions.Instance.NoSound,
+                                                audioqueuewave1, audioqueuewave2, audioqueuespeech, speechsynth, FrontierBindings, InputDeviceList, 
                                                 logger,
                                                 this.Icon, new Type[] { });
         }
 
         #endregion
 
+        #region Periodic Check
+
+        private void Periodicchecktimer_Tick(object sender, EventArgs e)
+        {
+            if (!EDDOptions.Instance.DisableTimeDisplay)
+            {
+                DateTime gameutc = DateTime.UtcNow.AddYears(1286);
+                labelGameDateTime.Text = gameutc.ToShortDateString() + " " + gameutc.ToShortTimeString();
+            }
+
+            if (buttonReloadActions.Visible)
+            {
+                if (actioncontroller.CheckForActionFilesChange()) // autoreload edited action files..
+                    buttonReloadActions_Click(null, null);
+            }
+
+            bool reloadbindings = FrontierBindings.IsOutOfDate() ||
+                        (FrontierStartPresetFile != null && File.GetLastWriteTimeUtc(FrontierStartPresetFile.Item1) > FrontierStartPresetFile.Item2);
+            
+            if (EDDOptions.Instance.AllowDeviceInput)
+            {
+                reloadbindings |= DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(InputDeviceList);
+            }
+            
+            if ( reloadbindings)
+            {
+                LoadWarnFrontierBindings();
+            }
+
+        }
+
+        #endregion
+
         #region Bindings
+
+        // after start we can combine, at start we need to split
+        public void LoadWarnFrontierBindings()
+        {
+            LoadFrontierBindings();
+            FrontierBindingsWarn();
+        }
+
+        // load, from init, from LoadWarn
         public void LoadFrontierBindings()
         {
-            FrontierBindings.Clear();       // use the same one, because other people have the handle to it!  trap caught sept 26
+            // use the same class and not replace because other people have a handle to it!  trap caught sept 26
+            // clear with these physical devices
+            FrontierBindings.Clear(GetPhysicalDeviceList());       
 
             // we remember details on startpreset.start because this can change which binding file is used
             FrontierStartPresetFile = BindingsFile.FindStartPreset(EDDOptions.Instance.FrontierBindingsFolder, true);
@@ -493,13 +537,54 @@ namespace EDDiscovery
             if (FrontierStartPresetFile != null)
             {
                 string file = BindingsFile.FindBindingsFile(FrontierStartPresetFile);       // this may return null, which read can handle
-            
+
                 if (FrontierBindings.Read(file) == null)
                 {
                     FrontierBindings.AssignVKeys();
-                    //System.Diagnostics.Debug.WriteLine($"Bindings: {FrontierBindings.ToXML()}");
                 }
             }
+        }
+
+        // call to warn, needs splitting on start up due to order
+        public void FrontierBindingsWarn()
+        {
+            if (FrontierBindings.IsLoaded)
+            {
+                LogLine("Loaded Bindings File");
+
+                if (FrontierBindings.NonPhysicalDevicesInUse)
+                {
+                    LogLineHighlight($"Missing physical device in bindings, bindings will not load in Elite! : {string.Join(",",FrontierBindings.DeviceList.Where(x=>!x.PhysicalDevice).Select(x=>x.BetterName))}");
+                    return;
+                }
+
+                if (!FrontierBindings.IsEditable)
+                    LogLineHighlight($"Bindings but not editable - unknown frontier culture ID `{FrontierBindings.KeyboardCulture}` {InputLanguage.CurrentInputLanguage.LayoutName} {InputLanguage.CurrentInputLanguage.Culture.Name} {FrontierBindings.FileName}");
+            }
+            else
+            {
+                LogLineHighlight("Not written a bindings file - various action packs will not operate");
+            }
+        }
+
+        // marry the two worlds together, the input device system and the bindings device.  Needs to be at this level
+        public List<EliteDangerousCore.Bindings.Device> GetPhysicalDeviceList()
+        {
+            var physicaldevices = new List<EliteDangerousCore.Bindings.Device>();
+
+            physicaldevices.Add(new EliteDangerousCore.Bindings.Device()); // add NoDevice
+
+            foreach (var device in InputDeviceList)
+            {
+                System.Diagnostics.Debug.WriteLine($"{device.ID.Name} {device.ID.VendorId} {device.ID.ProductId} {device.ID.VendorProductId}");
+
+                // does frontier know about it?
+                string frontiername = device.ID.Name == "Keyboard" || device.ID.Name == "Mouse" ? device.ID.Name : EliteDangerousCore.Bindings.FrontierDeviceNames.DeviceName(device.ID.ProductId, device.ID.VendorId) ?? device.ID.VendorProductId;
+
+                physicaldevices.Add(new EliteDangerousCore.Bindings.Device(frontiername, device.ID.Name, device.AxisPresent, device.POVCount, device.ButtonCount, true));
+            }
+
+            return physicaldevices;
         }
 
         #endregion

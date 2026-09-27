@@ -26,7 +26,7 @@ namespace EDDiscovery
     {
         public static ISpeechEngine GetWindowsSpeechEngine(Action<string> log)
         {
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            if (EDDOptions.Instance.AllowAudio)
             {
                 try
                 {
@@ -46,7 +46,7 @@ namespace EDDiscovery
 
         public static ISpeechEngine GetWindowsMediaSpeechEngine(Action<string> log)
         {
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            if (EDDOptions.Instance.AllowAudio)
             {
                 try
                 {
@@ -66,7 +66,7 @@ namespace EDDiscovery
 
         public static IVoiceRecognition GetVoiceRecognition(Action<string> log)
         {
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 6)
+            if (EDDOptions.Instance.AllowAudio && Environment.OSVersion.Version.Major >= 6)
             {
                 try
                 {
@@ -86,7 +86,7 @@ namespace EDDiscovery
 
         public static IAudioDriver GetAudioDriver(Action<string> log, string dev = null)
         {
-            if (Environment.OSVersion.Platform == PlatformID.Win32NT && Environment.OSVersion.Version.Major >= 5)
+            if (EDDOptions.Instance.AllowAudio)
             {
                 try
                 {
