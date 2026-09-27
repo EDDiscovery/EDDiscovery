@@ -33,16 +33,18 @@ namespace EDDiscovery.UserControls
         {
             var frontierpresetfilebindingfilename = BindingsFile.FindBindingsFile(EDDOptions.Instance.FrontierBindingsFolder, true);
 
-            bindingsEditor.ChangedBindings += (s) =>
-            {
-                if (DiscoveryForm.FrontierBindings.FileName.EqualsIIC(s) || !DiscoveryForm.FrontierBindings.IsLoaded)      // if same name, or not loaded, try and load
-                    DiscoveryForm.LoadWarnFrontierBindings();       // reload, 
-            };
-            bindingsEditor.ChangedDefault += (s) =>
-            {
-                if (!DiscoveryForm.FrontierBindings.FileName.EqualsIIC(s))      // if default is not the same as the current filename.
-                    DiscoveryForm.LoadWarnFrontierBindings();       // reload, 
-            };
+            // don't need these, the bindings monitor picks up changes. Keep for a bit
+
+            //bindingsEditor.ChangedBindings += (s) =>
+            //{
+            //    if (DiscoveryForm.FrontierBindings.FileName.EqualsIIC(s) || !DiscoveryForm.FrontierBindings.IsLoaded)      // if same name, or not loaded, try and load
+            //        DiscoveryForm.LoadWarnFrontierBindings();       // reload, 
+            //};
+            //bindingsEditor.ChangedDefault += (s) =>
+            //{
+            //    if (!DiscoveryForm.FrontierBindings.FileName.EqualsIIC(s))      // if default is not the same as the current filename.
+            //        DiscoveryForm.LoadWarnFrontierBindings();       // reload, 
+            //};
 
             bindingsEditor.ResetKeyNames += () =>
             {
@@ -100,6 +102,8 @@ namespace EDDiscovery.UserControls
             }
 
             bindingsEditor.Init(EDDOptions.Instance.FrontierBindingsFolder, frontierpresetfilebindingfilename, DiscoveryForm.GetPhysicalDeviceList(), keynames);
+
+            DiscoveryForm.OnInputDeviceChange += DiscoveryForm_OnInputDeviceChange;
         }
 
         protected override void InitialDisplay()
@@ -110,9 +114,16 @@ namespace EDDiscovery.UserControls
 
         protected override void Closing()
         {
+            DiscoveryForm.OnInputDeviceChange -= DiscoveryForm_OnInputDeviceChange;
             string json = keynames.Get();
             PutSettingGlobal("DeviceKeyNames", json);
         }
+        private void DiscoveryForm_OnInputDeviceChange()
+        {
+            if (!bindingsEditor.IsDirty)        // if its dirty, we leave it alone
+                bindingsEditor.Reload(DiscoveryForm.GetPhysicalDeviceList());
+        }
+
 
         public override bool AllowClose()
         {

@@ -499,17 +499,16 @@ namespace EDDiscovery
 
             bool reloadbindings = FrontierBindings.IsOutOfDate() ||
                         (FrontierStartPresetFile != null && File.GetLastWriteTimeUtc(FrontierStartPresetFile.Item1) > FrontierStartPresetFile.Item2);
+
+            bool changedinptudevices = EDDOptions.Instance.AllowDeviceInput ? DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(InputDeviceList) : false;
             
-            if (EDDOptions.Instance.AllowDeviceInput)
-            {
-                reloadbindings |= DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(InputDeviceList);
-            }
-            
-            if ( reloadbindings)
+            if ( reloadbindings || changedinptudevices)
             {
                 LoadWarnFrontierBindings();
             }
 
+            if (changedinptudevices)
+                OnInputDeviceChange?.Invoke();
         }
 
         #endregion
@@ -550,13 +549,14 @@ namespace EDDiscovery
         {
             if (FrontierBindings.IsLoaded)
             {
-                LogLine("Loaded Bindings File");
 
                 if (FrontierBindings.NonPhysicalDevicesInUse)
                 {
-                    LogLineHighlight($"Missing physical device in bindings, bindings will not load in Elite! : {string.Join(",",FrontierBindings.DeviceList.Where(x=>!x.PhysicalDevice).Select(x=>x.BetterName))}");
+                    LogLineHighlight($"Loaded Bindings file but with missing physical devices in bindings, bindings will not load in Elite! : {string.Join(",",FrontierBindings.DeviceList.Where(x=>!x.PhysicalDevice).Select(x=>x.BetterName))}");
                     return;
                 }
+                else
+                    LogLine("Loaded Bindings File all devices detected as present");
 
                 if (!FrontierBindings.IsEditable)
                     LogLineHighlight($"Bindings but not editable - unknown frontier culture ID `{FrontierBindings.KeyboardCulture}` {InputLanguage.CurrentInputLanguage.LayoutName} {InputLanguage.CurrentInputLanguage.Culture.Name} {FrontierBindings.FileName}");

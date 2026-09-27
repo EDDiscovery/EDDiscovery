@@ -78,6 +78,7 @@ namespace EDDiscovery
         public event Action<string, Color> OnNewLogEntry;               // Mirrored. New log entry generated.
         public event Action<UIEvent> OnNewUIEvent;                      // from Form_NewUIEvent pass onto panels
         public event Action<HistoryEntry> OnNewHistoryEntryUnfiltered;  // from Form_NewHistoryEntryUnfiltered pass onto panels
+        public event Action OnInputDeviceChange;                        // from Helpers period tick check devices have changed
         #endregion
 
         #region Events due to EDDiscoveryController, in UI thread
