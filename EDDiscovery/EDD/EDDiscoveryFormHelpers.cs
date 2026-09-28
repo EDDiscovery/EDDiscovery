@@ -483,6 +483,7 @@ namespace EDDiscovery
 
         #region Periodic Check
 
+        int periodiccheckcounter = 0;
         private void Periodicchecktimer_Tick(object sender, EventArgs e)
         {
             if (!EDDOptions.Instance.DisableTimeDisplay)
@@ -497,18 +498,21 @@ namespace EDDiscovery
                     buttonReloadActions_Click(null, null);
             }
 
-            bool reloadbindings = FrontierBindings.IsOutOfDate() ||
-                        (FrontierStartPresetFile != null && File.GetLastWriteTimeUtc(FrontierStartPresetFile.Item1) > FrontierStartPresetFile.Item2);
-
-            bool changedinptudevices = EDDOptions.Instance.AllowDeviceInput ? DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(InputDeviceList) : false;
-            
-            if ( reloadbindings || changedinptudevices)
+            if (periodiccheckcounter++ % 5 == 0)        // do it every 5 seconds
             {
-                LoadWarnFrontierBindings();
-            }
+                bool reloadbindings = FrontierBindings.IsOutOfDate() ||
+                            (FrontierStartPresetFile != null && File.GetLastWriteTimeUtc(FrontierStartPresetFile.Item1) > FrontierStartPresetFile.Item2);
 
-            if (changedinptudevices)
-                OnInputDeviceChange?.Invoke();
+                bool changedinptudevices = EDDOptions.Instance.AllowDeviceInput ? DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(InputDeviceList) : false;
+
+                if (reloadbindings || changedinptudevices)
+                {
+                    LoadWarnFrontierBindings();
+                }
+
+                if (changedinptudevices)
+                    OnInputDeviceChange?.Invoke();
+            }
         }
 
         #endregion

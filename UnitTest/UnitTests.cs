@@ -90,12 +90,13 @@ namespace UnitTest
 
         #region Unittests
 
-        [System.Diagnostics.DebuggerHidden()]
+     //   [System.Diagnostics.DebuggerHidden()]
 
-        private void Log(string x, Font fnt = null)
+        private void Log(string x, Font fnt = null, Color? color=null)
         {
             if (fnt != null)
-                richTextBoxLog.SelectionFont = fnt;
+                  richTextBoxLog.SelectionFont = fnt;
+            richTextBoxLog.SelectionColor = color.HasValue ? color.Value : Theme.Current.TextBlockForeColor;
             richTextBoxLog.AppendText(x);
             richTextBoxLog.AppendText(Environment.NewLine);
             richTextBoxLog.Select(richTextBoxLog.Text.Length, richTextBoxLog.Text.Length);
@@ -109,7 +110,7 @@ namespace UnitTest
             timer.Stop();
             if (testset < tests.Count)
             {
-                Log($"Execute {testset+1}:{tests[testset].Name}");
+                Log($"Execute {testset+1}:{tests[testset].Name}", color:Color.LightCyan);
                 testno = 0;
                 testfailures = 0;
                 section = "?";
@@ -130,7 +131,7 @@ namespace UnitTest
 
                 Section("?");
 
-                Log($"Completed {testset+1}:{tests[testset].Name} in {time}ms Totals failed {testfailures} out of {totaltests} tests");
+                Log($"Completed {testset+1}:{tests[testset].Name} in {time}ms Totals failed {testfailures} out of {totaltests} tests", color: Color.LightGreen);
                 
 
                 testset++;
@@ -140,9 +141,9 @@ namespace UnitTest
             {
                 Log("");
                 if ( totalfailures == 0 )
-                    Log($"Finished. Success tests {totaltests}", new Font("Arial", 14));
+                    Log($"Finished. Success tests {totaltests}", new Font("Arial", 14), color: Color.FromArgb(0,255,0));
                 else
-                    Log($"Finished. Failed {totalfailures}/{totaltests}", new Font("Arial", 14));
+                    Log($"Finished. Failed {totalfailures}/{totaltests}", new Font("Arial", 14), color: Color.Red);
 
             }
         }
