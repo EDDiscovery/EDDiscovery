@@ -118,10 +118,11 @@ namespace EDDiscovery.UserControls
             string json = keynames.Get();
             PutSettingGlobal("DeviceKeyNames", json);
         }
-        private void DiscoveryForm_OnInputDeviceChange()
+
+        // called when main programd detects a controller changegf
+        private void DiscoveryForm_OnInputDeviceChange(List<EliteDangerousCore.Bindings.Device> phylist)
         {
-            if (!bindingsEditor.IsDirty)        // if its dirty, we leave it alone
-                bindingsEditor.Reload(DiscoveryForm.GetPhysicalDeviceList());
+            bindingsEditor.ResetPhysicalDevices(phylist);
         }
 
 

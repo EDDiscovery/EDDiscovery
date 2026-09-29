@@ -511,7 +511,7 @@ namespace EDDiscovery
                 }
 
                 if (changedinptudevices)
-                    OnInputDeviceChange?.Invoke();
+                    OnInputDeviceChange?.Invoke(GetPhysicalDeviceList());
             }
         }
 
@@ -553,7 +553,6 @@ namespace EDDiscovery
         {
             if (FrontierBindings.IsLoaded)
             {
-
                 if (FrontierBindings.NonPhysicalDevicesInUse)
                 {
                     LogLineHighlight($"Loaded Bindings file but with missing physical devices in bindings, bindings will not load in Elite! : {string.Join(",",FrontierBindings.DeviceList.Where(x=>!x.PhysicalDevice).Select(x=>x.BetterName))}");
@@ -567,7 +566,7 @@ namespace EDDiscovery
             }
             else
             {
-                LogLineHighlight("Not written a bindings file - various action packs will not operate");
+                LogLineHighlight("No bindings file found - various action packs will not operate");
             }
         }
 

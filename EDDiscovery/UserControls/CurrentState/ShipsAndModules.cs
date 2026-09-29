@@ -263,9 +263,10 @@ namespace EDDiscovery.UserControls
 
                     foreach (ShipModulesInStore.StoredModule sm in mi.StoredModules)
                     {
+                        var mprop = sm.GetModuleUnengineered();
                         object[] rowobj = {
                                 sm.NameFD.GetForeignModuleType(),
-                                sm.NameFD.GetForeignModuleName(sm.Name_Localised),
+                                sm.NameFD.GetForeignModuleName(sm.Name_Localised) + " " + mprop.ClassRating,
                                 sm.StarSystem.Alt("In Transit".Tx()), 
                                 sm.TransferTimeString ,
                                 sm.Mass > 0 ? (sm.Mass.ToString()+"t") : "",
