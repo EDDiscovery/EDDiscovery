@@ -116,6 +116,8 @@ namespace EDDiscovery.Actions
             ActionBase.AddCommand("Star", typeof(ActionStar), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Target", typeof(ActionTarget), ActionBase.ActionType.Cmd);
             ActionBase.AddCommand("Timer", typeof(ActionTimer), ActionBase.ActionType.Cmd);
+
+            Globals["_ELITEINPUTFROM"] = "elitedangerous64";
         }
 
         public void ReLoad(bool completereload = true)        // COMPLETE reload..

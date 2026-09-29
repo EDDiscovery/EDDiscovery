@@ -33,7 +33,7 @@ namespace EDDiscovery.Actions
             ac = pc;
         }
 
-        // called by Controller EliteInput to turn on/off hook. 
+        // called by Controller 
         public void Start()    
         {
             InputDeviceList.OnNewEventInThread += Devices_OnNewEvent;
@@ -74,21 +74,28 @@ namespace EDDiscovery.Actions
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
 
             IntPtr handle = BaseUtils.Win32.UnsafeNativeMethods.GetForegroundWindow();
-            Process[] processes = Process.GetProcessesByName("elitedangerous64");//Process.GetProcessesByName("EliteDangerous64");
-            bool ed = false;
-            foreach (Process p in processes)
-            {
-                if ( p.MainWindowHandle == handle )     //ED seems to have multiple processes running.. find one
-                {
-                    ed = true;
-                    break;
-                }
-            }
 
-            if ( !ed )//&& false)
+            if (!ac.Globals.TryGet("_ELITEINPUTFROM", out string processname))
+                processname = "All";
+            
+            if (!processname.EqualsIIC("All"))
             {
-                //System.Diagnostics.Debug.WriteLine("Rejected keypress " + processes.Length);
-                return;
+                Process[] processes = Process.GetProcessesByName(processname);
+                bool ed = false;
+                foreach (Process p in processes)
+                {
+                    if (p.MainWindowHandle == handle)     //ED seems to have multiple processes running.. find one
+                    {
+                        ed = true;
+                        break;
+                    }
+                }
+
+                if (!ed)//&& false)
+                {
+                    //System.Diagnostics.Debug.WriteLine("Rejected keypress " + processes.Length);
+                    return;
+                }
             }
 
             foreach (InputDeviceEvent ide in list)

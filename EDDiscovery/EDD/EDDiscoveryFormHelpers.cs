@@ -503,7 +503,7 @@ namespace EDDiscovery
                 bool reloadbindings = FrontierBindings.IsOutOfDate() ||
                             (FrontierStartPresetFile != null && File.GetLastWriteTimeUtc(FrontierStartPresetFile.Item1) > FrontierStartPresetFile.Item2);
 
-                bool changedinptudevices = EDDOptions.Instance.AllowDeviceInput ? DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(InputDeviceList) : false;
+                bool changedinptudevices = EDDOptions.Instance.AllowDeviceInput ? InputDeviceList.AddDevices(DirectInputDevices.InputDeviceIdentity.DeviceClass.Controllers) : false;
 
                 if (reloadbindings || changedinptudevices)
                 {

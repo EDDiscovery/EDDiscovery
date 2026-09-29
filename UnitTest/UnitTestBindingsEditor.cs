@@ -19,9 +19,9 @@ namespace UnitTest
         public void Init()
         {
             inputdevices = new DirectInputDevices.InputDeviceList();
-            InputDeviceJoystickWindows.CreateJoysticks(inputdevices);
-            InputDeviceKeyboard.CreateKeyboard(inputdevices);
-            InputDeviceMouse.CreateMouse(inputdevices);
+            inputdevices.AddDevices(InputDeviceIdentity.DeviceClass.Controllers);
+            inputdevices.AddDevices(InputDeviceIdentity.DeviceClass.Keyboard);
+            inputdevices.AddDevices(InputDeviceIdentity.DeviceClass.Mouse);
 
             List<Device> deviceparas = new List<Device>();
             deviceparas.Add(new Device());

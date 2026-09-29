@@ -411,9 +411,9 @@ namespace EDDiscovery
 
             if (EDDOptions.Instance.AllowDeviceInput)
             {
-                DirectInputDevices.InputDeviceJoystickWindows.CreateJoysticks(InputDeviceList);
-                DirectInputDevices.InputDeviceKeyboard.CreateKeyboard(InputDeviceList);              // Created.. not started..
-                DirectInputDevices.InputDeviceMouse.CreateMouse(InputDeviceList);
+                InputDeviceList.AddDevices(InputDeviceIdentity.DeviceClass.Controllers);
+                InputDeviceList.AddDevices(InputDeviceIdentity.DeviceClass.Keyboard);
+                InputDeviceList.AddDevices(InputDeviceIdentity.DeviceClass.Mouse);
                 InputDeviceList.Start();
             }
 
