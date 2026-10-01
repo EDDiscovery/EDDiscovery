@@ -299,7 +299,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonAddCommander_Click(object sender, EventArgs e)
         {
-            cf = new EliteDangerousCore.Forms.CommanderForm(AdditionalCmdrControls());
+            cf = new EliteDangerousCore.Forms.CommanderForm(AdditionalCmdrControls()) { Icon = DiscoveryForm.Icon };
             cf.Init(true);
             DiscoveryForm.FrontierCAPI.StatusChange += CAPICallBack;
             SetCAPILabelState();
@@ -343,7 +343,7 @@ namespace EDDiscovery.UserControls
         { 
             EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-            cf = new EliteDangerousCore.Forms.CommanderForm(AdditionalCmdrControls());
+            cf = new EliteDangerousCore.Forms.CommanderForm(AdditionalCmdrControls()) { Icon = DiscoveryForm.Icon };
             cf.Init(cmdr,false);
             SetCAPILabelState();
             DiscoveryForm.FrontierCAPI.StatusChange += CAPICallBack;
@@ -545,7 +545,7 @@ namespace EDDiscovery.UserControls
 
         private void buttonExtScreenshot_Click(object sender, EventArgs e)
         {
-            DiscoveryForm.ScreenshotConverter.Configure(this.DiscoveryForm);
+            DiscoveryForm.ScreenshotConverter.Configure(this.DiscoveryForm, this.DiscoveryForm.Icon);
         }
 
         private void checkBoxCustomEnableScreenshots_CheckedChanged(object sender, EventArgs e)

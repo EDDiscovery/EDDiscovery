@@ -861,7 +861,7 @@
         "Joy_XAxis":
         {
           "Name":"LSTECS Throttle L",
-          "Icon":"[x52proy]"
+          "Icon":"[x52prox]"
         },
         "Joy_YAxis":
         {
