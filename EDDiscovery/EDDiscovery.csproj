@@ -1286,6 +1286,10 @@
       <Project>{019917a4-7342-4f67-8aaf-9e20c016a935}</Project>
       <Name>EliteDangerous</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ExtendedControls\AudioForms\AudioForms.csproj">
+      <Project>{044e2adf-3dfc-492e-8d77-eef70ab218c1}</Project>
+      <Name>AudioForms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ExtendedControls\ExtendedControls\ExtendedControls.csproj">
       <Project>{2049403f-f4c7-45e6-b777-6390c78e4d2b}</Project>
       <Name>ExtendedControls</Name>
