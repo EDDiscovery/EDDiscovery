@@ -1,19 +1,29 @@
 ; EDD script
 
+#ifndef MyAppName
 #define MyAppName "EDDiscovery"
-#ifndef MyAppVersion
-#define MyAppVersion "12.1.710"
 #endif
+
+#ifndef MyAppVersion
+#define MyAppVersion "19.1.100.0"
+#endif
+
+; if you want parallel installation set this and change app name
+#ifndef MyAppGUIDAux
+#define MyAppGUIDAux ""
+#endif
+
 #define MyAppPublisher "Robby & EDDiscovery Team"
 #define MyAppURL "https://github.com/EDDiscovery"
 #define MyAppExeName "EDDiscovery.exe"
+
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
 ; Do not use the same AppId value in installers for other applications.
 ; (To generate a new GUID, click Tools | Generate GUID inside the IDE.)
 AllowUNCPath=no
-AppId={{66D786F5-B09D-F1B4-6910-DE98F4475083}
+AppId={{66D786F5-B09D-F1B4-6910-DE98F4475083{#MyAppGUIDAux}}
 AppName={#MyAppName}
 AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}

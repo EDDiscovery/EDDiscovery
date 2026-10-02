@@ -9,23 +9,19 @@ set exefolder=..\\EDDiscovery\\bin\\Release\\
 pushd %exefolder%
 set absexefolder=%CD%
 popd
-set exefile=%absexefolder%\EDDiscovery.exe
 
 rem using EnableExtensions, use the pattern replacer to double \\
 
-set exefile=%exefile:\=\\%
 set vno=%1
 
-echo ExeFile is %exefile%, Want version `%vno%`
+rem support having a prefix to the appname/guid so you can install two EDDs at the same time. Use cmd /c cmdbuild 19.1.200.0 DR 
+
+if "%2" == "" set altname=
+if NOT "%2" == "" set altname=-%2
+
+echo Want version `%vno`, Name `%EDDiscovery%altname%`
 
 if "%vno%"=="" goto :errorVER
-
-rem windows 11 does not support - need powershell? wmic datafile where Name="%exefile%" get Version |more >%TMP%\vno.txt
-
-rem find "%vno%" %TMP%\vno.txt
-rem if %ERRORLEVEL%==1 goto :errorEXE
-
-echo Exe passed
 
 if "%CAPIID%"=="" goto :errorCAPI
 
@@ -38,13 +34,19 @@ echo Building default act files into %exefolder%
 del %exefolder%\defaultactfiles.zip >nul
 powershell compress-archive -Path ..\..\EDDiscoveryData\ActionFiles\V1\*.* -DestinationPath %exefolder%\defaultactfiles.zip
 
-
 echo.
-echo Build %vno%
-"\Program Files (x86)\Inno Setup 6\iscc.exe" /DMyAppVersion=%vno% innoscript.iss
-copy ..\EDDiscovery\bin\Release\EDDiscovery.Portable.Zip installers\EDDiscovery.Portable.%vno%.zip
-certutil -hashfile installers\EDDiscovery-%vno%.exe SHA256 >installers\checksums.%vno%.txt
-certutil -hashfile installers\EDDiscovery.Portable.%vno%.zip SHA256 >>installers\checksums.%vno%.txt
+echo Build %vno%%altname%
+
+if "%altname%"==""      "\Program Files (x86)\Inno Setup 6\iscc.exe" /DMyAppVersion=%vno% innoscript.iss
+if NOT "%altname%"==""  "\Program Files (x86)\Inno Setup 6\iscc.exe" /DMyAppVersion=%vno% /DMyAppName=EDDiscovery%altname% /DMyAppGUIDAux=%altname% innoscript.iss
+
+rem program built
+
+rem echo copy ..\EDDiscovery\bin\Release\EDDiscovery.Portable.Zip installers\EDDiscovery%altname%.Portable.%vno%.zip
+copy ..\EDDiscovery\bin\Release\EDDiscovery.Portable.Zip installers\EDDiscovery%altname%.Portable.%vno%.zip
+
+certutil -hashfile installers\EDDiscovery%altname%-%vno%.exe SHA256 >installers\checksums%altname%.%vno%.txt
+certutil -hashfile installers\EDDiscovery%altname%.Portable.%vno%.zip SHA256 >>installers\checksums%altname%.%vno%.txt
 
 explorer .\installers
 
