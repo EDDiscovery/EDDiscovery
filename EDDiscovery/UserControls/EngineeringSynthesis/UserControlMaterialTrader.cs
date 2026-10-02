@@ -476,11 +476,9 @@ namespace EDDiscovery.UserControls
                         int margin = 20;
 
                         var butl = new ExtendedControls.ExtButton();
-                        butl.Image = BaseUtils.Icons.IconSet.GetImage("Controls.MaterialTrader.LeftArrow");
-                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry(butl, "less", "", new Point(margin, 64), new Size(32, 32), null));
+                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry(butl, "less", "", new Point(margin, 64), new Size(32, 32), null) { ButtonImage = BaseUtils.Icons.IconSet.GetImage("Controls.MaterialTrader.LeftArrow") });
                         var butr = new ExtendedControls.ExtButton();
-                        butr.Image = BaseUtils.Icons.IconSet.GetImage("Controls.MaterialTrader.RightArrow");
-                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry(butr, "more", "", new Point(width - margin - 32, 64), new Size(32, 32), null));
+                        f.Add(new ExtendedControls.ConfigurableEntryList.Entry(butr, "more", "", new Point(width - margin - 32, 64), new Size(32, 32), null) {  ButtonImage = BaseUtils.Icons.IconSet.GetImage("Controls.MaterialTrader.RightArrow") });
 
                         f.Add(new ExtendedControls.ConfigurableEntryList.Entry("olabel", typeof(Label), "Offer".Tx(), new Point(margin, 30), new Size(width - margin * 2, 20), null, 1.5f, ContentAlignment.MiddleCenter));
 

@@ -227,10 +227,13 @@ namespace EDDiscovery.UserControls.Helpers
                         filterin &= extButtonShipyard.Get().HasChars() && station.HasAnyShipTypes(extButtonShipyard.Get().SplitNoEmptyStartFinish(extButtonShipyard.SettingsSplittingChar).Select(x => new VehicleFDName(x)).ToArray());
 
                     if (!extButtonEconomy.IsDisabled)
-                        filterin &= extButtonEconomy.Get().HasChars() && station.HasAnyEconomyTypes(extButtonEconomy.Get().SplitNoEmptyStartFinish(extButtonEconomy.SettingsSplittingChar).Select(x=> EconomyDefinitions.ToEnum(x)).ToArray());
+                        filterin &= extButtonEconomy.Get().HasChars() && station.HasAnyEconomyTypes(extButtonEconomy.Get().SplitNoEmptyStartFinish(extButtonEconomy.SettingsSplittingChar).Select(x => EconomyDefinitions.ToEnum(x)).ToArray());
 
                     if (!extButtonServices.IsDisabled)
-                        ////filterin &= extButtonServices.Get().HasChars() && station.HasAnyServicesTypes(extButtonServices.Get().SplitNoEmptyStartFinish(extButtonServices.SettingsSplittingChar).Select(x=> StationDefinitions.StationServicesToEnum(x)).ToArray());
+                    {
+                        var list = extButtonServices.Get().SplitNoEmptyStartFinish(extButtonServices.SettingsSplittingChar);
+                        filterin &= extButtonServices.Get().HasChars() && station.HasAnyServicesTypes(list.Select(x => StationDefinitions.StationServicesToEnum(x)).ToArray());
+                    }
 
                     if (filterin)
                     {

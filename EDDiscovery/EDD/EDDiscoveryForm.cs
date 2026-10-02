@@ -543,14 +543,6 @@ namespace EDDiscovery
             {
                 // normally updated by DownloadEDSMGEC in ControllerHelpers, but first time run, we want them now, before we continue
 
-                string edsmgmofile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "galacticmapping.json");
-
-                if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(edsmgmofile))        // if allowed to load, and no gmo file, fetch immediately
-                {
-                    if (EliteDangerousCore.EDSM.EDSMClass.DownloadGMOFileFromEDSM(edsmgmofile, new System.Threading.CancellationToken()))
-                        SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
-                }
-
                 string gecfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "gecmapping.json");
 
                 if (!EDDOptions.Instance.NoSystemsLoad && !File.Exists(gecfile))        // if allowed to load, and no gec file, fetch immediately
@@ -559,14 +551,14 @@ namespace EDDiscovery
                         SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);
                 }
 
-
                 // in priority order..
 
                 if (File.Exists(gecfile))
                     GalacticMapping.ParseGMPFile(gecfile, int.MaxValue / 2);                    // at this point, gal map data has been uploaded - get it into memory
 
-                if (File.Exists(edsmgmofile))
-                    GalacticMapping.ParseGMPFile(edsmgmofile, 0);                            // at this point, gal map data has been uploaded - get it into memory
+                string edsmgmotext = System.Text.Encoding.ASCII.GetString(Properties.Resources.edsmgmo);
+
+                GalacticMapping.ParseGMPJson(edsmgmotext, 0);                            // at this point, gal map data has been uploaded - get it into memory
 
                 GalacticMapping.LoadCSV(EDDiscovery.Properties.Resources.TouristBeacons, "GECTB", "", "Community Sourced Tourist Beacon");
 

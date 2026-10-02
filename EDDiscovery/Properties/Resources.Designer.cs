@@ -19,7 +19,7 @@ namespace EDDiscovery.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     public class Resources {
@@ -65,7 +65,7 @@ namespace EDDiscovery.Properties {
         ///Cmdr Robby
         ///
         ///Developers for this release series:
-        ///Eahlstan, Shufton
+        ///Eahlstan, Bravada
         ///
         ///Images Captured by:
         ///Spandino, Robby, Eahlstan, Ettanin, CompleteNOOB from Frontier Elite Dangerous Images (C) Frontier Developments PLC
@@ -77,7 +77,7 @@ namespace EDDiscovery.Properties {
         ///Cmdr Finwen  (Robert Wahlström)
         ///
         ///Previous Contributors:
-        ///Jugom, Flynn, Merovech, Bravada Ca [rest of string was truncated]&quot;;.
+        ///Shufton, Jugom, Flynn, Merovech, B [rest of string was truncated]&quot;;.
         /// </summary>
         public static string Credits {
             get {
@@ -91,29 +91,28 @@ namespace EDDiscovery.Properties {
         ///  &quot;Devices&quot;:
         ///  [
         ///    {
-        ///      &quot;Devices&quot;:&quot;CHProThrottle1&quot;,
-        ///      &quot;Buttons&quot;: 19,
-        ///      &quot;POV&quot; : 1,
-        ///      &quot;Axis&quot; : &quot;X,Y,Z&quot;,
+        ///      &quot;Device&quot;:&quot;054C0CE6&quot;,
+        ///      &quot;Name&quot;:&quot;Sony DualSense&quot;,
+        ///      &quot;Buttons&quot;:15,
+        ///      &quot;POV&quot;:1,
+        ///      &quot;Axis&quot;:&quot;X,Y,Z,RX,RY,RZ&quot;,
         ///      &quot;Keys&quot;:
         ///      {
         ///        &quot;Joy_1&quot;:
         ///        {
-        ///          &quot;Rename&quot;:&quot;Top Hat Right&quot;,
-        ///          &quot;Hint&quot;:&quot;Top Hat&quot;
+        ///          &quot;IconOnly&quot;:true,
+        ///          &quot;Name&quot;:&quot;Square&quot;,
+        ///          &quot;Icon&quot;:&quot;[ps4Square]&quot;
         ///        },
         ///        &quot;Joy_2&quot;:
         ///        {
-        ///          &quot;Rename&quot;:&quot;Top Hat Down&quot;,
-        ///          &quot;Hint&quot;:&quot;Top Hat&quot;
+        ///          &quot;IconOnly&quot;:true,
+        ///          &quot;Name&quot;:&quot;Cross&quot;,
+        ///          &quot;Icon&quot;:&quot;[ps4Cross]&quot;
         ///        },
         ///        &quot;Joy_3&quot;:
         ///        {
-        ///          &quot;Rename&quot;:&quot;Top Hat Left&quot;,
-        ///          &quot;Hint&quot;:&quot;Top Hat&quot;
-        ///        },
-        ///        &quot;Joy_4&quot;:
-        ///  [rest of string was truncated]&quot;;.
+        ///          &quot;IconOnly&quot;: [rest of string was truncated]&quot;;.
         /// </summary>
         public static string defkeynames {
             get {
@@ -132,9 +131,9 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ELITE DANGEROUS DISCOVERY TERMS AND CONDITIONS â€“ December 2023
+        ///   Looks up a localized string similar to ELITE DANGEROUS DISCOVERY TERMS AND CONDITIONS – September 2026
         ///1. This code is licensed under the Apache License Version 2.0, January 2004.  See below for the Apache license.
-        ///2. DOWNLOADING OF DATA FROM GITHUB.COM/EDDISCOVERY.  From this site, EDD automatically checks at start up for the following information: New releases, Updated Bookmarks, New Expeditions, New Exploration list files, Updated Maps, Notifications.  It automatically downloads to your APPDATA folder any new or updated files detected.  No [rest of string was truncated]&quot;;.
+        ///2. DOWNLOADING OF DATA FROM GITHUB.COM/EDDISCOVERY.  From this site, EDD automatically checks at start up for the following information: New releases, Updated Bookmarks, New Expeditions, New Exploration list files, Updated Maps, Notifications.  It automatically downloads to your APPDATA folder any new or updated files detected.  Non [rest of string was truncated]&quot;;.
         /// </summary>
         public static string EDD_Licence_Mono {
             get {
@@ -143,8 +142,8 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {\rtf1\adeflang1025\ansi\ansicpg1252\uc1\adeff0\deff0\stshfdbch0\stshfloch31506\stshfhich31506\stshfbi31506\deflang2057\deflangfe2057\themelang2057\themelangfe0\themelangcs0{\fonttbl{\f0\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f34\fbidi \froman\fcharset0\fprq2{\*\panose 02040503050406030204}Cambria Math;}
-        ///{\f37\fbidi \fswiss\fcharset0\fprq2{\*\panose 020f0502020204030204}Calibri;}{\flomajor\f31500\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to {\rtf1\adeflang1025\ansi\ansicpg1252\uc1\adeff0\deff0\stshfdbch0\stshfloch31506\stshfhich31506\stshfbi31506\deflang2057\deflangfe2057\themelang2057\themelangfe0\themelangcs0{\fonttbl{\f0\fbidi \froman\fcharset0\fprq2{\*\panose 02020603050405020304}Times New Roman;}{\f2\fbidi \fmodern\fcharset0\fprq1{\*\panose 02070309020205020404}Courier New;}
+        ///{\f3\fbidi \froman\fcharset2\fprq2{\*\panose 05050102010706020507}Symbol;}{\f10\fbidi \fnil\fcharset2\fprq2{\*\panose 05000000000000000000}Wingdings;}{\f34\fbidi \fr [rest of string was truncated]&quot;;.
         /// </summary>
         public static string EDD_License {
             get {
@@ -159,6 +158,16 @@ namespace EDDiscovery.Properties {
             get {
                 object obj = ResourceManager.GetObject("edlogo_3mo_icon", resourceCulture);
                 return ((System.Drawing.Icon)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        public static byte[] edsmgmo {
+            get {
+                object obj = ResourceManager.GetObject("edsmgmo", resourceCulture);
+                return ((byte[])(obj));
             }
         }
         

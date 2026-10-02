@@ -57,19 +57,6 @@ namespace EDDiscovery
         {
             Task.Factory.StartNew(() =>
             {
-                // if we have a edsm gmo file, but its out of date, refresh it for next time, do it in background thread since not critical.
-                string gmofile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "galacticmapping.json");
-
-                if (File.Exists(gmofile) && DateTime.UtcNow.Subtract(SystemsDatabase.Instance.GetEDSMGalMapLast()).TotalDays >= 7)
-                {
-                    LogLine("Get galactic mapping from EDSM.".Tx());
-                    System.Diagnostics.Trace.WriteLine($"Download EDSM file background");
-                    if (EDSMClass.DownloadGMOFileFromEDSM(gmofile,cancel))
-                        SystemsDatabase.Instance.SetEDSMGalMapLast(DateTime.UtcNow);
-                    System.Diagnostics.Trace.WriteLine($"Download GEC file background");
-
-                }
-
                 // if we have a gec file, but its out of date, refresh it for next time, do it in background thread since not critical.
                 string gecfile = Path.Combine(EDDOptions.Instance.AppDataDirectory, "gecmapping.json");
 
