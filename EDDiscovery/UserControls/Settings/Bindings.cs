@@ -49,7 +49,7 @@ namespace EDDiscovery.UserControls
             bindingsEditor.ResetKeyNames += () =>
             {
                 string defnames2 = Properties.Resources.defkeynames;            // reset the set to the program default
-                keynames.Set(defnames2);
+                DiscoveryForm.DeviceKeyNames.Set(defnames2);
             };
 
             bindingsEditor.DeviceInput += (bf, entry) =>
@@ -86,22 +86,7 @@ namespace EDDiscovery.UserControls
             };
 
 
-            string userset = GetSettingGlobal("DeviceKeyNames", "{}");
-            keynames.Set(userset);
-
-            // we ship with a set, if its not present in the user set, update the user set
-            string defnames = Properties.Resources.defkeynames;
-            DeviceKeyNames defrenames = new DeviceKeyNames();
-            defrenames.Set(defnames);
-            foreach (DeviceKeyNames.DeviceNameSet key in defrenames)
-            {
-                if (keynames.GetDevice(key.Device) == null)
-                {
-                    keynames.Add(key);
-                }
-            }
-
-            bindingsEditor.Init(EDDOptions.Instance.FrontierBindingsFolder, frontierpresetfilebindingfilename, DiscoveryForm.GetPhysicalDeviceList(), keynames);
+            bindingsEditor.Init(EDDOptions.Instance.FrontierBindingsFolder, frontierpresetfilebindingfilename, DiscoveryForm.GetPhysicalDeviceList(), DiscoveryForm.DeviceKeyNames);
 
             DiscoveryForm.OnInputDeviceChange += DiscoveryForm_OnInputDeviceChange;
         }
@@ -115,8 +100,6 @@ namespace EDDiscovery.UserControls
         protected override void Closing()
         {
             DiscoveryForm.OnInputDeviceChange -= DiscoveryForm_OnInputDeviceChange;
-            string json = keynames.Get();
-            PutSettingGlobal("DeviceKeyNames", json);
         }
 
         // called when main programd detects a controller changegf
@@ -137,7 +120,5 @@ namespace EDDiscovery.UserControls
 
             return true;
         }
-
-        DeviceKeyNames keynames = new DeviceKeyNames();
     }
 }

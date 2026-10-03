@@ -44,6 +44,8 @@ namespace EDDiscovery
         public ExtendedControls.ThemeList ThemeList { get; private set; }
 
         public EliteDangerousCore.Bindings.BindingsFile FrontierBindings { get; private set; }
+        public EliteDangerousCore.Bindings.DeviceKeyNames DeviceKeyNames { get; private set; }
+
         public InputDeviceList InputDeviceList { get; private set; }
         private Tuple<string, DateTime, int> FrontierStartPresetFile { get; set; }
 
@@ -123,6 +125,7 @@ namespace EDDiscovery
         private AudioExtensions.AudioQueue audioqueuespeech;
         private AudioExtensions.SpeechSynthesizer speechsynth;
 
+        private const string dbKeyNames = "DeviceKeyNames";
 
         private Dictionary<string, string> installdeinstallsettings;
 
@@ -417,9 +420,28 @@ namespace EDDiscovery
                 InputDeviceList.Start();
             }
 
-            FrontierBindings = new EliteDangerousCore.Bindings.BindingsFile(null);      // start with nothing, load will reset physical devices
 
-            LoadFrontierBindings();     // load the bindings into EDD
+            {
+                FrontierBindings = new EliteDangerousCore.Bindings.BindingsFile(null);      // start with nothing, load will reset physical devices
+                string userset = EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(dbKeyNames, "{}");
+                DeviceKeyNames = new EliteDangerousCore.Bindings.DeviceKeyNames();
+                DeviceKeyNames.Set(userset);
+
+                // we ship with a set, if its not present in the user set, update the user set
+                string defnames = Properties.Resources.defkeynames;
+                var defrenames = new EliteDangerousCore.Bindings.DeviceKeyNames();
+                defrenames.Set(defnames);
+
+                foreach (var key in defrenames)
+                {
+                    if (DeviceKeyNames.GetDevice(key.Device) == null)
+                    {
+                        DeviceKeyNames.Add(key);
+                    }
+                }
+
+                LoadFrontierBindings();     // load the bindings into EDD
+            }
 
             System.Diagnostics.Trace.WriteLine($"EDDInit {BaseUtils.AppTicks.TickCountLap()} EDF Load action controller");
 
@@ -973,6 +995,8 @@ namespace EDDiscovery
 
             string persistentvars = actioncontroller.CloseDown();
             EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("UserGlobalActionVars", persistentvars);
+
+            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(dbKeyNames, DeviceKeyNames.Get());
 
             DLLManager.UnLoad();
 

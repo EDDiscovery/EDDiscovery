@@ -555,7 +555,7 @@ namespace EDDiscovery
             {
                 if (FrontierBindings.NonPhysicalDevicesInUse)
                 {
-                    LogLineHighlight($"Loaded Bindings file but with missing physical devices in bindings, bindings will not load in Elite! : {string.Join(",",FrontierBindings.DeviceList.Where(x=>!x.PhysicalDevice).Select(x=>x.BetterName))}");
+                    LogLineHighlight($"Loaded Bindings file but with missing physical devices in bindings, bindings will not load in Elite! : {string.Join(",",FrontierBindings.DeviceList.Where(x=>!x.PhysicalDevice).Select(x=>DeviceKeyNames.GetDeviceNameOrFrontierName(x.FrontierName)))}");
                     return;
                 }
                 else
