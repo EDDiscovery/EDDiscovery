@@ -476,6 +476,7 @@
     <EmbeddedResource Include="Controls\notfirstdiscover.png" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Journal\MarketID.png" />
     <EmbeddedResource Include="Journal\GameModeChange.png" />
     <EmbeddedResource Include="Journal\LaunchVessel.png" />
     <EmbeddedResource Include="Panels\Bindings.png" />
