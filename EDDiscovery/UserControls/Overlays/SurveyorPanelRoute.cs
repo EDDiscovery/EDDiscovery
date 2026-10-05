@@ -38,7 +38,9 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor draw route {sys?.Name}");
 
-            string lastroutetext = "No System Info";
+            string lastroutetext = RouteTrackerWithoutRoute
+                ? "No route selected. Choose a route using the route button.".Tx()
+                : "No System Info".Tx();
 
             SavedRouteClass.ClosestInfo closest = null;
 
@@ -65,7 +67,7 @@ namespace EDDiscovery.UserControls
 
                         //System.Diagnostics.Debug.WriteLine($"Surveyor: {closest.lastsystem?.Name}->{closest.nextsystem?.Name} {closest.waypoint} distance to {closest.disttowaypoint} dev {closest.deviation} cuml after wp {closest.cumulativewpdist} inc wp {distleft} route {routedistance}");
 
-                        lastroutetext = $"{currentRoute.Name} {currentRoute.Systems.Count} WPs, {routedistance:N1}ly -> {closest.finalsystem.Name}";
+                        lastroutetext = String.Format("{0}: {1} WPs, {2:N1}ly -> {3}".Tx(), currentRoute.Name, currentRoute.Systems.Count, routedistance, closest.finalsystem.Name);
 
                         string jumpmsg = "";
                         if (IsSet(RouteControl.showJumps))
@@ -219,8 +221,10 @@ namespace EDDiscovery.UserControls
             dropdown.Items = list;
             dropdown.FlatStyle = FlatStyle.Popup;
             dropdown.PositionBelow(sender as Control);
+            int menuGeneration = commanderGeneration;
             dropdown.SelectedIndexChanged += (s, ea, key) =>
             {
+                if (menuGeneration != commanderGeneration) return;
                 if (dropdown.SelectedIndex == 0)    // off
                 {
                     LoadRoute("");
@@ -246,6 +250,7 @@ namespace EDDiscovery.UserControls
         private void LoadRoute(string name, int manualpos = -1)
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Order load of route '{name}'");
+            lastsystemonroute = null;
             PutSetting(dbRouteName, name);      // store back the current name - this is used to wipe out a route with LoadRoute("")
 
             //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} In DB its now '{GetSetting(dbRouteName,"???")}'");
@@ -267,7 +272,7 @@ namespace EDDiscovery.UserControls
                                 Select(rt => new SavedRouteClass.SystemEntry(rt.StarSystem, "", rt.StarPos.X, rt.StarPos.Y, rt.StarPos.Z)).ToList();
 
                         currentRoute = new SavedRouteClass(translatednavroutename, systems);      // with an ID of -1 note, used to detect navroutes
-                        currentRouteManualTarget = manualpos;
+                        currentRouteManualTarget = currentRoute != null && manualpos >= 0 && manualpos < currentRoute.Systems.Count ? manualpos : -1;
                         //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Loaded Nav route with {systems.Length}");
                     }
                     else
@@ -282,7 +287,7 @@ namespace EDDiscovery.UserControls
                     var savedroutes = SavedRouteClass.GetAllSavedRoutes();      // load routes
                     currentRoute = savedroutes.Find(x => x.Name == name);       // pick, if not found, will be null
                     currentRoute?.FillInCoordinates();                           // fill in any co-ords into DB - it may be in the DB without known co-ords
-                    currentRouteManualTarget = manualpos;
+                    currentRouteManualTarget = currentRoute != null && manualpos >= 0 && manualpos < currentRoute.Systems.Count ? manualpos : -1;
                     //System.Diagnostics.Debug.WriteLine($"Surveyor {displaynumber} Loaded route with {currentRoute?.Systems.Count}");
                 }
             }
@@ -331,8 +336,10 @@ namespace EDDiscovery.UserControls
             displayfilter.UC.ScreenMargin = new Size(0, 0);
             displayfilter.CloseBoundaryRegion = new Size(32, ((Control)sender).Height);
 
+            int menuGeneration = commanderGeneration;
             displayfilter.SaveSettings = (s, o) =>
             {
+                if (menuGeneration != commanderGeneration) return;
                 routecontrolsettings = s;
                 PutSetting(dbroutecontrol, s);
                 DrawRoute(cur_sys);

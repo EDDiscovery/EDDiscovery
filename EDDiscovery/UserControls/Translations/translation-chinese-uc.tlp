@@ -44,7 +44,7 @@ FCAA3EA68677B6: "Target Faction" => "目标派系"
 2A4D800653DEFF: "Select Campaign to view" => "选择要浏览的战役"
 986756D007F78B: "Edit user defined campaign" => "编辑用户创建的战役"
 52DF2DF585563D: "Show grid when in transparent mode" => "透明模式下显示网格"
-C0BEED0FD04454: "No Target" @
+C0BEED0FD04454: "No Target" => "无目标"
 1F0D021C027337: "New Campaign" => "新建战役"
 FDCE09ED980672: "Since Last Dock" => "自最近降落后"
 17395737697D96: "Give name to campaign" => "给战役输入名称"
@@ -144,7 +144,7 @@ ADC4E96A478BE0: "Sort" => "取消排序"
 SECTION UserControlDiscoveries
 
 4CC658129E454D: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "输入文本以搜索所有的域"
-B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" @
+B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" => "从扫描搜索面板中选择要搜索的发现"
 
 SECTION SearchStars
 
@@ -391,17 +391,17 @@ A6F528EE452953: "Show system info always" @
 26B6A73ABC8985: "Show scan summary always" @
 0C958474BD3F89: "Show star class in system info" @
 38F6C10BC38855: "Show dividers" @
-7CCD13400121F3: "Planet Filter" @
-7AA20A2EFC7BB6: "Star Filter" @
-274A5199553A8D: "Display Settings" @
-7F8C5176C3F03B: "Alignment" @
-B97C4D4CDDF23E: "Font" => "编辑主题改变颜色和字体"
-7E65928ECE63CA: "FSS Signal Selection" @
-23048BC1AE69FE: "Word Wrap" @
-1BB6C810B1DA16: "Select route to follow" @
-524DD2CDBBAD94: "Route Settings" @
-B10CFFF10BABC0: "Nav Route" @
-9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
+7CCD13400121F3: "Planet Filter" => "行星筛选"
+7AA20A2EFC7BB6: "Star Filter" => "恒星筛选"
+274A5199553A8D: "Display Settings" => "显示设置"
+7F8C5176C3F03B: "Alignment" => "文本对齐"
+B97C4D4CDDF23E: "Font" => "字体"
+7E65928ECE63CA: "FSS Signal Selection" => "FSS 信号选择"
+23048BC1AE69FE: "Word Wrap" => "自动换行"
+1BB6C810B1DA16: "Select route to follow" => "选择要跟踪的航线"
+524DD2CDBBAD94: "Route Settings" => "航线设置"
+B10CFFF10BABC0: "Nav Route" => "导航航线"
+9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => "平均 {0:N1} 光年，余油 {1:N1} 光年，续航 {2:N1} 光年"
 B37E90C8789813: "List signals to display, semicolon seperated" @
 
 SECTION MissionListUserControl
@@ -558,26 +558,26 @@ DE6A8B4B96A80A: "Copy the target system to end route entry" => "将目标星系�
 
 SECTION UserControlRouteTracker
 
-0BA3B547C8344B: "Show Bookmark Notes" @
-DF44D515D3D0A7: "Show Jumps To Go" => "显示所需的FSD跳跃次数"
+0BA3B547C8344B: "Show Bookmark Notes" => "显示书签备注"
+DF44D515D3D0A7: "Show Jumps To Go" => "显示剩余跃迁次数"
 DA8C8F2A82D1B3: "Show Waypoint Coordinates" => "显示航点坐标"
-9068E91DD59D7E: "Show Deviation from route" => "显示距航线的偏差"
-0E41D824E76FFC: "Auto copy waypoint" => "自动复制航点"
+9068E91DD59D7E: "Show Deviation from route" => "显示航线偏差"
+0E41D824E76FFC: "Auto copy waypoint" => "自动复制下一个星系"
 47A9634A94F762: "Auto set target" => "自动设置目标"
-E732DB70301B2D: "Show Route Note on waypoint" @
-F01A41B43B8868: "Show Target Information" @
-79A125B4CFF3BE: "Show Fuel Information" @
-271E9A568C0E9E: "jump" => "次跳跃"
-24C1C17E2C811B: "To First WP " => "至下一个航点："
-EDA92612CF2474: "jumps" => "次跳跃"
-8212F4935A232D: "From Last WP " => "自上一个航点："
-DD0341E14022F3: ", Left {0:N1}ly" => "，剩余 {0:N1}Lj"
-DF5C9749BAE618: "(WP {0})" => "至航点 {0}"
-F01632B2B22D3F: " No Ship FSD Information" => " 无此飞船的FSD参数信息"
-2DA19892882702: ", Dev {0:N1}ly" => ", 偏航 {0:N1}ly"
-CEE17FB4380701: "Route contains no waypoints" => "此航线不包含任何航点"
-C415DA3D51A1E9: "No systems in route have known co-ords" => "此航线中没有任何已知坐标的星系"
-33F6E6F622B613: "Note: {0}" @
+E732DB70301B2D: "Show Route Note on waypoint" => "显示航点备注"
+F01A41B43B8868: "Show Target Information" => "显示目标信息"
+79A125B4CFF3BE: "Show Fuel Information" => "显示燃料信息"
+271E9A568C0E9E: "jump" => "次跃迁"
+24C1C17E2C811B: "To First WP " => "前往第一个航点 "
+EDA92612CF2474: "jumps" => "次跃迁"
+8212F4935A232D: "From Last WP " => "从最后一个航点出发 "
+DD0341E14022F3: ", Left {0:N1}ly" => "，剩余 {0:N1} 光年"
+DF5C9749BAE618: "(WP {0})" => "（航点 {0}）"
+F01632B2B22D3F: " No Ship FSD Information" => " 无飞船 FSD 信息"
+2DA19892882702: ", Dev {0:N1}ly" => "，偏离 {0:N1} 光年"
+CEE17FB4380701: "Route contains no waypoints" => "航线不包含航点"
+C415DA3D51A1E9: "No systems in route have known co-ords" => "航线中所有星系的坐标均未知"
+33F6E6F622B613: "Note: {0}" => "备注：{0}"
 
 SECTION UserControlScan
 
@@ -1418,3 +1418,8 @@ F5EDA1B11AFA0F: "Cycle" @
 50944E656EBC33: "Copy Merits" @
 0AFA5205B52671: "Copy Merits Report" @
 DC521442E6AC91: "Copy System Name" @
+EE1666AAB7AAC5: "No route selected. Choose a route using the route button." => "未选择航线。请使用航线选择按钮选择航线。"
+F657602F1C63C3: "No System Info" => "无星系信息"
+DD12F3D8212DF7: "{0}: {1} WPs, {2:N1}ly -> {3}" => "{0}：{1} 个航点，{2:N1} 光年 -> {3}"
+06391711DD1177: "No known system" => "无已知星系"
+D79901037CD562: "Target: {0} {1:N1}ly {2}" => "目标：{0} {1:N1} 光年 {2}"

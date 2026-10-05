@@ -766,6 +766,7 @@
     <Compile Include="UserControls\Overlays\UserControlSpanel.Designer.cs">
       <DependentUpon>UserControlSpanel.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserControls\Overlays\RouteTrackerSettings.cs" />
     <Compile Include="UserControls\Overlays\SurveyorPanel.cs">
       <SubType>UserControl</SubType>
     </Compile>

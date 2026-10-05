@@ -37,6 +37,7 @@ namespace EDDiscovery.UserControls
         }
         protected override void Init()
         {
+            SelectCommander(false);
             edsmSpanshButton.Init(this, "EDSMSpansh", "");
             edsmSpanshButton.ValueChanged += (s, ch) =>
             {
@@ -63,7 +64,7 @@ namespace EDDiscovery.UserControls
 
             displayfont = BaseUtils.FontHandler.GetFontFromSetting(GetSetting(dbFont, ""), null);        // null if not set
 
-            LoadRoute(GetSetting("route", ""));
+            LoadRoute(GetSetting(dbRouteName, ""), GetSetting(dbRouteManualPos, -1));
             routecontrolsettings = GetSetting(dbroutecontrol, "showJumps;showwaypoints;shownotetext");
 
             rollUpPanelTop.PinState = GetSetting(dbpinstate, true);
@@ -74,6 +75,7 @@ namespace EDDiscovery.UserControls
 
         protected override void InitialDisplay()
         {
+            DrawRoute(cur_sys);
             RequestPanelOperation(this, new UserControlCommonBase.RequestHistoryGridPos());     //request an update 
             SetVisibility();
             doresize = true;                            // now allow resizing actions, before, resizes were due to setups, now due to user interactions
@@ -81,9 +83,11 @@ namespace EDDiscovery.UserControls
 
         protected override void Closing()
         {
-            drawsystemupdatetimer.Stop();
+            if (DiscoveryForm == null) return;
+            drawsystemupdatetimer?.Stop();
 
             PutSetting(dbpinstate, rollUpPanelTop.PinState);
+            PutSetting(dbRouteManualPos, currentRoute != null ? currentRouteManualTarget : -1);
 
             DiscoveryForm.OnNewUIEvent -= Discoveryform_OnNewUIEvent;
             DiscoveryForm.OnHistoryChange -= Discoveryform_OnHistoryChange;
@@ -95,6 +99,7 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnHistoryChange()
         {
+            SelectCommander(true);
             var hl = DiscoveryForm.History;
             cur_sys = hl.GetLast?.System;      // may be null
             shipfsdinfo = hl.GetLast?.GetJumpInfo(DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(hl.GetLast.MaterialCommodity));
@@ -113,6 +118,8 @@ namespace EDDiscovery.UserControls
 
         private void Discoveryform_OnNewEntry(HistoryEntry he)
         {
+            SelectCommander(true);
+            if (this is UserControlRouteTracker) ReceiveHistoryEntry(he);
             // received a new navroute, and we have navroute selected (-1), reload
             if (he.EntryType == JournalTypeEnum.NavRoute && currentRoute != null && currentRoute.Id == -1)
             {
@@ -186,6 +193,8 @@ namespace EDDiscovery.UserControls
         }
 
         // normally we use uistate/uimode to determine if the output is visible. We can override this, for use when transparent mode is on but its not transparent
+        private bool RouteTrackerWithoutRoute => this is UserControlRouteTracker && currentRoute == null;
+
         private void SetVisibility(bool overrideon = false)
         {
             bool showit = true;
@@ -200,12 +209,12 @@ namespace EDDiscovery.UserControls
             }
 
             //System.Diagnostics.Debug.WriteLine($"Surveyor Visibility uimode {uimode} uistate {uistate} Visibility {showit} route {currentRoute!=null}");
-            extPictureBoxScrollSystemDetails.Visible = showit;
-            extPictureBoxScanSummary.Visible = IsSet(CtrlList.showscansum) && showit;
-            extPictureBoxTitle.Visible = IsSet(CtrlList.showsysinfo) && showit;
-            extPictureBoxRoute.Visible = currentRoute != null && showit;
-            extPictureBoxTarget.Visible = showit && IsSet(RouteControl.showtarget) && TargetClass.IsTargetSet();
-            extPictureBoxFuel.Visible = IsSet(RouteControl.showfuel) && showit;
+            extPictureBoxScrollSystemDetails.Visible = showit && !RouteTrackerWithoutRoute;
+            extPictureBoxScanSummary.Visible = IsSet(CtrlList.showscansum) && showit && !RouteTrackerWithoutRoute;
+            extPictureBoxTitle.Visible = IsSet(CtrlList.showsysinfo) && showit && !RouteTrackerWithoutRoute;
+            extPictureBoxRoute.Visible = (currentRoute != null || RouteTrackerWithoutRoute) && showit;
+            extPictureBoxTarget.Visible = showit && !RouteTrackerWithoutRoute && IsSet(RouteControl.showtarget) && TargetClass.IsTargetSet();
+            extPictureBoxFuel.Visible = IsSet(RouteControl.showfuel) && showit && !RouteTrackerWithoutRoute;
         }
 
         private void UserControlSurveyor_Resize(object sender, EventArgs e)
@@ -220,6 +229,9 @@ namespace EDDiscovery.UserControls
         // travelgrid sends this when cursor position changes, either up or down
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
+            if (he == null) return;
+            if (this is UserControlRouteTracker && !Object.ReferenceEquals(DiscoveryForm.History.GetLast, he)) return;
+            SelectCommander(true);
             // something has changed and just blindly for now recalc the fsd info
             shipfsdinfo = he.GetJumpInfo(DiscoveryForm.History.MaterialCommoditiesMicroResources.CargoCount(he.MaterialCommodity));
             shipinfo = he.ShipInformation;
@@ -425,6 +437,8 @@ namespace EDDiscovery.UserControls
         // calculate then draw the scan summmary info. Await
         private async void CalculateThenDrawScanSummary(ISystem sys)
         {
+            if (RouteTrackerWithoutRoute) return;
+            int calculationGeneration = commanderGeneration;
             // System.Diagnostics.Debug.WriteLine($"Surveyor scan summary ${sys?.Name}");
 
             scansummarytext = "";
@@ -432,7 +446,7 @@ namespace EDDiscovery.UserControls
             if (sys != null)
             {
                 var systemnode = await DiscoveryForm.History.StarScan2.FindSystemAsync(sys, edsmSpanshButton.WebLookup);        // get data with EDSM
-                if (IsClosed)   // may close during await..
+                if (IsClosed || calculationGeneration != commanderGeneration || RouteTrackerWithoutRoute)   // may close during await..
                     return;
 
                 if (sys != cur_sys)
@@ -478,6 +492,8 @@ namespace EDDiscovery.UserControls
         // recalc the system drawSystem* values, then lock, set the locals above, then lock draw
         async private void CalculateThenDrawSystemSignals(ISystem sys)
         {
+            if (RouteTrackerWithoutRoute) return;
+            int calculationGeneration = commanderGeneration;
             System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor {DisplayNumber} calc system {sys?.Name}");
 
             SortedList<string, string> ldrawsystemtext = new SortedList<string, string>(new CollectionStaticHelpers.AlphaIntCompare<string>());
@@ -525,7 +541,7 @@ namespace EDDiscovery.UserControls
                             // await is horrible, anything can happen, even closing
                             await HistoryListQueries.Instance.Find(helist, searchresults, searchname, defaultvars, DiscoveryForm.History.StarScan2, false); // execute the searches
 
-                            if (IsClosed)       // if we was ordered to close, abore
+                            if (IsClosed || calculationGeneration != commanderGeneration || RouteTrackerWithoutRoute)       // if we was ordered to close, abore
                                 return;
 
                         }
@@ -542,7 +558,7 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Debug.WriteLine($"{Environment.TickCount % 10000} Surveyor Find System Async {sys.Name}");
 
                 var systemnode = await DiscoveryForm.History.StarScan2.FindSystemAsync(sys, edsmSpanshButton.WebLookup);       
-                if (IsClosed)   // may close during await..
+                if (IsClosed || calculationGeneration != commanderGeneration || RouteTrackerWithoutRoute)   // may close during await..
                     return;
 
                 // produce body event triggers only if we have seen events, so don't produce them on startup
@@ -822,7 +838,7 @@ namespace EDDiscovery.UserControls
 
             }       // end sys
 
-            if (sys != cur_sys)
+            if (IsClosed || calculationGeneration != commanderGeneration || RouteTrackerWithoutRoute || sys != cur_sys)
             {
                 System.Diagnostics.Debug.WriteLine($"{Environment.TickCount%10000} Surveyor Cancelled CalculateThenDrawSystemSignals as cursys has changed during await");
                 return;
@@ -1008,7 +1024,7 @@ namespace EDDiscovery.UserControls
     {
         public UserControlRouteTracker() : base()
         {
-            DBBaseName = "RouteTracker";
+            DBBaseName = "RouteTracker_Pending_";
         }
 
         protected override bool DefaultSetting(CtrlList e)

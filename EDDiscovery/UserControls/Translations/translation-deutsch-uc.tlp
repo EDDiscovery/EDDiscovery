@@ -144,7 +144,7 @@ ADC4E96A478BE0: "Sort" => "Sortieren"
 SECTION UserControlDiscoveries
 
 4CC658129E454D: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Spezifiziere einen Suchterm um Zelleninhalte zu filtern. Verfügbar sind system:<Platzhalter>, body:<Platzhalter>, station:<Platzhalter> und stationfaction:<Platzhalter> um Ereignisse die diesen Parametern zugewiesen sind zu filtern"
-B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" => "Wähle Entdeckungen um danach zu suchen, Liste wird aus dem Suchpanel übernommen"
+B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" => "Suchabfragen für Entdeckungen aus der Scan-Suche auswählen"
 
 SECTION SearchStars
 
@@ -392,16 +392,16 @@ A6F528EE452953: "Show system info always" => "Systeminformation immer anzeigen"
 0C958474BD3F89: "Show star class in system info" => "Zeige Sternenklasse in Systeminformation"
 38F6C10BC38855: "Show dividers" => "Zeige Unterteiler"
 7CCD13400121F3: "Planet Filter" => "Planetenfilter"
-7AA20A2EFC7BB6: "Star Filter" => "Sternenfilter"
+7AA20A2EFC7BB6: "Star Filter" => "Sternfilter"
 274A5199553A8D: "Display Settings" => "Anzeigeeinstellungen"
-7F8C5176C3F03B: "Alignment" => "Ausrichtung"
+7F8C5176C3F03B: "Alignment" => "Textausrichtung"
 B97C4D4CDDF23E: "Font" => "Schriftart"
-7E65928ECE63CA: "FSS Signal Selection" => "VSS-Signalauswahl"
+7E65928ECE63CA: "FSS Signal Selection" => "FSS-Signalauswahl"
 23048BC1AE69FE: "Word Wrap" => "Zeilenumbruch"
-1BB6C810B1DA16: "Select route to follow" => "Wähle zu verfolgende Route"
+1BB6C810B1DA16: "Select route to follow" => "Route zum Verfolgen auswählen"
 524DD2CDBBAD94: "Route Settings" => "Routeneinstellungen"
-B10CFFF10BABC0: "Nav Route" => "Nav-Route"
-9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => "Halber Tank {0:N1} Lj, Maximum {1:N1} Lj, Reichweite {2:N1} Lj"
+B10CFFF10BABC0: "Nav Route" => "Navigationsroute"
+9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => "Mittel {0:N1} Lj, mit Resttreibstoff {1:N1} Lj, Reichweite {2:N1} Lj"
 B37E90C8789813: "List signals to display, semicolon seperated" => "Trage anzuzeigende Signale ein, Semikolon als Trennzeichen"
 
 SECTION MissionListUserControl
@@ -558,25 +558,25 @@ DE6A8B4B96A80A: "Copy the target system to end route entry" => "Kopiere das Ziel
 
 SECTION UserControlRouteTracker
 
-0BA3B547C8344B: "Show Bookmark Notes" => "Zeige Lesezeichennotizen"
-DF44D515D3D0A7: "Show Jumps To Go" => "Zeige restliche Sprünge"
-DA8C8F2A82D1B3: "Show Waypoint Coordinates" => "Zeige Koordinaten des Wegpunktes"
-9068E91DD59D7E: "Show Deviation from route" => "Zeige Abweichung von der Route"
-0E41D824E76FFC: "Auto copy waypoint" => "Wegpunkt automatisch kopieren"
+0BA3B547C8344B: "Show Bookmark Notes" => "Lesezeichennotizen anzeigen"
+DF44D515D3D0A7: "Show Jumps To Go" => "Verbleibende Sprünge anzeigen"
+DA8C8F2A82D1B3: "Show Waypoint Coordinates" => "Wegpunktkoordinaten anzeigen"
+9068E91DD59D7E: "Show Deviation from route" => "Abweichung von der Route anzeigen"
+0E41D824E76FFC: "Auto copy waypoint" => "Nächstes System automatisch kopieren"
 47A9634A94F762: "Auto set target" => "Ziel automatisch setzen"
-E732DB70301B2D: "Show Route Note on waypoint" => "Zeige Routennotiz am Wegpunkt"
-F01A41B43B8868: "Show Target Information" => "Zeige Zielinformation"
-79A125B4CFF3BE: "Show Fuel Information" => "Zeige Treibstoffinformation"
+E732DB70301B2D: "Show Route Note on waypoint" => "Routennotiz am Wegpunkt anzeigen"
+F01A41B43B8868: "Show Target Information" => "Zielinformationen anzeigen"
+79A125B4CFF3BE: "Show Fuel Information" => "Treibstoffinformationen anzeigen"
 271E9A568C0E9E: "jump" => "Sprung"
-24C1C17E2C811B: "To First WP " => "Zum ersten Wegpunkt"
+24C1C17E2C811B: "To First WP " => "Zum ersten Wegpunkt "
 EDA92612CF2474: "jumps" => "Sprünge"
-8212F4935A232D: "From Last WP " => "Vom letzten Wegpunkt"
-DD0341E14022F3: ", Left {0:N1}ly" => ", übrig {0:N1}Lj"
-DF5C9749BAE618: "(WP {0})" => "(WP {0})"
-F01632B2B22D3F: " No Ship FSD Information" => " keine Schiffs-FSA-Information"
-2DA19892882702: ", Dev {0:N1}ly" => ", Abw {0:N1}Lj"
-CEE17FB4380701: "Route contains no waypoints" => "Route enthält keine Wegpunkte"
-C415DA3D51A1E9: "No systems in route have known co-ords" => "Kein System in der Route hat bekannte Koordinaten"
+8212F4935A232D: "From Last WP " => "Vom letzten Wegpunkt "
+DD0341E14022F3: ", Left {0:N1}ly" => ", verbleibend {0:N1} Lj"
+DF5C9749BAE618: "(WP {0})" => "(Wegpunkt {0})"
+F01632B2B22D3F: " No Ship FSD Information" => " Keine FSA-Informationen zum Schiff"
+2DA19892882702: ", Dev {0:N1}ly" => ", Abweichung {0:N1} Lj"
+CEE17FB4380701: "Route contains no waypoints" => "Die Route enthält keine Wegpunkte"
+C415DA3D51A1E9: "No systems in route have known co-ords" => "Für kein System der Route sind Koordinaten bekannt"
 33F6E6F622B613: "Note: {0}" => "Notiz: {0}"
 
 SECTION UserControlScan
@@ -1418,3 +1418,8 @@ F5EDA1B11AFA0F: "Cycle" @
 50944E656EBC33: "Copy Merits" @
 0AFA5205B52671: "Copy Merits Report" @
 DC521442E6AC91: "Copy System Name" @
+EE1666AAB7AAC5: "No route selected. Choose a route using the route button." => "Keine Route ausgewählt. Wählen Sie eine Route über die Routenauswahl."
+F657602F1C63C3: "No System Info" => "Keine Systeminformationen"
+DD12F3D8212DF7: "{0}: {1} WPs, {2:N1}ly -> {3}" => "{0}: {1} Wegpunkte, {2:N1} Lj -> {3}"
+06391711DD1177: "No known system" => "Kein bekanntes System"
+D79901037CD562: "Target: {0} {1:N1}ly {2}" => "Ziel: {0} {1:N1} Lj {2}"

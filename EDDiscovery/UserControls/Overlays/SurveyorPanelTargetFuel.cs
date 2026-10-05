@@ -32,7 +32,7 @@ namespace EDDiscovery.UserControls
         {
             //System.Diagnostics.Debug.WriteLine($"Surveyor draw target");
 
-            string lasttargettext = "No Target";
+            string lasttargettext = "No Target".Tx();
 
             if (TargetClass.GetTargetPosition(out string name, out double x, out double y, out double z))
             {
@@ -48,10 +48,10 @@ namespace EDDiscovery.UserControls
                             jumpstr = jumps.ToString() + " " + ((jumps == 1) ? "jump".Tx() : "jumps".Tx());
                     }
 
-                    lasttargettext = $"T-> {name} {dist:N1}ly {jumpstr}";
+                    lasttargettext = String.Format("Target: {0} {1:N1}ly {2}".Tx(), name, dist, jumpstr);
                 }
                 else
-                    lasttargettext = "No known system";
+                    lasttargettext = "No known system".Tx();
             }
 
             ClearThenDrawText(extPictureBoxTarget, lasttargettext);
@@ -110,7 +110,12 @@ namespace EDDiscovery.UserControls
         }
 
 
-        private int currentRouteManualTarget = -1;      // current route manual target
+        private int manualTarget = -1;
+        private int currentRouteManualTarget
+        {
+            get { return manualTarget; }
+            set { manualTarget = value; if (commanderId >= 0 && !loadingCommander) PutSetting(dbRouteManualPos, value); }
+        }      // current route manual target
 
 
     }

@@ -44,7 +44,7 @@ FCAA3EA68677B6: "Target Faction" @
 2A4D800653DEFF: "Select Campaign to view" @
 986756D007F78B: "Edit user defined campaign" @
 52DF2DF585563D: "Show grid when in transparent mode" @
-C0BEED0FD04454: "No Target" @
+C0BEED0FD04454: "No Target" => "No Target"
 1F0D021C027337: "New Campaign" @
 FDCE09ED980672: "Since Last Dock" @
 17395737697D96: "Give name to campaign" @
@@ -144,7 +144,7 @@ ADC4E96A478BE0: "Sort" @
 SECTION UserControlDiscoveries
 
 4CC658129E454D: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
-B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" @
+B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" => "Select discoveries to search for, taken from the search panel scan searches"
 
 SECTION SearchStars
 
@@ -391,17 +391,17 @@ A6F528EE452953: "Show system info always" @
 26B6A73ABC8985: "Show scan summary always" @
 0C958474BD3F89: "Show star class in system info" @
 38F6C10BC38855: "Show dividers" @
-7CCD13400121F3: "Planet Filter" @
-7AA20A2EFC7BB6: "Star Filter" @
-274A5199553A8D: "Display Settings" @
-7F8C5176C3F03B: "Alignment" @
-B97C4D4CDDF23E: "Font" @
-7E65928ECE63CA: "FSS Signal Selection" @
-23048BC1AE69FE: "Word Wrap" @
-1BB6C810B1DA16: "Select route to follow" @
-524DD2CDBBAD94: "Route Settings" @
-B10CFFF10BABC0: "Nav Route" @
-9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
+7CCD13400121F3: "Planet Filter" => "Planet Filter"
+7AA20A2EFC7BB6: "Star Filter" => "Star Filter"
+274A5199553A8D: "Display Settings" => "Display Settings"
+7F8C5176C3F03B: "Alignment" => "Alignment"
+B97C4D4CDDF23E: "Font" => "Font"
+7E65928ECE63CA: "FSS Signal Selection" => "FSS Signal Selection"
+23048BC1AE69FE: "Word Wrap" => "Word Wrap"
+1BB6C810B1DA16: "Select route to follow" => "Select route to follow"
+524DD2CDBBAD94: "Route Settings" => "Route Settings"
+B10CFFF10BABC0: "Nav Route" => "Nav Route"
+9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly"
 B37E90C8789813: "List signals to display, semicolon seperated" @
 
 SECTION MissionListUserControl
@@ -560,26 +560,26 @@ DE6A8B4B96A80A: "Copy the target system to end route entry" @
 
 SECTION UserControlRouteTracker
 
-0BA3B547C8344B: "Show Bookmark Notes" @
-DF44D515D3D0A7: "Show Jumps To Go" @
-DA8C8F2A82D1B3: "Show Waypoint Coordinates" @
-9068E91DD59D7E: "Show Deviation from route" @
-0E41D824E76FFC: "Auto copy waypoint" @
-47A9634A94F762: "Auto set target" @
-E732DB70301B2D: "Show Route Note on waypoint" @
-F01A41B43B8868: "Show Target Information" @
-79A125B4CFF3BE: "Show Fuel Information" @
-271E9A568C0E9E: "jump" @
-24C1C17E2C811B: "To First WP " @
-EDA92612CF2474: "jumps" @
-8212F4935A232D: "From Last WP " @
-DD0341E14022F3: ", Left {0:N1}ly" @
-DF5C9749BAE618: "(WP {0})" @
-F01632B2B22D3F: " No Ship FSD Information" @
-2DA19892882702: ", Dev {0:N1}ly" @
-CEE17FB4380701: "Route contains no waypoints" @
-C415DA3D51A1E9: "No systems in route have known co-ords" @
-33F6E6F622B613: "Note: {0}" @
+0BA3B547C8344B: "Show Bookmark Notes" => "Show Bookmark Notes"
+DF44D515D3D0A7: "Show Jumps To Go" => "Show Jumps To Go"
+DA8C8F2A82D1B3: "Show Waypoint Coordinates" => "Show Waypoint Coordinates"
+9068E91DD59D7E: "Show Deviation from route" => "Show Deviation from route"
+0E41D824E76FFC: "Auto copy waypoint" => "Auto copy waypoint"
+47A9634A94F762: "Auto set target" => "Auto set target"
+E732DB70301B2D: "Show Route Note on waypoint" => "Show Route Note on waypoint"
+F01A41B43B8868: "Show Target Information" => "Show Target Information"
+79A125B4CFF3BE: "Show Fuel Information" => "Show Fuel Information"
+271E9A568C0E9E: "jump" => "jump"
+24C1C17E2C811B: "To First WP " => "To First WP "
+EDA92612CF2474: "jumps" => "jumps"
+8212F4935A232D: "From Last WP " => "From Last WP "
+DD0341E14022F3: ", Left {0:N1}ly" => ", Left {0:N1}ly"
+DF5C9749BAE618: "(WP {0})" => "(WP {0})"
+F01632B2B22D3F: " No Ship FSD Information" => " No Ship FSD Information"
+2DA19892882702: ", Dev {0:N1}ly" => ", Dev {0:N1}ly"
+CEE17FB4380701: "Route contains no waypoints" => "Route contains no waypoints"
+C415DA3D51A1E9: "No systems in route have known co-ords" => "No systems in route have known co-ords"
+33F6E6F622B613: "Note: {0}" => "Note: {0}"
 
 SECTION UserControlScan
 
@@ -1425,3 +1425,8 @@ F5EDA1B11AFA0F: "Cycle" @
 50944E656EBC33: "Copy Merits" @
 0AFA5205B52671: "Copy Merits Report" @
 DC521442E6AC91: "Copy System Name" @
+EE1666AAB7AAC5: "No route selected. Choose a route using the route button." => "No route selected. Choose a route using the route button."
+F657602F1C63C3: "No System Info" => "No System Info"
+DD12F3D8212DF7: "{0}: {1} WPs, {2:N1}ly -> {3}" => "{0}: {1} WPs, {2:N1}ly -> {3}"
+06391711DD1177: "No known system" => "No known system"
+D79901037CD562: "Target: {0} {1:N1}ly {2}" => "Target: {0} {1:N1}ly {2}"

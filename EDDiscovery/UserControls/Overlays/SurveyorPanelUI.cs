@@ -59,7 +59,8 @@ namespace EDDiscovery.UserControls
         {
             ctrlset = GetSettingAsCtrlSet<CtrlList>(DefaultSetting);
             alignment = ctrlset[(int)CtrlList.alignright] ? StringAlignment.Far : ctrlset[(int)CtrlList.aligncenter] ? StringAlignment.Center : StringAlignment.Near;
-            string sat = GetSetting(dbSearchesText, HistoryListQueries.Instance.DefaultSearches(SettingsSplittingChar), true);
+            string defaultSearches = this is UserControlRouteTracker ? "" : HistoryListQueries.Instance.DefaultSearches(SettingsSplittingChar);
+            string sat = GetSetting(dbSearchesText, defaultSearches, true);
             searchesactivetext = sat.SplitNoEmptyStartFinish('\u2188');
             searchesactivevoice = GetSetting(dbSearchesVoice, sat, true).SplitNoEmptyStartFinish('\u2188');
         }
@@ -121,8 +122,10 @@ namespace EDDiscovery.UserControls
             displayfilter.UC.ScreenMargin = new Size(0, 0);
             displayfilter.UC.MultiColumnSlide = true;
 
+            int menuGeneration = commanderGeneration;
             displayfilter.SaveSettings = (s, o) =>
             {
+                if (menuGeneration != commanderGeneration) return;
                 PutSetting(dbSearchesText, displayfilter.GetChecked(0));
                 PutSetting(dbSearchesVoice, displayfilter.GetChecked(1));
                 PopulateCtrlList();
@@ -191,8 +194,10 @@ namespace EDDiscovery.UserControls
             displayfilter.UC.ScreenMargin = new Size(0, 0);
             displayfilter.UC.MultiColumnSlide = true;
 
+            int menuGeneration = commanderGeneration;
             displayfilter.SaveSettings = (s, o) =>
             {
+                if (menuGeneration != commanderGeneration) return;
                 if (saveasstring == null)
                     PutBoolSettingsFromString(s, displayfilter.UC.TagList());
                 else
@@ -211,7 +216,9 @@ namespace EDDiscovery.UserControls
 
         private void extButtonFont_Click(object sender, EventArgs e)
         {
+            int menuGeneration = commanderGeneration;
             Font f = BaseUtils.FontDialog.SelectFont(this.FindForm(), displayfont ?? this.Font, true);
+            if (menuGeneration != commanderGeneration) return;
             string setting = BaseUtils.FontHandler.GetFontSettingString(f);
             //System.Diagnostics.Debug.WriteLine($"Surveyor Font selected {setting}");
             PutSetting(dbFont, setting);
@@ -248,7 +255,9 @@ namespace EDDiscovery.UserControls
                 }
             };
 
+            int menuGeneration = commanderGeneration;
             DialogResult res = f.ShowDialogCentred(this.FindForm(), this.FindForm().Icon, "List signals to display, semicolon seperated".Tx(), closeicon: true);
+            if (menuGeneration != commanderGeneration) return;
             if (res == DialogResult.OK)
             {
                 fsssignalstodisplay = f.Get("Text");

@@ -44,7 +44,7 @@ FCAA3EA68677B6: "Target Faction" => "Frakcja będąca celem"
 2A4D800653DEFF: "Select Campaign to view" => "Zaznacz Kampanię do pokazania"
 986756D007F78B: "Edit user defined campaign" => "Edytuj kampanię zdefiniowaną przez użytkownika"
 52DF2DF585563D: "Show grid when in transparent mode" => "Pokaż siatkę gdy przezroczyste"
-C0BEED0FD04454: "No Target" => "Brak Celu"
+C0BEED0FD04454: "No Target" => "Brak celu"
 1F0D021C027337: "New Campaign" => "Nowa Kampania"
 FDCE09ED980672: "Since Last Dock" => "Od Ostatniego Dokowania"
 17395737697D96: "Give name to campaign" => "Nazwij kampanię"
@@ -144,7 +144,7 @@ ADC4E96A478BE0: "Sort" => "Sortieren"
 SECTION UserControlDiscoveries
 
 4CC658129E454D: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Spezifiziere einen Suchterm um Zelleninhalte zu filtern. Verfügbar sind system:<Platzhalter>, body:<Platzhalter>, station:<Platzhalter> und stationfaction:<Platzhalter> um Ereignisse die diesen Parametern zugewiesen sind zu filtern"
-B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" @
+B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" => "Wybierz wyszukiwania odkryć z panelu wyszukiwania skanów"
 
 SECTION SearchStars
 
@@ -391,17 +391,17 @@ A6F528EE452953: "Show system info always" @
 26B6A73ABC8985: "Show scan summary always" @
 0C958474BD3F89: "Show star class in system info" @
 38F6C10BC38855: "Show dividers" @
-7CCD13400121F3: "Planet Filter" @
-7AA20A2EFC7BB6: "Star Filter" @
-274A5199553A8D: "Display Settings" @
-7F8C5176C3F03B: "Alignment" => "Ausrichtung"
-B97C4D4CDDF23E: "Font" => "Schriftart"
-7E65928ECE63CA: "FSS Signal Selection" @
-23048BC1AE69FE: "Word Wrap" @
-1BB6C810B1DA16: "Select route to follow" @
-524DD2CDBBAD94: "Route Settings" @
-B10CFFF10BABC0: "Nav Route" => "Nav-Route"
-9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
+7CCD13400121F3: "Planet Filter" => "Filtr planet"
+7AA20A2EFC7BB6: "Star Filter" => "Filtr gwiazd"
+274A5199553A8D: "Display Settings" => "Ustawienia wyświetlania"
+7F8C5176C3F03B: "Alignment" => "Wyrównanie tekstu"
+B97C4D4CDDF23E: "Font" => "Czcionka"
+7E65928ECE63CA: "FSS Signal Selection" => "Wybór sygnałów FSS"
+23048BC1AE69FE: "Word Wrap" => "Zawijanie tekstu"
+1BB6C810B1DA16: "Select route to follow" => "Wybierz trasę do śledzenia"
+524DD2CDBBAD94: "Route Settings" => "Ustawienia trasy"
+B10CFFF10BABC0: "Nav Route" => "Trasa z mapy galaktyki"
+9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => "Śr. {0:N1} lś, na resztce paliwa {1:N1} lś, zasięg {2:N1} lś"
 B37E90C8789813: "List signals to display, semicolon seperated" @
 
 SECTION MissionListUserControl
@@ -558,26 +558,26 @@ DE6A8B4B96A80A: "Copy the target system to end route entry" => "Kopiuj układ do
 
 SECTION UserControlRouteTracker
 
-0BA3B547C8344B: "Show Bookmark Notes" @
-DF44D515D3D0A7: "Show Jumps To Go" => "Pokaż Pozostałe Skoki"
-DA8C8F2A82D1B3: "Show Waypoint Coordinates" => "Pokaż Współrzędne Punktu Nawigacyjnego"
-9068E91DD59D7E: "Show Deviation from route" => "Pokaż Odstępstwo od trasy"
-0E41D824E76FFC: "Auto copy waypoint" => "Automatycznie kopiuj punkt nawigacyjny"
+0BA3B547C8344B: "Show Bookmark Notes" => "Pokaż notatki zakładek"
+DF44D515D3D0A7: "Show Jumps To Go" => "Pokaż pozostałe skoki"
+DA8C8F2A82D1B3: "Show Waypoint Coordinates" => "Pokaż współrzędne punktów trasy"
+9068E91DD59D7E: "Show Deviation from route" => "Pokaż odchylenie od trasy"
+0E41D824E76FFC: "Auto copy waypoint" => "Automatycznie kopiuj następny układ"
 47A9634A94F762: "Auto set target" => "Automatycznie ustaw cel"
-E732DB70301B2D: "Show Route Note on waypoint" @
-F01A41B43B8868: "Show Target Information" @
-79A125B4CFF3BE: "Show Fuel Information" @
+E732DB70301B2D: "Show Route Note on waypoint" => "Pokaż notatkę przy punkcie trasy"
+F01A41B43B8868: "Show Target Information" => "Pokaż informacje o celu"
+79A125B4CFF3BE: "Show Fuel Information" => "Pokaż informacje o paliwie"
 271E9A568C0E9E: "jump" => "skok"
-24C1C17E2C811B: "To First WP " => "Do Pierwszego Pkt. Naw."
+24C1C17E2C811B: "To First WP " => "Do pierwszego punktu trasy "
 EDA92612CF2474: "jumps" => "skoki"
-8212F4935A232D: "From Last WP " => "Od Ostatniego Pkt. Naw."
-DD0341E14022F3: ", Left {0:N1}ly" => "Pozostało {0:N1} lat świetlnych"
-DF5C9749BAE618: "(WP {0})" => "(Pkt. Naw. {0})"
-F01632B2B22D3F: " No Ship FSD Information" => "Brak informacji o FSD statku"
-2DA19892882702: ", Dev {0:N1}ly" => "Odst. {0:N1}LŚ"
-CEE17FB4380701: "Route contains no waypoints" => "Trasa nie zawiera punktów nawigacyjnych"
-C415DA3D51A1E9: "No systems in route have known co-ords" => "Brak układów ze znanymi współrzędnymi w trasie"
-33F6E6F622B613: "Note: {0}" @
+8212F4935A232D: "From Last WP " => "Od ostatniego punktu trasy "
+DD0341E14022F3: ", Left {0:N1}ly" => ", pozostało {0:N1} lś"
+DF5C9749BAE618: "(WP {0})" => "(punkt {0})"
+F01632B2B22D3F: " No Ship FSD Information" => " Brak informacji o FSD statku"
+2DA19892882702: ", Dev {0:N1}ly" => ", odchylenie {0:N1} lś"
+CEE17FB4380701: "Route contains no waypoints" => "Trasa nie zawiera punktów"
+C415DA3D51A1E9: "No systems in route have known co-ords" => "Żaden układ w trasie nie ma znanych współrzędnych"
+33F6E6F622B613: "Note: {0}" => "Notatka: {0}"
 
 SECTION UserControlScan
 
@@ -1418,3 +1418,8 @@ F5EDA1B11AFA0F: "Cycle" @
 50944E656EBC33: "Copy Merits" @
 0AFA5205B52671: "Copy Merits Report" @
 DC521442E6AC91: "Copy System Name" @
+EE1666AAB7AAC5: "No route selected. Choose a route using the route button." => "Nie wybrano trasy. Wybierz ją przyciskiem wyboru trasy."
+F657602F1C63C3: "No System Info" => "Brak informacji o układzie"
+DD12F3D8212DF7: "{0}: {1} WPs, {2:N1}ly -> {3}" => "{0}: punkty trasy: {1}, {2:N1} lś -> {3}"
+06391711DD1177: "No known system" => "Brak znanego układu"
+D79901037CD562: "Target: {0} {1:N1}ly {2}" => "Cel: {0} {1:N1} lś {2}"
