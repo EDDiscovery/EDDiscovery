@@ -1,0 +1,286 @@
+name: Build
+
+on:
+  push:
+  release:
+  workflow_dispatch:
+  pull_request:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_SDK_VERSION: 10.0.401
+  USE_DOTNET_SDK: false # This would require all projects to be converted to SDK-style projects
+  SOLUTION_FILE: "EDDiscovery.sln"
+
+jobs:
+  check-case-sensitive-files:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          submodules: true
+
+      - name: Check case-sensitive files
+        shell: python
+        run: |
+          import os
+          import sys
+
+          paths = {}
+          for dirpath, dirnames, filenames in os.walk("."):
+              if dirpath.endswith("/.git") or '/.git/' in dirpath:
+                  continue
+              for name in filenames:
+                  filepath = os.path.join(dirpath, name)
+                  paths.setdefault(filepath.casefold(), []).append(filepath)
+
+          collisions = [group for group in paths.values() if len(group) > 1]
+
+          if collisions:
+              for group in collisions:
+                  for filepath in group:
+                      print(f"::Error file={filepath}::Case conflict for file: {filepath}", file=sys.stderr)
+              sys.exit(1)
+
+          print(f'No case conflicts found over {len(paths)} files.')
+
+  check-unreferenced-csharp-files:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        if: env.USE_DOTNET_SDK == 'false'
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          submodules: true
+
+      - name: Check files not referenced by projects
+        if: env.USE_DOTNET_SDK == 'false'
+        shell: python
+        run: |
+          import os
+          import sys
+          from xml.dom import minidom
+
+          projects = []
+
+          if os.path.exists('EDDiscovery.sln'):
+              with open('EDDiscovery.sln', 'r') as f:
+                  for line in f:
+                      if line.strip().startswith('Project(') and ') = ' in line:
+                          parts = line.strip().split('=')[1].split(',')
+                          project_path = parts[1].strip().strip('"')
+                          projects.append(project_path.replace('\\', '/'))
+          elif os.path.exists('EDDiscovery.slnx'):
+              with open('EDDiscovery.slnx', 'r') as f:
+                  doc = minidom.parse(f)
+                  for project in doc.getElementsByTagName('Project'):
+                      project_path = project.getAttribute('Path')
+                      if project_path.endswith('.csproj'):
+                          projects.append(project_path.replace('\\', '/'))
+          else:
+              print("::Error::No solution file found.", file=sys.stderr)
+              sys.exit(1)
+
+          unref_files = set()
+          compile_files = set()
+
+          for project in projects:
+              project_files = set()
+              project_exclude_files = set()
+
+              if not os.path.exists(project):
+                  print(f"::Error::Project file not found: {project}", file=sys.stderr)
+                  sys.exit(1)
+
+              project_dir = os.path.dirname(project)
+
+              with open(project, 'r') as f:
+                  doc = minidom.parse(f)
+
+                  if doc.documentElement.getAttribute('Sdk'):
+                      print(f"Skipping SDK-style project {project}.", file=sys.stderr)
+
+                  for item_group in doc.getElementsByTagName('ItemGroup'):
+                      for tag in ('Compile', 'EmbeddedResource', 'Content', 'None'):
+                          for compile in item_group.getElementsByTagName(tag):
+                              include_file_path = compile.getAttribute('Include')
+                              if include_file_path:
+                                  project_files.add(os.path.join(project_dir, include_file_path.replace('\\', '/')))
+                              exclude_file_path = compile.getAttribute('Exclude')
+                              if exclude_file_path:
+                                  project_exclude_files.add(os.path.join(project_dir, exclude_file_path.replace('\\', '/')))
+
+              for dirpath, dirnames, filenames in os.walk(project_dir):
+                  for file in filenames:
+                      file_path = os.path.join(dirpath, file)
+                      name, extension = os.path.splitext(file_path)
+                      if extension in ('.cs', '.resx', '.settings', '.cshtml'):
+                          if file_path not in project_files and file_path not in project_exclude_files:
+                              unref_files.add(file_path)
+
+          if unref_files:
+              for file_path in unref_files:
+                  print(f"::Warning file={file_path}::File not referenced by any project: {file_path}", file=sys.stderr)
+          else:
+              print(f'No unreferenced files found.')
+
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - windows-latest
+          # - ubuntu-2204 # Support ends 17 April 2027
+          - ubuntu-latest
+        BUILD_CONFIGURATION:
+          - Debug
+          - Release
+        DEFINE_CONSTANTS:
+          - HAS_SYSTEM_SPEECH
+          - NO_SYSTEM_SPEECH
+        exclude:
+          - os: ubuntu-latest
+            DEFINE_CONSTANTS: HAS_SYSTEM_SPEECH
+          - os: ubuntu-2204
+            DEFINE_CONSTANTS: HAS_SYSTEM_SPEECH
+
+    runs-on: ${{ matrix.os }}
+
+    permissions:
+      contents: read
+
+    steps:
+      - name: Enable case-sensitive file system
+        if: matrix.os == 'windows-latest'
+        run: fsutil.exe file setCaseSensitiveInfo . enable
+
+      - name: Checkout repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+          submodules: true
+
+      - name: Setup .NET
+        if: env.USE_DOTNET_SDK == 'true'
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68 # v6.0.0
+        with:
+          dotnet-version: ${{ env.DOTNET_SDK_VERSION }}
+
+      - name: Setup MSBuild
+        if: matrix.os == 'windows-latest' && env.USE_DOTNET_SDK == 'false'
+        uses: microsoft/setup-msbuild@30375c66a4eea26614e0d39710365f22f8b0af57 # v3.0.0
+
+      - name: Install Mono
+        if: matrix.os == 'ubuntu-latest' && env.USE_DOTNET_SDK == 'false'
+        run: |
+          sudo apt install ca-certificates gnupg
+          sudo gpg --homedir /tmp --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+          sudo chmod +r /usr/share/keyrings/mono-official-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
+          sudo apt update
+          sudo apt install -y mono-devel nuget msbuild
+
+      - name: Restore dependencies
+        if: env.USE_DOTNET_SDK == 'true'
+        run: dotnet restore
+
+      - name: Restore dependencies
+        if: env.USE_DOTNET_SDK == 'false'
+        run: nuget restore
+
+      - name: Compile stub System.Speech
+        if: matrix.os == 'windows-latest' && matrix.DEFINE_CONSTANTS == 'NO_SYSTEM_SPEECH'
+        shell: pwsh
+        run: |
+          mkdir "${{ runner.temp }}\dotnet-stubs"
+          echo '[assembly: System.Reflection.AssemblyVersion("4.0.0.0")]' > "${{ runner.temp }}\dotnet-stubs\Stub.cs"
+          C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe -target:library -out:"${{ runner.temp }}\dotnet-stubs\System.Speech.dll" "${{ runner.temp }}\dotnet-stubs\Stub.cs"
+          C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe -target:library -out:"${{ runner.temp }}\dotnet-stubs\PresentationCore.dll" "${{ runner.temp }}\dotnet-stubs\Stub.cs"
+          C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe -target:library -out:"${{ runner.temp }}\dotnet-stubs\PresentationFramework.dll" "${{ runner.temp }}\dotnet-stubs\Stub.cs"
+          C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe -target:library -out:"${{ runner.temp }}\dotnet-stubs\UIAutomationProvider.dll" "${{ runner.temp }}\dotnet-stubs\Stub.cs"
+          C:\Windows\Microsoft.NET\Framework64\v4.0.30319\csc.exe -target:library -out:"${{ runner.temp }}\dotnet-stubs\WindowsFormsIntegration.dll" "${{ runner.temp }}\dotnet-stubs\Stub.cs"
+          echo @'
+          <Project>
+            <ItemGroup Condition="'$(MSBuildProjectExtension)' == '.csproj'">
+              <Reference Remove="System.Speech" />
+              <Reference Include="System.Speech">
+                <HintPath>$(SystemSpeechStubPath)\System.Speech.dll</HintPath>
+                <Private>false</Private>
+              </Reference>
+              <Reference Remove="PresentationCore" />
+              <Reference Include="PresentationCore">
+                <HintPath>$(SystemSpeechStubPath)\PresentationCore.dll</HintPath>
+                <Private>false</Private>
+              </Reference>
+              <Reference Remove="PresentationFramework" />
+              <Reference Include="PresentationFramework">
+                <HintPath>$(SystemSpeechStubPath)\PresentationFramework.dll</HintPath>
+                <Private>false</Private>
+              </Reference>
+              <Reference Remove="UIAutomationProvider" />
+              <Reference Include="UIAutomationProvider">
+                <HintPath>$(SystemSpeechStubPath)\UIAutomationProvider.dll</HintPath>
+                <Private>false</Private>
+              </Reference>
+              <Reference Remove="WindowsFormsIntegration" />
+              <Reference Include="WindowsFormsIntegration">
+                <HintPath>$(SystemSpeechStubPath)\WindowsFormsIntegration.dll</HintPath>
+                <Private>false</Private>
+              </Reference>
+            </ItemGroup>
+          </Project>
+          '@ > "${{ runner.temp }}\dotnet-stubs\NoSystemSpeech.targets"
+
+      - name: Build solution
+        if: env.USE_DOTNET_SDK == 'true' && matrix.os == 'windows-latest' && matrix.DEFINE_CONSTANTS == 'NO_SYSTEM_SPEECH'
+        run: >
+          dotnet build "${{ env.SOLUTION_FILE }}"
+          -p:Configuration=${{ matrix.BUILD_CONFIGURATION }}
+          -p:DefineConstants=${{ matrix.DEFINE_CONSTANTS }}
+          -p:CustomAfterMicrosoftCommonTargets="${{ runner.temp }}\dotnet-stubs\NoSystemSpeech.targets"
+          -p:SystemSpeechStubPath="${{ runner.temp }}\dotnet-stubs"
+
+      - name: Build solution
+        if: env.USE_DOTNET_SDK == 'true' && (matrix.os != 'windows-latest' || matrix.DEFINE_CONSTANTS != 'NO_SYSTEM_SPEECH')
+        run: >
+          dotnet build "${{ env.SOLUTION_FILE }}"
+          -p:Configuration=${{ matrix.BUILD_CONFIGURATION }}
+          -p:DefineConstants=${{ matrix.DEFINE_CONSTANTS }}
+
+      - name: Build solution
+        if: env.USE_DOTNET_SDK == 'false' && matrix.os == 'windows-latest' && matrix.DEFINE_CONSTANTS == 'NO_SYSTEM_SPEECH'
+        run: >
+          msbuild "${{ env.SOLUTION_FILE }}"
+          -p:Configuration=${{ matrix.BUILD_CONFIGURATION }}
+          -p:DefineConstants=${{ matrix.DEFINE_CONSTANTS }}
+          -p:CustomAfterMicrosoftCommonTargets="${{ runner.temp }}\dotnet-stubs\NoSystemSpeech.targets"
+          -p:SystemSpeechStubPath="${{ runner.temp }}\dotnet-stubs"
+
+      - name: Build solution
+        if: env.USE_DOTNET_SDK == 'false' && (matrix.os != 'windows-latest' || matrix.DEFINE_CONSTANTS != 'NO_SYSTEM_SPEECH')
+        run: >
+          msbuild "${{ env.SOLUTION_FILE }}"
+          -p:Configuration=${{ matrix.BUILD_CONFIGURATION }}
+          -p:DefineConstants=${{ matrix.DEFINE_CONSTANTS }}
+
+      - name: Upload portable zip
+        if: |
+          github.event_name != 'pull_request' &&
+          matrix.os == 'windows-latest' &&
+          matrix.BUILD_CONFIGURATION == 'Release' &&
+          matrix.DEFINE_CONSTANTS == 'HAS_SYSTEM_SPEECH'
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: EDDiscovery-portable-zip
+          if-no-files-found: error
+          overwrite: true
+          archive: false
+          path: |
+            EDDiscovery/bin/Release/EDDiscovery.Portable.zip
