@@ -1141,7 +1141,7 @@ namespace EDDiscovery
         {
             Forms.MoveToCommander movefrm = new Forms.MoveToCommander();
 
-            movefrm.Init(null,"Pick commander to move all their history to current commander:");
+            movefrm.Init(null,"Pick commander to move all their history to current commander");
 
             DialogResult red = movefrm.ShowDialog(FindForm());
             if (red == DialogResult.OK)

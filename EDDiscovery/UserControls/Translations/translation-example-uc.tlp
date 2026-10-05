@@ -479,6 +479,8 @@ F32D0645A8333F: "Weapons" @
 6E34095646ED42: "Enter loadout description to save ship with" @
 
 20E15F06826B22: "Owned Ships Current and Sold/Destroyed" @
+C5072E9217BE30: "Power usage by priority (RGBYM)" @
+1BC94C3794BDA3: "Core Power and Weapon Power. Small line is Core Power point. Large line is 100% power usage" @
 
 SECTION UserControlNotePanel
 
