@@ -391,17 +391,17 @@ A6F528EE452953: "Show system info always" @
 26B6A73ABC8985: "Show scan summary always" @
 0C958474BD3F89: "Show star class in system info" @
 38F6C10BC38855: "Show dividers" @
-7CCD13400121F3: "Planet Filter" => "行星筛选"
-7AA20A2EFC7BB6: "Star Filter" => "恒星筛选"
-274A5199553A8D: "Display Settings" => "显示设置"
-7F8C5176C3F03B: "Alignment" => "文本对齐"
-B97C4D4CDDF23E: "Font" => "字体"
-7E65928ECE63CA: "FSS Signal Selection" => "FSS 信号选择"
-23048BC1AE69FE: "Word Wrap" => "自动换行"
-1BB6C810B1DA16: "Select route to follow" => "选择要跟踪的航线"
-524DD2CDBBAD94: "Route Settings" => "航线设置"
-B10CFFF10BABC0: "Nav Route" => "导航航线"
-9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => "平均 {0:N1} 光年，余油 {1:N1} 光年，续航 {2:N1} 光年"
+7CCD13400121F3: "Planet Filter" @
+7AA20A2EFC7BB6: "Star Filter" @
+274A5199553A8D: "Display Settings" @
+7F8C5176C3F03B: "Alignment" @
+B97C4D4CDDF23E: "Font" => "编辑主题改变颜色和字体"
+7E65928ECE63CA: "FSS Signal Selection" @
+23048BC1AE69FE: "Word Wrap" @
+1BB6C810B1DA16: "Select route to follow" @
+524DD2CDBBAD94: "Route Settings" @
+B10CFFF10BABC0: "Nav Route" @
+9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
 B37E90C8789813: "List signals to display, semicolon seperated" @
 
 SECTION MissionListUserControl
@@ -557,6 +557,12 @@ DE6A8B4B96A80A: "Copy the target system to end route entry" => "将目标星系�
 98310A2466609B: "Rocky HMC" @
 
 SECTION UserControlRouteTracker
+
+EE1666AAB7AAC5: "No route selected. Choose a route using the route button." => "未选择航线。请使用航线选择按钮选择航线。"
+F657602F1C63C3: "No System Info" => "无星系信息"
+DD12F3D8212DF7: "{0}: {1} WPs, {2:N1}ly -> {3}" => "{0}：{1} 个航点，{2:N1} 光年 -> {3}"
+06391711DD1177: "No known system" => "无已知星系"
+D79901037CD562: "Target: {0} {1:N1}ly {2}" => "目标：{0} {1:N1} 光年 {2}"
 
 0BA3B547C8344B: "Show Bookmark Notes" => "显示书签备注"
 DF44D515D3D0A7: "Show Jumps To Go" => "显示剩余跃迁次数"
@@ -1418,8 +1424,3 @@ F5EDA1B11AFA0F: "Cycle" @
 50944E656EBC33: "Copy Merits" @
 0AFA5205B52671: "Copy Merits Report" @
 DC521442E6AC91: "Copy System Name" @
-EE1666AAB7AAC5: "No route selected. Choose a route using the route button." => "未选择航线。请使用航线选择按钮选择航线。"
-F657602F1C63C3: "No System Info" => "无星系信息"
-DD12F3D8212DF7: "{0}: {1} WPs, {2:N1}ly -> {3}" => "{0}：{1} 个航点，{2:N1} 光年 -> {3}"
-06391711DD1177: "No known system" => "无已知星系"
-D79901037CD562: "Target: {0} {1:N1}ly {2}" => "目标：{0} {1:N1} 光年 {2}"
