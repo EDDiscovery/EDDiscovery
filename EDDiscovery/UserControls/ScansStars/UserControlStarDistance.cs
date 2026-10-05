@@ -158,7 +158,7 @@ namespace EDDiscovery.UserControls
                     if (tvp.Value.Name != name && (checkBoxCube.Checked || (dist >= textMinRadius.Value && dist <= textMaxRadius.Value)))
                     {
                         int visits = DiscoveryForm.History.GetVisitsCount(tvp.Value.Name);
-                        object[] rowobj = { tvp.Value.Name, $"{dist:0.00}", $"{visits:n0}" };
+                        object[] rowobj = { tvp.Value.Name, $"{dist:0.00}", $"{visits:n0}", Stars.ToLocalisedLanguage(tvp.Value.MainStarType) };
 
                         var rw = dataGridViewNearest.RowTemplate.Clone() as DataGridViewRow;
                         rw.CreateCells(dataGridViewNearest, rowobj);
