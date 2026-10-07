@@ -698,10 +698,10 @@ SECTION UserControlRouteTracker
 .TF: "To First WP " => "Do Pierwszego Pkt. Naw."
 .JS: "jumps" => "skoki"
 .FL: "From Last WP " => "Od Ostatniego Pkt. Naw."
-.LF: ", Left {0:N1}ly" => "Pozostało {0:N1} lat świetlnych"
+.LF: ", Left {0:N1}ly" => ", Pozostało {0:N1} lat świetlnych"
 .ToWP: "(WP {0})" => "(Pkt. Naw. {0})"
-.NoFSD: " No Ship FSD Information" => "Brak informacji o FSD statku"
-.Dev: ", Dev {0:N1}ly" => "Odst. {0:N1}LŚ"
+.NoFSD: " No Ship FSD Information" => " Brak informacji o FSD statku"
+.Dev: ", Dev {0:N1}ly" => ", Odst. {0:N1} LŚ"
 .NoWay: "Route contains no waypoints" => "Trasa nie zawiera punktów nawigacyjnych"
 .NoCo: "No systems in route have known co-ords" => "Brak układów ze znanymi współrzędnymi w trasie"
 .Note: "Note: {0}" @
