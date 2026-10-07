@@ -575,10 +575,10 @@ F01A41B43B8868: "Show Target Information" @
 24C1C17E2C811B: "To First WP " => "Do Pierwszego Pkt. Naw."
 EDA92612CF2474: "jumps" => "skoki"
 8212F4935A232D: "From Last WP " => "Od Ostatniego Pkt. Naw."
-DD0341E14022F3: ", Left {0:N1}ly" => "Pozostało {0:N1} lat świetlnych"
+DD0341E14022F3: ", Left {0:N1}ly" => ", Pozostało {0:N1} lat świetlnych"
 DF5C9749BAE618: "(WP {0})" => "(Pkt. Naw. {0})"
-F01632B2B22D3F: " No Ship FSD Information" => "Brak informacji o FSD statku"
-2DA19892882702: ", Dev {0:N1}ly" => "Odst. {0:N1}LŚ"
+F01632B2B22D3F: " No Ship FSD Information" => " Brak informacji o FSD statku"
+2DA19892882702: ", Dev {0:N1}ly" => ", Odst. {0:N1} LŚ"
 CEE17FB4380701: "Route contains no waypoints" => "Trasa nie zawiera punktów nawigacyjnych"
 C415DA3D51A1E9: "No systems in route have known co-ords" => "Brak układów ze znanymi współrzędnymi w trasie"
 33F6E6F622B613: "Note: {0}" @
