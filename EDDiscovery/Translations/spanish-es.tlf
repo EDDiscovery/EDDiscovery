@@ -157,7 +157,7 @@ C999A758A64A62: "Grid (allows other panels to be placed in it)" => "Cuadrícula 
 701C483F813CF1: "Grid" => "Cuadrícula"
 C05916255EB1DC: "Splitter (allows other panels to be placed in it)" => "Divisor (permite colocar otros paneles en el mismo)"
 3C9A6D76F1CED5: "Splitter" => "Divisor"
-DA39A3EE5E6B4B: "" => ""
+DA39A3EE5E6B4B: "" @
 A979EF10CC6F6A: "+" => "+"
 BCE06414177F72: "Search" => "Búsqueda"
 F69D2C0C04A8EE: "Captain's Log" => "Bitácora del capitán"
