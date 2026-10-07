@@ -700,7 +700,7 @@ SECTION UserControlRouteTracker
 .FL: "From Last WP " => "От последней точки маршрута "
 .LF: ", Left {0:N1}ly" => ", осталось {0:N1} св. л."
 .ToWP: "(WP {0})" => "(точки маршрута {0})"
-.NoFSD: " No Ship FSD Information" => "Нет информации о FSD"
+.NoFSD: " No Ship FSD Information" => " Нет информации о FSD"
 .Dev: ", Dev {0:N1}ly" => ", отклонение {0:N1} св. л."
 .NoWay: "Route contains no waypoints" => "Маршрут не содержит точек маршрута"
 .NoCo: "No systems in route have known co-ords" => "Ни одна система маршрута не содержит известных координат"
