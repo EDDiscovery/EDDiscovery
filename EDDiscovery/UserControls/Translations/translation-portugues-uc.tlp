@@ -23,22 +23,16 @@ B15BC9CCE1BA39: "Edit Tags" @
 SECTION UserControlCombatPanel
 
 AD8919ACE091B1: "Event" => "Zdarzenie"
-C7D7652EC6A795: "Reward" @
-BFAC50D6424B51: "Credits" @
 9EC34025B6DB16: "Kills" @
 645DE66F0C79ED: "Faction Kills" @
 90EEF613042C5A: "Balance" @
-68316444B99C6B: "Died" @
 000C7B010AA15B: "Crimes" @
-61AD50A9B9189C: "Target" => "Cel"
-9D269517397775: "Faction" => "Frakcje"
 A116A463F16F3B: "TotalReward" @
 2AD918FF81A2C4: "FactionReward" @
 078EB757BF1155: "Current Credits" @
 6B3534A2242650: "Total kills (NPC/PVP) in campaign" @
 6344C1B665774D: "Total reward less any costs (fines, rebuys etc)" @
 3E680888D11E9A: "How many times you've been caught!" @
-FCAA3EA68677B6: "Target Faction" @
 0A11B11F4BD307: "Total reward" @
 68C7A5D8D1ECF1: "Reward associated with destroying the faction ships" @
 2A4D800653DEFF: "Select Campaign to view" @
@@ -105,7 +99,6 @@ E1988D908E0FDA: "Discovered at " @
 14D5C9FDE290FE: "Item 1" @
 EB9A4BC1C0C153: "Date" => "Data"
 85A7DE6E270547: "Star" => "Gwiazda"
-D219C68101F532: "Location" => "Lokalizacja"
 84C078AF3EFE1A: "Current Distance" @
 CF1C85ADBA548E: "Position" => "Pozycja"
 209B0897FD112F: "Output grid to CSV" @
@@ -163,8 +156,7 @@ D4FDD27AAE7070: "View on History Grid" @
 SECTION UserControlEngineering
 
 8F388BB9800713: "Upgrade/Mat" @
-B8FF02892916FF: "Module" => "Moduł"
-7C7F5D049FAD25: "Level" @
+
 A95E85AED56318: "Max" => "Maks."
 B568B10AECDDE8: "Wanted" @
 F2367E42DEFDAC: "Avail." @
@@ -190,9 +182,6 @@ SECTION UserControlEstimatedValues
 1D68666BDF4A40: "Body Name" @
 D6B23A46B95CAF: "Body Type" @
 6DA13ADDB000B6: "Source" @
-4A7C05BDEB22B3: "Mapped" @
-21B572F3D9F3E3: "Already Mapped" @
-43DF814DBC5742: "Already Discovered" @
 CB34D7DD05451F: "Base Value" @
 EEA6FFEE027AB4: "First Mapped" @
 CB083BFF78F38B: "First Discovered Mapped" @
@@ -288,10 +277,6 @@ SECTION UserControlLog
 
 SECTION UserControlMarketData
 
-A3C686E711E472: "Category" @
-FA3CF2AD51E078: "Sell" @
-7CECA51FCAFE42: "Buy" @
-6C98E86FC49B32: "Cargo" @
 5DFC68721F3D07: "Demand" @
 222DB0FC1CADF0: "Supply" @
 7C9EF052D00BFD: "Galactic Avg" @
@@ -308,14 +293,9 @@ BB4C560BF53C47: "Has Demand" @
 
 SECTION UserControlMaterialCommodities
 
-4DA805AFD83F17: "Ship Locker" @
-E5E429BCC9C2E4: "Data" => "Dane"
 BEFB21EE719272: "Mats" @
-B25928C6990255: "Total" @
-CCE370D2F9781A: "Rare" @
 FE187BD4E80F7E: "Abv" @
 B7BAA1D40C4EA2: "Number" => "Ilość"
-0CCF90EB09D636: "Backpack" @
 6358DC846638BD: "Avg. Price" @
 9FB1092F32D4FC: "Recipes" @
 B18F6ADE27CF7A: "Want" => "Gewollt"
@@ -337,7 +317,6 @@ AFF3ACED3CA75C: "Count of Items" @
 BA416FBADB0F09: "Display Item in shopping list" @
 EB8E343579E999: "Clear all display items in shopping list" @
 3EE4B7555F0B02: "Display all non zero items in shopping list" @
-1B90271D66CF2D: "Progress" @
 
 
 SECTION UserControlMissionOverlay
@@ -361,7 +340,6 @@ C310B6E9C77045: "Ammonia World" @
 B52BBF018CF9EC: "Earthlike World" @
 909C1B5FFD57ED: "Water World" @
 3D43FF8C48FA2C: "High metal content body" @
-EA5B349025CF82: "Metal-rich body" @
 4D8D48B5146934: "Terraformable" @
 D4617F3267AD60: "Has volcanism" @
 3821671BA55EA5: "Has Rings" @
@@ -370,7 +348,6 @@ BE57FAED31951F: "High eccentricity" @
 CB270B1D277411: "Has any other signals" @
 2B332D20943805: "Has geological signals" @
 F70D62F8263274: "Has biological signals" @
-A9292825CC0CA6: "Landable" @
 80F9887F7F5A1B: "Landable with atmosphere" @
 C269F2C820ADBB: "Landable and large" @
 3F9C411965E271: "Landable with volcanism" @
@@ -400,7 +377,6 @@ B97C4D4CDDF23E: "Font" @
 23048BC1AE69FE: "Word Wrap" @
 1BB6C810B1DA16: "Select route to follow" @
 524DD2CDBBAD94: "Route Settings" @
-B10CFFF10BABC0: "Nav Route" @
 9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" @
 B37E90C8789813: "List signals to display, semicolon seperated" @
 
@@ -409,7 +385,6 @@ SECTION MissionListUserControl
 44AB85A252ADB7: "Origin" @
 D42713493CA811: "Destination" @
 731322861EF2C0: "Result (cr)" @
-4374AAEE247FB2: "to" => "do"
 
 SECTION UserControlMissions
 
@@ -421,16 +396,11 @@ F8B59037B2A4AE: " Mission" @
 
 SECTION UserControlModules
 
-ECDDA59AEA5EE6: "Item" => "Przedmiot"
 20DD0E149BA65F: "BluePrint" @
 02D2B8A95C0CDF: "P/E" @
-323D4FC7337134: "Ship" => "Statek"
-AF0AD10B2A196B: "Mass" @
-64AE43E8FE7620: "Cost" @
 0C85DB3EB1A9A6: "FSD" => "FSA"
 47071804F38EAF: "Thrust" @
 31FE17191E290C: "Shields" @
-FAB9348C4FD97F: "Armour" @
 
 
 6129EFBCDDA076: "Show full blueprint information" @
@@ -444,12 +414,9 @@ A64AB328A429FA: "Import a ship definition for display" @
 
 FE5C2531E39340: "Force Sell" @
 122A6B402DF67D: "Confirm sell of ship" @
-CA73BB4E22EBFD: "Stored Modules" => "Przechowywane Moduły"
 D2F025FD0D6F0C: "Travel History Entry" @
 673463FDF95385: "Owned Ships" @
 44B046E04F2B04: "Tx Time" @
-ECE2AC10D7266F: "Slot" @
-B2B53EE4FC1A90: "Stored" => "Gelagert"
 22F4D0D2422A35: "All Modules" @
 8F325EDB2B44A3: "All Known Modules" @
 9569A6C389205D: "All Ships" @
@@ -471,7 +438,6 @@ E5379DCF7E564E: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" 
 C8DF6EB8BFDFCF: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
 C11EA28A729193: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" @
 6CC0AEA921D9CD: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" @
-F32D0645A8333F: "Weapons" @
 
 60830556FBB8D7: "Save this loadout to the EDD loadout folder" @
 391427FC2F26EA: "Delete loadout" @
@@ -519,8 +485,6 @@ CFD4E874046B93: "Road to Riches" @
 1DF8F8D30FDD0F: "Ammonia Worlds" @
 AB2A9F0D8D787B: "Earth Likes" @
 0077D22826A77F: "Trade Router" @
-0CF5E327910E74: "Fleet Carrier" @
-7F0950D59B1A34: "Squadron Carrier" @
 B12CDD63114BA4: "Galaxy Plotter" @
 B364AA8B4033FF: "Exo Mastery" @
 07AB47C5737BA1: "Use Permit Systems" @
@@ -529,11 +493,9 @@ B2BB7604C825F9: "Metric" @
 B604A930356A28: "Find Route" @
 A975EEA30DB9FA: "Parameters" @
 281FA0DAFE53E1: "Use Boosts" @
-3F66052A107EAF: "From" => "Z"
 EC59449017E5B6: "ly" => "lat świetlnych"
 8424A6DD977331: "Web Lookup" @
 A0E237BAC8B17A: "Max jump" @
-AE79EA1E9C6391: "To" => "Do"
 7CF37443D567D9: "Push to expedition" @
 D5C87506FD897A: "Show route on 3D Map" @
 2FB4DE63226EC5: "Pick the metric to use when searching for a route" @
@@ -597,7 +559,6 @@ A0BB88B66F57E8: "Set High Value Limit" @
 9F6C1D41D0D032: "Show Materials" @
 B028A006D79224: "Show rare materials only" @
 00848F83A633FB: "Show Moons" @
-2DBDE6DD6FB541: "Belt" @
 17B8D69486D780: "Barycentre" @
 14E0E8D442549A: "Show G on all planets" @
 12071F4330F803: "Show Habitation Zone" @
@@ -607,25 +568,21 @@ E0B7B8CC8BD7CC: "Show Classes of Stars" @
 1BC356C17D4433: "Show mass of planets" @
 FA07BE19814A99: "Show mass of stars" @
 A35655D05BB820: "Show age of stars" @
-A689A999A5E620: "Expired" @
 90EAF9559AB2D2: "Show bodyless stars on separate lines" @
 79F1829F7C4ED0: "Create a new bookmark for the current system" @
 CA142B27F2458B: "Show signal icons for expired signals" @
 
 SECTION UserControlScanGrid
 
-41FF354B2B330B: "Class" @
 63289439EF0B8A: "Max Value" @
 ED567CF0E9AE1F: "Organics Value" @
 EBFEA75A0A6AC5: "Configure overall settings" @
 0498696B357E52: "Main Star" @
-E5AAEAAC2E19A2: "Radius" => "Promień"
 0A9062A9CB5199: "Temperature" @
 846B90266CABF4: "Moon" @
 F85D3B343E0C17: "Geological activity" @
 8E140B3FB3635C: "Surface mapped" @
 269077C77225D6: "This body contains" @
-96DDACCF581F48: "Ring" => "Posiada 1 pierścień"
 CB7305DF2F4D76: "This is a green system, as it has all existing jumponium materials available!" @
 318EF98C2276FA: " jumponium materials found in system." @
 37B1866847BAC8: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" @
@@ -637,8 +594,6 @@ SECTION UserControlSettings
 
 1AA2284ABF94BF: "System Lookup from Web" @
 B6EB402E86A9AA: "Commanders" => "Dowódcy"
-79056C7AE5C30B: "Commander" => "Dowódca"
-F5110F31C60E83: "EDSM Name" => "Nazwa w EDSM"
 DE5B4A878597E3: "Journal Folder" => "Lokalizacja Dzienników"
 9B2A9354670636: "Undelete" @
 A797E30923AC1B: "Theme" => "Motyw"
@@ -666,7 +621,6 @@ D6D452D0168D18: "Show notification area icon" @
 C30412531E342C: "DLLs" => "DLLs"
 D06D55570938D1: "Permissions" @
 89B86AB0E66F52: "Language" => "Język"
-4D064726954A17: "Advanced" @
 00626039F3FF33: "Restart in Safe Mode" @
 EC0002676E6536: "Click this to perform special operations, such as to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" @
 5E012313D53D6A: "Delete selected commander" @
@@ -818,32 +772,9 @@ SECTION UserControlStats
 12D9C090439BAA: "In Game" @
 AB2855156E832D: "By Ship" @
 00926D0ECAABBF: "Ranks" @
-DD48A1149548F0: "Rank" @
 2451A597FA5067: "At Start" @
 0B12D442964C13: "At End" @
 F230B2BCC6A6B1: "Last Promotion/Date" @
-955A4E9A59BF11: "Powerplay" @
-67711E423601BA: "Squadron" @
-E72ED7A5BCA163: "Bounties on Thargoids" @
-C070DE1BD06E83: "Bounties on On Foot NPC" @
-6273A2A0CA35EF: "Bounties on Skimmers" @
-9A18F8035AAEA1: "Ships Unknown Rank" @
-BAC11F62A1EE7D: "Ships Elite Rank" @
-6ED71D543A46B5: "Ships Deadly Rank" @
-C154182DA6A0EA: "Ships Dangerous Rank" @
-366E78B1602F76: "Ships Master Rank" @
-457AA8E691A5DA: "Ships Expert Rank" @
-68F8A460EF2B65: "Ships Competent Rank" @
-8FAD289393971D: "Ships Novice Rank" @
-8727F6D4EE824C: "Ships Harmless Rank" @
-EAF8AE7FAE1187: "PVP Elite Rank" @
-B313E7107D5C86: "PVP Deadly Rank" @
-7743458F23BEEB: "PVP Dangerous Rank" @
-28AF125F4DCEB4: "PVP Master Rank" @
-A6E743F4A8DA1F: "PVP Expert Rank" @
-0D4936734E146A: "PVP Competent Rank" @
-0A7B5DB004014C: "PVP Novice Rank" @
-8BED567DC90C30: "PVP Harmless Rank" @
 EBA0BF6D59AA23: "Bounties" @
 6C18EAA601E281: "Bounty Value" @
 143706EC834465: "Bounties on Ships" @
@@ -873,34 +804,18 @@ ED38C3B32E9FB4: "Most East" @
 57160FBF8BB19A: "Most Highest" @
 742DE30108A030: "Most Lowest" @
 985904BE62860B: "Most Visited" @
-022AFB2A3DD28F: "Ident" @
 A42A766FB98A1B: "Travelled Ly" @
 A3E3727E7AC80E: "Bodies Scanned" @
 86FD480DBADC22: "Destroyed" @
 B051CCCD8B0D67: "Premium Boost" @
 4FE81F7DFC3A7B: "Standard Boost" @
 744F275A75FD8F: "Basic Boost" @
-BF95513D610332: "Jet Cone Boost" @
 80D9028EDFA54B: "Organic Scans Value" @
 93C9D999CAF90E: "Scan value" => "Wartość skanów"
-D436FDB4D178CC: "Belt Cluster" @
 785AD46ADCFC58: "Last dock" => "Ostatnie dokowanie"
-6D391E1333D9E0: "Bank Account" @
-1B5A20A804DC74: "Crime" @
-6BEEE635DCA549: "Smuggling" @
-49352196F6D28E: "Trading" @
-FAABCF8B4B60DB: "Mining" @
-957464A0F91C56: "Exploration" => "Eksploracja"
-AB86B441AD93E7: "Passengers" @
-E0C47B9F787BC5: "Search and Rescue" @
 EA78B34DA11F9D: "Crafting" @
-DE463BA892C2F3: "Crew" @
 EB6824747FE3AC: "Multi-crew" @
 F8D07BF619AB93: "Materials Trader" @
-4EC8D6E506ED34: "Fleetcarrier" @
-B663617A36922A: "CQC" @
-E41CFBE34F8307: "Exobiology" @
-57D866D2E06189: "Thargoids" @
 ED8FE7F50C291D: "Goods Bought" @
 4A9BE7DFAB7DEE: "Goods Sold" @
 266338DF847C39: "Goods Profit" @
@@ -949,16 +864,11 @@ F02F62E261A315: "Display Material Count" @
 31ACBB09F84846: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" @
 A89C9CA2A96AE8: "Distance to target" @
 9FFE9E9C6D7672: "Sets the target" @
-F25CE1B8A399BD: "Security" @
 A16C5BBE4BF996: "Range" => "Skok"
-A7B93D2128E820: "Mode" => "Tryb"
 208A402074139F: "MR" @
 0B645D1B659917: "Fuel" @
 C9B1B30D011FE2: "Pos" => "Pozycja"
-7E8548C30FEF17: "Economy" @
 503335220A6476: "Gov" @
-E471FACAC24C5F: "Allegiance" @
-A7250206751868: "State" @
 DF5D4664763117: "Sol" @
 70F8BB9A8A5393: "Home" => "Dom"
 7B181F6DED4B8C: "Dest" @
@@ -1089,15 +999,11 @@ EEBF564BAF4F90: "{0} systems with unknown coordinates found in {1} sector." @
 SECTION UserControlMaterialTrader
 
 1D4D43CC6F3A83: "Use" => "Benutzen"
-8AE1C34BD37FAD: "Left" => "Übrig"
 BFFFD736CDDD08: "Get" => "Erhalte"
 719EA396AD92E0: "Clear" => "Leeren"
 3898B9AA06204B: "Offer" @
 965FB2DDF63D60: "Receive" => "Erhalten"
 127F7960FB4A8D: "Clear Trade" @
-DA433CD41E7FB7: "Raw" @
-58AC2F7D78D326: "Encoded" @
-8AB3DB9BFC3921: "Manufactured" @
 
 SECTION UserControlMiningOverlay
 
@@ -1136,8 +1042,6 @@ C1ECFEB8DEF4DC: "Commds Profit" @
 77E2DD8141E981: "Bounty Kills" @
 397B67A90DEC91: "Bounty Rewards" @
 D5965451E332A6: "Bounty Rewards Value" @
-B83FE58DB23E57: "Interdicted" @
-C21AFB3EFA18AB: "Interdiction" @
 5F22266A168021: "Kill Bonds Victim" @
 FC21DB8588503E: "Kill Bonds Awarded" @
 DAE2AEC9BE1018: "Kill Bonds Value" @
@@ -1155,8 +1059,6 @@ EE4A9C0F4355B9: "Materials/Commodities for " @
 F6A9D28E466A97: "Missions In Progress" @
 72E11BB738A1FB: "Capital ship Victims" @
 6F623465F6238E: "Capital ship Award" @
-C7AD6F7B6831A8: "Redeem Voucher" @
-2C60D95A352DA3: "Pay Fines" @
 7E2BA2DEEF4EF3: "Pay Bounty Value" @
 984FAF564D50B9: "DL Victim" @
 AB2BEAA625AAC3: "DL Payee Faction" @
@@ -1164,7 +1066,6 @@ AB2BEAA625AAC3: "DL Payee Faction" @
 
 01784CA8036C41: "Last Known Reputation" @
 CE1FCB4A606ED1: "Last State" @
-5C9CB498F540DF: "Government" @
 1DD01EBAA45EEF: "System Influence" @
 05A55AA172DB06: "Other System Info" @
 CB7B9C47F344FC: "Organic Data Value" @
@@ -1189,9 +1090,6 @@ DAB5A87D199E18: "Star System" @
 CC91B1EA2C1651: "Variant" @
 E214E19943B264: "Last Scan Type" @
 
-SECTION ScanDisplayForm
-
-4CB8D8545ED6BF: "Station" => "Stacja"
 
 SECTION TagsForm
 
@@ -1221,8 +1119,6 @@ SECTION InfoForm
 
 SECTION UserControlSuitsWeapons
 
-CC459F63A7AECD: "Mods" @
-9E7FD7DDAEE291: "Loadout" => "Konfiguration"
 EF002BCE769B96: "Primary 1" @
 34CD6210189BD2: "Primary 2" @
 025DE599EA0A62: "Secondary" @
@@ -1279,7 +1175,6 @@ CD7E9084A619FD: "This Service is Suspended" @
 6C573682E526FF: "This Service is Not Installed" @
 068D15FAF7392F: "No Module or Ship packs installed" @
 3BECD4DD96195C: "Tier " => "Rang "
-8EF7B327113B48: "Cost: ; cr;N0" @
 BB9246B17BFDFF: "Jumping" @
 334FBEB50B8D02: "No CAPI data from frontier, due to either or server/network failure" @
 296B6B5743412B: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." @
@@ -1294,9 +1189,6 @@ EA50EDD2233946: "Balance cr" @
 5CBD584046863B: "Services" @
 DB866831C3D096: "Packs" => "Pakete"
 CDED093321DDAA: "Orders" @
-38DFC233193C18: "Commodity" => "Handelsware"
-171A0606F7C745: "Group" @
-160F06D4799C85: "Purchase" @
 0028D743EB44B8: "Sale" @
 D909428F5E2D1E: "Blackmarket" @
 57218AD66361FC: "CAPI Stats" @
@@ -1306,10 +1198,8 @@ B8420D77CE0227: "CAPI Members" @
 2D2CB022BC3D26: "Speed" @
 2DA2851FFF3935: "Boost" @
 2521738884EF95: "Landing Pad" @
-7548AB52C3D1D5: "Power" @
 BCECF4562F1709: "Stock" @
 2011FCCFA79102: "CAPI Items" @
-44F6AF6945544C: "Quantity" @
 678DD8A69CFC99: "Stolen" @
 3F6F257DD23224: "Microresource" @
 5DBCAD7F97B0E0: "Last Online" @

@@ -219,7 +219,7 @@ namespace EDDiscovery.UserControls
                     var textcolour = IsTransparentModeOn ? ExtendedControls.Theme.Current.SPanelColor : ExtendedControls.Theme.Current.LabelColor;
                     var backcolour = IsTransparentModeOn ? Color.Transparent : this.BackColor;
 
-                    string l = string.Format("At {0}".Tx(), node.Name());
+                    string l = "At".Tx() + " " + node.Name();
                     if (node.Scan != null)
                     {
                         l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}".Tx(), node.Scan.PlanetTypeText, node.Scan.RadiusText,

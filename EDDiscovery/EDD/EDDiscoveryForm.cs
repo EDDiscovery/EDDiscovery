@@ -645,10 +645,10 @@ namespace EDDiscovery
                 tabControlMain.CreateTabs(this, EDDOptions.Instance.TabsReset, DefaultTabList);      // numbers from popouts, which are FIXED!
                 if (tabControlMain.PrimarySplitterTab == null || tabControlMain.PrimarySplitterTab.GetHistoryGrid == null)  // double check we have a primary tab and tg..
                 {
-                    MessageBox.Show(("Tab setup failure: Primary tab or TG failed to load." + Environment.NewLine +
-                                    "This is a abnormal condition - please problem to EDD Team on discord or github." + Environment.NewLine +
-                                    "To try and clear it, hold down shift and then launch the program." + Environment.NewLine +
-                                    "Click on Reset tabs, then Run program, which may clear the problem.").Tx());
+                    MessageBox.Show("Tab setup failure: Primary tab or TG failed to load.\r\n" +
+                                    "This is a abnormal condition - please problem to EDD Team on discord or github.\r\n" + 
+                                    "To try and clear it, hold down shift and then launch the program.\r\n" + 
+                                    "Click on Reset tabs, then Run program, which may clear the problem.".Tx());
                     Application.Exit();
                 }
             }

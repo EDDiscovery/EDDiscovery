@@ -1,34 +1,20 @@
 ﻿// File consists of SHA-1 (0..7) IDs with english text and translation, or @ if no translation
 
-E9C45563358E81: "Warning" @
+SECTION General
+
 24345A14377FD8: "Today" @
 02779596113109: "24h" @
 0A8DD6ADCE7A0D: "7 days" @
 6A72085653E4C5: "All" @
-9CE3BD4224C8C1: "OK" @
-77DFD2135F4DB7: "Cancel" @
 F6FDBE48DC54DD: "Delete" @
 69390E166570E5: "Campaign" @
 86C16821B16226: "No Scan" @
 515FAD8593999E: "Game Time" @
-6C82E6DD86807E: "Time" @
 4276E6AB2A3146: "No Data" @
-6EEF6648406C33: "None" @
 DB3D405B106759: "on" @
 E3DE5AB0CA4C69: "Off" @
-BC7819B34FF875: "Unknown" @
 0EB5ED506E4923: "Information" @
 DE543B3879BD6E: "No Pos" @
-
-// from EDC Core
-
-E8249C664732DF: "Remove All" @
-49CE5DE18C09AA: "Hostile" @
-C65CDEF3DEF45A: "Unfriendly" @
-4BD29139454399: "Neutral" @
-713DB5C16D862F: "Cordial" @
-BF567DC7870262: "Friendly" @
-81F1B69D074090: "Allied" @
 
 // from extended controls
 
@@ -60,7 +46,6 @@ SECTION SafeModeForm
 
 11DDBF0E006302: "EDDiscovery Safe Mode" @
 B1B392607DEAF2: "Run" @
-FCFBF9C6671583: "Remove Journals" @
 5DCC4262C9BB58: "Remove Journal Entries && Commanders" @
 365C643F550384: "Delete/Rebuild User DB" @
 01F2FBC637B7E7: "Delete/Rebuild System DB" @
@@ -89,31 +74,25 @@ A09BA3EA152A4C: "Journal grid" @
 8AE3AF9C3B3CDF: "Visited Star list" @
 0184AA8A46AF1D: "Visited Stars" @
 D8E431F017DBF4: "Materials count" @
-2402EA36326521: "Materials" @
 9668DDAD4FBCDC: "Commodity count" @
 6ABB1B41C4C775: "Commodities" @
 5EB3307B4BCE13: "Ledger of cash related entries" @
 1AA2F31EE7CCBD: "Ledger" @
 D0CE44CC23615F: "Mission list" @
-323EA30C1DCCD5: "Missions" @
 48F48CBFECAAEB: "Ships and their loadouts plus stored modules" @
 C9AAB3AD20D010: "Ships/Loadout" @
 8415368612653C: "Statistics Information" @
-2086B21F8F4927: "Statistics" @
 0408BFBA0435A5: "Market data, giving commodity price information where available" @
 3BE93448CA0805: "Market Data" @
 93A7328B4F8E54: "Ship yards information from places you have visited" @
 2919BE026701EF: "Ship Yards" @
 55AD8F7B31A275: "Outfitting items in ship yards from places you have visited" @
-DEF494BAD4AAB6: "Outfitting" @
 950AD71B4EFEE2: "Synthesis planner" @
-D7B22A6928D409: "Synthesis" @
 608915C58B801E: "Engineering planner" @
 4143D04801509C: "Engineering" @
 593DC32DF5C4CE: "Shopping list planner combining synthesis and engineering" @
 6160F4C2D06317: "Shopping List" @
 844922E5491066: "Scan data on system" @
-28CBA55D2AADF5: "Scan" @
 FB45D404829E9E: "Scan data on system in a grid" @
 AFAC1D100B4A2C: "Scan Grid" @
 5698E21A28B5F8: "Nearest stars from current position" @
@@ -124,16 +103,11 @@ CB92E6CAAAB685: "Estimated Scan values of bodies in system" @
 9C4EE43BE8AD56: "2D Map of galaxy" @
 3C6489B3276EF3: "Mining Overlay" @
 D6FF8EAE6FDB7D: "Mining overlay" @
-2CB83259459C98: "3D Map of systems in range" @
-60D12B289C0F47: "Local Map" @
-A7528D77703FD5: "2D Plot of systems in range" @
-142ADE7739800A: "2D Plot" @
 893A59853B6083: "Trilateration of stars with unknown positions" @
 35E19316B84348: "Trilateration" @
 90897EA3342CFD: "Bookmarks on systems and planets" @
 CA3CDDD25BD8F6: "Bookmarks" @
 8349378742E6AF: "Combat statistics" @
-AF169BB89CFBA4: "Combat" @
 4FEC43B7690B88: "Route Finder from stored star data" @
 DF8B99C5B42959: "Route Finder" @
 4AAA969F8C8AE7: "Expedition Planner, make up a expedition route" @
@@ -141,8 +115,6 @@ C7BFEE111A04BC: "Expedition" @
 5131FE5695BC3C: "System Information" @
 0B8D44BAD5BCAA: "Summary panel overlay" @
 DB6536B2745A44: "Summary Panel" @
-E0F2ED1B7A0283: "Trip computer overlay" @
-ECB3577C325E47: "Trip Computer" @
 3184D5E0831A5A: "Notes overlay" @
 70440046A3DC2E: "Notes" @
 3BBCB9B592E4E3: "Route tracker overlay" @
@@ -166,7 +138,6 @@ FE3AF2D4889AE0: "Captain's Log - notes on your travels" @
 AF2B2B3C3B9D55: "Surveyor - Exploration and route overlay" @
 F0DAFF585A132F: "Mission Overlay" @
 4AC7AEC325927E: "Mission List overlay" @
-86896507A6ED88: "Material Trader" @
 471574D885158A: "Material trader" @
 E0A8D47F3E9219: "EDSM" @
 ED52705FDF6D29: "EDSM - Automatic web view of system" @
@@ -176,8 +147,6 @@ C992AAD4B16F58: "Factions" @
 A404D2CFE41408: "Faction rewards and trading tally" @
 A9A440245EE992: "Spansh" @
 DAD92F257D7828: "Spansh - Automatic web view of system" @
-72F20C151227D8: "EDDB" @
-ADAB7B122964C0: "EDDB - Automatic web view of system" @
 55E85562E3BB89: "Micro Resources" @
 F12262247D08BD: "Micro resource count" @
 8BEBD95AF22662: "Suits & Weapons" @
@@ -188,17 +157,14 @@ F12262247D08BD: "Micro resource count" @
 112E4D8C9B4EEC: "Local 3D Map of systems near you" @
 92F242BD12833A: "Organic Scans" @
 092BC4115EF04D: "Organic scans of current body and historic scans" @
-C6C5065C1BFCBE: "Engineers" @
 104A3B657D7113: "Engineers List, status, recipes" @
 BE1C21D6FE0AE4: "Discoveries" @
 98A0679EBD354B: "Discoveries Observer List" @
-91B0BA24657FE5: "Carrier" @
 42F527004E124B: "Data about your fleet carrier" @
 87DF60DE337FB5: "Resources" @
 9AE60B8B41DFAD: "Resources: All Materials, Commodity, Micro resources" @
 542CC34C1F691F: "Spansh Stations" @
 17DFA3A002E3D5: "Stations in the system from spansh web data" @
-4DFB01DC92677C: "Colonisation" @
 91A4AFA2089B9F: "Colonisation statistics" @
 5A016BA9B95236: "Test Overlay" @
 52A1B9A52B8BFE: "Auto Panel" @
@@ -268,7 +234,6 @@ B1B79547453735: "Insert Tab with panel.." @
 FDB587F6AEF9FC: "Remove Tab" @
 A44AD2D137232C: "Rename Tab" @
 DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." @
-709A23220F2C3D: "Name" @
 5365F84B9A53D9: "Enter a new name for the tab" @
 FF063FC2431DAF: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" @
 3160432B058751: "DLLs loaded: {0}" @
@@ -326,8 +291,6 @@ SECTION AddOnManagerForm
 
 3F827C66E7E047: "Globals" @
 0972452F39F378: "Add-On Manager" @
-3DEB7456519697: "Type" @
-2DA600BF940484: "Version" @
 55F8EBC805E65B: "Description" @
 BAE7D5BE70820E: "Status" @
 97C89A4D6630AD: "Action" @
@@ -415,7 +378,6 @@ SECTION SetNoteForm
 335F5087016C3E: "Set Note" @
 19EABC961735D7: "Timestamp" @
 EFC007A393F66C: "Save" @
-BC0792D8DC81E8: "System" @
 12B71C3E0FE5F7: "Summary" @
 DC3DECBB938475: "Details" @
 
@@ -482,13 +444,11 @@ D8CBC0CB400C12: "Wait until speech completes" @
 3A9C736B3175D6: "Rate" @
 3091C8446F8D3A: "Voice" @
 3B18E8E332500F: "Volume" @
-84219262228FD0: "Override" @
 
 SECTION WaveConfigureDialog
 
 72209F8C09DF0D: "Configure Wave" @
 5CB7091D05A1FB: "Select Default device, volume and effects" @
-2F3B5C55BC27CD: "Browse" @
 2B63A06A3CF32F: "Wait until audio completes" @
 
 SECTION SoundEffectsDialog
@@ -499,7 +459,6 @@ FD7391B6720B80: "Mix" @
 6973E1FED929E5: "Chorus" @
 C26BC3C7F09EAB: "No effects" @
 052BA8E09CD155: "Reverb" @
-20063AD9053289: "Enable" @
 E73D6E899B5D7D: "Distortion" @
 C8D7677E19495F: "Feedback" @
 A6C2D09A48FE01: "Pitch" @

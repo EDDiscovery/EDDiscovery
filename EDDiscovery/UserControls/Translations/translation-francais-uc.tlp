@@ -23,22 +23,16 @@ B15BC9CCE1BA39: "Edit Tags" => "Modifier les tags"
 SECTION UserControlCombatPanel
 
 AD8919ACE091B1: "Event" => "Événement"
-C7D7652EC6A795: "Reward" => "Récompense"
-BFAC50D6424B51: "Credits" => "Crédits"
 9EC34025B6DB16: "Kills" => "Tués"
 645DE66F0C79ED: "Faction Kills" => "Tués par la faction"
 90EEF613042C5A: "Balance" => "Solde"
-68316444B99C6B: "Died" => "Mort"
 000C7B010AA15B: "Crimes" @
-61AD50A9B9189C: "Target" => "Cible"
-9D269517397775: "Faction" @
 A116A463F16F3B: "TotalReward" => "Récompense totale"
 2AD918FF81A2C4: "FactionReward" => "Récompense de faction"
 078EB757BF1155: "Current Credits" => "Crédits disponibles"
 6B3534A2242650: "Total kills (NPC/PVP) in campaign" => "Nombre de tués dans la campagne"
 6344C1B665774D: "Total reward less any costs (fines, rebuys etc)" => "Récompense totale moins les coûts (amendes, rachats, etc.)"
 3E680888D11E9A: "How many times you've been caught!" => "Nombre de fois où vous avez été pris !"
-FCAA3EA68677B6: "Target Faction" => "Faction cible"
 0A11B11F4BD307: "Total reward" => "Récompense totale"
 68C7A5D8D1ECF1: "Reward associated with destroying the faction ships" => "Récompense associée à la destruction de vaisseau de faction"
 2A4D800653DEFF: "Select Campaign to view" => "Sélectionner la campagne à afficher"
@@ -105,7 +99,6 @@ E1988D908E0FDA: "Discovered at " => "Découvert à "
 14D5C9FDE290FE: "Item 1" => "Objet 1"
 EB9A4BC1C0C153: "Date" @
 85A7DE6E270547: "Star" => "Étoile"
-D219C68101F532: "Location" => "Localisation"
 84C078AF3EFE1A: "Current Distance" => "Distance actuelle"
 CF1C85ADBA548E: "Position" @
 209B0897FD112F: "Output grid to CSV" => "Exporter"
@@ -163,8 +156,7 @@ D4FDD27AAE7070: "View on History Grid" => "Voir sur la grille d'historique"
 SECTION UserControlEngineering
 
 8F388BB9800713: "Upgrade/Mat" => "Amélioration/Mat"
-B8FF02892916FF: "Module" @
-7C7F5D049FAD25: "Level" => "Niveau"
+
 A95E85AED56318: "Max" @
 B568B10AECDDE8: "Wanted" => "Souhaité"
 F2367E42DEFDAC: "Avail." => "Dispo."
@@ -190,9 +182,6 @@ SECTION UserControlEstimatedValues
 1D68666BDF4A40: "Body Name" => "Nom du corps"
 D6B23A46B95CAF: "Body Type" => "Type du corps"
 6DA13ADDB000B6: "Source" @
-4A7C05BDEB22B3: "Mapped" => "Cartographié"
-21B572F3D9F3E3: "Already Mapped" => "Déjà cartographié"
-43DF814DBC5742: "Already Discovered" => "Déjà découvert"
 CB34D7DD05451F: "Base Value" => "Valeur de base"
 EEA6FFEE027AB4: "First Mapped" => "Première carto."
 CB083BFF78F38B: "First Discovered Mapped" => "Première découverte carto."
@@ -288,10 +277,6 @@ SECTION UserControlLog
 
 SECTION UserControlMarketData
 
-A3C686E711E472: "Category" => "Catégorie"
-FA3CF2AD51E078: "Sell" => "Vente"
-7CECA51FCAFE42: "Buy" => "Achat"
-6C98E86FC49B32: "Cargo" => "Cargaison"
 5DFC68721F3D07: "Demand" => "Demande"
 222DB0FC1CADF0: "Supply" => "Offre"
 7C9EF052D00BFD: "Galactic Avg" => "Moy. Galactique"
@@ -308,14 +293,9 @@ BB4C560BF53C47: "Has Demand" => "A de la demande"
 
 SECTION UserControlMaterialCommodities
 
-4DA805AFD83F17: "Ship Locker" => "Entrepôt du vaisseau"
-E5E429BCC9C2E4: "Data" => "Données"
 BEFB21EE719272: "Mats" => "Matériaux"
-B25928C6990255: "Total" @
-CCE370D2F9781A: "Rare" @
 FE187BD4E80F7E: "Abv" => "Abrev."
 B7BAA1D40C4EA2: "Number" => "Qté."
-0CCF90EB09D636: "Backpack" => "Sac à dos"
 6358DC846638BD: "Avg. Price" => "Prix moyen"
 9FB1092F32D4FC: "Recipes" => "Recettes"
 B18F6ADE27CF7A: "Want" => "Souhaité"
@@ -337,7 +317,6 @@ AFF3ACED3CA75C: "Count of Items" => "Qté de marchandise"
 BA416FBADB0F09: "Display Item in shopping list" => "Affiche l'élément dans la liste de courses"
 EB8E343579E999: "Clear all display items in shopping list" => "Effacer tous les éléments affiché de la liste de courses"
 3EE4B7555F0B02: "Display all non zero items in shopping list" => "Afficher tous les éléments qui ne sont pas à 0 dans la liste de courses"
-1B90271D66CF2D: "Progress" => "Progression"
 
 
 SECTION UserControlMissionOverlay
@@ -361,7 +340,6 @@ C310B6E9C77045: "Ammonia World" => "Monde ammoniac"
 B52BBF018CF9EC: "Earthlike World" => "Monde tellurique"
 909C1B5FFD57ED: "Water World" => "Monde aquatique"
 3D43FF8C48FA2C: "High metal content body" => "Monde abondant en métaux"
-EA5B349025CF82: "Metal-rich body" => "Corps riche en métaux"
 4D8D48B5146934: "Terraformable" @
 D4617F3267AD60: "Has volcanism" => "a du volcanisme"
 3821671BA55EA5: "Has Rings" => "a des anneaux"
@@ -370,7 +348,6 @@ BE57FAED31951F: "High eccentricity" => "Haute excentricité"
 CB270B1D277411: "Has any other signals" => "a d'autres signaux"
 2B332D20943805: "Has geological signals" => "a des signaux géologiques"
 F70D62F8263274: "Has biological signals" => "a des signaux biologiques"
-A9292825CC0CA6: "Landable" => "Atterrissable"
 80F9887F7F5A1B: "Landable with atmosphere" => "Atterrissable avec atmosphère"
 C269F2C820ADBB: "Landable and large" => "Atterrissable et large"
 3F9C411965E271: "Landable with volcanism" => "Atterrissable avec du volcanisme"
@@ -400,7 +377,6 @@ B97C4D4CDDF23E: "Font" => "Police de caractère"
 23048BC1AE69FE: "Word Wrap" => "Retour à la ligne"
 1BB6C810B1DA16: "Select route to follow" => "Sélectionner l'itinéraire à suivre"
 524DD2CDBBAD94: "Route Settings" => "Paramètres d'itinéraire"
-B10CFFF10BABC0: "Nav Route" => "Itinéraire de navigation en jeu"
 9ADF8A76D97E2A: "Avg {0:N1}ly Fume {1:N1}ly Range {2:N1}ly" => ", Moy : {0:N1} al, Max : {1:N1} al, Portée : {2:N1} al"
 B37E90C8789813: "List signals to display, semicolon seperated" => "Liste des signaux à afficher, séparés par des points-virgules"
 
@@ -409,7 +385,6 @@ SECTION MissionListUserControl
 44AB85A252ADB7: "Origin" => "Origine"
 D42713493CA811: "Destination" @
 731322861EF2C0: "Result (cr)" => "Résultat (cr)"
-4374AAEE247FB2: "to" => "à"
 
 SECTION UserControlMissions
 
@@ -421,16 +396,11 @@ F8B59037B2A4AE: " Mission" @
 
 SECTION UserControlModules
 
-ECDDA59AEA5EE6: "Item" => "Équipement"
 20DD0E149BA65F: "BluePrint" => "Plan"
 02D2B8A95C0CDF: "P/E" => "P/A"
-323D4FC7337134: "Ship" => "Vaisseau"
-AF0AD10B2A196B: "Mass" => "Masse"
-64AE43E8FE7620: "Cost" => "Coût"
 0C85DB3EB1A9A6: "FSD" => "FSD"
 47071804F38EAF: "Thrust" => "Poussée"
 31FE17191E290C: "Shields" => "Boucliers"
-FAB9348C4FD97F: "Armour" => "Armure"
 
 
 6129EFBCDDA076: "Show full blueprint information" => "Afficher les informations complètes du plan"
@@ -444,12 +414,9 @@ A64AB328A429FA: "Import a ship definition for display" => "Importer une définit
 
 FE5C2531E39340: "Force Sell" => "Forcer la vente"
 122A6B402DF67D: "Confirm sell of ship" => "Confirmer la vente du vaisseau"
-CA73BB4E22EBFD: "Stored Modules" => "Modules stockés"
 D2F025FD0D6F0C: "Travel History Entry" => "Historique de voyage"
 673463FDF95385: "Owned Ships" => "Vaisseaux possédés"
 44B046E04F2B04: "Tx Time" @
-ECE2AC10D7266F: "Slot" => "Emplacement"
-B2B53EE4FC1A90: "Stored" => "Stocké"
 22F4D0D2422A35: "All Modules" => "Tous les modules"
 8F325EDB2B44A3: "All Known Modules" => "Tous les modules connus"
 9569A6C389205D: "All Ships" => "Tous les vaisseaux"
@@ -471,7 +438,6 @@ E5379DCF7E564E: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" 
 C8DF6EB8BFDFCF: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" => "Actu {0.##|ly} Porté {0.##|ly} Plein {0.##|ly} Vide {0.##|ly} Max {0.##|ly} Max Carbu {0.##|t} Actu {0.#|/|0.#|t} Réserve {0.#|/|0.#|t} En transfert vers {} Stocké à {}"
 C11EA28A729193: "Cur Spd {0.#} Bst {0.#} Laden {0.#|/|0.#} Unladen {0.#|/|0.#} Max {0.#|/|0.#} Boost Cur {0.#|s} Max {0.#|s}" => "Vit actu {0.#} Boost {0.#} Plein {0.#|/|0.#} Vide {0.#|/|0.#} Max {0.#|/|0.#} Boost Actu {0.#|s} Max {0.#|s}"
 6CC0AEA921D9CD: "Raw {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Ammo {0.#|s} Cur {0.#|%} Max {0.#|%}" => "Brut {0.#} Abs {0.#|%} Kin {0.#|%} Thm {0.#|%} Exp {0.#|%} AX {0.#|%} Dur {0.#|s} DurMax {0.#|s} Munitions {0.#|s} Actu {0.#|%} Max {0.#|%}"
-F32D0645A8333F: "Weapons" => "Armes"
 
 60830556FBB8D7: "Save this loadout to the EDD loadout folder" => "Sauvegarder cette configuration dans le dossier des configurations de EDD"
 391427FC2F26EA: "Delete loadout" => "Supprimer la configuration"
@@ -519,8 +485,6 @@ CFD4E874046B93: "Road to Riches" => "Route à la richesse"
 1DF8F8D30FDD0F: "Ammonia Worlds" => "Mondes ammoniacs"
 AB2A9F0D8D787B: "Earth Likes" => "Mondes telluriques"
 0077D22826A77F: "Trade Router" => "Itinéraire commercial"
-0CF5E327910E74: "Fleet Carrier" => "Porte-vaisseaux"
-7F0950D59B1A34: "Squadron Carrier" => "Porte-vaisseaux d'escadron"
 B12CDD63114BA4: "Galaxy Plotter" => "Itinéraire galactique"
 B364AA8B4033FF: "Exo Mastery" => "Maitrise exobiologique"
 07AB47C5737BA1: "Use Permit Systems" => "Utiliser les systèmes avec permis"
@@ -529,11 +493,9 @@ B2BB7604C825F9: "Metric" => "métrique"
 B604A930356A28: "Find Route" => "Trouver itinéraire"
 A975EEA30DB9FA: "Parameters" => "Paramètres"
 281FA0DAFE53E1: "Use Boosts" => "Utilisation des injections"
-3F66052A107EAF: "From" => "Depuis"
 EC59449017E5B6: "ly" => "al"
 8424A6DD977331: "Web Lookup" @
 A0E237BAC8B17A: "Max jump" => "Saut max"
-AE79EA1E9C6391: "To" => "vers"
 7CF37443D567D9: "Push to expedition" => "Envoyer dans Expédition"
 D5C87506FD897A: "Show route on 3D Map" => "Afficher l'itinéraire sur la carte 3D"
 2FB4DE63226EC5: "Pick the metric to use when searching for a route" => "Choisir la métrique à utiliser lors du calcul d'itinéraire"
@@ -597,7 +559,6 @@ A0BB88B66F57E8: "Set High Value Limit" => "Définir la limite haute de valeur"
 9F6C1D41D0D032: "Show Materials" => "Afficher les matériaux"
 B028A006D79224: "Show rare materials only" => "Afficher uniquement les matériaux rares"
 00848F83A633FB: "Show Moons" => "Afficher les lunes"
-2DBDE6DD6FB541: "Belt" => "Ceinture d'astéroïdes"
 17B8D69486D780: "Barycentre" @
 14E0E8D442549A: "Show G on all planets" => "Afficher les G sur toutes les planètes"
 12071F4330F803: "Show Habitation Zone" => "Afficher la zone habitable"
@@ -607,25 +568,21 @@ E0B7B8CC8BD7CC: "Show Classes of Stars" => "Afficher les classes d'étoile"
 1BC356C17D4433: "Show mass of planets" => "Afficher la masse des planètes"
 FA07BE19814A99: "Show mass of stars" => "Afficher la masse des étoiles"
 A35655D05BB820: "Show age of stars" => "Afficher l'age des étoiles"
-A689A999A5E620: "Expired" => "Expiré"
 90EAF9559AB2D2: "Show bodyless stars on separate lines" => "Afficher les étoiles sans corps sur des lignes séparées"
 79F1829F7C4ED0: "Create a new bookmark for the current system" => "Créer un nouveau marque-page pour le système actuel"
 CA142B27F2458B: "Show signal icons for expired signals" @
 
 SECTION UserControlScanGrid
 
-41FF354B2B330B: "Class" => "Classe"
 63289439EF0B8A: "Max Value" => "Valeur maximale"
 ED567CF0E9AE1F: "Organics Value" => "Valeur scans organiques"
 EBFEA75A0A6AC5: "Configure overall settings" => "Paramètres généraux"
 0498696B357E52: "Main Star" => "Étoile principale"
-E5AAEAAC2E19A2: "Radius" => "Rayon"
 0A9062A9CB5199: "Temperature" => "Température"
 846B90266CABF4: "Moon" => "Lune"
 F85D3B343E0C17: "Geological activity" => "Activité géologique"
 8E140B3FB3635C: "Surface mapped" => "Surface cartographiée"
 269077C77225D6: "This body contains" => "Ce corps contient"
-96DDACCF581F48: "Ring" => "Anneau"
 CB7305DF2F4D76: "This is a green system, as it has all existing jumponium materials available!" => "Ceci est un système écologique, tous les matériaux existants pour le Jumponium sont disponibles !"
 318EF98C2276FA: " jumponium materials found in system." => " matériaux pour le Jumponium trouvés dans le système."
 37B1866847BAC8: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Résumé de scan de {0} : {1} étoiles; {2} planètes ({3} telluriques, {4} géantes gazeuses), {5} lunes"
@@ -637,8 +594,6 @@ SECTION UserControlSettings
 
 1AA2284ABF94BF: "System Lookup from Web" @
 B6EB402E86A9AA: "Commanders" => "Commandants"
-79056C7AE5C30B: "Commander" => "Commandant"
-F5110F31C60E83: "EDSM Name" => "Nom EDSM"
 DE5B4A878597E3: "Journal Folder" => "Dossier du journal"
 9B2A9354670636: "Undelete" => "Annuler supprimer"
 A797E30923AC1B: "Theme" => "Thème"
@@ -666,7 +621,6 @@ D6D452D0168D18: "Show notification area icon" => "Afficher l'icône de la zone d
 C30412531E342C: "DLLs" @
 D06D55570938D1: "Permissions" @
 89B86AB0E66F52: "Language" => "Langue"
-4D064726954A17: "Advanced" => "Avancé"
 00626039F3FF33: "Restart in Safe Mode" => "Redémarrer en mode sans échec"
 EC0002676E6536: "Click this to perform special operations, such as to move system databases to another drive, reset UI, and other maintenance tasks...\r\n\r\n" => "cliquer ici pour réaliser des tâches spécifiques comme le déplacement de bases de données vers un autre disque dur, réinitialiser l'interface ou autres tâches de maintenance...\r\n\r\n"
 5E012313D53D6A: "Delete selected commander" => "Supprimer le commandant sélectionné"
@@ -818,32 +772,9 @@ SECTION UserControlStats
 12D9C090439BAA: "In Game" => "En jeu"
 AB2855156E832D: "By Ship" => "Par vaisseau"
 00926D0ECAABBF: "Ranks" => "Rangs"
-DD48A1149548F0: "Rank" => "Rang"
 2451A597FA5067: "At Start" => "Au départ"
 0B12D442964C13: "At End" => "À la fin"
 F230B2BCC6A6B1: "Last Promotion/Date" => "Date de dernière promotion"
-955A4E9A59BF11: "Powerplay" @
-67711E423601BA: "Squadron" => "Escadron"
-E72ED7A5BCA163: "Bounties on Thargoids" => "Primes sur des Thargoids"
-C070DE1BD06E83: "Bounties on On Foot NPC" => "Primes sur des PNJ à pied"
-6273A2A0CA35EF: "Bounties on Skimmers" => "Primes sur des drones sentinelles"
-9A18F8035AAEA1: "Ships Unknown Rank" => "Vaisseaux de rang inconnu"
-BAC11F62A1EE7D: "Ships Elite Rank" => "Vaisseaux de rang Élite"
-6ED71D543A46B5: "Ships Deadly Rank" => "Vaisseaux de rang Létal"
-C154182DA6A0EA: "Ships Dangerous Rank" => "Vaisseaux de rang Vétéran"
-366E78B1602F76: "Ships Master Rank" => "Vaisseaux de rang Maître"
-457AA8E691A5DA: "Ships Expert Rank" => "Vaisseaux de rang Expert"
-68F8A460EF2B65: "Ships Competent Rank" => "Vaisseaux de rang Compétent"
-8FAD289393971D: "Ships Novice Rank" => "Vaisseaux de rang Novice"
-8727F6D4EE824C: "Ships Harmless Rank" => "Vaisseaux de rang Bleu"
-EAF8AE7FAE1187: "PVP Elite Rank" => "Joueur de rang Élite"
-B313E7107D5C86: "PVP Deadly Rank" => "Joueur de rang Létal"
-7743458F23BEEB: "PVP Dangerous Rank" => "Joueur de rang Vétéran"
-28AF125F4DCEB4: "PVP Master Rank" => "Joueur de rang Maître"
-A6E743F4A8DA1F: "PVP Expert Rank" => "Joueur de rang Expert"
-0D4936734E146A: "PVP Competent Rank" => "Joueur de rang Compétent"
-0A7B5DB004014C: "PVP Novice Rank" => "Joueur de rang Novice"
-8BED567DC90C30: "PVP Harmless Rank" => "Joueur de rang Bleu"
 EBA0BF6D59AA23: "Bounties" => "Primes"
 6C18EAA601E281: "Bounty Value" => "Valeur des primes"
 143706EC834465: "Bounties on Ships" => "Primes sur des vaisseaux"
@@ -873,34 +804,18 @@ ED38C3B32E9FB4: "Most East" => "Le plus à l'est"
 57160FBF8BB19A: "Most Highest" => "Le plus éloigné"
 742DE30108A030: "Most Lowest" => "Le plus proche"
 985904BE62860B: "Most Visited" => "Le plus visité"
-022AFB2A3DD28F: "Ident" @
 A42A766FB98A1B: "Travelled Ly" => "Al parcourues"
 A3E3727E7AC80E: "Bodies Scanned" => "Corps scannés"
 86FD480DBADC22: "Destroyed" => "Détruit(e)s"
 B051CCCD8B0D67: "Premium Boost" => "Boost premium"
 4FE81F7DFC3A7B: "Standard Boost" => "Boost standard"
 744F275A75FD8F: "Basic Boost" => "Boost basique"
-BF95513D610332: "Jet Cone Boost" => "Boost par jet de matière"
 80D9028EDFA54B: "Organic Scans Value" => "Valeur des scans organique"
 93C9D999CAF90E: "Scan value" => "Valeur de scan"
-D436FDB4D178CC: "Belt Cluster" => "Ceintures d'astéroïdes"
 785AD46ADCFC58: "Last dock" => "Dernier appontage"
-6D391E1333D9E0: "Bank Account" => "Compte en banque"
-1B5A20A804DC74: "Crime" @
-6BEEE635DCA549: "Smuggling" => "Contrebande"
-49352196F6D28E: "Trading" => "Commerce"
-FAABCF8B4B60DB: "Mining" => "Minage"
-957464A0F91C56: "Exploration" @
-AB86B441AD93E7: "Passengers" => "Passagers"
-E0C47B9F787BC5: "Search and Rescue" => "Sauvetage"
 EA78B34DA11F9D: "Crafting" => "Fabrication"
-DE463BA892C2F3: "Crew" => "Équipage"
 EB6824747FE3AC: "Multi-crew" => "Équipage multiple"
 F8D07BF619AB93: "Materials Trader" => "Commerçants de matériaux"
-4EC8D6E506ED34: "Fleetcarrier" => "Porte-vaisseaux"
-B663617A36922A: "CQC" @
-E41CFBE34F8307: "Exobiology" => "Exobiologie"
-57D866D2E06189: "Thargoids" => "Rencontres"
 ED8FE7F50C291D: "Goods Bought" => "Marchandises achetées"
 4A9BE7DFAB7DEE: "Goods Sold" => "Marchandises vendues"
 266338DF847C39: "Goods Profit" => "Bénéfice sur les marchandises"
@@ -949,16 +864,11 @@ F02F62E261A315: "Display Material Count" => "Afficher la quantité de matériaux
 31ACBB09F84846: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Maintenir CTRL puis clic gauche pour faire glisser un élément à repositionner, 8 colonnes sont disponibles"
 A89C9CA2A96AE8: "Distance to target" => "Distance de la cible"
 9FFE9E9C6D7672: "Sets the target" => "Définit la cible"
-F25CE1B8A399BD: "Security" => "Sécurité"
 A16C5BBE4BF996: "Range" => "Saut"
-A7B93D2128E820: "Mode" @
 208A402074139F: "MR" @
 0B645D1B659917: "Fuel" => "Carburant"
 C9B1B30D011FE2: "Pos" @
-7E8548C30FEF17: "Economy" => "Économie"
 503335220A6476: "Gov" => "Gouv"
-E471FACAC24C5F: "Allegiance" => "Allégeance"
-A7250206751868: "State" => "Statut"
 DF5D4664763117: "Sol" @
 70F8BB9A8A5393: "Home" => "Base"
 7B181F6DED4B8C: "Dest" @
@@ -1089,15 +999,11 @@ EEBF564BAF4F90: "{0} systems with unknown coordinates found in {1} sector." => "
 SECTION UserControlMaterialTrader
 
 1D4D43CC6F3A83: "Use" => "Utiliser"
-8AE1C34BD37FAD: "Left" => "Restant"
 BFFFD736CDDD08: "Get" => "Obtenir"
 719EA396AD92E0: "Clear" => "Vider"
 3898B9AA06204B: "Offer" => "Offre"
 965FB2DDF63D60: "Receive" => "Reçoit"
 127F7960FB4A8D: "Clear Trade" => "Vider la transaction"
-DA433CD41E7FB7: "Raw" => "Brut"
-58AC2F7D78D326: "Encoded" => "Encodé"
-8AB3DB9BFC3921: "Manufactured" => "Fabriqué"
 
 SECTION UserControlMiningOverlay
 
@@ -1136,8 +1042,6 @@ C1ECFEB8DEF4DC: "Commds Profit" => "Gains marchandises"
 77E2DD8141E981: "Bounty Kills" => "Tués pour primes"
 397B67A90DEC91: "Bounty Rewards" => "Récompenses de prime"
 D5965451E332A6: "Bounty Rewards Value" => "Valeur des récompenses de primes"
-B83FE58DB23E57: "Interdicted" => "Interdit"
-C21AFB3EFA18AB: "Interdiction" => "Interdiction"
 5F22266A168021: "Kill Bonds Victim" => "Victimes de récompenses de combat"
 FC21DB8588503E: "Kill Bonds Awarded" => "Récompenses de combat"
 DAE2AEC9BE1018: "Kill Bonds Value" => "Valeur des récompenses de combat"
@@ -1155,8 +1059,6 @@ EE4A9C0F4355B9: "Materials/Commodities for " => "Matériaux/Marchandises pour "
 F6A9D28E466A97: "Missions In Progress" => "Missions en cours"
 72E11BB738A1FB: "Capital ship Victims" => "Victimes de vaisseau capital"
 6F623465F6238E: "Capital ship Award" => "Récompenses de vaisseau capital"
-C7AD6F7B6831A8: "Redeem Voucher" => "Valeur des primes réclamées"
-2C60D95A352DA3: "Pay Fines" => "Valeur des amendes"
 7E2BA2DEEF4EF3: "Pay Bounty Value" => "Valeur des primes"
 984FAF564D50B9: "DL Victim" => "Victimes liaison de données"
 AB2BEAA625AAC3: "DL Payee Faction" => "Récompenses liaison de données"
@@ -1164,7 +1066,6 @@ AB2BEAA625AAC3: "DL Payee Faction" => "Récompenses liaison de données"
 
 01784CA8036C41: "Last Known Reputation" => "Dernière réputation connue"
 CE1FCB4A606ED1: "Last State" => "Dernier état"
-5C9CB498F540DF: "Government" => "Gouvernement"
 1DD01EBAA45EEF: "System Influence" => "Influence dans le système"
 05A55AA172DB06: "Other System Info" => "Autres infos du système"
 CB7B9C47F344FC: "Organic Data Value" => "Valeur des scans organiques"
@@ -1189,9 +1090,6 @@ DAB5A87D199E18: "Star System" => "Système"
 CC91B1EA2C1651: "Variant" @
 E214E19943B264: "Last Scan Type" => "Type du dernier scan"
 
-SECTION ScanDisplayForm
-
-4CB8D8545ED6BF: "Station" @
 
 SECTION TagsForm
 
@@ -1221,8 +1119,6 @@ SECTION InfoForm
 
 SECTION UserControlSuitsWeapons
 
-CC459F63A7AECD: "Mods" => "Modifications"
-9E7FD7DDAEE291: "Loadout" => "Configuration"
 EF002BCE769B96: "Primary 1" => "Principal 1"
 34CD6210189BD2: "Primary 2" => "Principal 2"
 025DE599EA0A62: "Secondary" => "Secondaire"
@@ -1279,7 +1175,6 @@ CD7E9084A619FD: "This Service is Suspended" => "Ce service est suspendu"
 6C573682E526FF: "This Service is Not Installed" => "Ce service n'est pas installé"
 068D15FAF7392F: "No Module or Ship packs installed" => "Pas de pack de modules ou de vaisseaux installé"
 3BECD4DD96195C: "Tier " @
-8EF7B327113B48: "Cost: ; cr;N0" => "Coût : ; cr;N0"
 BB9246B17BFDFF: "Jumping" => "Saut en cours"
 334FBEB50B8D02: "No CAPI data from frontier, due to either or server/network failure" => "Pas de données CAPI de la part de Frontier, à cause d'une erreur serveur ou réseau"
 296B6B5743412B: "You are not logged into CAPI.\r\nGo to the settings page and select your commanders settings, and log into CAPI." => "Vous n'êtes pas connecté à CAPI.\r\nAllez dans la page des paramètres puis ouvrez la configuration du commandant, et connectez-vous à CAPI."
@@ -1294,9 +1189,6 @@ EA50EDD2233946: "Balance cr" => "Solde (cr)"
 5CBD584046863B: "Services" @
 DB866831C3D096: "Packs" @
 CDED093321DDAA: "Orders" => "Commerce de marchandises"
-38DFC233193C18: "Commodity" => "Marchandise"
-171A0606F7C745: "Group" => "Groupe"
-160F06D4799C85: "Purchase" => "Achat"
 0028D743EB44B8: "Sale" => "Vente"
 D909428F5E2D1E: "Blackmarket" => "Marché noir"
 57218AD66361FC: "CAPI Stats" @
@@ -1306,10 +1198,8 @@ B8420D77CE0227: "CAPI Members" @
 2D2CB022BC3D26: "Speed" => "Vitesse"
 2DA2851FFF3935: "Boost" @
 2521738884EF95: "Landing Pad" => "Plate-forme d'atterrissage"
-7548AB52C3D1D5: "Power" => "Puissance"
 BCECF4562F1709: "Stock" @
 2011FCCFA79102: "CAPI Items" => "CAPI Éléments"
-44F6AF6945544C: "Quantity" => "Quantité"
 678DD8A69CFC99: "Stolen" => "Volé"
 3F6F257DD23224: "Microresource" => "Micro ressource"
 5DBCAD7F97B0E0: "Last Online" @

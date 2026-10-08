@@ -1,34 +1,20 @@
 ﻿// File consists of SHA-1 (0..7) IDs with english text and translation, or @ if no translation
 
-E9C45563358E81: "Warning" => "Attention"
+SECTION General
+
 24345A14377FD8: "Today" => "Aujourd'hui"
 02779596113109: "24h" @
 0A8DD6ADCE7A0D: "7 days" => "7 jours"
 6A72085653E4C5: "All" => "Tout"
-9CE3BD4224C8C1: "OK" @
-77DFD2135F4DB7: "Cancel" => "Annuler"
 F6FDBE48DC54DD: "Delete" => "Supprimer"
 69390E166570E5: "Campaign" => "Campagne"
 86C16821B16226: "No Scan" => "Pas de Scan"
 515FAD8593999E: "Game Time" => "Temps de jeu"
-6C82E6DD86807E: "Time" => "Heure"
 4276E6AB2A3146: "No Data" => "Pas de données"
-6EEF6648406C33: "None" => "Aucun"
 DB3D405B106759: "on" => "On"
 E3DE5AB0CA4C69: "Off" @
-BC7819B34FF875: "Unknown" => "Inconnu"
 0EB5ED506E4923: "Information" @
 DE543B3879BD6E: "No Pos" => "Pas de position"
-
-// from EDC Core
-
-E8249C664732DF: "Remove All" => "Supprimer tout"
-49CE5DE18C09AA: "Hostile" @
-C65CDEF3DEF45A: "Unfriendly" => "Non amicale"
-4BD29139454399: "Neutral" => "Neutre"
-713DB5C16D862F: "Cordial" => "Cordiale"
-BF567DC7870262: "Friendly" => "Amicale"
-81F1B69D074090: "Allied" => "Alliée"
 
 // from extended controls
 
@@ -60,7 +46,6 @@ SECTION SafeModeForm
 
 11DDBF0E006302: "EDDiscovery Safe Mode" => "EDDiscovery Mode sans échec"
 B1B392607DEAF2: "Run" => "Démarrer"
-FCFBF9C6671583: "Remove Journals" => "Supprimer les journaux"
 5DCC4262C9BB58: "Remove Journal Entries && Commanders" => "Supprimer les entrées des journaux et des commandants"
 365C643F550384: "Delete/Rebuild User DB" => "Supprimer/Reconstruire la base de données de l'utilisateur"
 01F2FBC637B7E7: "Delete/Rebuild System DB" => "Supprimer/Reconstruire la base de données des systèmes"
@@ -89,31 +74,25 @@ A09BA3EA152A4C: "Journal grid" => "Vue tableau du journal"
 8AE3AF9C3B3CDF: "Visited Star list" => "Liste des étoiles visitées"
 0184AA8A46AF1D: "Visited Stars" => "Liste des étoiles"
 D8E431F017DBF4: "Materials count" => "Quantité de matériaux"
-2402EA36326521: "Materials" => "Matériaux"
 9668DDAD4FBCDC: "Commodity count" => "Quantité de marchandises"
 6ABB1B41C4C775: "Commodities" => "Marchandises"
 5EB3307B4BCE13: "Ledger of cash related entries" => "Livre de compte (crédits)"
 1AA2F31EE7CCBD: "Ledger" => "Comptabilité"
 D0CE44CC23615F: "Mission list" => "Liste des missions"
-323EA30C1DCCD5: "Missions" @
 48F48CBFECAAEB: "Ships and their loadouts plus stored modules" => "Vaisseaux, leurs équipements et modules stockés"
 C9AAB3AD20D010: "Ships/Loadout" => "Vaisseaux/Équipements"
 8415368612653C: "Statistics Information" => "Informations statistiques"
-2086B21F8F4927: "Statistics" => "Statistiques"
 0408BFBA0435A5: "Market data, giving commodity price information where available" => "Vue des données du marché, indique les prix quand ils sont disponibles"
 3BE93448CA0805: "Market Data" => "Marché"
 93A7328B4F8E54: "Ship yards information from places you have visited" => "Information sur les chantiers navals des endroits visités"
 2919BE026701EF: "Ship Yards" => "Chantiers Navals"
 55AD8F7B31A275: "Outfitting items in ship yards from places you have visited" => "Information sur les équipements dans les chantiers navals des endroits visités"
-DEF494BAD4AAB6: "Outfitting" => "Équipements"
 950AD71B4EFEE2: "Synthesis planner" => "Planificateur des synthèses"
-D7B22A6928D409: "Synthesis" => "Synthèses"
 608915C58B801E: "Engineering planner" => "Planificateur de l'ingénierie"
 4143D04801509C: "Engineering" => "Ingénierie"
 593DC32DF5C4CE: "Shopping list planner combining synthesis and engineering" => "Liste de courses combinant les synthèses et l'ingénierie"
 6160F4C2D06317: "Shopping List" => "Liste de courses"
 844922E5491066: "Scan data on system" => "Données de scan du système"
-28CBA55D2AADF5: "Scan" @
 FB45D404829E9E: "Scan data on system in a grid" => "Données de scan du système en vue tableau"
 AFAC1D100B4A2C: "Scan Grid" => "Scan Tableau"
 5698E21A28B5F8: "Nearest stars from current position" => "Liste des étoiles les plus proches"
@@ -124,16 +103,11 @@ CB92E6CAAAB685: "Estimated Scan values of bodies in system" => "Valeurs estimée
 9C4EE43BE8AD56: "2D Map of galaxy" => "Carte 2D de la galaxie"
 3C6489B3276EF3: "Mining Overlay" => "Minage, superposé (overlay)"
 D6FF8EAE6FDB7D: "Mining overlay" => "Minage, superposé (overlay)"
-2CB83259459C98: "3D Map of systems in range" => "Carte 3D des systèmes à portée"
-60D12B289C0F47: "Local Map" => "Carte Locale"
-A7528D77703FD5: "2D Plot of systems in range" => "Plan 2D des systèmes à portées"
-142ADE7739800A: "2D Plot" => "Plan 2D"
 893A59853B6083: "Trilateration of stars with unknown positions" => "Trilatération d'étoiles aux positions inconnues"
 35E19316B84348: "Trilateration" => "Trilatération"
 90897EA3342CFD: "Bookmarks on systems and planets" => "Gestion des marque-pages de systèmes et planètes"
 CA3CDDD25BD8F6: "Bookmarks" => "Marque-pages"
 8349378742E6AF: "Combat statistics" => "Affichage des statistiques de combat"
-AF169BB89CFBA4: "Combat" @
 4FEC43B7690B88: "Route Finder from stored star data" => "Calcul d'itinéraire depuis les données stellaires stockées"
 DF8B99C5B42959: "Route Finder" => "Calcul d'itinéraire"
 4AAA969F8C8AE7: "Expedition Planner, make up a expedition route" => "Planificateur d'expédition"
@@ -141,8 +115,6 @@ C7BFEE111A04BC: "Expedition" => "Expédition"
 5131FE5695BC3C: "System Information" => "Information système"
 0B8D44BAD5BCAA: "Summary panel overlay" => "Panneau superposé de résumé (overlay)"
 DB6536B2745A44: "Summary Panel" => "Panneau résumé"
-E0F2ED1B7A0283: "Trip computer overlay" => "Ordinateur de voyage, superposé (overlay)"
-ECB3577C325E47: "Trip Computer" => "Ordinateur de voyage"
 3184D5E0831A5A: "Notes overlay" => "Notes sur le système, superposée (overlay)"
 70440046A3DC2E: "Notes" @
 3BBCB9B592E4E3: "Route tracker overlay" => "Suivi d'itinéraire, superposé (overlay)"
@@ -166,7 +138,6 @@ FE3AF2D4889AE0: "Captain's Log - notes on your travels" => "Journal du capitaine
 AF2B2B3C3B9D55: "Surveyor - Exploration and route overlay" => "Assistance de cartographie de planète, superposée (overlay)"
 F0DAFF585A132F: "Mission Overlay" => "Mission, superposée (overlay)"
 4AC7AEC325927E: "Mission List overlay" => "Liste des missions, superposée (overlay)"
-86896507A6ED88: "Material Trader" => "Commerçants de matériaux"
 471574D885158A: "Material trader" => "Commerçants de matériaux"
 E0A8D47F3E9219: "EDSM" @
 ED52705FDF6D29: "EDSM - Automatic web view of system" => "Vue web automatique de la page EDSM d'un système"
@@ -176,8 +147,6 @@ C992AAD4B16F58: "Factions" @
 A404D2CFE41408: "Faction rewards and trading tally" => "Récompenses de faction et décompte du commerce"
 A9A440245EE992: "Spansh" @
 DAD92F257D7828: "Spansh - Automatic web view of system" => "Vue web automatique de la page Spansh d'un système"
-72F20C151227D8: "EDDB" @
-ADAB7B122964C0: "EDDB - Automatic web view of system" => "Vue web automatique de la page EDDB d'un système"
 55E85562E3BB89: "Micro Resources" => "Micro ressources"
 F12262247D08BD: "Micro resource count" => "Compteur des micro ressources"
 8BEBD95AF22662: "Suits & Weapons" => "Combinaisons & Armes"
@@ -188,17 +157,14 @@ F12262247D08BD: "Micro resource count" => "Compteur des micro ressources"
 112E4D8C9B4EEC: "Local 3D Map of systems near you" => "Carte 3D locale des systèmes proches de vous"
 92F242BD12833A: "Organic Scans" => "Scans organique"
 092BC4115EF04D: "Organic scans of current body and historic scans" => "Scans organique du corps actuel et historique des scans"
-C6C5065C1BFCBE: "Engineers" => "Ingénieurs"
 104A3B657D7113: "Engineers List, status, recipes" => "Liste des ingénieurs, statuts, recettes"
 BE1C21D6FE0AE4: "Discoveries" => "Découvertes"
 98A0679EBD354B: "Discoveries Observer List" => "Liste des découvertes"
-91B0BA24657FE5: "Carrier" => "Porte-vaisseaux"
 42F527004E124B: "Data about your fleet carrier" => "Données de votre porte-vaisseaux"
 87DF60DE337FB5: "Resources" => "Ressources"
 9AE60B8B41DFAD: "Resources: All Materials, Commodity, Micro resources" => "Ressources : Tous les matériaux, marchandises, micro ressources"
 542CC34C1F691F: "Spansh Stations" => "Spansh - Stations"
 17DFA3A002E3D5: "Stations in the system from spansh web data" => "Les stations du système depuis le site web Spansh"
-4DFB01DC92677C: "Colonisation" @
 91A4AFA2089B9F: "Colonisation statistics" => "Statistiques de colonisation"
 5A016BA9B95236: "Test Overlay" @
 52A1B9A52B8BFE: "Auto Panel" @
@@ -268,7 +234,6 @@ B1B79547453735: "Insert Tab with panel.." => "Insérer l'onglet dans le panneau"
 FDB587F6AEF9FC: "Remove Tab" => "Supprimer l'onglet"
 A44AD2D137232C: "Rename Tab" => "Renommer l'onglet"
 DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Erreur de création d'onglet \r\nCette erreur est anormale, rapportez le problème à l'équipe d'EDD sur Discord ou GitHub.\r\nPour essayer de récupérer, maintenir la touche MAJ et lancer le programme.\r\nCliquer sur RAZ Onglets, puis relancer le programme, ceci pourrait régler le problème."
-709A23220F2C3D: "Name" => "Nom"
 5365F84B9A53D9: "Enter a new name for the tab" => "Entrer un nouveau nom pour l'onglet"
 FF063FC2431DAF: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Les DLL de l'extension suivante ont été trouvées\r\nSouhaitez-vous autoriser leur utilisation ?\r\n{0} \r\nSi vous ne le souhaitez pas, vous pouvez soit supprimer les DLL du dossier ED dans Appdata\r\nou désinstaller le pack qui a installé la DLL\r\nou maintenir la touche MAJ en lançant EDD et choisir l'option de Supprimer toutes les extensions"
 3160432B058751: "DLLs loaded: {0}" => "DLL chargée(s) : {0}"
@@ -326,8 +291,6 @@ SECTION AddOnManagerForm
 
 3F827C66E7E047: "Globals" @
 0972452F39F378: "Add-On Manager" => "Gestionnaire d'Add-On"
-3DEB7456519697: "Type" @
-2DA600BF940484: "Version" @
 55F8EBC805E65B: "Description" @
 BAE7D5BE70820E: "Status" => "Statut"
 97C89A4D6630AD: "Action" @
@@ -415,7 +378,6 @@ SECTION SetNoteForm
 335F5087016C3E: "Set Note" => "Définir une note"
 19EABC961735D7: "Timestamp" => "Timestamp"
 EFC007A393F66C: "Save" => "Sauvegarder"
-BC0792D8DC81E8: "System" => "Système"
 12B71C3E0FE5F7: "Summary" => "Résumé"
 DC3DECBB938475: "Details" => "Détails"
 
@@ -482,13 +444,11 @@ D8CBC0CB400C12: "Wait until speech completes" => "Attendez la fin du discours"
 3A9C736B3175D6: "Rate" => "Vitesse"
 3091C8446F8D3A: "Voice" => "Voix"
 3B18E8E332500F: "Volume" @
-84219262228FD0: "Override" @
 
 SECTION WaveConfigureDialog
 
 72209F8C09DF0D: "Configure Wave" @
 5CB7091D05A1FB: "Select Default device, volume and effects" => "Sélectionnez le périphérique par défaut, le volume et les effets"
-2F3B5C55BC27CD: "Browse" => "Parcourir"
 2B63A06A3CF32F: "Wait until audio completes" => "Attendez la fin de l'audio"
 
 SECTION SoundEffectsDialog
@@ -499,7 +459,6 @@ FD7391B6720B80: "Mix" @
 6973E1FED929E5: "Chorus" @
 C26BC3C7F09EAB: "No effects" => "Pas d'effets"
 052BA8E09CD155: "Reverb" => "Réverbérations"
-20063AD9053289: "Enable" => "Activer"
 E73D6E899B5D7D: "Distortion" @
 C8D7677E19495F: "Feedback" @
 A6C2D09A48FE01: "Pitch" @

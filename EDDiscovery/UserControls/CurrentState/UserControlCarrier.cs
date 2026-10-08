@@ -693,7 +693,7 @@ namespace EDDiscovery.UserControls
 
             if (cs.PackCost.TryGetValue(CarrierStats.PackCostKey(sp), out long value))
             {
-                imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), BaseUtils.FieldBuilder.Build("Cost: ; cr;N0".Tx(), value), normfont, color);
+                imageControlPacks.DrawText(pointtextmid, new Size(titlewidth, 2000), BaseUtils.FieldBuilder.Build("Cost".Tx() + ": ; cr N0",value), normfont, color);
             }
 
             Image img = BaseUtils.Icons.IconSet.GetImage(module ? "Controls.ModulePack" : "Controls.Shipyard");

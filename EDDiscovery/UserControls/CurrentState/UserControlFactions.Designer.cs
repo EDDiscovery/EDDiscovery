@@ -460,7 +460,7 @@
             this.labelTo.Name = "labelTo";
             this.labelTo.Size = new System.Drawing.Size(16, 13);
             this.labelTo.TabIndex = 4;
-            this.labelTo.Text = "to";
+            this.labelTo.Text = "To";
             // 
             // labelSearch
             // 
