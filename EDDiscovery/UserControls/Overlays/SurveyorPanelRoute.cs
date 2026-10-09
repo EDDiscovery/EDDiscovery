@@ -83,7 +83,7 @@ namespace EDDiscovery.UserControls
                                     jumpmsg = ", " + jumps.ToString() + " " + ((jumps == 1) ? "jump".Tx() : "jumps".Tx());
                             }
                             else
-                                jumpmsg = " No Ship FSD Information".Tx();
+                                jumpmsg = " " + "No Ship FSD Information".Tx();
                         }
 
                         string wpposmsg = "";
@@ -98,7 +98,7 @@ namespace EDDiscovery.UserControls
                         }
                         else
                         {
-                            lastroutetext += String.Format(", Left {0:N1}ly".Tx(), distleft) + Environment.NewLine;
+                            lastroutetext += String.Format(", " + "Left".Tx() + " {0:N1}ly", distleft) + Environment.NewLine;
 
                             if (distleft == 0)
                                 lastroutetext += $"{closest.nextsystem.Name}";
@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
                             lastroutetext += wpposmsg + jumpmsg;
 
                             if (IsSet(RouteControl.showdeviation) && closest.deviation > 0)
-                                lastroutetext += String.Format(", Dev {0:N1}ly".Tx(), closest.deviation);
+                                lastroutetext += String.Format(", " + "Dev {0:N1}ly".Tx(), closest.deviation);
                         }
 
                         //System.Diagnostics.Debug.WriteLine(lastroutetext);

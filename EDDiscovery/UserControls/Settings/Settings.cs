@@ -35,6 +35,8 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             DBBaseName = "SettingsPanel";
+            toolTip.SetToolTip(comboBoxClickThruKey, "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards".Tx());
+
         }
 
         protected override void Init()
@@ -470,12 +472,11 @@ namespace EDDiscovery.UserControls
                 if (!themename.Equals("Custom") && !DiscoveryForm.ThemeList.IsFontAvailable(themename, out fontwanted))
                 {
                     string warning = string.Format(
-                          ("The font used by this theme is not available on your system." + Environment.NewLine +
-                          "The font needed is \"{0}\"." + Environment.NewLine +
-                          "Install this font to fully use this theme." + Environment.NewLine +
-                          "Euro Caps font is freely available from www.edassets.org." + Environment.NewLine +
-                          Environment.NewLine +
-                          "Would you like to load this theme using a replacement font?").Tx(), fontwanted);
+                          "The font used by this theme is not available on your system.\r\n" +
+                          "The font needed is \"{0}\".\r\n" +
+                          "Install this font to fully use this theme.\r\n" + 
+                          "Euro Caps font is freely available from www.edassets.org.\r\n\r\n" + 
+                          "Would you like to load this theme using a replacement font?".Tx(), fontwanted);
 
                     DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".Tx(), MessageBoxButtons.YesNo);
 
@@ -638,11 +639,13 @@ namespace EDDiscovery.UserControls
 
         private void extButtonReloadStarDatabase_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, ("This will delete the systems database." + Environment.NewLine+ Environment.NewLine +
-                    "You can then reselect the database data source and the" + Environment.NewLine +
-                    "star set required." + Environment.NewLine + Environment.NewLine +
-                    "This will require a full download of the star database from the server" + Environment.NewLine +
-                    "Only use this if you are happy to download the dataset again").Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, 
+                    "This will delete the systems database.\r\n\r\n" +
+                    "You can then reselect the database data source and the\r\n" +
+                    "star set required.\r\n\r\n" +
+                    "This will require a full download of the star database from the server\r\n" +
+                    "Only use this if you are happy to download the dataset again".Tx(), 
+                    "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 EDDApplicationContext.RestartOptions = $"-deletesystemdb -systemsdbpath {EDDOptions.Instance.SystemDatabasePath} -appfolder {EDDOptions.Instance.AppDataDirectory}";
                 Application.Exit();
@@ -672,11 +675,12 @@ namespace EDDiscovery.UserControls
                     info = new ExtendedControls.InfoForm();
                     info.Info("Remove Sectors".Tx(),
                                 EDDiscovery.Properties.Resources.edlogo_3mo_icon,
-                                string.Format(("Removing {0} Sector(s)." + Environment.NewLine + Environment.NewLine +
-                                "This will take a while (up to 30 mins dep on drive type and amount of sectors)." + Environment.NewLine +
-                                "You may continue to use EDD while this operation takes place" + Environment.NewLine +
-                                "but it may be slow to respond. Do not close down EDD until this window says" + Environment.NewLine +
-                                "the process has finished" + Environment.NewLine + Environment.NewLine).Tx(), gss.Removed.Count));
+                                string.Format(
+                                "Removing {0} Sector(s).\r\n\r\n" +
+                                "This will take a while (up to 30 mins dep on drive type and amount of sectors).\r\n" + 
+                                "You may continue to use EDD while this operation takes place\r\n" + 
+                                "but it may be slow to respond. Do not close down EDD until this window says\r\n" + 
+                                "the process has finished\r\n\r\n".Tx(), gss.Removed.Count));
                     info.EnableClose = false;
                     info.Show(DiscoveryForm);
 
@@ -711,8 +715,9 @@ namespace EDDiscovery.UserControls
                 removetimer.Stop();
                 taskremovesectors.Dispose();
                 info.EnableClose = true;
-                info.AddText(("Finished, Please close the window." + Environment.NewLine +
-                    "If you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD" + Environment.NewLine).Tx());
+                info.AddText(
+                    "Finished, Please close the window.\r\n" +
+                    "If you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n".Tx());
             }
         }
 

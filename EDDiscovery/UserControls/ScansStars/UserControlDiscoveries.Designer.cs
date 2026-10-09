@@ -89,7 +89,6 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 29;
-            this.toolTip.SetToolTip(this.buttonExtExcel, "Export");
             this.buttonExtExcel.UseVisualStyleBackColor = false;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
@@ -144,7 +143,6 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.TabIndex = 31;
             this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxSearch.TextNoChange = "";
-            this.toolTip.SetToolTip(this.textBoxSearch, resources.GetString("textBoxSearch.ToolTip"));
             this.textBoxSearch.WordWrap = true;
             this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
             // 
@@ -251,6 +249,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxTime.DisabledScaling = 0.5F;
             this.comboBoxTime.DisplayMember = "";
+            this.comboBoxTime.DropDownMinimumItemWidth = -1;
             this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTime.GradientDirection = 90F;
             this.comboBoxTime.Location = new System.Drawing.Point(47, 5);

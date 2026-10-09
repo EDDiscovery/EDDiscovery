@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
-        private string searchterms = "system:body:station:stationfaction";
+        private string searchterms;
 
         private EventColours eventcolours;
 
@@ -79,6 +79,9 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(historyContextMenu);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
             DBBaseName = "JournalGrid";
+
+            toolTip.SetToolTip(textBoxSearch, "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties".Tx());
+
         }
 
         protected override void Init()
@@ -108,6 +111,8 @@ namespace EDDiscovery.UserControls
             todotimer = new Timer() { Interval = 10 };
             todotimer.Tick += Todotimer_Tick;
 
+            searchterms = "system:body:station:stationfaction".TxIfDefined();
+
             DiscoveryForm.OnHistoryChange += HistoryChanged;
             DiscoveryForm.OnNewEntry += AddNewEntry;
 
@@ -118,9 +123,6 @@ namespace EDDiscovery.UserControls
             }
 
             eventcolours = new EventColours(GetSetting(dbEventColours, "{}"));
-
-            if (BaseUtils.TranslatorMkII.Instance.IsDefined(searchterms))
-                searchterms = searchterms.Tx();
         }
 
         protected override void LoadLayout()
@@ -252,7 +254,7 @@ namespace EDDiscovery.UserControls
 
                 System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " JG TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
-                string ms = string.Format(" showing {0} original {1}".Tx(), dataGridViewJournal.Rows.Count, current_historylist?.Count ?? 0);
+                string ms = string.Format(" " + "showing {0} original {1}".Tx(), dataGridViewJournal.Rows.Count, current_historylist?.Count ?? 0);
                 comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(), fdropdown + ms) : "Select the entries by age, ".Tx()+ ms);
 
                 if (dataGridViewJournal.SelectAndMove(rowsbyjournalid, ref pos, true))

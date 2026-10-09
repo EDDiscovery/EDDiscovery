@@ -78,7 +78,7 @@ namespace EDDiscovery.UserControls
 
                 CompositeAutoScaleButton cb = CompositeAutoScaleButton.QuickInit(
                             selback,
-                            (i == 0) ? "NO ADD ONS!".Tx(): i.ToString() + " Add Ons".Tx(),
+                            (i == 0) ? "NO ADD ONS!".Tx(): i.ToString() + "Add Ons".Tx(),
                             new Image[] { EDDiscovery.Icons.Controls.ManageAddOns },
                             new Image[] { EDDiscovery.Icons.Controls.Popout },
                             ButtonPress,

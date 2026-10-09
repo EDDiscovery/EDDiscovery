@@ -30,7 +30,7 @@ namespace EDDiscovery.UserControls
         private string dbSearches = "Searches";
         private string dbWordWrap = "WordWrap";
 
-        private string searchterms = "system:body";
+        private string searchterms;
         private Timer searchtimer;
         private Timer updatetimer;
 
@@ -43,6 +43,9 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
 
             DBBaseName = "Discoveries";
+
+            // the darn thing keeps on putting it in a resource file hiding it from the scanner!
+            toolTip.SetToolTip(textBoxSearch, "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties".Tx());
         }
 
         protected override void Init()
@@ -75,6 +78,8 @@ namespace EDDiscovery.UserControls
             searchtimer.Tick += Searchtimer_Tick;
             updatetimer = new Timer() { Interval = 1000 };
             updatetimer.Tick += Updatetimer_Tick;
+
+            searchterms = "system:body".TxIfDefined();
 
             // we need to ask our parent UCCB for the panel op - remembering we are not a normal UCCB # 3478
             dataGridView.GotoEntryClicked += (he) =>

@@ -50,7 +50,7 @@ namespace EDDiscovery.UserControls
 
         private Dictionary<long, DataGridViewRow> rowsbyjournalid = new Dictionary<long, DataGridViewRow>();
 
-        private string searchterms = "system:body:station:stationfaction";
+        private string searchterms;
 
         private Timer searchtimer;
 
@@ -73,6 +73,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
 
             DBBaseName = "StarListControl";
+
+            toolTip.SetToolTip(textBoxSearch, "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties".Tx());
         }
 
         protected override void Init()
@@ -99,14 +101,13 @@ namespace EDDiscovery.UserControls
             todotimer = new Timer() { Interval = 20 };
             todotimer.Tick += Todotimer_Tick;
 
+            searchterms = "system:body:station:stationfaction".TxIfDefined();
+
             // set up the combo box, and if we can't find the setting, reset the setting
             if ( TravelHistoryFilter.InitialiseComboBox(comboBoxTime, GetSetting(dbTimeSelector, ""), false, true, false, GetSetting(dbTimeDates, "")) == false)
             {
                 PutSetting(dbTimeSelector, comboBoxTime.Text);
             }
-
-            if (BaseUtils.TranslatorMkII.Instance.IsDefined(searchterms))
-                searchterms = searchterms.Tx();
         }
 
         protected override void LoadLayout()

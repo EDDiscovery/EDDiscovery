@@ -144,8 +144,9 @@ namespace EDDiscovery.UserControls
 
             if (edsmroute != null)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), ("The current route name conflicts with a well-known expedition." + Environment.NewLine
-                    + "Please specify a new name to save your changes.").Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), 
+                    "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes.".Tx(), 
+                    "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
                 return false;
             }
@@ -193,8 +194,9 @@ namespace EDDiscovery.UserControls
             {
                 MakeVisible();      // we may not be on this screen if called (shutdown, import) make visible
 
-                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), ("Expedition - There are unsaved changes to the current route." + Environment.NewLine
-                    + "Would you like to save the current route before proceeding?").Tx(), "Warning".Tx(), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
+                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), 
+                    "Expedition - There are unsaved changes to the current route.\r\nWould you like to save the current route before proceeding?".Tx(), 
+                    "Warning".Tx(), MessageBoxButtons.YesNoCancel, MessageBoxIcon.Exclamation);
 
                 switch (result)
                 {

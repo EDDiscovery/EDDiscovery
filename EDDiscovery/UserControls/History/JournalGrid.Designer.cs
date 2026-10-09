@@ -65,6 +65,7 @@ namespace EDDiscovery.UserControls
             this.buttonField = new ExtendedControls.ExtButton();
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.checkBoxCursorToTop = new ExtendedControls.ExtCheckBox();
+            this.extButtonEventColours = new ExtendedControls.ExtButton();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.vScrollBarCustom = new ExtendedControls.ExtScrollBar();
             this.dataGridViewJournal = new BaseUtils.DataGridViewColumnControl();
@@ -75,7 +76,6 @@ namespace EDDiscovery.UserControls
             this.panelTop = new System.Windows.Forms.FlowLayoutPanel();
             this.labelTime = new System.Windows.Forms.Label();
             this.labelSearch = new System.Windows.Forms.Label();
-            this.extButtonEventColours = new ExtendedControls.ExtButton();
             this.historyContextMenu.SuspendLayout();
             this.dataViewScrollerPanel.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewJournal)).BeginInit();
@@ -188,6 +188,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxTime.DisabledScaling = 0.5F;
             this.comboBoxTime.DisplayMember = "";
+            this.comboBoxTime.DropDownMinimumItemWidth = -1;
             this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTime.GradientDirection = 90F;
             this.comboBoxTime.Location = new System.Drawing.Point(39, 4);
@@ -246,7 +247,6 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.TabIndex = 1;
             this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxSearch.TextNoChange = "";
-            this.toolTip.SetToolTip(this.textBoxSearch, resources.GetString("textBoxSearch.ToolTip"));
             this.textBoxSearch.WordWrap = true;
             this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
             // 
@@ -259,6 +259,7 @@ namespace EDDiscovery.UserControls
             this.extComboBoxQuickMarks.DisableBackgroundDisabledShadingGradient = false;
             this.extComboBoxQuickMarks.DisabledScaling = 0.5F;
             this.extComboBoxQuickMarks.DisplayMember = "";
+            this.extComboBoxQuickMarks.DropDownMinimumItemWidth = -1;
             this.extComboBoxQuickMarks.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extComboBoxQuickMarks.GradientDirection = 90F;
             this.extComboBoxQuickMarks.Location = new System.Drawing.Point(380, 4);
@@ -359,6 +360,23 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.checkBoxCursorToTop, "Automatically move the cursor to the latest entry when it arrives");
             this.checkBoxCursorToTop.UseVisualStyleBackColor = false;
+            // 
+            // extButtonEventColours
+            // 
+            this.extButtonEventColours.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonEventColours.ButtonDisabledScaling = 0.5F;
+            this.extButtonEventColours.GradientDirection = 90F;
+            this.extButtonEventColours.Image = global::EDDiscovery.Icons.Controls.ColourSelector;
+            this.extButtonEventColours.Location = new System.Drawing.Point(593, 1);
+            this.extButtonEventColours.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extButtonEventColours.MouseOverScaling = 1.3F;
+            this.extButtonEventColours.MouseSelectedScaling = 1.3F;
+            this.extButtonEventColours.Name = "extButtonEventColours";
+            this.extButtonEventColours.Size = new System.Drawing.Size(28, 28);
+            this.extButtonEventColours.TabIndex = 32;
+            this.toolTip.SetToolTip(this.extButtonEventColours, "Colour events by type");
+            this.extButtonEventColours.UseVisualStyleBackColor = true;
+            this.extButtonEventColours.Click += new System.EventHandler(this.extButtonEventColours_Click);
             // 
             // dataViewScrollerPanel
             // 
@@ -509,30 +527,13 @@ namespace EDDiscovery.UserControls
             this.labelSearch.TabIndex = 24;
             this.labelSearch.Text = "Search";
             // 
-            // extButtonEventColours
-            // 
-            this.extButtonEventColours.BackColor2 = System.Drawing.Color.Red;
-            this.extButtonEventColours.ButtonDisabledScaling = 0.5F;
-            this.extButtonEventColours.GradientDirection = 90F;
-            this.extButtonEventColours.Image = global::EDDiscovery.Icons.Controls.ColourSelector;
-            this.extButtonEventColours.Location = new System.Drawing.Point(593, 1);
-            this.extButtonEventColours.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.extButtonEventColours.MouseOverScaling = 1.3F;
-            this.extButtonEventColours.MouseSelectedScaling = 1.3F;
-            this.extButtonEventColours.Name = "extButtonEventColours";
-            this.extButtonEventColours.Size = new System.Drawing.Size(28, 28);
-            this.extButtonEventColours.TabIndex = 32;
-            this.toolTip.SetToolTip(this.extButtonEventColours, "Colour events by type");
-            this.extButtonEventColours.UseVisualStyleBackColor = true;
-            this.extButtonEventColours.Click += new System.EventHandler(this.extButtonEventColours_Click);
-            // 
-            // UserControlJournalGrid
+            // JournalGrid
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.dataViewScrollerPanel);
             this.Controls.Add(this.panelTop);
-            this.Name = "UserControlJournalGrid";
+            this.Name = "JournalGrid";
             this.Size = new System.Drawing.Size(804, 716);
             this.historyContextMenu.ResumeLayout(false);
             this.dataViewScrollerPanel.ResumeLayout(false);

@@ -89,7 +89,7 @@ ADB03812B4EF51: "Stars" => "Gwiazdy"
 
 SECTION SearchMaterialsCommodities
 
-77EDFE8755BB52: ", Rare Commodity" @
+848B86BE73BFEE: "Rare Commodity" @
 C2F934CB8CAB6C: "AND" => "I"
 F579C523960AF1: "OR" => "LUB"
 E1988D908E0FDA: "Discovered at " @
@@ -189,7 +189,7 @@ CB083BFF78F38B: "First Discovered Mapped" @
 3B2FE7700E6893: "Green will show all bodies even with zero value, red will only show bodies with value" @
 C746EA1EC215F8: "Show all values, even ones which are impossible to get" @
 AC0E083CA2C4C4: "Estimated Scan Values for {0}" @
-2A07C88E4554DD: " | You scanned {1} of {2} bodies in this system." @
+44D64939C89F1D: "Scanned {1} of {2} bodies in this system." @
 
 SECTION UserControlExpedition
 
@@ -225,6 +225,7 @@ B7A2B9728CF910: "P2P Distance" @
 A5323E433EDC1A: "Route Name" @
 5ECE584160349A: "View System" @
 AF74F7C5362AAE: "Copy" @
+24E66B0672FCA9: "Copy All" @
 DB2483000D154C: "Paste" @
 38D13BDA5C40AF: "Cut" => "Ausschneiden"
 506AD5294AD65A: "Insert row above" @
@@ -239,7 +240,6 @@ D371A4A652422C: "Edit bookmark" @
 638C59CA247034: "Please specify a name for the route." @
 A6419AC5F7F3B3: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." @
 CD249D0309B0E4: "Warning: route already exists. Would you like to overwrite it?" @
-9F6A7413561C8D: "System not known" @
 C13DDF91AFA61A: "No local scan info" @
 
 SECTION UserControlJournalGrid
@@ -254,7 +254,7 @@ F4DE89CE1015FB: "Jump to Entry" @
 752DA692C2C1B2: "Set Start/Stop point for travel calculations" @
 F792127FD17C22: "Run Actions on this entry" @
 290084F20A44C9: "Copy journal entry to clipboard" @
-E4370C63EC4290: " showing {0} original {1}" @
+B9FBD5057BCD1A: "showing {0} original {1}" @
 ADE8224F6E2B20: "Filtered {0}" @
 079B875FC72C76: "Select the entries by age, " @
 F70EA8DC6685B3: "Journal: Filter out fields" @
@@ -321,7 +321,6 @@ EB8E343579E999: "Clear all display items in shopping list" @
 
 SECTION UserControlMissionOverlay
 
-BC775B0E4D5ED0: " Left " => " Pozostało "
 50C4713CBC3348: "Mission Name" @
 90DC27E4C3BEB4: "Mission Description" @
 7190FFD9B23765: "Faction Information" @
@@ -329,9 +328,9 @@ BC775B0E4D5ED0: " Left " => " Pozostało "
 SECTION UserControlSurveyor
 
 C545D651351423: "System scan complete" @
-7FBED1E5CF7C0C: " bodies detected." @
-7B14664F50BD79: " bodies found." @
-60B6BCE139DBD6: " Cluster and NonBody counts differ by " @
+503DDA93683C26: "Bodies detected" @
+5CEA7DF0E82923: "Bodies found" @
+26FA96F0286294: "Cluster and NonBody counts differ by" @
 1C8BA580027067: "Alignment Left" @
 DF79D6CA8BD2F3: "Alignment Center" @
 43EF428A78F1FA: "Alignment Right" @
@@ -388,8 +387,7 @@ D42713493CA811: "Destination" @
 
 SECTION UserControlMissions
 
-A91D37462D4799: " Missions" @
-F8B59037B2A4AE: " Mission" @
+E4698D4CEACBE6: "Mission" @
 199EA69AF2F28C: "Value (cr):\n{0:N0}" @
 59EF5FF5CFDAFB: "Value (cr)" @
 8DCE170DE238B1: "Value" => "Wartość"
@@ -428,11 +426,14 @@ F7E56852A21682: "Fuel Warning" @
 6915FDD1AF8A81: "Enter fuel warning level in % (0 = off, 1-100%)" @
 E613FC90158F3E: "A Value is not valid" @
 3F86F40ECFD2E5: "Ship Configure" @
+3AECE78A04F99B: "Go to creation event" @
+9452EB520CCBF5: "Go to sold/destroyed event" @
 2A7F42E6F0BB55: "Module Information" @
 5E09137F0F0012: "No Ship Information available" @
 
 5434A871028102: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" @
 AA4EDB168CAE21: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" @
+B28241A03D7E89: "Plant {0.##|MW} Core {0.##|MW}{0.0|%} Weapons {0.##|MW}{0.0|%} Deployed{0.##|MW}{0.0|%} P1 {0.##|MW}{0.0|%} P1-2 {0.##|MW}{0.0|%} P1-3 {0.##|MW}{0.0|%}" @
 7D67DDF30E8473: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" @
 E5379DCF7E564E: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" @
 C8DF6EB8BFDFCF: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" @
@@ -463,7 +464,7 @@ SECTION UserControlOutfitting
 SECTION UserControlPanelSelector
 
 F195557637BC15: "NO ADD ONS!" @
-2CB644D01CC1F0: " Add Ons" @
+4FA68481F3D753: "Add Ons" @
 F219DBFBA7E199: "Click to add or remove Add Ons" @
 AE0FE6B7276775: "Add ons are essential additions to your EDD experience!" @
 03B4832BADF372: "Pop out in a new window" @
@@ -522,7 +523,7 @@ DE6A8B4B96A80A: "Copy the target system to end route entry" @
 33C5EE107CFEC3: "No route set up, retry" @
 98310A2466609B: "Rocky HMC" @
 
-SECTION UserControlRouteTracker
+SECTION UserControlSurveyorRoute
 
 0BA3B547C8344B: "Show Bookmark Notes" @
 DF44D515D3D0A7: "Show Jumps To Go" @
@@ -537,10 +538,9 @@ F01A41B43B8868: "Show Target Information" @
 24C1C17E2C811B: "To First WP " @
 EDA92612CF2474: "jumps" => "skoki"
 8212F4935A232D: "From Last WP " @
-DD0341E14022F3: ", Left {0:N1}ly" @
 DF5C9749BAE618: "(WP {0})" @
-F01632B2B22D3F: " No Ship FSD Information" @
-2DA19892882702: ", Dev {0:N1}ly" @
+70FE0797EDD3D2: "No Ship FSD Information" @
+CBF9002B17E8D9: "Dev {0:N1}ly" @
 CEE17FB4380701: "Route contains no waypoints" @
 C415DA3D51A1E9: "No systems in route have known co-ords" @
 33F6E6F622B613: "Note: {0}" @
@@ -554,7 +554,6 @@ F3B7084D189898: "Configure scan display body filters" @
 A0BB88B66F57E8: "Set High Value Limit" @
 2F2F42105ABA82: "Set Valuable Minimum" @
 0DE266189138B6: "Show body status icons" @
-3466741E7D93DA: "Show system and value in main display" @
 028F51CCB7BAD7: "Hide materials which have reached their storage limit" @
 9F6C1D41D0D032: "Show Materials" @
 B028A006D79224: "Show rare materials only" @
@@ -584,7 +583,7 @@ F85D3B343E0C17: "Geological activity" @
 8E140B3FB3635C: "Surface mapped" @
 269077C77225D6: "This body contains" @
 CB7305DF2F4D76: "This is a green system, as it has all existing jumponium materials available!" @
-318EF98C2276FA: " jumponium materials found in system." @
+224BB5937EB3B4: "Jumponium materials found in system" @
 37B1866847BAC8: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" @
 E8DE686E802FAB: "Show belts" @
 F914C4A8D920BF: "Show rings" @
@@ -644,7 +643,6 @@ BCCEBEFF588CE4: "Minimize the main window to the system notification area (syste
 5AE9F629C09614: "Show a system notification area (system tray) icon for EDDiscovery." @
 F6CB7AD3D68BFC: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." @
 DC99D54D9990E3: "Local" => "Lokal"
-920917D62700D0: "Warning about webserver-  see english text" @
 00A0EA8208DAC7: "Did not start - click OK to configure windows" @
 96645A6CB7E91B: "All entries for Statistics" @
 6A8283358AA59B: "Safe Mode" => "Tryb Bezpieczny"
@@ -668,7 +666,6 @@ C552D2599FF6E0: "Remove Sectors" @
 4481948392A884: "Nothing" @
 E3AEDF672CD00D: "Do you wish to delete commander " @
 EB4FD2BBBBAACE: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
-57768403688225: "No map available!" @
 35F9B4B074BFBC: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" @
 BB75D637DC2C4D: "Reload Star Database" @
 CA622FCCA53890: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" @
@@ -794,9 +791,8 @@ D01ADD4A8CF9C6: "PVP Kills" @
 D06EC3483818A9: "FSD jumps" => "FSA-Sprünge"
 E13CB4A04BC34B: "FSD Jump History" @
 BB3BBEC3B7BECB: "24 Hours" @
-91A4748C01B13C: ", One Week" @
-F1B5EA10F447E6: ", 30 Days" @
-FEB665354F9937: ", One Year" @
+4F8CD7B1014720: "30 Days" @
+F9241A881EA6AE: "One Year" @
 50CA2C7949A7B3: "Most North" @
 FF4C48EC20A07F: "Most South" @
 ED38C3B32E9FB4: "Most East" @
@@ -816,9 +812,6 @@ B051CCCD8B0D67: "Premium Boost" @
 EA78B34DA11F9D: "Crafting" @
 EB6824747FE3AC: "Multi-crew" @
 F8D07BF619AB93: "Materials Trader" @
-ED8FE7F50C291D: "Goods Bought" @
-4A9BE7DFAB7DEE: "Goods Sold" @
-266338DF847C39: "Goods Profit" @
 
 SECTION StatsTimeUserControl
 
@@ -923,7 +916,6 @@ EF5031AC6BB79D: "Run selection through Inara System (Debug)" @
 87AA55A4D8390D: "Run selection through EDDN Test Server (Debug)" @
 524BF0531AFD77: "Run selection through EDAstro (Debug)" @
 0F5FE8CD3D51BA: "Send selection to DLLs (Debug)" @
-B91F8B4B18E7EA: "Show lines in System Visited Fore Colour" @
 C083AF7B5668ED: "Debug Mode" @
 21FE521D359452: "Outlining On" @
 7CD3494777C5DB: "Scan Events Outlining" @
@@ -935,7 +927,7 @@ D9273536780112: "Control Outlining" @
 10FA8B1B034219: "Go to a marked journal entry. Use right click to mark an entry" @
 0128C783DB2024: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 03C54D66F2DA56: "Next start/stop marker is hidden" @
-72BB592592883F: "No start/stop marker found ``below" @
+905A92084F2F46: "No start/stop marker found below" @
 A89F26DDCFE091: "Entry filtered out of grid" @
 A070027FDED89B: "Colour events by type" @
 D5769D2797F39C: "Open journal file in editor (Debug)" @
@@ -1007,7 +999,7 @@ BFFFD736CDDD08: "Get" => "Erhalte"
 
 SECTION UserControlMiningOverlay
 
-92743D7648AAD4: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" @
+3F13FB0A4131AD: "Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" @
 3E82E468720F25: "Ref." @
 633C0EE42BDD19: "Coll." @
 FF44397BA75466: "Prosp." @
@@ -1021,7 +1013,6 @@ E07CB141188F05: "Max%" @
 ACBFF454D6581B: "Asteroids Pros." @
 805723CC0E68E1: "Content %" @
 98FD8A73E231A5: "% Above" @
-1D3C457CBE3E35: "Distribution" @
 7B169F19D2E9BB: "Limpets left {0}, Cargo left {1}" @
 CA0FBEE8E26BBE: "Display items with zero refined items" @
 081E86CF24ED15: "Select chart options" @
@@ -1041,6 +1032,8 @@ C1ECFEB8DEF4DC: "Commds Profit" @
 6AC2053328E50A: "Crimes Committed" @
 77E2DD8141E981: "Bounty Kills" @
 397B67A90DEC91: "Bounty Rewards" @
+6EA4A034747D02: "Bought" @
+8544A47725836A: "Profit" @
 D5965451E332A6: "Bounty Rewards Value" @
 5F22266A168021: "Kill Bonds Victim" @
 FC21DB8588503E: "Kill Bonds Awarded" @
@@ -1082,8 +1075,6 @@ FBB715DCFB4F59: "Show/Hide Kill Bonds" @
 SECTION UserControlOrganics
 
 20ABF8B1A35466: "Display incomplete scans" @
-729535298F44FF: "At {0}" @
-023888959E33B9: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" @
 DAB5A87D199E18: "Star System" @
 48902F14E5C843: "Genus" @
 83A7238826AB30: "Species" @
@@ -1133,7 +1124,7 @@ A9A96EC019494D: "Primary" => "Primäre"
 D08EC89EFF37EC: "Range m" @
 F3CEC91C2F03B8: "DPS" @
 E70031EADDA4DE: "Head Shot Mult" @
-2ECE6C47CFB703: "Confirm Selling of" @
+B0D7BF71AC2C58: "Confirm selling of" @
 D13DB38286C90C: "Force Suit Sale" @
 
 SECTION UserControlCarrier
@@ -1236,7 +1227,7 @@ SECTION FindSystemsUserControl
 
 ECF8B0EC8407C9: "Radius ly Min" => "Ráio Min (ly)"
 DEB29771D8FDD9: "Star Name" => "Nome do Sistema"
-8E8DB7C9C725EA: "Cannot find system " => "Impossível achar o sistema"
+E2D6C9E4D4EBFA: "Cannot find system" => "Impossível achar o sistema"
 38BA068999A442: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" @
 809B1882D352CC: "From DB Find Names" => "Cerca neve dal DB"
 7A84B27F1A8FA2: "From EDSM" => "Cerca da EDSM"
@@ -1295,6 +1286,9 @@ CB6477E67C121C: "Search for stations with ships across systems" @
 A369535C35A528: "Output grid to excel" @
 
 F06FC9B08C6AE1: "LY Distance" @
+FA02E0321C28B0: "View Market" @
+B8BD8DF949AD0F: "View Outfitting" @
+D6CD34EB114863: "View Shipyard" @
 4EFE75D6EB0078: "Price 1" @
 F33B503B1A195E: "S/D 1" @
 606BB56FD9280F: "Price 2" @

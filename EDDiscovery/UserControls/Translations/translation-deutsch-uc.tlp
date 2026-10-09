@@ -89,7 +89,7 @@ ADB03812B4EF51: "Stars" => "Sterne"
 
 SECTION SearchMaterialsCommodities
 
-77EDFE8755BB52: ", Rare Commodity" => ", seltene Ware"
+848B86BE73BFEE: "Rare Commodity" => "seltene Ware"
 C2F934CB8CAB6C: "AND" => "UND"
 F579C523960AF1: "OR" => "ODER"
 E1988D908E0FDA: "Discovered at " => "Entdeckt am"
@@ -189,7 +189,7 @@ CB083BFF78F38B: "First Discovered Mapped" => "Zuerst entdeckt und kartographiert
 3B2FE7700E6893: "Green will show all bodies even with zero value, red will only show bodies with value" => "Grün zeigt alle Materialien, Rot entfernt Materialien mit Lagerstand Null"
 C746EA1EC215F8: "Show all values, even ones which are impossible to get" => "Zeige alle Werte, auch jene, die unerreichbar sind."
 AC0E083CA2C4C4: "Estimated Scan Values for {0}" => "Geschätzte Scanwerte für {0}"
-2A07C88E4554DD: " | You scanned {1} of {2} bodies in this system." => " | Du hast {1} von {2} Körpern in diesem System gescannt."
+44D64939C89F1D: "Scanned {1} of {2} bodies in this system." => "Du hast {1} von {2} Körpern in diesem System gescannt."
 
 SECTION UserControlExpedition
 
@@ -225,6 +225,7 @@ B7A2B9728CF910: "P2P Distance" => "Punkt-zu-Punkt-Entfernung"
 A5323E433EDC1A: "Route Name" => "Routenname"
 5ECE584160349A: "View System" => "Zeige System"
 AF74F7C5362AAE: "Copy" => "Kopieren"
+24E66B0672FCA9: "Copy All" => "Kopieren Alle"
 DB2483000D154C: "Paste" => "Einfügen"
 38D13BDA5C40AF: "Cut" => "Ausschneiden"
 506AD5294AD65A: "Insert row above" => "Zeile darüber einfügen"
@@ -239,7 +240,6 @@ D371A4A652422C: "Edit bookmark" => "Lesezeichen bearbeiten"
 638C59CA247034: "Please specify a name for the route." => "Bitte gib der Route einen Namen."
 A6419AC5F7F3B3: "The current route name conflicts with a well-known expedition.\r\nPlease specify a new name to save your changes." => "Der derzeitige Routenname steht im Konflikt mit einer bekannten Expedition.\r\nBitte gib der Route einen neuen Namen, um zu speichern."
 CD249D0309B0E4: "Warning: route already exists. Would you like to overwrite it?" => "Warnung: Route existiert bereits. Willst du sie überschreiben?"
-9F6A7413561C8D: "System not known" => "System nicht bekannt"
 C13DDF91AFA61A: "No local scan info" => "Keine lokale Scaninformation"
 
 SECTION UserControlJournalGrid
@@ -254,7 +254,7 @@ F4DE89CE1015FB: "Jump to Entry" => "Springe zu Eintrag"
 752DA692C2C1B2: "Set Start/Stop point for travel calculations" => "Setze Start/Stopp-Punkt für Reiseberechnungen"
 F792127FD17C22: "Run Actions on this entry" => "Führe Aktionen auf diesem Eintrag aus"
 290084F20A44C9: "Copy journal entry to clipboard" => "Kopiere Journaleintrag in die Zwischenablage"
-E4370C63EC4290: " showing {0} original {1}" => " zeige {0} original {1}"
+B9FBD5057BCD1A: "showing {0} original {1}" => "zeige {0} original {1}"
 ADE8224F6E2B20: "Filtered {0}" => "Gefiltert {0}"
 079B875FC72C76: "Select the entries by age, " => "Wähle die Einträge nach Alter, "
 F70EA8DC6685B3: "Journal: Filter out fields" => "Journal: Felder ausfiltern"
@@ -321,7 +321,6 @@ EB8E343579E999: "Clear all display items in shopping list" => "Lösche alle ange
 
 SECTION UserControlMissionOverlay
 
-BC775B0E4D5ED0: " Left " => " Noch übrig"
 50C4713CBC3348: "Mission Name" => "Missionsname"
 90DC27E4C3BEB4: "Mission Description" => "Missionsbeschreibung"
 7190FFD9B23765: "Faction Information" => "Fraktionsinformation"
@@ -329,9 +328,9 @@ BC775B0E4D5ED0: " Left " => " Noch übrig"
 SECTION UserControlSurveyor
 
 C545D651351423: "System scan complete" => "Systemscan komplett"
-7FBED1E5CF7C0C: " bodies detected." => " Körper erkannt."
-7B14664F50BD79: " bodies found." => " Körper gefunden."
-60B6BCE139DBD6: " Cluster and NonBody counts differ by " => " Gruppen- und NichtKörper-Zählungen differieren um "
+503DDA93683C26: "Bodies detected" => "Körper erkannt"
+5CEA7DF0E82923: "Bodies found" => "Körper gefunden"
+26FA96F0286294: "Cluster and NonBody counts differ by" => "Gruppen- und NichtKörper-Zählungen differieren um"
 1C8BA580027067: "Alignment Left" => "Ausrichtung Links"
 DF79D6CA8BD2F3: "Alignment Center" => "Ausrichtung Mitte"
 43EF428A78F1FA: "Alignment Right" => "Ausrichtung Rechts"
@@ -388,8 +387,7 @@ D42713493CA811: "Destination" => "Ziel"
 
 SECTION UserControlMissions
 
-A91D37462D4799: " Missions" => " Missionen"
-F8B59037B2A4AE: " Mission" => " Mission"
+E4698D4CEACBE6: "Mission" => "Mission"
 199EA69AF2F28C: "Value (cr):\n{0:N0}" => "Wert (Cr):\n{0:N0}"
 59EF5FF5CFDAFB: "Value (cr)" => "Wert (Cr)"
 8DCE170DE238B1: "Value" => "Wert"
@@ -428,11 +426,14 @@ F7E56852A21682: "Fuel Warning" => "Treibstoffwarnung"
 6915FDD1AF8A81: "Enter fuel warning level in % (0 = off, 1-100%)" => "Niveau der Füllstandswarnung in % eingeben (0 = aus, 1-100%)"
 E613FC90158F3E: "A Value is not valid" => "Ein Wert ist ungültig"
 3F86F40ECFD2E5: "Ship Configure" => "Schiffskonfiguration"
+3AECE78A04F99B: "Go to creation event" @
+9452EB520CCBF5: "Go to sold/destroyed event" @
 2A7F42E6F0BB55: "Module Information" => "Modulinformation"
 5E09137F0F0012: "No Ship Information available" => "Keine Schiffsinformationen verfügbar"
 
 5434A871028102: "Raw {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Cau {0.#|% =|0.#}" => "Roh {0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#} Ätz {0.#|% =|0.#}"
 AA4EDB168CAE21: "Raw {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}" => "Roh {0.#} Sys {0.#|% =|0.#} Kin {0.#|% =|0.#} Thm {0.#|% =|0.#} Exp {0.#|% =|0.#}"
+B28241A03D7E89: "Plant {0.##|MW} Core {0.##|MW}{0.0|%} Weapons {0.##|MW}{0.0|%} Deployed{0.##|MW}{0.0|%} P1 {0.##|MW}{0.0|%} P1-2 {0.##|MW}{0.0|%} P1-3 {0.##|MW}{0.0|%}" @
 7D67DDF30E8473: "Mass {0.##|t} Hull {0.##|t} Modules {0.##|t} Unladen {0.##|t} Cargo {0|/|0|t} Warning at {0.#|%}" => "Masse {0.##|t} Hülle {0.##|t} Module {0.##|t} Unbeladen {0.##|t} Fracht {0|/|0|t} Warnung bei {0.#|%}"
 E5379DCF7E564E: "Cost Hull {N0|cr} Modules {N0|cr} Total {N0|cr} Rebuy {N0|cr}" => "Kosten Hülle {N0|cr} Module {N0|cr} Total {N0|cr} Rückkauf {N0|cr}"
 C8DF6EB8BFDFCF: "Cur {0.##|ly} Range {0.##|ly} Laden {0.##|ly} Unladen {0.##|ly} Max {0.##|ly} MaxFuel {0.##|t} Current {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} In Transit to {} Stored at {}" => "Dzt {0.##|ly} Reichweite {0.##|ly} Beladen {0.##|ly} Unbeladen {0.##|ly} Max {0.##|ly} MaxTStoff {0.##|t} Derzeit {0.#|/|0.#|t} Reserve {0.#|/|0.#|t} Im Transfer nach {} Gelagert bei {}"
@@ -463,7 +464,7 @@ SECTION UserControlOutfitting
 SECTION UserControlPanelSelector
 
 F195557637BC15: "NO ADD ONS!" => "KEINE ADD-ONS!"
-2CB644D01CC1F0: " Add Ons" => " Add-Ons"
+4FA68481F3D753: "Add Ons" => "Add-Ons"
 F219DBFBA7E199: "Click to add or remove Add Ons" => "Klicken, um Add-Ons hinzuzufügen oder zu entfernen"
 AE0FE6B7276775: "Add ons are essential additions to your EDD experience!" => "Add-ons sind essentielle Erweiterungen für dein EDD-Erlebnis!"
 03B4832BADF372: "Pop out in a new window" => "In externes Fenster öffnen"
@@ -522,7 +523,7 @@ DE6A8B4B96A80A: "Copy the target system to end route entry" => "Kopiere das Ziel
 33C5EE107CFEC3: "No route set up, retry" => "Keine Route eingerichtet, wiederholen"
 98310A2466609B: "Rocky HMC" => "Gestein HMP"
 
-SECTION UserControlRouteTracker
+SECTION UserControlSurveyorRoute
 
 0BA3B547C8344B: "Show Bookmark Notes" => "Zeige Lesezeichennotizen"
 DF44D515D3D0A7: "Show Jumps To Go" => "Zeige restliche Sprünge"
@@ -537,10 +538,9 @@ F01A41B43B8868: "Show Target Information" => "Zeige Zielinformation"
 24C1C17E2C811B: "To First WP " => "Zum ersten Wegpunkt"
 EDA92612CF2474: "jumps" => "Sprünge"
 8212F4935A232D: "From Last WP " => "Vom letzten Wegpunkt"
-DD0341E14022F3: ", Left {0:N1}ly" => ", übrig {0:N1}Lj"
 DF5C9749BAE618: "(WP {0})" => "(WP {0})"
-F01632B2B22D3F: " No Ship FSD Information" => " keine Schiffs-FSA-Information"
-2DA19892882702: ", Dev {0:N1}ly" => ", Abw {0:N1}Lj"
+70FE0797EDD3D2: "No Ship FSD Information" => "keine Schiffs-FSA-Information"
+CBF9002B17E8D9: "Dev {0:N1}ly" => "Abw {0:N1}Lj"
 CEE17FB4380701: "Route contains no waypoints" => "Route enthält keine Wegpunkte"
 C415DA3D51A1E9: "No systems in route have known co-ords" => "Kein System in der Route hat bekannte Koordinaten"
 33F6E6F622B613: "Note: {0}" => "Notiz: {0}"
@@ -554,7 +554,6 @@ F3B7084D189898: "Configure scan display body filters" => "Konfiguriere Körperfi
 A0BB88B66F57E8: "Set High Value Limit" => "Setze Limit für 'hoher Wert'"
 2F2F42105ABA82: "Set Valuable Minimum" => "Setze 'wertvoll' Minimum"
 0DE266189138B6: "Show body status icons" => "Zeige Körperstatussymbole"
-3466741E7D93DA: "Show system and value in main display" => "Zeige System und Wert in der Hauptanzeige"
 028F51CCB7BAD7: "Hide materials which have reached their storage limit" => "Verberge Materialien, deren Aufbewahrungslimit erreicht ist"
 9F6C1D41D0D032: "Show Materials" => "Zeige Materialien"
 B028A006D79224: "Show rare materials only" => "Zeige nur seltene Materialien"
@@ -584,7 +583,7 @@ F85D3B343E0C17: "Geological activity" => "Geologische Aktivität"
 8E140B3FB3635C: "Surface mapped" => "Oberfläche kartographiert"
 269077C77225D6: "This body contains" => "Dieser Körper enthält"
 CB7305DF2F4D76: "This is a green system, as it has all existing jumponium materials available!" => "Dies ist ein grünes System, da in ihm alle verschiedenen Sprungmaterialien vorhanden sind"
-318EF98C2276FA: " jumponium materials found in system." => " Sprungmaterialien im System gefunden."
+224BB5937EB3B4: "Jumponium materials found in system" => "Sprungmaterialien im System gefunden"
 37B1866847BAC8: "Scan Summary for {0}: {1} stars; {2} planets ({3} terrestrial, {4} gas giants), {5} moons" => "Scanzusammenfassung für {0}: {1} Sterne; {2} Planeten ({3} terrestrisch, {4} Gasriesen), {5} Monde"
 E8DE686E802FAB: "Show belts" => "Gürtel"
 F914C4A8D920BF: "Show rings" => "Ringe"
@@ -644,7 +643,6 @@ BCCEBEFF588CE4: "Minimize the main window to the system notification area (syste
 5AE9F629C09614: "Show a system notification area (system tray) icon for EDDiscovery." => "Zeige Infobereichssymbol für EDDiscovery."
 F6CB7AD3D68BFC: "Safe Mode allows you to perform special operations, such as moving the databases, resetting the UI, resetting the action packs,  DLLs etc." => "Der abgesicherte Modus erlaubt das durchführen spezieller Operationen, wie das Verschieben der Datenbanken, das Zurücksetzen des UIs, Zurücksetzen der Action-Packs und DLLs, etc."
 DC99D54D9990E3: "Local" => "Lokal"
-920917D62700D0: "Warning about webserver-  see english text" => "Webserverwarnung - beachte den englischen Text"
 00A0EA8208DAC7: "Did not start - click OK to configure windows" => "Hat nicht gestartet - Klicke OK, um Windows zu konfigurieren"
 96645A6CB7E91B: "All entries for Statistics" => "Alle statistisch relevanten Einträge"
 6A8283358AA59B: "Safe Mode" => "Abgesicherter Modus"
@@ -668,7 +666,6 @@ C552D2599FF6E0: "Remove Sectors" => "Entferne Sektoren"
 4481948392A884: "Nothing" => "Nichts"
 E3AEDF672CD00D: "Do you wish to delete commander " => "Willst du den Kommandanten löschen "
 EB4FD2BBBBAACE: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Die von diesem Thema verwendete Schriftart ist auf diesem System nicht verfügbar.\r\nDie benötigte Schriftart ist \"{0}\"\r\nInstalliere diese Schriftart um das Thema wie vorgesehen zu nutzen.\r\nDie Schriftart Euro Caps ist auf www.edassets.org frei verfügbar.\r\n\r\nWillst du dieses Thema mit einer Ersatzschriftart laden?"
-57768403688225: "No map available!" => "Keine Karte verfügbar!"
 35F9B4B074BFBC: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Beendet. Bitte schließe dieses Fenster.\r\nWenn die 3D-Karte bereits geöffnet ist, werden Änderungen erst nach einem EDD-Neustart sichtbar."
 BB75D637DC2C4D: "Reload Star Database" => "Sternendatenbank neu laden"
 CA622FCCA53890: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" => "Dies löscht die Sternendatenbank.\r\n\r\nDanach kannst du erneut die Datenquelle sowie\r\ndie Regionen wählen.\r\nDies benötigt einen erneuten Download der Daten vom Server.\r\nBenutze dies nur, wenn du die Datenbank neu erstellen willst."
@@ -794,9 +791,8 @@ D01ADD4A8CF9C6: "PVP Kills" => "PVP Tötungen"
 D06EC3483818A9: "FSD jumps" => "FSA-Sprünge"
 E13CB4A04BC34B: "FSD Jump History" => "Sprunghistorie"
 BB3BBEC3B7BECB: "24 Hours" => "24 Stunden"
-91A4748C01B13C: ", One Week" => ", eine Woche"
-F1B5EA10F447E6: ", 30 Days" => ", 30 Tage"
-FEB665354F9937: ", One Year" => ", ein Jahr"
+4F8CD7B1014720: "30 Days" => "30 Tage"
+F9241A881EA6AE: "One Year" => "ein Jahr"
 50CA2C7949A7B3: "Most North" => "am nördlichsten"
 FF4C48EC20A07F: "Most South" => "am südlichsten"
 ED38C3B32E9FB4: "Most East" => "am östlichsten"
@@ -816,9 +812,6 @@ B051CCCD8B0D67: "Premium Boost" => "Premiumboost"
 EA78B34DA11F9D: "Crafting" => "Herstellen"
 EB6824747FE3AC: "Multi-crew" => "Multicrew"
 F8D07BF619AB93: "Materials Trader" => "Materialienhändler"
-ED8FE7F50C291D: "Goods Bought" => "Handelswaren gekauft"
-4A9BE7DFAB7DEE: "Goods Sold" => "Handelswaren verkauft"
-266338DF847C39: "Goods Profit" => "Warenprofit"
 
 SECTION StatsTimeUserControl
 
@@ -923,7 +916,6 @@ EF5031AC6BB79D: "Run selection through Inara System (Debug)" => "Führe Auswahl 
 87AA55A4D8390D: "Run selection through EDDN Test Server (Debug)" => "Führe Auswahl über EDDN-Testserver aus (Debug)"
 524BF0531AFD77: "Run selection through EDAstro (Debug)" => "Führe Auswahl über EDAstro aus (Debug)"
 0F5FE8CD3D51BA: "Send selection to DLLs (Debug)" => "Sende Auswahl an DLLs (Debug)"
-B91F8B4B18E7EA: "Show lines in System Visited Fore Colour" => "Zeige Linien in 'besuchtes System'-Vordergrundfarbe"
 C083AF7B5668ED: "Debug Mode" => "Reisegitter im Debugmodus"
 21FE521D359452: "Outlining On" => "Umriss ein"
 7CD3494777C5DB: "Scan Events Outlining" => "Scanereignisse umreißen"
@@ -935,7 +927,7 @@ D9273536780112: "Control Outlining" => "Umrisskontrolle"
 10FA8B1B034219: "Go to a marked journal entry. Use right click to mark an entry" => "Gehe zu einem markierten Journaleintrag. Klicke rechts, um einen Eintrag zu markieren."
 0128C783DB2024: "system:body:station:stationfaction" => "system:body:station:stationfaction"
 03C54D66F2DA56: "Next start/stop marker is hidden" => "Nächste Start/Stopp-Markierung ist versteckt"
-72BB592592883F: "No start/stop marker found ``below" => "Weiter unten keine Start/Stopp-Markierung gefunden"
+905A92084F2F46: "No start/stop marker found below" => "Weiter unten keine Start/Stopp-Markierung gefunden"
 A89F26DDCFE091: "Entry filtered out of grid" => "Eintrag in Historie ausgefiltert"
 A070027FDED89B: "Colour events by type" => "Färbe Ereignise pro Typ"
 D5769D2797F39C: "Open journal file in editor (Debug)" => "Öffne Journaldatei im Editor (Debug)"
@@ -1007,7 +999,7 @@ BFFFD736CDDD08: "Get" => "Erhalte"
 
 SECTION UserControlMiningOverlay
 
-92743D7648AAD4: ", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" => ", Erzsucher abgefeuert {0}, Sammler ausgebracht {1}, geknackt {2}"
+3F13FB0A4131AD: "Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}" => "Erzsucher abgefeuert {0}, Sammler ausgebracht {1}, geknackt {2}"
 3E82E468720F25: "Ref." => "Raf."
 633C0EE42BDD19: "Coll." => "Samm."
 FF44397BA75466: "Prosp." => "Erzs."
@@ -1021,7 +1013,6 @@ E07CB141188F05: "Max%" => "Max%"
 ACBFF454D6581B: "Asteroids Pros." => "Asteroiden prospektiert"
 805723CC0E68E1: "Content %" => "Inhalt %"
 98FD8A73E231A5: "% Above" => "% Über"
-1D3C457CBE3E35: "Distribution" => "Verteilung"
 7B169F19D2E9BB: "Limpets left {0}, Cargo left {1}" => "Drohnen übrig {0}, Fracht übrig {1}"
 CA0FBEE8E26BBE: "Display items with zero refined items" => "Zeige Objekte mit null raffinierten Gegenständen"
 081E86CF24ED15: "Select chart options" => "Wähle Tabellenoptionen"
@@ -1041,6 +1032,8 @@ C1ECFEB8DEF4DC: "Commds Profit" => "Warenprofit"
 6AC2053328E50A: "Crimes Committed" => "Verbrechen begangen"
 77E2DD8141E981: "Bounty Kills" => "Kopfgeld"
 397B67A90DEC91: "Bounty Rewards" => "Kopfgeldbelohnungen"
+6EA4A034747D02: "Bought" @
+8544A47725836A: "Profit" @
 D5965451E332A6: "Bounty Rewards Value" => "Wert der Kopfgeldbelohnungen"
 5F22266A168021: "Kill Bonds Victim" => "Tötungsbelohnungen Opfer"
 FC21DB8588503E: "Kill Bonds Awarded" => "Tötungsbelohnungen erhalten"
@@ -1082,8 +1075,6 @@ FBB715DCFB4F59: "Show/Hide Kill Bonds" => "Zeige/Verstecke Tötungsbelohnungen"
 SECTION UserControlOrganics
 
 20ABF8B1A35466: "Display incomplete scans" => "Zeige unvollständige Scans"
-729535298F44FF: "At {0}" => "Bei {0}"
-023888959E33B9: ", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}" => ", {0}, Radius {1}, {2}, {3}, Biosignale: {4}{5}"
 DAB5A87D199E18: "Star System" => "Sternensystem"
 48902F14E5C843: "Genus" => "Gattung"
 83A7238826AB30: "Species" => "Spezies"
@@ -1133,7 +1124,7 @@ A9A96EC019494D: "Primary" => "Primäre"
 D08EC89EFF37EC: "Range m" => "Reichweite m"
 F3CEC91C2F03B8: "DPS" => "SPS"
 E70031EADDA4DE: "Head Shot Mult" => "Kopfschussmulti"
-2ECE6C47CFB703: "Confirm Selling of" => "Bestätige Verkauf von"
+B0D7BF71AC2C58: "Confirm selling of" => "Bestätige Verkauf von"
 D13DB38286C90C: "Force Suit Sale" => "Erzwinge Anzugsverkauf"
 
 SECTION UserControlCarrier
@@ -1236,7 +1227,7 @@ SECTION FindSystemsUserControl
 
 ECF8B0EC8407C9: "Radius ly Min" => "Minimaler Radius"
 DEB29771D8FDD9: "Star Name" => "Sternenname"
-8E8DB7C9C725EA: "Cannot find system " => "Kann System nicht finden"
+E2D6C9E4D4EBFA: "Cannot find system" => "Kann System nicht finden"
 38BA068999A442: "Website did not return any data on {0}\nIt may be a galactic object that it does not know about" => "Webseite sendete keine Daten von {0} zurück.\nEs könnte ein galaktisches Objekt sein das es nicht kennt."
 809B1882D352CC: "From DB Find Names" => "Finde Namen in der DB"
 7A84B27F1A8FA2: "From EDSM" => "Von EDSM"
@@ -1295,6 +1286,9 @@ CB6477E67C121C: "Search for stations with ships across systems" => "Suche nach S
 A369535C35A528: "Output grid to excel" => "Exportiere Gitter zu Excel"
 
 F06FC9B08C6AE1: "LY Distance" => "LJ Entfernung"
+FA02E0321C28B0: "View Market" @
+B8BD8DF949AD0F: "View Outfitting" @
+D6CD34EB114863: "View Shipyard" @
 4EFE75D6EB0078: "Price 1" => "Preis 1"
 F33B503B1A195E: "S/D 1" => "V/N 1"
 606BB56FD9280F: "Price 2" => "Preis 2"

@@ -146,7 +146,6 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxOutlines.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxOutlines.TabIndex = 30;
             this.extCheckBoxOutlines.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.extCheckBoxOutlines, "Control Outlining");
             this.extCheckBoxOutlines.UseVisualStyleBackColor = false;
             this.extCheckBoxOutlines.Click += new System.EventHandler(this.extButtonOutlines_Click);
             // 
@@ -180,7 +179,6 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.Size = new System.Drawing.Size(28, 28);
             this.checkBoxCursorToTop.TabIndex = 30;
             this.checkBoxCursorToTop.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxCursorToTop, "Automatically move the cursor to the latest entry when it arrives");
             this.checkBoxCursorToTop.UseVisualStyleBackColor = false;
             // 
             // buttonExtExcel
@@ -197,7 +195,6 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 28;
-            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
             this.buttonExtExcel.UseVisualStyleBackColor = true;
             this.buttonExtExcel.Click += new System.EventHandler(this.buttonExtExcel_Click);
             // 
@@ -214,7 +211,6 @@ namespace EDDiscovery.UserControls
             this.buttonField.Name = "buttonField";
             this.buttonField.Size = new System.Drawing.Size(28, 28);
             this.buttonField.TabIndex = 25;
-            this.toolTip.SetToolTip(this.buttonField, "Filter out entries matching the field selection");
             this.buttonField.UseVisualStyleBackColor = true;
             this.buttonField.Click += new System.EventHandler(this.buttonField_Click);
             // 
@@ -231,7 +227,6 @@ namespace EDDiscovery.UserControls
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonFilter.TabIndex = 25;
-            this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on event type");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
@@ -260,7 +255,6 @@ namespace EDDiscovery.UserControls
             this.textBoxSearch.TabIndex = 1;
             this.textBoxSearch.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxSearch.TextNoChange = "";
-            this.toolTip.SetToolTip(this.textBoxSearch, resources.GetString("textBoxSearch.ToolTip"));
             this.textBoxSearch.WordWrap = true;
             this.textBoxSearch.TextChanged += new System.EventHandler(this.textBoxSearch_TextChanged);
             // 
@@ -283,6 +277,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxTime.DisabledScaling = 0.5F;
             this.comboBoxTime.DisplayMember = "";
+            this.comboBoxTime.DropDownMinimumItemWidth = -1;
             this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTime.GradientDirection = 90F;
             this.comboBoxTime.Location = new System.Drawing.Point(39, 4);
@@ -295,7 +290,6 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.Size = new System.Drawing.Size(100, 21);
             this.comboBoxTime.TabIndex = 0;
             this.comboBoxTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.comboBoxTime, "Select the entries by age");
             this.comboBoxTime.ValueMember = "";
             this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
@@ -605,6 +599,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.TabIndex = 30;
             this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
+            this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
             // 
             // extButtonTimeRanges
@@ -621,6 +616,7 @@ namespace EDDiscovery.UserControls
             this.extButtonTimeRanges.Size = new System.Drawing.Size(28, 28);
             this.extButtonTimeRanges.TabIndex = 25;
             this.toolTip.SetToolTip(this.extButtonTimeRanges, "Define new time ranges for time selector");
+            this.toolTip.SetToolTip(this.extButtonTimeRanges, "Define new time ranges for time selector");
             this.extButtonTimeRanges.UseVisualStyleBackColor = true;
             this.extButtonTimeRanges.Click += new System.EventHandler(this.extButtonTimeRanges_Click);
             // 
@@ -633,6 +629,7 @@ namespace EDDiscovery.UserControls
             this.extComboBoxQuickMarks.DisableBackgroundDisabledShadingGradient = false;
             this.extComboBoxQuickMarks.DisabledScaling = 0.5F;
             this.extComboBoxQuickMarks.DisplayMember = "";
+            this.extComboBoxQuickMarks.DropDownMinimumItemWidth = -1;
             this.extComboBoxQuickMarks.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extComboBoxQuickMarks.GradientDirection = 90F;
             this.extComboBoxQuickMarks.Location = new System.Drawing.Point(380, 4);
@@ -645,6 +642,7 @@ namespace EDDiscovery.UserControls
             this.extComboBoxQuickMarks.Size = new System.Drawing.Size(139, 21);
             this.extComboBoxQuickMarks.TabIndex = 0;
             this.extComboBoxQuickMarks.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.toolTip.SetToolTip(this.extComboBoxQuickMarks, "Go to a marked journal entry. Use right click to mark an entry");
             this.toolTip.SetToolTip(this.extComboBoxQuickMarks, "Go to a marked journal entry. Use right click to mark an entry");
             this.extComboBoxQuickMarks.ValueMember = "";
             this.extComboBoxQuickMarks.SelectedIndexChanged += new System.EventHandler(this.extComboBoxQuickMarks_SelectedIndexChanged);
@@ -662,6 +660,7 @@ namespace EDDiscovery.UserControls
             this.extButtonEventColours.Name = "extButtonEventColours";
             this.extButtonEventColours.Size = new System.Drawing.Size(28, 28);
             this.extButtonEventColours.TabIndex = 25;
+            this.toolTip.SetToolTip(this.extButtonEventColours, "Colour events by type");
             this.toolTip.SetToolTip(this.extButtonEventColours, "Colour events by type");
             this.extButtonEventColours.UseVisualStyleBackColor = true;
             this.extButtonEventColours.Click += new System.EventHandler(this.extButtonEventColours_Click);

@@ -15,12 +15,10 @@ DB3D405B106759: "on" => "Вкл"
 E3DE5AB0CA4C69: "Off" => "Выкл"
 0EB5ED506E4923: "Information" => "Информация"
 DE543B3879BD6E: "No Pos" => "Нет положения"
-
-// from extended controls
-
 F4F4473DF8CB59: "Disabled" => "Отключено"
+1090044535D1EA: "Panel Colour" @
 
-// from action programs
+SECTION Action programs
 
 AC1627C6A55792: "To be deleted" @
 EB1BCE574038E4: "To be installed" @
@@ -29,9 +27,6 @@ B5E77C5C02A90C: "Removed" @
 
 // misc
 
-1090044535D1EA: "Panel Colour" @
-96FCC783071DFD: "Current Key Delay String" @
-3CD8E99F3C4143: "Default Down Delay (0=Default)" @
 
 SECTION StartUp
 
@@ -50,6 +45,8 @@ B1B392607DEAF2: "Run" => "Запуск"
 365C643F550384: "Delete/Rebuild User DB" => "Удалить/перестроить базу данных пользователя"
 01F2FBC637B7E7: "Delete/Rebuild System DB" => "Удалить/перестроить базу данных систем"
 149C06035C88FF: "Reset DB Location" => "Сбросить расположение базы данных"
+4FDECF8CBABC50: "Remove Journal Entries" @
+F83B6FE3AEBF13: "Exit" @
 6B295419D3023F: "Backup Database" => "Резервная копия базы данных"
 81DE8C10D7B389: "Move Databases" => "Переместить базу данных"
 BF259EDBD80CA0: "Reset Language to English" => "Сбросить язык на английский"
@@ -197,7 +194,6 @@ B58EA2C0453904: "&Turn Off All Transparency" => "Отключить прозра
 47AA608083EDEF: "E&xit" => "Выход"
 E592F675275650: "A&dmin" => "Управление"
 AAC8CEA1D98BFE: "Show journal files directory of current commander" => "Перейти в папку с файлами журнала текущего командира"
-D85D0424D5DDE8: "Reset all history to current commander" => "Сбросить всю историю текущего командира"
 E3D7130BAF225D: "Read 2.1 and former log files" => "Прочитать данные журнала версии 2.1 и более ранних"
 6C233E7A4C3485: "Force reload logs" => "Принудительно перезагрузить журнал"
 2EB4A69BC73B8C: "Re-scan all journal files" => "Перезагрузить все файлы журнала"
@@ -235,7 +231,7 @@ FDB587F6AEF9FC: "Remove Tab" => "Удалить вкладку"
 A44AD2D137232C: "Rename Tab" => "Переименовать вкладку"
 DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Установить вкладку не удалось: основная вкладка или TG не загрузились.\r\nТак быть не должно - пожалуйста, сообщите о проблеме команде EDD через Discord или Github.\r\nЧтобы избежать ошибки, перезапустите программу, удерживая клавишу shift,\r\nвыберите опцию Reset tabs и перезапустите программу еще раз."
 5365F84B9A53D9: "Enter a new name for the tab" => "Новое имя вкладки"
-FF063FC2431DAF: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Найдены следующие dll дополнений\r\nВы хотите их использовать?\r\n{0} \r\nЕсли нет, удалите dll из папки DLL программы\r\\или удалите соответствующие action pack,\r\\или удерживайте клавишу shift при запуске программы и выберите опцию «Удалить все dll дополнений»"
+38749AF88850D0: "The following application extension DLL have been found\r\nDo you wish to allow it to be used?\r\n\r\n{0} \r\n" => "Найдены следующие dll дополнений\r\nВы хотите их использовать?\r\n{0} \r\nЕсли нет, удалите dll из папки DLL программы\r\\или удалите соответствующие action pack,\r\\или удерживайте клавишу shift при запуске программы и выберите опцию «Удалить все dll дополнений»"
 3160432B058751: "DLLs loaded: {0}" => "Загруженные библиотеки (.dll): {0}"
 CCFDEF5228D48D: "DLLs failed to load: {0}" => "Не удалось загрузить библиотеки (.dll): {0}"
 5C77F5282CD58B: "Are you sure to Rebuild Indexes? It may take a long time." @
@@ -249,10 +245,9 @@ B683FA5A92D7B6: "Closing, please wait!" => "Завершаю работу"
 03617D9031DCED: "Star Data download is disabled. Use Settings to reenable it" => "Загрузка данных о системах отключена. Пожалуйста, включите ее в настройках"
 029E79A86E66C0: "Synchronisation to databases is in operation or pending, please wait" => "Идет синхронизация с базой данных, пожалуйста, подождите"
 5C5508F7B29BD6: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "На это может уйти много времени и трафика\r\nВы действительно хотите это сделать?"
-EC8966F52E96C2: "Confirm you wish to reset all history entries to the current commander" => "Вы действительно хотите сбросить все записи истории для текущего командира?"
 690A6A4AC09622: "No new release found" => "Новая версия программы не найдена"
 9769B4CCF9B4FE: "Confirm you remove any duplicate FSD entries from the current commander" => "Вы действительно хотите удалить все дубликаты FSD записей для текущего командира?"
-BA32A940331E35: "Removed {0} FSD entries" => " Количество удалённых FSD записей: {0}"
+BA32A940331E35: "Removed {0} FSD entries" => "Количество удалённых FSD записей: {0}"
 4F01D475DE606B: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "Загрузка на Inara отключена на 1 час, чтобы предотвратить перегрузку сервера"
 651C69E6D25F44: "Refresh History." => "Обновить историю."
 A2AB3C168B45C2: "No EDSM API key set" => "Убедитесь, что выбран командир и установлен EDSM API key"
@@ -275,7 +270,6 @@ C7F0C2BDEE6813: "Move another commanders history to this commander" @
 SECTION EDDiscoveryController
 
 9BA9842C1C8616: "Closing down, please wait.." => "Завершаю работу"
-DB2578F4000025: "Get galactic mapping from EDSM." => "Получаю карту Галактики с EDSM"
 B916383C5DCECE: "Get galactic mapping from GEC." => "Получаю карту Галактики с GEC."
 855115699D49D3: "Loaded Notes, Bookmarks and Galactic mapping." => "Загружаю примечания, закладки и карту Галактики"
 D080CC813B189E: "Reading travel history" => "Читаю историю полётов"
@@ -299,7 +293,6 @@ C9B87AD62761ED: "Newer EDD required" => "Требуется более нова�
 0AE36D6F55493C: "Too old for EDD" => "Слишком старая для EDD"
 5B3A1A44268196: "Locally modified" => "Изменено локально"
 482E9BD3F6E7A8: "Up to Date" => "Актуальная"
-05ED059BB7B8B0: "Local Only" => "Только локально"
 76AFFE13E38473: "New version" => "Новая версия"
 FD6C3EBF7BEFCA: "Install" => "Установить"
 FB91E24FA52D8D: "Update" => "Обновить"
@@ -341,6 +334,7 @@ B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cle
 13D60E3F37387F: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "Чтобы предоставить вам больше информации, ED Discovery может загрузить данные о системах из EDSM/EDDB. Выберите, сколько данных вы хотите загрузить. Чем большую часть Галактики вы выберете, тем больше места потребуется для хранения."
 8598222918D3C6: "Select" => "Выберите"
 0EE93787C960CF: "Select the data set" @
+BD32B2E4F5C2FD: "Select the data source" @
 D24336A365C558: "Press to Accept" => "Нажмите для подтверждения"
 D65DF91B92B250: "Select Galaxy Data" => "Выберите EDSM Galaxy Data"
 2745DEBAA64A20: "Area" => "Gebiet"
@@ -399,6 +393,8 @@ AA822BAACB5BCA: "Value is not valid" => "Значение недействите
 
 SECTION KeyForm
 
+96FCC783071DFD: "Current Key Delay String" @
+3CD8E99F3C4143: "Default Down Delay (0=Default)" @
 A6CC1735E61BA1: "Define Key Sequence" => "Определить последовательность клавиш"
 2038BDEC921020: "Up" => "Вверх"
 BF93E5CE8BC122: "Down" => "Вниз"
@@ -407,9 +403,7 @@ EA683AD616063B: "Press" => "Нажмите"
 DD6A02A553DA4C: "Ctrl" => "Strg"
 E30EFF925100B7: "Alt" => "Alt"
 A24AEF4D03E398: "Press Key" => "Нажмите клавишу"
-D54FFCD418FB39: "Current Delay" => "Текущая задержка"
 5606C23DCD17C1: "Select Key" => "Выберите клавишу"
-0A25165DFF06CC: "Start Delay(ms)" => "Начальная задержка (мс)"
 D11F7478DD0192: "Send To" => "Передать"
 E5651C683F14C9: "Keys" => "Клавиши"
 BC981983E7F547: "Next" => "Далее"

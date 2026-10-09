@@ -223,7 +223,7 @@ namespace EDDiscovery.UserControls
 
             if (rows != null && rows.Length > 1)
             {
-                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete {0} notes?" + Environment.NewLine + "Confirm or Cancel").Tx(), rows.Length), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format("Do you really want to delete {0} notes?\r\nConfirm or Cancel".Tx(), rows.Length), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     foreach (int r in rows)
                     {
@@ -244,7 +244,7 @@ namespace EDDiscovery.UserControls
                 {
                     CaptainsLogClass entry = (CaptainsLogClass)rw.Tag;
 
-                    if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format(("Do you really want to delete the note for {0}" + Environment.NewLine + "Confirm or Cancel").Tx(), entry.SystemName + ":" + entry.BodyName), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+                    if (ExtendedControls.MessageBoxTheme.Show(FindForm(), string.Format("Do you really want to delete the note for {0}\r\nConfirm or Cancel".Tx(), entry.SystemName + ":" + entry.BodyName), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                     {
                         GlobalCaptainsLogList.Instance.Delete(entry);
                         Display();

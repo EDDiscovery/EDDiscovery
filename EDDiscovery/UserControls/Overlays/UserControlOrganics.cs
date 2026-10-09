@@ -222,7 +222,7 @@ namespace EDDiscovery.UserControls
                     string l = "At".Tx() + " " + node.Name();
                     if (node.Scan != null)
                     {
-                        l += string.Format(", {0}, Radius {1}, {2}, {3}, Bio Signals: {4}{5}".Tx(), node.Scan.PlanetTypeText, node.Scan.RadiusText,
+                        l += string.Format(", {0}, " + "Radius".Tx() + " {1}, {2}, {3}, " + "Biological signals".Tx() + ": {4}{5}".Tx(), node.Scan.PlanetTypeText, node.Scan.RadiusText,
                                                 (Math.Round(node.Scan.nSurfaceGravityG.Value, 2, MidpointRounding.AwayFromZero).ToString() ?? "?") + " g", 
                                                 node.Scan.AtmosphereTranslated, node.CountBioSignals.ToString(), 
                                                 ((node.Genuses != null && node.CountBioSignals > 0) ? ": " + String.Join(", ", node.Genuses?.Select(x => x.Genus_Localised).ToArray()) : ""));

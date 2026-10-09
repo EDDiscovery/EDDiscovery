@@ -413,9 +413,9 @@ namespace EDDiscovery.UserControls
             if (starclass.HasChars() && IsSet(CtrlList.showstarclass))
                 text += " | " + starclass;
             if (bodies_found > 0 && !all_found)
-                text += " | " + bodies_found + " bodies detected.".Tx();
+                text += " | " + bodies_found + " " + "Bodies detected".Tx() + ".";
             if (all_found)
-                text += " | " + "System scan complete".Tx()+ ": " + bodies_found + " bodies found.".Tx();
+                text += " | " + "System scan complete".Tx()+ ": " + bodies_found + " " +"Bodies found".Tx() + ".";
 
             SetControlText(text);
             ClearThenDrawText(extPictureBoxTitle, text);
@@ -460,7 +460,7 @@ namespace EDDiscovery.UserControls
                     }
                     if (systemnode.FSSTotalNonBodies != null && IsSet(CtrlList.showsignalmismatch))
                     {
-                        scansummarytext = scansummarytext.AppendPrePad(systemnode.FSSTotalNonBodies.Value != clusters ? " Cluster and NonBody counts differ by ".Tx()+ Math.Abs(systemnode.FSSTotalNonBodies.Value - clusters).ToString("N0") : "");
+                        scansummarytext = scansummarytext.AppendPrePad(systemnode.FSSTotalNonBodies.Value != clusters ? " " + "Cluster and NonBody counts differ by".Tx() + " " + Math.Abs(systemnode.FSSTotalNonBodies.Value - clusters).ToString("N0") : "");
                     }
                     
                 }

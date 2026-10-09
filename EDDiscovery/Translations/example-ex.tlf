@@ -15,12 +15,10 @@ DB3D405B106759: "on" @
 E3DE5AB0CA4C69: "Off" @
 0EB5ED506E4923: "Information" @
 DE543B3879BD6E: "No Pos" @
-
-// from extended controls
-
 F4F4473DF8CB59: "Disabled" @
+1090044535D1EA: "Panel Colour" @
 
-// from action programs
+SECTION Action programs
 
 AC1627C6A55792: "To be deleted" @
 EB1BCE574038E4: "To be installed" @
@@ -29,9 +27,6 @@ B5E77C5C02A90C: "Removed" @
 
 // misc
 
-1090044535D1EA: "Panel Colour" @
-96FCC783071DFD: "Current Key Delay String" @
-3CD8E99F3C4143: "Default Down Delay (0=Default)" @
 
 SECTION StartUp
 
@@ -50,6 +45,8 @@ B1B392607DEAF2: "Run" @
 365C643F550384: "Delete/Rebuild User DB" @
 01F2FBC637B7E7: "Delete/Rebuild System DB" @
 149C06035C88FF: "Reset DB Location" @
+4FDECF8CBABC50: "Remove Journal Entries" @
+F83B6FE3AEBF13: "Exit" @
 6B295419D3023F: "Backup Database" @
 81DE8C10D7B389: "Move Databases" @
 BF259EDBD80CA0: "Reset Language to English" @
@@ -197,7 +194,6 @@ B58EA2C0453904: "&Turn Off All Transparency" @
 47AA608083EDEF: "E&xit" @
 E592F675275650: "A&dmin" @
 AAC8CEA1D98BFE: "Show journal files directory of current commander" @
-D85D0424D5DDE8: "Reset all history to current commander" @
 E3D7130BAF225D: "Read 2.1 and former log files" @
 6C233E7A4C3485: "Force reload logs" @
 2EB4A69BC73B8C: "Re-scan all journal files" @
@@ -235,7 +231,7 @@ FDB587F6AEF9FC: "Remove Tab" @
 A44AD2D137232C: "Rename Tab" @
 DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." @
 5365F84B9A53D9: "Enter a new name for the tab" @
-FF063FC2431DAF: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" @
+38749AF88850D0: "The following application extension DLL have been found\r\nDo you wish to allow it to be used?\r\n\r\n{0} \r\n" @
 3160432B058751: "DLLs loaded: {0}" @
 CCFDEF5228D48D: "DLLs failed to load: {0}" @
 5C77F5282CD58B: "Are you sure to Rebuild Indexes? It may take a long time." @
@@ -249,7 +245,6 @@ B683FA5A92D7B6: "Closing, please wait!" @
 03617D9031DCED: "Star Data download is disabled. Use Settings to reenable it" @
 029E79A86E66C0: "Synchronisation to databases is in operation or pending, please wait" @
 5C5508F7B29BD6: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" @
-EC8966F52E96C2: "Confirm you wish to reset all history entries to the current commander" @
 690A6A4AC09622: "No new release found" @
 9769B4CCF9B4FE: "Confirm you remove any duplicate FSD entries from the current commander" @
 BA32A940331E35: "Removed {0} FSD entries" @
@@ -275,7 +270,6 @@ C7F0C2BDEE6813: "Move another commanders history to this commander" @
 SECTION EDDiscoveryController
 
 9BA9842C1C8616: "Closing down, please wait.." @
-DB2578F4000025: "Get galactic mapping from EDSM." @
 B916383C5DCECE: "Get galactic mapping from GEC." @
 855115699D49D3: "Loaded Notes, Bookmarks and Galactic mapping." @
 D080CC813B189E: "Reading travel history" @
@@ -299,7 +293,6 @@ C9B87AD62761ED: "Newer EDD required" @
 0AE36D6F55493C: "Too old for EDD" @
 5B3A1A44268196: "Locally modified" @
 482E9BD3F6E7A8: "Up to Date" @
-05ED059BB7B8B0: "Local Only" @
 76AFFE13E38473: "New version" @
 FD6C3EBF7BEFCA: "Install" @
 FB91E24FA52D8D: "Update" @
@@ -341,6 +334,7 @@ B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cle
 13D60E3F37387F: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." @
 8598222918D3C6: "Select" @
 0EE93787C960CF: "Select the data set" @
+BD32B2E4F5C2FD: "Select the data source" @
 D24336A365C558: "Press to Accept" @
 D65DF91B92B250: "Select Galaxy Data" @
 2745DEBAA64A20: "Area" @
@@ -399,6 +393,8 @@ AA822BAACB5BCA: "Value is not valid" @
 
 SECTION KeyForm
 
+96FCC783071DFD: "Current Key Delay String" @
+3CD8E99F3C4143: "Default Down Delay (0=Default)" @
 A6CC1735E61BA1: "Define Key Sequence" @
 2038BDEC921020: "Up" @
 BF93E5CE8BC122: "Down" @
@@ -407,9 +403,7 @@ EA683AD616063B: "Press" @
 DD6A02A553DA4C: "Ctrl" @
 E30EFF925100B7: "Alt" @
 A24AEF4D03E398: "Press Key" @
-D54FFCD418FB39: "Current Delay" @
 5606C23DCD17C1: "Select Key" @
-0A25165DFF06CC: "Start Delay(ms)" @
 D11F7478DD0192: "Send To" @
 E5651C683F14C9: "Keys" @
 BC981983E7F547: "Next" @

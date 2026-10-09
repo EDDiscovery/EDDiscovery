@@ -44,7 +44,7 @@ namespace EDDiscovery.UserControls
         private const string dbTimeDates = "TimeDates";
         private const string dbEventColours = "EventColours";
 
-        private string searchterms = "system:body:station:stationfaction";
+        private string searchterms;
 
         private HistoryList current_historylist;        // the last one set, for internal refresh purposes on sort
 
@@ -76,6 +76,8 @@ namespace EDDiscovery.UserControls
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
 
             DBBaseName = "TravelHistoryControl";
+
+            toolTip.SetToolTip(textBoxSearch, "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties".Tx());
         }
 
         protected override void Init()
@@ -136,8 +138,7 @@ namespace EDDiscovery.UserControls
 
             eventcolours = new EventColours(GetSetting(dbEventColours, "{}"));
 
-            if (BaseUtils.TranslatorMkII.Instance.IsDefined(searchterms))
-                searchterms = searchterms.Tx();
+            searchterms = "system:body:station:stationfaction".TxIfDefined();
 
             // reorder of entries for debugging
             if (EDDOptions.Instance.EnableTGRightDebugClicks)
@@ -335,7 +336,7 @@ namespace EDDiscovery.UserControls
                     }
                 }
 
-                string ms = string.Format(" showing {0} original {1}".Tx(), dataGridViewTravel.Rows.Count, current_historylist?.Count ?? 0);
+                string ms = string.Format(" " + "showing {0} original {1}".Tx(), dataGridViewTravel.Rows.Count, current_historylist?.Count ?? 0);
                 comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(), fdropdown + ms) : "Select the entries by age, ".Tx() + ms);
 
                 if (dataGridViewTravel.SelectAndMove(rowsbyjournalid, ref pos, true))

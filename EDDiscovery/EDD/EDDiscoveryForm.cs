@@ -1072,7 +1072,7 @@ namespace EDDiscovery
         {
             if (!EDDConfig.Instance.SystemDBDownload)
                 ExtendedControls.MessageBoxTheme.Show(this, "Star Data download is disabled. Use Settings to reenable it".Tx());
-            else if (ExtendedControls.MessageBoxTheme.Show(this, ("This can take a considerable amount of time and bandwidth" + Environment.NewLine + "Confirm you want to do this?").Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
+            else if (ExtendedControls.MessageBoxTheme.Show(this, "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk)  == DialogResult.OK )
             {
                 if (!Controller.AsyncPerformSync(true))      // we want it to have run, to completion, to allow another go..
                     ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to databases is in operation or pending, please wait".Tx());
@@ -1141,7 +1141,7 @@ namespace EDDiscovery
         {
             Forms.MoveToCommander movefrm = new Forms.MoveToCommander();
 
-            movefrm.Init(null,"Pick commander to move all their history to current commander");
+            movefrm.Init(null,"Pick commander to move all their history to current commander".Tx());
 
             DialogResult red = movefrm.ShowDialog(FindForm());
             if (red == DialogResult.OK)

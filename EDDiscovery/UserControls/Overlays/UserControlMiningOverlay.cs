@@ -204,7 +204,7 @@ namespace EDDiscovery.UserControls
                     {
                         string text = string.Format("Limpets left {0}, Cargo left {1}".Tx(), limpetsleftdisplay, cargoleftdisplay);
                         if (collectorsused > 0 || prospectorsused > 0 || asteroidscracked > 0)
-                            text += string.Format(", Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}".Tx(), prospectorsused, collectorsused, asteroidscracked);
+                            text += string.Format(", " + "Prospectors Fired {0}, Collectors Deployed {1}, Cracked {2}".Tx(), prospectorsused, collectorsused, asteroidscracked);
 
                         var ieprosp = pictureBox.AddTextAutoSize(new Point(hpos[limpetscolpos], vpos), new Size(2000, this.Height),
                                     text, displayfont, textcolour, backcolour, 1.0F, frmt: frmt);

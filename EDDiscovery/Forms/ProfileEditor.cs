@@ -274,8 +274,8 @@ namespace EDDiscovery.Forms
             Group g = ((Control)sender).Tag as Group;
 
             if (ExtendedControls.MessageBoxTheme.Show(this,
-                        string.Format(("Do you wish to delete profile {0}?" + Environment.NewLine + "This will remove all the profile information and" + 
-                        Environment.NewLine + "is not reversible!").Tx(), g.name.Text), "Warning".Tx(), 
+                        string.Format("Do you wish to delete profile {0}?\r\nThis will remove all the profile information and\r\nis not reversible!".Tx(), g.name.Text),
+                        "Warning".Tx(), 
                         MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
 

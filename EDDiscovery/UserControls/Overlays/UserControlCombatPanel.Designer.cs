@@ -153,7 +153,7 @@ namespace EDDiscovery.UserControls
             this.labelTotalCrimes.TabIndex = 4;
             this.labelTotalCrimes.Text = "Crimes";
             this.labelTotalCrimes.TextBackColor = System.Drawing.SystemColors.Control;
-            this.toolTip.SetToolTip(this.labelTotalCrimes, "How many times you\'ve been caught!");
+            this.toolTip.SetToolTip(this.labelTotalCrimes, "How many times you've been caught!");
             // 
             // labelTarget
             // 

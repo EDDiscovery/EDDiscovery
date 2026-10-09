@@ -475,8 +475,9 @@ namespace EDDiscovery.UserControls
                 if (PossibleJumps > 100)
                 {
                     DialogResult res = MessageBoxTheme.Show(FindForm(),
-                        string.Format(("This will result in a large number ({0}) of jumps" + Environment.NewLine + "Confirm please").Tx(),
-                        PossibleJumps), "Warning".Tx(), MessageBoxButtons.YesNo);
+                        string.Format(
+                            "This will result in a large number ({0}) of jumps\r\nConfirm please".Tx(),PossibleJumps), 
+                            "Warning".Tx(), MessageBoxButtons.YesNo);
                     if (res != System.Windows.Forms.DialogResult.Yes)
                     {
                         return;

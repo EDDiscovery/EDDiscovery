@@ -124,10 +124,6 @@ namespace EDDiscovery
 
             // use to extract a translation ID Eahlstan!
 
-            // string sksk = "DamagedHuman".Tx();
-
-
-
 
         }
 

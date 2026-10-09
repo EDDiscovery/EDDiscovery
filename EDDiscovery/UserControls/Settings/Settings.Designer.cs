@@ -101,19 +101,19 @@ namespace EDDiscovery.UserControls
             this.labelHistorySel = new System.Windows.Forms.Label();
             this.groupBoxCustomScreenShots = new ExtendedControls.ExtGroupBox();
             this.extButtonDrawnHelpScreenshots = new ExtendedControls.ExtButtonDrawn();
+            this.extGroupBoxWebLookup = new ExtendedControls.ExtGroupBox();
+            this.extComboBoxWebLookup = new ExtendedControls.ExtComboBox();
+            this.extGroupBoxDLLPerms = new ExtendedControls.ExtGroupBox();
+            this.extButtonDrawnHelpDLL = new ExtendedControls.ExtButtonDrawn();
+            this.extButtonDLLConfigure = new ExtendedControls.ExtButton();
+            this.extButtonDLLPerms = new ExtendedControls.ExtButton();
+            this.groupBoxCustomLanguage = new ExtendedControls.ExtGroupBox();
+            this.comboBoxCustomLanguage = new ExtendedControls.ExtComboBox();
             this.groupBoxCustomEDSM = new ExtendedControls.ExtGroupBox();
             this.extButtonDrawnHelpEDSM = new ExtendedControls.ExtButtonDrawn();
             this.extButtonReloadStarDatabase = new ExtendedControls.ExtButton();
             this.groupBoxPopOuts = new ExtendedControls.ExtGroupBox();
             this.extButtonDrawnHelpWindowOptions = new ExtendedControls.ExtButtonDrawn();
-            this.extGroupBoxDLLPerms = new ExtendedControls.ExtGroupBox();
-            this.extButtonDrawnHelpDLL = new ExtendedControls.ExtButtonDrawn();
-            this.extButtonDLLConfigure = new ExtendedControls.ExtButton();
-            this.extButtonDLLPerms = new ExtendedControls.ExtButton();
-            this.extGroupBoxWebLookup = new ExtendedControls.ExtGroupBox();
-            this.extComboBoxWebLookup = new ExtendedControls.ExtComboBox();
-            this.groupBoxCustomLanguage = new ExtendedControls.ExtGroupBox();
-            this.comboBoxCustomLanguage = new ExtendedControls.ExtComboBox();
             this.groupBoxCustomSafeMode = new ExtendedControls.ExtGroupBox();
             this.extButtonDrawnHelpSafeMode = new ExtendedControls.ExtButtonDrawn();
             this.labelSafeMode = new System.Windows.Forms.Label();
@@ -128,11 +128,11 @@ namespace EDDiscovery.UserControls
             this.groupBoxInteraction.SuspendLayout();
             this.groupBoxMemory.SuspendLayout();
             this.groupBoxCustomScreenShots.SuspendLayout();
+            this.extGroupBoxWebLookup.SuspendLayout();
+            this.extGroupBoxDLLPerms.SuspendLayout();
+            this.groupBoxCustomLanguage.SuspendLayout();
             this.groupBoxCustomEDSM.SuspendLayout();
             this.groupBoxPopOuts.SuspendLayout();
-            this.extGroupBoxDLLPerms.SuspendLayout();
-            this.extGroupBoxWebLookup.SuspendLayout();
-            this.groupBoxCustomLanguage.SuspendLayout();
             this.groupBoxCustomSafeMode.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -198,6 +198,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxTheme.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxTheme.DisabledScaling = 0.5F;
             this.comboBoxTheme.DisplayMember = "";
+            this.comboBoxTheme.DropDownMinimumItemWidth = -1;
             this.comboBoxTheme.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxTheme.GradientDirection = 90F;
             this.comboBoxTheme.Location = new System.Drawing.Point(10, 19);
@@ -277,6 +278,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxClickThruKey.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxClickThruKey.DisabledScaling = 0.5F;
             this.comboBoxClickThruKey.DisplayMember = "";
+            this.comboBoxClickThruKey.DropDownMinimumItemWidth = -1;
             this.comboBoxClickThruKey.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxClickThruKey.GradientDirection = 90F;
             this.comboBoxClickThruKey.Location = new System.Drawing.Point(9, 48);
@@ -288,7 +290,6 @@ namespace EDDiscovery.UserControls
             this.comboBoxClickThruKey.Size = new System.Drawing.Size(243, 21);
             this.comboBoxClickThruKey.TabIndex = 6;
             this.comboBoxClickThruKey.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.comboBoxClickThruKey, resources.GetString("comboBoxClickThruKey.ToolTip"));
             this.comboBoxClickThruKey.ValueMember = "";
             // 
             // comboBoxCustomEssentialEntries
@@ -300,6 +301,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomEssentialEntries.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomEssentialEntries.DisabledScaling = 0.5F;
             this.comboBoxCustomEssentialEntries.DisplayMember = "";
+            this.comboBoxCustomEssentialEntries.DropDownMinimumItemWidth = -1;
             this.comboBoxCustomEssentialEntries.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomEssentialEntries.GradientDirection = 90F;
             this.comboBoxCustomEssentialEntries.Location = new System.Drawing.Point(128, 48);
@@ -323,6 +325,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomHistoryLoadTime.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomHistoryLoadTime.DisabledScaling = 0.5F;
             this.comboBoxCustomHistoryLoadTime.DisplayMember = "";
+            this.comboBoxCustomHistoryLoadTime.DropDownMinimumItemWidth = -1;
             this.comboBoxCustomHistoryLoadTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomHistoryLoadTime.GradientDirection = 90F;
             this.comboBoxCustomHistoryLoadTime.Location = new System.Drawing.Point(128, 19);
@@ -596,7 +599,7 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSettings.HideScrollBar = true;
             this.extScrollBarSettings.LargeChange = 10;
             this.extScrollBarSettings.Location = new System.Drawing.Point(1062, 0);
-            this.extScrollBarSettings.Maximum = -184;
+            this.extScrollBarSettings.Maximum = -261;
             this.extScrollBarSettings.Minimum = 0;
             this.extScrollBarSettings.MouseOverButtonColor = System.Drawing.Color.Green;
             this.extScrollBarSettings.MouseOverButtonColor2 = System.Drawing.Color.Green;
@@ -614,8 +617,8 @@ namespace EDDiscovery.UserControls
             this.extScrollBarSettings.ThumbButtonColor = System.Drawing.Color.DarkBlue;
             this.extScrollBarSettings.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.extScrollBarSettings.ThumbDrawAngle = 0F;
-            this.extScrollBarSettings.Value = -184;
-            this.extScrollBarSettings.ValueLimited = -184;
+            this.extScrollBarSettings.Value = -261;
+            this.extScrollBarSettings.ValueLimited = -261;
             // 
             // groupBoxCommanders
             // 
@@ -929,6 +932,7 @@ namespace EDDiscovery.UserControls
             this.extComboBoxGameTime.DisableBackgroundDisabledShadingGradient = false;
             this.extComboBoxGameTime.DisabledScaling = 0.5F;
             this.extComboBoxGameTime.DisplayMember = "";
+            this.extComboBoxGameTime.DropDownMinimumItemWidth = -1;
             this.extComboBoxGameTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.extComboBoxGameTime.GradientDirection = 90F;
             this.extComboBoxGameTime.Location = new System.Drawing.Point(113, 48);
@@ -1253,120 +1257,51 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelpScreenshots.UseMnemonic = true;
             this.extButtonDrawnHelpScreenshots.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
             // 
-            // groupBoxCustomEDSM
+            // extGroupBoxWebLookup
             // 
-            this.groupBoxCustomEDSM.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxCustomEDSM.BorderColor2 = System.Drawing.Color.Gray;
-            this.groupBoxCustomEDSM.ChildrenThemed = true;
-            this.groupBoxCustomEDSM.Controls.Add(this.extButtonDrawnHelpEDSM);
-            this.groupBoxCustomEDSM.Controls.Add(this.extButtonReloadStarDatabase);
-            this.groupBoxCustomEDSM.Controls.Add(this.buttonExtEDSMConfigureArea);
-            this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMDownload);
-            this.groupBoxCustomEDSM.GradientDirection = 0F;
-            this.groupBoxCustomEDSM.Location = new System.Drawing.Point(3, 344);
-            this.groupBoxCustomEDSM.Name = "groupBoxCustomEDSM";
-            this.groupBoxCustomEDSM.Size = new System.Drawing.Size(281, 105);
-            this.groupBoxCustomEDSM.TabIndex = 21;
-            this.groupBoxCustomEDSM.TabStop = false;
-            this.groupBoxCustomEDSM.Text = "System DB Control";
-            this.groupBoxCustomEDSM.TextPadding = 0;
-            this.groupBoxCustomEDSM.TextStartPosition = -1;
-            this.groupBoxCustomEDSM.ThemeColors = new System.Drawing.Color[] {
+            this.extGroupBoxWebLookup.BorderColor = System.Drawing.Color.LightGray;
+            this.extGroupBoxWebLookup.BorderColor2 = System.Drawing.Color.Gray;
+            this.extGroupBoxWebLookup.ChildrenThemed = true;
+            this.extGroupBoxWebLookup.Controls.Add(this.extComboBoxWebLookup);
+            this.extGroupBoxWebLookup.GradientDirection = 0F;
+            this.extGroupBoxWebLookup.Location = new System.Drawing.Point(3, 344);
+            this.extGroupBoxWebLookup.Name = "extGroupBoxWebLookup";
+            this.extGroupBoxWebLookup.Size = new System.Drawing.Size(281, 52);
+            this.extGroupBoxWebLookup.TabIndex = 21;
+            this.extGroupBoxWebLookup.TabStop = false;
+            this.extGroupBoxWebLookup.Text = "System Lookup from Web";
+            this.extGroupBoxWebLookup.TextPadding = 0;
+            this.extGroupBoxWebLookup.TextStartPosition = -1;
+            this.extGroupBoxWebLookup.ThemeColors = new System.Drawing.Color[] {
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
-            this.groupBoxCustomEDSM.ThemeColorSet = -1;
+            this.extGroupBoxWebLookup.ThemeColorSet = -1;
             // 
-            // extButtonDrawnHelpEDSM
+            // extComboBoxWebLookup
             // 
-            this.extButtonDrawnHelpEDSM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.extButtonDrawnHelpEDSM.AutoEllipsis = false;
-            this.extButtonDrawnHelpEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.extButtonDrawnHelpEDSM.BorderColor = System.Drawing.Color.Orange;
-            this.extButtonDrawnHelpEDSM.BorderWidth = 1;
-            this.extButtonDrawnHelpEDSM.ButtonDisabledScaling = 0.25F;
-            this.extButtonDrawnHelpEDSM.Image = null;
-            this.extButtonDrawnHelpEDSM.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
-            this.extButtonDrawnHelpEDSM.Location = new System.Drawing.Point(253, 12);
-            this.extButtonDrawnHelpEDSM.MouseOverColor = System.Drawing.Color.White;
-            this.extButtonDrawnHelpEDSM.MouseSelectedColor = System.Drawing.Color.Green;
-            this.extButtonDrawnHelpEDSM.MouseSelectedColorEnable = true;
-            this.extButtonDrawnHelpEDSM.Name = "extButtonDrawnHelpEDSM";
-            this.extButtonDrawnHelpEDSM.Padding = new System.Windows.Forms.Padding(6);
-            this.extButtonDrawnHelpEDSM.Selectable = true;
-            this.extButtonDrawnHelpEDSM.Size = new System.Drawing.Size(24, 24);
-            this.extButtonDrawnHelpEDSM.TabIndex = 26;
-            this.extButtonDrawnHelpEDSM.Text = "?";
-            this.extButtonDrawnHelpEDSM.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.extButtonDrawnHelpEDSM.UseMnemonic = true;
-            this.extButtonDrawnHelpEDSM.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
-            // 
-            // extButtonReloadStarDatabase
-            // 
-            this.extButtonReloadStarDatabase.BackColor2 = System.Drawing.Color.Red;
-            this.extButtonReloadStarDatabase.ButtonDisabledScaling = 0.5F;
-            this.extButtonReloadStarDatabase.GradientDirection = 90F;
-            this.extButtonReloadStarDatabase.Location = new System.Drawing.Point(10, 72);
-            this.extButtonReloadStarDatabase.MouseOverScaling = 1.3F;
-            this.extButtonReloadStarDatabase.MouseSelectedScaling = 1.3F;
-            this.extButtonReloadStarDatabase.Name = "extButtonReloadStarDatabase";
-            this.extButtonReloadStarDatabase.Size = new System.Drawing.Size(243, 23);
-            this.extButtonReloadStarDatabase.TabIndex = 10;
-            this.extButtonReloadStarDatabase.Text = "Reload Star Database";
-            this.extButtonReloadStarDatabase.UseVisualStyleBackColor = true;
-            this.extButtonReloadStarDatabase.Click += new System.EventHandler(this.extButtonReloadStarDatabase_Click);
-            // 
-            // groupBoxPopOuts
-            // 
-            this.groupBoxPopOuts.BorderColor = System.Drawing.Color.LightGray;
-            this.groupBoxPopOuts.BorderColor2 = System.Drawing.Color.Gray;
-            this.groupBoxPopOuts.ChildrenThemed = true;
-            this.groupBoxPopOuts.Controls.Add(this.extButtonDrawnHelpWindowOptions);
-            this.groupBoxPopOuts.Controls.Add(this.checkBoxPanelSortOrder);
-            this.groupBoxPopOuts.Controls.Add(this.checkBoxKeepOnTop);
-            this.groupBoxPopOuts.Controls.Add(this.checkBoxCustomResize);
-            this.groupBoxPopOuts.Controls.Add(this.checkBoxMinimizeToNotifyIcon);
-            this.groupBoxPopOuts.Controls.Add(this.checkBoxUseNotifyIcon);
-            this.groupBoxPopOuts.GradientDirection = 0F;
-            this.groupBoxPopOuts.Location = new System.Drawing.Point(290, 344);
-            this.groupBoxPopOuts.Name = "groupBoxPopOuts";
-            this.groupBoxPopOuts.Size = new System.Drawing.Size(281, 129);
-            this.groupBoxPopOuts.TabIndex = 19;
-            this.groupBoxPopOuts.TabStop = false;
-            this.groupBoxPopOuts.Text = "Window Options";
-            this.groupBoxPopOuts.TextPadding = 0;
-            this.groupBoxPopOuts.TextStartPosition = -1;
-            this.groupBoxPopOuts.ThemeColors = new System.Drawing.Color[] {
-        System.Drawing.SystemColors.Control,
-        System.Drawing.SystemColors.Control,
-        System.Drawing.SystemColors.Control,
-        System.Drawing.SystemColors.Control};
-            this.groupBoxPopOuts.ThemeColorSet = -1;
-            // 
-            // extButtonDrawnHelpWindowOptions
-            // 
-            this.extButtonDrawnHelpWindowOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.extButtonDrawnHelpWindowOptions.AutoEllipsis = false;
-            this.extButtonDrawnHelpWindowOptions.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.extButtonDrawnHelpWindowOptions.BorderColor = System.Drawing.Color.Orange;
-            this.extButtonDrawnHelpWindowOptions.BorderWidth = 1;
-            this.extButtonDrawnHelpWindowOptions.ButtonDisabledScaling = 0.25F;
-            this.extButtonDrawnHelpWindowOptions.Image = null;
-            this.extButtonDrawnHelpWindowOptions.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
-            this.extButtonDrawnHelpWindowOptions.Location = new System.Drawing.Point(253, 12);
-            this.extButtonDrawnHelpWindowOptions.MouseOverColor = System.Drawing.Color.White;
-            this.extButtonDrawnHelpWindowOptions.MouseSelectedColor = System.Drawing.Color.Green;
-            this.extButtonDrawnHelpWindowOptions.MouseSelectedColorEnable = true;
-            this.extButtonDrawnHelpWindowOptions.Name = "extButtonDrawnHelpWindowOptions";
-            this.extButtonDrawnHelpWindowOptions.Padding = new System.Windows.Forms.Padding(6);
-            this.extButtonDrawnHelpWindowOptions.Selectable = true;
-            this.extButtonDrawnHelpWindowOptions.Size = new System.Drawing.Size(24, 24);
-            this.extButtonDrawnHelpWindowOptions.TabIndex = 26;
-            this.extButtonDrawnHelpWindowOptions.Text = "?";
-            this.extButtonDrawnHelpWindowOptions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.extButtonDrawnHelpWindowOptions.UseMnemonic = true;
-            this.extButtonDrawnHelpWindowOptions.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
+            this.extComboBoxWebLookup.BackColor = System.Drawing.Color.Gray;
+            this.extComboBoxWebLookup.BackColor2 = System.Drawing.Color.Red;
+            this.extComboBoxWebLookup.BorderColor = System.Drawing.Color.Red;
+            this.extComboBoxWebLookup.ControlBackground = System.Drawing.SystemColors.Control;
+            this.extComboBoxWebLookup.DataSource = null;
+            this.extComboBoxWebLookup.DisableBackgroundDisabledShadingGradient = false;
+            this.extComboBoxWebLookup.DisabledScaling = 0.5F;
+            this.extComboBoxWebLookup.DisplayMember = "";
+            this.extComboBoxWebLookup.DropDownMinimumItemWidth = -1;
+            this.extComboBoxWebLookup.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.extComboBoxWebLookup.GradientDirection = 90F;
+            this.extComboBoxWebLookup.Location = new System.Drawing.Point(9, 19);
+            this.extComboBoxWebLookup.MouseOverScalingColor = 1.3F;
+            this.extComboBoxWebLookup.Name = "extComboBoxWebLookup";
+            this.extComboBoxWebLookup.SelectedIndex = -1;
+            this.extComboBoxWebLookup.SelectedItem = null;
+            this.extComboBoxWebLookup.SelectedValue = null;
+            this.extComboBoxWebLookup.Size = new System.Drawing.Size(266, 21);
+            this.extComboBoxWebLookup.TabIndex = 0;
+            this.extComboBoxWebLookup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.extComboBoxWebLookup.ValueMember = "";
             // 
             // extGroupBoxDLLPerms
             // 
@@ -1377,7 +1312,7 @@ namespace EDDiscovery.UserControls
             this.extGroupBoxDLLPerms.Controls.Add(this.extButtonDLLConfigure);
             this.extGroupBoxDLLPerms.Controls.Add(this.extButtonDLLPerms);
             this.extGroupBoxDLLPerms.GradientDirection = 0F;
-            this.extGroupBoxDLLPerms.Location = new System.Drawing.Point(3, 479);
+            this.extGroupBoxDLLPerms.Location = new System.Drawing.Point(290, 344);
             this.extGroupBoxDLLPerms.Name = "extGroupBoxDLLPerms";
             this.extGroupBoxDLLPerms.Size = new System.Drawing.Size(281, 52);
             this.extGroupBoxDLLPerms.TabIndex = 21;
@@ -1446,51 +1381,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDLLPerms.UseVisualStyleBackColor = true;
             this.extButtonDLLPerms.Click += new System.EventHandler(this.extButtonDLLPerms_Click);
             // 
-            // extGroupBoxWebLookup
-            // 
-            this.extGroupBoxWebLookup.BorderColor = System.Drawing.Color.LightGray;
-            this.extGroupBoxWebLookup.BorderColor2 = System.Drawing.Color.Gray;
-            this.extGroupBoxWebLookup.ChildrenThemed = true;
-            this.extGroupBoxWebLookup.Controls.Add(this.extComboBoxWebLookup);
-            this.extGroupBoxWebLookup.GradientDirection = 0F;
-            this.extGroupBoxWebLookup.Location = new System.Drawing.Point(577, 344);
-            this.extGroupBoxWebLookup.Name = "extGroupBoxWebLookup";
-            this.extGroupBoxWebLookup.Size = new System.Drawing.Size(281, 52);
-            this.extGroupBoxWebLookup.TabIndex = 21;
-            this.extGroupBoxWebLookup.TabStop = false;
-            this.extGroupBoxWebLookup.Text = "System Lookup from Web";
-            this.extGroupBoxWebLookup.TextPadding = 0;
-            this.extGroupBoxWebLookup.TextStartPosition = -1;
-            this.extGroupBoxWebLookup.ThemeColors = new System.Drawing.Color[] {
-        System.Drawing.SystemColors.Control,
-        System.Drawing.SystemColors.Control,
-        System.Drawing.SystemColors.Control,
-        System.Drawing.SystemColors.Control};
-            this.extGroupBoxWebLookup.ThemeColorSet = -1;
-            // 
-            // extComboBoxWebLookup
-            // 
-            this.extComboBoxWebLookup.BackColor = System.Drawing.Color.Gray;
-            this.extComboBoxWebLookup.BackColor2 = System.Drawing.Color.Red;
-            this.extComboBoxWebLookup.BorderColor = System.Drawing.Color.Red;
-            this.extComboBoxWebLookup.ControlBackground = System.Drawing.SystemColors.Control;
-            this.extComboBoxWebLookup.DataSource = null;
-            this.extComboBoxWebLookup.DisableBackgroundDisabledShadingGradient = false;
-            this.extComboBoxWebLookup.DisabledScaling = 0.5F;
-            this.extComboBoxWebLookup.DisplayMember = "";
-            this.extComboBoxWebLookup.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.extComboBoxWebLookup.GradientDirection = 90F;
-            this.extComboBoxWebLookup.Location = new System.Drawing.Point(9, 19);
-            this.extComboBoxWebLookup.MouseOverScalingColor = 1.3F;
-            this.extComboBoxWebLookup.Name = "extComboBoxWebLookup";
-            this.extComboBoxWebLookup.SelectedIndex = -1;
-            this.extComboBoxWebLookup.SelectedItem = null;
-            this.extComboBoxWebLookup.SelectedValue = null;
-            this.extComboBoxWebLookup.Size = new System.Drawing.Size(266, 21);
-            this.extComboBoxWebLookup.TabIndex = 0;
-            this.extComboBoxWebLookup.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.extComboBoxWebLookup.ValueMember = "";
-            // 
             // groupBoxCustomLanguage
             // 
             this.groupBoxCustomLanguage.BorderColor = System.Drawing.Color.LightGray;
@@ -1498,7 +1388,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomLanguage.ChildrenThemed = true;
             this.groupBoxCustomLanguage.Controls.Add(this.comboBoxCustomLanguage);
             this.groupBoxCustomLanguage.GradientDirection = 0F;
-            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(290, 479);
+            this.groupBoxCustomLanguage.Location = new System.Drawing.Point(577, 344);
             this.groupBoxCustomLanguage.Name = "groupBoxCustomLanguage";
             this.groupBoxCustomLanguage.Size = new System.Drawing.Size(281, 52);
             this.groupBoxCustomLanguage.TabIndex = 21;
@@ -1523,6 +1413,7 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomLanguage.DisableBackgroundDisabledShadingGradient = false;
             this.comboBoxCustomLanguage.DisabledScaling = 0.5F;
             this.comboBoxCustomLanguage.DisplayMember = "";
+            this.comboBoxCustomLanguage.DropDownMinimumItemWidth = -1;
             this.comboBoxCustomLanguage.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.comboBoxCustomLanguage.GradientDirection = 90F;
             this.comboBoxCustomLanguage.Location = new System.Drawing.Point(9, 19);
@@ -1536,6 +1427,121 @@ namespace EDDiscovery.UserControls
             this.comboBoxCustomLanguage.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.comboBoxCustomLanguage.ValueMember = "";
             // 
+            // groupBoxCustomEDSM
+            // 
+            this.groupBoxCustomEDSM.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxCustomEDSM.BorderColor2 = System.Drawing.Color.Gray;
+            this.groupBoxCustomEDSM.ChildrenThemed = true;
+            this.groupBoxCustomEDSM.Controls.Add(this.extButtonDrawnHelpEDSM);
+            this.groupBoxCustomEDSM.Controls.Add(this.extButtonReloadStarDatabase);
+            this.groupBoxCustomEDSM.Controls.Add(this.buttonExtEDSMConfigureArea);
+            this.groupBoxCustomEDSM.Controls.Add(this.checkBoxCustomEDSMDownload);
+            this.groupBoxCustomEDSM.GradientDirection = 0F;
+            this.groupBoxCustomEDSM.Location = new System.Drawing.Point(3, 402);
+            this.groupBoxCustomEDSM.Name = "groupBoxCustomEDSM";
+            this.groupBoxCustomEDSM.Size = new System.Drawing.Size(281, 105);
+            this.groupBoxCustomEDSM.TabIndex = 21;
+            this.groupBoxCustomEDSM.TabStop = false;
+            this.groupBoxCustomEDSM.Text = "System DB Control";
+            this.groupBoxCustomEDSM.TextPadding = 0;
+            this.groupBoxCustomEDSM.TextStartPosition = -1;
+            this.groupBoxCustomEDSM.ThemeColors = new System.Drawing.Color[] {
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.groupBoxCustomEDSM.ThemeColorSet = -1;
+            // 
+            // extButtonDrawnHelpEDSM
+            // 
+            this.extButtonDrawnHelpEDSM.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpEDSM.AutoEllipsis = false;
+            this.extButtonDrawnHelpEDSM.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpEDSM.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpEDSM.BorderWidth = 1;
+            this.extButtonDrawnHelpEDSM.ButtonDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpEDSM.Image = null;
+            this.extButtonDrawnHelpEDSM.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpEDSM.Location = new System.Drawing.Point(253, 12);
+            this.extButtonDrawnHelpEDSM.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpEDSM.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpEDSM.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpEDSM.Name = "extButtonDrawnHelpEDSM";
+            this.extButtonDrawnHelpEDSM.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpEDSM.Selectable = true;
+            this.extButtonDrawnHelpEDSM.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpEDSM.TabIndex = 26;
+            this.extButtonDrawnHelpEDSM.Text = "?";
+            this.extButtonDrawnHelpEDSM.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpEDSM.UseMnemonic = true;
+            this.extButtonDrawnHelpEDSM.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
+            // 
+            // extButtonReloadStarDatabase
+            // 
+            this.extButtonReloadStarDatabase.BackColor2 = System.Drawing.Color.Red;
+            this.extButtonReloadStarDatabase.ButtonDisabledScaling = 0.5F;
+            this.extButtonReloadStarDatabase.GradientDirection = 90F;
+            this.extButtonReloadStarDatabase.Location = new System.Drawing.Point(10, 72);
+            this.extButtonReloadStarDatabase.MouseOverScaling = 1.3F;
+            this.extButtonReloadStarDatabase.MouseSelectedScaling = 1.3F;
+            this.extButtonReloadStarDatabase.Name = "extButtonReloadStarDatabase";
+            this.extButtonReloadStarDatabase.Size = new System.Drawing.Size(243, 23);
+            this.extButtonReloadStarDatabase.TabIndex = 10;
+            this.extButtonReloadStarDatabase.Text = "Reload Star Database";
+            this.extButtonReloadStarDatabase.UseVisualStyleBackColor = true;
+            this.extButtonReloadStarDatabase.Click += new System.EventHandler(this.extButtonReloadStarDatabase_Click);
+            // 
+            // groupBoxPopOuts
+            // 
+            this.groupBoxPopOuts.BorderColor = System.Drawing.Color.LightGray;
+            this.groupBoxPopOuts.BorderColor2 = System.Drawing.Color.Gray;
+            this.groupBoxPopOuts.ChildrenThemed = true;
+            this.groupBoxPopOuts.Controls.Add(this.extButtonDrawnHelpWindowOptions);
+            this.groupBoxPopOuts.Controls.Add(this.checkBoxPanelSortOrder);
+            this.groupBoxPopOuts.Controls.Add(this.checkBoxKeepOnTop);
+            this.groupBoxPopOuts.Controls.Add(this.checkBoxCustomResize);
+            this.groupBoxPopOuts.Controls.Add(this.checkBoxMinimizeToNotifyIcon);
+            this.groupBoxPopOuts.Controls.Add(this.checkBoxUseNotifyIcon);
+            this.groupBoxPopOuts.GradientDirection = 0F;
+            this.groupBoxPopOuts.Location = new System.Drawing.Point(290, 402);
+            this.groupBoxPopOuts.Name = "groupBoxPopOuts";
+            this.groupBoxPopOuts.Size = new System.Drawing.Size(281, 129);
+            this.groupBoxPopOuts.TabIndex = 19;
+            this.groupBoxPopOuts.TabStop = false;
+            this.groupBoxPopOuts.Text = "Window Options";
+            this.groupBoxPopOuts.TextPadding = 0;
+            this.groupBoxPopOuts.TextStartPosition = -1;
+            this.groupBoxPopOuts.ThemeColors = new System.Drawing.Color[] {
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.groupBoxPopOuts.ThemeColorSet = -1;
+            // 
+            // extButtonDrawnHelpWindowOptions
+            // 
+            this.extButtonDrawnHelpWindowOptions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.extButtonDrawnHelpWindowOptions.AutoEllipsis = false;
+            this.extButtonDrawnHelpWindowOptions.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.extButtonDrawnHelpWindowOptions.BorderColor = System.Drawing.Color.Orange;
+            this.extButtonDrawnHelpWindowOptions.BorderWidth = 1;
+            this.extButtonDrawnHelpWindowOptions.ButtonDisabledScaling = 0.25F;
+            this.extButtonDrawnHelpWindowOptions.Image = null;
+            this.extButtonDrawnHelpWindowOptions.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
+            this.extButtonDrawnHelpWindowOptions.Location = new System.Drawing.Point(253, 12);
+            this.extButtonDrawnHelpWindowOptions.MouseOverColor = System.Drawing.Color.White;
+            this.extButtonDrawnHelpWindowOptions.MouseSelectedColor = System.Drawing.Color.Green;
+            this.extButtonDrawnHelpWindowOptions.MouseSelectedColorEnable = true;
+            this.extButtonDrawnHelpWindowOptions.Name = "extButtonDrawnHelpWindowOptions";
+            this.extButtonDrawnHelpWindowOptions.Padding = new System.Windows.Forms.Padding(6);
+            this.extButtonDrawnHelpWindowOptions.Selectable = true;
+            this.extButtonDrawnHelpWindowOptions.Size = new System.Drawing.Size(24, 24);
+            this.extButtonDrawnHelpWindowOptions.TabIndex = 26;
+            this.extButtonDrawnHelpWindowOptions.Text = "?";
+            this.extButtonDrawnHelpWindowOptions.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.extButtonDrawnHelpWindowOptions.UseMnemonic = true;
+            this.extButtonDrawnHelpWindowOptions.Click += new System.EventHandler(this.extButtonDrawnHelp_Click);
+            // 
             // groupBoxCustomSafeMode
             // 
             this.groupBoxCustomSafeMode.BorderColor = System.Drawing.Color.LightGray;
@@ -1545,7 +1551,7 @@ namespace EDDiscovery.UserControls
             this.groupBoxCustomSafeMode.Controls.Add(this.buttonExtSafeMode);
             this.groupBoxCustomSafeMode.Controls.Add(this.labelSafeMode);
             this.groupBoxCustomSafeMode.GradientDirection = 0F;
-            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(577, 479);
+            this.groupBoxCustomSafeMode.Location = new System.Drawing.Point(577, 402);
             this.groupBoxCustomSafeMode.Name = "groupBoxCustomSafeMode";
             this.groupBoxCustomSafeMode.Size = new System.Drawing.Size(281, 127);
             this.groupBoxCustomSafeMode.TabIndex = 21;
@@ -1593,12 +1599,12 @@ namespace EDDiscovery.UserControls
             this.labelSafeMode.Text = "Click this to perform special operations, such as to move system databases to ano" +
     "ther drive, reset UI, and other maintenance tasks...\r\n\r\n";
             // 
-            // UserControlSettings
+            // Settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.extPanelScroll);
-            this.Name = "UserControlSettings";
+            this.Name = "Settings";
             this.Size = new System.Drawing.Size(1086, 802);
             this.extPanelScroll.ResumeLayout(false);
             this.groupBoxCommanders.ResumeLayout(false);
@@ -1616,13 +1622,13 @@ namespace EDDiscovery.UserControls
             this.groupBoxMemory.PerformLayout();
             this.groupBoxCustomScreenShots.ResumeLayout(false);
             this.groupBoxCustomScreenShots.PerformLayout();
+            this.extGroupBoxWebLookup.ResumeLayout(false);
+            this.extGroupBoxDLLPerms.ResumeLayout(false);
+            this.groupBoxCustomLanguage.ResumeLayout(false);
             this.groupBoxCustomEDSM.ResumeLayout(false);
             this.groupBoxCustomEDSM.PerformLayout();
             this.groupBoxPopOuts.ResumeLayout(false);
             this.groupBoxPopOuts.PerformLayout();
-            this.extGroupBoxDLLPerms.ResumeLayout(false);
-            this.extGroupBoxWebLookup.ResumeLayout(false);
-            this.groupBoxCustomLanguage.ResumeLayout(false);
             this.groupBoxCustomSafeMode.ResumeLayout(false);
             this.ResumeLayout(false);
 

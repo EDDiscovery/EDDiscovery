@@ -142,7 +142,7 @@ namespace EDDiscovery.UserControls
             // 
             this.bookmarkToolStripMenuItem.Name = "bookmarkToolStripMenuItem";
             this.bookmarkToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
-            this.bookmarkToolStripMenuItem.Text = "Bookmark";
+            this.bookmarkToolStripMenuItem.Text = "Bookmarks";
             // 
             // ScanDisplayUserControl
             // 

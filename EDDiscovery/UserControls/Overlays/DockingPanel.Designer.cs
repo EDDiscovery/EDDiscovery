@@ -78,19 +78,19 @@ namespace EDDiscovery.UserControls
             this.fleetCarrierDockingPads.Size = new System.Drawing.Size(321, 213);
             this.fleetCarrierDockingPads.SmallPad = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(192)))));
             this.fleetCarrierDockingPads.TabIndex = 1;
-            this.fleetCarrierDockingPads.Text = "fleetCarrierDockingPads1";
+            this.fleetCarrierDockingPads.Text = "<code>";
             // 
             // contextMenuStripCarrier
             // 
             this.contextMenuStripCarrier.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.flipToolStripMenuItem});
             this.contextMenuStripCarrier.Name = "contextMenuStripCarrier";
-            this.contextMenuStripCarrier.Size = new System.Drawing.Size(94, 26);
+            this.contextMenuStripCarrier.Size = new System.Drawing.Size(181, 48);
             // 
             // flipToolStripMenuItem
             // 
             this.flipToolStripMenuItem.Name = "flipToolStripMenuItem";
-            this.flipToolStripMenuItem.Size = new System.Drawing.Size(93, 22);
+            this.flipToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.flipToolStripMenuItem.Text = "Flip";
             this.flipToolStripMenuItem.Click += new System.EventHandler(this.flipToolStripMenuItem_Click);
             // 

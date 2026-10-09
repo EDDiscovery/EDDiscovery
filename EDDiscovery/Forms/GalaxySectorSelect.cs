@@ -1,5 +1,5 @@
 ﻿/*
- * Copyright © 2017 EDDiscovery development team
+ * Copyright 2017-2026 EDDiscovery development team
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
  * file except in compliance with the License. You may obtain a copy of the License at
@@ -10,9 +10,9 @@
  * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
  * ANY KIND, either express or implied. See the License for the specific language
  * governing permissions and limitations under the License.
- * 
- * EDDiscovery is not affiliated with Frontier Developments plc.
  */
+
+
 using BaseUtils;
 using EliteDangerousCore.DB;
 using System;
@@ -153,11 +153,11 @@ namespace EDDiscovery.Forms
             if (added)                            // we added some..
             {
                 if (ExtendedControls.MessageBoxTheme.Show(this, 
-                    ("You have added new sectors!" + Environment.NewLine + "This will require a complete re-download of the EDSM data" + Environment.NewLine + "Confirm you wish to do this?").Tx(), 
+                    "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?".Tx(), 
                     "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                 {
                     if (!EDDConfig.Instance.SystemDBDownload)
-                        ExtendedControls.MessageBoxTheme.Show(this, ("Synchronisation to star data disabled in settings." + Environment.NewLine + "Reenable to allow star data to be updated").Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                        ExtendedControls.MessageBoxTheme.Show(this, "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated".Tx(), "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
 
                     Action = ActionToDo.Add;
                 }
@@ -173,7 +173,7 @@ namespace EDDiscovery.Forms
                     AllRemoveSectors = (from int i in GridId.AllId() where !currentsel.Contains(i) select i).ToList();
 
                     if (ExtendedControls.MessageBoxTheme.Show(this, 
-                        ("You have removed sectors!" + Environment.NewLine + "This will require the DB to be cleaned of entries, which will take time" + Environment.NewLine + "Confirm you wish to do this?").Tx(), 
+                        "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?".Tx(), 
                         "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                     {
                         Action = ActionToDo.Remove;

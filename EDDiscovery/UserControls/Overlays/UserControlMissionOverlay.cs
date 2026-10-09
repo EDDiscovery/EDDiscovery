@@ -168,7 +168,7 @@ namespace EDDiscovery.UserControls
                                         "< ", ms.Mission.KillCount?.ToString("N") ?? null,
                                         " ", ms.Mission.CommodityLocalised,
                                         "< ", ms.Mission.Count,
-                                        " Left ".Tx(), ms.CargoDepot?.ItemsToGo
+                                        " " + "Left".Tx() + " ", ms.CargoDepot?.ItemsToGo
                                         );
 
                     text = text.AppendPrePad(mainpart, ", ");

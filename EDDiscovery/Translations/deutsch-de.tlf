@@ -15,12 +15,10 @@ DB3D405B106759: "on" => "An"
 E3DE5AB0CA4C69: "Off" => "Aus"
 0EB5ED506E4923: "Information" => "Information"
 DE543B3879BD6E: "No Pos" => "Keine Position"
-
-// from extended controls
-
 F4F4473DF8CB59: "Disabled" => "Deaktiviert"
+1090044535D1EA: "Panel Colour" => "Paneelfarbe"
 
-// from action programs
+SECTION Action programs
 
 AC1627C6A55792: "To be deleted" => "Wird gelöscht werden"
 EB1BCE574038E4: "To be installed" => "Wird installiert werden"
@@ -29,9 +27,6 @@ B5E77C5C02A90C: "Removed" => "Entfernt"
 
 // misc
 
-1090044535D1EA: "Panel Colour" => "Paneelfarbe"
-96FCC783071DFD: "Current Key Delay String" => "Verzögerungsstring für aktuelle Taste"
-3CD8E99F3C4143: "Default Down Delay (0=Default)" => "Standard Abwärtsverzögerung (0=Voreinstellung)"
 
 SECTION StartUp
 
@@ -50,6 +45,8 @@ B1B392607DEAF2: "Run" => "Starten"
 365C643F550384: "Delete/Rebuild User DB" => "Benutzer-DB löschen/wiederaufbauen"
 01F2FBC637B7E7: "Delete/Rebuild System DB" => "System-DB löschen/wiederaufbauen"
 149C06035C88FF: "Reset DB Location" => "Datenbankort zurücksetzen"
+4FDECF8CBABC50: "Remove Journal Entries" @
+F83B6FE3AEBF13: "Exit" @
 6B295419D3023F: "Backup Database" => "Datenbank sichern"
 81DE8C10D7B389: "Move Databases" => "Verschiebe Datenbank"
 BF259EDBD80CA0: "Reset Language to English" => "Reset Language to English"
@@ -197,7 +194,6 @@ B58EA2C0453904: "&Turn Off All Transparency" => "&Schalte bei ALLEN die Transpar
 47AA608083EDEF: "E&xit" => "B&eenden"
 E592F675275650: "A&dmin" => "Ad&ministrator"
 AAC8CEA1D98BFE: "Show journal files directory of current commander" => "Zeige den Journalordner des derzeitigen Kommandanten"
-D85D0424D5DDE8: "Reset all history to current commander" => "Setze die gesamte Historie auf den derzeitigen Kommandanten zurück"
 E3D7130BAF225D: "Read 2.1 and former log files" => "Lies log-Dateien von 2.1 und früher"
 6C233E7A4C3485: "Force reload logs" => "Erzwinge ein Neuladen aller Logs"
 2EB4A69BC73B8C: "Re-scan all journal files" => "Alle Journaldateien erneut scannen"
@@ -235,7 +231,7 @@ FDB587F6AEF9FC: "Remove Tab" => "Registerkarte entfernen"
 A44AD2D137232C: "Rename Tab" => "Registerkarte umbenennen"
 DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Registerkartensetupfehler: laden primärer Registerkarte oder TG fehlgeschlagen.\r\nDas ist ein abnormaler Zustand - bitte das Problem an das EDD-Team auf Discord oder Github melden.\r\nUm zu versuchen das Problem zu beheben bitte Shift drücken während EDD startet.\r\nKlicke auf Registerkarten zurücksetzen und danach auf Programm starten."
 5365F84B9A53D9: "Enter a new name for the tab" => "Neuen Namen für Registerkarte eingeben"
-FF063FC2431DAF: "The following application extension DLL have been found\r\nDo you wish it to be used?\r\n\r\n{0} \r\n" => "Die folgenden Anwendungs-DLLs wurden gefunden\r\nWillst du sie verwenden?\r\n\r\n{0} \r\n"
+38749AF88850D0: "The following application extension DLL have been found\r\nDo you wish to allow it to be used?\r\n\r\n{0} \r\n" => "Die folgenden Anwendungs-DLLs wurden gefunden\r\nWillst du sie verwenden?\r\n\r\n{0} \r\n"
 3160432B058751: "DLLs loaded: {0}" => "DLLs geladen: {0}"
 CCFDEF5228D48D: "DLLs failed to load: {0}" => "Laden der DLLs fehlgeschlagen: {0}"
 5C77F5282CD58B: "Are you sure to Rebuild Indexes? It may take a long time." => "Bist du sicher, dass die Indexes neu erstellt werden sollen? Dies kann lange dauern."
@@ -249,7 +245,6 @@ B683FA5A92D7B6: "Closing, please wait!" => "Abschalten, bitte warten!"
 03617D9031DCED: "Star Data download is disabled. Use Settings to reenable it" => "Sternendatendownload is deaktiviert. Gehe zu den Einstellungen um ihn zu aktivieren."
 029E79A86E66C0: "Synchronisation to databases is in operation or pending, please wait" => "Datenbanksynchronisation ist im Laufen oder in der Warteschlange, bitte warten."
 5C5508F7B29BD6: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Dies kann erhebliche Zeit dauern und benötigt Bandbreite.\r\nBestätige, ob du das willst."
-EC8966F52E96C2: "Confirm you wish to reset all history entries to the current commander" => "Bestätige, dass du die gesamte Historie auf den derzeitigen Kommandanten zurücksetzen willst."
 690A6A4AC09622: "No new release found" => "Keine neue Version gefunden."
 9769B4CCF9B4FE: "Confirm you remove any duplicate FSD entries from the current commander" => "Bestätige, dass du alle duplizierten FSA-Sprünge vom derzeitigen Kommandanten entfernen willst."
 BA32A940331E35: "Removed {0} FSD entries" => "{0} FSA-Einträge entfernt."
@@ -275,7 +270,6 @@ C7F0C2BDEE6813: "Move another commanders history to this commander" => "Verschie
 SECTION EDDiscoveryController
 
 9BA9842C1C8616: "Closing down, please wait.." => "Beenden, bitte warten..."
-DB2578F4000025: "Get galactic mapping from EDSM." => "Erhalte GMP-Daten von EDSM"
 B916383C5DCECE: "Get galactic mapping from GEC." => "Erhalte Mappingdaten von GEC"
 855115699D49D3: "Loaded Notes, Bookmarks and Galactic mapping." => "Notizen, Lesezeichen sowie GMP-Daten geladen."
 D080CC813B189E: "Reading travel history" => "Lese die Reisehistorie."
@@ -299,7 +293,6 @@ C9B87AD62761ED: "Newer EDD required" => "Neueres EDD erforderlich"
 0AE36D6F55493C: "Too old for EDD" => "Zu alt für EDD"
 5B3A1A44268196: "Locally modified" => "Lokal modifiziert"
 482E9BD3F6E7A8: "Up to Date" => "Auf dem neuesten Stand"
-05ED059BB7B8B0: "Local Only" => "Nur lokal"
 76AFFE13E38473: "New version" => "Neue Version"
 FD6C3EBF7BEFCA: "Install" => "Installieren"
 FB91E24FA52D8D: "Update" => "Updaten"
@@ -341,6 +334,7 @@ B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cle
 13D60E3F37387F: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "EDDiscovery kann Sterndaten von EDSM/Spansh herunterladen um dir zusätzliche Daten zur Verfügung zu stellen. Wähle wieviele Daten du herunterladen möchtest. Je mehr  Teile der Galaxie du wählst umso mehr Speicherplatz wird benötigt. Beachte, dass der Appdataordner von EDD sich auf einer SSD befinden sollte, sollte er sich auf einer Festplatte befinden wird dies sehr langsam sein. Wähle 'Keine' wenn du eine Festplatte nutzt."
 8598222918D3C6: "Select" => "Auswählen"
 0EE93787C960CF: "Select the data set" => "Wähle das Datenset"
+BD32B2E4F5C2FD: "Select the data source" @
 D24336A365C558: "Press to Accept" => "Drücke um anzunehmen"
 D65DF91B92B250: "Select Galaxy Data" => "Wähle Galaxiedaten"
 2745DEBAA64A20: "Area" => "Gebiet"
@@ -399,6 +393,8 @@ AA822BAACB5BCA: "Value is not valid" => "Wert ist ungültig"
 
 SECTION KeyForm
 
+96FCC783071DFD: "Current Key Delay String" => "Verzögerungsstring für aktuelle Taste"
+3CD8E99F3C4143: "Default Down Delay (0=Default)" => "Standard Abwärtsverzögerung (0=Voreinstellung)"
 A6CC1735E61BA1: "Define Key Sequence" => "Definiere Tastensequenz"
 2038BDEC921020: "Up" => "Rauf"
 BF93E5CE8BC122: "Down" => "Runter"
@@ -407,9 +403,7 @@ EA683AD616063B: "Press" => "Drücken"
 DD6A02A553DA4C: "Ctrl" => "Strg"
 E30EFF925100B7: "Alt" => "Alt"
 A24AEF4D03E398: "Press Key" => "Drücke Taste"
-D54FFCD418FB39: "Current Delay" => "Derzeitige Verzögerung"
 5606C23DCD17C1: "Select Key" => "Wähle Taste"
-0A25165DFF06CC: "Start Delay(ms)" => "Starte Verzögerung (ms)"
 D11F7478DD0192: "Send To" => "Sende an"
 E5651C683F14C9: "Keys" => "Tasten"
 BC981983E7F547: "Next" => "Nächste"

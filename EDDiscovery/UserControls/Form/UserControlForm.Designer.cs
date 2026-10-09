@@ -44,7 +44,6 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlForm));
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.extButtonDrawnShowTitle = new ExtendedControls.ExtButtonDrawn();
             this.extButtonDrawnMinimize = new ExtendedControls.ExtButtonDrawn();
@@ -76,9 +75,11 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnShowTitle.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonDrawnShowTitle.BorderColor = System.Drawing.Color.Orange;
             this.extButtonDrawnShowTitle.BorderWidth = 1;
+            this.extButtonDrawnShowTitle.ButtonDisabledScaling = 0.25F;
             this.extButtonDrawnShowTitle.Image = null;
             this.extButtonDrawnShowTitle.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Captioned;
             this.extButtonDrawnShowTitle.Location = new System.Drawing.Point(31, -2);
+            this.extButtonDrawnShowTitle.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnShowTitle.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnShowTitle.MouseSelectedColorEnable = true;
             this.extButtonDrawnShowTitle.Name = "extButtonDrawnShowTitle";
@@ -98,9 +99,11 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnMinimize.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonDrawnMinimize.BorderColor = System.Drawing.Color.Orange;
             this.extButtonDrawnMinimize.BorderWidth = 1;
+            this.extButtonDrawnMinimize.ButtonDisabledScaling = 0.25F;
             this.extButtonDrawnMinimize.Image = null;
             this.extButtonDrawnMinimize.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Minimize;
             this.extButtonDrawnMinimize.Location = new System.Drawing.Point(127, -2);
+            this.extButtonDrawnMinimize.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnMinimize.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnMinimize.MouseSelectedColorEnable = true;
             this.extButtonDrawnMinimize.Name = "extButtonDrawnMinimize";
@@ -121,9 +124,11 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnOnTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonDrawnOnTop.BorderColor = System.Drawing.Color.Orange;
             this.extButtonDrawnOnTop.BorderWidth = 1;
+            this.extButtonDrawnOnTop.ButtonDisabledScaling = 0.25F;
             this.extButtonDrawnOnTop.Image = null;
             this.extButtonDrawnOnTop.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Floating;
             this.extButtonDrawnOnTop.Location = new System.Drawing.Point(79, -2);
+            this.extButtonDrawnOnTop.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnOnTop.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnOnTop.MouseSelectedColorEnable = true;
             this.extButtonDrawnOnTop.Name = "extButtonDrawnOnTop";
@@ -143,9 +148,11 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnTaskBarIcon.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonDrawnTaskBarIcon.BorderColor = System.Drawing.Color.Orange;
             this.extButtonDrawnTaskBarIcon.BorderWidth = 1;
+            this.extButtonDrawnTaskBarIcon.ButtonDisabledScaling = 0.25F;
             this.extButtonDrawnTaskBarIcon.Image = null;
             this.extButtonDrawnTaskBarIcon.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.WindowInTaskBar;
             this.extButtonDrawnTaskBarIcon.Location = new System.Drawing.Point(55, -2);
+            this.extButtonDrawnTaskBarIcon.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnTaskBarIcon.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnTaskBarIcon.MouseSelectedColorEnable = true;
             this.extButtonDrawnTaskBarIcon.Name = "extButtonDrawnTaskBarIcon";
@@ -165,9 +172,11 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnTransparentMode.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonDrawnTransparentMode.BorderColor = System.Drawing.Color.Orange;
             this.extButtonDrawnTransparentMode.BorderWidth = 1;
+            this.extButtonDrawnTransparentMode.ButtonDisabledScaling = 0.25F;
             this.extButtonDrawnTransparentMode.Image = null;
             this.extButtonDrawnTransparentMode.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Transparent;
             this.extButtonDrawnTransparentMode.Location = new System.Drawing.Point(7, -2);
+            this.extButtonDrawnTransparentMode.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnTransparentMode.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnTransparentMode.MouseSelectedColorEnable = true;
             this.extButtonDrawnTransparentMode.Name = "extButtonDrawnTransparentMode";
@@ -176,7 +185,6 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnTransparentMode.Size = new System.Drawing.Size(24, 24);
             this.extButtonDrawnTransparentMode.TabIndex = 24;
             this.extButtonDrawnTransparentMode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            this.toolTip.SetToolTip(this.extButtonDrawnTransparentMode, resources.GetString("extButtonDrawnTransparentMode.ToolTip"));
             this.extButtonDrawnTransparentMode.UseMnemonic = true;
             this.extButtonDrawnTransparentMode.Click += new System.EventHandler(this.button_transparency_Click);
             // 
@@ -187,9 +195,11 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonDrawnClose.BorderColor = System.Drawing.Color.Orange;
             this.extButtonDrawnClose.BorderWidth = 1;
+            this.extButtonDrawnClose.ButtonDisabledScaling = 0.25F;
             this.extButtonDrawnClose.Image = null;
             this.extButtonDrawnClose.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Close;
             this.extButtonDrawnClose.Location = new System.Drawing.Point(151, -2);
+            this.extButtonDrawnClose.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnClose.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnClose.MouseSelectedColorEnable = true;
             this.extButtonDrawnClose.Name = "extButtonDrawnClose";
@@ -234,9 +244,11 @@ namespace EDDiscovery.UserControls
             this.extButtonDrawnHelp.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
             this.extButtonDrawnHelp.BorderColor = System.Drawing.Color.Orange;
             this.extButtonDrawnHelp.BorderWidth = 1;
+            this.extButtonDrawnHelp.ButtonDisabledScaling = 0.25F;
             this.extButtonDrawnHelp.Image = null;
             this.extButtonDrawnHelp.ImageSelected = ExtendedControls.ExtButtonDrawn.ImageType.Text;
             this.extButtonDrawnHelp.Location = new System.Drawing.Point(103, -2);
+            this.extButtonDrawnHelp.MouseOverColor = System.Drawing.Color.White;
             this.extButtonDrawnHelp.MouseSelectedColor = System.Drawing.Color.Green;
             this.extButtonDrawnHelp.MouseSelectedColorEnable = true;
             this.extButtonDrawnHelp.Name = "extButtonDrawnHelp";
@@ -274,13 +286,24 @@ namespace EDDiscovery.UserControls
             // 
             // extPanelResizerTop
             // 
+            this.extPanelResizerTop.ChildrenThemed = true;
             this.extPanelResizerTop.Cursor = System.Windows.Forms.Cursors.SizeNS;
             this.extPanelResizerTop.Dock = System.Windows.Forms.DockStyle.Top;
+            this.extPanelResizerTop.FlowDirection = null;
+            this.extPanelResizerTop.GradientDirection = 0F;
             this.extPanelResizerTop.Location = new System.Drawing.Point(0, 0);
             this.extPanelResizerTop.Movement = System.Windows.Forms.DockStyle.Top;
             this.extPanelResizerTop.Name = "extPanelResizerTop";
+            this.extPanelResizerTop.PaintTransparentColor = System.Drawing.Color.Transparent;
             this.extPanelResizerTop.Size = new System.Drawing.Size(1226, 3);
             this.extPanelResizerTop.TabIndex = 28;
+            this.extPanelResizerTop.ThemeColors = new System.Drawing.Color[] {
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control,
+        System.Drawing.SystemColors.Control};
+            this.extPanelResizerTop.ThemeColorSet = -1;
+            this.extPanelResizerTop.ThisThemed = true;
             // 
             // panelTitleControlText
             // 

@@ -545,7 +545,7 @@ namespace EDDiscovery.UserControls
             if (toolStripJumponiumProgressBar.Value == 8)
                 toolStripJumponiumProgressBar.ToolTipText = "This is a green system, as it has all existing jumponium materials available!".Tx();
             else
-                toolStripJumponiumProgressBar.ToolTipText = toolStripJumponiumProgressBar.Value + " jumponium materials found in system.".Tx();
+                toolStripJumponiumProgressBar.ToolTipText = toolStripJumponiumProgressBar.Value + " " + "Jumponium materials found in system".Tx();
 
             string ct = systemnode.System.Name;
             long totalv = systemnode.ScanValue(edsmSpanshButton.WebLookup) + organicvaluetotal;

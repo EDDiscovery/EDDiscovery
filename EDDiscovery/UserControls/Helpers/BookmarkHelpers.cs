@@ -113,7 +113,7 @@ namespace EDDiscovery.UserControls
             {
                 ExtendedControls.MessageBoxTheme.Show(
                     parentForm,
-                    "Cannot find system.".Tx(),
+                    "Cannot find system".Tx(),
                     "Warning".Tx(),
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Information

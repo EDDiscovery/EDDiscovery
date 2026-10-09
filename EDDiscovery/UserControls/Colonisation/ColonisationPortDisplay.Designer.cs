@@ -1,4 +1,20 @@
-﻿namespace EDDiscovery.UserControls.Colonisation
+﻿/*
+ * Copyright 2025 - 2025 EDDiscovery development team
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this
+ * file except in compliance with the License. You may obtain a copy of the License at
+ *
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software distributed under
+ * the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF
+ * ANY KIND, either express or implied. See the License for the specific language
+ * governing permissions and limitations under the License.
+ */
+
+// .NotTxFile()
+
+namespace EDDiscovery.UserControls.Colonisation
 {
     partial class ColonisationPortDisplay
     {
@@ -37,6 +53,7 @@
             this.ColRLRemaining = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ColRLPayment = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.extPanelGradientFill1 = new ExtendedControls.ExtPanelGradientFill();
+            this.extCheckBoxShowZeros = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxShowContributions = new ExtendedControls.ExtCheckBox();
             this.extCheckBoxShowRL = new ExtendedControls.ExtCheckBox();
             this.labelDataProgress = new ExtendedControls.LabelData();
@@ -51,7 +68,6 @@
             this.extPanelDataGridViewScrollContributions = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.extScrollBarContributions = new ExtendedControls.ExtScrollBar();
             this.extPanelGradientFillBot = new ExtendedControls.ExtPanelGradientFill();
-            this.extCheckBoxShowZeros = new ExtendedControls.ExtCheckBox();
             this.extPanelDataGridViewScrollRL.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewRL)).BeginInit();
             this.extPanelGradientFill1.SuspendLayout();
@@ -93,6 +109,7 @@
             this.extScrollBarRL.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarRL.Name = "extScrollBarRL";
             this.extScrollBarRL.Size = new System.Drawing.Size(24, 227);
+            this.extScrollBarRL.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarRL.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarRL.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarRL.SliderDrawAngle = 90F;
@@ -179,6 +196,33 @@
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
             this.extPanelGradientFill1.ThemeColorSet = 1;
+            this.extPanelGradientFill1.ThisThemed = true;
+            // 
+            // extCheckBoxShowZeros
+            // 
+            this.extCheckBoxShowZeros.Appearance = System.Windows.Forms.Appearance.Button;
+            this.extCheckBoxShowZeros.ButtonGradientDirection = 90F;
+            this.extCheckBoxShowZeros.CheckBoxColor = System.Drawing.Color.Gray;
+            this.extCheckBoxShowZeros.CheckBoxGradientDirection = 225F;
+            this.extCheckBoxShowZeros.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.extCheckBoxShowZeros.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowZeros.CheckColor2 = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxShowZeros.Checked = true;
+            this.extCheckBoxShowZeros.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.extCheckBoxShowZeros.DisabledScaling = 0.5F;
+            this.extCheckBoxShowZeros.Image = global::EDDiscovery.Icons.Controls.greenzero;
+            this.extCheckBoxShowZeros.ImageIndeterminate = null;
+            this.extCheckBoxShowZeros.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.extCheckBoxShowZeros.ImageUnchecked = global::EDDiscovery.Icons.Controls.redzero;
+            this.extCheckBoxShowZeros.Location = new System.Drawing.Point(73, 28);
+            this.extCheckBoxShowZeros.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extCheckBoxShowZeros.MouseOverScaling = 1.3F;
+            this.extCheckBoxShowZeros.MouseSelectedScaling = 1.3F;
+            this.extCheckBoxShowZeros.Name = "extCheckBoxShowZeros";
+            this.extCheckBoxShowZeros.Size = new System.Drawing.Size(28, 28);
+            this.extCheckBoxShowZeros.TabIndex = 35;
+            this.extCheckBoxShowZeros.TickBoxReductionRatio = 0.75F;
+            this.extCheckBoxShowZeros.UseVisualStyleBackColor = true;
             // 
             // extCheckBoxShowContributions
             // 
@@ -385,6 +429,7 @@
             this.extScrollBarContributions.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.extScrollBarContributions.Name = "extScrollBarContributions";
             this.extScrollBarContributions.Size = new System.Drawing.Size(24, 227);
+            this.extScrollBarContributions.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.extScrollBarContributions.SliderColor = System.Drawing.Color.DarkGray;
             this.extScrollBarContributions.SliderColor2 = System.Drawing.Color.DarkGray;
             this.extScrollBarContributions.SliderDrawAngle = 90F;
@@ -414,32 +459,7 @@
         System.Drawing.SystemColors.Control,
         System.Drawing.SystemColors.Control};
             this.extPanelGradientFillBot.ThemeColorSet = -1;
-            // 
-            // extCheckBoxShowZeros
-            // 
-            this.extCheckBoxShowZeros.Appearance = System.Windows.Forms.Appearance.Button;
-            this.extCheckBoxShowZeros.ButtonGradientDirection = 90F;
-            this.extCheckBoxShowZeros.CheckBoxColor = System.Drawing.Color.Gray;
-            this.extCheckBoxShowZeros.CheckBoxGradientDirection = 225F;
-            this.extCheckBoxShowZeros.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.extCheckBoxShowZeros.CheckColor = System.Drawing.Color.DarkBlue;
-            this.extCheckBoxShowZeros.CheckColor2 = System.Drawing.Color.DarkBlue;
-            this.extCheckBoxShowZeros.Checked = true;
-            this.extCheckBoxShowZeros.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.extCheckBoxShowZeros.DisabledScaling = 0.5F;
-            this.extCheckBoxShowZeros.Image = global::EDDiscovery.Icons.Controls.greenzero;
-            this.extCheckBoxShowZeros.ImageIndeterminate = null;
-            this.extCheckBoxShowZeros.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.extCheckBoxShowZeros.ImageUnchecked = global::EDDiscovery.Icons.Controls.redzero;
-            this.extCheckBoxShowZeros.Location = new System.Drawing.Point(73, 28);
-            this.extCheckBoxShowZeros.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.extCheckBoxShowZeros.MouseOverScaling = 1.3F;
-            this.extCheckBoxShowZeros.MouseSelectedScaling = 1.3F;
-            this.extCheckBoxShowZeros.Name = "extCheckBoxShowZeros";
-            this.extCheckBoxShowZeros.Size = new System.Drawing.Size(28, 28);
-            this.extCheckBoxShowZeros.TabIndex = 35;
-            this.extCheckBoxShowZeros.TickBoxReductionRatio = 0.75F;
-            this.extCheckBoxShowZeros.UseVisualStyleBackColor = true;
+            this.extPanelGradientFillBot.ThisThemed = true;
             // 
             // ColonisationPortDisplay
             // 

@@ -151,7 +151,7 @@ namespace EDDiscovery.UserControls
                 ReturnSystems((from x in list select new Tuple<ISystem, double>(x, x.Distance(sys))).ToList());
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".Tx()+ textBoxSystemName.Text, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system".Tx() + " " + textBoxSystemName.Text, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
         private void buttonExtDBClick(object sender, EventArgs e)
@@ -183,7 +183,7 @@ namespace EDDiscovery.UserControls
                 })));
             }
             else
-                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system ".Tx()+ textBoxSystemName.Text, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Cannot find system".Tx() + " " + textBoxSystemName.Text, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
         }
 
 
