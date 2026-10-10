@@ -206,7 +206,7 @@ SECTION EDDiscoveryForm
 
 .ConfirmSyncToEDSM: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "Masz wyłączoną synchronizację EDSM dla tego Dowódcy. Czy na pewno chcesz przesłać niezsynchronizowane zdarzenia do EDSM?"
 .ConfirmSyncToEDSMCaption: "Confirm EDSM sync" => "Potwierdź synchronizację EDSM"
-.SendEDSMCaption: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
+.SendEDSMCaption: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." => "Do wysłania jest {0} raportów EDSM. Wymaga to czasu i transferu danych. Wybierz poniżej sposób postępowania. Wcześniejsze wpisy zostaną oznaczone jako wysłane."
 .SendEDSMAll: "Send All to EDSM" => "Wyślij wszystko do EDSM"
 .SendEDSM24: "Send Last 24 Hours of entries to EDSM" => "Wyślij wpisy z ostatnich 24 godzin do EDSM"
 .SendEDSMFrom: "Send From" => "Wyślij od"

@@ -171,7 +171,7 @@ SECTION SearchScans
 
 SECTION UserControlDiscoveries
 
-.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" @
+.textBoxSearch.ToolTip: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Wpisz tekst, aby filtrować zdarzenia według zawartości kolumn. Możesz też użyć system:<wildcard>, body:<wildcard>, station:<wildcard> i stationfaction:<wildcard>, aby filtrować zdarzenia według tych właściwości"
 .extButtonSearches.ToolTip: "Select discoveries to search for, taken from the search panel scan searches" => "Wybierz typy odkryć do wyszukania spośród wyszukiwań skanów w panelu wyszukiwania"
 .extCheckBoxWordWrap.ToolTip: "Enable or disable word wrap" => "Włącz lub wyłącz zawijanie tekstu"
 .buttonExtExcel.ToolTip: "Export" => "Eksportuj"
@@ -861,13 +861,13 @@ SECTION UserControlSettings
 .EJ: "Jumps" => "Skoki"
 .EN: "Nothing" = None
 .DelCmdr: "Do you wish to delete commander " => "Czy usunąć komandera "
-.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
+.Font: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Czcionka używana przez ten motyw nie jest dostępna w systemie.\r\nWymagana czcionka: \"{0}\".\r\nZainstaluj ją, aby w pełni korzystać z motywu.\r\nCzcionkę Euro Caps można bezpłatnie pobrać z www.edassets.org.\r\n\r\nCzy wczytać motyw z użyciem czcionki zastępczej?"
 .NoMap: "No map available!" => "Brak dostępnej mapy!"
 .GalFini: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Ukończono, proszę zamknąć to okno.\r\nJeśli masz już otwartą mapę 3D, zmiany nie będą na niej widoczne do następnego uruchomienia EDD\r\n"
 .extButtonReloadStarDatabase: "Reload Star Database" => "Ponownie załaduj bazę gwiazd"
-.RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" @
-.PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" @
-.PermDelTLUs: "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned" @
+.RELOAD: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" => "Baza układów zostanie usunięta.\r\n\r\nNastępnie będzie można ponownie wybrać źródło danych\r\noraz wymagany zestaw gwiazd.\r\n\r\nWymaga to pobrania całej bazy gwiazd z serwera.\r\nUżyj tej opcji tylko, jeśli chcesz ponownie pobrać te dane"
+.PermDelCmdr: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" => "Czy trwale usunąć wszystkie dane komandera (TAK), w tym dane dziennika,\r\nczy tylko go ukryć i nie wyświetlać ponownie (NIE)?"
+.PermDelTLUs: "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned" => "Czy trwale usunąć informacje o plikach dziennika komandera (TAK)?\r\nTAK oznacza ponowne odczytanie jego plików dziennika, jeśli nadal istnieją.\r\nNIE oznacza, że nie zostaną ponownie odczytane."
 
 SECTION UserControlShipYards
 
