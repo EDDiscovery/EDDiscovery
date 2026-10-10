@@ -136,7 +136,7 @@ ADC4E96A478BE0: "Sort" => "Sortieren"
 
 SECTION UserControlDiscoveries
 
-4CC658129E454D: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Spezifiziere einen Suchterm um Zelleninhalte zu filtern. Verfügbar sind system:<Platzhalter>, body:<Platzhalter>, station:<Platzhalter> und stationfaction:<Platzhalter> um Ereignisse die diesen Parametern zugewiesen sind zu filtern"
+4CC658129E454D: "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties" => "Wpisz tekst, aby filtrować zdarzenia według zawartości kolumn. Możesz też użyć system:<wildcard>, body:<wildcard>, station:<wildcard> i stationfaction:<wildcard>, aby filtrować zdarzenia według tych właściwości"
 B4F6B956832BEC: "Select discoveries to search for, taken from the search panel scan searches" => "Wybierz typy odkryć do wyszukania spośród wyszukiwań skanów w panelu wyszukiwania"
 
 SECTION SearchStars
@@ -665,12 +665,12 @@ C552D2599FF6E0: "Remove Sectors" => "Usuń Sektory"
 933ADEA19EEE0A: "Jumps" => "Skoki"
 4481948392A884: "Nothing" => "Nic"
 E3AEDF672CD00D: "Do you wish to delete commander " => "Czy usunąć komandera "
-EB4FD2BBBBAACE: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
+EB4FD2BBBBAACE: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Czcionka używana przez ten motyw nie jest dostępna w systemie.\r\nWymagana czcionka: \"{0}\".\r\nZainstaluj ją, aby w pełni korzystać z motywu.\r\nCzcionkę Euro Caps można bezpłatnie pobrać z www.edassets.org.\r\n\r\nCzy wczytać motyw z użyciem czcionki zastępczej?"
 35F9B4B074BFBC: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Ukończono, proszę zamknąć to okno.\r\nJeśli masz już otwartą mapę 3D, zmiany nie będą na niej widoczne do następnego uruchomienia EDD\r\n"
 BB75D637DC2C4D: "Reload Star Database" => "Ponownie załaduj bazę gwiazd"
-CA622FCCA53890: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" @
-9124C85C715BCB: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" @
-A60B40E8AD02DD: "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned" @
+CA622FCCA53890: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" => "Baza układów zostanie usunięta.\r\n\r\nNastępnie będzie można ponownie wybrać źródło danych\r\noraz wymagany zestaw gwiazd.\r\n\r\nWymaga to pobrania całej bazy gwiazd z serwera.\r\nUżyj tej opcji tylko, jeśli chcesz ponownie pobrać te dane"
+9124C85C715BCB: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" => "Czy trwale usunąć wszystkie dane komandera (TAK), w tym dane dziennika,\r\nczy tylko go ukryć i nie wyświetlać ponownie (NIE)?"
+A60B40E8AD02DD: "Do you wish permanently delete records of journal files of the commander (YES),\r\nSaying YES means the commander journal files will be rescanned if they are still present\r\nSaying NO means they won't be rescanned" => "Czy trwale usunąć informacje o plikach dziennika komandera (TAK)?\r\nTAK oznacza ponowne odczytanie jego plików dziennika, jeśli nadal istnieją.\r\nNIE oznacza, że nie zostaną ponownie odczytane."
 
 SECTION UserControlShipYards
 

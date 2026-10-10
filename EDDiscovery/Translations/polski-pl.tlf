@@ -180,7 +180,7 @@ SECTION EDDiscoveryForm
 
 586CFE03DAA723: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "Masz wyłączoną synchronizację EDSM dla tego Dowódcy. Czy na pewno chcesz przesłać niezsynchronizowane zdarzenia do EDSM?"
 25C9D555A2A9B9: "Confirm EDSM sync" => "Potwierdź synchronizację EDSM"
-FAC898054B2C2B: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
+FAC898054B2C2B: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." => "Do wysłania jest {0} raportów EDSM. Wymaga to czasu i transferu danych. Wybierz poniżej sposób postępowania. Wcześniejsze wpisy zostaną oznaczone jako wysłane."
 B61E7134EF7FDD: "Send All to EDSM" => "Wyślij wszystko do EDSM"
 2460BB4C7A146D: "Send Last 24 Hours of entries to EDSM" => "Wyślij wpisy z ostatnich 24 godzin do EDSM"
 AA962467914A2B: "Send From" => "Wyślij od"
