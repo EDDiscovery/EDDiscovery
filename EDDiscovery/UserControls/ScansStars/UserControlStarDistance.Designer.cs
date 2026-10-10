@@ -407,7 +407,7 @@ namespace EDDiscovery.UserControls
             // colStarType
             // 
             this.colStarType.FillWeight = 25F;
-            this.colStarType.HeaderText = "Star Type";
+            this.colStarType.HeaderText = "Star type";
             this.colStarType.Name = "colStarType";
             this.colStarType.ReadOnly = true;
             // 

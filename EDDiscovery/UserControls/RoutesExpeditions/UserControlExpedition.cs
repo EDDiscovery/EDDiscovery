@@ -484,7 +484,7 @@ namespace EDDiscovery.UserControls
                     row.Cells[FSSBodies.Index].Value =
                     row.Cells[KnownBodies.Index].Value =
                     row.Cells[Stars.Index].Value = "";
-                    row.Cells[Info.Index].Value = lookup != EliteDangerousCore.WebExternalDataLookup.None ? "No Body information found on web".Tx(): "No local scan info".Tx();
+                    row.Cells[Info.Index].Value = lookup != EliteDangerousCore.WebExternalDataLookup.None ? "Website did not return any data".Tx() : "No local scan info".Tx();
                 }
             }
 
@@ -842,7 +842,7 @@ namespace EDDiscovery.UserControls
             var rt = CopyGridIntoRoute();
             if (rt == null)
             {
-                ExtendedControls.MessageBoxTheme.Show(FindForm(), "There is no route to export ".Tx(),
+                ExtendedControls.MessageBoxTheme.Show(FindForm(), "There is no route to export".Tx(),
                     "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }

@@ -459,7 +459,7 @@ namespace EDDiscovery.UserControls
 
             f.AllowResize = true;
 
-            f.ShowDialogCentred(FindForm(), FindForm().Icon, "Missions for ".Tx()+ factionname, closeicon: true);
+            f.ShowDialogCentred(FindForm(), FindForm().Icon, "Missions for".Tx() + " " + factionname, closeicon: true);
 
             DGVSaveColumnLayout(mluc.dataGridView, "ShowMission");
         }
@@ -525,7 +525,7 @@ namespace EDDiscovery.UserControls
             f.InstallStandardTriggers();
             f.AllowResize = true;
 
-            string title = "Materials/Commodities for ".Tx()+ factionname;
+            string title = "Materials/Commodities for".Tx() + " " + factionname;
             if (profit != 0)
                 title += " (" + profit.ToString("N0") + "cr)";
             f.ShowDialogCentred(FindForm(), FindForm().Icon, title, closeicon: true);
@@ -569,7 +569,7 @@ namespace EDDiscovery.UserControls
             f.InstallStandardTriggers();
             f.AllowResize = true;
 
-            f.ShowDialogCentred(FindForm(), FindForm().Icon, "Bounties/Bonds for ".Tx()+ factionname, closeicon: true);
+            f.ShowDialogCentred(FindForm(), FindForm().Icon, "Bounties/Bonds for".Tx() + " " + factionname, closeicon: true);
 
             DGVSaveColumnLayout(dgvpanel.DataGrid, "ShowBonds");
         }
