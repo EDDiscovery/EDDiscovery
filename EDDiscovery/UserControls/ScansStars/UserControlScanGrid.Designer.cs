@@ -359,7 +359,7 @@ namespace EDDiscovery.UserControls
             // 
             this.toolStripStatusTotalValue.Name = "toolStripStatusTotalValue";
             this.toolStripStatusTotalValue.Size = new System.Drawing.Size(122, 18);
-            this.toolStripStatusTotalValue.Text = "Estimated scans value";
+            this.toolStripStatusTotalValue.Text = "";
             // 
             // toolStripJumponiumProgressBar
             // 

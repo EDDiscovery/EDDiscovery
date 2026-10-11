@@ -146,27 +146,27 @@ namespace EDDiscovery.UserControls
                 {
                     var je = he.journalEntry as JournalMaterialDiscovered;
                     if (je.Name.Equals(cm.FDName))
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".Tx()+ he.WhereAmI);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at".Tx()+ " " + he.WhereAmI);
                 }
                 else if (he.EntryType == JournalTypeEnum.MaterialCollected)
                 {
                     var je = he.journalEntry as JournalMaterialCollected;
                     if (je.Name.Equals(cm.FDName))
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Collected at ".Tx()+ he.WhereAmI);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Collected at".Tx()+ " " +he.WhereAmI);
                 }
 
                 else if (he.EntryType == JournalTypeEnum.MissionCompleted)
                 {
                     var je = he.journalEntry as JournalMissionCompleted;
                     if (je.HasReceivedReward(cm.FDName))
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Mission Reward at ".Tx()+ he.WhereAmI);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Mission Reward at".Tx()+ " " + he.WhereAmI);
                 }
 
                 else if (he.EntryType == JournalTypeEnum.SAASignalsFound)
                 {
                     var je = he.journalEntry as JournalSAASignalsFound;
                     if (je.Contains(cm.FDName) > 0)
-                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at ".Tx()+ je.BodyName);
+                        found = new Tuple<HistoryEntry, string>(he, prefix + "Discovered at".Tx() + " " + je.BodyName);
                 }
 
                 else if (he.EntryType == JournalTypeEnum.FCMaterials)

@@ -686,7 +686,7 @@ namespace EDDiscovery.UserControls
 
             var size = imageControlPacks.DrawMeasureText(pointtextleft, new Size(titlewidth, 1000), sp.PackTheme.SplitCapsWordFull(), bigfont, color);
             pointtextleft.Y += (int)(size.Height + 1) + linemargin;
-            imageControlPacks.DrawText(pointtextleft, new Size(titlewidth, 2000), "Tier ".Tx() + sp.PackTier.ToString("N0"), bigfont, color);
+            imageControlPacks.DrawText(pointtextleft, new Size(titlewidth, 2000), "Tier".Tx() + " " + sp.PackTier.ToString("N0"), bigfont, color);
 
 
             var pointtextmid = new Point(titlewidth + 50, pointtextleft.Y);

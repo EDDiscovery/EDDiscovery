@@ -337,7 +337,7 @@ namespace EDDiscovery.UserControls
                 }
 
                 string ms = string.Format(" " + "showing {0} original {1}".Tx(), dataGridViewTravel.Rows.Count, current_historylist?.Count ?? 0);
-                comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(), fdropdown + ms) : "Select the entries by age, ".Tx() + ms);
+                comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(), fdropdown + ms) : "Select the entries by age".Tx() + " " + ms);
 
                 if (dataGridViewTravel.SelectAndMove(rowsbyjournalid, ref pos, true))
                 {

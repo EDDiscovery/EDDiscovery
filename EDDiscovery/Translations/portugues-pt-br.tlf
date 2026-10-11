@@ -18,13 +18,6 @@ DE543B3879BD6E: "No Pos" => "Nenhuma Posição"
 F4F4473DF8CB59: "Disabled" => "Deaktiviert"
 1090044535D1EA: "Panel Colour" @
 
-SECTION Action programs
-
-AC1627C6A55792: "To be deleted" @
-EB1BCE574038E4: "To be installed" @
-B5E77C5C02A90C: "Removed" => "Entfernt"
-06DB4FFA7EFB34: "Incompatible" @
-
 // misc
 
 
@@ -118,7 +111,6 @@ DB6536B2745A44: "Summary Panel" => "Somário"
 C24689D54DC869: "Route Tracker" => "Traçador de Itinerário"
 3E9A0D08AB2CD4: "Compass overlay to show bearing to planetary coordinates" => "Bussola planetária mostra a direção a seguir para chegar às coordenadas desejadas"
 9D5C8E519D85D8: "Compass" => "Bussola Planetária"
-8038B86D2A5395: "Settings for ED Discovery " => "Configurações de ED Discovery "
 C7F73BB54D9289: "Settings" => "Configurações"
 BF5CF3ED547461: "Screen shot" => "Mostrar a Foto da Tela"
 AF4B7F220B9658: "Screen Shot" => "Foto da Tela"
@@ -280,26 +272,6 @@ CBD5298BFF839E: "Processing log file {0}" => "Processando o file de registro {0}
 1EB68C8D6B5F34: "Refresh Displays" => "Recarregando a exibição"
 DCDB45EA825C67: "History refresh complete." => "Recarregamento do histórico completo"
 B624A602C8C18F: "Checking for new Expedition data" => "Verificando por novos dados de exploração"
-
-SECTION AddOnManagerForm
-
-3F827C66E7E047: "Globals" => "Global"
-0972452F39F378: "Add-On Manager" => "Gerir os Add-Ons"
-55F8EBC805E65B: "Description" => "Descrição"
-BAE7D5BE70820E: "Status" => "Estado"
-97C89A4D6630AD: "Action" => "Ação"
-DF174A3F2FAA31: "Enabled" => "Habilitar"
-C9B87AD62761ED: "Newer EDD required" => "Nova versão de EDDiscovery necesária"
-0AE36D6F55493C: "Too old for EDD" => "Demasiado velho para EDDiscovery"
-5B3A1A44268196: "Locally modified" => "Modificado localmente"
-482E9BD3F6E7A8: "Up to Date" => "Atualizado"
-76AFFE13E38473: "New version" => "Nova versão"
-FD6C3EBF7BEFCA: "Install" => "Instalar"
-FB91E24FA52D8D: "Update" => "Atualizar"
-5301648DCF6B53: "Edit" => "Modifica"
-A425A7972A5C05: "Modified locally, do you wish to overwrite the changes" => "Modificado localmente, está certo de querer sobreescrever as mudanças?"
-943E16DB2C7F21: "Add-on failed to update. Check files for read only status" => "Attualização dos Add-On falhada. Verifica se os arquivos são escrivíveis"
-491F68FCF24992: "Do you really want to delete {0}" => "Está certo de querer eliminar {0}"
 
 SECTION ImportExportForm
 
@@ -472,31 +444,72 @@ SECTION AudioDeviceConfigure
 5B91330DCA5F99: "Audio Device Select" @
 87A47513B6B28B: "Select Device" @
 
+SECTION AddOnManagerForm
+
+AC1627C6A55792: "To be deleted" @
+EB1BCE574038E4: "To be installed" @
+B5E77C5C02A90C: "Removed" => "Entfernt"
+06DB4FFA7EFB34: "Incompatible" @
+3F827C66E7E047: "Globals" => "Global"
+0972452F39F378: "Add-On Manager" => "Gerir os Add-Ons"
+55F8EBC805E65B: "Description" => "Descrição"
+BAE7D5BE70820E: "Status" => "Estado"
+97C89A4D6630AD: "Action" => "Ação"
+DF174A3F2FAA31: "Enabled" => "Habilitar"
+C9B87AD62761ED: "Newer EDD required" => "Nova versão de EDDiscovery necesária"
+0AE36D6F55493C: "Too old for EDD" => "Demasiado velho para EDDiscovery"
+5B3A1A44268196: "Locally modified" => "Modificado localmente"
+482E9BD3F6E7A8: "Up to Date" => "Atualizado"
+76AFFE13E38473: "New version" => "Nova versão"
+FD6C3EBF7BEFCA: "Install" => "Instalar"
+FB91E24FA52D8D: "Update" => "Atualizar"
+5301648DCF6B53: "Edit" => "Modifica"
+A425A7972A5C05: "Modified locally, do you wish to overwrite the changes" => "Modificado localmente, está certo de querer sobreescrever as mudanças?"
+943E16DB2C7F21: "Add-on failed to update. Check files for read only status" => "Attualização dos Add-On falhada. Verifica se os arquivos são escrivíveis"
+491F68FCF24992: "Do you really want to delete {0}" => "Está certo de querer eliminar {0}"
+
 SECTION ActionPackEditPackForm
 
 3B042F6CEA285B: "Install Parameters" @
 9D68007B0763CB: "Program" => "Programm"
+61684730DD60CE: "Set Installation variables for pack (Advanced)" @
+629F1940518C39: "Select a program to edit directly" @
+429C81EBA021F2: "Add more events" @
+8774D189CE7F96: "Configuration items for installation - specialist use" @
+C6370ADED9036C: "Move Up" @
+4158BEDC2FCD0E: "Move Down" @
+B6DAC3FF80F22C: "Move to Group Above" @
+96BC3B2FC5D1AB: "Move to Group Below" @
+66D54828B59329: "Move Group Up" @
+DE1D98C7DD607C: "Move Group Down" @
+75BF20110FEB09: "Insert New Event Above" @
+BA398F4B1450CB: "Insert New  Group Above" @
+8B15993C662F3B: "Rename Group" @
+D6524F6AACF889: "Collapse All" @
+5B8374F41549EC: "Expand All" @
+F78D25A32DC6A6: "Select Action" @
+6CE769B555EA05: "Disable All" @
+5193D0205EC3C7: "Enable All" @
+97F32D67C7021A: "Delete All" @
 
 SECTION ActionProgramEditForm
-
 4BB0A4AF96D21C: "Action Program" => "Action-Programm"
 9A92F637264375: "As File" @
 DDCB77FF769EA5: "Load" => "Laden"
 A96C6A2EC6FD15: "Text Edit" @
-
-SECTION ActionPackEditForm
-
-8774D189CE7F96: "Configuration items for installation - specialist use" @
 0878211D394E87: "Input parameters to pass to program on run" @
+DBA0FE23646D9A: "Insert Entry above" @
+60B61224DBB6D9: "Insert whitespace below" @
+BB163562E81E7F: "Remove whitespace" @
+B5FFEB5F637B29: "Edit Comment" @
+
+SECTION ActionCommands
 A45731FA87CFD4: "Define Variable" @
 E7181957BFACA6: "Variables to pass into called program" @
 
 SECTION ActionPackVariablesForm
 
 EA3E71F3439195: "Global User variables to pass to program on run" @
-
-SECTION Misc
-
 
 include translation-portugues-uc.tlp
 

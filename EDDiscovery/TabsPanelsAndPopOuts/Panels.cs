@@ -186,7 +186,7 @@ namespace EDDiscovery
 #endif
 
             { new PanelInfo( "Settings") },
-            { new PanelInfo( PanelIDs.Settings, typeof(Settings), "Settings", "SettingsPanel", "Settings for ED Discovery ") },
+            { new PanelInfo( PanelIDs.Settings, typeof(Settings), "Settings", "SettingsPanel", "Settings") },
             { new PanelInfo( PanelIDs.Bindings, typeof(Bindings), "Bindings", "BindingsPanel", "Key and Joystick Bindings for Elite") },
 
             { new PanelInfo( "Screenshots") },

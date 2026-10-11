@@ -371,7 +371,7 @@ namespace EDDiscovery.UserControls
                 int row = dataGridViewCommanders.SelectedRows[0].Index;
                 EDCommander cmdr = dataGridViewCommanders.Rows[row].DataBoundItem as EDCommander;
 
-                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish to delete commander ".Tx()+ cmdr.Name + "?", "Warning".Tx(), MessageBoxButtons.YesNo, MessageBoxIcon.Information);
+                var result = ExtendedControls.MessageBoxTheme.Show(FindForm(), "Do you wish to delete commander".Tx() + " " + cmdr.Name + "?", "Warning".Tx(), MessageBoxButtons.YesNo, MessageBoxIcon.Information);
 
                 if (result == DialogResult.Yes)
                 {
@@ -680,7 +680,7 @@ namespace EDDiscovery.UserControls
                                 "This will take a while (up to 30 mins dep on drive type and amount of sectors).\r\n" + 
                                 "You may continue to use EDD while this operation takes place\r\n" + 
                                 "but it may be slow to respond. Do not close down EDD until this window says\r\n" + 
-                                "the process has finished\r\n\r\n".Tx(), gss.Removed.Count));
+                                "the process has finished".Tx(), gss.Removed.Count));
                     info.EnableClose = false;
                     info.Show(DiscoveryForm);
 

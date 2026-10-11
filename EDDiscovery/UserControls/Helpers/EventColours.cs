@@ -206,7 +206,7 @@ namespace EDDiscovery.UserControls.Helpers
                         string path = dlg.FileName;
                         if (! BaseUtils.FileHelpers.TryWriteToFile(path,ToString()) )
                         {
-                            MessageBoxTheme.Show("Failed to write to ".Tx() + path, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBoxTheme.Show("Failed to write to".Tx() + " " +path, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                     }
 
@@ -233,7 +233,7 @@ namespace EDDiscovery.UserControls.Helpers
                         }
 
                         if (!changed)
-                            MessageBoxTheme.Show("Failed to open ".Tx() + path, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            MessageBoxTheme.Show("Failed to open".Tx() + " " + path, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
 
                     closed(changed);                    // tell the caller

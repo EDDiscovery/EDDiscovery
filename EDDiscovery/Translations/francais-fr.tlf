@@ -18,13 +18,6 @@ DE543B3879BD6E: "No Pos" => "Pas de position"
 F4F4473DF8CB59: "Disabled" => "Désactivé"
 1090044535D1EA: "Panel Colour" @
 
-SECTION Action programs
-
-AC1627C6A55792: "To be deleted" => "A supprimer"
-EB1BCE574038E4: "To be installed" => "A installer"
-B5E77C5C02A90C: "Removed" => "Supprimé"
-06DB4FFA7EFB34: "Incompatible" @
-
 // misc
 
 
@@ -118,7 +111,6 @@ DB6536B2745A44: "Summary Panel" => "Panneau résumé"
 C24689D54DC869: "Route Tracker" => "Suivi d'itinéraire"
 3E9A0D08AB2CD4: "Compass overlay to show bearing to planetary coordinates" => "Boussole terrestre superposée (overlay) indiquant la direction de coordonnées planétaires"
 9D5C8E519D85D8: "Compass" => "Boussole"
-8038B86D2A5395: "Settings for ED Discovery " => "Paramètres d'ED Discovery"
 C7F73BB54D9289: "Settings" => "Paramètres"
 BF5CF3ED547461: "Screen shot" => "Vue des captures d'écran"
 AF4B7F220B9658: "Screen Shot" => "Captures d'écran"
@@ -229,7 +221,7 @@ B5594BDC32706F: "Edit Add-Ons" => "Modifier les Add-Ons"
 B1B79547453735: "Insert Tab with panel.." => "Insérer l'onglet dans le panneau"
 FDB587F6AEF9FC: "Remove Tab" => "Supprimer l'onglet"
 A44AD2D137232C: "Rename Tab" => "Renommer l'onglet"
-DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Erreur de création d'onglet \r\nCette erreur est anormale, rapportez le problème à l'équipe d'EDD sur Discord ou GitHub.\r\nPour essayer de récupérer, maintenir la touche MAJ et lancer le programme.\r\nCliquer sur RAZ Onglets, puis relancer le programme, ceci pourrait régler le problème."
+DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Erreur de création d'onglet \r\nCette erreur est anormale, rapportez le problème à l'équipe d'EDD sur Discord ou GitHub.\r\nPour essayer de récupérer, maintenir la touche MAJ et lancer le programme.\r\nCliquer sur RAZ Onglets, puis relancer le programme, ceci pourrait régler le problème"
 5365F84B9A53D9: "Enter a new name for the tab" => "Entrer un nouveau nom pour l'onglet"
 38749AF88850D0: "The following application extension DLL have been found\r\nDo you wish to allow it to be used?\r\n\r\n{0} \r\n" => "Les DLL de l'extension suivante ont été trouvées\r\nSouhaitez-vous autoriser leur utilisation ?\r\n{0} \r\nSi vous ne le souhaitez pas, vous pouvez soit supprimer les DLL du dossier ED dans Appdata\r\nou désinstaller le pack qui a installé la DLL\r\nou maintenir la touche MAJ en lançant EDD et choisir l'option de Supprimer toutes les extensions"
 3160432B058751: "DLLs loaded: {0}" => "DLL chargée(s) : {0}"
@@ -280,26 +272,6 @@ CBD5298BFF839E: "Processing log file {0}" => "Traitement du fichier log {0}"
 1EB68C8D6B5F34: "Refresh Displays" => "Rafraichissement des affichages"
 DCDB45EA825C67: "History refresh complete." => "Rafraichissement de l'historique terminé."
 B624A602C8C18F: "Checking for new Expedition data" => "Vérification de nouvelles données d'expédition"
-
-SECTION AddOnManagerForm
-
-3F827C66E7E047: "Globals" @
-0972452F39F378: "Add-On Manager" => "Gestionnaire d'Add-On"
-55F8EBC805E65B: "Description" @
-BAE7D5BE70820E: "Status" => "Statut"
-97C89A4D6630AD: "Action" @
-DF174A3F2FAA31: "Enabled" => "Activé"
-C9B87AD62761ED: "Newer EDD required" => "Version plus récente d'EDD nécessaire"
-0AE36D6F55493C: "Too old for EDD" => "Trop ancien pour EDD"
-5B3A1A44268196: "Locally modified" => "Modifié localement"
-482E9BD3F6E7A8: "Up to Date" => "A jour"
-76AFFE13E38473: "New version" => "Nouvelle version"
-FD6C3EBF7BEFCA: "Install" => "Installer"
-FB91E24FA52D8D: "Update" => "Mettre à jour"
-5301648DCF6B53: "Edit" => "Modifier"
-A425A7972A5C05: "Modified locally, do you wish to overwrite the changes" => "Modifié localement, voulez-vous écraser les modifications"
-943E16DB2C7F21: "Add-on failed to update. Check files for read only status" => "Echec de la mise à jour de l'Add-On. Vérifier que les fichiers ne sont pas en lecture seule."
-491F68FCF24992: "Do you really want to delete {0}" => "Voulez-vous vraiment supprimer {0} ?"
 
 SECTION ImportExportForm
 
@@ -472,31 +444,72 @@ SECTION AudioDeviceConfigure
 5B91330DCA5F99: "Audio Device Select" => "Sélection du périphérique par défaut"
 87A47513B6B28B: "Select Device" => "Sélectionnez le périphérique"
 
+SECTION AddOnManagerForm
+
+AC1627C6A55792: "To be deleted" => "A supprimer"
+EB1BCE574038E4: "To be installed" => "A installer"
+B5E77C5C02A90C: "Removed" => "Supprimé"
+06DB4FFA7EFB34: "Incompatible" @
+3F827C66E7E047: "Globals" @
+0972452F39F378: "Add-On Manager" => "Gestionnaire d'Add-On"
+55F8EBC805E65B: "Description" @
+BAE7D5BE70820E: "Status" => "Statut"
+97C89A4D6630AD: "Action" @
+DF174A3F2FAA31: "Enabled" => "Activé"
+C9B87AD62761ED: "Newer EDD required" => "Version plus récente d'EDD nécessaire"
+0AE36D6F55493C: "Too old for EDD" => "Trop ancien pour EDD"
+5B3A1A44268196: "Locally modified" => "Modifié localement"
+482E9BD3F6E7A8: "Up to Date" => "A jour"
+76AFFE13E38473: "New version" => "Nouvelle version"
+FD6C3EBF7BEFCA: "Install" => "Installer"
+FB91E24FA52D8D: "Update" => "Mettre à jour"
+5301648DCF6B53: "Edit" => "Modifier"
+A425A7972A5C05: "Modified locally, do you wish to overwrite the changes" => "Modifié localement, voulez-vous écraser les modifications"
+943E16DB2C7F21: "Add-on failed to update. Check files for read only status" => "Echec de la mise à jour de l'Add-On. Vérifier que les fichiers ne sont pas en lecture seule."
+491F68FCF24992: "Do you really want to delete {0}" => "Voulez-vous vraiment supprimer {0} ?"
+
 SECTION ActionPackEditPackForm
 
 3B042F6CEA285B: "Install Parameters" => "Paramètres d'installation"
 9D68007B0763CB: "Program" => "Programme"
+61684730DD60CE: "Set Installation variables for pack (Advanced)" @
+629F1940518C39: "Select a program to edit directly" @
+429C81EBA021F2: "Add more events" @
+8774D189CE7F96: "Configuration items for installation - specialist use" => "Éléments de configuration pour l'installation - usage spécialisé"
+C6370ADED9036C: "Move Up" @
+4158BEDC2FCD0E: "Move Down" @
+B6DAC3FF80F22C: "Move to Group Above" @
+96BC3B2FC5D1AB: "Move to Group Below" @
+66D54828B59329: "Move Group Up" @
+DE1D98C7DD607C: "Move Group Down" @
+75BF20110FEB09: "Insert New Event Above" @
+BA398F4B1450CB: "Insert New  Group Above" @
+8B15993C662F3B: "Rename Group" @
+D6524F6AACF889: "Collapse All" @
+5B8374F41549EC: "Expand All" @
+F78D25A32DC6A6: "Select Action" @
+6CE769B555EA05: "Disable All" @
+5193D0205EC3C7: "Enable All" @
+97F32D67C7021A: "Delete All" @
 
 SECTION ActionProgramEditForm
-
 4BB0A4AF96D21C: "Action Program" @
 9A92F637264375: "As File" @
 DDCB77FF769EA5: "Load" => "Ouvrir"
 A96C6A2EC6FD15: "Text Edit" => "Editer texte"
-
-SECTION ActionPackEditForm
-
-8774D189CE7F96: "Configuration items for installation - specialist use" => "Éléments de configuration pour l'installation - usage spécialisé"
 0878211D394E87: "Input parameters to pass to program on run" => "Paramètres d'entrée à transmettre au programme lors de l'exécution"
+DBA0FE23646D9A: "Insert Entry above" @
+60B61224DBB6D9: "Insert whitespace below" @
+BB163562E81E7F: "Remove whitespace" @
+B5FFEB5F637B29: "Edit Comment" @
+
+SECTION ActionCommands
 A45731FA87CFD4: "Define Variable" => "Définir une variable"
 E7181957BFACA6: "Variables to pass into called program" => "Variables à transmettre au programme appelé"
 
 SECTION ActionPackVariablesForm
 
 EA3E71F3439195: "Global User variables to pass to program on run" => "Variables globales utilisateur à transmettre au programme lors de l'exécution"
-
-SECTION Misc
-
 
 include translation-francais-uc.tlp
 

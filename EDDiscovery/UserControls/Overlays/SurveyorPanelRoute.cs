@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls
                         if (closest.deviation < 0)        // if not on path
                         {
                             lastroutetext += Environment.NewLine;
-                            lastroutetext += closest.cumulativewpdist == 0 ? "From Last WP ".Tx() : "To First WP ".Tx();
+                            lastroutetext += closest.cumulativewpdist == 0 ? "From Last WP".Tx() : "To First WP".Tx();
                             lastroutetext += $" >> {closest.disttowaypoint:N1}ly >> " + closest.nextsystem.Name + wpposmsg + jumpmsg;
                         }
                         else

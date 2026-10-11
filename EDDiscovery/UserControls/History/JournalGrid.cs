@@ -255,7 +255,7 @@ namespace EDDiscovery.UserControls
                 System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " JG TOTAL TIME " + swtotal.ElapsedMilliseconds);
 
                 string ms = string.Format(" " + "showing {0} original {1}".Tx(), dataGridViewJournal.Rows.Count, current_historylist?.Count ?? 0);
-                comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(), fdropdown + ms) : "Select the entries by age, ".Tx()+ ms);
+                comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(), fdropdown + ms) : "Select the entries by age".Tx() + " "+ ms);
 
                 if (dataGridViewJournal.SelectAndMove(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();

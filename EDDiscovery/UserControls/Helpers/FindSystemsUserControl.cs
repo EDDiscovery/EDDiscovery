@@ -311,7 +311,7 @@ namespace EDDiscovery.UserControls
 
             if (listsphere == null)
             {
-                string resp = String.Format("Website did not return any data on {0}\nIt may be a galactic object that it does not know about".Tx(), textBoxSystemName.Text);
+                string resp = String.Format("Website did not return any data".Tx() + ": " + textBoxSystemName.Text);
                 ExtendedControls.MessageBoxTheme.Show(this.FindForm(), resp, "Warning".Tx(), MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
