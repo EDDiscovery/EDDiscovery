@@ -799,7 +799,7 @@ namespace EDDiscovery
                                                    "Notifications", // github folder name
                                                    EDDOptions.Instance.NotificationsAppDirectory(),
                                                    EDDiscovery.Properties.Resources.URLGithubDataDownload,  // github url
-                                                   "NotificationsV2",       // xml notification section. Previous version had a flaw where it always showed stuff unless a recognised condition was present. Did not allow for future expansion. 
+                                                   "NotificationsV3",       // xml notification section. Use V3 files only
             (notelist) =>
             {
                 this.BeginInvoke(new Action(() =>
