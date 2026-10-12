@@ -141,8 +141,8 @@ namespace EDDiscovery.UserControls.Helpers
 
             int count = dataGridView.RowCount;
             
-            PcolName.HeaderText = (count > 0) ? (count.ToString() + " "  + (count > 1 ? "Missions".Tx(): "Mission".Tx())) : "Name".Tx();
-            pColResult.HeaderText = (totalreward != 0) ? string.Format("Value (cr):\n{0:N0}".Tx(), totalreward) : "Value (cr)".Tx();
+            pColName.HeaderText = (count > 0) ? (count.ToString() + " "  + (count > 1 ? "Missions".Tx(): "Mission".Tx())) : "Name".Tx();
+            pColResult.HeaderText = "Value (cr)".Tx() + (totalreward != 0 ? $"\r\n{totalreward:N0}" : "");
 
             dataGridView.Sort(sortcolcur, (sortordercur == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
             dataGridView.Columns[sortcolcur.Index].HeaderCell.SortGlyphDirection = sortordercur;

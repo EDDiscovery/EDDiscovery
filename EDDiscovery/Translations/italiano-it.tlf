@@ -11,7 +11,6 @@ F6FDBE48DC54DD: "Delete" => "Elimina"
 86C16821B16226: "No Scan" => "Nessuna Scansione"
 515FAD8593999E: "Game Time" => "Orario del Gioco"
 4276E6AB2A3146: "No Data" => "Nienti Dati"
-DB3D405B106759: "on" => "An"
 E3DE5AB0CA4C69: "Off" => "Aus"
 0EB5ED506E4923: "Information" => "Informazione"
 DE543B3879BD6E: "No Pos" => "Nessuna Posizione"
@@ -223,13 +222,14 @@ FDB587F6AEF9FC: "Remove Tab" => "Rimuovi scheda"
 A44AD2D137232C: "Rename Tab" => "Rinomina scheda"
 DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Problemi nel settaggio: scheda principale o gruppo di schede non pu� essere caricato.\r\nQuesta � una condizione anomala. Entra in contatto con gli sviluppatori!"
 5365F84B9A53D9: "Enter a new name for the tab" => "Rinomina la scheda"
-38749AF88850D0: "The following application extension DLL have been found\r\nDo you wish to allow it to be used?\r\n\r\n{0} \r\n" => "Le seguenti estensioni DLL sono state trovate\r\nVuoi darle il permesso di essere usate?\r\n{0} \r\nSe non vuoi che vengano usate, rimuovere le DLL dalla cartella DLL di EDDiscovery\r\no rimuovere l'action pack che introduce queste DLL\r\no premere shift alla partenza del programma e selezionare l'opzione Rimuovi le Estensioni DLL"
-3160432B058751: "DLLs loaded: {0}" => "DLLs caricate: {0}"
-CCFDEF5228D48D: "DLLs failed to load: {0}" => "Impossibile caricare DLLs: {0}"
+AD583CD268D4F3: "The following application extension DLL have been found\r\nDo you wish to allow it to be used?\r\n\r\n" => "Le seguenti estensioni DLL sono state trovate\r\nVuoi darle il permesso di essere usate?\r\n \r\nSe non vuoi che vengano usate, rimuovere le DLL dalla cartella DLL di EDDiscovery\r\no rimuovere l'action pack che introduce queste DLL\r\no premere shift alla partenza del programma e selezionare l'opzione Rimuovi le Estensioni DLL"
+A0E44522BDDD0C: "System data download from {0} required.\r\nThis will take a while, please be patient.\r\nPlease continue running ED Discovery until refresh is complete." @
+7E07BEC01ADC82: "DLLs loaded" => "DLLs caricate"
+DE617477CC8108: "DLLs failed to load" => "Impossibile caricare DLLs"
 5C77F5282CD58B: "Are you sure to Rebuild Indexes? It may take a long time." @
 4B610F7AC3BDAA: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
 A7BA2B77971D8B: "Profile {0} Loaded" => "Profilo {0} caricato"
-E11B312BFDAE74: "New EDDiscovery installer available: {0}" => "Nuovo setup di EDDiscovery disponibile: {0}"
+26B80AE7ABDE92: "New EDDiscovery installer available" => "Nuovo setup di EDDiscovery disponibile"
 2F18E849A799F4: "New Release Available!" => "Nuova versione disponibile!"
 34CFE199A2E81E: "Arrived at system {0} Visit No. {1}" => "Arrivato al sistema {0} Visita di Numero {1}"
 48D867E49868E8: "Profile reports errors in triggers" => "Errori nel profilo riportati dal trigger"
@@ -239,7 +239,7 @@ B683FA5A92D7B6: "Closing, please wait!" => "Chiudendo, per favore aspettare!"
 5C5508F7B29BD6: "This can take a considerable amount of time and bandwidth\r\nConfirm you want to do this?" => "Questa operazione pu� necessitare di molto tempo e molta larghezza di banda.\r\nConfermi?"
 690A6A4AC09622: "No new release found" => "Nessuna nuova versione trovata"
 9769B4CCF9B4FE: "Confirm you remove any duplicate FSD entries from the current commander" => "Confermare la rimozione dei registri FSD duplicati al comandante corrente"
-BA32A940331E35: "Removed {0} FSD entries" => "Rimossi {0} registri FSD"
+7DA40B6734A4D7: "Removed FSD entries" => "Rimossi registri FSD"
 4F01D475DE606B: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "L'invio dello storico a Inara � disabilitato per un'ora a partire dall'ultimo invio per evitare problemi al server"
 651C69E6D25F44: "Refresh History." => "Rinfrescare lo Storico"
 A2AB3C168B45C2: "No EDSM API key set" => "Pre favore, assicurarsi che um comandante sia selezionato e che abbia una chiave di API EDSM assegnata"
@@ -256,7 +256,7 @@ DE5CFD5A00795F: "Fetch Star Data Again" => "REcupera dati stellari nuovamente"
 7279E939048432: "Web server failed to start" => "Impossibilie avviare il server web"
 683617E8B53C1F: "Web server disabled due to incorrect folder or missing zip file" => "Server Web disabilitato a causa di cartella errata o file zip mancante"
 37F51D0860E8D7: "*** Web server is disabled ***" => "*** Il server web é disabilitato ***"
-AEA794CB1D04DB: "DLLs disabled: {0}" @
+2B82888AFF4CE6: "DLLs disabled" @
 C7F0C2BDEE6813: "Move another commanders history to this commander" @
 
 SECTION EDDiscoveryController
@@ -265,10 +265,9 @@ SECTION EDDiscoveryController
 B916383C5DCECE: "Get galactic mapping from GEC." @
 855115699D49D3: "Loaded Notes, Bookmarks and Galactic mapping." => "Note, Preferiti e Mappa Galattica caricati."
 D080CC813B189E: "Reading travel history" => "Lettura dello storico di viaggio"
-AF6F80B989BC53: "Please continue running ED Discovery until refresh is complete." => "Per favore, continua a usare EDDiscovery fino al completamento del rinnovo."
 592A7473F32418: "Star Data download is disabled. Use Settings panel to reenable" => "Sincronizzazione a EDSM e EDDB disabilitati. Abilitarli nel setup del comandante"
 FC6E2FB62C5980: "Systems update complete with {0:N0} systems" => "Attualizzazione EDSM completata com {0:N0} sistemi"
-CBD5298BFF839E: "Processing log file {0}" => "Processando il file di registro {0}"
+F81351B782D372: "Processing log file" => "Processando il file di registro"
 1EB68C8D6B5F34: "Refresh Displays" => "Ricaricando la Schermata"
 DCDB45EA825C67: "History refresh complete." => "Ricaricamento dello storico completato"
 B624A602C8C18F: "Checking for new Expedition data" => "Verificando per nuovi dati di Esplorazione"
@@ -466,7 +465,7 @@ FB91E24FA52D8D: "Update" => "Attualizza"
 5301648DCF6B53: "Edit" => "Modifica"
 A425A7972A5C05: "Modified locally, do you wish to overwrite the changes" => "Modificato localmente, sei sicuro di voler scrivere sui cambiamenti"
 943E16DB2C7F21: "Add-on failed to update. Check files for read only status" => "Attualizzazione dell'Add-On fallita. Verifica se gli archivi sono scrivibili"
-491F68FCF24992: "Do you really want to delete {0}" => "Sei sicuro di voler eliminare {0}"
+E4080552DCC4B7: "Do you really want to delete" => "Sei sicuro di voler eliminare"
 
 SECTION ActionPackEditPackForm
 

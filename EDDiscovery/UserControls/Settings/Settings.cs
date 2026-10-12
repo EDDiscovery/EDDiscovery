@@ -35,8 +35,11 @@ namespace EDDiscovery.UserControls
         {
             InitializeComponent();
             DBBaseName = "SettingsPanel";
-            toolTip.SetToolTip(comboBoxClickThruKey, "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards".Tx());
 
+            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
+            // done programmatically since winforms insist on it being in a res file and invisible to the scanner. 
+            toolTip.SetToolTip(comboBoxClickThruKey, "Select the key to hold down for at least 500 ms\r\nto show the form of a transparent pop out, when\r\nthe pop out transparency mode if Tc (Click thru,\r\ncontrols still active) or Tf (controls inactive)\r\nNot all keys are guaranteed active on all keyboards".Tx());
         }
 
         protected override void Init()
@@ -56,9 +59,7 @@ namespace EDDiscovery.UserControls
             ConfigureHelpButton(extButtonDrawnHelpDLL, "DLLs");
             ConfigureHelpButton(extButtonDrawnHelpSafeMode, "Advanced");
 
-            BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
-            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
-
+            
             UpdateThemeComboBox();
 
             btnDeleteCommander.Enabled = EDCommander.GetListActiveCommanders().Count > 1;
@@ -760,10 +761,11 @@ namespace EDDiscovery.UserControls
 
             if (runit)
             {
-                var res = ExtendedControls.MessageBoxTheme.Show(this.FindForm(), ("You need to configure Windows to allow EDD to webserve" + Environment.NewLine +
+                var res = ExtendedControls.MessageBoxTheme.Show(this.FindForm(), 
+                                                                            "You need to configure Windows to allow EDD to webserve" + Environment.NewLine +
                                                                            "Click Yes to do this. If you are not the adminstrator, a dialog will appear to ask you" + Environment.NewLine +
                                                                            "to sign in as an admin to allow this to happen" + Environment.NewLine +
-                                                                           "If you have previously done this on this same port number you can click No and the enable will work").Tx(),
+                                                                           "If you have previously done this on this same port number you can click No and the enable will work".Tx(),
                                                                            "Web Server",
                                                                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 

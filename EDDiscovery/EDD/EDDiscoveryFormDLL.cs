@@ -110,9 +110,8 @@ namespace EDDiscovery
                 foreach (var dll in list)
                 {
                     if (ExtendedControls.MessageBoxTheme.Show(this,
-                                    string.Format("The following application extension DLL have been found\r\n" +
-                                    "Do you wish to allow it to be used?\r\n\r\n" +
-                                    "{0} \r\n".Tx(), dll ),
+                                    "The following application extension DLL have been found\r\n" +
+                                    "Do you wish to allow it to be used?\r\n\r\n".Tx() + dll,
                                     "Warning".Tx(),
                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     {
@@ -134,11 +133,11 @@ namespace EDDiscovery
             }
 
             if (dllresults.Item1.HasChars())   // ok
-                LogLine(string.Format("DLLs loaded: {0}".Tx(), dllresults.Item1));
+                LogLine("DLLs loaded".Tx() + ": " + dllresults.Item1);
             if (dllresults.Item2.HasChars())   // failed
-                LogLineHighlight(string.Format("DLLs failed to load: {0}".Tx(), dllresults.Item2));
+                LogLineHighlight(string.Format("DLLs failed to load".Tx() + ": " + dllresults.Item2));
             if (dllresults.Item4.HasChars())   // failed
-                LogLine(string.Format("DLLs disabled: {0}".Tx(), dllresults.Item4));
+                LogLine(string.Format("DLLs disabled".Tx() + ": " + dllresults.Item4));
         }
 
 

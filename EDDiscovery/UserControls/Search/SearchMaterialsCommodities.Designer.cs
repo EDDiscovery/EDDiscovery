@@ -163,7 +163,7 @@ namespace EDDiscovery.UserControls
             // ColumnCurrentDistance
             // 
             this.ColumnCurrentDistance.FillWeight = 40F;
-            this.ColumnCurrentDistance.HeaderText = "Current Distance";
+            this.ColumnCurrentDistance.HeaderText = "Distance";
             this.ColumnCurrentDistance.MinimumWidth = 50;
             this.ColumnCurrentDistance.Name = "ColumnCurrentDistance";
             this.ColumnCurrentDistance.ReadOnly = true;

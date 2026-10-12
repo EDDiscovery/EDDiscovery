@@ -294,7 +294,7 @@ namespace EDDiscovery.UserControls
 
                 if ( results.Count > max )
                 {
-                    object[] rowobj = { "","", "","",string.Format("Too many results to display, truncating to the first {0}".Tx(), max) };
+                    object[] rowobj = { "","", "","","Too many results to display, truncating to the first".Tx() + " " + max.ToString() };
                     dataGridView.Rows.Add(rowobj);
                 }
 

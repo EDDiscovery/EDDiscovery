@@ -67,13 +67,13 @@ namespace EDDiscovery.UserControls
         public StarList()
         {
             InitializeComponent();
+            DBBaseName = "StarListControl";
 
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(contextMenuStrip);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
 
-            DBBaseName = "StarListControl";
-
+            // done programmatically since winforms insist on it being in a res file and invisible to the scanner. 
             toolTip.SetToolTip(textBoxSearch, "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties".Tx());
         }
 
@@ -398,11 +398,11 @@ namespace EDDiscovery.UserControls
                 int stars = sysnode.StarsScanned();
                 int total = sysnode.StarPlanetsScanned(edsmSpanshButton.WebLookup);      // total with data, include web bodies if we have the tick box on
 
-                infostr = string.Format("{0} Star(s) {1}".Tx(), stars, st);
+                infostr = stars + " " + "Stars".Tx() + " " + st;
 
                 if (total > stars)
                 {
-                    infostr += " " + string.Format("{0} Other bodies".Tx(), (total - stars).ToString());
+                    infostr += " " + (total - stars) + " " + "Bodies found".Tx();
                 }
 
                 bool showcodex = displayfilters.Contains("codex");

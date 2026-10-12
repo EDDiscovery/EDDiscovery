@@ -116,7 +116,7 @@ namespace EDDiscovery.UserControls
                             lastroutetext += wpposmsg + jumpmsg;
 
                             if (IsSet(RouteControl.showdeviation) && closest.deviation > 0)
-                                lastroutetext += String.Format(", " + "Dev {0:N1}ly".Tx(), closest.deviation);
+                                lastroutetext += ", " + "Deviation".Tx() + $" {closest.deviation:N1} " + "ly".Tx();
                         }
 
                         //System.Diagnostics.Debug.WriteLine(lastroutetext);
@@ -126,7 +126,7 @@ namespace EDDiscovery.UserControls
                         {
                             BookmarkClass bookmark = GlobalBookMarkList.Instance.FindBookmarkOnSystem(sys.Name);
                             if (bookmark != null)
-                                lastroutetext += Environment.NewLine + String.Format("Note: {0}".Tx(), bookmark.Note);
+                                lastroutetext += Environment.NewLine + "Note".Tx() + ": " + bookmark.Note;
                         }
 
                         if (IsSet(RouteControl.shownotetext))

@@ -154,7 +154,7 @@ namespace EDDiscovery.UserControls
             // Available
             // 
             this.Available.FillWeight = 25F;
-            this.Available.HeaderText = "Avail.";
+            this.Available.HeaderText = "Available";
             this.Available.MinimumWidth = 50;
             this.Available.Name = "Available";
             this.Available.ReadOnly = true;

@@ -27,13 +27,12 @@ AD8919ACE091B1: "Event" => "Evento"
 645DE66F0C79ED: "Faction Kills" => "Abbattuti dalla Fazione"
 90EEF613042C5A: "Balance" => "Bilancio"
 000C7B010AA15B: "Crimes" => "Crimini"
-A116A463F16F3B: "TotalReward" => "Ricompensa Total"
+043A4AA7E2DDFD: "Total Reward" => "Ricompensa Total"
 2AD918FF81A2C4: "FactionReward" => "Ricompensa della Fazione"
 078EB757BF1155: "Current Credits" => "Crediti Attuali"
 6B3534A2242650: "Total kills (NPC/PVP) in campaign" => "Totale abbattuti nella campagna"
 6344C1B665774D: "Total reward less any costs (fines, rebuys etc)" => "Ricomepnsa totale, meno costi (multe, compre, etc)"
 3E680888D11E9A: "How many times you've been caught!" => "Quante volte sei stato catturato!"
-0A11B11F4BD307: "Total reward" => "Ricomensa Totale"
 68C7A5D8D1ECF1: "Reward associated with destroying the faction ships" => "Ricompensa associata alla distruzione delle nevi avversarie"
 2A4D800653DEFF: "Select Campaign to view" => "Seleziona la campagna da visualizzare"
 986756D007F78B: "Edit user defined campaign" => "Modifica campagna definita dall'utente"
@@ -48,7 +47,6 @@ B42FF2D11E4363: "Select Start time" @
 A2BB9D34B8A1A7: "End" => "Ende"
 1510FD8CF43BD1: "Press to Delete" @
 AC6345BDC5189A: "Name of campaign already in use, cannot overwrite" @
-C5A715320080CE: "Confirm deletion of {0}" @
 547C7CF9543709: "Name changed - can't delete" @
 C99A37D48B4758: "Bal" => "KS"
 
@@ -99,7 +97,6 @@ C5F9A8E1A25446: "Mission Reward at" @
 14D5C9FDE290FE: "Item 1" @
 EB9A4BC1C0C153: "Date" => "Datum"
 85A7DE6E270547: "Star" => "Stern"
-84C078AF3EFE1A: "Current Distance" @
 CF1C85ADBA548E: "Position" => "Position"
 209B0897FD112F: "Output grid to CSV" @
 B366981EAEF1CF: "Find materials/commodities" @
@@ -132,7 +129,7 @@ D14970EE4E27AE: "Click to enable debug log production on search" @
 07C3B8B498D6BD: "Export user searches" @
 F6FBA35BE4C529: "Import user searches" @
 ADC4E96A478BE0: "Sort" => "Sortieren"
-5531C4FF55C5CF: "Too many results to display, truncating to the first {0}" @
+F872BB583B4FA4: "Too many results to display, truncating to the first" @
 
 SECTION UserControlDiscoveries
 
@@ -160,7 +157,6 @@ SECTION UserControlEngineering
 
 A95E85AED56318: "Max" => "Max"
 B568B10AECDDE8: "Wanted" => "Ricercato"
-F2367E42DEFDAC: "Avail." => "Disp."
 1DCDA804C96DA3: "Recipe" => "Ricetta"
 21467D0FE8237D: "Crafted" @
 49578C008054B9: "Set all wanted values to zero" => "Imposta tutti i ricercati su zero"
@@ -189,8 +185,6 @@ CB083BFF78F38B: "First Discovered Mapped" @
 4F993153012BCF: "Current Value" => "Vaore Stimato"
 3B2FE7700E6893: "Green will show all bodies even with zero value, red will only show bodies with value" @
 C746EA1EC215F8: "Show all values, even ones which are impossible to get" @
-AC0E083CA2C4C4: "Estimated Scan Values for {0}" => "Stima dei valori di scansione per {0}"
-44D64939C89F1D: "Scanned {1} of {2} bodies in this system." @
 
 SECTION UserControlExpedition
 
@@ -255,8 +249,6 @@ F4DE89CE1015FB: "Jump to Entry" => "Salta alla voce"
 752DA692C2C1B2: "Set Start/Stop point for travel calculations" => "Imposta punto d'Inizio/Fine sul computer di viaggio"
 F792127FD17C22: "Run Actions on this entry" => "Avvia azioni su questa voce"
 290084F20A44C9: "Copy journal entry to clipboard" => "Copia voce del giornale sulla memoria"
-B9FBD5057BCD1A: "showing {0} original {1}" @
-ADE8224F6E2B20: "Filtered {0}" @
 F70EA8DC6685B3: "Journal: Filter out fields" @
 
 SECTION UserControlLedger
@@ -385,12 +377,10 @@ SECTION MissionListUserControl
 
 44AB85A252ADB7: "Origin" => "Origine"
 D42713493CA811: "Destination" => "Destinazione"
-731322861EF2C0: "Result (cr)" => "Risultato (cr)"
 
 SECTION UserControlMissions
 
 E4698D4CEACBE6: "Mission" => "Mission"
-199EA69AF2F28C: "Value (cr):\n{0:N0}" @
 59EF5FF5CFDAFB: "Value (cr)" @
 8DCE170DE238B1: "Value" => "Wert"
 
@@ -422,6 +412,7 @@ D2F025FD0D6F0C: "Travel History Entry" @
 9569A6C389205D: "All Ships" @
 
 046E5CEE819C2B: "In Transit" @
+8C948D7947E0C2: "Hot" @
 EF14AB9080E8AD: "Enter ED Shipyard URL" @
 5406A1422EA878: "Enter Coriolis URL" @
 F7E56852A21682: "Fuel Warning" @
@@ -542,10 +533,8 @@ EDA92612CF2474: "jumps" => "Sprünge"
 F941674CED7F57: "From Last WP" @
 DF5C9749BAE618: "(WP {0})" @
 70FE0797EDD3D2: "No Ship FSD Information" @
-CBF9002B17E8D9: "Dev {0:N1}ly" @
 CEE17FB4380701: "Route contains no waypoints" @
 C415DA3D51A1E9: "No systems in route have known co-ords" @
-33F6E6F622B613: "Note: {0}" @
 
 SECTION UserControlScan
 
@@ -669,6 +658,7 @@ F0713ECF8D95B8: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30
 42D840604E5BFA: "Do you wish to delete commander" @
 EB4FD2BBBBAACE: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" @
 35F9B4B074BFBC: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" @
+5EE3143180F0E2: "You need to configure Windows to allow EDD to webserve\r\nClick Yes to do this. If you are not the adminstrator, a dialog will appear to ask you\r\nto sign in as an admin to allow this to happen\r\nIf you have previously done this on this same port number you can click No and the enable will work" @
 BB75D637DC2C4D: "Reload Star Database" @
 CA622FCCA53890: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" @
 9124C85C715BCB: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" @
@@ -693,7 +683,6 @@ E3E78C5A9B4B48: "Use Historic Material Counts" @
 6C1B59B6152200: "Filling Shopping List would exceed capacity for" @
 0C17E1E2D825FF: "No materials currently required." @
 9CDB9B531A7E2C: "Max FSD Injections\r\n   {0} Basic\r\n   {1} Standard\r\n   {2} Premium" @
-7D83DF15795144: "Materials on {0}" @
 
 SECTION UserControlSpanel
 
@@ -749,16 +738,13 @@ BF02C54B8728D4: "Add to Trilateration" @
 D6EBF4E4344E48: "Check to indicate use a cube instead of a sphere for distances" @
 D8FA9D7408D9DC: "Minimum star distance in ly" @
 146FD57102D84B: "Maximum star distance in ly" @
-957DB23D1CF5F7: "From {0}" @
 
 SECTION UserControlStarList
 
 25229E81F3BF74: "Last Visit" @
 28442DA04B1BF3: "Body Count" @
 C90A4905639F83: "Scan Value" => "Scanwert"
-A1E87E0BCAE241: "{0} Star(s) {1}" @
 FB044B95FD466C: "This system has materials for FSD boost" @
-3DC09A6F2DA211: "{0} Other bodies" @
 FB90E0C92B3663: "Show/Hide presence of Jumponium Materials" @
 47D68486BBAA7E: "Show valuable bodies" @
 FF058EFC89FB18: "Show organic scans" @
@@ -858,7 +844,6 @@ F02F62E261A315: "Display Material Count" => "Mostra Conteggio dei Materiali"
 53B251F715E19A: "Display Next Destination Selected" @
 5B17A15D263EC5: "Disable copy to clipboard when clicking on text boxes" @
 31ACBB09F84846: "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available" => "Mantieni premuto il tasto Ctrl per trascinare e riposizionare, 8 colonne disponibili"
-A89C9CA2A96AE8: "Distance to target" => "Distanza al Destino"
 9FFE9E9C6D7672: "Sets the target" => "Seleziona il Destino"
 A16C5BBE4BF996: "Range" => "Sprung"
 208A402074139F: "MR" @
@@ -870,8 +855,6 @@ DF5D4664763117: "Sol" => "Sole"
 7B181F6DED4B8C: "Dest" => "Dest"
 8074342446780B: "No Missions" @
 32155DB2FEE95E: "System unknown to EDSM" @
-EC16F1DC33B505: "Position is {0:0.00},{1:0.00},{2:0.00}" @
-43AB6BF5133F6C: "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter" @
 F9D6E7C9EF5584: "On Foot" @
 08D2E98E6754AF: "N/A" @
 
@@ -890,7 +873,7 @@ B728CDF769CB75: "Merge Right Panel" @
 8D65E9F5EF03D3: "Merge Bottom Panel" @
 B8E0FB8095A05A: "Right click on splitter bar to change orientation\nor split or merge panels" @
 
-SECTION UserControlTravelGrid
+SECTION UserControlHistoryGrid
 
 618ED5F457C419: "History: Filter out fields" @
 041FA7A8EDCBCD: "Clear Start marker" @
@@ -1079,7 +1062,6 @@ FBB715DCFB4F59: "Show/Hide Kill Bonds" @
 SECTION UserControlOrganics
 
 20ABF8B1A35466: "Display incomplete scans" @
-DAB5A87D199E18: "Star System" @
 48902F14E5C843: "Genus" @
 83A7238826AB30: "Species" @
 CC91B1EA2C1651: "Variant" @
@@ -1135,35 +1117,26 @@ SECTION UserControlCarrier
 
 3D76FD53AA0F62: "Decommissioned" @
 0B2AA74B1595AE: "Decommissioning on" @
-FECCF27D8A756C: "Cargo: ; t;N0" @
-E4B184DD2B2AD1: "Services: ; t;N0" @
-B63CFA032C94BF: "Ship Packs: ; t;N0" @
-EF1C1576EACED1: "Module Packs: ; t;N0" @
-56B679C0A68C1B: "Reserved Space: ; t;N0" @
-0456E14744E365: "Free Space: ; t;N0" @
-11CDC4D5D07633: "Jump Range: ; ly;N0" @
-A2B7F586AACEE5: "Max Jump: ; ly;N0" @
-A936AD07CF17C0: "Fuel: ; t;N0" @
+7C23625357246F: "Reserved Space" @
+65F722E72270CA: "Jump Range" @
+CC2ED69677A9C2: "Max Jump" @
 0935C6C59186BC: "Docking Access" @
 059AE46E428B7C: "Notorious" @
-5A1731CE9C0565: "Balance: ; cr;N0" @
-CB4849CE71609D: "Reserve: ; cr;N0" @
-EF688A50489362: "Available: ; cr;N0" @
-D75DF56D16E59F: "Reserve: ; %;N0" @
+187579E3A78471: "Reserve" @
+7C62A1424469B1: "Available" @
 E8F1C1B55660EB: "Pioneer Tax" @
 7A6FA51ABA501E: "Shipyard Tax" @
 3583018B5E8131: "Rearm Tax" @
 460784033FAD01: "Outfitting Tax" @
 964A427048AAB1: "Refuel Tax" @
 7A550EE38B3E7C: "Repair Tax" @
-1A0F5DB337EC25: ": ; %;N0" @
-5DD178DB7162A2: "Core Cost: ; cr;N0" @
-FE59ED4101E466: "Services Cost: ; cr;N0" @
+FF65D760FBF6D9: "Core Cost" @
+ADD4897C94B7A4: "Services Cost" @
 50E6AE8D109017: "No Carrier" @
-B455B013A9CF13: "Install cost: ; cr;N0" @
-3DF5159B0456C1: "Capacity Allocated: ; Units;N0" @
-CB7654E3728C0A: "Upkeep cost: ; cr;N0" @
-9EC790B9F4E58F: "Suspended upkeep cost: ; cr;N0" @
+928453BEE34EFA: "Install cost" @
+9AF45DCF76EB40: "Capacity Allocated" @
+F4F6CA986485ED: "Upkeep cost" @
+8DFDD0F4B29DA2: "Suspended upkeep cost" @
 311F21EEA90405: "Crew Name" @
 E2CE7274D260B9: "This Service is Active" @
 CD7E9084A619FD: "This Service is Suspended" @
@@ -1176,7 +1149,6 @@ BB9246B17BFDFF: "Jumping" @
 5BB5DF1A383AE6: "Core Service" @
 8A528519BDABA6: "Overall" @
 B1BED287E15EFC: "Itinerary" @
-251018D2063C94: "Jump Dist" @
 9E94B37532F75D: "Dist From" @
 4F05E8FDB76807: "Finances" @
 EA50EDD2233946: "Balance cr" @
@@ -1242,10 +1214,10 @@ E478A8A04835DC: "From Spansh Find Names" @
 
 SECTION TravelHistoryFilter
 
-6C204C8FBBB9EC: "{0} hours" => "{0} ore"
-536C16BD9FDF58: "{0} days" => "{0} giorni"
+9E25A34E635A12: "Hours" => "ore"
+F6BB0F468A8569: "Days" => "giorni"
 D85B59C8A8549D: "One Week" => "Una settimana"
-2985A39CF5BF9E: "{0} weeks" => "{0} settimane"
+7D75266A53B99C: "Weeks" => "settimane"
 0D3830748786CE: "Quarter" => "Quadrimestre"
 D0E392BB008D98: "Half year" => "Semestre"
 879E32326C5217: "Year" => "Anno"

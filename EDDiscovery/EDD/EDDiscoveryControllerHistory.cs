@@ -173,7 +173,7 @@ namespace EDDiscovery
                 if (args.RemoveDuplicateFSDEntries)
                 {
                     int n = JournalEntry.RemoveDuplicateFSDEntries(EDCommander.CurrentCmdrID);
-                    LogLine(string.Format("Removed {0} FSD entries".Tx(), n));
+                    LogLine("Removed FSD entries".Tx() + " " + n);
                 }
 
                 if (args.CurrentCommander >= 0)             // if we have a real commander
@@ -192,7 +192,7 @@ namespace EDDiscovery
 
                     System.Diagnostics.Trace.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Parse journal files");
 
-                    journalmonitor.ParseJournalFilesOnWatchers((p, s) => ReportRefreshProgress(p, string.Format("Processing log file {0}".Tx(),s)),
+                    journalmonitor.ParseJournalFilesOnWatchers((p, s) => ReportRefreshProgress(p, "Processing log file".Tx() + " " + s),
                                                                         PendingClose.Token,
                                                                         EDDOptions.Instance.MinJournalDateUTC,
                                                                          forcereloadoflastn

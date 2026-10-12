@@ -72,14 +72,14 @@ namespace EDDiscovery.UserControls
         public JournalGrid()
         {
             InitializeComponent();
+            DBBaseName = "JournalGrid";
 
             var tlnset = new string[] { "UserControlJournalGrid", "UserControlTravelGrid" };    // share top level name between them - new feature dec 24
 
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
             BaseUtils.TranslatorMkII.Instance.TranslateToolstrip(historyContextMenu);
             BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
-            DBBaseName = "JournalGrid";
-
+            // done programmatically since winforms insist on it being in a res file and invisible to the scanner. 
             toolTip.SetToolTip(textBoxSearch, "Specify a search term to filter events with by column contents. You can also use system:<wildcard>, body:<wildcard>, station:<wildcard> and stationfaction:<wildcard> to filter on events occurring with those properties".Tx());
 
         }
@@ -253,9 +253,6 @@ namespace EDDiscovery.UserControls
                     return;
 
                 System.Diagnostics.Debug.WriteLine(BaseUtils.AppTicks.TickCount + " JG TOTAL TIME " + swtotal.ElapsedMilliseconds);
-
-                string ms = string.Format(" " + "showing {0} original {1}".Tx(), dataGridViewJournal.Rows.Count, current_historylist?.Count ?? 0);
-                comboBoxTime.SetTipDynamically(toolTip, fdropdown > 0 ? string.Format("Filtered {0}".Tx(), fdropdown + ms) : "Select the entries by age".Tx() + " "+ ms);
 
                 if (dataGridViewJournal.SelectAndMove(rowsbyjournalid, ref pos, true))
                     FireChangeSelection();

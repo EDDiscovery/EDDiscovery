@@ -169,7 +169,7 @@ namespace EDDiscovery.UserControls
             // AvailableCol
             // 
             this.AvailableCol.FillWeight = 25F;
-            this.AvailableCol.HeaderText = "Avail.";
+            this.AvailableCol.HeaderText = "Available";
             this.AvailableCol.MinimumWidth = 50;
             this.AvailableCol.Name = "AvailableCol";
             this.AvailableCol.ReadOnly = true;

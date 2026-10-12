@@ -198,7 +198,7 @@ namespace EDDiscovery.UserControls
             // ColumnCurrentDistance
             // 
             this.ColumnCurrentDistance.FillWeight = 40F;
-            this.ColumnCurrentDistance.HeaderText = "Current Distance";
+            this.ColumnCurrentDistance.HeaderText = "Distance";
             this.ColumnCurrentDistance.Name = "ColumnCurrentDistance";
             this.ColumnCurrentDistance.ReadOnly = true;
             // 
@@ -551,7 +551,7 @@ namespace EDDiscovery.UserControls
             // dataGridViewTextBoxColumn4
             // 
             this.dataGridViewTextBoxColumn4.FillWeight = 40F;
-            this.dataGridViewTextBoxColumn4.HeaderText = "Current Distance";
+            this.dataGridViewTextBoxColumn4.HeaderText = "Distance";
             this.dataGridViewTextBoxColumn4.MinimumWidth = 50;
             this.dataGridViewTextBoxColumn4.Name = "dataGridViewTextBoxColumn4";
             this.dataGridViewTextBoxColumn4.ReadOnly = true;

@@ -274,7 +274,7 @@ namespace EDDiscovery.UserControls
 
                 if (showPlanetMats && sd != null && sd.HasMaterials)
                 {
-                    wantedList.Append(Environment.NewLine + Environment.NewLine + string.Format("Materials on {0}".Tx(), last_he.WhereAmI) + Environment.NewLine);
+                    wantedList.Append(Environment.NewLine + Environment.NewLine + "Materials".Tx() + " " + last_he.WhereAmI + Environment.NewLine);
                     foreach (KeyValuePair<MCFDName, double> mat in sd.Materials)
                     {
                         int? onHand = mcl.Where(m => m.Details.FDName == mat.Key).FirstOrDefault()?.Count;

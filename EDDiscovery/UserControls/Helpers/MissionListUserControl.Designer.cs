@@ -31,7 +31,7 @@
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MissionListUserControl));
             this.dataGridView = new BaseUtils.DataGridViewColumnControl();
-            this.PcolName = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.pColName = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColStart = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColEnd = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.pColOrigin = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -65,7 +65,7 @@
             this.dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dataGridView.ColumnReorder = true;
             this.dataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.PcolName,
+            this.pColName,
             this.pColStart,
             this.pColEnd,
             this.pColOrigin,
@@ -89,10 +89,10 @@
             // 
             // PcolName
             // 
-            this.PcolName.HeaderText = "Name";
-            this.PcolName.MinimumWidth = 50;
-            this.PcolName.Name = "PcolName";
-            this.PcolName.ReadOnly = true;
+            this.pColName.HeaderText = "Name";
+            this.pColName.MinimumWidth = 50;
+            this.pColName.Name = "PColName";
+            this.pColName.ReadOnly = true;
             // 
             // pColStart
             // 
@@ -145,7 +145,7 @@
             // pColResult
             // 
             this.pColResult.FillWeight = 80F;
-            this.pColResult.HeaderText = "Result (cr)";
+            this.pColResult.HeaderText = "Value (cr)";
             this.pColResult.MinimumWidth = 25;
             this.pColResult.Name = "pColResult";
             this.pColResult.ReadOnly = true;
@@ -332,7 +332,7 @@
         private System.Windows.Forms.Label labelValue;
         private ExtendedControls.ExtPanelDataGridViewScroll extPanelDataGridViewScroll;
         private ExtendedControls.ExtScrollBar extScrollBar1;
-        private System.Windows.Forms.DataGridViewTextBoxColumn PcolName;
+        private System.Windows.Forms.DataGridViewTextBoxColumn pColName;
         private System.Windows.Forms.DataGridViewTextBoxColumn pColStart;
         private System.Windows.Forms.DataGridViewTextBoxColumn pColEnd;
         private System.Windows.Forms.DataGridViewTextBoxColumn pColOrigin;

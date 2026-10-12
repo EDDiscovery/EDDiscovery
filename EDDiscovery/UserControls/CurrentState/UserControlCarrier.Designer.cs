@@ -443,7 +443,7 @@
             // colItinJumpDistNumeric
             // 
             this.colItinJumpDistNumeric.FillWeight = 100.0195F;
-            this.colItinJumpDistNumeric.HeaderText = "Jump Dist";
+            this.colItinJumpDistNumeric.HeaderText = "Distance";
             this.colItinJumpDistNumeric.MinimumWidth = 8;
             this.colItinJumpDistNumeric.Name = "colItinJumpDistNumeric";
             // 

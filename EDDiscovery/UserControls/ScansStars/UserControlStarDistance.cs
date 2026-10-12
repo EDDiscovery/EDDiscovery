@@ -144,7 +144,7 @@ namespace EDDiscovery.UserControls
 
             if (csl != null && csl.Any())
             {
-                SetControlText(string.Format("From {0}".Tx(), name));
+                SetControlText("From".Tx() + " " + name);
 
                 List<DataGridViewRow> rows = new List<DataGridViewRow>();
 

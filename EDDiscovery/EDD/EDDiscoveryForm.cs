@@ -870,13 +870,12 @@ namespace EDDiscovery
                             System.Reflection.Assembly.GetExecutingAssembly().GetAssemblyVersionString(), (rel) =>  // in thread
                 {
                     newRelease = rel;
-                    BeginInvoke(new Action(() => LogLineHighlight(string.Format("New EDDiscovery installer available: {0}".Tx(), newRelease.ReleaseName))));
+                    BeginInvoke(new Action(() => LogLineHighlight("New EDDiscovery installer available".Tx() + " " + newRelease.ReleaseName)));
                     BeginInvoke(new Action(() => labelInfoBoxTop.Text = "New Release Available!".Tx()));
                 });
             }
 
             // Time Display
-
             periodicchecktimer = new Timer();                   // timer for periodic actions
             periodicchecktimer.Interval = 1000;
             periodicchecktimer.Tick += Periodicchecktimer_Tick;     // over at helpers

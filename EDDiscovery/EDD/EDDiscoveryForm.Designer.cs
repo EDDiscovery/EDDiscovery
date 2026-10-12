@@ -16,7 +16,7 @@
 
 // guide scanner
 // .ExcludedTX() debugger*
-// .ExcludedTX() comboBoxCommander,buttonReloadActions,extButtonCAPI,stepTimeToolStripMenuItem
+// .ExcludedTX() comboBoxCommander,buttonReloadActions,extButtonCAPI,stepTimeToolStripMenuItem, notifyIconEDD,this
 
 
 namespace EDDiscovery

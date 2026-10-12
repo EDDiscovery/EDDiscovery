@@ -180,9 +180,9 @@ namespace EDDiscovery.UserControls
             this.labelTotalReward.Name = "labelTotalReward";
             this.labelTotalReward.Size = new System.Drawing.Size(100, 24);
             this.labelTotalReward.TabIndex = 4;
-            this.labelTotalReward.Text = "TotalReward";
+            this.labelTotalReward.Text = "Total Reward";
             this.labelTotalReward.TextBackColor = System.Drawing.SystemColors.Control;
-            this.toolTip.SetToolTip(this.labelTotalReward, "Total reward");
+            this.toolTip.SetToolTip(this.labelTotalReward, "Total Reward");
             // 
             // labelFactionReward
             // 

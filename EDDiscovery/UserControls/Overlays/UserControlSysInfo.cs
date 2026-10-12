@@ -812,14 +812,11 @@ namespace EDDiscovery.UserControls
                 HistoryEntry cs = DiscoveryForm.History.GetLastWithPosition();
                 if (cs != null)
                     textBoxTargetDist.Text = cs.System.Distance(x, y, z).ToString("0.0");
-
-              //  textBoxTarget.SetTipDynamically(toolTip, string.Format("Position is {0:0.00},{1:0.00},{2:0.00}".Tx(), x, y, z));
             }
             else
             {
                 textBoxTarget.Text = "?";
                 textBoxTargetDist.Text = "";
-          //      textBoxTarget.SetTipDynamically(toolTip, "On 3D Map right click to make a bookmark, region mark or click on a notemark and then tick on Set Target, or type it here and hit enter".Tx());
             }
         }
 

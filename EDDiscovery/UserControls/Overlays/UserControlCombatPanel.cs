@@ -619,7 +619,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (f.Get("Name").Equals(entry.Name))
                     {
-                        if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), string.Format("Confirm deletion of {0}".Tx(), entry.Name), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK )
+                        if (ExtendedControls.MessageBoxTheme.Show(this.FindForm(), "Confirm deletion of".Tx() + " " + entry.Name, "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK )
                         {
                             f.ReturnResult(DialogResult.Abort);
                         }

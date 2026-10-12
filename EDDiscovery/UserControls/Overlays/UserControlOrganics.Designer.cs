@@ -282,7 +282,7 @@ namespace EDDiscovery.UserControls
             // 
             // ColStarSystem
             // 
-            this.ColStarSystem.HeaderText = "Star System";
+            this.ColStarSystem.HeaderText = "System";
             this.ColStarSystem.Name = "ColStarSystem";
             this.ColStarSystem.ReadOnly = true;
             // 

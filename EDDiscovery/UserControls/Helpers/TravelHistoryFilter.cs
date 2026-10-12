@@ -70,17 +70,17 @@ namespace EDDiscovery.UserControls
 
         public static TravelHistoryFilter FromHours(int hours)
         {
-            return new TravelHistoryFilter(TimeSpan.FromHours(hours), string.Format("{0} hours".Tx(),hours));
+            return new TravelHistoryFilter(TimeSpan.FromHours(hours), hours + " " + "Hours".Tx());
         }
 
         public static TravelHistoryFilter FromDays(int days)
         {
-            return new TravelHistoryFilter(TimeSpan.FromDays(days), string.Format("{0} days".Tx(),days));
+            return new TravelHistoryFilter(TimeSpan.FromDays(days), days + " " + "Days".Tx());
         }
 
         public static TravelHistoryFilter FromWeeks(int weeks)
         {
-            return new TravelHistoryFilter(TimeSpan.FromDays(7 * weeks), weeks == 1 ? "One Week".Tx(): string.Format( "{0} weeks".Tx(), weeks));
+            return new TravelHistoryFilter(TimeSpan.FromDays(7 * weeks), weeks == 1 ? "One Week".Tx(): (weeks + " " + "Weeks".Tx()));
         }
 
         public static TravelHistoryFilter LastMonth()

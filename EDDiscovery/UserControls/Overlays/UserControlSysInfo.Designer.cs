@@ -496,7 +496,6 @@ namespace EDDiscovery.UserControls
             this.textBoxTargetDist.TabStop = false;
             this.textBoxTargetDist.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxTargetDist.TextNoChange = "";
-            this.toolTip.SetToolTip(this.textBoxTargetDist, "Distance to target");
             this.textBoxTargetDist.WordWrap = true;
             this.textBoxTargetDist.Click += new System.EventHandler(this.clickTextBox);
             this.textBoxTargetDist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.controlMouseDown);
