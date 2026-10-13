@@ -74,7 +74,7 @@ namespace EDDiscovery.UserControls
         public override bool SupportTransparency => true;
         protected override void SetTransparency(bool on, Color curcol)
         {
-            System.Diagnostics.Debug.WriteLine($"Transparent mode {on}");
+            //System.Diagnostics.Debug.WriteLine($"Transparent mode {on}");
             this.BackColor = curcol;
             this.panelControls.Visible = !on;
             UpdateDisplay();
@@ -292,7 +292,7 @@ namespace EDDiscovery.UserControls
 
                     if (ss != null)    // we have it, find info on system
                     {
-                        System.Diagnostics.Debug.WriteLine($"Travel Panel Dest found system  {ss.System.Name} {uis.DestinationSystemAddress} ");
+                        //System.Diagnostics.Debug.WriteLine($"Travel Panel Dest found system  {ss.System.Name} {uis.DestinationSystemAddress} ");
 
                         BodyNode bn = uistatus.DestinationBodyID != null ? ss.FindBody(uistatus.DestinationBodyID.Value) : null;     // may be null
 
@@ -391,8 +391,7 @@ namespace EDDiscovery.UserControls
                 }
             }
 
-
-            System.Diagnostics.Debug.WriteLine($"Update picture box @ {lasthe.EventTimeUTC} {lasthe.EventSummary} {lasthe.System.Name}");
+            //System.Diagnostics.Debug.WriteLine($"Update picture box @ {lasthe.EventTimeUTC} {lasthe.EventSummary} {lasthe.System.Name}");
             extPictureBox.AddRange(el);
             extPictureBox.Render();
         }
@@ -461,7 +460,7 @@ namespace EDDiscovery.UserControls
         {
             Font f = BaseUtils.FontDialog.SelectFont(this.FindForm(), displayfont ?? this.Font, true);
             string setting = BaseUtils.FontHandler.GetFontSettingString(f);
-            System.Diagnostics.Debug.WriteLine($"Travel Panel Font selected {setting}");
+            //System.Diagnostics.Debug.WriteLine($"Travel Panel Font selected {setting}");
             PutSetting(dbFont, setting);
             displayfont = f;
             UpdateDisplay();
