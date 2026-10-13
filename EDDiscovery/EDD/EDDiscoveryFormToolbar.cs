@@ -66,7 +66,7 @@ namespace EDDiscovery
 
         private void buttonExtRefresh_Click(object sender, EventArgs e)
         {
-            LogLine("Refresh History.".Tx());
+            LogLine("Refresh History".Tx());
             RefreshHistoryAsync();
         }
 

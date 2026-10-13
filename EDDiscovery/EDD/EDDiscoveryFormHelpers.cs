@@ -106,7 +106,7 @@ namespace EDDiscovery
                 DateTime lasthe = helist.Last().EventTimeUTC;
 
                 cf.Add(new ExtendedControls.ConfigurableEntryList.Entry("UC", typeof(Label),
-                            string.Format("There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent.".Tx(), helist.Count),
+                            string.Format("There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent".Tx(), helist.Count),
                              new Point(5, 30), new Size(width - 5 - 20, 100), null)
                 { TextBoxMultiline = true });
 

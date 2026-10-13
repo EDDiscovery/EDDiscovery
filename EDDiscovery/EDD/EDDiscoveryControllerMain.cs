@@ -189,7 +189,7 @@ namespace EDDiscovery
                 EDSMJournalSync.StopSync();
                 EdsmLogFetcher.AsyncStop();
                 journalmonitor.StopMonitor();
-                LogLineHighlight("Closing down, please wait..".Tx());
+                LogLineHighlight("Closing down, please wait".Tx());
                 journalqueuedelaytimer.Change(Timeout.Infinite, Timeout.Infinite);
                 journalqueuedelaytimer.Dispose();
             }
@@ -241,13 +241,13 @@ namespace EDDiscovery
 
             SystemNoteClass.GetAllSystemNotes();
 
-            LogLine("Loaded Notes, Bookmarks and Galactic mapping.".Tx());
+            LogLine("Loaded Notes, Bookmarks and Galactic mapping".Tx());
 
             if (!EDDOptions.Instance.NoLoad)        // here in this thread, we do a refresh of history. 
             {
                 Debug.WriteLine($"{BaseUtils.AppTicks.TickCountLap()} EDC Background Worker Load history");
 
-                LogLine("Reading travel history".Tx());
+                LogLine("Reading travel history".Tx() + ": " + EDCommander.Current.Name);
 
                 if (EDDOptions.Instance.Commander != null)
                 {

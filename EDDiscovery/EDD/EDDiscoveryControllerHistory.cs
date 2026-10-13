@@ -346,7 +346,7 @@ namespace EDDiscovery
                 refreshHistoryRequestedFlag = 0;
                 readyForNewRefresh.Set();       // say i'm okay for another refresh
 
-                LogLine("History refresh complete.".Tx());
+                LogLine("History refresh complete".Tx() + ": " + EDCommander.Current.Name);
 
                 ReportRefreshProgress(-1, "");
 

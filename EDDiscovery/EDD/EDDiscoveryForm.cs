@@ -648,7 +648,7 @@ namespace EDDiscovery
                     MessageBox.Show("Tab setup failure: Primary tab or TG failed to load.\r\n" +
                                     "This is a abnormal condition - please problem to EDD Team on discord or github.\r\n" + 
                                     "To try and clear it, hold down shift and then launch the program.\r\n" + 
-                                    "Click on Reset tabs, then Run program, which may clear the problem.".Tx());
+                                    "Click on Reset tabs, then Run program, which may clear the problem".Tx());
                     Application.Exit();
                 }
             }
@@ -1172,7 +1172,7 @@ namespace EDDiscovery
 
         private void rebuildUserDBIndexesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time.".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 UserDatabase.Instance.RebuildIndexes(LogLine);
             }
@@ -1180,7 +1180,7 @@ namespace EDDiscovery
 
         private void rebuildSystemDBIndexesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time.".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
+            if (ExtendedControls.MessageBoxTheme.Show(this, "Are you sure to Rebuild Indexes? It may take a long time".Tx(), "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 SystemsDatabase.Instance.RebuildIndexes(LogLine);
             }

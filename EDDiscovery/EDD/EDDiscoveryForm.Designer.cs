@@ -391,7 +391,7 @@ namespace EDDiscovery
             // 
             this.addTabToolStripMenuItem.Name = "addTabToolStripMenuItem";
             this.addTabToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.addTabToolStripMenuItem.Text = "Insert Tab with panel..";
+            this.addTabToolStripMenuItem.Text = "Insert Tab with panel";
             // 
             // removeTabToolStripMenuItem
             // 
@@ -409,7 +409,7 @@ namespace EDDiscovery
             // 
             this.popOutPanelToolStripMenuItem.Name = "popOutPanelToolStripMenuItem";
             this.popOutPanelToolStripMenuItem.Size = new System.Drawing.Size(189, 22);
-            this.popOutPanelToolStripMenuItem.Text = "Pop Out Panel..";
+            this.popOutPanelToolStripMenuItem.Text = "Pop Out Panel";
             // 
             // panelColourToolStripMenuItem
             // 

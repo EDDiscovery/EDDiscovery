@@ -62,7 +62,7 @@ namespace EDDiscovery
 
                 if ( !cancel.IsCancellationRequested && File.Exists(gecfile) && DateTime.UtcNow.Subtract(SystemsDatabase.Instance.GetGECGalMapLast()).TotalDays >= 7)
                 {
-                    LogLine("Get galactic mapping from GEC.".Tx());
+                    LogLine("Get galactic mapping from GEC".Tx());
                     System.Diagnostics.Trace.WriteLine($"Download GEC file background");
                     if (GECClass.DownloadGECFile(gecfile, cancel))
                         SystemsDatabase.Instance.SetGECGalMapLast(DateTime.UtcNow);

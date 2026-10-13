@@ -595,7 +595,7 @@ namespace EDDiscovery.UserControls
 
                             //System.Diagnostics.Debug.WriteLine($"Sysinfo destination {lastdestination.Name} -> {destname}");
 
-                            if (lastdestination.BodyID.HasValue)
+                            if (lastdestination.BodyID.HasValue && DiscoveryForm.History.Count>0)
                             {
                                 ss = DiscoveryForm.History.StarScan2.FindSystemSynchronous(DiscoveryForm.History.GetLast.System, false);
                                 var body = ss?.FindBody(lastdestination.BodyID.Value);

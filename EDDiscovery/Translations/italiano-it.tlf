@@ -171,7 +171,7 @@ SECTION EDDiscoveryForm
 
 586CFE03DAA723: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "Hai disabilitato la sincronizzazione con EDSM per questo comandante. Sei sicuro di voler inviare eventi non sincronizzati a EDSM?"
 25C9D555A2A9B9: "Confirm EDSM sync" => "Conferma syncronizzazione com EDSM"
-FAC898054B2C2B: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
+532BE1D4A10C4A: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent" @
 B61E7134EF7FDD: "Send All to EDSM" @
 2460BB4C7A146D: "Send Last 24 Hours of entries to EDSM" @
 AA962467914A2B: "Send From" @
@@ -217,16 +217,16 @@ F13804FF3542A3: "Click to select a pop out panel to display" => "Premi per aprir
 B5594BDC32706F: "Edit Add-Ons" => "Modifica i Componenti"
 990761914FAABC: "Manage Add-Ons" => "Gestisci i Componenti"
 76EE286CA0BD95: "Refresh the history" => "Aggiorna lo storico"
-B1B79547453735: "Insert Tab with panel.." => "Inserisci un pannelo come scheda"
+327C9B87C0EB54: "Insert Tab with panel" => "Inserisci un pannelo come scheda"
 FDB587F6AEF9FC: "Remove Tab" => "Rimuovi scheda"
 A44AD2D137232C: "Rename Tab" => "Rinomina scheda"
-DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Problemi nel settaggio: scheda principale o gruppo di schede non pu� essere caricato.\r\nQuesta � una condizione anomala. Entra in contatto con gli sviluppatori!"
+5A6267856DDE68: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem" => "Problemi nel settaggio: scheda principale o gruppo di schede non pu� essere caricato.\r\nQuesta � una condizione anomala. Entra in contatto con gli sviluppatori!"
 5365F84B9A53D9: "Enter a new name for the tab" => "Rinomina la scheda"
 AD583CD268D4F3: "The following application extension DLL have been found\r\nDo you wish to allow it to be used?\r\n\r\n" => "Le seguenti estensioni DLL sono state trovate\r\nVuoi darle il permesso di essere usate?\r\n \r\nSe non vuoi che vengano usate, rimuovere le DLL dalla cartella DLL di EDDiscovery\r\no rimuovere l'action pack che introduce queste DLL\r\no premere shift alla partenza del programma e selezionare l'opzione Rimuovi le Estensioni DLL"
 A0E44522BDDD0C: "System data download from {0} required.\r\nThis will take a while, please be patient.\r\nPlease continue running ED Discovery until refresh is complete." @
 7E07BEC01ADC82: "DLLs loaded" => "DLLs caricate"
 DE617477CC8108: "DLLs failed to load" => "Impossibile caricare DLLs"
-5C77F5282CD58B: "Are you sure to Rebuild Indexes? It may take a long time." @
+78B8D462D682D8: "Are you sure to Rebuild Indexes? It may take a long time" @
 4B610F7AC3BDAA: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
 A7BA2B77971D8B: "Profile {0} Loaded" => "Profilo {0} caricato"
 26B80AE7ABDE92: "New EDDiscovery installer available" => "Nuovo setup di EDDiscovery disponibile"
@@ -241,10 +241,10 @@ B683FA5A92D7B6: "Closing, please wait!" => "Chiudendo, per favore aspettare!"
 9769B4CCF9B4FE: "Confirm you remove any duplicate FSD entries from the current commander" => "Confermare la rimozione dei registri FSD duplicati al comandante corrente"
 7DA40B6734A4D7: "Removed FSD entries" => "Rimossi registri FSD"
 4F01D475DE606B: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "L'invio dello storico a Inara � disabilitato per un'ora a partire dall'ultimo invio per evitare problemi al server"
-651C69E6D25F44: "Refresh History." => "Rinfrescare lo Storico"
+5FFDB33D481739: "Refresh History" => "Rinfrescare lo Storico"
 A2AB3C168B45C2: "No EDSM API key set" => "Pre favore, assicurarsi che um comandante sia selezionato e che abbia una chiave di API EDSM assegnata"
 C34D9E2DBB5632: "Edit Profiles" => "Modificare Profili"
-B155CB3806504B: "Pop Out Panel.." => "Pannelo di popout"
+AF1A2D5B244FF3: "Pop Out Panel" => "Pannelo di popout"
 10A7567860F85A: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery sta aggiornando i database EDSM e EDDB \\ r \\ nPremere OK per chiudere ora, Annulla per attendere fino al completamento dell'aggiornamento"
 F2C6773DD29948: "&Open EDDiscovery" => "&Apri EDDiscovery"
 E9E8D3707EA8A5: "&Hide Tray Icon" => "&Nascondi l'icona di notificazione"
@@ -261,15 +261,15 @@ C7F0C2BDEE6813: "Move another commanders history to this commander" @
 
 SECTION EDDiscoveryController
 
-9BA9842C1C8616: "Closing down, please wait.." => "Chiudendo, per favore aspettare..."
-B916383C5DCECE: "Get galactic mapping from GEC." @
-855115699D49D3: "Loaded Notes, Bookmarks and Galactic mapping." => "Note, Preferiti e Mappa Galattica caricati."
+6B3B97CEE608D3: "Closing down, please wait" => "Chiudendo, per favore aspettare"
+D4C78949DE46BD: "Get galactic mapping from GEC" @
+B0559FDC0B9C72: "Loaded Notes, Bookmarks and Galactic mapping" => "Note, Preferiti e Mappa Galattica caricati"
 D080CC813B189E: "Reading travel history" => "Lettura dello storico di viaggio"
 592A7473F32418: "Star Data download is disabled. Use Settings panel to reenable" => "Sincronizzazione a EDSM e EDDB disabilitati. Abilitarli nel setup del comandante"
 FC6E2FB62C5980: "Systems update complete with {0:N0} systems" => "Attualizzazione EDSM completata com {0:N0} sistemi"
 F81351B782D372: "Processing log file" => "Processando il file di registro"
 1EB68C8D6B5F34: "Refresh Displays" => "Ricaricando la Schermata"
-DCDB45EA825C67: "History refresh complete." => "Ricaricamento dello storico completato"
+474EB10D928F0A: "History refresh complete" => "Ricaricamento dello storico completato"
 B624A602C8C18F: "Checking for new Expedition data" => "Verificando per nuovi dati di Esplorazione"
 
 SECTION ImportExportForm
@@ -302,7 +302,7 @@ C763B2138A8CAD: "Bubble" => "Bolla"
 0AE7FC00D6AA70: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Hai aggiunto nuovi settori!\r\nQuesta operazione richiede un nuovo scarico COMPLETO di tutti i dati EDSM\r\nSei sicuro di voler continuare?"
 2D91E32D25F1DF: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Sincronizzazione dei dati stellari disabilitata nel settagio.\r\nAbilitare per impostare l'aggiornamento"
 B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Hai rimosso settori!\r\nQuesto richiede che tutti i registri siano puliti, cosa che richiede tempo\r\nSei sicuro di voler continuare?"
-13D60E3F37387F: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "ED Discovery scarica i dati stellari da EDSM/EDDB, che è usato per importare dati addizionali. Seleziona quanti dati vuoi scaricare e conservare. Quanto più settori galattici scarichi, maggiore lo spazio necessario e la memoria usata."
+9C24C4B7756B85: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data. Select how much data you want to store. The more of the galaxy you select, the bigger the storage needed. Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD" => "ED Discovery scarica i dati stellari da EDSM/EDDB, che è usato per importare dati addizionali. Seleziona quanti dati vuoi scaricare e conservare. Quanto più settori galattici scarichi, maggiore lo spazio necessario e la memoria usata"
 8598222918D3C6: "Select" => "Seleziona"
 0EE93787C960CF: "Select the data set" => "Seleziona il set di dati"
 BD32B2E4F5C2FD: "Select the data source" @

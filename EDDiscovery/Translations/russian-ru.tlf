@@ -3,8 +3,8 @@
 SECTION General
 
 24345A14377FD8: "Today" => "Сегодня"
-02779596113109: "24h" => "24 ч."
-0A8DD6ADCE7A0D: "7 days" => "7 дн."
+02779596113109: "24h" => "24 ч"
+0A8DD6ADCE7A0D: "7 days" => "7 дн"
 6A72085653E4C5: "All" => "Все"
 F6FDBE48DC54DD: "Delete" => "Удалить"
 69390E166570E5: "Campaign" => "Кампания"
@@ -171,7 +171,7 @@ SECTION EDDiscoveryForm
 
 586CFE03DAA723: "You have disabled sync to EDSM for this commander.  Are you sure you want to send unsynced events to EDSM?" => "У этого командира отключена синхронизация с EDSM. Вы действительно хотите отправить несинхронизированные события в EDSM?"
 25C9D555A2A9B9: "Confirm EDSM sync" => "Подтвердить синхронизацию с EDSM"
-FAC898054B2C2B: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent." @
+532BE1D4A10C4A: "There are {0} EDSM reports to send, this will take time and bandwidth, choose from the following what to do. Entries before this will be marked as sent" @
 B61E7134EF7FDD: "Send All to EDSM" => "Отправить всё на EDSM"
 2460BB4C7A146D: "Send Last 24 Hours of entries to EDSM" @
 AA962467914A2B: "Send From" @
@@ -217,16 +217,16 @@ F13804FF3542A3: "Click to select a pop out panel to display" => "Создать 
 B5594BDC32706F: "Edit Add-Ons" => "Изменить дополнения"
 990761914FAABC: "Manage Add-Ons" => "Управление дополнениями"
 76EE286CA0BD95: "Refresh the history" => "Обновить историю"
-B1B79547453735: "Insert Tab with panel.." => "Вставить вкладку с панелью..."
+327C9B87C0EB54: "Insert Tab with panel" => "Вставить вкладку с панелью."
 FDB587F6AEF9FC: "Remove Tab" => "Удалить вкладку"
 A44AD2D137232C: "Rename Tab" => "Переименовать вкладку"
-DF9002C7843BEE: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem." => "Установить вкладку не удалось: основная вкладка или TG не загрузились.\r\nТак быть не должно - пожалуйста, сообщите о проблеме команде EDD через Discord или Github.\r\nЧтобы избежать ошибки, перезапустите программу, удерживая клавишу shift,\r\nвыберите опцию Reset tabs и перезапустите программу еще раз"
+5A6267856DDE68: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem" => "Установить вкладку не удалось: основная вкладка или TG не загрузились.\r\nТак быть не должно - пожалуйста, сообщите о проблеме команде EDD через Discord или Github.\r\nЧтобы избежать ошибки, перезапустите программу, удерживая клавишу shift,\r\nвыберите опцию Reset tabs и перезапустите программу еще раз"
 5365F84B9A53D9: "Enter a new name for the tab" => "Новое имя вкладки"
 AD583CD268D4F3: "The following application extension DLL have been found\r\nDo you wish to allow it to be used?\r\n\r\n" => "Найдены следующие dll дополнений\r\nВы хотите их использовать?\r\n \r\nЕсли нет, удалите dll из папки DLL программы\r\\или удалите соответствующие action pack,\r\\или удерживайте клавишу shift при запуске программы и выберите опцию «Удалить все dll дополнений»"
 A0E44522BDDD0C: "System data download from {0} required.\r\nThis will take a while, please be patient.\r\nPlease continue running ED Discovery until refresh is complete." @
 7E07BEC01ADC82: "DLLs loaded" => "Загруженные библиотеки (.dll)"
 DE617477CC8108: "DLLs failed to load" => "Не удалось загрузить библиотеки (.dll)"
-5C77F5282CD58B: "Are you sure to Rebuild Indexes? It may take a long time." @
+78B8D462D682D8: "Are you sure to Rebuild Indexes? It may take a long time" @
 4B610F7AC3BDAA: "Scan your history, and for systems without co-ordinates,\r\ntry and fill them in from your system database\r\nConfirm?" @
 A7BA2B77971D8B: "Profile {0} Loaded" => "Профиль {0} загружен"
 26B80AE7ABDE92: "New EDDiscovery installer available" => "Доступна новая версия EDDiscovery"
@@ -241,11 +241,11 @@ B683FA5A92D7B6: "Closing, please wait!" => "Завершаю работу"
 9769B4CCF9B4FE: "Confirm you remove any duplicate FSD entries from the current commander" => "Вы действительно хотите удалить все дубликаты FSD записей для текущего командира?"
 7DA40B6734A4D7: "Removed FSD entries" => "Количество удалённых FSD записей"
 4F01D475DE606B: "Inara historic upload is disabled until 1 hour has elapsed from the last try to prevent server flooding" => "Загрузка на Inara отключена на 1 час, чтобы предотвратить перегрузку сервера"
-651C69E6D25F44: "Refresh History." => "Обновить историю."
+5FFDB33D481739: "Refresh History" => "Обновить историю"
 A2AB3C168B45C2: "No EDSM API key set" => "Убедитесь, что выбран командир и установлен EDSM API key"
 C34D9E2DBB5632: "Edit Profiles" => "Изменить профили"
-B155CB3806504B: "Pop Out Panel.." => "Создать отдельное окно..."
-10A7567860F85A: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery обновляет базы данных EDSM и EDDB.\r\nНажмите «ОК», чтобы выйти прямо сейчас, или нажмите «Отмена», чтобы дождаться завершения обновления."
+AF1A2D5B244FF3: "Pop Out Panel" => "Создать отдельное окно."
+10A7567860F85A: "EDDiscovery is updating the System database\r\nPress OK to close now, Cancel to wait until update is complete" => "EDDiscovery обновляет базы данных EDSM и EDDB.\r\nНажмите «ОК», чтобы выйти прямо сейчас, или нажмите «Отмена», чтобы дождаться завершения обновления"
 F2C6773DD29948: "&Open EDDiscovery" => "&Открыть EDDiscovery"
 E9E8D3707EA8A5: "&Hide Tray Icon" => "&Скрыть значок в трее"
 2E90DDA55C63D8: "Fetch Logs Again" => "Повторно получить логи"
@@ -261,15 +261,15 @@ C7F0C2BDEE6813: "Move another commanders history to this commander" @
 
 SECTION EDDiscoveryController
 
-9BA9842C1C8616: "Closing down, please wait.." => "Завершаю работу"
-B916383C5DCECE: "Get galactic mapping from GEC." => "Получаю карту Галактики с GEC."
-855115699D49D3: "Loaded Notes, Bookmarks and Galactic mapping." => "Загружаю примечания, закладки и карту Галактики"
+6B3B97CEE608D3: "Closing down, please wait" => "Завершаю работу"
+D4C78949DE46BD: "Get galactic mapping from GEC" => "Получаю карту Галактики с GEC"
+B0559FDC0B9C72: "Loaded Notes, Bookmarks and Galactic mapping" => "Загружаю примечания, закладки и карту Галактики"
 D080CC813B189E: "Reading travel history" => "Читаю историю полётов"
 592A7473F32418: "Star Data download is disabled. Use Settings panel to reenable" => "Синхронизация с EDSM и EDDB отключена в настройках"
 FC6E2FB62C5980: "Systems update complete with {0:N0} systems" => "Количество систем, загруженных при обновлении EDSM: {0:N0}"
 F81351B782D372: "Processing log file" => "Обрабатываю файл журнала"
 1EB68C8D6B5F34: "Refresh Displays" => "Обновляю вкладки"
-DCDB45EA825C67: "History refresh complete." => "Обновление истории завершено"
+474EB10D928F0A: "History refresh complete" => "Обновление истории завершено"
 B624A602C8C18F: "Checking for new Expedition data" => "Ищу новые данные экспедиций"
 
 SECTION ImportExportForm
@@ -300,9 +300,9 @@ C763B2138A8CAD: "Bubble" => "Пузырь"
 799C88F07B1448: "Extended Bubble" => "Расширенный Пузырь"
 1EADEFDD069739: "Bubble+Colonia" => "Пузырь и Колония"
 0AE7FC00D6AA70: "You have added new sectors!\r\nThis will require a complete re-download of the EDSM data\r\nConfirm you wish to do this?" => "Вы добавили новые сектора!\r\nЭто потребует повторной загрузки данных из EDSM\r\nВы действительно хотите это сделать?"
-2D91E32D25F1DF: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Синхронизация данных о системах отключена в настройках.\r\nВключите ее, чтобы обновить данные."
+2D91E32D25F1DF: "Synchronisation to star data disabled in settings.\r\nReenable to allow star data to be updated" => "Синхронизация данных о системах отключена в настройках.\r\nВключите ее, чтобы обновить данные"
 B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cleaned of entries, which will take time\r\nConfirm you wish to do this?" => "Вы удалили сектора!\r\nЭто потребует очистки БД, что займет время.\r\nВы действительно хотите это сделать?"
-13D60E3F37387F: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data.  Select how much data you want to store.  The more of the galaxy you select, the bigger the storage needed.  Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD." => "Чтобы предоставить вам больше информации, ED Discovery может загрузить данные о системах из EDSM/EDDB. Выберите, сколько данных вы хотите загрузить. Чем большую часть Галактики вы выберете, тем больше места потребуется для хранения."
+9C24C4B7756B85: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data. Select how much data you want to store. The more of the galaxy you select, the bigger the storage needed. Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD" => "Чтобы предоставить вам больше информации, ED Discovery может загрузить данные о системах из EDSM/EDDB. Выберите, сколько данных вы хотите загрузить. Чем большую часть Галактики вы выберете, тем больше места потребуется для хранения"
 8598222918D3C6: "Select" => "Выберите"
 0EE93787C960CF: "Select the data set" @
 BD32B2E4F5C2FD: "Select the data source" @
