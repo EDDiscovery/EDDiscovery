@@ -128,8 +128,8 @@ D14970EE4E27AE: "Click to enable debug log production on search" => "Kliknij, ab
 450D52D3EF8975: "Searches" => "Wyszukiwania"
 07C3B8B498D6BD: "Export user searches" => "Eksportuj wyszukiwania użytkownika"
 F6FBA35BE4C529: "Import user searches" => "Importuj wyszukiwania użytkownika"
-ADC4E96A478BE0: "Sort" => "Sortieren"
-F872BB583B4FA4: "Too many results to display, truncating to the first" @
+ADC4E96A478BE0: "Sort" => "Sortowanie"
+F872BB583B4FA4: "Too many results to display, truncating to the first" => "Zbyt wiele wyników do wyświetlenia; pokazano tylko pierwsze"
 
 SECTION UserControlDiscoveries
 
@@ -388,9 +388,9 @@ SECTION UserControlModules
 
 20DD0E149BA65F: "BluePrint" => "Schemat"
 02D2B8A95C0CDF: "P/E" => "W/P"
-0C85DB3EB1A9A6: "FSD" => "FSA"
+0C85DB3EB1A9A6: "FSD" => "FSD"
 47071804F38EAF: "Thrust" => "Ciąg"
-31FE17191E290C: "Shields" => "Schilde"
+31FE17191E290C: "Shields" => "Tarcze"
 
 
 6129EFBCDDA076: "Show full blueprint information" => "Pokaż pełne informacje o projekcie modyfikacji"
@@ -549,7 +549,7 @@ A0BB88B66F57E8: "Set High Value Limit" => "Ustaw Min. Wysoką Wartość"
 9F6C1D41D0D032: "Show Materials" => "Pokaż materiały"
 B028A006D79224: "Show rare materials only" => "Pokaż tylko rzadkie materiały"
 00848F83A633FB: "Show Moons" => "Pokaż księżyce"
-17B8D69486D780: "Barycentre" => "Baryzentrum"
+17B8D69486D780: "Barycentre" => "Barycentrum"
 14E0E8D442549A: "Show G on all planets" => "Pokaż przyspieszenie grawitacyjne na wszystkich planetach"
 12071F4330F803: "Show Habitation Zone" => "Pokaż ekosferę"
 64E6C643FFE7E8: "Show Classes of Planets" => "Pokaż klasy planet"
@@ -658,7 +658,7 @@ F0713ECF8D95B8: "Removing {0} Sector(s).\r\n\r\nThis will take a while (up to 30
 42D840604E5BFA: "Do you wish to delete commander" => "Czy usunąć komandera"
 EB4FD2BBBBAACE: "The font used by this theme is not available on your system.\r\nThe font needed is \"{0}\".\r\nInstall this font to fully use this theme.\r\nEuro Caps font is freely available from www.edassets.org.\r\n\r\nWould you like to load this theme using a replacement font?" => "Czcionka używana przez ten motyw nie jest dostępna w systemie.\r\nWymagana czcionka: \"{0}\".\r\nZainstaluj ją, aby w pełni korzystać z motywu.\r\nCzcionkę Euro Caps można bezpłatnie pobrać z www.edassets.org.\r\n\r\nCzy wczytać motyw z użyciem czcionki zastępczej?"
 35F9B4B074BFBC: "Finished, Please close the window.\r\nIf you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n" => "Ukończono, proszę zamknąć to okno.\r\nJeśli masz już otwartą mapę 3D, zmiany nie będą na niej widoczne do następnego uruchomienia EDD\r\n"
-5EE3143180F0E2: "You need to configure Windows to allow EDD to webserve\r\nClick Yes to do this. If you are not the adminstrator, a dialog will appear to ask you\r\nto sign in as an admin to allow this to happen\r\nIf you have previously done this on this same port number you can click No and the enable will work" @
+5EE3143180F0E2: "You need to configure Windows to allow EDD to webserve\r\nClick Yes to do this. If you are not the adminstrator, a dialog will appear to ask you\r\nto sign in as an admin to allow this to happen\r\nIf you have previously done this on this same port number you can click No and the enable will work" => "Aby EDDiscovery mogło uruchomić serwer WWW, trzeba odpowiednio skonfigurować system Windows.\r\nKliknij Tak, aby to zrobić. Jeśli nie masz uprawnień administratora, pojawi się okno\r\nz prośbą o zalogowanie jako administrator w celu zatwierdzenia tej zmiany.\r\nJeśli wykonano to wcześniej dla tego samego portu, możesz kliknąć Nie — serwer nadal będzie można włączyć."
 BB75D637DC2C4D: "Reload Star Database" => "Ponownie załaduj bazę gwiazd"
 CA622FCCA53890: "This will delete the systems database.\r\n\r\nYou can then reselect the database data source and the\r\nstar set required.\r\n\r\nThis will require a full download of the star database from the server\r\nOnly use this if you are happy to download the dataset again" => "Baza układów zostanie usunięta.\r\n\r\nNastępnie będzie można ponownie wybrać źródło danych\r\noraz wymagany zestaw gwiazd.\r\n\r\nWymaga to pobrania całej bazy gwiazd z serwera.\r\nUżyj tej opcji tylko, jeśli chcesz ponownie pobrać te dane"
 9124C85C715BCB: "Do you wish permanently delete all commander data (YES) including journal data,\r\nor just mark the commander as hidden and never show him/her again (NO)" => "Czy trwale usunąć wszystkie dane komandera (TAK), w tym dane dziennika,\r\nczy tylko go ukryć i nie wyświetlać ponownie (NIE)?"
@@ -743,7 +743,7 @@ SECTION UserControlStarList
 
 25229E81F3BF74: "Last Visit" => "Ostatnia Wizyta"
 28442DA04B1BF3: "Body Count" => "Liczba ciał niebieskich"
-C90A4905639F83: "Scan Value" => "Scanwert"
+C90A4905639F83: "Scan Value" => "Wartość skanów"
 FB044B95FD466C: "This system has materials for FSD boost" => "Ten układ zawiera materiały do doładowania FSD"
 FB90E0C92B3663: "Show/Hide presence of Jumponium Materials" => "Pokaż / ukryj obecność materiałów do zwiększania zasięgu FSD"
 47D68486BBAA7E: "Show valuable bodies" => "Pokaż wartościowe ciała niebieskie"
@@ -850,7 +850,7 @@ A16C5BBE4BF996: "Range" => "Skok"
 0B645D1B659917: "Fuel" => "Paliwo"
 C9B1B30D011FE2: "Pos" => "Pozycja"
 503335220A6476: "Gov" => "Rząd"
-DF5D4664763117: "Sol" => "Sole"
+DF5D4664763117: "Sol" => "Sol"
 70F8BB9A8A5393: "Home" => "Dom"
 7B181F6DED4B8C: "Dest" => "Cel"
 8074342446780B: "No Missions" => "Brak Misji"
@@ -1117,26 +1117,26 @@ SECTION UserControlCarrier
 
 3D76FD53AA0F62: "Decommissioned" => "Wycofany z eksploatacji"
 0B2AA74B1595AE: "Decommissioning on" => "Wycofanie z eksploatacji dnia"
-7C23625357246F: "Reserved Space" @
-65F722E72270CA: "Jump Range" @
-CC2ED69677A9C2: "Max Jump" @
+7C23625357246F: "Reserved Space" => "Zarezerwowana przestrzeń"
+65F722E72270CA: "Jump Range" => "Zasięg skoku"
+CC2ED69677A9C2: "Max Jump" => "Maksymalny zasięg skoku"
 0935C6C59186BC: "Docking Access" => "Dostęp do dokowania"
 059AE46E428B7C: "Notorious" => "Rozgłos"
-187579E3A78471: "Reserve" @
-7C62A1424469B1: "Available" @
+187579E3A78471: "Reserve" => "Rezerwa"
+7C62A1424469B1: "Available" => "Dostępne środki"
 E8F1C1B55660EB: "Pioneer Tax" => "Podatek Pioneer Supplies"
 7A6FA51ABA501E: "Shipyard Tax" => "Podatek od stoczni"
 3583018B5E8131: "Rearm Tax" => "Podatek od uzupełniania amunicji"
 460784033FAD01: "Outfitting Tax" => "Podatek od wyposażenia"
 964A427048AAB1: "Refuel Tax" => "Podatek od tankowania"
 7A550EE38B3E7C: "Repair Tax" => "Podatek od napraw"
-FF65D760FBF6D9: "Core Cost" @
-ADD4897C94B7A4: "Services Cost" @
+FF65D760FBF6D9: "Core Cost" => "Koszt podstawowy"
+ADD4897C94B7A4: "Services Cost" => "Koszt usług"
 50E6AE8D109017: "No Carrier" => "Brak lotniskowca"
-928453BEE34EFA: "Install cost" @
-9AF45DCF76EB40: "Capacity Allocated" @
-F4F6CA986485ED: "Upkeep cost" @
-8DFDD0F4B29DA2: "Suspended upkeep cost" @
+928453BEE34EFA: "Install cost" => "Koszt instalacji"
+9AF45DCF76EB40: "Capacity Allocated" => "Przydzielona pojemność"
+F4F6CA986485ED: "Upkeep cost" => "Koszt utrzymania"
+8DFDD0F4B29DA2: "Suspended upkeep cost" => "Koszt utrzymania zawieszonej usługi"
 311F21EEA90405: "Crew Name" => "Nazwa członka załogi"
 E2CE7274D260B9: "This Service is Active" => "Ta usługa jest aktywna"
 CD7E9084A619FD: "This Service is Suspended" => "Ta usługa jest zawieszona"
