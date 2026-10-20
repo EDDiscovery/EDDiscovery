@@ -193,7 +193,7 @@ namespace EDDiscovery.UserControls
         }
 
         // list in is in ascending order, oldest first, return in ascending date order
-        public List<Ledger.Transaction> Filter(List<Ledger.Transaction> list )
+        public List<EliteDangerousCore.Ledger.Transaction> Filter(List<EliteDangerousCore.Ledger.Transaction> list )
         {                                                             
             if (MaximumNumberOfItems.HasValue)
             {

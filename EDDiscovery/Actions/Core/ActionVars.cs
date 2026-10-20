@@ -131,7 +131,7 @@ namespace EDDiscovery.Actions
                 ident = si.ShipUserIdent.Alt("");
                 sv = si.SubVehicle.ToString();
                 fullinfo = si.ShipFullInfo();
-                manu = si.GetShipProperties().Manufacturer;
+                manu = si.GetShipProperties()?.Manufacturer ?? "Unknown";
                 shortname = si.ShipShortName.Alt("Unknown");
                 fuel = si.FuelCapacity.ToStringInvariant("0.0");
                 fuellevel = si.FuelLevel.ToStringInvariant("0.0");

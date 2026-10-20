@@ -14,12 +14,14 @@ rem using EnableExtensions, use the pattern replacer to double \\
 
 set vno=%1
 
-rem support having a prefix to the appname/guid so you can install two EDDs at the same time. Use cmd /c cmdbuild 19.1.200.0 DR 
+rem support having a prefix to the appname/guid so you can install two EDDs at the same time. Use cmd /c cmdbuild 19.1.200.0 DR
 
 if "%2" == "" set altname=
 if NOT "%2" == "" set altname=-%2
 
 echo Want version `%vno`, Name `%EDDiscovery%altname%`
+pause
+
 
 if "%vno%"=="" goto :errorVER
 

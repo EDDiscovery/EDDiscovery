@@ -24,7 +24,7 @@ using System.Windows.Forms.DataVisualization.Charting;
 
 namespace EDDiscovery.UserControls
 {
-    public partial class UserControlLedger : UserControlCommonBase
+    public partial class Ledger : UserControlCommonBase
     {
         private JournalFilterSelector cfs;
         private const string dbFilter = "EventFilter2";
@@ -36,7 +36,7 @@ namespace EDDiscovery.UserControls
 
         #region Init
 
-        public UserControlLedger()
+        public Ledger()
         {
             InitializeComponent();
             BaseUtils.TranslatorMkII.Instance.TranslateControls(this);
@@ -154,9 +154,9 @@ namespace EDDiscovery.UserControls
             if (ledger != null && ledger.Transactions.Count > 0)
             {
                 var filter = (TravelHistoryFilter)comboBoxTime.SelectedItem ?? TravelHistoryFilter.NoFilter;
-                
+
                 // transactions are in date ascending, and filtered list is too in date ascending
-                List<Ledger.Transaction> filteredlist = filter.Filter(ledger.Transactions);
+                List<EliteDangerousCore.Ledger.Transaction> filteredlist = filter.Filter(ledger.Transactions);
 
                 if (filteredlist.Count > 0)
                 {
@@ -203,7 +203,7 @@ namespace EDDiscovery.UserControls
             Calculate24h7Day();
         }
 
-        private DataGridViewRow CreateRow(Ledger.Transaction tx, HashSet<string> eventfilter, string textfilter)
+        private DataGridViewRow CreateRow(EliteDangerousCore.Ledger.Transaction tx, HashSet<string> eventfilter, string textfilter)
         {
             if (!eventfilter.Contains(tx.EventType.ToString()) && !eventfilter.Contains("All"))        // All or event name must be in list
                 return null;
@@ -215,7 +215,8 @@ namespace EDDiscovery.UserControls
                                             (tx.CashAdjust<0) ? (-tx.CashAdjust).ToString("N0") : "",
                                             tx.CashTotal.ToString("N0"),
                                             (tx.ProfitPerUnit!=0) ? tx.ProfitPerUnit.ToString("N0") : "",
-                                            (tx.Profit!=0) ? tx.Profit.ToString("N0") : ""
+                                            (tx.Profit!=0) ? tx.Profit.ToString("N0") : "",
+                                            tx.MercTotal.ToString("N0"),
                                         };
 
             if (!textfilter.HasChars() || rowobj.ContainsIn(textfilter, StringComparison.InvariantCultureIgnoreCase) >= 0)
@@ -234,7 +235,7 @@ namespace EDDiscovery.UserControls
         {
             while(transactioncountatdisplay < DiscoveryForm.History.CashLedger.Transactions.Count)   // if new transaction
             {
-                Ledger.Transaction tx = DiscoveryForm.History.CashLedger.Transactions[transactioncountatdisplay];
+                EliteDangerousCore.Ledger.Transaction tx = DiscoveryForm.History.CashLedger.Transactions[transactioncountatdisplay];
 
                 var eventfilter = GetSetting(dbFilter, "All").Split(';').ToHashSet();
                 var row = CreateRow(tx, eventfilter, textBoxFilter.Text);
@@ -263,8 +264,8 @@ namespace EDDiscovery.UserControls
             int row = dataGridViewLedger.SelectedRowAndCount(false, true, -1).Item1;
             if (row >= 0)
             {
-                Ledger ledger = DiscoveryForm.History.CashLedger;
-                Ledger.Transaction tx = dataGridViewLedger.Rows[row].Cells[0].Tag as Ledger.Transaction;
+                EliteDangerousCore.Ledger ledger = DiscoveryForm.History.CashLedger;
+                EliteDangerousCore.Ledger.Transaction tx = dataGridViewLedger.Rows[row].Cells[0].Tag as EliteDangerousCore.Ledger.Transaction;
 
                 //System.Diagnostics.Debug.WriteLine($"Ledger calc amount at row {row} time {tx.EventTimeUTC}");
                 var tx1 = ledger.TransactionBefore(tx, new TimeSpan(24, 0, 0));
@@ -355,7 +356,7 @@ namespace EDDiscovery.UserControls
         {
             if (!movingpos && e.RowIndex >= 0 && e.RowIndex < dataGridViewLedger.RowCount)        // triage actually clicking on row
             {
-                Ledger.Transaction tx = dataGridViewLedger.Rows[e.RowIndex].Cells[0].Tag as Ledger.Transaction;
+                EliteDangerousCore.Ledger.Transaction tx = dataGridViewLedger.Rows[e.RowIndex].Cells[0].Tag as EliteDangerousCore.Ledger.Transaction;
                 // bug here, found by Ealhstan. Graph is in user time base, need to convert utc->user time
                 var usertime = EDDConfig.Instance.ConvertTimeToSelectedFromUTC(tx.EventTimeUTC);
 
@@ -381,7 +382,7 @@ namespace EDDiscovery.UserControls
                 var seldate = EDDConfig.Instance.ConvertTimeToSelected(oadate);         // Make sure its in selected kind (Local or UTC)
                 var utc = EDDConfig.Instance.ConvertTimeToUTCFromSelected(seldate);     // convert to UTC
 
-                int row = dataGridViewLedger.FindRowWithDateTagWithin((r) => ((Ledger.Transaction)r.Cells[0].Tag).EventTimeUTC, utc, long.MaxValue);  // we accept any nearest
+                int row = dataGridViewLedger.FindRowWithDateTagWithin((r) => ((EliteDangerousCore.Ledger.Transaction)r.Cells[0].Tag).EventTimeUTC, utc, long.MaxValue);  // we accept any nearest
                // System.Diagnostics.Debug.WriteLine($"Ledger Chart Selected {pos} correspondion to {seldate} utc {utc} = row {row}");
                 if (row >= 0)
                 {

@@ -205,6 +205,8 @@ namespace EDDiscovery.UserControls
             if (last_he != null)
             {
                 var mcllist = DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity);      // mcl at this point
+                var ledgerat = DiscoveryForm.History.CashLedger.TransactionAtOrBefore(last_he.EventTimeUTC);        // may be NULL
+                var curmerc = ledgerat?.MercTotal ?? long.MaxValue;     // find merc total, presume its very large if we don't know.
                 var lastengprog = DiscoveryForm.History.GetLastHistoryEntry(x => x.EntryType == JournalTypeEnum.EngineerProgress, last_he);
 
                 int fdrow = dataGridViewEngineering.SafeFirstDisplayedScrollingRowIndex();      // remember where we were displaying
@@ -281,7 +283,10 @@ namespace EDDiscovery.UserControls
                         dataGridViewEngineering[NotesCol.Index, i].ToolTipText = res.Item4;
                         dataGridViewEngineering[RecipeCol.Index, i].Value = r.IngredientsStringvsCurrent(mcllist);
                         dataGridViewEngineering[RecipeCol.Index, i].ToolTipText = r.IngredientsStringLong;
-                        dataGridViewEngineering.Rows[i].DefaultCellStyle.BackColor = (res.Item5 >= 100.0) ? ExtendedControls.Theme.Current.GridHighlightBack : ExtendedControls.Theme.Current.GridCellBack;
+
+                        bool haveitems = res.Item5 >= 100.0 && r.MercCoins <= curmerc;    
+
+                        dataGridViewEngineering.Rows[i].DefaultCellStyle.BackColor = haveitems ? ExtendedControls.Theme.Current.GridHighlightBack : ExtendedControls.Theme.Current.GridCellBack;
                     }
 
                     // add to wanted list, either if visible or we don't show shopping list (therefore embedded)

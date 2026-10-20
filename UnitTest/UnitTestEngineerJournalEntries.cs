@@ -12,6 +12,17 @@ namespace UnitTest
         {
             CheckSection("Engineer");
             {
+                //EngineeringRecipe r1 = EngineeringRecipe.FindEngineeringFDName(new EngineeringRecipeFDName("cargorack_increasedcapacity"), 2);
+                //CheckThat(r1).IsNotNull();
+                //EngineeringRecipe r1a = EngineeringRecipe.FindEngineeringFDName(new EngineeringRecipeFDName("cargorack_increasedcapacity"));
+                //CheckThat(r1a).IsNotNull();
+                //CheckThat(r1a.Level).Is(2);
+                //EngineeringRecipe r2 = EngineeringRecipe.FindEngineeringFDName(new EngineeringRecipeFDName("cargorack_increasedcapacity"), 1);
+                //CheckThat(r2).IsNull();
+
+            }
+
+            {
                 string t1 = @"{ ""timestamp"":""2018-01-27T13:59:17Z"", ""event"":""EngineerApply"", ""Engineer"":""Hera Tani""" +
 @", ""Blueprint"":""PowerPlant_Boosted"", ""Level"":5 }";
                 var je = JournalEntry.CreateJournalEntry(t1) as JournalEngineerApply;

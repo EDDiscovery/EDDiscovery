@@ -224,6 +224,8 @@ namespace EDDiscovery.UserControls
                 }
 
                 var mcllist = last_he != null ? DiscoveryForm.History.MaterialCommoditiesMicroResources.Get(last_he.MaterialCommodity) : null;
+                var ledgerat = last_he != null ? DiscoveryForm.History.CashLedger.TransactionAtOrBefore(last_he.EventTimeUTC) : null;     
+                var curmerc = ledgerat?.MercTotal ?? long.MaxValue;     // find merc total, presume its very large if we don't know.
 
                 List<HistoryEntry> crafts = null;
 
@@ -235,7 +237,7 @@ namespace EDDiscovery.UserControls
                         crafts = DiscoveryForm.History.Engineering.Get(last_he.Engineering, new EngineerFDName(ep.Name));
                 }
                 
-                ep.UpdateStatus(status, system, mcllist,crafts);
+                ep.UpdateStatus(status, system, mcllist, curmerc, crafts);
             }
 
             //System.Diagnostics.Debug.WriteLine($"Update Complete {BaseUtils.AppTicks.TickCountLap("s2")}");

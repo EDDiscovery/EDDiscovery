@@ -187,7 +187,7 @@ namespace EDDiscovery.UserControls
 
         // mcllist may be null, cursystem may be null as may crafts
 
-        public void UpdateStatus(string status, ISystem cursystem, List<MaterialCommodityMicroResource> mcllist, List<HistoryEntry> crafts)
+        public void UpdateStatus(string status, ISystem cursystem, List<MaterialCommodityMicroResource> mcllist, long merctotal, List<HistoryEntry> crafts)
         {
             labelEngineerStatus.Text = status;
             string dist = "";
@@ -264,7 +264,7 @@ namespace EDDiscovery.UserControls
                     row.Cells[NotesCol.Index].Value = res.Item3;
                     row.Cells[NotesCol.Index].ToolTipText = res.Item4;
                     row.Cells[RecipeCol.Index].Value = r.IngredientsStringvsCurrent(mcllist);
-                    row.DefaultCellStyle.BackColor = (res.Item5 >= 100.0) ? ExtendedControls.Theme.Current.GridHighlightBack : ExtendedControls.Theme.Current.GridCellBack;
+                    row.DefaultCellStyle.BackColor = (res.Item5 >= 100.0 && r.MercCoins <= merctotal) ? ExtendedControls.Theme.Current.GridHighlightBack : ExtendedControls.Theme.Current.GridCellBack;
                 }
 
                 dataGridViewEngineering.ResumeLayout();

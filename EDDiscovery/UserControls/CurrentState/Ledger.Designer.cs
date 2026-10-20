@@ -15,7 +15,7 @@
  */
 namespace EDDiscovery.UserControls
 {
-    partial class UserControlLedger
+    partial class Ledger
     {
         /// <summary> 
         /// Required designer variable.
@@ -44,9 +44,9 @@ namespace EDDiscovery.UserControls
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(UserControlLedger));
-            System.Windows.Forms.DataVisualization.Charting.ElementPosition elementPosition1 = new System.Windows.Forms.DataVisualization.Charting.ElementPosition();
-            System.Windows.Forms.DataVisualization.Charting.ElementPosition elementPosition2 = new System.Windows.Forms.DataVisualization.Charting.ElementPosition();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ledger));
+            System.Windows.Forms.DataVisualization.Charting.ElementPosition elementPosition3 = new System.Windows.Forms.DataVisualization.Charting.ElementPosition();
+            System.Windows.Forms.DataVisualization.Charting.ElementPosition elementPosition4 = new System.Windows.Forms.DataVisualization.Charting.ElementPosition();
             this.dataViewScrollerPanel = new ExtendedControls.ExtPanelDataGridViewScroll();
             this.dataGridViewLedger = new BaseUtils.DataGridViewColumnControl();
             this.TimeCol = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -57,6 +57,7 @@ namespace EDDiscovery.UserControls
             this.Balance = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.NormProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.TotalProfit = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.ColMercCoins = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripMenuItemGotoItem = new System.Windows.Forms.ToolStripMenuItem();
             this.vScrollBarCustomMC = new ExtendedControls.ExtScrollBar();
@@ -68,8 +69,8 @@ namespace EDDiscovery.UserControls
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.buttonExtExcel = new ExtendedControls.ExtButton();
             this.extCheckBoxWordWrap = new ExtendedControls.ExtCheckBox();
-            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.checkBoxCursorToTop = new ExtendedControls.ExtCheckBox();
+            this.topPanel = new System.Windows.Forms.FlowLayoutPanel();
             this.label24h = new System.Windows.Forms.Label();
             this.label7d = new System.Windows.Forms.Label();
             this.splitContainerLedger = new System.Windows.Forms.SplitContainer();
@@ -92,6 +93,7 @@ namespace EDDiscovery.UserControls
             this.dataViewScrollerPanel.InternalMargin = new System.Windows.Forms.Padding(0);
             this.dataViewScrollerPanel.Location = new System.Drawing.Point(0, 0);
             this.dataViewScrollerPanel.Name = "dataViewScrollerPanel";
+            this.dataViewScrollerPanel.ScrollBarWidth = 24;
             this.dataViewScrollerPanel.Size = new System.Drawing.Size(800, 266);
             this.dataViewScrollerPanel.TabIndex = 0;
             this.dataViewScrollerPanel.VerticalScrollBarDockRight = true;
@@ -113,7 +115,8 @@ namespace EDDiscovery.UserControls
             this.Debits,
             this.Balance,
             this.NormProfit,
-            this.TotalProfit});
+            this.TotalProfit,
+            this.ColMercCoins});
             this.dataGridViewLedger.ContextMenuStrip = this.contextMenuStrip;
             this.dataGridViewLedger.Location = new System.Drawing.Point(0, 0);
             this.dataGridViewLedger.MultiSelect = false;
@@ -124,7 +127,7 @@ namespace EDDiscovery.UserControls
             this.dataGridViewLedger.ScrollBars = System.Windows.Forms.ScrollBars.None;
             this.dataGridViewLedger.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.dataGridViewLedger.SingleRowSelect = true;
-            this.dataGridViewLedger.Size = new System.Drawing.Size(781, 266);
+            this.dataGridViewLedger.Size = new System.Drawing.Size(776, 266);
             this.dataGridViewLedger.TabIndex = 1;
             this.dataGridViewLedger.RowEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridViewLedger_RowEnter);
             this.dataGridViewLedger.SortCompare += new System.Windows.Forms.DataGridViewSortCompareEventHandler(this.dataGridViewLedger_SortCompare);
@@ -185,6 +188,13 @@ namespace EDDiscovery.UserControls
             this.TotalProfit.Name = "TotalProfit";
             this.TotalProfit.ReadOnly = true;
             // 
+            // ColMercCoins
+            // 
+            this.ColMercCoins.HeaderText = "MercCoins";
+            this.ColMercCoins.MinimumWidth = 80;
+            this.ColMercCoins.Name = "ColMercCoins";
+            this.ColMercCoins.ReadOnly = true;
+            // 
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -204,24 +214,31 @@ namespace EDDiscovery.UserControls
             this.vScrollBarCustomMC.AlwaysHideScrollBar = false;
             this.vScrollBarCustomMC.ArrowBorderColor = System.Drawing.Color.LightBlue;
             this.vScrollBarCustomMC.ArrowButtonColor = System.Drawing.Color.LightGray;
+            this.vScrollBarCustomMC.ArrowButtonColor2 = System.Drawing.Color.LightGray;
             this.vScrollBarCustomMC.ArrowDownDrawAngle = 270F;
             this.vScrollBarCustomMC.ArrowUpDrawAngle = 90F;
             this.vScrollBarCustomMC.BorderColor = System.Drawing.Color.White;
             this.vScrollBarCustomMC.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.vScrollBarCustomMC.HideScrollBar = false;
             this.vScrollBarCustomMC.LargeChange = 0;
-            this.vScrollBarCustomMC.Location = new System.Drawing.Point(781, 0);
+            this.vScrollBarCustomMC.Location = new System.Drawing.Point(776, 0);
             this.vScrollBarCustomMC.Maximum = -1;
             this.vScrollBarCustomMC.Minimum = 0;
             this.vScrollBarCustomMC.MouseOverButtonColor = System.Drawing.Color.Green;
+            this.vScrollBarCustomMC.MouseOverButtonColor2 = System.Drawing.Color.Green;
             this.vScrollBarCustomMC.MousePressedButtonColor = System.Drawing.Color.Red;
+            this.vScrollBarCustomMC.MousePressedButtonColor2 = System.Drawing.Color.Red;
             this.vScrollBarCustomMC.Name = "vScrollBarCustomMC";
-            this.vScrollBarCustomMC.Size = new System.Drawing.Size(19, 266);
+            this.vScrollBarCustomMC.Size = new System.Drawing.Size(24, 266);
+            this.vScrollBarCustomMC.SkinnyStyle = ExtendedControls.ExtScrollBar.ScrollStyle.Normal;
             this.vScrollBarCustomMC.SliderColor = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustomMC.SliderColor2 = System.Drawing.Color.DarkGray;
+            this.vScrollBarCustomMC.SliderDrawAngle = 90F;
             this.vScrollBarCustomMC.SmallChange = 1;
             this.vScrollBarCustomMC.TabIndex = 0;
             this.vScrollBarCustomMC.ThumbBorderColor = System.Drawing.Color.Yellow;
             this.vScrollBarCustomMC.ThumbButtonColor = System.Drawing.Color.DarkBlue;
+            this.vScrollBarCustomMC.ThumbButtonColor2 = System.Drawing.Color.DarkBlue;
             this.vScrollBarCustomMC.ThumbDrawAngle = 0F;
             this.vScrollBarCustomMC.Value = -1;
             this.vScrollBarCustomMC.ValueLimited = -1;
@@ -238,22 +255,25 @@ namespace EDDiscovery.UserControls
             // 
             // buttonFilter
             // 
+            this.buttonFilter.BackColor2 = System.Drawing.Color.Red;
+            this.buttonFilter.ButtonDisabledScaling = 0.5F;
+            this.buttonFilter.GradientDirection = 90F;
             this.buttonFilter.Image = global::EDDiscovery.Icons.Controls.EventFilter;
-            this.buttonFilter.Location = new System.Drawing.Point(351, 1);
+            this.buttonFilter.Location = new System.Drawing.Point(350, 1);
             this.buttonFilter.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonFilter.MouseOverScaling = 1.3F;
+            this.buttonFilter.MouseSelectedScaling = 1.3F;
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonFilter.TabIndex = 25;
-            this.toolTip.SetToolTip(this.buttonFilter, "Display entries matching this event type filter");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 
             // textBoxFilter
             // 
-            this.textBoxFilter.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.None;
-            this.textBoxFilter.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.None;
             this.textBoxFilter.BackErrorColor = System.Drawing.Color.Red;
             this.textBoxFilter.BorderColor = System.Drawing.Color.Transparent;
+            this.textBoxFilter.BorderColor2 = System.Drawing.Color.Transparent;
             this.textBoxFilter.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.textBoxFilter.ClearOnFirstChar = false;
             this.textBoxFilter.ControlBackground = System.Drawing.SystemColors.Control;
@@ -262,7 +282,7 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.EndButtonSize16ths = 10;
             this.textBoxFilter.EndButtonVisible = false;
             this.textBoxFilter.InErrorCondition = false;
-            this.textBoxFilter.Location = new System.Drawing.Point(195, 1);
+            this.textBoxFilter.Location = new System.Drawing.Point(196, 1);
             this.textBoxFilter.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
             this.textBoxFilter.Multiline = false;
             this.textBoxFilter.Name = "textBoxFilter";
@@ -274,14 +294,13 @@ namespace EDDiscovery.UserControls
             this.textBoxFilter.TabIndex = 1;
             this.textBoxFilter.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.textBoxFilter.TextNoChange = "";
-            this.toolTip.SetToolTip(this.textBoxFilter, "Search to particular items");
             this.textBoxFilter.WordWrap = true;
             this.textBoxFilter.TextChanged += new System.EventHandler(this.textBoxFilter_TextChanged);
             // 
             // labelSearch
             // 
             this.labelSearch.AutoSize = true;
-            this.labelSearch.Location = new System.Drawing.Point(146, 3);
+            this.labelSearch.Location = new System.Drawing.Point(144, 3);
             this.labelSearch.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
             this.labelSearch.Name = "labelSearch";
             this.labelSearch.Size = new System.Drawing.Size(41, 13);
@@ -290,13 +309,19 @@ namespace EDDiscovery.UserControls
             // 
             // comboBoxTime
             // 
+            this.comboBoxTime.BackColor2 = System.Drawing.Color.Red;
             this.comboBoxTime.BorderColor = System.Drawing.Color.Red;
+            this.comboBoxTime.ControlBackground = System.Drawing.SystemColors.Control;
             this.comboBoxTime.DataSource = null;
             this.comboBoxTime.DisableBackgroundDisabledShadingGradient = false;
+            this.comboBoxTime.DisabledScaling = 0.5F;
             this.comboBoxTime.DisplayMember = "";
+            this.comboBoxTime.DropDownMinimumItemWidth = -1;
             this.comboBoxTime.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.comboBoxTime.Location = new System.Drawing.Point(38, 1);
+            this.comboBoxTime.GradientDirection = 90F;
+            this.comboBoxTime.Location = new System.Drawing.Point(41, 1);
             this.comboBoxTime.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.comboBoxTime.MouseOverScalingColor = 1.3F;
             this.comboBoxTime.Name = "comboBoxTime";
             this.comboBoxTime.SelectedIndex = -1;
             this.comboBoxTime.SelectedItem = null;
@@ -304,7 +329,6 @@ namespace EDDiscovery.UserControls
             this.comboBoxTime.Size = new System.Drawing.Size(100, 21);
             this.comboBoxTime.TabIndex = 0;
             this.comboBoxTime.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            this.toolTip.SetToolTip(this.comboBoxTime, "Select the entries by age");
             this.comboBoxTime.ValueMember = "";
             this.comboBoxTime.SelectedIndexChanged += new System.EventHandler(this.comboBoxHistoryWindow_SelectedIndexChanged);
             // 
@@ -314,10 +338,15 @@ namespace EDDiscovery.UserControls
             // 
             // buttonExtExcel
             // 
+            this.buttonExtExcel.BackColor2 = System.Drawing.Color.Red;
+            this.buttonExtExcel.ButtonDisabledScaling = 0.5F;
             this.buttonExtExcel.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonExtExcel.GradientDirection = 90F;
             this.buttonExtExcel.Image = global::EDDiscovery.Icons.Controls.ExportToExcel;
-            this.buttonExtExcel.Location = new System.Drawing.Point(459, 1);
+            this.buttonExtExcel.Location = new System.Drawing.Point(452, 1);
             this.buttonExtExcel.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.buttonExtExcel.MouseOverScaling = 1.3F;
+            this.buttonExtExcel.MouseSelectedScaling = 1.3F;
             this.buttonExtExcel.Name = "buttonExtExcel";
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 32;
@@ -330,10 +359,14 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.Appearance = System.Windows.Forms.Appearance.Button;
             this.extCheckBoxWordWrap.BackColor = System.Drawing.Color.Transparent;
             this.extCheckBoxWordWrap.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.extCheckBoxWordWrap.ButtonGradientDirection = 90F;
             this.extCheckBoxWordWrap.CheckBoxColor = System.Drawing.Color.White;
+            this.extCheckBoxWordWrap.CheckBoxGradientDirection = 225F;
             this.extCheckBoxWordWrap.CheckBoxInnerColor = System.Drawing.Color.White;
             this.extCheckBoxWordWrap.CheckColor = System.Drawing.Color.DarkBlue;
+            this.extCheckBoxWordWrap.CheckColor2 = System.Drawing.Color.DarkBlue;
             this.extCheckBoxWordWrap.Cursor = System.Windows.Forms.Cursors.Default;
+            this.extCheckBoxWordWrap.DisabledScaling = 0.5F;
             this.extCheckBoxWordWrap.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
             this.extCheckBoxWordWrap.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
             this.extCheckBoxWordWrap.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
@@ -343,14 +376,49 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxWordWrap.ImageIndeterminate = null;
             this.extCheckBoxWordWrap.ImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.extCheckBoxWordWrap.ImageUnchecked = global::EDDiscovery.Icons.Controls.WordWrapOff;
-            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(387, 1);
+            this.extCheckBoxWordWrap.Location = new System.Drawing.Point(384, 1);
             this.extCheckBoxWordWrap.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.extCheckBoxWordWrap.MouseOverScaling = 1.3F;
+            this.extCheckBoxWordWrap.MouseSelectedScaling = 1.3F;
             this.extCheckBoxWordWrap.Name = "extCheckBoxWordWrap";
             this.extCheckBoxWordWrap.Size = new System.Drawing.Size(28, 28);
             this.extCheckBoxWordWrap.TabIndex = 33;
             this.extCheckBoxWordWrap.TickBoxReductionRatio = 0.75F;
             this.toolTip.SetToolTip(this.extCheckBoxWordWrap, "Enable or disable word wrap");
             this.extCheckBoxWordWrap.UseVisualStyleBackColor = false;
+            // 
+            // checkBoxCursorToTop
+            // 
+            this.checkBoxCursorToTop.Appearance = System.Windows.Forms.Appearance.Button;
+            this.checkBoxCursorToTop.BackColor = System.Drawing.Color.Transparent;
+            this.checkBoxCursorToTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
+            this.checkBoxCursorToTop.ButtonGradientDirection = 90F;
+            this.checkBoxCursorToTop.CheckBoxColor = System.Drawing.Color.White;
+            this.checkBoxCursorToTop.CheckBoxGradientDirection = 225F;
+            this.checkBoxCursorToTop.CheckBoxInnerColor = System.Drawing.Color.White;
+            this.checkBoxCursorToTop.CheckColor = System.Drawing.Color.DarkBlue;
+            this.checkBoxCursorToTop.CheckColor2 = System.Drawing.Color.DarkBlue;
+            this.checkBoxCursorToTop.Cursor = System.Windows.Forms.Cursors.Default;
+            this.checkBoxCursorToTop.DisabledScaling = 0.5F;
+            this.checkBoxCursorToTop.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.checkBoxCursorToTop.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
+            this.checkBoxCursorToTop.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
+            this.checkBoxCursorToTop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
+            this.checkBoxCursorToTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
+            this.checkBoxCursorToTop.ImageIndeterminate = null;
+            this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
+            this.checkBoxCursorToTop.Location = new System.Drawing.Point(418, 1);
+            this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
+            this.checkBoxCursorToTop.MouseOverScaling = 1.3F;
+            this.checkBoxCursorToTop.MouseSelectedScaling = 1.3F;
+            this.checkBoxCursorToTop.Name = "checkBoxCursorToTop";
+            this.checkBoxCursorToTop.Size = new System.Drawing.Size(28, 28);
+            this.checkBoxCursorToTop.TabIndex = 30;
+            this.checkBoxCursorToTop.TickBoxReductionRatio = 0.75F;
+            this.toolTip.SetToolTip(this.checkBoxCursorToTop, "Automatically move the cursor to the latest entry when it arrives");
+            this.checkBoxCursorToTop.UseVisualStyleBackColor = false;
             // 
             // topPanel
             // 
@@ -371,37 +439,10 @@ namespace EDDiscovery.UserControls
             this.topPanel.Size = new System.Drawing.Size(800, 30);
             this.topPanel.TabIndex = 2;
             // 
-            // checkBoxCursorToTop
-            // 
-            this.checkBoxCursorToTop.Appearance = System.Windows.Forms.Appearance.Button;
-            this.checkBoxCursorToTop.BackColor = System.Drawing.Color.Transparent;
-            this.checkBoxCursorToTop.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.checkBoxCursorToTop.CheckBoxColor = System.Drawing.Color.White;
-            this.checkBoxCursorToTop.CheckBoxInnerColor = System.Drawing.Color.White;
-            this.checkBoxCursorToTop.CheckColor = System.Drawing.Color.DarkBlue;
-            this.checkBoxCursorToTop.Cursor = System.Windows.Forms.Cursors.Default;
-            this.checkBoxCursorToTop.FlatAppearance.BorderColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.checkBoxCursorToTop.FlatAppearance.CheckedBackColor = System.Drawing.Color.Green;
-            this.checkBoxCursorToTop.FlatAppearance.MouseDownBackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(192)))), ((int)(((byte)(0)))));
-            this.checkBoxCursorToTop.FlatAppearance.MouseOverBackColor = System.Drawing.Color.Silver;
-            this.checkBoxCursorToTop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.checkBoxCursorToTop.Image = global::EDDiscovery.Icons.Controls.CursorToTop;
-            this.checkBoxCursorToTop.ImageIndeterminate = null;
-            this.checkBoxCursorToTop.ImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.checkBoxCursorToTop.ImageUnchecked = global::EDDiscovery.Icons.Controls.CursorStill;
-            this.checkBoxCursorToTop.Location = new System.Drawing.Point(423, 1);
-            this.checkBoxCursorToTop.Margin = new System.Windows.Forms.Padding(3, 1, 3, 1);
-            this.checkBoxCursorToTop.Name = "checkBoxCursorToTop";
-            this.checkBoxCursorToTop.Size = new System.Drawing.Size(28, 28);
-            this.checkBoxCursorToTop.TabIndex = 30;
-            this.checkBoxCursorToTop.TickBoxReductionRatio = 0.75F;
-            this.toolTip.SetToolTip(this.checkBoxCursorToTop, "Automatically move the cursor to the latest entry when it arrives");
-            this.checkBoxCursorToTop.UseVisualStyleBackColor = false;
-            // 
             // label24h
             // 
             this.label24h.AutoSize = true;
-            this.label24h.Location = new System.Drawing.Point(495, 3);
+            this.label24h.Location = new System.Drawing.Point(483, 3);
             this.label24h.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
             this.label24h.Name = "label24h";
             this.label24h.Size = new System.Drawing.Size(64, 13);
@@ -411,7 +452,7 @@ namespace EDDiscovery.UserControls
             // label7d
             // 
             this.label7d.AutoSize = true;
-            this.label7d.Location = new System.Drawing.Point(567, 3);
+            this.label7d.Location = new System.Drawing.Point(555, 3);
             this.label7d.Margin = new System.Windows.Forms.Padding(0, 3, 8, 1);
             this.label7d.Name = "label7d";
             this.label7d.Size = new System.Drawing.Size(58, 13);
@@ -443,22 +484,22 @@ namespace EDDiscovery.UserControls
             this.extChartLedger.IsStartedFromZeroX = false;
             this.extChartLedger.IsStartedFromZeroY = false;
             this.extChartLedger.LeftArrowEnable = true;
-            this.extChartLedger.LeftArrowPosition = elementPosition1;
+            this.extChartLedger.LeftArrowPosition = elementPosition3;
             this.extChartLedger.Location = new System.Drawing.Point(0, 0);
             this.extChartLedger.Name = "extChartLedger";
             this.extChartLedger.RightArrowEnable = true;
-            this.extChartLedger.RightArrowPosition = elementPosition2;
+            this.extChartLedger.RightArrowPosition = elementPosition4;
             this.extChartLedger.Size = new System.Drawing.Size(800, 272);
             this.extChartLedger.TabIndex = 11;
             this.extChartLedger.ZoomMouseWheelXZoomFactor = 1.5D;
             // 
-            // UserControlLedger
+            // Ledger
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.splitContainerLedger);
             this.Controls.Add(this.topPanel);
-            this.Name = "UserControlLedger";
+            this.Name = "Ledger";
             this.Size = new System.Drawing.Size(800, 572);
             this.dataViewScrollerPanel.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridViewLedger)).EndInit();
@@ -489,6 +530,12 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.Label labelTime;
         private System.Windows.Forms.FlowLayoutPanel topPanel;
         private ExtendedControls.ExtButton buttonExtExcel;
+        private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
+        private System.Windows.Forms.SplitContainer splitContainerLedger;
+        private ExtendedControls.ExtSafeChart extChartLedger;
+        private System.Windows.Forms.Label label24h;
+        private System.Windows.Forms.Label label7d;
+        private ExtendedControls.ExtCheckBox checkBoxCursorToTop;
         private System.Windows.Forms.DataGridViewTextBoxColumn TimeCol;
         private System.Windows.Forms.DataGridViewTextBoxColumn Type;
         private System.Windows.Forms.DataGridViewTextBoxColumn Notes;
@@ -497,11 +544,6 @@ namespace EDDiscovery.UserControls
         private System.Windows.Forms.DataGridViewTextBoxColumn Balance;
         private System.Windows.Forms.DataGridViewTextBoxColumn NormProfit;
         private System.Windows.Forms.DataGridViewTextBoxColumn TotalProfit;
-        private ExtendedControls.ExtCheckBox extCheckBoxWordWrap;
-        private System.Windows.Forms.SplitContainer splitContainerLedger;
-        private ExtendedControls.ExtSafeChart extChartLedger;
-        private System.Windows.Forms.Label label24h;
-        private System.Windows.Forms.Label label7d;
-        private ExtendedControls.ExtCheckBox checkBoxCursorToTop;
+        private System.Windows.Forms.DataGridViewTextBoxColumn ColMercCoins;
     }
 }

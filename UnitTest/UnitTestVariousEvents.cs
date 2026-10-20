@@ -151,7 +151,7 @@ namespace UnitTest
                 je = JournalEntry.CreateJournalEntry(t5) as JournalDied;
                 Check(je != null);
                 string info = je.GetInfo();
-                CheckThat(info).Is("Killed by Cmdr SHINOY in ship type Type-9 Heavy rank Master, Cmdr mcthrust [GPL] in ship type Type-9 Heavy rank Competent");
+                CheckThat(info).Is("Killed by Cmdr SHINOY, Ship: Type-9 Heavy, Rank: Master, Cmdr mcthrust [GPL], Ship: Type-9 Heavy, Rank: Competent");
 
                 string t6 = @"{ ""timestamp"":""2024-11-08T23:22:24Z"", ""event"":""Died"", ""KillerShip"":""thargonswarm""" +
 @", ""KillerRank"":""Elite"" }";
