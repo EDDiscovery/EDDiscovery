@@ -223,7 +223,7 @@ A44AD2D137232C: "Rename Tab" => "Zmień nazwę Karty"
 5A6267856DDE68: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem" => "Błąd ustawiania Kart: Nie udało się wczytać karty głównej lub TG.\r\nProszę zgłosić problem do Zespołu EDD na Discord lub GitHub.\r\nAby spróbować usunąć problem, uruchom EDDiscovery trzymając Shift.\r\nKliknij na 'Resetuj Karty', a następnie 'Uruchom program', co może naprawić problem"
 5365F84B9A53D9: "Enter a new name for the tab" => "Wprowadź nową nazwę dla tej karty"
 AD583CD268D4F3: "The following application extension DLL have been found\r\nDo you wish to allow it to be used?\r\n\r\n" => "Znaleziono poniższe pliki DLL rozszerzeń aplikacji\r\nCzy chcesz zezwolić na ich używanie?\r\n \r\nJeśli nie chcesz, usuń pliki DLL z folderu plików DLL w AppData ED\r\nlub odinstaluj paczkę akcji która dodała pliki DLL\r\nlub przytrzymaj Shift podczas uruchamiania i użyj opcji 'Usuń wszystkie DLL Rozszerzeń'."
-A0E44522BDDD0C: "System data download from {0} required.\r\nThis will take a while, please be patient.\r\nPlease continue running ED Discovery until refresh is complete." @
+A0E44522BDDD0C: "System data download from {0} required.\r\nThis will take a while, please be patient.\r\nPlease continue running ED Discovery until refresh is complete." => "Wymagane jest pobranie danych układów z {0}.\r\nTo potrwa chwilę, proszę czekać.\r\nNie zamykaj EDDiscovery do zakończenia odświeżania."
 7E07BEC01ADC82: "DLLs loaded" => "Wczytane pliki DLL"
 DE617477CC8108: "DLLs failed to load" => "Niewczytane pliki DLL"
 78B8D462D682D8: "Are you sure to Rebuild Indexes? It may take a long time" => "Czy na pewno przebudować indeksy? Może to potrwać długo"
@@ -256,7 +256,7 @@ DE5CFD5A00795F: "Fetch Star Data Again" => "Pobierz Dane Gwiazd Ponownie"
 7279E939048432: "Web server failed to start" => "Nie udało się uruchomić serwera WWW"
 683617E8B53C1F: "Web server disabled due to incorrect folder or missing zip file" => "Serwer WWW wyłączono z powodu nieprawidłowego folderu lub braku pliku ZIP"
 37F51D0860E8D7: "*** Web server is disabled ***" => "*** Serwer WWW jest wyłączony ***"
-2B82888AFF4CE6: "DLLs disabled" @
+2B82888AFF4CE6: "DLLs disabled" => "Wyłączone biblioteki DLL"
 C7F0C2BDEE6813: "Move another commanders history to this commander" => "Przenieś historię innego komandera do tego komandera"
 
 SECTION EDDiscoveryController
@@ -471,22 +471,22 @@ SECTION ActionPackEditPackForm
 
 3B042F6CEA285B: "Install Parameters" => "Parametry instalacji"
 9D68007B0763CB: "Program" => "Program"
-61684730DD60CE: "Set Installation variables for pack (Advanced)" @
-629F1940518C39: "Select a program to edit directly" @
-429C81EBA021F2: "Add more events" @
+61684730DD60CE: "Set Installation variables for pack (Advanced)" => "Ustaw zmienne instalacji paczki (dla zaawansowanych)"
+629F1940518C39: "Select a program to edit directly" => "Wybierz program do bezpośredniej edycji"
+429C81EBA021F2: "Add more events" => "Dodaj więcej zdarzeń"
 8774D189CE7F96: "Configuration items for installation - specialist use" => "Elementy konfiguracji instalacji — dla zaawansowanych użytkowników"
 C6370ADED9036C: "Move Up" => "Przenieś w górę"
 4158BEDC2FCD0E: "Move Down" => "Przenieś w dół"
-B6DAC3FF80F22C: "Move to Group Above" @
-96BC3B2FC5D1AB: "Move to Group Below" @
-66D54828B59329: "Move Group Up" @
-DE1D98C7DD607C: "Move Group Down" @
-75BF20110FEB09: "Insert New Event Above" @
-BA398F4B1450CB: "Insert New  Group Above" @
+B6DAC3FF80F22C: "Move to Group Above" => "Przenieś do grupy powyżej"
+96BC3B2FC5D1AB: "Move to Group Below" => "Przenieś do grupy poniżej"
+66D54828B59329: "Move Group Up" => "Przenieś grupę w górę"
+DE1D98C7DD607C: "Move Group Down" => "Przenieś grupę w dół"
+75BF20110FEB09: "Insert New Event Above" => "Wstaw nowe zdarzenie powyżej"
+BA398F4B1450CB: "Insert New  Group Above" => "Wstaw nową grupę powyżej"
 8B15993C662F3B: "Rename Group" => "Zmień nazwę grupy"
 D6524F6AACF889: "Collapse All" => "Zwiń wszystko"
 5B8374F41549EC: "Expand All" => "Rozwiń wszystko"
-F78D25A32DC6A6: "Select Action" @
+F78D25A32DC6A6: "Select Action" => "Wybierz akcję"
 6CE769B555EA05: "Disable All" => "Wyłącz wszystko"
 5193D0205EC3C7: "Enable All" => "Włącz wszystko"
 97F32D67C7021A: "Delete All" => "Usuń wszystko"
@@ -497,10 +497,10 @@ SECTION ActionProgramEditForm
 DDCB77FF769EA5: "Load" => "Wczytaj"
 A96C6A2EC6FD15: "Text Edit" => "Edytor tekstu"
 0878211D394E87: "Input parameters to pass to program on run" => "Parametry wejściowe przekazywane programowi przy uruchomieniu"
-DBA0FE23646D9A: "Insert Entry above" @
-60B61224DBB6D9: "Insert whitespace below" @
-BB163562E81E7F: "Remove whitespace" @
-B5FFEB5F637B29: "Edit Comment" @
+DBA0FE23646D9A: "Insert Entry above" => "Wstaw wpis powyżej"
+60B61224DBB6D9: "Insert whitespace below" => "Dodaj odstęp poniżej"
+BB163562E81E7F: "Remove whitespace" => "Usuń odstęp"
+B5FFEB5F637B29: "Edit Comment" => "Edytuj komentarz"
 
 SECTION ActionCommands
 A45731FA87CFD4: "Define Variable" => "Zdefiniuj zmienną"
