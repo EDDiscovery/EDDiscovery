@@ -12,6 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
+using BaseUtils;
 using System;
 using System.Drawing.Text;
 using System.IO;
@@ -176,26 +177,21 @@ namespace EDDiscovery
 
             // 1. go thru the command line looking for -optionfile only and process them only for -appdata changes
             // allow rooted and relative to exe folder
-            ProcessCommandLineForOptionsFile(ExeDirectory(), true, false, ProcessOption);
+            System.Diagnostics.Debug.WriteLine($"Options process commandline for appdata thru -optionsfile");
+            ProcessCommandLineForOptionsFile(ExeDirectory(), true, false, ProcessAppFolderOptions);
 
             // 2. read the options*.txt files in the exe folder and allow app changes
-            foreach (var exefiles in Directory.EnumerateFiles(ExeDirectory(), "options*.txt", SearchOption.TopDirectoryOnly))
+            foreach (var exefile in Directory.EnumerateFiles(ExeDirectory(), "options*.txt", SearchOption.TopDirectoryOnly))
             {
-                System.Diagnostics.Debug.WriteLine($"Options process EXE file {exefiles}");
-                ProcessFileForAppFolder(exefiles);
+                System.Diagnostics.Debug.WriteLine($"Options process file exe for apppath {exefile}");
+                CommandArgs.ProcessFile(exefile, ProcessAppFolderOptions);
             }
 
+            appfolderwarningmessage = "";        // Cancel any app folder message override from above
+
             // 3. process command line options for -appfolder
-            string appfolderwarningmessage = "";        // only used for command line appfolder overrides
-            ProcessCommandLineOptions((optname, ca, toeol) =>
-            {
-                if (optname == "-appfolder" && ca.More)
-                {
-                    AppFolder = ca.Next();
-                    appfolderwarningmessage = " (Using " + AppFolder + ")";
-                    System.Diagnostics.Debug.WriteLine("Command line sets App Folder to " + AppFolder);
-                }
-            });
+            System.Diagnostics.Debug.WriteLine($"Options process commandline for apppath");
+            CommandArgs.ProcessCommandLine(ProcessAppFolderOptions);
 
             // 4. Set up AppDataDirectory
 
@@ -217,6 +213,8 @@ namespace EDDiscovery
                 AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppFolder);
             }
 
+            System.Diagnostics.Debug.WriteLine($"Options ****** Set AppFolder to `{AppDataDirectory}` message `{appfolderwarningmessage}`");
+
             if (!Directory.Exists(AppDataDirectory))        // make sure its there, don't fail
                 BaseUtils.FileHelpers.CreateDirectoryNoError(AppDataDirectory);
 
@@ -230,16 +228,16 @@ namespace EDDiscovery
 
             translationfolder = Path.Combine(AppDataDirectory, "Translator");
 
-            // 5. with appdata set, read the options*.txt files in the exe folder again and allow options
-            foreach (var exefiles in Directory.EnumerateFiles(ExeDirectory(), "options*.txt", SearchOption.TopDirectoryOnly))
+            // 5. read the options*.txt files in the exe folder again and allow options
+            foreach (var exefile in Directory.EnumerateFiles(ExeDirectory(), "options*.txt", SearchOption.TopDirectoryOnly))
             {
-                System.Diagnostics.Debug.WriteLine($"Options process exe file options {exefiles}");
-                ProcessFile(exefiles, ProcessOption);                       // execute all options
+                System.Diagnostics.Debug.WriteLine($"Options process file for options {exefile}");
+                CommandArgs.ProcessFile(exefile, ProcessOption);
             }
 
-            // 6. with appdata set, go thru the command line looking for -optionfile rooted or relative to app folder
-            // Do not allow appfolder change now
+            // 6. with appdata set, go thru the command line looking for -optionfile rooted or relative to app folder and execute options
 
+            System.Diagnostics.Debug.WriteLine($"Options process commandline for -optionsfile and execute options");
             ProcessCommandLineForOptionsFile(AppDataDirectory, false, true, ProcessOption);
 
             // 7. go thru appfolder looking for options*.txt and dboptions*.txt
@@ -247,17 +245,17 @@ namespace EDDiscovery
             try  // protect.. check incase we could not create appdata, because the user gave us a bad location where we can't make directories in
             {
                 // process appdata options files
-                foreach (var appfiles in Directory.EnumerateFiles(AppDataDirectory, "options*.txt", SearchOption.TopDirectoryOnly))
+                foreach (var appfile in Directory.EnumerateFiles(AppDataDirectory, "options*.txt", SearchOption.TopDirectoryOnly))
                 {
-                    System.Diagnostics.Debug.WriteLine($"Options process APP DATA file {appfiles}");
-                    ProcessFile(appfiles, ProcessOption);
+                    System.Diagnostics.Debug.WriteLine($"Options process APP DATA file {appfile}");
+                    CommandArgs.ProcessFile(appfile, ProcessOption);
                 }
 
                 // process appdata dboptions files
-                foreach (var dbfiles in Directory.EnumerateFiles(AppDataDirectory, "dboptions*.txt", SearchOption.TopDirectoryOnly))
+                foreach (var dbfile in Directory.EnumerateFiles(AppDataDirectory, "dboptions*.txt", SearchOption.TopDirectoryOnly))
                 {
-                    System.Diagnostics.Debug.WriteLine($"Options process DB file {dbfiles}");
-                    ProcessFile(dbfiles, ProcessOption);
+                    System.Diagnostics.Debug.WriteLine($"Options process DB file {dbfile}");
+                    CommandArgs.ProcessFile(dbfile, ProcessOption);
                 }
             }
             catch (Exception ex)
@@ -266,7 +264,10 @@ namespace EDDiscovery
             }
 
             // 8. do all of the command line except optionsfile and appfolder..
-            ProcessCommandLineOptions(ProcessOption);
+            System.Diagnostics.Debug.WriteLine($"Options process commandline for options");
+            CommandArgs.ProcessCommandLine(ProcessOption);
+
+            // Finished
 
             // Set version display string
             {
@@ -307,7 +308,6 @@ namespace EDDiscovery
             FrontierBindingsFolder = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier Developments", "Elite Dangerous", "Options", "Bindings");
 
             EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
-
         }
 
 
@@ -315,7 +315,7 @@ namespace EDDiscovery
         private void ProcessCommandLineForOptionsFile(string basefolder, bool allowappfolderchange, bool allowoptions,
                                                             Action<string, BaseUtils.CommandArgs, bool> processoption)   
         {
-            ProcessCommandLineOptions((optname, ca, toeol) =>
+            CommandArgs.ProcessCommandLine((optname, ca, _) =>
             {
                 if (optname == "-optionsfile" && ca.More)
                 {
@@ -330,75 +330,53 @@ namespace EDDiscovery
                     { 
                         if (allowappfolderchange)
                         {
-                            System.Diagnostics.Debug.WriteLine($"Options process file for appfolder {cmdlineoptfile}");
-                            ProcessFileForAppFolder(cmdlineoptfile);                      // give it a chance to set appfolder
+                            System.Diagnostics.Debug.WriteLine($" Options command line options file process for appfolder {cmdlineoptfile}");
+                            CommandArgs.ProcessFile(cmdlineoptfile, ProcessAppFolderOptions);  // give it a chance to set appfolder
                         }
 
                         if (allowoptions)
                         {
-                            System.Diagnostics.Debug.WriteLine($"Options process file for cmd options {cmdlineoptfile}");
-                            ProcessFile(cmdlineoptfile, processoption);                       // execute all options
+                            System.Diagnostics.Debug.WriteLine($" Options command line options file proccess for options {cmdlineoptfile}");
+                            CommandArgs.ProcessFile(cmdlineoptfile, processoption);                       // execute all options
                         }
                     }
                     else
-                        System.Diagnostics.Debug.WriteLine("No Option File " + cmdlineoptfile);
+                        System.Diagnostics.Debug.WriteLine(" No Option File " + cmdlineoptfile);
                 }
             });
         }
 
-        // read file and process thru process option
-        private void ProcessFile(string filepath, Action<string, BaseUtils.CommandArgs, bool> processoption)       
+        // Process the app folder options..
+        private void ProcessAppFolderOptions(string optname, CommandArgs ca, bool fileread)
         {
-            foreach (string line in File.ReadAllLines(filepath))
+            if (optname == "-appfolder" && ca.More)
             {
-                if (!line.IsEmpty())
-                {
-                    //string[] cmds = line.Split(new char[] { ' ' }, 2).Select(s => s.Trim()).ToArray();    // old version..
-                    string[] cmds = BaseUtils.StringParser.ParseWordList(line, separ: ' ').ToArray();
-                    BaseUtils.CommandArgs ca = new BaseUtils.CommandArgs(cmds);
-
-                    string option = ca.NextEmpty().ToLowerInvariant();
-                    if (!option.StartsWith("-"))
-                        option = "-" + option;
-
-                    processoption(option, ca, true);
-                }
+                AppFolder = fileread ? ca.Rest() : ca.NextEmpty();
+                appfolderwarningmessage = " (Using " + AppFolder + ")";
+                System.Diagnostics.Debug.WriteLine($"  Option accepted:        {optname} to {AppFolder}");
+            }
+            else if (optname == "-portable")
+            {
+                PortableInstall = true;
+                System.Diagnostics.Debug.WriteLine($"  Option accepted:        {optname}");
+            }
+            else
+            {
+                System.Diagnostics.Debug.WriteLine($"  Option ignored:         {optname}");
             }
         }
 
-        // read command line and process thru process option
-        private void ProcessCommandLineOptions(Action<string, BaseUtils.CommandArgs, bool> processoption) 
-        {
-            string[] cmdlineopts = Environment.GetCommandLineArgs().ToArray();
-            BaseUtils.CommandArgs ca = new BaseUtils.CommandArgs(cmdlineopts, 1);
-            //System.Diagnostics.Debug.WriteLine("Command Line:");
-            while (ca.More)
-            {
-                processoption(ca.Next().ToLowerInvariant(), ca, false);
-            }
-        }
-
-        private void ProcessFileForAppFolder(string file)
-        {
-            ProcessFile(file, (optname, ca, toeol) =>
-            {
-                if (optname == "-appfolder" && ca.More)
-                {
-                    AppFolder = ca.Rest();
-                    System.Diagnostics.Debug.WriteLine("Options file sets App Folder to " + AppFolder);
-                }
-            });
-        }
-
-        // standard process option (excepting -optionsfile and -appfolder)
-        private void ProcessOption(string optname, BaseUtils.CommandArgs ca, bool toeol)
+        // standard process option (excepting -optionsfile, -appfolder, -portable)
+        private void ProcessOption(string optname, BaseUtils.CommandArgs ca, bool fileread)
         {
             optname = optname.ToLowerInvariant();
-            //System.Diagnostics.Debug.WriteLine("     Option " + optname);
 
-            if (optname == "-optionsfile" || optname == "-appfolder")       // not processed thru this function
+            // not processed thru this function
+
+            if (optname == "-optionsfile" || optname == "-appfolder" || optname == "-portable")
             {
                 ca.Remove();   // waste it
+                System.Diagnostics.Debug.WriteLine($"  Option ignored:        {optname}");
             }
             else
             {
@@ -412,90 +390,90 @@ namespace EDDiscovery
                 }
                 else if (optname == "-userdbpath")
                 {
-                    readdata = UserDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = UserDatabasePath = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-userdbfilename")
                 {
-                    readdata = UserDatabaseFilename = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = UserDatabaseFilename = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-cmdr" || optname == "-commander")
                 {
-                    readdata = Commander = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = Commander = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-profile")
                 {
-                    readdata = Profile = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = Profile = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-zmqport")
                 {
-                    readdata = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = fileread ? ca.Rest() : ca.NextEmpty();
                     ZMQPort = readdata.InvariantParseInt(12300);
                 }
                 else if (optname == "-systemsdbpath")
                 {
-                    readdata = SystemDatabasePath = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = SystemDatabasePath = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-scancachepath")
                 {
-                    readdata = ScanCachePath = toeol ? ca.Rest() : ca.NextEmpty();     // use DISABLED c/i
+                    readdata = ScanCachePath = fileread ? ca.Rest() : ca.NextEmpty();     // use DISABLED c/i
                 }
                 else if (optname == "-systemsdbfilename")
                 {
-                    readdata = SystemDatabaseFilename = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = SystemDatabaseFilename = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-iconspath")
                 {
-                    readdata = IconsPath = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = IconsPath = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-notificationfolder")
                 {
-                    readdata = NotificationFolderOverride = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = NotificationFolderOverride = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-tracelog")
                 {
-                    readdata = TraceLog = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = TraceLog = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-fontsize")
                 {
-                    readdata = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = fileread ? ca.Rest() : ca.NextEmpty();
                     FontSize = readdata.InvariantParseFloat(0);
                 }
                 else if (optname == "-font")
                 {
-                    readdata = Font = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = Font = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-language")
                 {
-                    readdata = SelectLanguage = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = SelectLanguage = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-webserverfolder" || optname == "-wsf")
                 {
-                    readdata = WebServerFolder = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = WebServerFolder = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-outputeventhelp")
                 {
-                    readdata = OutputEventHelp = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = OutputEventHelp = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-defaultjournalfolder")
                 {
-                    readdata = DefaultJournalFolder = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = DefaultJournalFolder = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-journalfilematch")
                 {
-                    readdata = DefaultJournalMatchFilename = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = DefaultJournalMatchFilename = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-culture")
                 {
-                    readdata = Culture = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = Culture = fileread ? ca.Rest() : ca.NextEmpty();
                 }
                 else if (optname == "-minjournaldateutc")
                 {
-                    readdata = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = fileread ? ca.Rest() : ca.NextEmpty();
                     MinJournalDateUTC = readdata.ParseDateTime(ObjectExtensionsDates.MinValueUTC(), System.Globalization.CultureInfo.CurrentCulture);
                 }
                 else if (optname == "-historyloaddaylimit")
                 {
-                    readdata = (toeol ? ca.Rest() : ca.NextEmpty());
+                    readdata = (fileread ? ca.Rest() : ca.NextEmpty());
                     if (DateTime.TryParse(readdata, out DateTime t))
                     {
                         var delta = DateTime.UtcNow - t;
@@ -506,7 +484,7 @@ namespace EDDiscovery
                 }
                 else if (optname == "-readto")
                 {
-                    readdata = toeol ? ca.Rest() : ca.NextEmpty();
+                    readdata = fileread ? ca.Rest() : ca.NextEmpty();
                     MaxJournalDateUTC = readdata.ParseDateTime(ObjectExtensionsDates.MaxValueUTC(), System.Globalization.CultureInfo.CurrentCulture);
                 }
                 else if (optname.StartsWith("-"))
@@ -518,7 +496,6 @@ namespace EDDiscovery
                         case "-norepositionwindow": NoWindowReposition = true; break;
                         case "-minimize": case "-minimise": MinimiseOnOpen = true; break;
                         case "-maximise": case "-maximize": MaximiseOnOpen = true; break;
-                        case "-portable": PortableInstall = true; break;
                         case "-nrw": NoWindowReposition = true; break;
                         case "-showactionbutton": ActionButton = true; break;
                         case "-noload": NoLoad = true; break;
@@ -575,9 +552,9 @@ namespace EDDiscovery
                 }
 
                 if (handled)
-                    System.Diagnostics.Debug.WriteLine($"  Option {optname} {readdata}");
+                    System.Diagnostics.Debug.WriteLine($"  Option accepted:       {optname} {readdata}");
                 else
-                    System.Diagnostics.Debug.WriteLine($"  Option not recognised {optname}");
+                    System.Diagnostics.Debug.WriteLine($"  Option not recognised: {optname}");
             }
         }
 
@@ -588,8 +565,10 @@ namespace EDDiscovery
         private bool PortableInstall;  // internal to us, to indicate app folder is relative to exe not %localappdata%
         private string translationfolder; // internal to us
 
+        private string appfolderwarningmessage = "";
 
-        #endregion
+
+#endregion
 
     }
 
