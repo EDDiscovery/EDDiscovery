@@ -40,6 +40,7 @@ B1B392607DEAF2: "Run" => "Ejecutar"
 4FDECF8CBABC50: "Remove Journal Entries" @
 F83B6FE3AEBF13: "Exit" @
 6B295419D3023F: "Backup Database" => "Hacer Copia de seguridad de la base de datos"
+F1E7A4001E4A2D: "Remove Journal Entries From Date On" @
 81DE8C10D7B389: "Move Databases" => "Mover bases de datos"
 BF259EDBD80CA0: "Reset Language to English" => "Restablecer idioma a inglés"
 C5A8F7E7256EF2: "Remove all Action Packs" => "Eliminar todos los paquetes de acción"

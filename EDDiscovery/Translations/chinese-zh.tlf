@@ -40,6 +40,7 @@ B1B392607DEAF2: "Run" => "运行"
 4FDECF8CBABC50: "Remove Journal Entries" @
 F83B6FE3AEBF13: "Exit" @
 6B295419D3023F: "Backup Database" => "备份数据库"
+F1E7A4001E4A2D: "Remove Journal Entries From Date On" @
 81DE8C10D7B389: "Move Databases" => "转移数据库"
 BF259EDBD80CA0: "Reset Language to English" => "重置语言为英语"
 C5A8F7E7256EF2: "Remove all Action Packs" => "移除所有动作包(Action Packs)"

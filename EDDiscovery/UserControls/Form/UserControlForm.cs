@@ -56,6 +56,7 @@ namespace EDDiscovery.UserControls
             extButtonDrawnHelp.Image = ExtendedControls.TabStrip.HelpIcon;
                 extButtonDrawnHelp.Text = "";
 
+            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip, this);
             toolTip.SetToolTip(extButtonDrawnTransparentMode, "Toggle window transparency thru four settings\r\nOff - normal window\r\nOn (T) - transparent with controls active when mouse not inside window\r\nOn (Tc) - transparent with control active, to activate hold down the activate key\r\nOn (Tf) - fully transparent and inert, to activate hold down the activate key\r\n\r\nSee the settings page for configuring which key is the activate key.  \r\nMouse must be within the boundaries of the window and the key held down for\r\n500ms approx.".Tx());
         }
 
@@ -89,8 +90,6 @@ namespace EDDiscovery.UserControls
             {
                 idk = DirectInputDevices.InputDeviceKeyboard.CreateKeyboard();
             }
-
-            BaseUtils.TranslatorMkII.Instance.TranslateTooltip(toolTip,this);
 
             if (IsTransparencySupported)
                 TransparentMode = (TransparencyMode)EliteDangerousCore.DB.UserDatabase.Instance.GetSetting(DBRefName + "Transparent", UserControl.DefaultTransparent ? (int)TransparencyMode.On : (int)TransparencyMode.Off);

@@ -109,6 +109,9 @@ namespace EDDiscovery.UserControls
 
         ExtendedControls.ExtSafeChart chart = null;
 
+        // DEBUG!!! SET THIS to make it think your doing it real time, filter history and select mining refined events
+        bool debugasnow = false;
+
         private void Display(HistoryEntry he)       // at he, see if changed
         {
             if ( he != null )
@@ -128,14 +131,14 @@ namespace EDDiscovery.UserControls
                     int cargoleft = cargocap - cargo; 
 
                     // if no list, or diff no of items (due to new entry) or different start point, we reset and display, else we just quit as current is good
-                    if (eventlist == null || newlist.Count != eventlist.Count || hebelow != newhebelow || limpetsleft != limpetsleftdisplay || cargoleft != cargoleftdisplay) 
+                    if (debugasnow || eventlist == null || newlist.Count != eventlist.Count || hebelow != newhebelow || limpetsleft != limpetsleftdisplay || cargoleft != cargoleftdisplay) 
                     {
                         eventlist = newlist;
                         heabove = newheabove;
                         hebelow = newhebelow;
                         limpetsleftdisplay = limpetsleft;
                         cargoleftdisplay = cargoleft;
-                        incurrentplay = heabove == DiscoveryForm.History.GetLast && !boundevents.Contains(heabove.EntryType);
+                        incurrentplay = debugasnow || (heabove == DiscoveryForm.History.GetLast && !boundevents.Contains(heabove.EntryType));
                         System.Diagnostics.Debug.WriteLine("Redisplay {0} current {1}", heabove.EntryNumber, incurrentplay);
                         Display();
 
@@ -394,7 +397,7 @@ namespace EDDiscovery.UserControls
             if (eventlist != null && eventlist.Count > 0 )
             {
                 DateTime lasteventtime = eventlist.Last().EventTimeUTC;        // last event time
-                bool inprogress = incurrentplay && (DateTime.UtcNow - lasteventtime) < new TimeSpan(0, 15, 0);      // N min we are still in progress, and we are in current play
+                bool inprogress = debugasnow || (incurrentplay && (DateTime.UtcNow - lasteventtime) < new TimeSpan(0, 15, 0));      // N min we are still in progress, and we are in current play
                 TimeSpan timemining = inprogress ? (DateTime.UtcNow - eventlist.First().EventTimeUTC) : (lasteventtime - eventlist.First().EventTimeUTC);
                 string text = timemining.ToString(@"hh\:mm\:ss");
                 if (lastrefined > 0 && timemining.TotalHours>0)
