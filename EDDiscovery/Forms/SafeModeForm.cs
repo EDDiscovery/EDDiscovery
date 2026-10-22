@@ -22,7 +22,7 @@ namespace EDDiscovery.Forms
 {
     public partial class SafeModeForm : Form
     {
-        public Action<bool, bool, bool,bool> Run;
+        public Action<bool, bool, bool, bool> Run;
         bool theme = false;
         bool pos = false;
         bool resettabs = false;
@@ -33,7 +33,7 @@ namespace EDDiscovery.Forms
             InitializeComponent();
 
             BaseUtils.TranslatorMkII tx = new BaseUtils.TranslatorMkII();
-            tx.LoadTranslation("Auto", CultureInfo.CurrentUICulture, new string[] { System.IO.Path.GetDirectoryName(Application.ExecutablePath) }, 0,System.IO.Path.GetTempPath());
+            tx.LoadTranslation("Auto", CultureInfo.CurrentUICulture, new string[] { System.IO.Path.GetDirectoryName(Application.ExecutablePath) }, 0, System.IO.Path.GetTempPath());
             tx.TranslateControls(this);
         }
 
@@ -46,7 +46,7 @@ namespace EDDiscovery.Forms
 
         private void Run_Click(object sender, EventArgs e)
         {
-            Run(pos,theme,resettabs,resetlang);
+            Run(pos, theme, resettabs, resetlang);
         }
 
         private void buttonResetTheme_Click(object sender, EventArgs e)
@@ -78,7 +78,7 @@ namespace EDDiscovery.Forms
 
             if (File.Exists(opt.UserDatabasePath) && File.Exists(opt.SystemDatabasePath))
             {
-                if (MessageBox.Show(this, "Current databases are located at:" + Environment.NewLine + Environment.NewLine + 
+                if (MessageBox.Show(this, "Current databases are located at:" + Environment.NewLine + Environment.NewLine +
                                 "User: " + opt.UserDatabasePath + Environment.NewLine + "System: " + opt.SystemDatabasePath +
                                 Environment.NewLine + Environment.NewLine + "Do you wish to change their location?", "Move Databases", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
@@ -87,7 +87,7 @@ namespace EDDiscovery.Forms
                     FolderBrowserDialog fbd = new FolderBrowserDialog();
                     fbd.Description = "Select new folder";
 
-                    if (fbd.ShowDialog(this) == DialogResult.OK) 
+                    if (fbd.ShowDialog(this) == DialogResult.OK)
                     {
 
                         string pathto = fbd.SelectedPath;
@@ -101,7 +101,7 @@ namespace EDDiscovery.Forms
 
                         try
                         {
-                            
+
                             File.Copy(opt.UserDatabasePath, userfilename, true);
                             mbt.MessageText = "Copying System DB";
                             File.Copy(opt.SystemDatabasePath, systemfilename, true);
@@ -173,7 +173,7 @@ namespace EDDiscovery.Forms
                 if (MessageBox.Show(this, "Current system database is located at:" + Environment.NewLine + Environment.NewLine +
                                 "System: " + opt.SystemDatabasePath +
                                 Environment.NewLine + Environment.NewLine + "Do you wish to delete this and let EDD rebuild it" + Environment.NewLine +
-                                "No user settings will be lost" + Environment.NewLine + 
+                                "No user settings will be lost" + Environment.NewLine +
                                 "Afterwards, Exit and restart EDD",
                                 "Delete/Rebuild System Database", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
@@ -238,8 +238,8 @@ namespace EDDiscovery.Forms
 
             string dllfolder = opt.DLLAppDirectory();
 
-            if (MessageBox.Show(this, "Current add on DLL folder is located at:" + Environment.NewLine  +
-                            dllfolder + 
+            if (MessageBox.Show(this, "Current add on DLL folder is located at:" + Environment.NewLine +
+                            dllfolder +
                             Environment.NewLine + Environment.NewLine + "Do you wish to delete all DLLs?",
                             "Delete Extension DLLs", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
             {
@@ -294,12 +294,12 @@ namespace EDDiscovery.Forms
                 if (MessageBox.Show(this, "Confirm you want all journal entries removed from the DB at:" + Environment.NewLine + Environment.NewLine +
                                 opt.UserDatabasePath + Environment.NewLine + Environment.NewLine +
                                 "This will keep all other settings. Make sure you still have all your Frontier Journal logs before you do this." + Environment.NewLine +
-                                "EDD on start will then rescan any journal logs it finds from the folder locations of commanders listed in the settings panels" + Environment.NewLine + 
+                                "EDD on start will then rescan any journal logs it finds from the folder locations of commanders listed in the settings panels" + Environment.NewLine +
                                 "Notes will be kept but may be on the wrong entries",
                                 "Delete Journal Entries", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
                     UserDatabase.Instance.Initialize();
-                    UserDatabase.Instance.ClearJournals();
+                    UserDatabase.Instance.ClearJournals(DateTime.MinValue);
                 }
             }
         }
@@ -318,11 +318,31 @@ namespace EDDiscovery.Forms
                                 "Delete Journal Entries and Commanders", MessageBoxButtons.OKCancel, MessageBoxIcon.Asterisk) == DialogResult.OK)
                 {
                     UserDatabase.Instance.Initialize();
-                    UserDatabase.Instance.ClearJournals();
+                    UserDatabase.Instance.ClearJournals(DateTime.MinValue);
                     UserDatabase.Instance.ClearCommanderTable();
                 }
             }
 
+        }
+
+        private void buttonRemoveJournalsDate_Click(object sender, EventArgs e)
+        {
+            if (UserDatabase.Instance.Name != "UserDB")       // this means never initialised.. as we never got to set the name. See EDDApplicationContext. If it is, we should not be enabled..
+            {
+                Form fm = new Form() { Size = new System.Drawing.Size(300, 120), StartPosition = FormStartPosition.CenterParent };
+                DateTimePicker picker = new DateTimePicker() { Size = new System.Drawing.Size(250, 32), Location = new System.Drawing.Point(10, 10), Format = DateTimePickerFormat.Custom, CustomFormat = "yyyy-MM-dd HH-mm-ss"};
+                picker.Value = DateTime.Now.StartOfDay();
+                fm.Controls.Add(picker);
+                int vpos = 50;
+                fm.Controls.Add(new Button() { Text = "OK", DialogResult = DialogResult.OK, Size = new System.Drawing.Size(80, 24), Location = new System.Drawing.Point(180, vpos) });
+                fm.Controls.Add(new Button() { Text = "Cancel", DialogResult = DialogResult.Cancel, Size = new System.Drawing.Size(80, 24), Location = new System.Drawing.Point(80, vpos) });
+
+                if ( fm.ShowDialog(this) == DialogResult.OK)
+                {
+                    UserDatabase.Instance.Initialize();
+                    UserDatabase.Instance.ClearJournals(picker.Value);
+                }
+            }
         }
     }
 }

@@ -225,10 +225,10 @@ namespace EDDiscovery.UserControls
 
             ExtendedControls.ExtGroupBox g1 = new ExtendedControls.ExtGroupBox() { Name = "CAPIGB" , Height = 60, Text = "Frontier CAPI" };
             capiButton = new ExtendedControls.ExtButton() { Location = new System.Drawing.Point(240,23),
-                                    ClientSize = new System.Drawing.Size(80,20), Name="CAPIButton"};
+                                    ClientSize = new System.Drawing.Size(80,24), Name="CAPIButton"};
             capiButton.Click += CapiButton_Click;
             capiclearloginButton = new ExtendedControls.ExtButton() { Location = new System.Drawing.Point(340, 23),
-                ClientSize = new System.Drawing.Size(80, 20), Name = "ClearCAPIButton", Text = "Clear" };
+                ClientSize = new System.Drawing.Size(80, 24), Name = "ClearCAPIButton", Text = "Clear" };
             capiclearloginButton.Click += clearLoginButton_Click;
 
             capiStateLabel = new Label() { Location = new System.Drawing.Point(4, 23), Name ="CAPIStatus", Margin = new Padding(3,3,3,0)};

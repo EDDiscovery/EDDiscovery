@@ -236,7 +236,7 @@ namespace EDDiscovery
                 {
                     if (MessageBox.Show($"Confirm deletion of user journals in {EliteDangerousCore.EliteConfigInstance.InstanceOptions.UserDatabasePath}", "WARNING", MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
                     {
-                        UserDatabase.Instance.ClearJournals();
+                        UserDatabase.Instance.ClearJournals(DateTime.MinValue);
                     }
                 }
 
