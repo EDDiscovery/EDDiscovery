@@ -100,13 +100,14 @@ namespace UnitTest
         public static void TestStarJsons()
         {
             CheckSection("ScanScan Test Stars JSON");
-            // Debugger.OutputControl += "StarScan";        // turn on debugging
+            //Debugger.OutputControl += "StarScan";        // turn on debugging
 
             string folder = $@"..\..\..\UnitTest\StarScans\";
 
             if (Directory.Exists(folder))
             {
                 var files = System.IO.Directory.EnumerateFiles(folder, "*.json");
+                //var files = System.IO.Directory.EnumerateFiles(folder, "9*.json");
                 foreach (var f in files.EmptyIfNull())
                 {
                     string name = System.IO.Path.GetFileNameWithoutExtension(f);
@@ -115,6 +116,7 @@ namespace UnitTest
                         var sn = TestScan(null, f, @"c:\code\Images", false, 1920, false);
                         if (sn != null)
                         {
+                            //sn.DumpTree();
                             if ( name == "Leesti")
                             {
                                 CheckThat(sn.System.Name).Is("Leesti");

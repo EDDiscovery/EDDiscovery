@@ -113,6 +113,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <None Include="StarScans\9Aurigae.json" />
     <None Include="StarScans\Amitrite.json" />
     <None Include="StarScans\Artemis.json" />
     <None Include="StarScans\Asellus Primus.json" />
@@ -129,6 +130,7 @@
     <None Include="StarScans\Hagr.json" />
     <None Include="StarScans\HIP 1885.json" />
     <None Include="StarScans\hip 23759.json" />
+    <None Include="StarScans\HIP87621.json" />
     <None Include="StarScans\karka.json" />
     <None Include="StarScans\lanciansene.json" />
     <None Include="StarScans\Lave.json" />
