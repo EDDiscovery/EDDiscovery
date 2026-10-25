@@ -21,7 +21,7 @@ namespace UnitTest
         public void Init()
         {
             string pname = @"C:\Games\Elite\Products\elite-dangerous-odyssey-64\EliteDangerous64.exe";
-            FrontierDeviceMapping.ReadFrontierDeviceBindingFile(pname);
+            FrontierDeviceMapping.ReadFrontierDeviceMappingFile(pname);
 
             inputdevices = new DirectInputDevices.InputDeviceList();
             inputdevices.AddDevices(InputDeviceIdentity.DeviceClass.Controllers);

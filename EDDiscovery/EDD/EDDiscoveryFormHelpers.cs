@@ -16,8 +16,10 @@ using EliteDangerousCore;
 using EliteDangerousCore.Bindings;
 using EliteDangerousCore.DB;
 using EliteDangerousCore.EDSM;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -484,6 +486,7 @@ namespace EDDiscovery
         #region Periodic Check
 
         int periodiccheckcounter = 0;
+        bool havecheckeddevicemaps = false;
         private void Periodicchecktimer_Tick(object sender, EventArgs e)
         {
             if (!EDDOptions.Instance.DisableTimeDisplay)
@@ -500,18 +503,47 @@ namespace EDDiscovery
 
             if (periodiccheckcounter++ % 5 == 0)        // do it every 5 seconds
             {
-                bool reloadbindings = FrontierBindings.IsOutOfDate() ||
+                if (EDDOptions.Instance.AllowDeviceInput)
+                {
+                    bool reloadbindings = FrontierBindings.IsOutOfDate() ||
                             (FrontierStartPresetFile != null && File.GetLastWriteTimeUtc(FrontierStartPresetFile.Item1) > FrontierStartPresetFile.Item2);
 
-                bool changedinptudevices = EDDOptions.Instance.AllowDeviceInput ? InputDeviceList.AddDevices(DirectInputDevices.InputDeviceIdentity.DeviceClass.Controllers) : false;
+                    bool changedinptudevices = EDDOptions.Instance.AllowDeviceInput ? InputDeviceList.AddDevices(DirectInputDevices.InputDeviceIdentity.DeviceClass.Controllers) : false;
 
-                if (reloadbindings || changedinptudevices)
-                {
-                    LoadWarnFrontierBindings();
+                    if (reloadbindings || changedinptudevices)
+                    {
+                        LoadWarnFrontierBindings();
+                    }
+
+                    if (changedinptudevices)
+                        OnInputDeviceChange?.Invoke(GetPhysicalDeviceList());
+
+                    if (!havecheckeddevicemaps)
+                    {
+                        // this is the best way to know where elite is installed, wait for user to run it in the foreground
+                        // same logic as ActionsFromInputDevices.cs
+
+                        IntPtr handle = BaseUtils.Win32.UnsafeNativeMethods.GetForegroundWindow();
+                        var foregroundelitedangerous64 = Process.GetProcessesByName("elitedangerous64").Where(p => p.MainWindowHandle == handle).FirstOrDefault();
+                        if (foregroundelitedangerous64 != null)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Check Elite Device maps, its running at {foregroundelitedangerous64.MainModule.FileName}");
+
+                            JArray devicemap = FrontierDeviceMapping.ReadFrontierDeviceMappingFile(foregroundelitedangerous64.MainModule.FileName);
+                            if (devicemap != null)
+                            {
+                                int merges = FrontierDeviceMapping.MergeMappings(FrontierDeviceMapping.DeviceMappingToPIDVID, devicemap);
+                                if (merges > 0)
+                                    LogLine($"Fronter Device Mapping Updated {merges} entries in the EDD default set with the ones defined in the Elite DeviceMappings.xml");
+                                else
+                                    System.Diagnostics.Debug.WriteLine($"Check Elite Device maps, its up to date");
+
+
+                                havecheckeddevicemaps = true;
+                            }
+                        }
+                    }
                 }
-
-                if (changedinptudevices)
-                    OnInputDeviceChange?.Invoke(GetPhysicalDeviceList());
             }
         }
 
