@@ -3,8 +3,10 @@ using DirectInputDevices;
 using EliteDangerousCore;
 using EliteDangerousCore.Bindings;
 using ExtendedControls;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Windows.Forms;
 
 namespace UnitTest
@@ -18,6 +20,9 @@ namespace UnitTest
 
         public void Init()
         {
+            string pname = @"C:\Games\Elite\Products\elite-dangerous-odyssey-64\EliteDangerous64.exe";
+            FrontierDeviceMapping.ReadFrontierDeviceBindingFile(pname);
+
             inputdevices = new DirectInputDevices.InputDeviceList();
             inputdevices.AddDevices(InputDeviceIdentity.DeviceClass.Controllers);
             inputdevices.AddDevices(InputDeviceIdentity.DeviceClass.Keyboard);
@@ -26,12 +31,20 @@ namespace UnitTest
             List<Device> deviceparas = new List<Device>();
             deviceparas.Add(new Device());
 
+            JArray devicemappings = JTokenExtensionsOther.ReadJSONFile(Path.Combine(testfolder, "DeviceMappings.json")).Array();
+            System.Diagnostics.Debug.Assert(devicemappings != null);
+            FrontierDeviceMapping.DeviceMappingToPIDVID = devicemappings;
+
+            JArray expmap = new JArray { new JArray { "DemoMerge", 100, 200 }, new JArray { "VPCThrottle", 13124, 408 } };
+            FrontierDeviceMapping.MergeMappings(devicemappings, expmap);
+            System.Diagnostics.Debug.WriteLine(devicemappings.ToString(true));
+
             foreach (var device in inputdevices)
             {
                 System.Diagnostics.Debug.WriteLine($"{device.ID.Name} {device.ID.VendorId} {device.ID.ProductId} {device.ID.VendorProductId}");
 
                 // does frontier know about it?
-                string frontiername = device.ID.Name == "Keyboard" || device.ID.Name == "Mouse" ? device.ID.Name : FrontierDeviceNames.DeviceName(device.ID.ProductId, device.ID.VendorId) ?? device.ID.VendorProductId;
+                string frontiername = device.ID.Name == "Keyboard" || device.ID.Name == "Mouse" ? device.ID.Name : FrontierDeviceMapping.FindPIDVID(device.ID.ProductId, device.ID.VendorId) ?? device.ID.VendorProductId;
 
                 deviceparas.Add(new Device(frontiername, device.ID.Name, device.AxisPresent,  device.POVCount, device.ButtonCount, true));
             }

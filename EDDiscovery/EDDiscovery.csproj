@@ -1157,6 +1157,7 @@
       <DependentUpon>StatsTimeUserControl.cs</DependentUpon>
     </EmbeddedResource>
     <None Include="OpenTK.dll.config" />
+    <None Include="Resources\DeviceMappings.json" />
     <None Include="Resources\EDD License.rtf" />
     <None Include="Resources\EliteGalacticRegions.json" />
     <None Include="Resources\edlogo_3mo_icon.ico" />

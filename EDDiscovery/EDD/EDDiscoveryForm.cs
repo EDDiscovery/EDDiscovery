@@ -16,9 +16,11 @@ using ActionLanguage.Manager;
 using BaseUtils;
 using DirectInputDevices;
 using EliteDangerousCore;
+using EliteDangerousCore.Bindings;
 using EliteDangerousCore.DB;
 using ExtendedControls;
 using Microsoft.Win32;
+using QuickJSON;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -126,6 +128,7 @@ namespace EDDiscovery
         private AudioExtensions.SpeechSynthesizer speechsynth;
 
         private const string dbKeyNames = "DeviceKeyNames";
+        private const string dBFrontierDeviceNaming = "FrontierDeviceNaming";
 
         private Dictionary<string, string> installdeinstallsettings;
 
@@ -439,6 +442,18 @@ namespace EDDiscovery
                         DeviceKeyNames.Add(key);
                     }
                 }
+
+                // we ship with a set of default device mappings, store it in DB for update
+
+                JArray devicemapping = JArray.Parse(UserDatabase.Instance.GetSetting(dBFrontierDeviceNaming, "[]"));        // default empty
+                JArray frontierdevicemappings = JArray.Parse(Properties.Resources.DeviceMappings);      // our default set
+
+                int mergers = EliteDangerousCore.Bindings.FrontierDeviceMapping.MergeMappings(devicemapping,frontierdevicemappings);  // merge into device mappings
+                
+                EliteDangerousCore.Bindings.FrontierDeviceMapping.DeviceMappingToPIDVID = devicemapping;        // this is the set to use
+                System.Diagnostics.Debug.WriteLine($"Device mapping table {devicemapping.ToString(true)}");
+
+                // now we load bindings 
 
                 LoadFrontierBindings();     // load the bindings into EDD
             }
@@ -993,10 +1008,12 @@ namespace EDDiscovery
             notifyIconEDD.Dispose();
 
             string persistentvars = actioncontroller.CloseDown();
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting("UserGlobalActionVars", persistentvars);
+            UserDatabase.Instance.PutSetting("UserGlobalActionVars", persistentvars);
 
-            EliteDangerousCore.DB.UserDatabase.Instance.PutSetting(dbKeyNames, DeviceKeyNames.Get());
+            UserDatabase.Instance.PutSetting(dbKeyNames, DeviceKeyNames.Get());
 
+            UserDatabase.Instance.PutSetting(dBFrontierDeviceNaming, FrontierDeviceMapping.DeviceMappingToPIDVID.ToString());        // write back current set
+            
             DLLManager.UnLoad();
 
             audioqueuespeech.StopAll();

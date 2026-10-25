@@ -121,6 +121,69 @@ namespace EDDiscovery.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to [
+        ///  [
+        ///    &quot;GamePad&quot;,
+        ///    1118,
+        ///    654
+        ///  ],
+        ///  [
+        ///    &quot;GamePad&quot;,
+        ///    1118,
+        ///    655
+        ///  ],
+        ///  [
+        ///    &quot;GamePad&quot;,
+        ///    1118,
+        ///    767
+        ///  ],
+        ///  [
+        ///    &quot;GamePad&quot;,
+        ///    9414,
+        ///    23812
+        ///  ],
+        ///  [
+        ///    &quot;GamePad&quot;,
+        ///    1118,
+        ///    673
+        ///  ],
+        ///  [
+        ///    &quot;GamePad&quot;,
+        ///    1848,
+        ///    18198
+        ///  ],
+        ///  [
+        ///    &quot;GamePad&quot;,
+        ///    3695,
+        ///    531
+        ///  ],
+        ///  [
+        ///    &quot;GamePad&quot;,
+        ///    1118,
+        ///    657
+        ///  ],
+        ///  [
+        ///    &quot;GamePad&quot;,
+        ///    1118,
+        ///    1817
+        ///  ],
+        ///  [
+        ///    &quot;GamePad&quot;,
+        ///    1103,
+        ///    3847
+        ///  ],
+        ///  [
+        ///    &quot;GamePad&quot;,
+        ///    1103,
+        ///  [rest of string was truncated]&quot;;.
+        /// </summary>
+        public static string DeviceMappings {
+            get {
+                return ResourceManager.GetString("DeviceMappings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         public static System.Drawing.Bitmap EDCD {

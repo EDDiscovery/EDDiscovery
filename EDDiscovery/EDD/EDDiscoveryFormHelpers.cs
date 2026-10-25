@@ -582,7 +582,7 @@ namespace EDDiscovery
                 System.Diagnostics.Debug.WriteLine($"{device.ID.Name} {device.ID.VendorId} {device.ID.ProductId} {device.ID.VendorProductId}");
 
                 // does frontier know about it?
-                string frontiername = device.ID.Name == "Keyboard" || device.ID.Name == "Mouse" ? device.ID.Name : EliteDangerousCore.Bindings.FrontierDeviceNames.DeviceName(device.ID.ProductId, device.ID.VendorId) ?? device.ID.VendorProductId;
+                string frontiername = device.ID.Name == "Keyboard" || device.ID.Name == "Mouse" ? device.ID.Name : EliteDangerousCore.Bindings.FrontierDeviceMapping.FindPIDVID(device.ID.ProductId, device.ID.VendorId) ?? device.ID.VendorProductId;
 
                 physicaldevices.Add(new EliteDangerousCore.Bindings.Device(frontiername, device.ID.Name, device.AxisPresent, device.POVCount, device.ButtonCount, true));
             }
