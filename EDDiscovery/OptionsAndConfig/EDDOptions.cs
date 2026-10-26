@@ -213,6 +213,8 @@ namespace EDDiscovery
                 AppDataDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), AppFolder);
             }
 
+            FrontierBindingsFolder = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier Developments", "Elite Dangerous", "Options", "Bindings");
+
             System.Diagnostics.Debug.WriteLine($"Options ****** Set AppFolder to `{AppDataDirectory}` message `{appfolderwarningmessage}`");
 
             if (!Directory.Exists(AppDataDirectory))        // make sure its there, don't fail
@@ -305,7 +307,6 @@ namespace EDDiscovery
                 ScanCachePath = Path.Combine(AppDataDirectory, "WebScans");
             }
 
-            FrontierBindingsFolder = System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "Frontier Developments", "Elite Dangerous", "Options", "Bindings");
 
             EliteDangerousCore.EliteConfigInstance.InstanceOptions = this;
         }
@@ -486,6 +487,11 @@ namespace EDDiscovery
                 {
                     readdata = fileread ? ca.Rest() : ca.NextEmpty();
                     MaxJournalDateUTC = readdata.ParseDateTime(ObjectExtensionsDates.MaxValueUTC(), System.Globalization.CultureInfo.CurrentCulture);
+                }
+                else if (optname == "-bindingsfolder")
+                {
+                    readdata = fileread ? ca.Rest() : ca.NextEmpty();
+                    FrontierBindingsFolder = readdata;
                 }
                 else if (optname.StartsWith("-"))
                 {
