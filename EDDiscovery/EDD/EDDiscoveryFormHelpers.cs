@@ -561,21 +561,24 @@ namespace EDDiscovery
         // load, from init, from LoadWarn
         public void LoadFrontierBindings()
         {
-            // use the same class and not replace because other people have a handle to it!  trap caught sept 26
-            // clear with these physical devices
-            FrontierBindings.Clear(GetPhysicalDeviceList());       
-
-            // we remember details on startpreset.start because this can change which binding file is used
-            FrontierStartPresetFile = BindingsFile.FindStartPreset(EDDOptions.Instance.FrontierBindingsFolder, true);
-
-            // and we load if found
-            if (FrontierStartPresetFile != null)
+            if (false && Directory.Exists(EDDOptions.Instance.FrontierBindingsFolder))   // we need a proper folder to operate with
             {
-                string file = BindingsFile.FindBindingsFile(FrontierStartPresetFile);       // this may return null, which read can handle
+                // use the same class and not replace because other people have a handle to it!  trap caught sept 26
+                // clear with these physical devices
+                FrontierBindings.Clear(GetPhysicalDeviceList());
 
-                if (FrontierBindings.Read(file) == null)
+                // we remember details on startpreset.start because this can change which binding file is used
+                FrontierStartPresetFile = BindingsFile.FindStartPreset(EDDOptions.Instance.FrontierBindingsFolder, true);
+
+                // and we load if found
+                if (FrontierStartPresetFile != null)
                 {
-                    FrontierBindings.AssignVKeys();
+                    string file = BindingsFile.FindBindingsFile(FrontierStartPresetFile);       // this may return null, which read can handle
+
+                    if (FrontierBindings.Read(file) == null)
+                    {
+                        FrontierBindings.AssignVKeys();
+                    }
                 }
             }
         }
@@ -587,7 +590,7 @@ namespace EDDiscovery
             {
                 if (FrontierBindings.NonPhysicalDevicesInUse)
                 {
-                    LogLineHighlight($"Loaded Bindings file but with missing physical devices in bindings, bindings will not load in Elite! : {string.Join(",",FrontierBindings.DeviceList.Where(x=>!x.PhysicalDevice).Select(x=>DeviceKeyNames.GetDeviceNameOrFrontierName(x.FrontierName)))}");
+                    LogLineHighlight($"Loaded Bindings file but with missing physical devices in bindings, bindings will not load in Elite! : {string.Join(",", FrontierBindings.DeviceList.Where(x => !x.PhysicalDevice).Select(x => DeviceKeyNames.GetDeviceNameOrFrontierName(x.FrontierName)))}");
                     return;
                 }
                 else
@@ -596,7 +599,7 @@ namespace EDDiscovery
                 if (!FrontierBindings.IsEditable)
                     LogLineHighlight($"Bindings but not editable - unknown frontier culture ID `{FrontierBindings.KeyboardCulture}` {InputLanguage.CurrentInputLanguage.LayoutName} {InputLanguage.CurrentInputLanguage.Culture.Name} {FrontierBindings.FileName}");
             }
-            else
+            else if (Directory.Exists(EDDOptions.Instance.FrontierBindingsFolder))      // if we could have loaded it..
             {
                 LogLineHighlight("No bindings file found - various action packs will not operate");
             }

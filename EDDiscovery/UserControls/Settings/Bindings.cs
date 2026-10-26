@@ -33,19 +33,6 @@ namespace EDDiscovery.UserControls
         {
             var frontierpresetfilebindingfilename = BindingsFile.FindBindingsFile(EDDOptions.Instance.FrontierBindingsFolder, true);
 
-            // don't need these, the bindings monitor picks up changes. Keep for a bit
-
-            //bindingsEditor.ChangedBindings += (s) =>
-            //{
-            //    if (DiscoveryForm.FrontierBindings.FileName.EqualsIIC(s) || !DiscoveryForm.FrontierBindings.IsLoaded)      // if same name, or not loaded, try and load
-            //        DiscoveryForm.LoadWarnFrontierBindings();       // reload, 
-            //};
-            //bindingsEditor.ChangedDefault += (s) =>
-            //{
-            //    if (!DiscoveryForm.FrontierBindings.FileName.EqualsIIC(s))      // if default is not the same as the current filename.
-            //        DiscoveryForm.LoadWarnFrontierBindings();       // reload, 
-            //};
-
             bindingsEditor.ResetKeyNames += () =>
             {
                 string defnames2 = Properties.Resources.defkeynames;            // reset the set to the program default
