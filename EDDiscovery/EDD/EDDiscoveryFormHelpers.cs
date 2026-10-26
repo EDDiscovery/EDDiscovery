@@ -561,7 +561,7 @@ namespace EDDiscovery
         // load, from init, from LoadWarn
         public void LoadFrontierBindings()
         {
-            if (false && Directory.Exists(EDDOptions.Instance.FrontierBindingsFolder))   // we need a proper folder to operate with
+            if (Directory.Exists(EDDOptions.Instance.FrontierBindingsFolder))   // we need a proper folder to operate with
             {
                 // use the same class and not replace because other people have a handle to it!  trap caught sept 26
                 // clear with these physical devices

@@ -93,7 +93,7 @@ namespace EDDiscovery.UserControls.Colonisation
 
                     else if (cls == StationDefinitions.Classification.SpaceConstructionDepot || cls == StationDefinitions.Classification.ColonisationShip || cls == StationDefinitions.Classification.ColonisationPort)
                     {
-                        if (!Systems.ContainsKey(ld.SystemAddress)) global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} {ld.MarketID} {ld.MarketClass()} Colonisation docked created new system entry`{ld.StationName}` {ld.FDStationType} @ {ld.StarSystem}");
+                        //if (!Systems.ContainsKey(ld.SystemAddress)) global::System.Diagnostics.Debug.WriteLine($"{he.EventTimeUTC} {ld.MarketID} {ld.MarketClass()} Colonisation docked created new system entry`{ld.StationName}` {ld.FDStationType} @ {ld.StarSystem}");
 
                         bool newsystem = MakeSystem(hl, he.System, out ColonisationSystemData sys);     // make the system
                         bool newport = MakePort(sys, hl, ld.MarketID, he.WhereAmI, out ColonisationPortData port);    // make the port..
