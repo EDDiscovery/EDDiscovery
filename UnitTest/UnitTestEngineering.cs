@@ -23,7 +23,7 @@ namespace UnitTest
 {
     public static class UnitTestEngineeringRecipes
     {
-        [BaseUtils.UnitTests.Test(50)]
+        [BaseUtils.UnitTests.Test]
         public static void TestEngineeringRecipes()
         {
             CheckSection("Engineering Recipes");

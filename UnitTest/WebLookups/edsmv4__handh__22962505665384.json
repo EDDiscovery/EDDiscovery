@@ -1,0 +1,78 @@
+{
+  "id":24399,
+  "id64":22962505665384,
+  "name":"Handh",
+  "url":"https://www.edsm.net/en/system/bodies/id/24399/name/Handh",
+  "bodyCount":1,
+  "bodies":
+  [
+    {
+      "id":96442,
+      "id64":22962505665384,
+      "bodyId":0,
+      "name":"Handh",
+      "discovery":
+      {
+        "commander":"mims906",
+        "date":"2017-05-13 15:27:45"
+      },
+      "type":"Star",
+      "subType":"T (Brown dwarf) Star",
+      "parents":
+      [
+      ],
+      "distanceToArrival":0,
+      "isMainStar":true,
+      "isScoopable":false,
+      "age":11674,
+      "spectralClass":"T5",
+      "luminosity":"V",
+      "absoluteMagnitude":16.295364,
+      "solarMasses":0.054688,
+      "solarRadius":0.17404171962616821,
+      "surfaceTemperature":989,
+      "orbitalPeriod":null,
+      "semiMajorAxis":null,
+      "orbitalEccentricity":null,
+      "orbitalInclination":null,
+      "argOfPeriapsis":null,
+      "rotationalPeriod":0.60880708958333341,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":null,
+      "updateTime":"2022-12-11 23:49:14"
+    },
+    {
+      "id":167601947,
+      "id64":22962505665384,
+      "bodyId":0,
+      "name":"Handh Crucis Sector RO-R a4-1",
+      "discovery":
+      {
+        "commander":"Ragnar Stardust",
+        "date":"2018-03-28 15:47:21"
+      },
+      "type":"Star",
+      "subType":"T (Brown dwarf) Star",
+      "parents":null,
+      "distanceToArrival":0,
+      "isMainStar":true,
+      "isScoopable":false,
+      "age":11674,
+      "spectralClass":"T5",
+      "luminosity":"V",
+      "absoluteMagnitude":16.295364,
+      "solarMasses":0.054688,
+      "solarRadius":0.17404171962616821,
+      "surfaceTemperature":989,
+      "orbitalPeriod":null,
+      "semiMajorAxis":null,
+      "orbitalEccentricity":null,
+      "orbitalInclination":null,
+      "argOfPeriapsis":null,
+      "rotationalPeriod":0.60880710178240738,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":0,
+      "updateTime":"2018-12-29 20:00:56"
+    }
+  ]
+}

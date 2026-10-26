@@ -1,0 +1,1615 @@
+{
+  "system":
+  {
+    "allegiance":"Independent",
+    "bodies":
+    [
+      {
+        "absoluteMagnitude":12.496964,
+        "age":412,
+        "argOfPeriapsis":210.648823,
+        "ascendingNode":83.158048,
+        "axialTilt":0.0,
+        "bodyId":1,
+        "distanceToArrival":0.0,
+        "id64":36034169486068576,
+        "luminosity":"V",
+        "mainStar":true,
+        "meanAnomaly":215.091798,
+        "name":"Crucis Sector PI-T a3-0 A",
+        "orbitalEccentricity":0.002227,
+        "orbitalInclination":-32.930706,
+        "orbitalPeriod":1686.61442067888,
+        "parents":
+        [
+          {
+            "Null":0
+          }
+        ],
+        "rotationalPeriod":0.97927393556713,
+        "semiMajorAxis":0.668558200807336,
+        "solarMasses":0.160156,
+        "solarRadius":0.292175275341481,
+        "spectralClass":"L2",
+        "stations":
+        [
+        ],
+        "subType":"L (Brown dwarf) Star",
+        "surfaceTemperature":1830.0,
+        "timestamps":
+        {
+          "distanceToArrival":"2026-10-23T11:20:24Z",
+          "meanAnomaly":"2026-10-23T11:20:24Z"
+        },
+        "type":"Star",
+        "updateTime":"2026-10-24T19:56:45Z"
+      },
+      {
+        "absoluteMagnitude":14.511414,
+        "age":412,
+        "argOfPeriapsis":30.648828,
+        "ascendingNode":83.158048,
+        "axialTilt":0.0,
+        "bodyId":2,
+        "distanceToArrival":882.346439,
+        "id64":72062966505032544,
+        "luminosity":"V",
+        "meanAnomaly":215.091796,
+        "name":"Crucis Sector PI-T a3-0 B",
+        "orbitalEccentricity":0.002227,
+        "orbitalInclination":-32.930706,
+        "orbitalPeriod":1686.61442067888,
+        "parents":
+        [
+          {
+            "Null":0
+          }
+        ],
+        "rotationalPeriod":0.834210564861111,
+        "semiMajorAxis":1.09643575532014,
+        "solarMasses":0.097656,
+        "solarRadius":0.246124238677211,
+        "spectralClass":"T0",
+        "stations":
+        [
+        ],
+        "subType":"T (Brown dwarf) Star",
+        "surfaceTemperature":1254.0,
+        "timestamps":
+        {
+          "distanceToArrival":"2026-10-23T11:20:23Z",
+          "meanAnomaly":"2026-10-23T11:20:23Z"
+        },
+        "type":"Star",
+        "updateTime":"2026-10-23T11:20:23Z"
+      }
+    ],
+    "bodyCount":2,
+    "controllingFaction":
+    {
+      "allegiance":"Independent",
+      "government":"Theocracy",
+      "name":"Pi Mensae Brotherhood",
+      "pendingStates":
+      [
+        {
+          "state":"Expansion",
+          "trend":0.0
+        }
+      ],
+      "recoveringStates":
+      [
+        {
+          "state":"Outbreak",
+          "trend":0.0
+        }
+      ]
+    },
+    "coords":
+    {
+      "x":45.375,
+      "y":-34.90625,
+      "z":17.28125
+    },
+    "date":"2026-10-24T19:57:13Z",
+    "factions":
+    [
+      {
+        "allegiance":"Independent",
+        "government":"Anarchy",
+        "influence":0.062249,
+        "name":"Clan of Hors",
+        "state":"None"
+      },
+      {
+        "allegiance":"Federation",
+        "government":"Confederacy",
+        "influence":0.170683,
+        "name":"Coalition of Ehi",
+        "state":"None"
+      },
+      {
+        "allegiance":"Federation",
+        "government":"Confederacy",
+        "influence":0.144578,
+        "name":"Falcons' Nest",
+        "state":"None"
+      },
+      {
+        "allegiance":"Independent",
+        "government":"Theocracy",
+        "influence":0.437751,
+        "name":"Pi Mensae Brotherhood",
+        "pendingStates":
+        [
+          {
+            "state":"Expansion",
+            "trend":0.0
+          }
+        ],
+        "recoveringStates":
+        [
+          {
+            "state":"Outbreak",
+            "trend":0.0
+          }
+        ],
+        "state":"None"
+      },
+      {
+        "allegiance":"Federation",
+        "government":"Democracy",
+        "influence":0.184739,
+        "name":"Workers of Hors Values Party",
+        "state":"None"
+      }
+    ],
+    "government":"Theocracy",
+    "id64":5372467104608,
+    "name":"Crucis Sector PI-T a3-0",
+    "population":159451,
+    "powerConflictProgress":
+    [
+      {
+        "power":"A. Lavigny-Duval",
+        "progress":0.094092
+      },
+      {
+        "power":"Aisling Duval",
+        "progress":0.030233
+      },
+      {
+        "power":"Denton Patreus",
+        "progress":0.003583
+      },
+      {
+        "power":"Edmund Mahon",
+        "progress":0.014633
+      },
+      {
+        "power":"Li Yong-Rui",
+        "progress":0.009708
+      },
+      {
+        "power":"Yuri Grom",
+        "progress":0.001842
+      },
+      {
+        "power":"Zemina Torval",
+        "progress":0.001275
+      },
+      {
+        "power":"Jerome Archer",
+        "progress":0.008392
+      }
+    ],
+    "powerState":"Unoccupied",
+    "powers":
+    [
+      "A. Lavigny-Duval",
+      "Aisling Duval",
+      "Denton Patreus",
+      "Edmund Mahon",
+      "Li Yong-Rui",
+      "Yuri Grom",
+      "Zemina Torval",
+      "Jerome Archer"
+    ],
+    "primaryEconomy":"Military",
+    "secondaryEconomy":"Colony",
+    "security":"Low",
+    "stations":
+    [
+      {
+        "controllingFaction":"Clan of Hors",
+        "controllingFactionState":"Expansion",
+        "distanceToArrival":880.704979,
+        "economies":
+        {
+          "Colony":100.0
+        },
+        "government":"Anarchy",
+        "id":3955247362,
+        "landingPads":
+        {
+          "large":0,
+          "medium":11,
+          "small":3
+        },
+        "market":
+        {
+          "commodities":
+          [
+            {
+              "buyPrice":452,
+              "category":"Chemicals",
+              "commodityId":128673851,
+              "demand":0,
+              "name":"Liquid oxygen",
+              "sellPrice":451,
+              "supply":0,
+              "symbol":"LiquidOxygen"
+            }
+          ],
+          "prohibitedCommodities":
+          [
+          ],
+          "updateTime":"2025-03-10T23:05:45Z"
+        },
+        "name":"Orbital Construction Site: Wescott's Inheritance",
+        "primaryEconomy":"Colony",
+        "services":
+        [
+          "Dock",
+          "Autodock",
+          "Black Market",
+          "Market",
+          "Contacts",
+          "Restock",
+          "Refuel",
+          "Repair",
+          "Flight Controller",
+          "Station Operations",
+          "Station Menu",
+          "Construction Services"
+        ],
+        "type":"Space Construction Depot",
+        "updateTime":"2025-03-10T23:05:45Z"
+      },
+      {
+        "controllingFaction":"Brewer Corporation",
+        "controllingFactionState":null,
+        "distanceToArrival":882.626184,
+        "economies":
+        {
+          "Colony":100.0
+        },
+        "government":"Megaconstruction",
+        "id":3961546754,
+        "landingPads":
+        {
+          "large":0,
+          "medium":11,
+          "small":3
+        },
+        "market":
+        {
+          "commodities":
+          [
+          ],
+          "prohibitedCommodities":
+          [
+            "Narcotics",
+            "Imperial Slaves",
+            "Slaves",
+            "Tobacco"
+          ],
+          "updateTime":"2026-07-25T20:13:29Z"
+        },
+        "name":"Orbital Construction Site: Freud Landing",
+        "primaryEconomy":"Colony",
+        "services":
+        [
+          "Dock",
+          "Autodock",
+          "Market",
+          "Contacts",
+          "Restock",
+          "Refuel",
+          "Repair",
+          "Flight Controller",
+          "Station Operations",
+          "Station Menu",
+          "Construction Services"
+        ],
+        "type":"Space Construction Depot",
+        "updateTime":"2026-07-25T20:13:29Z"
+      },
+      {
+        "controllingFaction":"Pi Mensae Brotherhood",
+        "controllingFactionState":null,
+        "distanceToArrival":3.11199,
+        "economies":
+        {
+          "Military":100.0
+        },
+        "government":"Theocracy",
+        "id":4208726019,
+        "landingPads":
+        {
+          "large":0,
+          "medium":1,
+          "small":2
+        },
+        "market":
+        {
+          "commodities":
+          [
+            {
+              "buyPrice":0,
+              "category":"Medicines",
+              "commodityId":128682046,
+              "demand":768,
+              "name":"Advanced Medicines",
+              "sellPrice":1864,
+              "supply":0,
+              "symbol":"AdvancedMedicines"
+            },
+            {
+              "buyPrice":0,
+              "category":"Chemicals",
+              "commodityId":128924334,
+              "demand":8,
+              "name":"Agronomic Treatment",
+              "sellPrice":3656,
+              "supply":0,
+              "symbol":"AgronomicTreatment"
+            },
+            {
+              "buyPrice":0,
+              "category":"Foods",
+              "commodityId":128049177,
+              "demand":237,
+              "name":"Algae",
+              "sellPrice":577,
+              "supply":0,
+              "symbol":"Algae"
+            },
+            {
+              "buyPrice":0,
+              "category":"Metals",
+              "commodityId":128049176,
+              "demand":2493,
+              "name":"Aluminium",
+              "sellPrice":3309,
+              "supply":0,
+              "symbol":"Aluminium"
+            },
+            {
+              "buyPrice":0,
+              "category":"Foods",
+              "commodityId":128049182,
+              "demand":13,
+              "name":"Animal Meat",
+              "sellPrice":1848,
+              "supply":0,
+              "symbol":"Animalmeat"
+            },
+            {
+              "buyPrice":0,
+              "category":"Medicines",
+              "commodityId":128049210,
+              "demand":2125,
+              "name":"Basic Medicines",
+              "sellPrice":920,
+              "supply":0,
+              "symbol":"BasicMedicines"
+            },
+            {
+              "buyPrice":0,
+              "category":"Legal Drugs",
+              "commodityId":128049214,
+              "demand":4775,
+              "name":"Beer",
+              "sellPrice":760,
+              "supply":0,
+              "symbol":"Beer"
+            },
+            {
+              "buyPrice":0,
+              "category":"Salvage",
+              "commodityId":128666752,
+              "demand":72,
+              "name":"Black Box",
+              "sellPrice":31085,
+              "supply":0,
+              "symbol":"USSCargoBlackBox"
+            },
+            {
+              "buyPrice":0,
+              "category":"Industrial Materials",
+              "commodityId":128673856,
+              "demand":431,
+              "name":"CMM Composite",
+              "sellPrice":6875,
+              "supply":0,
+              "symbol":"CMMComposite"
+            },
+            {
+              "buyPrice":0,
+              "category":"Consumer Items",
+              "commodityId":128049241,
+              "demand":2508,
+              "name":"Clothing",
+              "sellPrice":920,
+              "supply":0,
+              "symbol":"Clothing"
+            },
+            {
+              "buyPrice":0,
+              "category":"Foods",
+              "commodityId":128049189,
+              "demand":678,
+              "name":"Coffee",
+              "sellPrice":2034,
+              "supply":0,
+              "symbol":"Coffee"
+            },
+            {
+              "buyPrice":0,
+              "category":"Technology",
+              "commodityId":128049225,
+              "demand":1498,
+              "name":"Computer Components",
+              "sellPrice":1168,
+              "supply":0,
+              "symbol":"ComputerComponents"
+            },
+            {
+              "buyPrice":0,
+              "category":"Salvage",
+              "commodityId":128672811,
+              "demand":72,
+              "name":"Damaged Escape Pod",
+              "sellPrice":16930,
+              "supply":0,
+              "symbol":"DamagedEscapePod"
+            },
+            {
+              "buyPrice":0,
+              "category":"Consumer Items",
+              "commodityId":128049238,
+              "demand":1461,
+              "name":"Domestic Appliances",
+              "sellPrice":1168,
+              "supply":0,
+              "symbol":"DomesticAppliances"
+            },
+            {
+              "buyPrice":0,
+              "category":"Machinery",
+              "commodityId":128673861,
+              "demand":688,
+              "name":"Emergency Power Cells",
+              "sellPrice":2984,
+              "supply":0,
+              "symbol":"EmergencyPowerCells"
+            },
+            {
+              "buyPrice":0,
+              "category":"Machinery",
+              "commodityId":128673863,
+              "demand":624,
+              "name":"Energy Grid Assembly",
+              "sellPrice":3309,
+              "supply":0,
+              "symbol":"PowerGridAssembly"
+            },
+            {
+              "buyPrice":0,
+              "category":"Foods",
+              "commodityId":128049183,
+              "demand":98,
+              "name":"Fish",
+              "sellPrice":869,
+              "supply":0,
+              "symbol":"Fish"
+            },
+            {
+              "buyPrice":0,
+              "category":"Foods",
+              "commodityId":128049184,
+              "demand":3109,
+              "name":"Food Cartridges",
+              "sellPrice":729,
+              "supply":0,
+              "symbol":"FoodCartridges"
+            },
+            {
+              "buyPrice":0,
+              "category":"Foods",
+              "commodityId":128049178,
+              "demand":2445,
+              "name":"Fruit and Vegetables",
+              "sellPrice":920,
+              "supply":0,
+              "symbol":"FruitAndVegetables"
+            },
+            {
+              "buyPrice":0,
+              "category":"Foods",
+              "commodityId":128049180,
+              "demand":4185,
+              "name":"Grain",
+              "sellPrice":795,
+              "supply":0,
+              "symbol":"Grain"
+            },
+            {
+              "buyPrice":0,
+              "category":"Technology",
+              "commodityId":128049226,
+              "demand":17538,
+              "name":"H.E. Suits",
+              "sellPrice":873,
+              "supply":0,
+              "symbol":"HazardousEnvironmentSuits"
+            },
+            {
+              "buyPrice":0,
+              "category":"Machinery",
+              "commodityId":128673860,
+              "demand":817,
+              "name":"HN Shock Mount",
+              "sellPrice":2569,
+              "supply":0,
+              "symbol":"HNShockMount"
+            },
+            {
+              "buyPrice":0,
+              "category":"Technology",
+              "commodityId":128673875,
+              "demand":373,
+              "name":"Hardware Diagnostic Sensor",
+              "sellPrice":7451,
+              "supply":0,
+              "symbol":"DiagnosticSensor"
+            },
+            {
+              "buyPrice":0,
+              "category":"Salvage",
+              "commodityId":128672135,
+              "demand":72,
+              "name":"Hostages",
+              "sellPrice":34644,
+              "supply":0,
+              "symbol":"Hostage"
+            },
+            {
+              "buyPrice":84,
+              "category":"Chemicals",
+              "commodityId":128049202,
+              "demand":1,
+              "name":"Hydrogen Fuel",
+              "sellPrice":80,
+              "supply":8119,
+              "symbol":"HydrogenFuel"
+            },
+            {
+              "buyPrice":0,
+              "category":"Industrial Materials",
+              "commodityId":128673855,
+              "demand":258,
+              "name":"Insulating Membrane",
+              "sellPrice":11540,
+              "supply":0,
+              "symbol":"InsulatingMembrane"
+            },
+            {
+              "buyPrice":0,
+              "category":"Legal Drugs",
+              "commodityId":128049216,
+              "demand":1104,
+              "name":"Liquor",
+              "sellPrice":1281,
+              "supply":0,
+              "symbol":"Liquor"
+            },
+            {
+              "buyPrice":0,
+              "category":"Technology",
+              "commodityId":128682047,
+              "demand":2265,
+              "name":"Medical Diagnostic Equipment",
+              "sellPrice":3681,
+              "supply":0,
+              "symbol":"MedicalDiagnosticEquipment"
+            },
+            {
+              "buyPrice":0,
+              "category":"Industrial Materials",
+              "commodityId":128672701,
+              "demand":345,
+              "name":"Meta-Alloys",
+              "sellPrice":194884,
+              "supply":0,
+              "symbol":"MetaAlloys"
+            },
+            {
+              "buyPrice":0,
+              "category":"Technology",
+              "commodityId":128673873,
+              "demand":459,
+              "name":"Micro Controllers",
+              "sellPrice":6480,
+              "supply":0,
+              "symbol":"MicroControllers"
+            },
+            {
+              "buyPrice":0,
+              "category":"Industrial Materials",
+              "commodityId":128673857,
+              "demand":1462,
+              "name":"Micro-weave Cooling Hoses",
+              "sellPrice":1946,
+              "supply":0,
+              "symbol":"CoolingHoses"
+            },
+            {
+              "buyPrice":0,
+              "category":"Textiles",
+              "commodityId":128682045,
+              "demand":4185,
+              "name":"Military Grade Fabrics",
+              "sellPrice":1470,
+              "supply":0,
+              "symbol":"MilitaryGradeFabrics"
+            },
+            {
+              "buyPrice":0,
+              "category":"Technology",
+              "commodityId":128673871,
+              "demand":1119,
+              "name":"Nanobreakers",
+              "sellPrice":2447,
+              "supply":0,
+              "symbol":"Nanobreakers"
+            },
+            {
+              "buyPrice":0,
+              "category":"Industrial Materials",
+              "commodityId":128673858,
+              "demand":488,
+              "name":"Neofabric Insulation",
+              "sellPrice":6111,
+              "supply":0,
+              "symbol":"NeofabricInsulation"
+            },
+            {
+              "buyPrice":0,
+              "category":"Chemicals",
+              "commodityId":128672304,
+              "demand":58,
+              "name":"Nerve Agents",
+              "sellPrice":13967,
+              "supply":0,
+              "symbol":"NerveAgents"
+            },
+            {
+              "buyPrice":1579,
+              "category":"Weapons",
+              "commodityId":128049236,
+              "demand":1,
+              "name":"Non-Lethal Weapons",
+              "sellPrice":1538,
+              "supply":87,
+              "symbol":"NonLethalWeapons"
+            },
+            {
+              "buyPrice":0,
+              "category":"Salvage",
+              "commodityId":128672125,
+              "demand":72,
+              "name":"Occupied Escape Pod",
+              "sellPrice":30386,
+              "supply":0,
+              "symbol":"OccupiedCryoPod"
+            },
+            {
+              "buyPrice":0,
+              "category":"Legal Drugs",
+              "commodityId":128983059,
+              "demand":252,
+              "name":"Onionhead Gamma Strain",
+              "sellPrice":5499,
+              "supply":0,
+              "symbol":"OnionHeadC"
+            },
+            {
+              "buyPrice":0,
+              "category":"Metals",
+              "commodityId":128671118,
+              "demand":402,
+              "name":"Osmium",
+              "sellPrice":49397,
+              "supply":0,
+              "symbol":"Osmium"
+            },
+            {
+              "buyPrice":0,
+              "category":"Medicines",
+              "commodityId":128049209,
+              "demand":449,
+              "name":"Performance Enhancers",
+              "sellPrice":7747,
+              "supply":0,
+              "symbol":"PerformanceEnhancers"
+            },
+            {
+              "buyPrice":0,
+              "category":"Salvage",
+              "commodityId":128672126,
+              "demand":72,
+              "name":"Personal Effects",
+              "sellPrice":9553,
+              "supply":0,
+              "symbol":"PersonalEffects"
+            },
+            {
+              "buyPrice":0,
+              "category":"Industrial Materials",
+              "commodityId":128049197,
+              "demand":27939,
+              "name":"Polymers",
+              "sellPrice":737,
+              "supply":0,
+              "symbol":"Polymers"
+            },
+            {
+              "buyPrice":0,
+              "category":"Machinery",
+              "commodityId":128049217,
+              "demand":345,
+              "name":"Power Generators",
+              "sellPrice":2928,
+              "supply":0,
+              "symbol":"PowerGenerators"
+            },
+            {
+              "buyPrice":0,
+              "category":"Medicines",
+              "commodityId":128049669,
+              "demand":10,
+              "name":"Progenitor Cells",
+              "sellPrice":7451,
+              "supply":0,
+              "symbol":"ProgenitorCells"
+            },
+            {
+              "buyPrice":0,
+              "category":"Machinery",
+              "commodityId":128673865,
+              "demand":903,
+              "name":"Radiation Baffle",
+              "sellPrice":2333,
+              "supply":0,
+              "symbol":"RadiationBaffle"
+            },
+            {
+              "buyPrice":1620,
+              "category":"Weapons",
+              "commodityId":128049235,
+              "demand":1,
+              "name":"Reactive Armour",
+              "sellPrice":1578,
+              "supply":3240,
+              "symbol":"ReactiveArmour"
+            },
+            {
+              "buyPrice":78,
+              "category":"Waste",
+              "commodityId":128049248,
+              "demand":1,
+              "name":"Scrap",
+              "sellPrice":65,
+              "supply":13576,
+              "symbol":"Scrap"
+            },
+            {
+              "buyPrice":0,
+              "category":"Metals",
+              "commodityId":129031238,
+              "demand":1119,
+              "name":"Steel",
+              "sellPrice":5137,
+              "supply":0,
+              "symbol":"Steel"
+            },
+            {
+              "buyPrice":0,
+              "category":"Foods",
+              "commodityId":128049185,
+              "demand":1579,
+              "name":"Synthetic Meat",
+              "sellPrice":846,
+              "supply":0,
+              "symbol":"SyntheticMeat"
+            },
+            {
+              "buyPrice":0,
+              "category":"Chemicals",
+              "commodityId":128672303,
+              "demand":774,
+              "name":"Synthetic Reagents",
+              "sellPrice":7747,
+              "supply":0,
+              "symbol":"SyntheticReagents"
+            },
+            {
+              "buyPrice":0,
+              "category":"Foods",
+              "commodityId":128049188,
+              "demand":166,
+              "name":"Tea",
+              "sellPrice":2036,
+              "supply":0,
+              "symbol":"Tea"
+            },
+            {
+              "buyPrice":0,
+              "category":"Technology",
+              "commodityId":128673872,
+              "demand":831,
+              "name":"Telemetry Suite",
+              "sellPrice":3309,
+              "supply":0,
+              "symbol":"TelemetrySuite"
+            },
+            {
+              "buyPrice":0,
+              "category":"Metals",
+              "commodityId":128672301,
+              "demand":2551,
+              "name":"Thorium",
+              "sellPrice":12658,
+              "supply":0,
+              "symbol":"Thorium"
+            },
+            {
+              "buyPrice":0,
+              "category":"Metals",
+              "commodityId":128049174,
+              "demand":1061,
+              "name":"Titanium",
+              "sellPrice":5440,
+              "supply":0,
+              "symbol":"Titanium"
+            },
+            {
+              "buyPrice":0,
+              "category":"Chemicals",
+              "commodityId":128961249,
+              "demand":144,
+              "name":"Tritium",
+              "sellPrice":53753,
+              "supply":0,
+              "symbol":"Tritium"
+            },
+            {
+              "buyPrice":0,
+              "category":"Salvage",
+              "commodityId":129022087,
+              "demand":72,
+              "name":"Unoccupied Escape Pod",
+              "sellPrice":4099,
+              "supply":0,
+              "symbol":"UnocuppiedEscapePod"
+            },
+            {
+              "buyPrice":0,
+              "category":"Chemicals",
+              "commodityId":128049166,
+              "demand":459,
+              "name":"Water",
+              "sellPrice":720,
+              "supply":0,
+              "symbol":"Water"
+            },
+            {
+              "buyPrice":0,
+              "category":"Machinery",
+              "commodityId":128049218,
+              "demand":1061,
+              "name":"Water Purifiers",
+              "sellPrice":903,
+              "supply":0,
+              "symbol":"WaterPurifiers"
+            },
+            {
+              "buyPrice":0,
+              "category":"Legal Drugs",
+              "commodityId":128049215,
+              "demand":525,
+              "name":"Wine",
+              "sellPrice":846,
+              "supply":0,
+              "symbol":"Wine"
+            },
+            {
+              "buyPrice":0,
+              "category":"Salvage",
+              "commodityId":128672123,
+              "demand":72,
+              "name":"Wreckage Components",
+              "sellPrice":8975,
+              "supply":0,
+              "symbol":"WreckageComponents"
+            }
+          ],
+          "prohibitedCommodities":
+          [
+          ],
+          "updateTime":"2026-09-25T19:40:28Z"
+        },
+        "name":"Viktorov Bastion",
+        "outfitting":
+        {
+          "modules":
+          [
+            {
+              "category":"mercgear",
+              "class":3,
+              "moduleId":129046190,
+              "name":"Exposing Missiles",
+              "rating":"A",
+              "symbol":"Hpt_BasicMissileRack_Fixed_Large"
+            },
+            {
+              "category":"mercgear",
+              "class":2,
+              "moduleId":129045436,
+              "name":"Lockdown Seeker Missile Rack",
+              "rating":"B",
+              "symbol":"Hpt_BasicMissileRack_Fixed_Medium"
+            },
+            {
+              "category":"mercgear",
+              "class":4,
+              "moduleId":129046189,
+              "name":"Overloaded Beam Laser",
+              "rating":"A",
+              "symbol":"Hpt_BeamLaser_Fixed_Huge"
+            },
+            {
+              "category":"mercgear",
+              "class":4,
+              "moduleId":129046187,
+              "name":"Force Impact Cannon",
+              "rating":"B",
+              "symbol":"Hpt_Cannon_Fixed_Huge"
+            },
+            {
+              "category":"hardpoint",
+              "class":1,
+              "moduleId":128049438,
+              "name":"Cannon",
+              "rating":"D",
+              "symbol":"Hpt_Cannon_Fixed_Small"
+            },
+            {
+              "category":"mercgear",
+              "class":2,
+              "moduleId":129045429,
+              "name":"High-Yield Enzyme Missile Rack",
+              "rating":"B",
+              "symbol":"Hpt_CausticMissile_Fixed_Medium"
+            },
+            {
+              "category":"mercgear",
+              "class":1,
+              "moduleId":129045432,
+              "name":"Long Range Mining Laser",
+              "rating":"D",
+              "symbol":"Hpt_MiningLaser_Fixed_Small"
+            },
+            {
+              "category":"mercgear",
+              "class":1,
+              "moduleId":129045428,
+              "name":"Far-Reaching Abrasion Blaster",
+              "rating":"D",
+              "symbol":"Hpt_Mining_AbrBlstr_Fixed_Small"
+            },
+            {
+              "category":"mercgear",
+              "class":2,
+              "moduleId":129045433,
+              "name":"Rapid Phase Multi-Cannon",
+              "rating":"E",
+              "symbol":"Hpt_MultiCannon_Fixed_Medium"
+            },
+            {
+              "category":"hardpoint",
+              "class":1,
+              "moduleId":128049400,
+              "name":"Burst Laser",
+              "rating":"F",
+              "symbol":"Hpt_PulseLaserBurst_Fixed_Small"
+            },
+            {
+              "category":"mercgear",
+              "class":2,
+              "moduleId":129046188,
+              "name":"Regenerative Burst Laser",
+              "rating":"F",
+              "symbol":"Hpt_PulseLaserBurst_Gimbal_Medium"
+            },
+            {
+              "category":"hardpoint",
+              "class":1,
+              "moduleId":128049381,
+              "name":"Pulse Laser",
+              "rating":"F",
+              "symbol":"Hpt_PulseLaser_Fixed_Small"
+            },
+            {
+              "category":"mercgear",
+              "class":2,
+              "moduleId":129044375,
+              "name":"Enduring Feedback Rail Gun",
+              "rating":"B",
+              "symbol":"Hpt_Railgun_Fixed_Medium"
+            },
+            {
+              "category":"mercgear",
+              "class":3,
+              "moduleId":129045430,
+              "name":"Double Screaming Fragment Cannon",
+              "rating":"C",
+              "symbol":"Hpt_Slugshot_Gimbal_Large"
+            },
+            {
+              "category":"mercgear",
+              "class":1,
+              "moduleId":129045431,
+              "name":"Double Screaming Fragment Cannon",
+              "rating":"E",
+              "symbol":"Hpt_Slugshot_Gimbal_Small"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128064338,
+              "name":"Cargo Rack",
+              "rating":"E",
+              "symbol":"Int_CargoRack_Size1_Class1"
+            },
+            {
+              "category":"mercgear",
+              "class":5,
+              "moduleId":129045443,
+              "name":"Extended Cargo Rack",
+              "rating":"E",
+              "symbol":"Int_CargoRack_Size5_Class1"
+            },
+            {
+              "category":"mercgear",
+              "class":6,
+              "moduleId":129045444,
+              "name":"Extended Cargo Rack",
+              "rating":"E",
+              "symbol":"Int_CargoRack_Size6_Class1"
+            },
+            {
+              "category":"mercgear",
+              "class":1,
+              "moduleId":129045445,
+              "name":"Long Range Detailed Surface Scanner",
+              "rating":"I",
+              "symbol":"Int_DetailedSurfaceScanner_Tiny"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128671229,
+              "name":"Collector Limpet Controller",
+              "rating":"E",
+              "symbol":"Int_DroneControl_Collection_Size1_Class1"
+            },
+            {
+              "category":"internal",
+              "class":3,
+              "moduleId":128671234,
+              "name":"Collector Limpet Controller",
+              "rating":"E",
+              "symbol":"Int_DroneControl_Collection_Size3_Class1"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128671249,
+              "name":"Fuel Transfer Limpet Controller",
+              "rating":"E",
+              "symbol":"Int_DroneControl_FuelTransfer_Size1_Class1"
+            },
+            {
+              "category":"internal",
+              "class":3,
+              "moduleId":128671254,
+              "name":"Fuel Transfer Limpet Controller",
+              "rating":"E",
+              "symbol":"Int_DroneControl_FuelTransfer_Size3_Class1"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128671269,
+              "name":"Prospector Limpet Controller",
+              "rating":"E",
+              "symbol":"Int_DroneControl_Prospector_Size1_Class1"
+            },
+            {
+              "category":"internal",
+              "class":3,
+              "moduleId":128671274,
+              "name":"Prospector Limpet Controller",
+              "rating":"E",
+              "symbol":"Int_DroneControl_Prospector_Size3_Class1"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128777327,
+              "name":"Repair Limpet Controller",
+              "rating":"E",
+              "symbol":"Int_DroneControl_Repair_Size1_Class1"
+            },
+            {
+              "category":"internal",
+              "class":3,
+              "moduleId":128777332,
+              "name":"Repair Limpet Controller",
+              "rating":"E",
+              "symbol":"Int_DroneControl_Repair_Size3_Class1"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128066532,
+              "name":"Hatch Breaker Limpet Controller",
+              "rating":"E",
+              "symbol":"Int_DroneControl_ResourceSiphon_Size1_Class1"
+            },
+            {
+              "category":"internal",
+              "class":3,
+              "moduleId":128066537,
+              "name":"Hatch Breaker Limpet Controller",
+              "rating":"E",
+              "symbol":"Int_DroneControl_ResourceSiphon_Size3_Class1"
+            },
+            {
+              "category":"standard",
+              "class":2,
+              "moduleId":128064068,
+              "name":"Thrusters",
+              "rating":"E",
+              "symbol":"Int_Engine_Size2_Class1"
+            },
+            {
+              "category":"standard",
+              "class":3,
+              "moduleId":128064073,
+              "name":"Thrusters",
+              "rating":"E",
+              "symbol":"Int_Engine_Size3_Class1"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128666704,
+              "name":"Frame Shift Drive Interdictor",
+              "rating":"E",
+              "symbol":"Int_FSDInterdictor_Size1_Class1"
+            },
+            {
+              "category":"internal",
+              "class":5,
+              "moduleId":129045677,
+              "name":"Mk II Vessel Hangar",
+              "rating":"D",
+              "symbol":"Int_FighterBayMk2_Size5_Class1_Free"
+            },
+            {
+              "category":"internal",
+              "class":6,
+              "moduleId":129045678,
+              "name":"Mk II Vessel Hangar",
+              "rating":"D",
+              "symbol":"Int_FighterBayMk2_Size6_Class1_Free"
+            },
+            {
+              "category":"internal",
+              "class":7,
+              "moduleId":129045679,
+              "name":"Mk II Vessel Hangar",
+              "rating":"D",
+              "symbol":"Int_FighterBayMk2_Size7_Class1_Free"
+            },
+            {
+              "category":"internal",
+              "class":5,
+              "moduleId":129045963,
+              "name":"Vessel Hangar",
+              "rating":"D",
+              "symbol":"Int_FighterBay_Size5_Class1_Free"
+            },
+            {
+              "category":"internal",
+              "class":6,
+              "moduleId":129045964,
+              "name":"Vessel Hangar",
+              "rating":"D",
+              "symbol":"Int_FighterBay_Size6_Class1_Free"
+            },
+            {
+              "category":"internal",
+              "class":7,
+              "moduleId":129045965,
+              "name":"Vessel Hangar",
+              "rating":"D",
+              "symbol":"Int_FighterBay_Size7_Class1_Free"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128666644,
+              "name":"Fuel Scoop",
+              "rating":"E",
+              "symbol":"Int_FuelScoop_Size1_Class1"
+            },
+            {
+              "category":"standard",
+              "class":1,
+              "moduleId":128064346,
+              "name":"Fuel Tank",
+              "rating":"C",
+              "symbol":"Int_FuelTank_Size1_Class3"
+            },
+            {
+              "category":"standard",
+              "class":2,
+              "moduleId":129030577,
+              "name":"Frame Shift Drive (SCO)",
+              "rating":"E",
+              "symbol":"Int_Hyperdrive_Overcharge_Size2_Class1"
+            },
+            {
+              "category":"standard",
+              "class":3,
+              "moduleId":129030581,
+              "name":"Frame Shift Drive (SCO)",
+              "rating":"E",
+              "symbol":"Int_Hyperdrive_Overcharge_Size3_Class1"
+            },
+            {
+              "category":"standard",
+              "class":2,
+              "moduleId":128064103,
+              "name":"Frame Shift Drive",
+              "rating":"E",
+              "symbol":"Int_Hyperdrive_Size2_Class1"
+            },
+            {
+              "category":"standard",
+              "class":3,
+              "moduleId":128064108,
+              "name":"Frame Shift Drive",
+              "rating":"E",
+              "symbol":"Int_Hyperdrive_Size3_Class1"
+            },
+            {
+              "category":"internal",
+              "class":2,
+              "moduleId":129046181,
+              "name":"Large Planetary Vehicle Hangar",
+              "rating":"F",
+              "symbol":"Int_LargeBuggyBay_Size2_Class3_Free"
+            },
+            {
+              "category":"internal",
+              "class":4,
+              "moduleId":129046182,
+              "name":"Large Planetary Vehicle Hangar",
+              "rating":"F",
+              "symbol":"Int_LargeBuggyBay_Size4_Class3_Free"
+            },
+            {
+              "category":"internal",
+              "class":6,
+              "moduleId":129046183,
+              "name":"Large Planetary Vehicle Hangar",
+              "rating":"F",
+              "symbol":"Int_LargeBuggyBay_Size6_Class3_Free"
+            },
+            {
+              "category":"standard",
+              "class":1,
+              "moduleId":128064138,
+              "name":"Life Support",
+              "rating":"E",
+              "symbol":"Int_LifeSupport_Size1_Class1"
+            },
+            {
+              "category":"standard",
+              "class":2,
+              "moduleId":128064143,
+              "name":"Life Support",
+              "rating":"E",
+              "symbol":"Int_LifeSupport_Size2_Class1"
+            },
+            {
+              "category":"standard",
+              "class":3,
+              "moduleId":128064148,
+              "name":"Life Support",
+              "rating":"E",
+              "symbol":"Int_LifeSupport_Size3_Class1"
+            },
+            {
+              "category":"internal",
+              "class":2,
+              "moduleId":129046184,
+              "name":"Mk II Large Planetary Vehicle Hangar",
+              "rating":"F",
+              "symbol":"Int_MkIILargeBuggyBay_Size2_Class3_Free"
+            },
+            {
+              "category":"internal",
+              "class":4,
+              "moduleId":129046185,
+              "name":"Mk II Large Planetary Vehicle Hangar",
+              "rating":"F",
+              "symbol":"Int_MkIILargeBuggyBay_Size4_Class3_Free"
+            },
+            {
+              "category":"internal",
+              "class":6,
+              "moduleId":129046186,
+              "name":"Mk II Large Planetary Vehicle Hangar",
+              "rating":"F",
+              "symbol":"Int_MkIILargeBuggyBay_Size6_Class3_Free"
+            },
+            {
+              "category":"mercgear",
+              "class":5,
+              "moduleId":129044377,
+              "name":"Heavy Duty Module Reinforcement Package",
+              "rating":"D",
+              "symbol":"Int_ModuleReinforcement_Size5_Class2"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128672317,
+              "name":"Planetary Approach Suite",
+              "rating":"I",
+              "symbol":"Int_PlanetApproachSuite"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128975719,
+              "name":"Advanced Planetary Approach Suite",
+              "rating":"I",
+              "symbol":"Int_PlanetApproachSuite_Advanced"
+            },
+            {
+              "category":"standard",
+              "class":1,
+              "moduleId":128064178,
+              "name":"Power Distributor",
+              "rating":"E",
+              "symbol":"Int_PowerDistributor_Size1_Class1"
+            },
+            {
+              "category":"standard",
+              "class":2,
+              "moduleId":128064183,
+              "name":"Power Distributor",
+              "rating":"E",
+              "symbol":"Int_PowerDistributor_Size2_Class1"
+            },
+            {
+              "category":"standard",
+              "class":3,
+              "moduleId":128064188,
+              "name":"Power Distributor",
+              "rating":"E",
+              "symbol":"Int_PowerDistributor_Size3_Class1"
+            },
+            {
+              "category":"mercgear",
+              "class":3,
+              "moduleId":129045438,
+              "name":"Support Focused Power Distributor",
+              "rating":"D",
+              "symbol":"Int_PowerDistributor_Size3_Class2"
+            },
+            {
+              "category":"mercgear",
+              "class":3,
+              "moduleId":129045439,
+              "name":"Support Focused Power Distributor",
+              "rating":"A",
+              "symbol":"Int_PowerDistributor_Size3_Class5"
+            },
+            {
+              "category":"mercgear",
+              "class":4,
+              "moduleId":129045440,
+              "name":"Support Focused Power Distributor",
+              "rating":"D",
+              "symbol":"Int_PowerDistributor_Size4_Class2"
+            },
+            {
+              "category":"mercgear",
+              "class":4,
+              "moduleId":129045441,
+              "name":"Support Focused Power Distributor",
+              "rating":"A",
+              "symbol":"Int_PowerDistributor_Size4_Class5"
+            },
+            {
+              "category":"mercgear",
+              "class":5,
+              "moduleId":129044376,
+              "name":"Balanced Power Distributor",
+              "rating":"A",
+              "symbol":"Int_PowerDistributor_Size5_Class5"
+            },
+            {
+              "category":"mercgear",
+              "class":6,
+              "moduleId":129045442,
+              "name":"Support Focused Power Distributor",
+              "rating":"A",
+              "symbol":"Int_PowerDistributor_Size6_Class5"
+            },
+            {
+              "category":"standard",
+              "class":2,
+              "moduleId":128064033,
+              "name":"Power Plant",
+              "rating":"E",
+              "symbol":"Int_Powerplant_Size2_Class1"
+            },
+            {
+              "category":"standard",
+              "class":3,
+              "moduleId":128064038,
+              "name":"Power Plant",
+              "rating":"E",
+              "symbol":"Int_Powerplant_Size3_Class1"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128666684,
+              "name":"Refinery",
+              "rating":"E",
+              "symbol":"Int_Refinery_Size1_Class1"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128667598,
+              "name":"Auto Field-Maintenance Unit",
+              "rating":"E",
+              "symbol":"Int_Repairer_Size1_Class1"
+            },
+            {
+              "category":"standard",
+              "class":1,
+              "moduleId":128064218,
+              "name":"Sensors",
+              "rating":"E",
+              "symbol":"Int_Sensors_Size1_Class1"
+            },
+            {
+              "category":"standard",
+              "class":2,
+              "moduleId":128064223,
+              "name":"Sensors",
+              "rating":"E",
+              "symbol":"Int_Sensors_Size2_Class1"
+            },
+            {
+              "category":"standard",
+              "class":3,
+              "moduleId":128064228,
+              "name":"Sensors",
+              "rating":"E",
+              "symbol":"Int_Sensors_Size3_Class1"
+            },
+            {
+              "category":"internal",
+              "class":1,
+              "moduleId":128064298,
+              "name":"Shield Cell Bank",
+              "rating":"E",
+              "symbol":"Int_ShieldCellBank_Size1_Class1"
+            },
+            {
+              "category":"internal",
+              "class":2,
+              "moduleId":128064303,
+              "name":"Shield Cell Bank",
+              "rating":"E",
+              "symbol":"Int_ShieldCellBank_Size2_Class1"
+            },
+            {
+              "category":"internal",
+              "class":3,
+              "moduleId":128064308,
+              "name":"Shield Cell Bank",
+              "rating":"E",
+              "symbol":"Int_ShieldCellBank_Size3_Class1"
+            },
+            {
+              "category":"internal",
+              "class":2,
+              "moduleId":128064263,
+              "name":"Shield Generator",
+              "rating":"E",
+              "symbol":"Int_ShieldGenerator_Size2_Class1"
+            },
+            {
+              "category":"internal",
+              "class":3,
+              "moduleId":128064268,
+              "name":"Shield Generator",
+              "rating":"E",
+              "symbol":"Int_ShieldGenerator_Size3_Class1"
+            }
+          ],
+          "updateTime":"2026-09-25T19:40:28Z"
+        },
+        "primaryEconomy":"Military",
+        "services":
+        [
+          "Dock",
+          "Autodock",
+          "Black Market",
+          "Market",
+          "Contacts",
+          "Missions",
+          "Outfitting",
+          "Restock",
+          "Refuel",
+          "Repair",
+          "Workshop",
+          "Missions Generated",
+          "Interstellar Factors Contact",
+          "Flight Controller",
+          "Station Operations",
+          "Powerplay",
+          "Search and Rescue",
+          "Station Menu",
+          "Shop",
+          "Livery",
+          "Social Space",
+          "System Colonisation"
+        ],
+        "type":"Outpost",
+        "updateTime":"2026-09-25T19:40:28Z"
+      }
+    ],
+    "timestamps":
+    {
+      "factions":"2026-10-24T19:56:45Z",
+      "powerState":"2026-10-24T19:56:45Z",
+      "powers":"2026-10-24T19:56:45Z"
+    }
+  }
+}

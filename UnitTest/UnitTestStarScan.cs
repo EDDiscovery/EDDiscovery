@@ -113,7 +113,7 @@ namespace UnitTest
                     string name = System.IO.Path.GetFileNameWithoutExtension(f);
                     if (!name.StartsWithIIC("Synth"))
                     {
-                        var sn = TestScan(null, f, @"c:\code\Images", false, 1920, false);
+                        var sn = TestScan(null, f, @"c:\code\Images\Dump", false, 1920, false);
                         if (sn != null)
                         {
                             //sn.DumpTree();

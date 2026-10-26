@@ -1,0 +1,501 @@
+{
+  "id":12790,
+  "id64":83919508178,
+  "name":"Gliese 9043",
+  "url":"https://www.edsm.net/en/system/bodies/id/12790/name/Gliese+9043",
+  "bodyCount":9,
+  "bodies":
+  [
+    {
+      "id":8263819,
+      "id64":36028880938472146,
+      "bodyId":1,
+      "name":"Gliese 9043 A",
+      "discovery":
+      {
+        "commander":"tu4kin",
+        "date":"2017-12-01 15:49:45"
+      },
+      "type":"Star",
+      "subType":"G (White-Yellow) Star",
+      "parents":
+      [
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":0,
+      "isMainStar":true,
+      "isScoopable":true,
+      "age":1176,
+      "spectralClass":"G",
+      "luminosity":"V",
+      "absoluteMagnitude":5.835464,
+      "solarMasses":0.84375,
+      "solarRadius":0.911041242271747,
+      "surfaceTemperature":5160,
+      "orbitalPeriod":30570.589695815976,
+      "semiMajorAxis":4.9754263407914268,
+      "orbitalEccentricity":0.090097,
+      "orbitalInclination":-10.914445,
+      "argOfPeriapsis":10.429607,
+      "rotationalPeriod":2.7446890705902778,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":null,
+      "updateTime":"2026-10-24 00:15:03"
+    },
+    {
+      "id":8263816,
+      "id64":72057677957436114,
+      "bodyId":2,
+      "name":"Gliese 9043 B",
+      "discovery":
+      {
+        "commander":"tu4kin",
+        "date":"2017-12-01 15:49:45"
+      },
+      "type":"Star",
+      "subType":"M (Red dwarf) Star",
+      "parents":
+      [
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":10339,
+      "isMainStar":false,
+      "isScoopable":true,
+      "age":1176,
+      "spectralClass":"M4",
+      "luminosity":"Va",
+      "absoluteMagnitude":9.80603,
+      "solarMasses":0.28125,
+      "solarRadius":0.40975951689432061,
+      "surfaceTemperature":2871,
+      "orbitalPeriod":30570.589695815976,
+      "semiMajorAxis":14.926046218298881,
+      "orbitalEccentricity":0.090097,
+      "orbitalInclination":-10.914445,
+      "argOfPeriapsis":190.429595,
+      "rotationalPeriod":1.4992327919675927,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":null,
+      "belts":
+      [
+        {
+          "name":"Gliese 9043 B A Belt",
+          "type":"Rocky",
+          "mass":70084000000000,
+          "innerRadius":470230,
+          "outerRadius":1645700
+        }
+      ],
+      "updateTime":"2026-10-24 00:15:03"
+    },
+    {
+      "id":8263815,
+      "id64":324259257090183890,
+      "bodyId":9,
+      "name":"Gliese 9043 B 1",
+      "discovery":
+      {
+        "commander":"tu4kin",
+        "date":"2017-12-01 15:49:45"
+      },
+      "type":"Planet",
+      "subType":"High metal content world",
+      "parents":
+      [
+        {
+          "Star":2
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":10356,
+      "isLandable":true,
+      "gravity":0.43100715977827964,
+      "earthMasses":0.084177,
+      "radius":2818.636,
+      "surfaceTemperature":205,
+      "surfacePressure":0.049471543074265975,
+      "volcanismType":"No volcanism",
+      "atmosphereType":"Thin Carbon dioxide",
+      "atmosphereComposition":
+      {
+        "Carbon dioxide":94.9,
+        "Sulphur dioxide":5.1
+      },
+      "solidComposition":
+      {
+        "Rock":67.16,
+        "Metal":32.84,
+        "Ice":0
+      },
+      "terraformingState":null,
+      "orbitalPeriod":209.10449739959492,
+      "semiMajorAxis":0.45175875831180534,
+      "orbitalEccentricity":0.003823,
+      "orbitalInclination":0.700234,
+      "argOfPeriapsis":227.427677,
+      "rotationalPeriod":0.90344741269675932,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":0.195077,
+      "materials":
+      {
+        "Iron":21.02,
+        "Nickel":15.9,
+        "Sulphur":14.95,
+        "Carbon":12.57,
+        "Chromium":9.45,
+        "Manganese":8.68,
+        "Phosphorus":8.05,
+        "Zinc":5.71,
+        "Niobium":1.44,
+        "Ruthenium":1.3,
+        "Mercury":0.92
+      },
+      "updateTime":"2026-09-15 14:49:38"
+    },
+    {
+      "id":8263821,
+      "id64":360288054109147858,
+      "bodyId":10,
+      "name":"Gliese 9043 B 2",
+      "discovery":
+      {
+        "commander":"tu4kin",
+        "date":"2017-12-01 15:49:45"
+      },
+      "type":"Planet",
+      "subType":"Ammonia world",
+      "parents":
+      [
+        {
+          "Star":2
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":10672,
+      "isLandable":false,
+      "gravity":0.64348634277019046,
+      "earthMasses":0.247616,
+      "radius":3956.4365,
+      "surfaceTemperature":231,
+      "surfacePressure":1.5564768381445842,
+      "volcanismType":"No volcanism",
+      "atmosphereType":"Ammonia and Oxygen",
+      "atmosphereComposition":
+      {
+        "Carbon dioxide":82.51,
+        "Nitrogen":13.5,
+        "Oxygen":3.09
+      },
+      "solidComposition":
+      {
+        "Rock":66.19,
+        "Metal":33.81,
+        "Ice":0
+      },
+      "terraformingState":null,
+      "orbitalPeriod":495.87784817924768,
+      "semiMajorAxis":0.8033672992213251,
+      "orbitalEccentricity":5E-05,
+      "orbitalInclination":0.051813,
+      "argOfPeriapsis":154.383722,
+      "rotationalPeriod":1.1169674715162037,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":2.639715,
+      "updateTime":"2026-10-12 04:22:19"
+    },
+    {
+      "id":8263814,
+      "id64":396316851128111826,
+      "bodyId":11,
+      "name":"Gliese 9043 B 2 a",
+      "discovery":
+      {
+        "commander":"tu4kin",
+        "date":"2017-12-01 15:49:45"
+      },
+      "type":"Planet",
+      "subType":"Rocky body",
+      "parents":
+      [
+        {
+          "Planet":10
+        },
+        {
+          "Star":2
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":10579,
+      "isLandable":true,
+      "gravity":0.17941927652681802,
+      "earthMasses":0.009199,
+      "radius":1444.1765,
+      "surfaceTemperature":133,
+      "surfacePressure":0.000559605753762645,
+      "volcanismType":"No volcanism",
+      "atmosphereType":"No atmosphere",
+      "atmosphereComposition":null,
+      "solidComposition":
+      {
+        "Rock":85.96,
+        "Metal":14.04,
+        "Ice":0
+      },
+      "terraformingState":null,
+      "orbitalPeriod":30.466570622395832,
+      "semiMajorAxis":0.00175075557441975,
+      "orbitalEccentricity":null,
+      "orbitalInclination":18.023008,
+      "argOfPeriapsis":348.521228,
+      "rotationalPeriod":31.027300729120366,
+      "rotationalPeriodTidallyLocked":true,
+      "axialTilt":0.315081,
+      "materials":
+      {
+        "Iron":19.81,
+        "Sulphur":17.73,
+        "Nickel":14.98,
+        "Carbon":14.91,
+        "Phosphorus":9.54,
+        "Chromium":8.91,
+        "Manganese":8.18,
+        "Selenium":2.77,
+        "Niobium":1.35,
+        "Molybdenum":1.29,
+        "Polonium":0.53
+      },
+      "updateTime":"2026-09-15 14:49:38"
+    },
+    {
+      "id":8263817,
+      "id64":432345648147075794,
+      "bodyId":12,
+      "name":"Gliese 9043 B 3",
+      "discovery":
+      {
+        "commander":"tu4kin",
+        "date":"2017-12-01 15:49:45"
+      },
+      "type":"Planet",
+      "subType":"Icy body",
+      "parents":
+      [
+        {
+          "Star":2
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":10405,
+      "isLandable":false,
+      "gravity":0.32871010695346503,
+      "earthMasses":0.123507,
+      "radius":3909.523,
+      "surfaceTemperature":110,
+      "surfacePressure":6.9389594127806564,
+      "volcanismType":"No volcanism",
+      "atmosphereType":"Thick Nitrogen",
+      "atmosphereComposition":
+      {
+        "Nitrogen":99.99
+      },
+      "solidComposition":
+      {
+        "Ice":56.21,
+        "Rock":29.41,
+        "Metal":14.38
+      },
+      "terraformingState":null,
+      "orbitalPeriod":877.41705830450235,
+      "semiMajorAxis":1.1752629442534572,
+      "orbitalEccentricity":0.000879,
+      "orbitalInclination":-0.003257,
+      "argOfPeriapsis":204.381513,
+      "rotationalPeriod":1.5101259064120371,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":0.492578,
+      "updateTime":"2026-09-15 14:49:38"
+    },
+    {
+      "id":8263811,
+      "id64":468374445166039762,
+      "bodyId":13,
+      "name":"Gliese 9043 B 4",
+      "discovery":
+      {
+        "commander":"tu4kin",
+        "date":"2017-12-01 15:49:45"
+      },
+      "type":"Planet",
+      "subType":"Icy body",
+      "parents":
+      [
+        {
+          "Star":2
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":9980,
+      "isLandable":false,
+      "gravity":0.35940833180688658,
+      "earthMasses":0.157851,
+      "radius":4226.8235,
+      "surfaceTemperature":99,
+      "surfacePressure":2.8474765605724155,
+      "volcanismType":"No volcanism",
+      "atmosphereType":"Argon-rich",
+      "atmosphereComposition":
+      {
+        "Nitrogen":99.35,
+        "Argon":0.65
+      },
+      "solidComposition":
+      {
+        "Ice":56.21,
+        "Rock":29.41,
+        "Metal":14.38
+      },
+      "terraformingState":null,
+      "orbitalPeriod":1337.6726182523148,
+      "semiMajorAxis":1.556793084138864,
+      "orbitalEccentricity":0.000111,
+      "orbitalInclination":-0.021638,
+      "argOfPeriapsis":71.540853,
+      "rotationalPeriod":1.3876731456134259,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":-0.307475,
+      "updateTime":"2026-09-15 14:49:38"
+    },
+    {
+      "id":8263822,
+      "id64":504403242185003730,
+      "bodyId":14,
+      "name":"Gliese 9043 B 5",
+      "discovery":
+      {
+        "commander":"tu4kin",
+        "date":"2017-12-01 15:49:45"
+      },
+      "type":"Planet",
+      "subType":"Icy body",
+      "parents":
+      [
+        {
+          "Star":2
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":11361,
+      "isLandable":false,
+      "gravity":0.59592431900673992,
+      "earthMasses":0.736237,
+      "radius":7089.209,
+      "surfaceTemperature":273,
+      "surfacePressure":1459.7458869972859,
+      "volcanismType":"Minor Carbon Dioxide Geysers",
+      "atmosphereType":"Thick Methane-rich",
+      "atmosphereComposition":
+      {
+        "Nitrogen":96,
+        "Methane":1.96,
+        "Argon":0.96
+      },
+      "solidComposition":
+      {
+        "Ice":68.29,
+        "Rock":21.25,
+        "Metal":10.47
+      },
+      "terraformingState":null,
+      "orbitalPeriod":2127.6775471590277,
+      "semiMajorAxis":2.1212973460177733,
+      "orbitalEccentricity":0.017356,
+      "orbitalInclination":-0.174112,
+      "argOfPeriapsis":319.371593,
+      "rotationalPeriod":0.9781090800810186,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":-0.617642,
+      "updateTime":"2026-09-15 14:49:38"
+    },
+    {
+      "id":8263808,
+      "id64":540432039203967698,
+      "bodyId":15,
+      "name":"Gliese 9043 B 5 a",
+      "discovery":
+      {
+        "commander":"tu4kin",
+        "date":"2017-12-01 15:49:45"
+      },
+      "type":"Planet",
+      "subType":"Icy body",
+      "parents":
+      [
+        {
+          "Planet":14
+        },
+        {
+          "Star":2
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":11365,
+      "isLandable":true,
+      "gravity":0.13309508879545909,
+      "earthMasses":0.016665,
+      "radius":2256.868,
+      "surfaceTemperature":87,
+      "surfacePressure":null,
+      "volcanismType":"No volcanism",
+      "atmosphereType":"No atmosphere",
+      "atmosphereComposition":null,
+      "solidComposition":
+      {
+        "Ice":87.99,
+        "Rock":10.34,
+        "Metal":1.67
+      },
+      "terraformingState":null,
+      "orbitalPeriod":93.416154246643515,
+      "semiMajorAxis":0.0052884786540822069,
+      "orbitalEccentricity":null,
+      "orbitalInclination":-67.639316,
+      "argOfPeriapsis":291.082978,
+      "rotationalPeriod":94.467472680567127,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":0.141923,
+      "materials":
+      {
+        "Sulphur":26.99,
+        "Carbon":22.7,
+        "Phosphorus":14.53,
+        "Iron":11.72,
+        "Nickel":8.86,
+        "Chromium":5.27,
+        "Manganese":4.84,
+        "Germanium":3.08,
+        "Niobium":0.8,
+        "Yttrium":0.7,
+        "Mercury":0.51
+      },
+      "updateTime":"2026-09-15 14:49:38"
+    }
+  ]
+}

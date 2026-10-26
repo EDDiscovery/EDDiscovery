@@ -63,6 +63,7 @@
     </Compile>
     <Compile Include="UnitTestFrontierKeys.cs" />
     <Compile Include="UnitTestBindingsFile.cs" />
+    <Compile Include="UnitTestEDSMSpanshLookup.cs" />
     <Compile Include="UnitTestStarScan.cs" />
     <Compile Include="UnitTestEngineering.cs" />
     <Compile Include="UnitTestShips.cs" />
@@ -158,6 +159,22 @@
     <None Include="StarScans\Tethlon.json" />
     <None Include="StarScans\UCAC3 70-2386.json" />
     <None Include="StarScans\wolf 1278.json" />
+    <None Include="WebLookups\edsmv4__handh__22962505665384.json" />
+    <None Include="WebLookups\spanshv4__4 serpentis__22785557692.json" />
+    <None Include="WebLookups\spanshv4__alpha centauri__1178708478315.json" />
+    <None Include="WebLookups\spanshv4__col 285 sector rv-q b20-3__7268024591817.json" />
+    <None Include="WebLookups\spanshv4__crucis sector pi-t a3-0__5372467104608.json" />
+    <None Include="WebLookups\spanshv4__dea motrona__2869709514161.json" />
+    <None Include="WebLookups\spanshv4__gliese 9043__83919508178.json" />
+    <None Include="WebLookups\spanshv4__hip 15286__1458309108426.json" />
+    <None Include="WebLookups\spanshv4__hip 75521__388434512243.json" />
+    <None Include="WebLookups\spanshv4__hip 97950__2557619442410.json" />
+    <None Include="WebLookups\spanshv4__hr 5791__594592942451.json" />
+    <None Include="WebLookups\spanshv4__icz hw-w b1-4__9467315365289.json" />
+    <None Include="WebLookups\spanshv4__kaliki__671491040657.json" />
+    <None Include="WebLookups\spanshv4__lhs 2435__5069806380465.json" />
+    <None Include="WebLookups\spanshv4__lhs 3447__5306465653474.json" />
+    <None Include="WebLookups\spanshv4__lp 378-541__22661187118505.json" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

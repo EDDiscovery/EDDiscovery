@@ -207,7 +207,7 @@ namespace UnitTest
 
             public string ScanCachePath => throw new NotImplementedException();
 
-            public bool ScanCacheEnabled => throw new NotImplementedException();
+            public bool ScanCacheEnabled => false;
 
             public bool SetEDDNforNewCommanders => throw new NotImplementedException();
         }

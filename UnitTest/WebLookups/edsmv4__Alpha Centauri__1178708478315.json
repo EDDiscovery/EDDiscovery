@@ -1,0 +1,464 @@
+{
+  "id":6903,
+  "id64":1178708478315,
+  "name":"Alpha Centauri",
+  "url":"https://www.edsm.net/en/system/bodies/id/6903/name/Alpha+Centauri",
+  "bodyCount":9,
+  "bodies":
+  [
+    {
+      "id":8141559,
+      "id64":72058772746406251,
+      "bodyId":2,
+      "name":"Alpha Centauri",
+      "discovery":
+      {
+        "commander":"Redfoxxx",
+        "date":"2017-09-26 22:09:17"
+      },
+      "type":"Star",
+      "subType":"G (White-Yellow) Star",
+      "parents":
+      [
+        {
+          "Null":1
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":0,
+      "isMainStar":true,
+      "isScoopable":true,
+      "age":9440,
+      "spectralClass":"G",
+      "luminosity":"V",
+      "absoluteMagnitude":4.357269,
+      "solarMasses":1.175781,
+      "solarRadius":1.1026000977713875,
+      "surfaceTemperature":6557,
+      "orbitalPeriod":9348.9066456202545,
+      "semiMajorAxis":4.6327012495840956,
+      "orbitalEccentricity":0.5179,
+      "orbitalInclination":79.205114,
+      "argOfPeriapsis":116.656503,
+      "rotationalPeriod":4.159450264155093,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":0.175421,
+      "updateTime":"2026-10-26 03:42:19"
+    },
+    {
+      "id":6716,
+      "id64":216173960822262123,
+      "bodyId":6,
+      "name":"2045 PC2",
+      "discovery":
+      {
+        "commander":"Redfoxxx",
+        "date":"2017-09-26 22:09:17"
+      },
+      "type":"Planet",
+      "subType":"Rocky body",
+      "parents":
+      [
+        {
+          "Null":1
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":4349,
+      "isLandable":true,
+      "gravity":0.08689331917261553,
+      "earthMasses":0.001,
+      "radius":684.213,
+      "surfaceTemperature":85,
+      "surfacePressure":null,
+      "volcanismType":"No volcanism",
+      "atmosphereType":"No atmosphere",
+      "atmosphereComposition":null,
+      "solidComposition":
+      {
+        "Rock":80,
+        "Metal":20,
+        "Ice":0
+      },
+      "terraformingState":null,
+      "orbitalPeriod":9348.9066456202545,
+      "semiMajorAxis":9.56568437539332,
+      "orbitalEccentricity":0.5179,
+      "orbitalInclination":0,
+      "argOfPeriapsis":269.999997,
+      "rotationalPeriod":1.9169499425578704,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":0.288145,
+      "materials":
+      {
+        "Iron":19.83,
+        "Sulphur":16.33,
+        "Nickel":15,
+        "Carbon":13.73,
+        "Chromium":8.92,
+        "Phosphorus":8.79,
+        "Manganese":8.19,
+        "Zinc":5.39,
+        "Cadmium":1.54,
+        "Tin":1.26,
+        "Antimony":1.02
+      },
+      "updateTime":"2026-10-26 03:42:19"
+    },
+    {
+      "id":1984,
+      "id64":252202757841226091,
+      "bodyId":7,
+      "name":"Lagrange",
+      "discovery":
+      {
+        "commander":"Redfoxxx",
+        "date":"2017-09-26 22:09:17"
+      },
+      "type":"Planet",
+      "subType":"Class I gas giant",
+      "parents":
+      [
+        {
+          "Null":1
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":4349,
+      "isLandable":false,
+      "gravity":2.4420471326173558,
+      "earthMasses":301.236633,
+      "radius":70837.2,
+      "surfaceTemperature":131,
+      "surfacePressure":null,
+      "volcanismType":"No volcanism",
+      "atmosphereType":"No atmosphere",
+      "atmosphereComposition":
+      {
+        "Hydrogen":72.27,
+        "Helium":27.73
+      },
+      "solidComposition":null,
+      "terraformingState":null,
+      "orbitalPeriod":9348.9066456202545,
+      "semiMajorAxis":9.56568517225827,
+      "orbitalEccentricity":0.5179,
+      "orbitalInclination":0,
+      "argOfPeriapsis":89.999999,
+      "rotationalPeriod":0.53615399116898144,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":0.058087,
+      "updateTime":"2026-10-26 03:42:19"
+    },
+    {
+      "id":8846,
+      "id64":288231554860190059,
+      "bodyId":8,
+      "name":"2042 L1",
+      "discovery":
+      {
+        "commander":"Redfoxxx",
+        "date":"2017-09-26 22:09:17"
+      },
+      "type":"Planet",
+      "subType":"Rocky body",
+      "parents":
+      [
+        {
+          "Planet":7
+        },
+        {
+          "Null":1
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":4345,
+      "isLandable":true,
+      "gravity":0.08689331917261553,
+      "earthMasses":0.001,
+      "radius":684.213,
+      "surfaceTemperature":85,
+      "surfacePressure":0,
+      "volcanismType":"No volcanism",
+      "atmosphereType":"No atmosphere",
+      "atmosphereComposition":null,
+      "solidComposition":
+      {
+        "Rock":80,
+        "Metal":20,
+        "Ice":0
+      },
+      "terraformingState":"Not terraformable",
+      "orbitalPeriod":2.9999999398379629,
+      "semiMajorAxis":0.00400000304422468,
+      "orbitalEccentricity":0.003,
+      "orbitalInclination":82.500195,
+      "argOfPeriapsis":322.089947,
+      "rotationalPeriod":3.0722599741666672,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":0.366246,
+      "materials":
+      {
+        "Iron":20.96,
+        "Sulphur":17.26,
+        "Nickel":15.85,
+        "Carbon":14.51,
+        "Phosphorus":9.29,
+        "Manganese":8.65,
+        "Vanadium":5.15,
+        "Germanium":5.1,
+        "Tin":1.34,
+        "Tungsten":1.15,
+        "Technetium":0.75
+      },
+      "updateTime":"2026-10-26 03:42:19"
+    },
+    {
+      "id":2384,
+      "id64":324260351879154027,
+      "bodyId":9,
+      "name":"2071 AC3",
+      "discovery":
+      {
+        "commander":"Redfoxxx",
+        "date":"2017-09-26 22:09:17"
+      },
+      "type":"Planet",
+      "subType":"Class I gas giant",
+      "parents":
+      [
+        {
+          "Null":1
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":11926,
+      "isLandable":false,
+      "gravity":1.775267166120228,
+      "earthMasses":16.729904,
+      "radius":19579.4,
+      "surfaceTemperature":61,
+      "surfacePressure":null,
+      "volcanismType":"No volcanism",
+      "atmosphereType":"No atmosphere",
+      "atmosphereComposition":
+      {
+        "Hydrogen":72.27,
+        "Helium":27.73
+      },
+      "solidComposition":null,
+      "terraformingState":null,
+      "orbitalPeriod":28259.300247386571,
+      "semiMajorAxis":23.000015870719206,
+      "orbitalEccentricity":0.000745,
+      "orbitalInclination":13.009866,
+      "argOfPeriapsis":65.44496,
+      "rotationalPeriod":1.335959997685185,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":-0.229091,
+      "updateTime":"2026-10-26 03:42:19"
+    },
+    {
+      "id":1553,
+      "id64":108087569765370219,
+      "bodyId":3,
+      "name":"Alpha Centauri B",
+      "discovery":
+      {
+        "commander":"Redfoxxx",
+        "date":"2017-09-26 22:09:17"
+      },
+      "type":"Star",
+      "subType":"K (Yellow-Orange) Star",
+      "parents":
+      [
+        {
+          "Null":1
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":4501,
+      "isMainStar":false,
+      "isScoopable":true,
+      "age":9212,
+      "spectralClass":"K1",
+      "luminosity":"V",
+      "absoluteMagnitude":5.71727,
+      "solarMasses":0.855469,
+      "solarRadius":0.9037780014378145,
+      "surfaceTemperature":5240,
+      "orbitalPeriod":9348.9066456202545,
+      "semiMajorAxis":6.3673077993690317,
+      "orbitalEccentricity":0.5179,
+      "orbitalInclination":79.205114,
+      "argOfPeriapsis":296.656498,
+      "rotationalPeriod":4.0409699742245371,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":0.203023,
+      "updateTime":"2026-10-26 03:42:19"
+    },
+    {
+      "id":9029,
+      "id64":180145163803298155,
+      "bodyId":5,
+      "name":"Alpha Centauri B 1",
+      "discovery":
+      {
+        "commander":"Redfoxxx",
+        "date":"2017-09-26 22:09:17"
+      },
+      "type":"Planet",
+      "subType":"Metal-rich body",
+      "parents":
+      [
+        {
+          "Star":3
+        },
+        {
+          "Null":1
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":4485,
+      "isLandable":true,
+      "gravity":1.473867844894319,
+      "earthMasses":0.674523,
+      "radius":4314.73,
+      "surfaceTemperature":1080,
+      "surfacePressure":0,
+      "volcanismType":"Rocky Magma",
+      "atmosphereType":"No atmosphere",
+      "atmosphereComposition":null,
+      "solidComposition":
+      {
+        "Metal":100,
+        "Ice":0,
+        "Rock":0
+      },
+      "terraformingState":"Not terraformable",
+      "orbitalPeriod":3.2356998848726857,
+      "semiMajorAxis":0.041850630397327573,
+      "orbitalEccentricity":0,
+      "orbitalInclination":0.052105,
+      "argOfPeriapsis":4.949055,
+      "rotationalPeriod":3.3806801655671297,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":-0.275897,
+      "materials":
+      {
+        "Iron":35.21,
+        "Nickel":26.63,
+        "Chromium":15.83,
+        "Manganese":14.54,
+        "Selenium":2.49,
+        "Tin":2.35,
+        "Tungsten":1.93,
+        "Polonium":1.02
+      },
+      "updateTime":"2026-10-26 03:42:19"
+    },
+    {
+      "id":8352,
+      "id64":144116366784334187,
+      "bodyId":4,
+      "name":"Proxima Centauri",
+      "discovery":
+      {
+        "commander":"Redfoxxx",
+        "date":"2017-09-26 22:09:17"
+      },
+      "type":"Star",
+      "subType":"M (Red dwarf) Star",
+      "parents":
+      [
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":6395220,
+      "isMainStar":false,
+      "isScoopable":true,
+      "age":12946,
+      "spectralClass":"M",
+      "luminosity":"V",
+      "absoluteMagnitude":15.461929,
+      "solarMasses":0.121094,
+      "solarRadius":0.26541135873472321,
+      "surfaceTemperature":1540,
+      "orbitalPeriod":368906185.03093749,
+      "semiMajorAxis":12268.924972795085,
+      "orbitalEccentricity":0.09868,
+      "orbitalInclination":-37.205417,
+      "argOfPeriapsis":169.19258,
+      "rotationalPeriod":1.4179500525578705,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":-0.11222,
+      "updateTime":"2026-10-26 03:42:19"
+    },
+    {
+      "id":168,
+      "id64":360289148898117995,
+      "bodyId":10,
+      "name":"Eden",
+      "discovery":
+      {
+        "commander":"Redfoxxx",
+        "date":"2017-09-26 22:09:17"
+      },
+      "type":"Planet",
+      "subType":"High metal content world",
+      "parents":
+      [
+        {
+          "Star":4
+        },
+        {
+          "Null":0
+        }
+      ],
+      "distanceToArrival":6395221,
+      "isLandable":false,
+      "gravity":0.91654217208082578,
+      "earthMasses":0.66,
+      "radius":5412.28,
+      "surfaceTemperature":1223,
+      "surfacePressure":2213.2862768319765,
+      "volcanismType":"Minor Metallic Magma",
+      "atmosphereType":"Hot thick Water",
+      "atmosphereComposition":
+      {
+        "Water":99.95
+      },
+      "solidComposition":
+      {
+        "Rock":70,
+        "Metal":30,
+        "Ice":0
+      },
+      "terraformingState":null,
+      "orbitalPeriod":30.999999769305557,
+      "semiMajorAxis":0.010000006813696581,
+      "orbitalEccentricity":0.01,
+      "orbitalInclination":77.100063,
+      "argOfPeriapsis":194.047054,
+      "rotationalPeriod":1.0495200603356483,
+      "rotationalPeriodTidallyLocked":false,
+      "axialTilt":-0.213485,
+      "updateTime":"2026-10-26 03:42:19"
+    }
+  ]
+}
