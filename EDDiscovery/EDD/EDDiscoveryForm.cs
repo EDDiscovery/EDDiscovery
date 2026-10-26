@@ -668,7 +668,7 @@ namespace EDDiscovery
                 }
             }
 
-            if (EDDOptions.Instance.AllowDragReorderTabs)
+            if (!EDDOptions.Instance.AllowDragReorderTabs)
                 tabControlMain.AllowDragReorder = false;
 
             UpdatePanelListInContextMenuStrip();
