@@ -451,7 +451,7 @@ namespace EDDiscovery
                 int mergers = EliteDangerousCore.Bindings.FrontierDeviceMapping.MergeMappings(devicemapping,frontierdevicemappings);  // merge into device mappings
                 
                 EliteDangerousCore.Bindings.FrontierDeviceMapping.DeviceMappingToPIDVID = devicemapping;        // this is the set to use
-                System.Diagnostics.Debug.WriteLine($"Device mapping table {devicemapping.ToString(true)}");
+                //System.Diagnostics.Debug.WriteLine($"Device mapping table {devicemapping.ToString(true)}");
 
                 // now we load bindings 
 
