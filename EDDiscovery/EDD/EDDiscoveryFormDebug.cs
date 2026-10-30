@@ -21,6 +21,7 @@ using EliteDangerousCore.Spansh;
 using QuickJSON;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -63,10 +64,17 @@ namespace EDDiscovery
 
                 s += Environment.NewLine;
 
-                foreach (var x in Enum.GetValues(typeof(JournalTypeEnum)))
+                foreach (JournalTypeEnum x in Enum.GetValues(typeof(JournalTypeEnum)))
                 {
+                    System.Diagnostics.Debug.WriteLine($"Serialising {x}");
                     //var x = "CreateSuitLoadout";
                     JournalEntry je = JournalEntry.CreateJournalEntry(x.ToString(), DateTime.UtcNow);
+
+                    if (x != JournalTypeEnum.Statistics)        // needs custom convert, check. Various places Json out events, check them. Can't do stats due to custom convert
+                    {
+                        JToken jo = JToken.FromObject(je, true, new Type[] {  }, 8, System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public);
+                        System.Diagnostics.Debug.Assert(jo != null);
+                    }
 
                     if (!(je is JournalUnknown))
                     {
