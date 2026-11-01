@@ -12,6 +12,7 @@
  * governing permissions and limitations under the License.
  */
 
+using BaseUtils;
 using System;
 using System.Drawing;
 using System.Reflection;
@@ -131,7 +132,7 @@ namespace EDDiscovery.Forms
 
             textboxDetails.Text =
                   description + DoubleNewLine
-                + "==== BEGIN ====" + Environment.NewLine
+                + "==== BEGIN " + Assembly.GetEntryAssembly().GetAssemblyVersionString() + " " + Environment.OSVersion.ToString() +  " =====" + Environment.NewLine
                 + exptext + Environment.NewLine
                 + "===== END =====";
 

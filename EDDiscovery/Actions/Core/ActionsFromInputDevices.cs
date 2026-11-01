@@ -73,29 +73,14 @@ namespace EDDiscovery.Actions
 
             System.Diagnostics.Debug.Assert(Application.MessageLoop);
 
-            IntPtr handle = BaseUtils.Win32.UnsafeNativeMethods.GetForegroundWindow();
-
             if (!ac.Globals.TryGet("_ELITEINPUTFROM", out string processname))
                 processname = "All";
             
             if (!processname.EqualsIIC("All"))
             {
-                Process[] processes = Process.GetProcessesByName(processname);
-                bool ed = false;
-                foreach (Process p in processes)
-                {
-                    if (p.MainWindowHandle == handle)     //ED seems to have multiple processes running.. find one
-                    {
-                        ed = true;
-                        break;
-                    }
-                }
-
-                if (!ed)//&& false)
-                {
-                    //System.Diagnostics.Debug.WriteLine("Rejected keypress " + processes.Length);
+                ProcessModule pm = BaseUtils.Processes.FindForegroundProcessModule("elitedangerous64");     // must be set up to say its running
+                if (pm == null)
                     return;
-                }
             }
 
             foreach (InputDeviceEvent ide in list)

@@ -523,13 +523,13 @@ namespace EDDiscovery
                         // this is the best way to know where elite is installed, wait for user to run it in the foreground
                         // same logic as ActionsFromInputDevices.cs
 
-                        IntPtr handle = BaseUtils.Win32.UnsafeNativeMethods.GetForegroundWindow();
-                        var foregroundelitedangerous64 = Process.GetProcessesByName("elitedangerous64").Where(p => p.MainWindowHandle == handle).FirstOrDefault();
-                        if (foregroundelitedangerous64 != null)
-                        {
-                            System.Diagnostics.Debug.WriteLine($"Check Elite Device maps, its running at {foregroundelitedangerous64.MainModule.FileName}");
+                        ProcessModule pm = BaseUtils.Processes.FindForegroundProcessModule("elitedangerous64");
 
-                            JArray devicemap = FrontierDeviceMapping.ReadFrontierDeviceMappingFile(foregroundelitedangerous64.MainModule.FileName);
+                        if (pm != null)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"Check Elite Device maps, its running at {pm.FileName}");
+
+                            JArray devicemap = FrontierDeviceMapping.ReadFrontierDeviceMappingFile(pm.FileName);
                             if (devicemap != null)
                             {
                                 int merges = FrontierDeviceMapping.MergeMappings(FrontierDeviceMapping.DeviceMappingToPIDVID, devicemap);
