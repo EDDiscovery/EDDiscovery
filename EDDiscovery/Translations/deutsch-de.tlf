@@ -26,7 +26,7 @@ SECTION StartUp
 
 SECTION DataGridView
 
-31341C6F0C7AF6: "Header" => "Entête"
+31341C6F0C7AF6: "Header" => "Kopfzeile"
 DF04C6BCA0BCDC: "Word Wrap (Override)" => "Zeilenumbruch (Überschreiben)"
 
 SECTION SafeModeForm
@@ -37,10 +37,10 @@ B1B392607DEAF2: "Run" => "Starten"
 365C643F550384: "Delete/Rebuild User DB" => "Benutzer-DB löschen/wiederaufbauen"
 01F2FBC637B7E7: "Delete/Rebuild System DB" => "System-DB löschen/wiederaufbauen"
 149C06035C88FF: "Reset DB Location" => "Datenbankort zurücksetzen"
-4FDECF8CBABC50: "Remove Journal Entries" @
-F83B6FE3AEBF13: "Exit" @
+4FDECF8CBABC50: "Remove Journal Entries" => "Entferne Journaleinträge"
+F83B6FE3AEBF13: "Exit" => "Beenden"
 6B295419D3023F: "Backup Database" => "Datenbank sichern"
-F1E7A4001E4A2D: "Remove Journal Entries From Date On" @
+F1E7A4001E4A2D: "Remove Journal Entries From Date On" => "Entferne Journaleinträge ab Datum"
 81DE8C10D7B389: "Move Databases" => "Verschiebe Datenbank"
 BF259EDBD80CA0: "Reset Language to English" => "Reset Language to English"
 C5A8F7E7256EF2: "Remove all Action Packs" => "Alle Action-Packs entfernen"
@@ -224,7 +224,7 @@ A44AD2D137232C: "Rename Tab" => "Registerkarte umbenennen"
 5A6267856DDE68: "Tab setup failure: Primary tab or TG failed to load.\r\nThis is a abnormal condition - please problem to EDD Team on discord or github.\r\nTo try and clear it, hold down shift and then launch the program.\r\nClick on Reset tabs, then Run program, which may clear the problem" => "Registerkartensetupfehler: laden primärer Registerkarte oder TG fehlgeschlagen.\r\nDas ist ein abnormaler Zustand - bitte das Problem an das EDD-Team auf Discord oder Github melden.\r\nUm zu versuchen das Problem zu beheben bitte Shift drücken während EDD startet.\r\nKlicke auf Registerkarten zurücksetzen und danach auf Programm starten"
 5365F84B9A53D9: "Enter a new name for the tab" => "Neuen Namen für Registerkarte eingeben"
 AD583CD268D4F3: "The following application extension DLL have been found\r\nDo you wish to allow it to be used?\r\n\r\n" => "Die folgenden Anwendungs-DLLs wurden gefunden\r\nWillst du sie verwenden?\r\n\r\n"
-A0E44522BDDD0C: "System data download from {0} required.\r\nThis will take a while, please be patient.\r\nPlease continue running ED Discovery until refresh is complete." @
+A0E44522BDDD0C: "System data download from {0} required.\r\nThis will take a while, please be patient.\r\nPlease continue running ED Discovery until refresh is complete." => "Systemdatendownload von {0} erforderlich.\r\nDies wird eine Weile dauern, bitte sei geduldig.\r\nEDDiscovery bitte nciht beenden, bevor die Aktualisierung beendet ist."
 7E07BEC01ADC82: "DLLs loaded" => "DLLs geladen"
 DE617477CC8108: "DLLs failed to load" => "Laden der DLLs fehlgeschlagen"
 78B8D462D682D8: "Are you sure to Rebuild Indexes? It may take a long time" => "Bist du sicher, dass die Indexes neu erstellt werden sollen? Dies kann lange dauern"
@@ -306,7 +306,7 @@ B98FEA259DE5C0: "You have removed sectors!\r\nThis will require the DB to be cle
 9C24C4B7756B85: "ED Discovery downloads star data from EDSM or Spansh which is used to give you additional data. Select how much data you want to store. The more of the galaxy you select, the bigger the storage needed. Note your System DB located in the Appdata folder must be stored on a SSD. Using a HDD will be very slow. Select None if you're using a HDD" => "EDDiscovery kann Sterndaten von EDSM/Spansh herunterladen um dir zusätzliche Daten zur Verfügung zu stellen. Wähle wieviele Daten du herunterladen möchtest. Je mehr Teile der Galaxie du wählst umso mehr Speicherplatz wird benötigt. Beachte, dass der Appdataordner von EDD sich auf einer SSD befinden sollte, sollte er sich auf einer Festplatte befinden wird dies sehr langsam sein. Wähle 'Keine' wenn du eine Festplatte nutzt"
 8598222918D3C6: "Select" => "Auswählen"
 0EE93787C960CF: "Select the data set" => "Wähle das Datenset"
-BD32B2E4F5C2FD: "Select the data source" @
+BD32B2E4F5C2FD: "Select the data source" => "Wähle Datenquelle"
 D24336A365C558: "Press to Accept" => "Drücke um anzunehmen"
 D65DF91B92B250: "Select Galaxy Data" => "Wähle Galaxiedaten"
 2745DEBAA64A20: "Area" => "Gebiet"
@@ -472,25 +472,25 @@ SECTION ActionPackEditPackForm
 
 3B042F6CEA285B: "Install Parameters" => "Installationsparameter"
 9D68007B0763CB: "Program" => "Programm"
-61684730DD60CE: "Set Installation variables for pack (Advanced)" @
-629F1940518C39: "Select a program to edit directly" @
-429C81EBA021F2: "Add more events" @
+61684730DD60CE: "Set Installation variables for pack (Advanced)" => "Setze Installationsvariablen für Paket (Fortgeschritten)"
+629F1940518C39: "Select a program to edit directly" => "Wähle ein Programm um es direkt zu bearbeiten."
+429C81EBA021F2: "Add more events" => "Weitere Ereignisse hinzufügen."
 8774D189CE7F96: "Configuration items for installation - specialist use" => "Konfigurationselemente für Installation - für Spezialisten"
-C6370ADED9036C: "Move Up" @
-4158BEDC2FCD0E: "Move Down" @
-B6DAC3FF80F22C: "Move to Group Above" @
-96BC3B2FC5D1AB: "Move to Group Below" @
-66D54828B59329: "Move Group Up" @
-DE1D98C7DD607C: "Move Group Down" @
-75BF20110FEB09: "Insert New Event Above" @
-BA398F4B1450CB: "Insert New  Group Above" @
-8B15993C662F3B: "Rename Group" @
-D6524F6AACF889: "Collapse All" @
-5B8374F41549EC: "Expand All" @
-F78D25A32DC6A6: "Select Action" @
-6CE769B555EA05: "Disable All" @
-5193D0205EC3C7: "Enable All" @
-97F32D67C7021A: "Delete All" @
+C6370ADED9036C: "Move Up" => "Gehe rauf"
+4158BEDC2FCD0E: "Move Down" => "Gehe runter"
+B6DAC3FF80F22C: "Move to Group Above" => "Gehe zur Gruppe oben"
+96BC3B2FC5D1AB: "Move to Group Below" => "Gehe zur Gruppe unten"
+66D54828B59329: "Move Group Up" => "Bewge Gruppe hinauf"
+DE1D98C7DD607C: "Move Group Down" => "Bewege Gruppe hinunter"
+75BF20110FEB09: "Insert New Event Above" => "Füge neues Ereignis darunter hinzu"
+BA398F4B1450CB: "Insert New  Group Above" => "Füge neues Ereignis darunter hinzu"
+8B15993C662F3B: "Rename Group" => "Gruppe umbenennen"
+D6524F6AACF889: "Collapse All" => "Alle einklappen"
+5B8374F41549EC: "Expand All" => "Alle ausklappen"
+F78D25A32DC6A6: "Select Action" => "Wähle Aktion"
+6CE769B555EA05: "Disable All" => "Alle deaktivieren"
+5193D0205EC3C7: "Enable All" => "Alle aktivieren"
+97F32D67C7021A: "Delete All" => "Alle löschen"
 
 SECTION ActionProgramEditForm
 4BB0A4AF96D21C: "Action Program" => "Action-Programm"
@@ -498,10 +498,10 @@ SECTION ActionProgramEditForm
 DDCB77FF769EA5: "Load" => "Laden"
 A96C6A2EC6FD15: "Text Edit" => "Text ändern"
 0878211D394E87: "Input parameters to pass to program on run" => "Eingangsparameter zur Weiterleitung an Programm im Betrieb"
-DBA0FE23646D9A: "Insert Entry above" @
-60B61224DBB6D9: "Insert whitespace below" @
-BB163562E81E7F: "Remove whitespace" @
-B5FFEB5F637B29: "Edit Comment" @
+DBA0FE23646D9A: "Insert Entry above" => "Eintrag darüber einfügen"
+60B61224DBB6D9: "Insert whitespace below" => "Whitespace darunter hinzufügen"
+BB163562E81E7F: "Remove whitespace" => "Whitespace entfernen"
+B5FFEB5F637B29: "Edit Comment" => "Kommentar bearbeiten"
 
 SECTION ActionCommands
 A45731FA87CFD4: "Define Variable" => "Definiere Variable"
