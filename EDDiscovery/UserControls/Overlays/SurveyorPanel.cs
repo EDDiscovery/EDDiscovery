@@ -584,7 +584,7 @@ namespace EDDiscovery.UserControls
                         bool matchedhumansignals = hashumansignals && IsSet(CtrlList.signals);
                         bool matchedothersignals = hasothersignals && IsSet(CtrlList.signals);
                         bool matchedminingsignals = hasminingsignals && IsSet(CtrlList.signals);
-                        bool matchedplanetaryminingsignals = hasplanetaryminingsignals && IsSet(CtrlList.signals);
+                        bool matchedplanetaryminingsignals = hasplanetaryminingsignals && IsSet(CtrlList.PlanetaryMiningSignals);
 
                         bool matchedlandablewithatmosphere = sd.IsLandable && sd.HasAtmosphericComposition && IsSet(CtrlList.isLandableWithAtmosphere);
                         bool matchedlandablevolcanism = sd.IsLandable && sd.HasMeaningfulVolcanism && IsSet(CtrlList.isLandableWithVolcanism);
@@ -609,6 +609,7 @@ namespace EDDiscovery.UserControls
                             if (hasthargoidsignals) cursystriggersalias.Add(TTThargoidSignals);
                             if (hasguardiansignals) cursystriggersalias.Add(TTGuardianSignals);
                             if (hashumansignals) cursystriggersalias.Add(TTHumanSignals);
+                            if (hasplanetaryminingsignals) cursystriggersalias.Add(TTPlanetaryMiningSignals);
                             if (hasothersignals) cursystriggersalias.Add(TTOtherSignals);
                             if (sd.CanBeTerraformable) cursystriggersalias.Add(TTCanBeTerraformed);
                             if (sd.IsLandable) cursystriggersalias.Add(TTLandable);
@@ -649,7 +650,7 @@ namespace EDDiscovery.UserControls
                                 (sd.nEccentricity.HasValue && sd.nEccentricity >= eccentricityLimit && IsSet(CtrlList.showEccentricity)) ||
                                 (sd.CanBeTerraformable && IsSet(CtrlList.showTerraformable)) ||
                                 (sd.IsPlanet && IsSet(CtrlList.lowradius) && sd.nRadius.HasValue && sd.nRadius < lowRadiusLimit) ||
-                                matchedgeosignals || matchedbiosignals || matchedthargoidsignals || matchedguardiansignals || matchedhumansignals || matchedothersignals || matchedminingsignals || matchedgeosignals || matchedbiosignals || matchedthargoidsignals || matchedguardiansignals || matchedhumansignals || matchedothersignals || matchedminingsignals || matchedplanetaryminingsignals ||
+                                matchedgeosignals || matchedbiosignals || matchedthargoidsignals || matchedguardiansignals || matchedhumansignals || matchedothersignals || matchedminingsignals || matchedplanetaryminingsignals ||
                                 (sd.IsStar && IsSet(CtrlList.allstars)) ||
                                 (sd.IsPlanet && IsSet(CtrlList.allplanets)) ||
                                 (sd.IsBeltClusterBody && IsSet(CtrlList.beltclusters));
@@ -974,6 +975,7 @@ namespace EDDiscovery.UserControls
         public const string TTThargoidSignals = "ThargoidSignals";
         public const string TTGuardianSignals = "GuardianSignals";
         public const string TTHumanSignals = "HumanSignals";
+        public const string TTPlanetaryMiningSignals = "PlanetaryMinigSignals";
         public const string TTOtherSignals = "OtherSignals";
         public const string TTCanBeTerraformed = "Terraformable";
         public const string TTLandable = "Landable";

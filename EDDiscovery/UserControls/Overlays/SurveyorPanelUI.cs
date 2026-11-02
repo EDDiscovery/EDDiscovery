@@ -31,7 +31,7 @@ namespace EDDiscovery.UserControls
         {
             allplanets, showAmmonia, showEarthlike, showWaterWorld, showHMC, showMR,
             showTerraformable, showVolcanism, showRinged, showEccentricity, lowradius,
-            signals, GeoSignals, BioSignals, isLandable, isLandableWithAtmosphere,
+            signals, GeoSignals, BioSignals, PlanetaryMiningSignals, isLandable, isLandableWithAtmosphere,
             largelandable, isLandableWithVolcanism,
             // 18
             allstars, beltclusters,
@@ -89,6 +89,7 @@ namespace EDDiscovery.UserControls
             displayfilter.UC.Add(CtrlList.lowradius.ToString(), "Tiny body".Tx(), global::EDDiscovery.Icons.Controls.Scan_SizeSmall);
             displayfilter.UC.Add(CtrlList.GeoSignals.ToString(), "Has geological signals".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
             displayfilter.UC.Add(CtrlList.BioSignals.ToString(), "Has biological signals".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
+            displayfilter.UC.Add(CtrlList.PlanetaryMiningSignals.ToString(), "Has planetary mining signals".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
             displayfilter.UC.Add(CtrlList.signals.ToString(), "Has any other signals".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_Signals);
             displayfilter.UC.Add(CtrlList.isLandable.ToString(), "Landable".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
             displayfilter.UC.Add(CtrlList.isLandableWithAtmosphere.ToString(), "Landable with atmosphere".Tx(), global::EDDiscovery.Icons.Controls.Scan_Bodies_LandablePlanet);
