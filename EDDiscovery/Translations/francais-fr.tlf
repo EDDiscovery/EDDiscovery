@@ -503,3 +503,6 @@ EA3E71F3439195: "Global User variables to pass to program on run" => "Variables 
 
 include translation-francais-uc.tlp
 
+include translation-francais-je.tlp
+
+include translation-francais-ed.tlp
