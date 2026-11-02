@@ -479,7 +479,17 @@ SECTION ActionPackEditPackForm
 C6370ADED9036C: "Move Up" @
 4158BEDC2FCD0E: "Move Down" @
 B6DAC3FF80F22C: "Move to Group Above" @
-@ -493,23 +493,23 @@ F78D25A32DC6A6: "Select Action" @
+96BC3B2FC5D1AB: "Move to Group Below" @
+66D54828B59329: "Move Group Up" @
+DE1D98C7DD607C: "Move Group Down" @
+75BF20110FEB09: "Insert New Event Above" @
+BA398F4B1450CB: "Insert New  Group Above" @
+8B15993C662F3B: "Rename Group" @
+D6524F6AACF889: "Collapse All" @
+5B8374F41549EC: "Expand All" @
+F78D25A32DC6A6: "Select Action" @
+6CE769B555EA05: "Disable All" @
+5193D0205EC3C7: "Enable All" @
 97F32D67C7021A: "Delete All" @
 
 SECTION ActionProgramEditForm
