@@ -1,7 +1,5 @@
 ﻿// File consists of SHA-1 (0..7) IDs with english text and translation, or @ if no translation
 
-@ -2,480 +2,480 @@
-
 SECTION General
 
 24345A14377FD8: "Today" => "Aujourd'hui"
