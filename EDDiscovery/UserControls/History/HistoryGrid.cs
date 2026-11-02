@@ -707,8 +707,9 @@ namespace EDDiscovery.UserControls
         {
             HistoryEntry he = (HistoryEntry)dataGridViewTravel.Rows[e.RowIndex].Tag;
             bool debugmode = travelGridInDebugModeToolStripMenuItem.Checked;
-            int rowno = debugmode ? (int)he.Journalid : (EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1));
-            PaintHelpers.PaintEventColumn(dataGridViewTravel, e, rowno, he, ColumnEvent.Index, true);
+            int rowno = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
+            string headertext = (debugmode ? he.Journalid.ToString("N0") + Environment.NewLine : "") + rowno.ToString("N0");
+            PaintHelpers.PaintEventColumn(dataGridViewTravel, e, headertext, he, ColumnEvent.Index, true);
         }
 
 

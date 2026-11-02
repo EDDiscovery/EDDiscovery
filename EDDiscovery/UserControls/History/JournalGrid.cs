@@ -397,7 +397,7 @@ namespace EDDiscovery.UserControls
         {
             HistoryEntry he = (HistoryEntry)dataGridViewJournal.Rows[e.RowIndex].Tag;
             int rowno = EDDConfig.Instance.OrderRowsInverted ? he.EntryNumber : (DiscoveryForm.History.Count - he.EntryNumber + 1);
-            PaintHelpers.PaintEventColumn(dataGridViewJournal, e, rowno, he, Columns.Event, false);
+            PaintHelpers.PaintEventColumn(dataGridViewJournal, e, rowno.ToString("N0"), he, Columns.Event, false);
         }
 
 

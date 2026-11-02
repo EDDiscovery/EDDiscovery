@@ -24,7 +24,7 @@ namespace EDDiscovery.UserControls
     public static class PaintHelpers
     {
         public static void PaintEventColumn(DataGridView grid, DataGridViewRowPostPaintEventArgs e,
-                                             int rown,
+                                             string headertext,
                                              HistoryEntry he,
                                              int iconcolumn,        //-1 for off
                                              bool showfsdmapcolour)
@@ -41,7 +41,7 @@ namespace EDDiscovery.UserControls
                 {
                     e.Graphics.SmoothingMode = System.Drawing.Drawing2D.SmoothingMode.AntiAlias;
                     using (Brush br = new SolidBrush(grid.RowHeadersDefaultCellStyle.ForeColor))
-                        e.Graphics.DrawString(rown.ToString(), grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
+                        e.Graphics.DrawString(headertext, grid.RowHeadersDefaultCellStyle.Font, br, headerBounds, centerFormat);
                 }
             }
 
