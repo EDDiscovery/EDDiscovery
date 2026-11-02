@@ -72,7 +72,8 @@ namespace EDDiscovery.WebServer
                         int width = (request.QueryString["width"] ?? "800").InvariantParseInt(800);
                         var sd = new EliteDangerousCore.StarScan2.SystemDisplay();
                         sd.ShowMoons = (request.QueryString["showmoons"] ?? "true").InvariantParseBool(true);
-                        sd.ShowOverlays = (request.QueryString["showbodyicons"] ?? "true").InvariantParseBool(true);
+                        sd.ShowLeftIcons = (request.QueryString["showbodyicons"] ?? "true").InvariantParseBool(true);
+                        sd.ShowRingSignal = (request.QueryString["showringsignals"] ?? "true").InvariantParseBool(true);
                         sd.ShowMaterials = (request.QueryString["showmaterials"] ?? "true").InvariantParseBool(true);
                         sd.ShowAllG = (request.QueryString["showgravity"] ?? "true").InvariantParseBool(true);
                         sd.ShowPlanetMass = (request.QueryString["showplanetmass"] ?? "false").InvariantParseBool(false);

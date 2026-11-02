@@ -546,6 +546,7 @@ A0BB88B66F57E8: "Set High Value Limit" => "Définir la limite haute de valeur"
 2F2F42105ABA82: "Set Valuable Minimum" => "Définir le seuil de valeur"
 0DE266189138B6: "Show body status icons" => "Afficher les icônes de statut des corps"
 028F51CCB7BAD7: "Hide materials which have reached their storage limit" => "Masquer les matériaux qui ont atteint la limite de stockage"
+9E5D62CB8EB291: "Show ring status icons" @
 9F6C1D41D0D032: "Show Materials" => "Afficher les matériaux"
 B028A006D79224: "Show rare materials only" => "Afficher uniquement les matériaux rares"
 00848F83A633FB: "Show Moons" => "Afficher les lunes"

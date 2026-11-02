@@ -27,13 +27,16 @@ namespace EDDiscovery.UserControls
 
         public void Init(EliteDangerousCore.DB.IUserDatabaseSettingsSaver ucb, string settingname)
         {
-            Setting = ucb.GetSetting(settingname, "V2;moons;icons;mats;allg;habzone;starclass;planetclass;dist;starage;starmass;simplify");
-            if (!Setting.StartsWith("V2;"))
+            Setting = ucb.GetSetting(settingname, "V3;moons;icons;ringsignal;mats;allg;habzone;starclass;planetclass;dist;starage;starmass;simplify");
+            if (!Setting.StartsWith("V2;") && !Setting.StartsWith("V3;"))
                 Setting += "simplify;";
+            if (!Setting.StartsWith("V3;"))
+                Setting += "ringsignal;";
 
             Init(new ExtendedControls.CheckedIconUserControl.Item[]
             {
                 new ExtendedControls.CheckedIconUserControl.Item("icons", "Show body status icons".Tx(), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays),
+                new ExtendedControls.CheckedIconUserControl.Item("ringsignal", "Show ring status icons".Tx(), global::EDDiscovery.Icons.Controls.Scan_ShowOverlays),
                 new ExtendedControls.CheckedIconUserControl.Item("mats", "Show Materials".Tx(), global::EDDiscovery.Icons.Controls.Scan_ShowAllMaterials),
                 new ExtendedControls.CheckedIconUserControl.Item("rares", "Show rare materials only".Tx(), global::EDDiscovery.Icons.Controls.Scan_ShowRareMaterials),
                 new ExtendedControls.CheckedIconUserControl.Item("matfull", "Hide materials which have reached their storage limit".Tx(), global::EDDiscovery.Icons.Controls.Scan_HideFullMaterials),
@@ -53,7 +56,7 @@ namespace EDDiscovery.UserControls
                 Setting,
                 (newsetting,ch) => {
                     Setting = newsetting;
-                    ucb.PutSetting(settingname, "V2;"+newsetting);
+                    ucb.PutSetting(settingname, "V3;"+newsetting);
                 },
                 allornoneshown:true,
                 closeboundaryregion:new System.Drawing.Size(64,64),
@@ -65,7 +68,8 @@ namespace EDDiscovery.UserControls
             var displayfilters = DisplayFilters;
             bool all = displayfilters.Contains("All");
             sduc.SystemDisplay.ShowMoons = displayfilters.Contains("moons") || all;
-            sduc.SystemDisplay.ShowOverlays = displayfilters.Contains("icons") || all;
+            sduc.SystemDisplay.ShowLeftIcons = displayfilters.Contains("icons") || all;
+            sduc.SystemDisplay.ShowRingSignal = displayfilters.Contains("ringsignal") || all;
             sduc.SystemDisplay.ShowMaterials = displayfilters.Contains("mats") || all;
             sduc.SystemDisplay.ShowOnlyMaterialsRare = displayfilters.Contains("rares") || all;
             sduc.SystemDisplay.HideFullMaterials = displayfilters.Contains("matfull") || all;
