@@ -765,7 +765,7 @@ namespace EDDiscovery.UserControls
                                                                             ("You need to configure Windows to allow EDD to webserve\r\n" +
                                                                            "Click Yes to do this. If you are not the adminstrator, a dialog will appear to ask you\r\n" +
                                                                            "to sign in as an admin to allow this to happen\r\n" +
-                                                                           "If you have previously done this on this same port number you can click No and the enable will work").Tx(),
+                                                                           "If you have previously done this on this same port number you can click No and the enable will work").Tx().Replace("\r\n", Environment.NewLine),
                                                                            "Web Server",
                                                                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
