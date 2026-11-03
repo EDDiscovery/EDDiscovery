@@ -473,11 +473,11 @@ namespace EDDiscovery.UserControls
                 if (!themename.Equals("Custom") && !DiscoveryForm.ThemeList.IsFontAvailable(themename, out fontwanted))
                 {
                     string warning = string.Format(
-                          "The font used by this theme is not available on your system.\r\n" +
+                          ("The font used by this theme is not available on your system.\r\n" +
                           "The font needed is \"{0}\".\r\n" +
                           "Install this font to fully use this theme.\r\n" + 
                           "Euro Caps font is freely available from www.edassets.org.\r\n\r\n" + 
-                          "Would you like to load this theme using a replacement font?".Tx(), fontwanted);
+                          "Would you like to load this theme using a replacement font?").Tx(), fontwanted);
 
                     DialogResult res = ExtendedControls.MessageBoxTheme.Show(FindForm(), warning, "Warning".Tx(), MessageBoxButtons.YesNo);
 
@@ -641,11 +641,11 @@ namespace EDDiscovery.UserControls
         private void extButtonReloadStarDatabase_Click(object sender, EventArgs e)
         {
             if (ExtendedControls.MessageBoxTheme.Show(this, 
-                    "This will delete the systems database.\r\n\r\n" +
+                    ("This will delete the systems database.\r\n\r\n" +
                     "You can then reselect the database data source and the\r\n" +
                     "star set required.\r\n\r\n" +
                     "This will require a full download of the star database from the server\r\n" +
-                    "Only use this if you are happy to download the dataset again".Tx(), 
+                    "Only use this if you are happy to download the dataset again").Tx(),
                     "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 EDDApplicationContext.RestartOptions = $"-deletesystemdb -systemsdbpath {EDDOptions.Instance.SystemDatabasePath} -appfolder {EDDOptions.Instance.AppDataDirectory}";
@@ -677,11 +677,11 @@ namespace EDDiscovery.UserControls
                     info.Info("Remove Sectors".Tx(),
                                 EDDiscovery.Properties.Resources.edlogo_3mo_icon,
                                 string.Format(
-                                "Removing {0} Sector(s).\r\n\r\n" +
+                                ("Removing {0} Sector(s).\r\n\r\n" +
                                 "This will take a while (up to 30 mins dep on drive type and amount of sectors).\r\n" + 
                                 "You may continue to use EDD while this operation takes place\r\n" + 
                                 "but it may be slow to respond. Do not close down EDD until this window says\r\n" + 
-                                "the process has finished".Tx(), gss.Removed.Count));
+                                "the process has finished").Tx(), gss.Removed.Count));
                     info.EnableClose = false;
                     info.Show(DiscoveryForm);
 
@@ -717,8 +717,8 @@ namespace EDDiscovery.UserControls
                 taskremovesectors.Dispose();
                 info.EnableClose = true;
                 info.AddText(
-                    "Finished, Please close the window.\r\n" +
-                    "If you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n".Tx());
+                    ("Finished, Please close the window.\r\n" +
+                    "If you already have the 3dmap open, changes will not be reflected in that map until the next start of EDD\r\n").Tx());
             }
         }
 
@@ -762,10 +762,10 @@ namespace EDDiscovery.UserControls
             if (runit)
             {
                 var res = ExtendedControls.MessageBoxTheme.Show(this.FindForm(), 
-                                                                            "You need to configure Windows to allow EDD to webserve" + Environment.NewLine +
-                                                                           "Click Yes to do this. If you are not the adminstrator, a dialog will appear to ask you" + Environment.NewLine +
-                                                                           "to sign in as an admin to allow this to happen" + Environment.NewLine +
-                                                                           "If you have previously done this on this same port number you can click No and the enable will work".Tx(),
+                                                                            ("You need to configure Windows to allow EDD to webserve\r\n" +
+                                                                           "Click Yes to do this. If you are not the adminstrator, a dialog will appear to ask you\r\n" +
+                                                                           "to sign in as an admin to allow this to happen\r\n" +
+                                                                           "If you have previously done this on this same port number you can click No and the enable will work").Tx(),
                                                                            "Web Server",
                                                                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 

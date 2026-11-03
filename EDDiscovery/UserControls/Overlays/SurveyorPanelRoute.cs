@@ -98,7 +98,7 @@ namespace EDDiscovery.UserControls
                         }
                         else
                         {
-                            lastroutetext += String.Format(", " + "Left".Tx() + " {0:N1}ly", distleft) + Environment.NewLine;
+                            lastroutetext += String.Format(", " + "Remaining".Tx() + " {0:N1}ly", distleft) + Environment.NewLine;
 
                             if (distleft == 0)
                                 lastroutetext += $"{closest.nextsystem.Name}";

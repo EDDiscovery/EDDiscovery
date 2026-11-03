@@ -177,7 +177,7 @@ namespace EDDiscovery.UserControls
             // WantedCol
             // 
             this.WantedCol.FillWeight = 25F;
-            this.WantedCol.HeaderText = "Left";
+            this.WantedCol.HeaderText = "Remaining";
             this.WantedCol.MinimumWidth = 50;
             this.WantedCol.Name = "WantedCol";
             this.WantedCol.SortMode = System.Windows.Forms.DataGridViewColumnSortMode.NotSortable;
