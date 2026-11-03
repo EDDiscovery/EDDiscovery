@@ -177,8 +177,7 @@ namespace EDDiscovery.UserControls
                 dataGridViewEstimatedValues.Sort(sortcol, (sortorder == SortOrder.Descending) ? System.ComponentModel.ListSortDirection.Descending : System.ComponentModel.ListSortDirection.Ascending);
                 dataGridViewEstimatedValues.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
 
-                SetControlText("System".Tx() + " " + last_sn.System.Name + ": " + totalvalue.ToString("N0") + " cr | " + "Scanned".Tx() + " " + 
-                                last_sn.StarPlanetsScanned(false).ToString() + " / " + (last_sn.FSSTotalBodies?.ToString() ?? "?"));
+                SetControlText("System".Tx() + " " + last_sn.System.Name + ": " + totalvalue.ToString("N0") + " cr | " + "Scanned".Tx() + " " + last_sn.StarPlanetsScanned(false).ToString() + " / " + (last_sn.FSSTotalBodies?.ToString() ?? "?"));
 
             }
             else

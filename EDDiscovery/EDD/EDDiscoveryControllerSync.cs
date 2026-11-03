@@ -79,9 +79,9 @@ namespace EDDiscovery
 
                 if (syncstate.perform_fullsync)
                 {
-                    LogLine(string.Format(("System data download from {0} required.\r\n" +
-                                    "This will take a while, please be patient.\r\n" +
-                                    "Please continue running ED Discovery until refresh is complete.").Tx().Replace("\r\n", Environment.NewLine), SystemsDatabase.Instance.DBSource));
+                    LogLine(string.Format(("System data download from {0} required." + Environment.NewLine +
+                                    "This will take a while, please be patient." + Environment.NewLine +
+                                    "Please continue running ED Discovery until refresh is complete.").Tx(), SystemsDatabase.Instance.DBSource));
                 }
             }
             else

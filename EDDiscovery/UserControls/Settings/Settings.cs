@@ -645,7 +645,7 @@ namespace EDDiscovery.UserControls
                     "You can then reselect the database data source and the\r\n" +
                     "star set required.\r\n\r\n" +
                     "This will require a full download of the star database from the server\r\n" +
-                    "Only use this if you are happy to download the dataset again").Tx(),
+                    "Only use this if you are happy to download the dataset again").Tx(), 
                     "Warning".Tx(), MessageBoxButtons.OKCancel, MessageBoxIcon.Warning) == DialogResult.OK)
             {
                 EDDApplicationContext.RestartOptions = $"-deletesystemdb -systemsdbpath {EDDOptions.Instance.SystemDatabasePath} -appfolder {EDDOptions.Instance.AppDataDirectory}";
@@ -762,10 +762,10 @@ namespace EDDiscovery.UserControls
             if (runit)
             {
                 var res = ExtendedControls.MessageBoxTheme.Show(this.FindForm(), 
-                                                                            ("You need to configure Windows to allow EDD to webserve\r\n" +
-                                                                           "Click Yes to do this. If you are not the adminstrator, a dialog will appear to ask you\r\n" +
-                                                                           "to sign in as an admin to allow this to happen\r\n" +
-                                                                           "If you have previously done this on this same port number you can click No and the enable will work").Tx().Replace("\r\n", Environment.NewLine),
+                                                                            ("You need to configure Windows to allow EDD to webserve" + Environment.NewLine +
+                                                                           "Click Yes to do this. If you are not the adminstrator, a dialog will appear to ask you" + Environment.NewLine +
+                                                                           "to sign in as an admin to allow this to happen" + Environment.NewLine +
+                                                                           "If you have previously done this on this same port number you can click No and the enable will work").Tx(),
                                                                            "Web Server",
                                                                            MessageBoxButtons.YesNo, MessageBoxIcon.Warning);
 
