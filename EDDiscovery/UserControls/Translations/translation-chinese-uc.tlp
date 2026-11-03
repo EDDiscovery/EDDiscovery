@@ -255,8 +255,6 @@ SECTION UserControlLedger
 
 F547624A8BDDF0: "Debits" => "出账"
 CA808D99D64C9C: "Profit Per Unit" => "单位利润"
-DC12265956ECE5: "Display entries matching this event type filter" => "显示匹配筛选事件类型的条目"
-B501410D1C0E50: "Search to particular items" => "搜索特定的条目"
 61FE5EB291070D: "Select the entries by age" => "安照时间顺序筛选条目"
 A51F65FF7C070F: "Cash Transactions" => "金融交易"
 662560B640930C: "No Ledger available" @

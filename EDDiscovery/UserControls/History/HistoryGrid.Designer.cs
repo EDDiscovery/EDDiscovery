@@ -147,6 +147,7 @@ namespace EDDiscovery.UserControls
             this.extCheckBoxOutlines.TabIndex = 30;
             this.extCheckBoxOutlines.TickBoxReductionRatio = 0.75F;
             this.extCheckBoxOutlines.UseVisualStyleBackColor = false;
+            this.toolTip.SetToolTip(this.extCheckBoxOutlines, "Control Outlining");
             this.extCheckBoxOutlines.Click += new System.EventHandler(this.extButtonOutlines_Click);
             // 
             // checkBoxCursorToTop
@@ -177,6 +178,7 @@ namespace EDDiscovery.UserControls
             this.checkBoxCursorToTop.MouseSelectedScaling = 1.3F;
             this.checkBoxCursorToTop.Name = "checkBoxCursorToTop";
             this.checkBoxCursorToTop.Size = new System.Drawing.Size(28, 28);
+            this.toolTip.SetToolTip(this.checkBoxCursorToTop, "Automatically move the cursor to the latest entry when it arrives");
             this.checkBoxCursorToTop.TabIndex = 30;
             this.checkBoxCursorToTop.TickBoxReductionRatio = 0.75F;
             this.checkBoxCursorToTop.UseVisualStyleBackColor = false;
@@ -193,6 +195,7 @@ namespace EDDiscovery.UserControls
             this.buttonExtExcel.MouseOverScaling = 1.3F;
             this.buttonExtExcel.MouseSelectedScaling = 1.3F;
             this.buttonExtExcel.Name = "buttonExtExcel";
+            this.toolTip.SetToolTip(this.buttonExtExcel, "Send data on grid to excel");
             this.buttonExtExcel.Size = new System.Drawing.Size(28, 28);
             this.buttonExtExcel.TabIndex = 28;
             this.buttonExtExcel.UseVisualStyleBackColor = true;
@@ -212,6 +215,7 @@ namespace EDDiscovery.UserControls
             this.buttonField.Size = new System.Drawing.Size(28, 28);
             this.buttonField.TabIndex = 25;
             this.buttonField.UseVisualStyleBackColor = true;
+            this.toolTip.SetToolTip(this.buttonField, "Filter out entries matching the field selection");
             this.buttonField.Click += new System.EventHandler(this.buttonField_Click);
             // 
             // buttonFilter
@@ -227,6 +231,7 @@ namespace EDDiscovery.UserControls
             this.buttonFilter.Name = "buttonFilter";
             this.buttonFilter.Size = new System.Drawing.Size(28, 28);
             this.buttonFilter.TabIndex = 25;
+            this.toolTip.SetToolTip(this.buttonFilter, "Filter out entries based on event type");
             this.buttonFilter.UseVisualStyleBackColor = true;
             this.buttonFilter.Click += new System.EventHandler(this.buttonFilter_Click);
             // 

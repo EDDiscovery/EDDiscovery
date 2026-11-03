@@ -255,8 +255,6 @@ SECTION UserControlLedger
 
 F547624A8BDDF0: "Debits" => "Расход"
 CA808D99D64C9C: "Profit Per Unit" => "Прибыль за единицу"
-DC12265956ECE5: "Display entries matching this event type filter" => "Фильтровать записи по типу события"
-B501410D1C0E50: "Search to particular items" => "Поиск определенного объекта"
 61FE5EB291070D: "Select the entries by age" => "Выбор записей по времени"
 A51F65FF7C070F: "Cash Transactions" => "Финансовые операции"
 662560B640930C: "No Ledger available" @

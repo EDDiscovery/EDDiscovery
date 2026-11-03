@@ -2081,6 +2081,7 @@ namespace EDDiscovery.UserControls
             this.Name = "UserControlSysInfo";
             this.Size = new System.Drawing.Size(1024, 832);
             this.Resize += new System.EventHandler(this.UserControlSysInfo_Resize);
+
             this.contextMenuStrip.ResumeLayout(false);
             this.extPanelScroll.ResumeLayout(false);
             this.extPanelScroll.PerformLayout();

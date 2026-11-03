@@ -255,8 +255,6 @@ SECTION UserControlLedger
 
 F547624A8BDDF0: "Debits" => "Wydatki"
 CA808D99D64C9C: "Profit Per Unit" => "Zysk Na Jednostkę"
-DC12265956ECE5: "Display entries matching this event type filter" => "Wyświetl wpisy pasujące do tego filtra typu zdarzenia"
-B501410D1C0E50: "Search to particular items" => "Szukaj konkretnych elementów"
 61FE5EB291070D: "Select the entries by age" => "Zaznacz wpisy według wieku"
 A51F65FF7C070F: "Cash Transactions" => "Transakcje Pieniężne"
 662560B640930C: "No Ledger available" => "Brak dostępnego rejestru"

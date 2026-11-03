@@ -255,8 +255,6 @@ SECTION UserControlLedger
 
 F547624A8BDDF0: "Debits" => "Abbuchung"
 CA808D99D64C9C: "Profit Per Unit" => "Profit pro Einheit"
-DC12265956ECE5: "Display entries matching this event type filter" => "Zeige Einträge die diesem Ereignisartfilter entsprechen"
-B501410D1C0E50: "Search to particular items" => "Suche nach bestimmten Einträgen"
 61FE5EB291070D: "Select the entries by age" => "Wähle die Einträge nach Alter"
 A51F65FF7C070F: "Cash Transactions" => "Bartransaktionen"
 662560B640930C: "No Ledger available" => "Kein Kassabuch verfügbar"

@@ -989,6 +989,10 @@ namespace EDDiscovery.UserControls
             {
                 if (!(c is ExtendedControls.ExtScrollBar))
                     c.Visible = false;
+                if ( c == labelSysName)
+                {
+                    toolTip.SetToolTip(c, "Hold down Ctrl Key then left drag a item to reposition, 8 columns are available".Tx());
+                }
             }
 
             //System.Diagnostics.Debug.WriteLine("Selection is " + sel);

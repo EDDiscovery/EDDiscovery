@@ -255,8 +255,6 @@ SECTION UserControlLedger
 
 F547624A8BDDF0: "Debits" => "Débitos"
 CA808D99D64C9C: "Profit Per Unit" => "Beneficio por unidad"
-DC12265956ECE5: "Display entries matching this event type filter" => "Mostrar entradas que coincidan con este filtro de tipo de evento"
-B501410D1C0E50: "Search to particular items" => "Buscar elementos en particular"
 61FE5EB291070D: "Select the entries by age" => "Seleccione las entradas por antigüedad"
 A51F65FF7C070F: "Cash Transactions" => "Transacciones en efectivo"
 662560B640930C: "No Ledger available" => "No hay libro mayor disponible"
