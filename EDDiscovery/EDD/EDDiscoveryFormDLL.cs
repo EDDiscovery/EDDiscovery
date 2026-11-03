@@ -110,8 +110,8 @@ namespace EDDiscovery
                 foreach (var dll in list)
                 {
                     if (ExtendedControls.MessageBoxTheme.Show(this,
-                                    "The following application extension DLL have been found\r\n" +
-                                    "Do you wish to allow it to be used?\r\n\r\n".Tx() + dll,
+                                    ("The following application extension DLL have been found\r\n" +
+                                    "Do you wish to allow it to be used?\r\n\r\n").Tx() + dll,
                                     "Warning".Tx(),
                                     MessageBoxButtons.YesNo, MessageBoxIcon.Warning) == DialogResult.Yes)
                     {
