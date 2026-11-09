@@ -196,6 +196,7 @@ namespace EDDiscovery
                 // dumped to the web scan folder..
                 History.StarScan2.FindSystemSynchronous(new SystemClass("Pyranu QO-Z d13-28", new SystemAddress(977516105979UL)), true);
                 History.StarScan2.FindSystemSynchronous(new SystemClass("", new SystemAddress(9467852826033UL)), true);
+                History.StarScan2.FindSystemSynchronous(new SystemClass("Sol", new SystemAddress(0)), true);
             }
 #endif
 
