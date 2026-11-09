@@ -12,10 +12,13 @@
  * governing permissions and limitations under the License.
  */
 
+//#define INARAGENTEST
+//#define SPANSHDUMP1
 
 using BaseUtils;
 using EliteDangerousCore;
 using EliteDangerousCore.DB;
+using EliteDangerousCore.Inara;
 using EliteDangerousCore.JournalEvents;
 using EliteDangerousCore.Spansh;
 using QuickJSON;
@@ -113,6 +116,17 @@ namespace EDDiscovery
                 File.WriteAllText(fn, s);
             }
 
+#if LISTENGINEERS
+            {
+                var engrec = EngineeringRecipe.GetPlayerEngineering().ToList();
+                List<string> engineers = engrec.SelectMany(r => r.EngineersNames).Distinct().ToList();
+                engineers.Sort();
+                foreach( var x in engineers)
+                {
+                    System.Diagnostics.Debug.WriteLine($"{{ new ActorFDName(\"{x.ToLower().Replace(" ","")}\") , new Actor(\"Engineer {x}\") }},");
+                }
+            }
+#endif
             //{
             //    JToken j = QuickJSON.JTokenExtensionsOther.ReadJSONFile(@"c:\code\kestrel.json");
             //    //JToken j = QuickJSON.JTokenExtensionsOther.ReadJSONFile(@"c:\code\ferdelance.json");
@@ -151,9 +165,24 @@ namespace EDDiscovery
             // JournalEntry.WriteJournals(35,new DateTime(2014, 1, 1), new DateTime(2099, 1, 1), @"c:\code\logs\lens larque");
         }
 
+
+
         public void PostHistoryLoadDebug()  // on UI thread
         {
-#if false
+#if INARAGENTEST
+            foreach( var he in History.EntryOrder())
+            {
+                var mcmr = History.MaterialCommoditiesMicroResources.GetDict(he.MaterialCommodity);
+                List<JToken> tkl = InaraSync.NewEntryList(he, he.EventTimeUTC, mcmr);
+                foreach( var x in tkl)
+                {
+//                    System.Diagnostics.Debug.WriteLine($"Send to Inara: {x.ToString()}");
+                }
+            }
+#endif
+
+
+#if DUMPHISTORYTOFILEONSYSTEM
             {   //Dump a systems entried to a debug file. Then use StarScan2.ProcessFromFile / Tests file to check the star scanner
                 string system = "Caelottixa";
                 var mhs = History.EntryOrder().Where(x => (x.System.Name.EqualsIIC(system)) && (x.journalEntry is IStarScan || x.journalEntry is IBodyFeature)).ToList();
@@ -161,12 +190,20 @@ namespace EDDiscovery
                 BaseUtils.FileHelpers.TryWriteAllLinesToFile($@"c:\code\eddiscovery\elitedangerouscore\elitedangerous\bodies\starscan2\tests\{system}.json", jsonlines.ToArray());
             }
 #endif
+
+#if SPANSHDUMP
+            {
+                // dumped to the web scan folder..
+                History.StarScan2.FindSystemSynchronous(new SystemClass("Pyranu QO-Z d13-28", new SystemAddress(977516105979UL)), true);
+                History.StarScan2.FindSystemSynchronous(new SystemClass("", new SystemAddress(9467852826033UL)), true);
+            }
+#endif
+
             //if (History.StarScan2.TryGetSystemNode("Eorm Chruia OJ-Q e5-356", out EliteDangerousCore.StarScan2.SystemNode sn))  sn.DrawSystemToFile(@"c:\code\AA\output");
 
             //History.StarScan2.DrawAllSystemsToFolder(@"c:\code\AA");
 
 
-            //var sys = History.StarScan.FindSystemSynchronous(new SystemClass("Pyranu QO-Z d13-28", 977516105979), WebExternalDataLookup.Spansh);
             //var sys2 = History.StarScan.FindSystemSynchronous(new SystemClass("Pyranu QO-Z d13-28", 977516105979), WebExternalDataLookup.Spansh);
 
             //var sys3 = SpanshClass.GetSpanshDump(new SystemClass("Pyranu QO-Z d13-28", 977516105979), true, false);
