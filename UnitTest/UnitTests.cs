@@ -193,6 +193,7 @@ namespace UnitTest
 
         class EliteOptions : IEliteOptions
         {
+
             public string SystemDatabasePath => throw new NotImplementedException();
 
             public string UserDatabasePath => throw new NotImplementedException();
@@ -210,6 +211,8 @@ namespace UnitTest
             public bool ScanCacheEnabled => false;
 
             public bool SetEDDNforNewCommanders => throw new NotImplementedException();
+
+            public bool VerboseOutput => true;
         }
 
         private void extButtonDrawnClose_Click(object sender, EventArgs e)
