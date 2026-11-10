@@ -14,6 +14,7 @@
 
 //#define INARAGENTEST
 //#define SPANSHDUMP1
+//#define SPANSHTHENDISPLAY
 
 using BaseUtils;
 using EliteDangerousCore;
@@ -163,6 +164,7 @@ namespace EDDiscovery
             //JournalEntry.WriteJournals(new DateTime(2021, 1, 10), new DateTime(2021, 1, 12), @"c:\code\dump.json");
 
             // JournalEntry.WriteJournals(35,new DateTime(2014, 1, 1), new DateTime(2099, 1, 1), @"c:\code\logs\lens larque");
+
         }
 
 
@@ -199,6 +201,16 @@ namespace EDDiscovery
                 History.StarScan2.FindSystemSynchronous(new SystemClass("Sol", new SystemAddress(0)), true);
             }
 #endif
+
+#if SPANSHTHENDISPLAY
+            {
+                var sn = History.StarScan2.FindSystemSynchronous(new SystemClass("Phrio Phoea RA-H c13-13", new SystemAddress(0)), true);
+                sn.DrawSystemToFile(@"c:\code\system.png", 1920, true, true);
+            }
+
+#endif
+
+
 
             //if (History.StarScan2.TryGetSystemNode("Eorm Chruia OJ-Q e5-356", out EliteDangerousCore.StarScan2.SystemNode sn))  sn.DrawSystemToFile(@"c:\code\AA\output");
 
