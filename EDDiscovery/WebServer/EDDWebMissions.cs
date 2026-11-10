@@ -79,7 +79,7 @@ namespace EDDiscovery.WebServer
 
                     DateTime hetime = he.EventTimeUTC;
 
-                    List<MissionState> mcurrent = MissionListAccumulator.GetAllCurrentMissions(ml, hetime);
+                    List<MissionState> mcurrent = ml.Where(x => x.InProgress).ToList();
 
                     JArray cur = new JArray();
 
@@ -90,7 +90,7 @@ namespace EDDiscovery.WebServer
 
                     response["current"] = cur;
 
-                    List<MissionState> mprev = MissionListAccumulator.GetAllExpiredMissions(ml, hetime);
+                    List<MissionState> mprev = ml.Where(x => !x.InProgress).ToList();
 
                     JArray prev = new JArray();
 

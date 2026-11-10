@@ -17,7 +17,7 @@ namespace UnitTest
                     string t1 = @"{""timestamp"":""2020-03-31T11:19:41Z"",""event"":""Missions"",""Active"":[{""MissionID"":559130037,""Name"":""Mission_DeliveryWing_name"",""PassengerMission"":false,""Expires"":28698}],""Failed"":[],""Complete"":[]}";
                     var je = JournalEntry.CreateJournalEntry(t1) as JournalMissions;
                     Check( je != null);
-                    Check( je.ActiveMissions[0].Name.Equals("Mission_DeliveryWing_name"));
+                    Check( je.ActiveMissions[0].FDName.Equals("Mission_DeliveryWing_name"));
                     Check( je.ActiveMissions[0].Name_Localised.Equals("Mission Delivery Wing"));
                 }
                 {

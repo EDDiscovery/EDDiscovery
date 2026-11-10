@@ -24,6 +24,7 @@ namespace EDDiscovery.UserControls
     public partial class UserControlMissions : UserControlCommonBase
     {
         private DateTime NextExpiryUTC;
+        private int ExpiredDisplayed = 0;
 
         #region Init
 
@@ -94,13 +95,17 @@ namespace EDDiscovery.UserControls
 
         public override void ReceiveHistoryEntry(HistoryEntry he)
         {
-            if (he.MissionList != last_he?.MissionList || he.EventTimeUTC > NextExpiryUTC)
+           // System.Diagnostics.Debug.WriteLine($"Mission List Clicked {he.EventTimeUTC} {he.MissionList} vs {last_he?.MissionList}, next expiry time {NextExpiryUTC}");
+
+            var ml = DiscoveryForm.History.MissionListAccumulator.GetMissionListInProgress(he.MissionList);
+
+            if (he.MissionList != last_he?.MissionList || he.EventTimeUTC > NextExpiryUTC || ml.Where(x=>!x.InProgressDateTime(he.EventTimeUTC)).Count() != ExpiredDisplayed)
             {
                 last_he = he;
                 Display();
-                var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he.MissionList, he.EventTimeUTC);    // will always return an array
+
                 NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? ObjectExtensionsDates.MaxValueUTC();
-                //System.Diagnostics.Debug.WriteLine($"Mission List recalc {he.EventTimeUTC} {he.MissionList} vs {last_he?.MissionList}, next expiry time {NextExpiryUTC}");
+                //System.Diagnostics.Debug.WriteLine($"Mission List Redisplay {he.EventTimeUTC} {he.MissionList} vs {last_he?.MissionList}, next expiry time {NextExpiryUTC} Expired {ExpiredDisplayed}");
             }
         }
 
@@ -108,29 +113,29 @@ namespace EDDiscovery.UserControls
     
         private void Display()
         {
-            List<MissionState> ml = last_he != null ? DiscoveryForm.History.MissionListAccumulator.GetMissionList(last_he.MissionList) : null;
+            List<MissionState> ml = last_he != null ? DiscoveryForm.History.MissionListAccumulator.GetMissionListOrdered(last_he.MissionList) : null;
 
             missionListCurrent.Start();
             missionListPrevious.Start();
+
+            ExpiredDisplayed = 0;
 
             if (ml != null)
             {
                 DateTime hetime = last_he.EventTimeUTC;
 
-                List<MissionState> mcurrent = MissionListAccumulator.GetAllCurrentMissions(ml,hetime);
-
-                foreach (MissionState ms in mcurrent)
+                foreach (MissionState ms in ml.Where(x=>x.InProgress))
                 {
-                    missionListCurrent.Add(ms, false, null);
+                    bool notexpired = ms.InProgressDateTime(hetime);
+                    ExpiredDisplayed += notexpired ? 0 : 1;
+                    missionListCurrent.Add(ms, false, notexpired, null);
                 }
 
                 missionListCurrent.CompletedFill();
 
-                List<MissionState> mprev = MissionListAccumulator.GetAllExpiredMissions(ml,hetime);
-
-                foreach (MissionState ms in mprev)
+                foreach (MissionState ms in ml.Where(x=>!x.InProgress))
                 {
-                    missionListPrevious.Add(ms, true, missionListPrevious.SearchText);
+                    missionListPrevious.Add(ms, true, false, missionListPrevious.SearchText);
                 }
 
                 missionListPrevious.CompletedFill();

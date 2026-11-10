@@ -569,7 +569,7 @@ namespace EDDiscovery.UserControls
                             {
                                 List<MissionState> ml = hl.MissionListAccumulator.GetMissionList(he.MissionList);
 
-                                List<MissionState> mcurrent = MissionListAccumulator.GetAllCurrentMissions(ml, he.EventTimeUTC);
+                                List<MissionState> mcurrent = ml.Where(x => x.InProgress).ToList();
 
                                 var cur = reply["current"].Array();
 
@@ -580,7 +580,7 @@ namespace EDDiscovery.UserControls
                                     cur.Add(jo);
                                 }
 
-                                List<MissionState> mprev = MissionListAccumulator.GetAllExpiredMissions(ml, he.EventTimeUTC);
+                                List<MissionState> mprev = ml.Where(x => !x.InProgress).ToList();
 
                                 JArray prev = reply["previous"].Array();
 

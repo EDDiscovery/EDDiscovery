@@ -755,7 +755,7 @@ namespace EDDiscovery.UserControls
                     Name += ":" + m.Mission.Target;
                 starttime = m.Mission.EventTimeUTC;
                 endtime = m.Mission.Expiry;                 // NOTE expiry time of mission, not used however to gate below, we use Mission
-                MissionKey = MissionListAccumulator.Key(m.Mission);
+                MissionKey = m.Mission.Key;
                 TargetFaction = m.Mission.TargetFaction ?? "";
             }
 

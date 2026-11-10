@@ -38,6 +38,7 @@ namespace EDDiscovery
             }
         }
 
+        public bool VerboseOutput { get; private set; }         // use to turn on extra info just in debug mode, such as extra IDs in Mission lists..
         public string VersionDisplayString { get; private set; }
         public string AppDataDirectory { get; private set; }    
         public string UserDatabasePath { get; private set; }       
@@ -170,6 +171,7 @@ namespace EDDiscovery
 #if !DEBUG
             CheckGithubNotifications = CheckGithubAddOn = CheckGithubRelease = true;
 #else
+            VerboseOutput = true;
             EnableTGRightDebugClicks = true;
 #endif
 

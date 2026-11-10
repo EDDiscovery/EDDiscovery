@@ -139,8 +139,7 @@ namespace EDDiscovery.UserControls
 
                 DateTime hetime = currentHE.EventTimeUTC;
 
-                List<MissionState> ml = DiscoveryForm.History.MissionListAccumulator.GetMissionList(currentHE.MissionList);
-                List<MissionState> mcurrent = MissionListAccumulator.GetAllCurrentMissions(ml,hetime);
+                List<MissionState> mcurrent = DiscoveryForm.History.MissionListAccumulator.GetMissionListOrderedInProgress(currentHE.MissionList);
 
                 int vpos = 4;
                 Font displayfont = ExtendedControls.Theme.Current.GetFont;

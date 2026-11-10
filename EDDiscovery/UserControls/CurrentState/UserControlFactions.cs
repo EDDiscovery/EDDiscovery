@@ -116,7 +116,8 @@ namespace EDDiscovery.UserControls
                 {
                     last_he_received = he;
                     Display();
-                    var ml = DiscoveryForm.History.MissionListAccumulator.GetAllCurrentMissions(he.MissionList, he.EventTimeUTC);    // will always return an array
+
+                    var ml = DiscoveryForm.History.MissionListAccumulator.GetMissionListInProgress(he.MissionList);
                     NextExpiryUTC = ml.OrderBy(e => e.MissionEndTime).FirstOrDefault()?.MissionEndTime ?? EliteReleaseDates.GameEndTime;
                     //System.Diagnostics.Debug.WriteLine($"Faction List recalc {he.EventTimeUTC} {he.MissionList} vs {last_he_received?.MissionList}, next expiry time {NextExpiryUTC}");
                 }
@@ -439,7 +440,7 @@ namespace EDDiscovery.UserControls
                 {
                     if (ms.Mission.Faction == factionname)
                     {
-                        mluc.Add(ms, true, "");
+                        mluc.Add(ms, true, true, "");
                         System.Diagnostics.Debug.WriteLine($"Mission {ms.Mission.MissionBasicInfo(false)}");
                     }
                 }

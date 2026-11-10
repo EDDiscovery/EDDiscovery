@@ -77,7 +77,7 @@ namespace EDDiscovery.UserControls.Helpers
             extPanelDataGridViewScroll.Suspend();
         }
 
-        public void Add(MissionState ms, bool previousmissions, string search)
+        public void Add(MissionState ms, bool previousmissions, bool activenotexpired, string search)
         {
             bool show = true;
             if (panelButtons.Visible)
@@ -90,9 +90,10 @@ namespace EDDiscovery.UserControls.Helpers
 
             if (show)
             {
-                string[] rowobj = { JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
+                string idprint = EDDOptions.Instance.VerboseOutput ? ms.Mission.MissionID.ToString() + ":" : "";
+                string[] rowobj = { idprint + JournalFieldNaming.ShortenMissionName(ms.Mission.LocalisedName) ,
                                     EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.EventTimeUTC).ToString(),
-                                    EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry).ToString(),
+                                    previousmissions || activenotexpired ? EDDConfig.Instance.ConvertTimeToSelectedFromUTC(ms.Mission.Expiry).ToString() : "Expired".Tx(),
                                     ms.OriginatingSystem.Name + ": " + ms.OriginatingStation,
                                     ms.Mission.Faction,
                                     ms.DestinationSystemStationSettlement(),
