@@ -713,6 +713,18 @@ namespace EDDiscovery
                         tabControlMain.EnsureMajorTabIsPresent(pid,false);
                 }
             }
+            else if ( EDDOptions.Instance.CloseAllTabTypes)
+            {
+                foreach (PanelInformation.PanelIDs pid in Enum.GetValues(typeof(PanelInformation.PanelIDs))) 
+                { 
+                    if (pid >= 0) 
+                    { 
+                        TabPage p = tabControlMain.GetMajorTab(pid); 
+                        if (p != null && p.TabIndex>0) 
+                            tabControlMain.RemoveTab(p); 
+                    } 
+                }
+            }
 
             SystemEvents.PowerModeChanged += (senderpe, pevent) =>
             {

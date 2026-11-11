@@ -25,6 +25,7 @@ namespace UnitTest
 {
     public static class UnitTestScanScan
     {
+
         [BaseUtils.UnitTests.Test]
         public static void TestStarScan()
         {
@@ -183,6 +184,63 @@ namespace UnitTest
             }
             else
                 return null;
+        }
+
+
+        // DEMO a new BC sorting method
+
+        public const string BCNamingPrefix = "BC of ";
+        public static int Comparer(string left, string right, List<string> items)
+        {
+            int res = 0;
+            string lt = left;
+            string rt = right;
+            string[] rsubparts = null;
+            string[] lsubparts = null;
+
+            if (rt.StartsWith(BCNamingPrefix))
+                rsubparts = rt.Substring(BCNamingPrefix.Length).SplitTrim(',').Where(x => items.Contains(x)).ToArray();     // split back into parts, need to trim off spaces, only consider other sorted items
+
+            if (lt.StartsWith(BCNamingPrefix))
+                lsubparts = lt.Substring(BCNamingPrefix.Length).SplitTrim(',').Where(x => items.Contains(x)).ToArray();     // split back into parts, need to trim off spaces, only consider other sorted items
+
+            if (rsubparts?.Length > 0)      // protect against not having a nodenames in the BC list
+            {
+                if (lsubparts?.Length > 0)
+                    res = lsubparts[0].CompareTo(rsubparts[0]);
+                else
+                    res = lt == rsubparts[0] ? -1 : lt.CompareTo(rsubparts[0]);
+            }
+            else if (lsubparts?.Length > 0)
+            {
+                res = lsubparts[0] == rt ? 1 : lsubparts[0].CompareTo(rt);
+            }
+            else
+            {
+                res = lt.CompareTo(rt);
+            }
+
+            System.Diagnostics.Debug.WriteLine($"Compare {lt} vs {rt} = {res}");
+
+            return res;
+        }
+
+        [BaseUtils.UnitTests.Test(-1)]
+        public static void TestStarScanSort1()
+        {
+            List<string> items = new List<string> { "BC of 1,2,3,D,E", "D", "BC of F,G", "F", "A", "BC of A,B", "C", "E", "B", "G" };
+            items.Sort(delegate (string left, string right) { return Comparer(left, right, items); });
+            foreach (var s in items)
+                System.Diagnostics.Debug.WriteLine($"Item {s}");
+        }
+
+        [BaseUtils.UnitTests.Test(200000)]
+        public static void TestStarScanSort2()
+        {
+            List<string> items = new List<string> { "BC of C", "D", "BC of 1, 4, 5, F", "E", "A", "C", "B", "F" , "BC of 1, 2, 3, D, E"};
+            items.Sort(delegate (string left, string right) { return Comparer(left, right, items); });
+            foreach (var s in items)
+                System.Diagnostics.Debug.WriteLine($"Item {s}");
         }
 
     }

@@ -57,6 +57,7 @@ namespace EDDiscovery
         public bool NoTheme { get; set; }
         public bool NoTabs { get; private set; }
         public bool OpenAllTabTypes { get; private set; }
+        public bool CloseAllTabTypes { get; private set; }
         public bool TabsReset { get; set; }
         public bool NoSystemsLoad { get; private set; }
         public bool NoSound { get; private set; }
@@ -499,6 +500,8 @@ namespace EDDiscovery
                 {
                     switch (optname)
                     {
+                        case "-notverbose": VerboseOutput = false; break;
+                        case "-verbose": VerboseOutput = true; break;
                         case "-journalsinglethread": MultithreadedJournalRead = false; break;
                         case "-safemode": SafeMode = true; break;
                         case "-norepositionwindow": NoWindowReposition = true; break;
@@ -527,6 +530,7 @@ namespace EDDiscovery
                         case "-notheme": NoTheme = true; break;
                         case "-notabs": NoTabs = true; break;
                         case "-openalltabtypes": OpenAllTabTypes = true; break;
+                        case "-closealltabtypes": CloseAllTabTypes = true; break;
                         case "-tabsreset": TabsReset = true; break;
                         case "-nosound": NoSound = true; break;
                         case "-notitleinfo": DisableShowDebugInfoInTitle = true; break;
