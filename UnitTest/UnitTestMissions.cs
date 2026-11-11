@@ -17,14 +17,14 @@ namespace UnitTest
                     string t1 = @"{""timestamp"":""2020-03-31T11:19:41Z"",""event"":""Missions"",""Active"":[{""MissionID"":559130037,""Name"":""Mission_DeliveryWing_name"",""PassengerMission"":false,""Expires"":28698}],""Failed"":[],""Complete"":[]}";
                     var je = JournalEntry.CreateJournalEntry(t1) as JournalMissions;
                     Check( je != null);
-                    Check( je.ActiveMissions[0].FDName.Equals("Mission_DeliveryWing_name"));
+                    Check( je.ActiveMissions[0].FDName.Equals("Mission_DeliveryWing"));
                     Check( je.ActiveMissions[0].Name_Localised.Equals("Mission Delivery Wing"));
                 }
                 {
                     string t1 = @"{""timestamp"":""2022-11-28T10:53:13Z"",""event"":""MissionAbandoned"",""Name"":""Mission_OnFoot_SalvageIllegal_BS_MB_name"",""MissionID"":902580000}";
                     var je = JournalEntry.CreateJournalEntry(t1) as JournalMissionAbandoned;
                     Check( je != null);
-                    Check(je.FDName.Equals("Mission_OnFoot_SalvageIllegal_BS_MB_name"));
+                    Check(je.FDName.Equals("Mission_OnFoot_SalvageIllegal_BS_MB"));
 
                     CheckThat(je).IsNotNull();
                     CheckThat(je.Name).Equals("Mission On Foot Salvage Illegal BS MB");
@@ -41,13 +41,13 @@ namespace UnitTest
                     string t1 = @"{""timestamp"":""2023-04-16T11:33:57Z"",""event"":""MissionFailed"",""Name"":""Mission_OnFoot_Defence_MacGuffin_MB_StandardCanister_name"",""MissionID"":924234541}";
                     var je = JournalEntry.CreateJournalEntry(t1) as JournalMissionFailed;
                     CheckThat(je).IsNotNull();
-                    CheckThat(je.FDName).Equals(new MissionFDName("Mission_OnFoot_Defence_MacGuffin_MB_StandardCanister_name"));
+                    CheckThat(je.FDName).Equals(new MissionFDName("Mission_OnFoot_Defence_MacGuffin_MB_StandardCanister"));
                 }
                 {
                     string t1 = @"{ ""timestamp"":""2021-08-04T12:47:55Z"", ""event"":""MissionCompleted"", ""Faction"":""Lotian Crimson Brotherhood"", ""Name"":""Mission_OnFoot_Salvage_MB_name"", ""MissionID"":797165185, ""Commodity"":""$SurveillanceEquipment_Name;"", ""Commodity_Localised"":""Surveillance Equipment"", ""Count"":1, ""Reward"":10000, ""FactionEffects"":[ { ""Faction"":""Lotian Crimson Brotherhood"", ""Effects"":[  ], ""Influence"":[ { ""SystemAddress"":5067658962369, ""Trend"":""UpGood"", ""Influence"":""+"" } ], ""ReputationTrend"":""UpGood"", ""Reputation"":""+++"" } ] }";
                     var je = JournalEntry.CreateJournalEntry(t1) as JournalMissionCompleted;
                     CheckThat(je).IsNotNull();
-                    CheckThat(je.FDName).Equals(new MissionFDName("Mission_OnFoot_Salvage_MB_name"));
+                    CheckThat(je.FDName).Equals(new MissionFDName("Mission_OnFoot_Salvage_MB"));
                     CheckThat(je.Commodity).Equals(new MCFDName("SurveillanceEquipment"));
                     CheckThat(je.CommodityLocalised).Equals("Surveillance Equipment");
                 }
@@ -61,7 +61,7 @@ namespace UnitTest
 
                     var je = JournalEntry.CreateJournalEntry(t1) as JournalMissionCompleted;
                     CheckThat(je).IsNotNull();
-                    CheckThat(je.FDName).Equals(new MissionFDName("Mission_OnFoot_SalvageIllegal_MB_name"));
+                    CheckThat(je.FDName).Equals(new MissionFDName("Mission_OnFoot_SalvageIllegal_MB"));
                     CheckThat(je.Commodity).Equals(new MCFDName("MemoryChip"));
                     CheckThat(je.Reward).Equals(10000);
                     CheckThat(je.FactionEffects[0].Faction).Equals("Liberals of NLTT 8653");
@@ -76,7 +76,7 @@ namespace UnitTest
 
                     var je = JournalEntry.CreateJournalEntry(t1) as JournalMissionCompleted;
                     CheckThat(je).IsNotNull();
-                    CheckThat(je.FDName).Equals(new MissionFDName("Mission_OnFoot_SalvageIllegal_MB_name"));
+                    CheckThat(je.FDName).Equals(new MissionFDName("Mission_OnFoot_SalvageIllegal_MB"));
                     CheckThat(je.Commodity).IsNull();
                     CheckThat(je.Reward).Equals(10000);
                     CheckThat(je.FactionEffects[0].Faction).Equals("Liberals of NLTT 8653");

@@ -188,7 +188,6 @@ namespace UnitTest
 
 
         // DEMO a new BC sorting method
-
         public const string BCNamingPrefix = "BC of ";
         public static int Comparer(string left, string right, List<string> items)
         {
@@ -225,7 +224,9 @@ namespace UnitTest
             return res;
         }
 
-        [BaseUtils.UnitTests.Test(-1)]
+        // demo code, not a test, disabled
+
+        [BaseUtils.UnitTests.Test(-200000)]
         public static void TestStarScanSort1()
         {
             List<string> items = new List<string> { "BC of 1,2,3,D,E", "D", "BC of F,G", "F", "A", "BC of A,B", "C", "E", "B", "G" };
@@ -234,7 +235,7 @@ namespace UnitTest
                 System.Diagnostics.Debug.WriteLine($"Item {s}");
         }
 
-        [BaseUtils.UnitTests.Test(200000)]
+        [BaseUtils.UnitTests.Test(-200000)]
         public static void TestStarScanSort2()
         {
             List<string> items = new List<string> { "BC of C", "D", "BC of 1, 4, 5, F", "E", "A", "C", "B", "F" , "BC of 1, 2, 3, D, E"};

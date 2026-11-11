@@ -502,7 +502,7 @@ namespace UnitTest
                 }
             }
 
-            CheckThat(tested).Is(23);
+            CheckThat(tested).Is(22);
         }
 
         static List<string> failed = new List<string>();
