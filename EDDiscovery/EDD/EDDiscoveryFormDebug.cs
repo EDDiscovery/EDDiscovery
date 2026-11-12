@@ -14,7 +14,9 @@
 
 //#define INARAGENTEST
 //#define SPANSHDUMP1
-#define SPANSHTHENDISPLAY
+//#define SPANSHTHENDISPLAY
+//#define DRAWALLHISTORYSCANS
+//#define EXECUTEALLQUERIES
 
 using BaseUtils;
 using EliteDangerousCore;
@@ -146,7 +148,7 @@ namespace EDDiscovery
 
 
 
-        public void PostHistoryLoadDebug()  // on UI thread
+        public async void PostHistoryLoadDebug()  // on UI thread
         {
 #if INARAGENTEST
             foreach( var he in History.EntryOrder())
@@ -179,9 +181,43 @@ namespace EDDiscovery
             }
 #endif
 
+#if DRAWALLHISTORYSCANS
+            {
+                History.StarScan2.DrawAllSystemsToFolder(@"c:\code\AA");
 
+            }
+#endif
 
+#if EXECUTEALLQUERIES
+            {
+                HistoryListQueries q = new HistoryListQueries();
 
+                HashSet<JournalTypeEnum> computedsearch = new HashSet<JournalTypeEnum>(); // see SearchScans
+                computedsearch.Add(JournalTypeEnum.Scan);
+                computedsearch.Add(JournalTypeEnum.FSSSignalDiscovered);
+                computedsearch.Add(JournalTypeEnum.SAASignalsFound);
+                computedsearch.Add(JournalTypeEnum.FSSBodySignals);
+                computedsearch.Add(JournalTypeEnum.CodexEntry);
+                computedsearch.Add(JournalTypeEnum.ScanOrganic);
+                var helist = HistoryList.FilterByEventEntryOrder(History.EntryOrder(), computedsearch);
+                var defaultvars = new BaseUtils.Variables();
+                foreach ( var search in q.Searches)
+                {
+                    var results = new Dictionary<string, List<HistoryListQueries.ResultEntry>>();
+                    string s = await q.Find(helist, results, search.Name, defaultvars, History.StarScan2, false);
+                    System.Diagnostics.Debug.WriteLine($"Search {search.Name} = {s} : results {results.Count}");
+                    foreach( var kvp in results)
+                    {
+                        foreach (var r in kvp.Value)
+                        {
+                            System.Diagnostics.Debug.WriteLine($"  {kvp.Key} {r.FilterPassed} {r.HistoryEntry.Index} {r.HistoryEntry.EventTimeUTC} {r.HistoryEntry.EventSummary}");
+                            break;
+                        }
+                        break;
+                    }
+                }
+            }
+#endif
 
         }
     }
