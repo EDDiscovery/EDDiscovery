@@ -17,6 +17,8 @@
 //#define SPANSHTHENDISPLAY
 //#define DRAWALLHISTORYSCANS
 //#define EXECUTEALLQUERIES
+//#define EXECUTEQUERY
+
 
 using BaseUtils;
 using EliteDangerousCore;
@@ -201,12 +203,12 @@ namespace EDDiscovery
                 computedsearch.Add(JournalTypeEnum.ScanOrganic);
                 var helist = HistoryList.FilterByEventEntryOrder(History.EntryOrder(), computedsearch);
                 var defaultvars = new BaseUtils.Variables();
-                foreach ( var search in q.Searches)
+                foreach (var search in q.Searches)
                 {
                     var results = new Dictionary<string, List<HistoryListQueries.ResultEntry>>();
                     string s = await q.Find(helist, results, search.Name, defaultvars, History.StarScan2, false);
                     System.Diagnostics.Debug.WriteLine($"Search {search.Name} = {s} : results {results.Count}");
-                    foreach( var kvp in results)
+                    foreach (var kvp in results)
                     {
                         foreach (var r in kvp.Value)
                         {
@@ -218,6 +220,49 @@ namespace EDDiscovery
                 }
             }
 #endif
+
+#if EXECUTEQUERY
+            {
+                HistoryListQueries q = new HistoryListQueries();
+
+                var defaultvars = new BaseUtils.Variables();
+                // we want to keep the doubleness of values as this means when divided by the eval engine we get a float/float divide
+                defaultvars.AddPropertiesFieldsOfClass(new BodyPhysicalConstants(), "", null, 10, ensuredoublerep: true);
+
+                var searchresults = new Dictionary<string, List<HistoryListQueries.ResultEntry>>();
+
+                string query = "PlanetTypeID $== Metal_rich_body And IsLandable IsTrue And ContainsBioSignals IsTrue And Parent.StarTypeID $== A";
+                query = "PlanetTypeID $== Metal_rich_body And IsLandable IsTrue And ContainsBioSignals IsTrue And Parent.StarTypeID $== A";
+                query = "PlanetTypeID $== Metal_rich_body And IsLandable IsTrue And ContainsBioSignals IsTrue And Bodies[Iter1].StarTypeID $== A";
+                HistoryListQueries.Query search = new HistoryListQueries.Query("Test", query, EliteDangerousCore.HistoryListQueries.QueryType.BuiltIn);
+
+                HashSet<JournalTypeEnum> computedsearch = new HashSet<JournalTypeEnum>(); // see SearchScans
+                computedsearch.Add(JournalTypeEnum.Scan);
+                computedsearch.Add(JournalTypeEnum.FSSSignalDiscovered);
+                computedsearch.Add(JournalTypeEnum.SAASignalsFound);
+                computedsearch.Add(JournalTypeEnum.FSSBodySignals);
+                computedsearch.Add(JournalTypeEnum.CodexEntry);
+                computedsearch.Add(JournalTypeEnum.ScanOrganic);
+                var helist = HistoryList.FilterByEventEntryOrder(History.EntryOrder(), computedsearch);
+
+                History.FillInScanNode();     // ensure all journal scan entries point to a scan node (expensive, done only when reqired in this panel)
+
+
+                var results = new Dictionary<string, List<HistoryListQueries.ResultEntry>>();
+
+                var cond = new BaseUtils.ConditionLists(search.Condition);
+                string s = await HistoryListQueries.Find(helist, results, search.Name, cond, defaultvars, History.StarScan2, false);
+                System.Diagnostics.Debug.WriteLine($"Search {search.Name} = {s} : results {results.Count}");
+                foreach (var kvp in results)
+                {
+                    foreach (var r in kvp.Value)
+                    {
+                        System.Diagnostics.Debug.WriteLine($"  {kvp.Key} {r.FilterPassed} {r.HistoryEntry.Index} {r.HistoryEntry.EventTimeUTC} {r.HistoryEntry.EventSummary}");
+                    }
+                }
+            }
+#endif
+
 
         }
     }
