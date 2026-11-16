@@ -205,7 +205,7 @@ namespace EDDiscovery.UserControls
                     {
                         loctext += $": {jld.StationName_Localised}" + Environment.NewLine + $"{StationDefinitions.ToLocalisedLanguage(jld.FDStationType)}, {jld.StationFaction}";
                         if (jld.StationAllegiance != AllegianceDefinitions.Allegiance.Unknown)
-                            loctext += ", {AllegianceDefinitions.ToEnglish(jld.StationAllegiance)}";
+                            loctext += $", {AllegianceDefinitions.ToEnglish(jld.StationAllegiance)}";
 
                         string iname = StationDefinitions.StationImageName(jld.FDStationType);
                         BaseUtils.Icons.IconSet.TryGetImage(iname, out locimage);      // may not have an image 
@@ -368,7 +368,7 @@ namespace EDDiscovery.UserControls
                                 //desttext += Environment.NewLine + "Orbital station";
                                 desttext += Environment.NewLine + $"{StationDefinitions.ToLocalisedLanguage(jld.FDStationType)}, {jld.StationFaction}";
                                 if (jld.StationAllegiance != AllegianceDefinitions.Allegiance.Unknown)
-                                    desttext += ", { AllegianceDefinitions.ToEnglish(jld.StationAllegiance)}";
+                                    desttext += $", { AllegianceDefinitions.ToEnglish(jld.StationAllegiance)}";
 
                                     string iname = StationDefinitions.StationImageName(jld.FDStationType);
                                 BaseUtils.Icons.IconSet.TryGetImage(iname, out destimage);      // may not have an image 
