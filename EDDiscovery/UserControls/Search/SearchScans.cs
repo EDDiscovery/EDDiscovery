@@ -245,77 +245,85 @@ namespace EDDiscovery.UserControls
                 var results = new Dictionary<string, List<HistoryListQueries.ResultEntry>>();
 
                 var computedsearch = HistoryListQueries.NeededSearchableTypes(allvars,allfuncs);
-                var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(), computedsearch);
-                System.Diagnostics.Debug.WriteLine($"Helist is {helist.Count} entryorder {DiscoveryForm.History.EntryOrder().Count}");
 
-                var sw = new System.Diagnostics.Stopwatch(); sw.Start();
-
-                lastresultlog = await HistoryListQueries.Find(helist, results, "ScanSearch", cond, defaultvars, DiscoveryForm.History.StarScan2, extCheckBoxDebug.Checked);
-
-                if (IsClosed)       // may be closing during async process
-                    return;
-
-                System.Diagnostics.Debug.WriteLine($"Find complete {sw.ElapsedMilliseconds} on {helist.Count} results {results.Count}");
-
-                ISystem cursystem = DiscoveryForm.History.CurrentSystem();        // could be null
-
-                int max = 10000;
-
-                foreach ( var kvp in results.Take(max).EmptyIfNull())
+                if (computedsearch.Count > 0)
                 {
-                    string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
+                    var helist = HistoryList.FilterByEventEntryOrder(DiscoveryForm.History.EntryOrder(), computedsearch);
+                    System.Diagnostics.Debug.WriteLine($"Helist is {helist.Count} entryorder {DiscoveryForm.History.EntryOrder().Count}");
 
-                    HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value, out string name, out string info, out string infotooltip, 
-                                                            ColumnParent.Visible, out string pinfo,
-                                                            ColumnParentParent.Visible, out string ppinfo, 
-                                                            ColumnStar.Visible, out string sinfo, 
-                                                            ColumnStarStar.Visible, out string ssinfo);
+                    var sw = new System.Diagnostics.Stopwatch(); sw.Start();
 
-                    HistoryEntry he = kvp.Value.Last().HistoryEntry;
-                    ISystem sys = he.System;
+                    lastresultlog = await HistoryListQueries.Find(helist, results, "ScanSearch", cond, defaultvars, DiscoveryForm.History.StarScan2, extCheckBoxDebug.Checked);
 
-                    object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
-                                            he.System.Name,
-                                            name,
-                                            he.System.HasCoordinate ? (he.System.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##")) : "",
-                                            (cursystem != null && he.System.HasCoordinate)? cursystem.Distance(sys).ToString("0.#") : "",
-                                            info,  
-                                            pinfo,
-                                            ppinfo,
-                                            sinfo,
-                                            ssinfo,
-                                            };
+                    if (IsClosed)       // may be closing during async process
+                        return;
 
-                    int row = dataGridView.Rows.Add(rowobj);
-                    dataGridView.Rows[row].Tag = he;
-                    dataGridView.Rows[row].Cells[0].Tag = kvp.Value;
-                    dataGridView.Rows[row].Cells[5].ToolTipText = infotooltip;
-                }
+                    System.Diagnostics.Debug.WriteLine($"Find complete {sw.ElapsedMilliseconds} on {helist.Count} results {results.Count}");
 
-                if ( results.Count > max )
-                {
-                    object[] rowobj = { "","", "","","Too many results to display, truncating to the first".Tx() + " " + max.ToString() };
-                    dataGridView.Rows.Add(rowobj);
-                }
+                    ISystem cursystem = DiscoveryForm.History.CurrentSystem();        // could be null
 
-                System.Diagnostics.Debug.WriteLine($"Search took {sw.ElapsedMilliseconds} Returned {results.Count}");
+                    int max = 10000;
 
-                if (scanSortControl.Condition.HasChars())       // custom sort, apply
-                {
-                    SortGridBySortCriteria();
+                    foreach (var kvp in results.Take(max).EmptyIfNull())
+                    {
+                        string sep = System.Globalization.CultureInfo.CurrentCulture.NumberFormat.NumberGroupSeparator + " ";
+
+                        HistoryListQueries.GenerateReportFields(kvp.Key, kvp.Value, out string name, out string info, out string infotooltip,
+                                                                ColumnParent.Visible, out string pinfo,
+                                                                ColumnParentParent.Visible, out string ppinfo,
+                                                                ColumnStar.Visible, out string sinfo,
+                                                                ColumnStarStar.Visible, out string ssinfo);
+
+                        HistoryEntry he = kvp.Value.Last().HistoryEntry;
+                        ISystem sys = he.System;
+
+                        object[] rowobj = { EDDConfig.Instance.ConvertTimeToSelectedFromUTC(he.EventTimeUTC).ToString(),
+                                                he.System.Name,
+                                                name,
+                                                he.System.HasCoordinate ? (he.System.X.ToString("0.##") + sep + sys.Y.ToString("0.##") + sep + sys.Z.ToString("0.##")) : "",
+                                                (cursystem != null && he.System.HasCoordinate)? cursystem.Distance(sys).ToString("0.#") : "",
+                                                info,
+                                                pinfo,
+                                                ppinfo,
+                                                sinfo,
+                                                ssinfo,
+                                                };
+
+                        int row = dataGridView.Rows.Add(rowobj);
+                        dataGridView.Rows[row].Tag = he;
+                        dataGridView.Rows[row].Cells[0].Tag = kvp.Value;
+                        dataGridView.Rows[row].Cells[5].ToolTipText = infotooltip;
+                    }
+
+                    if (results.Count > max)
+                    {
+                        object[] rowobj = { "", "", "", "", "Too many results to display, truncating to the first".Tx() + " " + max.ToString() };
+                        dataGridView.Rows.Add(rowobj);
+                    }
+
+                    System.Diagnostics.Debug.WriteLine($"Search took {sw.ElapsedMilliseconds} Returned {results.Count}");
+
+                    if (scanSortControl.Condition.HasChars())       // custom sort, apply
+                    {
+                        SortGridBySortCriteria();
+                    }
+                    else
+                    {
+                        dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
+                        dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                    }
+
+                    labelCount.Text = "Total".Tx() + " " + results.Count + " / " + helist.Count.ToString();
+                    labelCount.Visible = true;
                 }
                 else
                 {
-                    dataGridView.Sort(sortcol, (sortorder == SortOrder.Descending) ? ListSortDirection.Descending : ListSortDirection.Ascending);
-                    dataGridView.Columns[sortcol.Index].HeaderCell.SortGlyphDirection = sortorder;
+                    labelCount.Text = "Check expression - did not result in any journal entries to test";
+                    labelCount.Visible = true;
                 }
 
                 this.Cursor = Cursors.Default;
-
-                labelCount.Text = "Total".Tx()+ " " + results.Count + " / " + helist.Count.ToString();
-                labelCount.Visible = true;
             }
-
         }
 
         private void extCheckBoxDebug_CheckedChanged(object sender, EventArgs e)
