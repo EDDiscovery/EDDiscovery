@@ -13,6 +13,11 @@
 #define MyAppGUIDAux ""
 #endif
 
+#ifndef ReleaseFolder
+#define ReleaseFolder Release
+#endif
+
+
 #define MyAppPublisher "Robby & EDDiscovery Team"
 #define MyAppURL "https://github.com/EDDiscovery"
 #define MyAppExeName "EDDiscovery.exe"
@@ -42,7 +47,7 @@ LicenseFile="{#SourcePath}\..\EDDiscovery\Resources\EDD License.rtf"
 OutputBaseFilename={#MyAppName}-{#MyAppVersion}
 OutputDir="{#SourcePath}\installers"
 SolidCompression=yes
-SourceDir="{#SourcePath}\..\EDDiscovery\bin\Release"
+SourceDir="{#SourcePath}\..\EDDiscovery\bin\{#ReleaseFolder}"
 UninstallDisplayIcon={app}\{#MyAppExeName}
 UsePreviousTasks=no
 UsePreviousAppDir=yes
