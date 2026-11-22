@@ -1,16 +1,31 @@
 EDDiscovery is a captain's log and 2D/3D map for Elite Dangerous players. Find more information in the [EDDiscovery wiki](https://github.com/EDDiscovery/EDDiscovery/wiki).
 
+# License and use
+
+[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/EDDiscovery/EDDiscovery/master/LICENSE.md)
+
+We purposely make this software open source so you have confidence in it, can inspect it, and can reuse aspects of it for your own use such as the data, classes etc.
+
+**WE DO NOT PERMIT wholescale copying of features of this program into your latest Elite Dangerous project**
+
+Many thousands of hours of work has gone into this by its creators.  Its not fair if you just rip off whole features into your latest probably creation, AI generated or not. It will discourage people from contributing to the program as they see their work ripped off by others.
+
+If wholescale copying occurs, then we will be forced to move the crucial parts of it (the panels, EDC core) to closed source to stop the copying.  We really don't want to do that.  It will affect Mono users and people who just want to be able to compile it themselves.
+
+# Youtube
+
 Check out our Youtube Videos https://www.youtube.com/channel/UC6CMbualdRleR47ocYPnokg series for help on using EDD. More videos to come!
 
 To get the latest release, click on Download the latest version at https://github.com/EDDiscovery/EDDiscovery/releases/latest and scroll down to the bottom of the page, and download the .exe installer version (unless you want to have your program and data in the same place, in which case you can just unzip the .zip version into your chosen folder).
 
+# Release Notes and Install
 See Release Notes https://github.com/EDDiscovery/EDDiscovery/releases for the release history.
 
 Click here for an install video on how to install EDD https://youtu.be/gQZCNC5Amn0
 
 Get help and advice on our Discord at https://discord.gg/uBq3UHq
 
-EDDiscovery - What is it?
+# EDDiscovery - What is it?
 
 You play Elite Dangerous and have heard of EDDiscovery - and ended up here.  So what _is_ it?
 
@@ -58,6 +73,6 @@ EDDiscovery integrates with our partner Elite 3rd party developer tools:
 * Canonn Plugin to send and get data from the Canonn player group
 
 
-[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/EDDiscovery/EDDiscovery/master/LICENSE.md)
+
 
 EDDiscovery is not affiliated with nor endorsed by [Frontier Developments plc](http://frontier.co.uk/), the developers of [Elite: Dangerous](https://www.elitedangerous.com/).
