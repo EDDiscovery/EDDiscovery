@@ -425,7 +425,7 @@ namespace EDDiscovery.UserControls
                         if (r < dataGridViewLedger.RowCount)
                         {
                             DataGridViewRow rw = dataGridViewLedger.Rows[r];
-                            return new Object[] { rw.Cells[0].Value, rw.Cells[1].Value, rw.Cells[2].Value, rw.Cells[3].Value, rw.Cells[4].Value, rw.Cells[5].Value, rw.Cells[6].Value};
+                            return new Object[] { rw.Cells[0].Value, rw.Cells[1].Value, rw.Cells[2].Value, rw.Cells[3].Value, rw.Cells[4].Value, rw.Cells[5].Value, rw.Cells[6].Value, rw.Cells[7].Value, rw.Cells[8].Value};
                         }
                         else
                             return null;
