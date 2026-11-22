@@ -138,7 +138,7 @@ jobs:
         os:
           - windows-latest
           # - ubuntu-2204 # Support ends 17 April 2027
-          - ubuntu-latest
+          - ubuntu-24.04
         BUILD_CONFIGURATION:
           - Debug
           - Release
@@ -146,7 +146,7 @@ jobs:
           - HAS_SYSTEM_SPEECH
           - NO_SYSTEM_SPEECH
         exclude:
-          - os: ubuntu-latest
+          - os: ubuntu-24.04
             DEFINE_CONSTANTS: HAS_SYSTEM_SPEECH
           - os: ubuntu-2204
             DEFINE_CONSTANTS: HAS_SYSTEM_SPEECH
@@ -178,14 +178,15 @@ jobs:
         uses: microsoft/setup-msbuild@30375c66a4eea26614e0d39710365f22f8b0af57 # v3.0.0
 
       - name: Install Mono
-        if: matrix.os == 'ubuntu-latest' && env.USE_DOTNET_SDK == 'false'
+        if: matrix.os == 'ubuntu-24.04' && env.USE_DOTNET_SDK == 'false'
         run: |
           sudo apt install ca-certificates gnupg
           sudo gpg --homedir /tmp --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
           sudo chmod +r /usr/share/keyrings/mono-official-archive-keyring.gpg
           echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/ubuntu stable-focal main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
           sudo apt update
-          sudo apt install -y mono-devel nuget msbuild
+          sudo apt install -y mono-complete nuget msbuild ca-certificates-mono
+          sudo cert-sync /etc/ssl/certs/ca-certificates.crt
 
       - name: Restore dependencies
         if: env.USE_DOTNET_SDK == 'true'
