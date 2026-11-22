@@ -8,9 +8,9 @@ We purposely make this software open source so you have confidence in it, can in
 
 **WE DO NOT PERMIT wholescale copying of features of this program into your latest Elite Dangerous project**
 
-Many thousands of hours of work has gone into this by its creators.  Its not fair if you just rip off whole features into your latest probably creation, AI generated or not. It will discourage people from contributing to the program as they see their work ripped off by others.
+Many thousands of hours of work has gone into this by its creators.  Its not fair if you just rip off whole features into your latest creation, AI generated or not. It will discourage people from contributing to the program as they see their work ripped off by others.
 
-If wholescale copying occurs, then we will be forced to move the crucial parts of it (the panels, EDC core) to closed source to stop the copying.  We really don't want to do that.  It will affect Mono users and people who just want to be able to compile it themselves.
+If copying occurs, then we will be forced to move the crucial parts of it (the panels, EDC core) to closed source to stop the copying.  We really don't want to do that.  It will affect Mono users and people who just want to be able to compile it themselves.
 
 # Youtube
 
