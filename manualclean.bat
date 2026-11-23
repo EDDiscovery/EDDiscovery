@@ -49,7 +49,7 @@ echo Finish Elite Dangerous core
 
 echo EDD
 rd /s  .vs
-cd EDDiscovery
+cd EDD
 rd /s  obj
 rd /s  bin
 cd..

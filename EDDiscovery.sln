@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 18
-VisualStudioVersion = 18.10.12224.181 stable
+VisualStudioVersion = 18.10.12224.181
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDDiscovery", "EDDiscovery\EDDiscovery.csproj", "{6EE10D92-E3E4-44D9-8E6B-851801B0B510}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EDDiscovery", "EDD\EDDiscovery.csproj", "{6EE10D92-E3E4-44D9-8E6B-851801B0B510}"
 	ProjectSection(ProjectDependencies) = postProject
 		{59F99A05-CE16-4FB8-BE99-F1A24F019CB8} = {59F99A05-CE16-4FB8-BE99-F1A24F019CB8}
 		{2049403F-F4C7-45E6-B777-6390C78E4D2B} = {2049403F-F4C7-45E6-B777-6390C78E4D2B}

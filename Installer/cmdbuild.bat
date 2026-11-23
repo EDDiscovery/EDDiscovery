@@ -5,17 +5,18 @@ rem cmd.exe is needed for this
 SETLOCAL EnableExtensions DisableDelayedExpansion
 
 rem you can choose Debug or Release now here
-rem for Debug builds, you need to just tweak the EDDiscovery.csproj file to make it spit out the eddweb site, change Debug here to nonsense
+rem for Debug builds, you need to just tweak the EDD.csproj file to make it spit out the eddweb site, change Debug here to nonsense
 rem   <Target Name="AfterBuild" Outputs="$(OutDir)EDDiscovery.Portable.zip" Condition=" '$(OS)' != 'Unix' And '$(Configuration)' != 'Debug' ">
 
 set EXEROOT=Release
-set exefolder=..\\EDDiscovery\\bin\\%EXEROOT%\\
+set exefolder=..\\EDD\\bin\\%EXEROOT%\\
 
 rem trick to get absolute path
 
 pushd %exefolder%
 set absexefolder=%CD%
 popd
+echo Absolute folder for code is %absexefolder%
 
 rem using EnableExtensions, use the pattern replacer to double \\
 
@@ -29,12 +30,11 @@ if NOT "%2" == "" set altname=-%2
 echo Want version `%vno`, Name `%EDDiscovery%altname%`
 pause
 
-
 if "%vno%"=="" goto :errorVER
 
 if "%CAPIID%"=="" goto :errorCAPI
 
-find "%vno%" ..\eddiscovery\properties\AssemblyInfo.cs
+find "%vno%" ..\edd\properties\AssemblyInfo.cs
 if %ERRORLEVEL%==1 goto :errorAI
 echo Assembly passed
 
@@ -52,7 +52,7 @@ if NOT "%altname%"==""  "\Program Files (x86)\Inno Setup 6\iscc.exe" /DMyAppVers
 rem program built
 
 rem echo copy ..\EDDiscovery\bin\Release\EDDiscovery.Portable.Zip installers\EDDiscovery%altname%.Portable.%vno%.zip
-copy ..\EDDiscovery\bin\%EXEROOT%\EDDiscovery.Portable.Zip installers\EDDiscovery%altname%.Portable.%vno%.zip
+copy ..\EDD\bin\%EXEROOT%\EDDiscovery.Portable.Zip installers\EDDiscovery%altname%.Portable.%vno%.zip
 
 certutil -hashfile installers\EDDiscovery%altname%-%vno%.exe SHA256 >installers\checksums%altname%.%vno%.txt
 certutil -hashfile installers\EDDiscovery%altname%.Portable.%vno%.zip SHA256 >>installers\checksums%altname%.%vno%.txt
