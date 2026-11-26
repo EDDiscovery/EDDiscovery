@@ -1200,24 +1200,6 @@
     <None Include="Resources\Marx Nebula List 26-10-21.csv" />
     <None Include="Resources\TouristBeacons.csv" />
     <None Include="Resources\ZenDots-Regular.ttf" />
-    <None Include="Translations\chinese-zh.tlf" />
-    <None Include="Translations\deutsch-de.tlf" />
-    <None Include="Translations\example-ex.tlf" />
-    <None Include="Translations\francais-fr.tlf" />
-    <None Include="Translations\Italiano-it.tlf" />
-    <None Include="Translations\polski-pl.tlf" />
-    <None Include="Translations\portugues-pt-br.tlf" />
-    <None Include="Translations\russian-ru.tlf" />
-    <None Include="Translations\spanish-es.tlf" />
-    <None Include="UserControls\Translations\translation-chinese-uc.tlp" />
-    <None Include="UserControls\Translations\translation-deutsch-uc.tlp" />
-    <None Include="UserControls\Translations\translation-example-uc.tlp" />
-    <None Include="UserControls\Translations\translation-francais-uc.tlp" />
-    <None Include="UserControls\Translations\translation-italiano-uc.tlp" />
-    <None Include="UserControls\Translations\translation-polski-uc.tlp" />
-    <None Include="UserControls\Translations\translation-portugues-uc.tlp" />
-    <None Include="UserControls\Translations\translation-russian-uc.tlp" />
-    <None Include="UserControls\Translations\translation-spanish-uc.tlp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -1300,7 +1282,9 @@
       <Name>ExtendedForms</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Translations\" />
+  </ItemGroup>
   <UsingTask TaskName="Zip" TaskFactory="CodeTaskFactory" AssemblyFile="$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll">
     <ParameterGroup>
       <FileRoot ParameterType="System.String" Required="false" />

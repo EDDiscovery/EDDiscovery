@@ -1,0 +1,1149 @@
+﻿
+SECTION JournalTypeEnum
+DC7FCEE8298DF3: "Game Mode Change" @
+E3ACAEA10B7987: "Market ID" @
+9EFC707F8ABFDB: "Launch Vessel" @
+C7EC98CED613F9: "EDD Destination Selected" @
+94A37CFA0C8992: "Afmu Repairs" => "模组维护工具"
+D2F34790ECB3BA: "Approach Body" => "接近星体"
+5FB514306EBAE2: "Approach Settlement" => "接近地表移民地"
+4B7A83F3BE5558: "Bounty" => "悬赏代券"
+9DD2CAFB447CCC: "Buy Ammo" => "购买弹药"
+FEB62C499A2500: "Buy Drones" => "购买无人机"
+657F9AA0E064D8: "Buy Exploration Data" => "购买星图数据"
+7CAFDD19556BE8: "Buy Trade Data" => "购买贸易数据"
+4DB05D715294E0: "Cargo Depot" => "货物仓库"
+0C9331C9670394: "Change Crew Role" => "更改船员职责"
+92297066F3CE05: "Clear Saved Game" => "清除游戏存档"
+DECEEF4C721E9F: "Cockpit Breached" => "驾驶舱破碎"
+5C0DE795E1E9F4: "Collect Cargo" => "收集货物"
+B268ED0B4B607A: "Commit Crime" => "违法行为"
+8F950E8AA5B28D: "Community Goal" => "社区目标"
+D901282523F7E6: "Community Goal Join" => "加入社区目标"
+157888363FB63B: "Community Goal Reward" => "社区目标奖励"
+0E4AA789DB9CE3: "Continued" => "继续"
+D9DBF455284B6C: "Crew Assign" => "NPC船员分配职责"
+9FCD1C303A28D0: "Crew Fire" => "NPC船员解雇"
+F461D7CE106E43: "Crew Hire" => "NPC船员雇佣"
+0DE99E6DD44B25: "Colonisation Construction Depot" => "殖民建设仓库"
+8B4C0F68F590D1: "Colonisation Contribution" => "殖民贡献"
+CAD2667B19FFD9: "Colonisation System Claim" => "殖民系统主权"
+FDC7F8A4C985F5: "Colonisation Beacon Deployed" => "殖民信标已部署"
+87AD5FCA61B672: "Colonisation System Claim Release" => "殖民系统主权释放"
+C1873A0AEF8AFA: "Complete Construction" @
+D03AD030E9F093: "Clear Impound" => "解除扣押"
+C82B7C89CBD30E: "Datalink Scan" => "扫描数据链接"
+C681DDF728EF23: "Deliver Power Micro Resources" => "交付动力微资源(Power Micro Resources)"
+7DA32347D585AC: "Discovery Scan" => "发现式扫描"
+9D8193CC2A2C4A: "Docked" => "停靠"
+6D2D27037BA796: "Dock Fighter" => "停靠舰载机"
+8314BEC36AF82B: "Docking Cancelled" => "取消停靠"
+A45578BCD4D634: "Docking Denied" => "停靠被拒"
+26DC1C4B7F15D6: "Docking Granted" => "获准停靠"
+13F853321421F2: "Docking Requested" => "请求停靠"
+3C77E9C9554E54: "Docking Timeout" => "停靠超时"
+796895CEA9660E: "Dock SRV" => "停靠SRV车"
+E7E61DBEAF0D82: "Eject Cargo" => "丢弃货物"
+8BA3287C64D3F8: "End Crew Session" => "中止船员模式"
+C8A941A4EACDD9: "Engineer Apply" => "应用改装"
+772CD2D2953DAF: "Engineer Contribution" => "捐赠工程师"
+DCC8C35235D14B: "Engineer Craft" => "生成改装"
+2CD177C5449797: "Engineer Legacy Convert" => "转换旧型改装"
+D86077951EF998: "Engineer Progress" => "工程师进展"
+DA8DFCD3EB91C7: "Escape Interdiction" => "逃脱FSD拦截"
+5B25DA29144CE3: "Bartender Materials" => "酒保材料"
+C8DFA75D28023B: "FSD Jump" => "删除重复的FSD跳跃记录"
+E32CE0896F3456: "Fuel Scoop" => "燃料收集"
+25078CE898205E: "Fileheader" => "游戏日志文件头"
+59343B3335F13B: "Fighter Destroyed" => "舰载机被摧毁"
+A55D954C33A2C6: "Fighter Rebuilt" => "舰载机重建"
+C11D5E1D35FB7E: "Friends" => "好友"
+612F78C20036B3: "Heat Damage" => "高温伤害"
+2404C350585EFF: "Heat Warning" => "高温警告"
+8DCEF71583C289: "Hull Damage" => "船体伤害"
+AC6279DDA92ACD: "Holoscreen Hacked" => "全息屏幕遭到入侵"
+CFBCD7231691E7: "Jet Cone Damage" => "等离子喷流伤害"
+6B9B8F3795C3FE: "Join A Crew" => "加入为船员"
+5E2C7463061466: "Kick Crew Member" => "踢出船员"
+B4C51E14077D64: "Launch Drone" => "发射无人机"
+3683810A2E0B5E: "Launch Fighter" => "发射舰载机"
+98EE7DBAA15D4D: "Launch SRV" => "部署SRV车"
+4C1DEF3A63BE70: "Leave Body" => "离开星体"
+4ED0770561AF5B: "Liftoff" => "起飞"
+802AA657657737: "Load Game" => "载入游戏"
+569BBD757E1BB8: "Market" => "市场数据"
+07B9763A41395A: "Market Buy" => "市场采购"
+A139B9152B48AE: "Market Sell" => "市场出售"
+04D7802CE9BF8C: "Material Collected" => "收集材料"
+B325E88182396B: "Material Discarded" => "丢弃材料"
+72314913DF1DFB: "Material Discovered" => "发现材料"
+4CABFFE40BF7F1: "Material Trade" => "交易材料"
+5F9C7AA91B0117: "Mining Refined" => "矿石精炼"
+97C9FE50FCAD64: "Mission Abandoned" => "放弃任务"
+E161E0A85A06A5: "Mission Accepted" => "接受任务"
+D99D5CBC0E9F5D: "Mission Completed" => "完成任务"
+63B5C824ABFAA2: "Mission Failed" => "任务失败"
+BB88C34EE25C53: "Mission Redirected" => "任务变更"
+4348D55EBF3612: "Module Info" => "模组信息"
+0F11042AFFE3BE: "Module Buy" => "购买模组"
+9C6F653AC574EA: "Module Retrieve" => "购回模组"
+CD71CDF86BAD75: "Module Sell" => "出售模组"
+12EB2E4F778BB0: "Module Store" => "存放模组"
+F2B7A6EEFE871A: "Module Swap" => "交换模组"
+131260CBFBB0C8: "Music" => "音乐"
+378883DC424FF5: "Nav Beacon Scan" => "扫描导航信标"
+703619011B0E7C: "New Commander" => "新指挥官"
+A9F7B6DA4CD9A2: "Npc Crew Paid Wage" => "NPC船员工资支付"
+BA39C1516AABF2: "Npc Crew Rank" => "NPC船员等级"
+76A8964DFF1EA9: "Pay Bounties" => "支付悬赏"
+089888F828B2F4: "Pay Legacy Fines" => "支付历史罚款"
+5000616468FC32: "Powerplay Collect" => "势力物资收集"
+10B7247C88B0C7: "Powerplay Defect" => "势力叛变"
+4CA45BD051B2D7: "Powerplay Deliver" => "势力物资送达"
+3104A57A10DED4: "Powerplay Fast Track" => "势力快速通道"
+21D40F054F6CD6: "Powerplay Join" => "加入势力"
+6EB11A5AE6507E: "Powerplay Leave" => "离开势力"
+5CC808A9CDDAFF: "Powerplay Salary" => "势力工资"
+40B15AA6265BDE: "Powerplay Vote" => "势力投票"
+1F671B74035C76: "Powerplay Voucher" => "势力代券"
+550AE25C2EEEB9: "Promotion" => "晋升"
+249F234E0ECB7D: "PVP Kill" => "PVP杀敌"
+AEE2D9EEC50FC5: "Quit A Crew" => "离开船员"
+1216C18189303B: "Reboot Repair" => "重启维修"
+BDB49F46979640: "Receive Text" => "收到文本消息"
+C362D4612F5C74: "Refuel All" => "加满燃料"
+631EE680DA6EC0: "Refuel Partial" => "添加部分燃料"
+5F60B1C2E60520: "Repair" => "维修"
+C3F2BE0BE60597: "Repair All" => "全部维修"
+E8DB7AC16063A4: "Repair Drone" => "维修无人机"
+5F21606B3A35DE: "Reputation" => "声望"
+C2D9E7B331A6A3: "Request Power Micro Resources" => "请求动力微资源(Power Micro Resources)"
+615977F038158E: "Restock Vehicle" => "补充库存载具"
+53515D02D18F1B: "Resurrect" => "复活"
+23B2A150243DBA: "SAA Signals Found" => "SAA信号已发现"
+78A22FBA11B38F: "Scanned" => "被扫描"
+587EB8CC1361C3: "Scientific Research" => "科研"
+60C152D92DFFCE: "Screenshot" => "截图"
+9DCFE3BBC19358: "Search And Rescue" => "搜寻与救援"
+F06DB83784986C: "Self Destruct" => "自我摧毁"
+EBDA61F721E706: "Sell Drones" => "出售无人机"
+756A5F9211337F: "Sell Exploration Data" => "出售探索数据"
+8C28B150645580: "Sell Ship On Rebuy" => "复活时出售飞船"
+A4F67D90F861BB: "Send Text" => "发送文本消息"
+ECE8DF43B4E578: "Set User Ship Name" => "设定飞船名称"
+0DA1A534B43399: "Shield State" => "护盾状况"
+3C297FAA7D6A91: "Shipyard" => "船坞数据"
+757D7FCACF98BF: "Shipyard Buy" => "购买飞船"
+77AB9B969A910C: "Shipyard New" => "新飞船"
+4E29C0CE3E9D61: "Shipyard Sell" => "出售飞船"
+270AB9D553AFE5: "Shipyard Swap" => "交换飞船"
+7E6D4BF9F2AA3F: "Shipyard Transfer" => "转移飞船"
+86188917717CAE: "Shipyard Bank Deposit" @
+7908BD051ADB46: "Ship Targeted" => "锁定飞船目标"
+7FDDB7D8D1D60B: "Shutdown" => "退出游戏"
+CAAACBDEADF1BF: "SRV Destroyed" => "SRV车被摧毁"
+3B2C3C4691ED9D: "Start Jump" => "开始FSD跳跃"
+F9BBEDF86004A2: "Stored Ships" => "存放的飞船"
+20F68A6A1AF1CE: "Supercruise Entry" => "进入巡航"
+D23F09253DF3FB: "Supercruise Exit" => "跳出巡航"
+060A4DB27456BF: "Supercruise Destination Drop" => "超巡目的地脱离"
+572A527CEFEB60: "Systems Shutdown" => "系统关闭"
+BC696A6FB39B1E: "Technology Broker" => "科技商"
+A2B5B115CC601A: "Touchdown" => "着陆"
+89A69B807BD0C3: "Under Attack" => "被攻击"
+43F61E0660CF21: "Undocked" => "离港"
+042FA91808F2A3: "USS Drop" => "跳入不明信号源"
+90097AC4D99E06: "Vehicle Switch" => "切换载具"
+1F5209DDDFC851: "Wing Add" => "添加僚机"
+CE86409EC0526C: "Wing Invite" => "邀请僚机"
+037A5425B51D23: "Wing Join" => "加入僚机"
+7CE073E07B941F: "Wing Leave" => "退出僚机"
+3F13C520D21BF5: "Module Sell Remote" => "远程出售模组"
+324545E2943C03: "Fetch Remote Module" => "获取远程模组"
+E3EE9373B1B90F: "Mass Module Store" => "批量存放模组"
+52173A6697C471: "Datalink Voucher" => "数据链接代券"
+5F400C4C44137D: "Data Scanned" => "数据扫描"
+1F52D64952C421: "Community Goal Discard" => "放弃社区任务"
+D7B33D045A2BCB: "Crew Launch Fighter" => "船员舰载机"
+AD336CD7C73063: "Crew Member Joins" => "船员加入"
+D50F857E661100: "Crew Member Quits" => "船员离开"
+0BBA6B926C275D: "Crew Member Role Change" => "船员改变职责"
+87840FD0486F82: "EDD Item Set" => "EDD物品集"
+EF44C2AD2FEB81: "EDD Commodity Prices" => "EDD商品价格"
+4F231038718008: "Applied To Squadron" => "申请加入中队"
+D9189899F7098F: "Asteroid Cracked" => "破开小行星"
+182D7F00B01931: "Codex Entry" => "百科条目"
+A4E2A8AD61007C: "Disbanded Squadron" => "解散中队"
+D1BD90BB4FF563: "FSD Target" => "设定FSD跳跃目标"
+5AFA0561EA1EA2: "FSS All Bodies Found" => "全光谱扫描完全部星体"
+75B4E8B7C347C8: "FSS Discovery Scan" => "全光谱扫描仪发现式扫描"
+8E7C00F8CC93C7: "FSS Signal Discovered" => "全光谱扫描发现信号"
+E8230B84718CEE: "Invited To Squadron" => "被邀请至中队"
+A6C19FF94D7B3C: "Joined Squadron" => "加入中队"
+DD1E18769DE9C5: "Kicked From Squadron" => "被踢出中队"
+DBF7FC98D24808: "Left Squadron" => "离开中队"
+BB42F30FBF10D5: "Multi Sell Exploration Data" => "批量出售探索数据"
+9A0B26B14A7AD7: "SAA Scan Complete" => "星体测绘扫描完成"
+DED5555CBEC12B: "Shared Bookmark To Squadron" => "分享书签至中队"
+11E9777B7E1686: "Squadron Created" => "创建中队"
+D337B3584D4A2C: "Squadron Demotion" => "中队降级"
+7E35276147EA5D: "Squadron Promotion" => "中队晋级"
+2D4B697532658A: "Won A Trophy For Squadron" => "为中队赢得一个奖杯"
+1C2A2D69647B4E: "Crime Victim" => "违法受害"
+AF9B07B2FEE316: "Prospected Asteroid" => "勘探过的小行星"
+3D182E824C16BF: "Reservoir Replenished" => "副燃料箱补满"
+42F768126917CA: "Squadron Startup" => "中队信息"
+21F7E2CAA96984: "Carrier Bank Transfer" => "航母银行转账"
+A94BBBE9C56BBE: "Carrier Buy" => "航母购买"
+A23ED09D92F353: "Carrier Cancel Decommission" => "航母取消退役"
+66499C0A001316: "Carrier Crew Services" => "航母乘员服务"
+3BE0BA36AF68CA: "Carrier Decommission" => "航母退役"
+F7A0147A3FB973: "Carrier Deposit Fuel" => "航母燃料存入"
+4D7CC816A9CBDF: "Carrier Docking Permission" => "航母停靠权限"
+7DF333A8096FC5: "Carrier Finance" => "航母财务"
+03702A530DD63A: "Carrier Jump Request" => "航母跳跃请求"
+1A91119760CE17: "Carrier Jump" => "航母跳跃"
+CFA1B9339C0699: "Carrier Module Pack" => "航母模块包"
+2A84B48D0FEC3D: "Carrier Ship Pack" => "航母飞船包"
+037850588070C8: "Carrier Stats" => "航母状态"
+811BF0A043B9DD: "Carrier Trade Order" => "航母贸易订单"
+7722B972B8042E: "Carrier Name Change" => "航母名称修改"
+86A932837E6ED0: "Carrier Jump Cancelled" => "航母跳跃取消"
+18FC2307338F5B: "Cargo Transfer" => "转移货物"
+A70E1E5D4FCF57: "Book Dropship" => "预订运输舰"
+6F0043CCCF4ACB: "Book Taxi" => "预订出租车"
+EE2FD771832C88: "Buy Micro Resources" => "够买微资源"
+AAABEAA3538323: "Buy Suit" => "够买套装"
+CE6C719AB9B430: "Buy Weapon" => "够买武器"
+1DBFBD01434228: "Cancel Dropship" => "取消运输舰"
+A1393E5E4FBF69: "Cancel Taxi" => "取消出租车"
+31F8CBE66211D5: "Collect Items" => "收集物品"
+32D1411A67758F: "Create Suit Loadout" => "创建套装配置"
+4409C46E15CC61: "Delete Suit Loadout" => "删除套装配置"
+48846751537ACB: "Disembark" => "离舰"
+7AA2403F734BF0: "Drop Items" => "丢弃物品"
+60944C2DB33AC3: "Embark" => "登舰"
+AD9D9A51B80C51: "Loadout Equip Module" => "装配装备模块"
+A39C27356E914A: "Loadout Remove Module" => "装配移除模块"
+FEACDC101F3C71: "Rename Suit Loadout" => "重命名套装配置"
+92CD330C7476AF: "Scan Organic" => "扫描有机体"
+E1364B2750FF51: "Sell Micro Resources" => "出售微资源"
+1F1D1B09C4D2D1: "Sell Organic Data" => "出售有机体扫描数据"
+B69D39285E77BE: "Sell Suit" => "出售套装"
+F2D461F2B14E6D: "Sell Weapon" => "出售武器"
+89E3F435AC99AC: "Switch Suit Loadout" => "切换套装配置"
+D6CCA803E4CF15: "Trade Micro Resources" => "交易微资源"
+35B057D454E371: "Upgrade Suit" => "升级套装"
+CC32AF210BB9F0: "Upgrade Weapon" => "升级武器"
+2D95A18F6424D0: "Use Consumable" => "使用消耗品"
+FAE5889CBC718C: "Suit Loadout" => "套装配置"
+AF4A72DDF4E93C: "Dropship Deploy" => "运输舰部署"
+D65B880844BDA5: "Faction Kill Bond" => "派系战争债券"
+BEE86D7B577ADD: "Capital Ship Bond" => "主力战舰战争债券"
+C055CE660F5A68: "Backpack Change" => "更换背包"
+A3C03E444B54D1: "Resupply" => "补给物资"
+274B5ED5219994: "FSS Body Signals" => "FSS天体信号"
+9EE301C4756544: "Module Buy And Store" => "模块购买与存储"
+1583DD9013D4EF: "Scan Bary Centre" => "扫描质心点"
+DDDE2AEC826902: "Nav Route Clear" => "清除导航路线"
+762CAF00E77FCB: "Ship Redeemed" => "飞船已赎回"
+3D1641D631C5B9: "Shipyard Redeem" => "船坞赎回"
+02374D50F6A18D: "Powerplay Merits" => "权力游戏(Powerplay)功绩点"
+8062068144644D: "Powerplay Rank" => "权力游戏(Powerplay)等级"
+5668ADC227F38B: "Carrier Location" => "航母定位"
+00D83C2DDC1290: "Cancelled Squadron Application" @
+61CAC65A66E653: "Squadron Application Approved" @
+33646EA5A80A0A: "Squadron Application Rejected" @
+
+SECTION JournalCargo
+
+8A009AE46C6211: "SRV" => "SRV"
+
+SECTION JournalCodexEntry
+
+D1A616085A1A99: "Traits" => "特性"
+
+SECTION CommunityGoal
+
+768E0C1C69573F: "Title" => "标题"
+0855009C46728A: "At" => "在"
+A99BE3DA0C9DA2: "Expires" => "过期"
+636C2C3E755471: "Not Complete;Complete" => "未完成;已完成"
+0DB16A8C94160B: "Current Total" => "当前总计"
+982D5A73469ACE: "Contribution" => "贡献值"
+D431FC74CD845B: "Num Contributors" => "贡献者数量"
+E9BB68A65645DF: "Player % Band" => "玩家 % 区间"
+7BBFBA05C8A45A: "Top Rank" => "最高排名"
+F944307E983058: "Not In Top Rank;In Top Rank" => "不在最高排名内;在最高排名内"
+B065C5EEE9CF43: "Tier Reached" => "达到的等级"
+4D963CFAB70D8C: "Bonus" => "奖励"
+7654BB6A1342A8: "Top Tier Name" => "顶级等级名称"
+72819B6B953E71: "TT. Bonus" => "顶级等级奖励"
+
+SECTION FSSSignal
+
+16D19F8245DA02: "Threat Level" => "威胁等级"
+C81B79DF3C6448: "Installation" => "设施"
+20C226FB3237BB: "Last Seen" => "最后出现时间"
+
+SECTION JournalFSSDiscoveryScan
+
+B091D64170AFAF: "Bodies" => "星体"
+8D7BF5BF136E81: "Others" => "其他"
+
+SECTION JournalFSSSignalDiscovered
+
+A90AC299BB0207: "Detected ; signals" => "探测到;个信号"
+
+SECTION JournalDocked
+
+
+SECTION JournalCommodityPricesBase
+
+BBB81F7CA96417: "Prices on ; items" => "上的价格;物品"
+AEF36502D67B05: "In" => "在"
+D446B632E23844: "Items to buy" => "待购物品"
+9E0595F4B34B89: "Sell only Items" => "仅出售物品"
+
+SECTION JournalEngineerProgress
+
+1B81E4B95EF5F8: "Progress on ; Engineers" => "已发现;个工程师"
+
+SECTION JournalFSDJump
+
+38B0DFF437C1BF: "Fuel used" => "使用燃料 ; 吨"
+8047F4EC0FCAD1: "Fuel left" => "剩余 ; 吨"
+
+SECTION JournalLeaveBody
+
+
+SECTION JournalLocOrJump
+
+182D37EC74BF3C: "Population" => "人口："
+20682CE886E023: "Pending State" => "待定状态："
+A65110A78F3D51: "Recovering State" => "回复状态："
+
+SECTION JournalFuelScoop
+
+
+SECTION JournalLoadout
+
+04E9462C0FF02B: "Modules" => "模组数："
+
+SECTION JournalLocation
+
+7F607560C063F1: "Landed on" => "降落在"
+
+SECTION JournalLocOrJump
+
+5E76464C161E26: "In system" => "星系："
+115686EAF61F61: "Happiness" => "幸福"
+D61087F9C608B6: "Happiest" => "最幸福的星系"
+6BE989FCF3D7AF: "Active State" => "活跃状态"
+
+SECTION JournalMissionAccepted
+
+BA8F571E0F93E1: "Expiry" => "到期时间"
+03ECFA6479FA3A: "Influence" => "影响力"
+589CE3494A2AD6: "Wing" => "Wing"
+DCAC5D49C54C3C: "Deliver" => "势力物资送达"
+4266916B95C358: "Target Type" => "目标类别"
+594D59A3A18111: "Kill Count" => "击杀数量"
+66E12969C225CC: "Count" => "数量"
+
+SECTION JournalMaterialDiscovered
+
+3B3290C7FA38E8: "Discovery" => "探索"
+
+SECTION JournalMaterials
+
+
+SECTION JournalMissionRedirected
+
+
+SECTION MissionItem
+
+B1B482B63A553F: "Passenger" => "乘客"
+
+SECTION JournalModuleInfo
+
+
+SECTION JournalMultiSellExplorationData
+
+
+
+SECTION JournalProspectedAsteroid
+
+CC632B5E2FD25E: "Remaining" => "剩余"
+
+SECTION JournalPromotion
+
+B0811E470D6BF4: "Trade" => "贸易"
+1F87C3714E9035: "Empire" => "帝国"
+EC37C87C97E782: "Federation" => "帝国"
+E443046C7DE75A: "Soldier" => "士兵"
+19B26057DCFA5F: "ExoBiologist" => "外星生物学家"
+
+SECTION JournalReceiveText
+
+045962C8A5575F: "Texts" => "文本"
+
+SECTION JournalRepairDrone
+
+DC04075740AF45: "Hull" => "船体修复量："
+
+SECTION JournalReputation
+
+
+SECTION JournalReservoirReplenished
+
+F19A9F3C642C34: "Reservoir" => "储层"
+
+SECTION StarPlanetRing
+
+85BE7F9C5D879C: "Inner Radius" => "内半径"
+3247A11AC2332A: "Outer Radius" => "外半径"
+6B2FC602242208: "Icy" => "冰质"
+A1CF264F7F1E4F: "Rocky" => "岩石"
+2FD9C95A438B18: "Metal Rich" => "富金属"
+26D54591255652: "Metallic" => "金属"
+
+SECTION JournalScan
+
+EDC652A19DA6D6: "First Discovered value" => "首次发现价值"
+806017A33BCA90: "Detailed scan" => "细节扫描"
+D19051CBF6DE8E: "Scan Auto" => "自动扫描"
+5DBE81790BF519: "Scan Basic" => "基础扫描"
+D2F52355860145: "Scan Nav" => "导航扫描"
+FF9F1FF32120D8: "Age" => "年龄"
+FCC576945A3487: "Gravity" => "重力"
+B322920E3B5B02: "Solar Masses" => "太阳质量"
+668E8A9DC64B01: "Surface Temp" => "表面温度"
+DBBCFE91DF0C29: "Surface Pressure" => "地表气压"
+4890E36537CEFA: "Atmospheres" @
+E1530E8C16523E: "Volcanism" => "火山活动"
+AAF05D8373E624: "Distance from Arrival Point" => "距离抵达点"
+0085D3B8C4D46A: "Orbital Period" => "轨道周期"
+A8577055DEE81E: "Semi Major Axis" => "半长轴"
+FD157443DE4822: "Orbital Eccentricity" => "轨道偏心率"
+4CBCDFA19D3CB4: "Orbital Inclination" => "轨道倾角"
+7EF85BC100A7B1: "Arg Of Periapsis" => "近心点幅角"
+7B89D7CF3827AA: "Absolute Magnitude" => "绝对星等"
+6598E97B280384: "Axial tilt" => "转轴倾角"
+A1034E6FA37CEC: "Rotation Period" => "自转周期"
+B285F06D312CA2: "Tidally locked" => "潮汐锁定"
+1E92B81458AA22: "Candidate for terraforming" => "可能适合地球化改造"
+418458B2E2D068: "Moons" => "卫星"
+0CB33492C61519: "Belts" => "小行星带"
+75B04B88D4665E: "Rings" => "星环"
+543C1ED5BD6952: "Base Estimated value" => "基础估价"
+B57430D1DF11DD: "Mapped value" => "地图绘制价值"
+5046A1063B521B: "Atmospheric Composition" => "大气成分"
+D8F3372588C7F1: "Planetary Composition" => "行星成分"
+94820B8DEE66A2: "Efficiently" => "轨道效率(Efficiently)"
+0A7BC2FBE6AE7B: "First Discovered+Mapped value" => "首次发现+绘图价值"
+92C786272052C1: "First Mapped value" => "首次绘图价值"
+CBB0126B704028: "Scan Type" => "扫描类型"
+187199564DF54F: "Inferred Circumstellar zones" => "推测的环恒星区域"
+705A639481A462: "Ascending Node" => "升交点"
+2992326FD1BADD: "Mean Anomaly" => "平近点角"
+2F670401770A29: "Already Footfalled" @
+
+SECTION HabZones
+
+56C414E778CB95: "Habitable Zone" => "宜居带"
+B17F14B414E3F5: "Metal Rich planets" => "富金属行星"
+BB463626BC70E7: "Water Worlds" => "水行星"
+42C44755F86B5D: "Earth Like Worlds" => "类地行星"
+8828285DB2B26C: "Icy Planets" => "冰封行星"
+
+SECTION JournalSAAScanComplete
+
+6934B3123D3109: "Probes" => "探测器"
+030E6445D2280E: "Efficiency Target" => "效率目标(Efficiency Target)"
+
+SECTION JournalScreenshot
+
+2C3CAFA4DB3F3E: "File" => "文件"
+A58DDF50C5EA5C: "Width" => "宽"
+3F608B4935EAD6: "Height" => "高"
+
+SECTION JournalSearchAndRescue
+
+
+SECTION JournalSellExplorationData
+
+
+SECTION JournalSendText
+
+14766B11B99F48: "Msg" => "消息"
+
+SECTION JournalSetUserShipName
+
+E0049A66519CAE: "On" => "开(On)"
+
+SECTION JournalShipTargeted
+
+E80B0F71712CE3: "Target Events" => "目标事件"
+
+SECTION JournalShipyardSell
+
+
+SECTION JournalShipyardSwap
+
+210DD62A81E43D: "Swap" => "交换"
+C4E888A145F199: "For a" => "For a"
+
+SECTION JournalShipyardTransfer
+
+B7512F3911A958: "Of" => "Of"
+
+SECTION JournalStartJump
+
+D3E1E961E72D83: "Charging FSD" => "FSD引擎充能"
+
+SECTION JournalStatistics
+
+6916B9B5B958F3: "Multicrew" => "多人船员"
+97E9C7A4D75E7C: "Materials and Commodity Trading" => "商品和材料交易"
+
+SECTION BankAccountClass
+
+9205F45E8FA145: "Wealth" => "资产："
+FA52F146885859: "Spent on Ships" => "飞船花费："
+6DADB9201D6068: "Spent on Outfitting" => "装备花费："
+9FEA6E2955DD59: "Spent on Repairs" => "维修花费："
+3FFD686FF3C1C8: "Spent on Fuel" => "燃料花费："
+B6D52E40689ED3: "Spent on Ammo" => "弹药花费："
+AE4235969A026C: "Insurance Claims" => "理赔次数："
+627E17FB07067E: "Spent on Insurance" => "保险花费："
+0D9EB7CAD2FAEA: "Owned ships" => "拥有飞船"
+A853C383CD72BE: "Spent on Suits" => "套装花费"
+9B92C63EE0811C: "Spent on Weapons" => "武器花费"
+18EA8BF4BF7125: "Spent on Suit Consumables" => "套装耗材花费"
+E55D4B2BB1A32D: "Suits Owned" => "拥有套装"
+DEF87C9B027AB7: "Weapons Owned" => "拥有武器"
+2FE0B970D17B11: "Spent on Premium Stock" => "高级库存花费"
+A07AA5B2C0AD22: "Premium Stock bought" => "高级库存够买"
+EF009C11D3DF87: "Current Merc Coins" @
+AF25FD6811F08F: "Total Merc Coins earned" @
+E1B05A801F1512: "Total Merc Coins spent" @
+3620D8E8B730A3: "Merc Coins spent on Merc Gear" @
+BDE2D5628C08FE: "Merc Coins spent on Engineering" @
+
+SECTION CombatClass
+
+5E29D24DDBC250: "Bounty Profits" => "悬赏收益"
+30199C423E3112: "Combat Bonds" => "战争债券数："
+8BDD9309E3053F: "Combat Bond Profits" => "战争债券收益："
+129AF563D54349: "Assassinations" => "暗杀次数："
+383B7750264D22: "Assassination Profits" => "暗杀收益："
+00FB4612106121: "Highest Reward" => "最高赏金："
+0053547838DA42: "Skimmers Killed" => "无人机摧毁数："
+9AFC187DE558E3: "Surface Combat Bonds" => "地表战斗债券数"
+0AAFED8FFE2352: "Surface Combat Bonds Profits" => "地表战斗债券收益"
+CA4D062721CEE9: "Vehicles Destroyed on Foot" => "步行摧毁载具"
+0739641B8ED76F: "Ships Destroyed on Foot" => "步行摧毁飞船"
+5C94F0ADDA9971: "Dropships Taken" => "夺取(Taken)运输船"
+6A3EAD6AB2EE6E: "Dropships Booked" => "预订(Booked)运输船"
+0254A12A67A8C3: "Dropships Cancelled" => "取消(Cancelled)运输船"
+C014B72ABC5F63: "High Intensity Conflict Zones fought" => "参与的高强度冲突区战斗"
+1FF00916CC0EAF: "Medium Intensity Conflict Zones fought" => "参与的中强度冲突区战斗"
+14208F470D699A: "Low Intensity Conflict Zones fought" => "参与的低强度冲突区战斗"
+8404A33E4DBAAD: "Total Conflict Zones fought" => "总参与的冲突区战斗"
+B3F0E973717EAE: "High Intensity Conflict Zones won" => "高强度冲突区战斗胜利"
+9C2E29723F8E9B: "Medium Intensity Conflict Zones won" => "中强度冲突区战斗胜利"
+7A1592DB4A63FA: "Low Intensity Conflict Zones won" => "低强度冲突区战斗胜利"
+B9916B3231819E: "Total Conflict Zones won" => "总冲突区战斗胜利"
+9FF79CC17748FE: "Settlements Defended" => "防御的定居点"
+167E88DB332354: "Settlements Conquered" => "攻击的定居点"
+F1FADA1C1143E4: "Skimmers Killed on Foot" => "步行击杀的无人机(Skimmers)"
+C5F8BC49B06203: "Scavengers Killed on Foot" => "步行击杀的清道夫(Scavenger)"
+
+SECTION CrimeClass
+
+2ED7290428F6F6: "Notoriety Index" => "恶名度："
+DE8CE29CA21997: "Fines" => "被罚款次数："
+F56EAB0381876A: "Total Fines" => "罚款总额："
+2D645B371B8D26: "Total Bounties" => "被赏金总额："
+AA8BFC15F7D73A: "Highest Bounty" => "最高被赏金："
+324D916946F1A3: "Malware Uploaded" => "上传的恶意软件"
+5C1D97BAABE157: "Settlements shut down" => "瘫痪定居点"
+8CF2A4B7C62E3D: "Production Sabotaged" => "破坏的生产设施"
+9012BE9DEF07B1: "Production Thefts" => "窃取的生产物资"
+919712B415527F: "Total Murders" => "总击杀数"
+8D481C42F64829: "Citizens Murdered" => "平民击杀数"
+DDE08CBFFFBD10: "Omnipol Murdered" => "Omnipol特工击杀数"
+66B0CB5D730299: "Guards Murdered" => "安保人员击杀数"
+142857CAA3F351: "Data Stolen" => "窃取数据量"
+7D71F3F6A1360E: "Goods Stolen" => "窃取物资量"
+8C50113FC393A0: "Total Inventory Items Stolen" => "总盗窃物品数"
+E935D5EF0690FB: "Turrets Destroyed" => "炮塔摧毁数"
+9CE124A39129DD: "Turrets Overloaded" => "炮塔过载瘫痪数"
+2E632B01D351DB: "Total Turrets shut down" => "炮塔瘫痪总数"
+54C2AE36533ECA: "Stolen Items Value" => "赃物总价值"
+F923AB1A40BCF2: "Profiles Cloned" => "克隆档案数"
+
+SECTION SmugglingClass
+
+2806709FE4C156: "Black Markets" => "访问黑市数："
+4A5A05665D0BA9: "Black Market Profits" => "黑市交易收益："
+7613CBC4912447: "Resources Smuggled" => "走私货物总量："
+A2AFD246C7F08B: "Average Profit" => "平均收益："
+DE296E2A6C1849: "Highest Single Transaction" => "最高单笔交易额："
+
+SECTION TradingClass
+
+1F1DDF7BF0C98D: "Markets Traded" => "交易过的市场："
+E18498C3B2DDAB: "Profits" => "贸易收益："
+CB3900C16B7DCF: "No. of Resources" => "交易货物总量："
+C2789640C77B9E: "Data Sold" => "出售数据"
+4A9BE7DFAB7DEE: "Goods Sold" => "出售货品"
+55A5AD0B47B443: "Assets Sold" => "出售资产"
+
+SECTION MiningClass
+
+B9A0D48484748D: "Materials Collected" => "收集矿物数："
+
+SECTION ExplorationClass
+
+3609C472782EF6: "Systems Visited" => "访问星系数："
+9B2551486A830B: "Level 2 Scans" => "二级扫描次数："
+67A03AC70BB866: "Level 3 Scans" => "三级扫描次数："
+FBF2CDC12C5040: "Highest Payout" => "单星系最高价值："
+E8260E1106DAA2: "Total Distance" => "累计航行距离"
+F4F756D76B1601: "No of Jumps" => "FSD跳跃总次数："
+E50149D407E75F: "Greatest Distance" => "最大到达距离"
+25FA47C8047A82: "Time Played" => "游戏时间："
+FDF9860CE3D816: "Distance Travelled on Foot" => "步行移动距离:"
+63C9E1599C47BF: "Efficient Scans" => "高效扫描(Efficient Scans)次数"
+A1C690A90BBA86: "Shuttle Journeys" => "穿梭机航行次数"
+309E1A19F2E8F5: "Shuttle Distance Travelled" => "穿梭机航行里程"
+8D19BAD76EAAB4: "Credits Spent on Shuttles" => "穿梭机花费"
+8F9B02B3D27584: "First Footfalls" => "首次登陆"
+ADAE0C398FD16E: "Planets walked on" => "已登陆行星"
+3CD3D42DF5A01C: "Settlements docked at" => "已停靠定居点"
+
+SECTION PassengerMissionsClass
+
+1547AE3B0EDFAD: "Accepted Passenger Missions" => "接受的客运任务"
+209579433C3E1C: "Refugees bulk delivered" @
+36B0A681C9AA94: "Refugees bulk ejected" @
+C89A0B766827E9: "Aidworker bulk delivered" @
+FEA9E18BF4CFFA: "Aidworker bulk ejected" @
+5B1CE05A04A6BF: "Tourist VIP delivered" @
+8D8B427A53609C: "Tourist VIP ejected" @
+01DB3FB92F7CF3: "Tourist bulk delivered" @
+96943A73DF14F0: "Tourist bulk ejected" @
+3C2AECC241FA8B: "Freedom Fighters VIP delivered" @
+33D002DFD196B7: "Freedom Fighters VIP ejected" @
+21EAEFA79433C3: "Freedom Fighter bulk delivered" @
+38BD417DC01999: "Freedom Fighter bulk ejected" @
+05E04D4665E97F: "Protestors bulk delivered" @
+54ADEFA5E4CD6C: "Protestors bulk ejected" @
+BFEEE62B3B0A21: "Security Forces bulk delivered" @
+DD57659A90AA8D: "Security Forces bulk ejected" @
+EE4C3D724EA702: "Passengers Disgruntled" => "乘客不满意"
+5C47DF577A4202: "Celebrities VIP delivered" @
+22907B9501C61B: "Celebrities VIP ejected" @
+52A4F3688C7669: "Politicians VIP delivered" @
+A38F7B18D57EB8: "Politicians VIP ejected" @
+1B78408520ABFF: "Politicians bulk delivered" @
+30364F8D414AFB: "Politicians bulk ejected" @
+95B817EC4D68BD: "Medical VIP delivered" @
+0150267D4EB7D7: "Medical VIP ejected" @
+4781A22713904B: "Medical bulk delivered" @
+CCFE6761168FA3: "Medical bulk ejected" @
+96307DBADAF57F: "Soldiers VIP delivered" @
+1A586F3B7A8692: "Soldiers VIP ejected" @
+5CFF93329E7EAE: "Science Teams VIP delivered" @
+EADE07DD9EC1DB: "Science Teams VIP ejected" @
+CFA5F725B53EBA: "Criminal VIP delivered" @
+0E8C0CFEC5B55E: "Criminal VIP ejected" @
+CFD8DCDC202CCB: "Head of State VIP delivered" @
+1F792B34EE786B: "Head of State VIP ejected" @
+4321CCEECE5E6F: "Total Bulk Passengers Delivered" => "载送的普通乘客总数："
+9599802D75489A: "Total VIPs Delivered" => "载送的VIP乘客总数："
+A8DD51D45A8D5D: "Total Delivered" => "总载送乘客数："
+8D398FC72B5FC2: "Total Ejected" => "被丢掉的乘客数："
+
+SECTION SearchAndRescueClass
+
+DCAA667E620D83: "Total Items Rescued" => "总救援物品数："
+850F28DC235445: "Total Rescue Transactions" => "救援的物品提交次数："
+244BBE3573B782: "Legal Salvage Value - Surface" => "合法打捞价值(地表)"
+C8DC3186BA6616: "Legal Salvage Value - Settlements" => "合法打捞价值(定居点)"
+75C521838AF38D: "Illegal Salvage Value - Surface" => "非法打捞价值(地表)"
+E5BFE4EAC644A1: "Illegal Salvage Value - Settlements" => "非法打捞价值(定居点)"
+75D0DE1ED996EC: "Maglocks cut" => "破坏磁力锁"
+2440DF52CFA4C7: "Panels cut" => "破坏控制面板"
+A4C99BC8F121D1: "Settlement Fires extinguished" => "定居点灭火"
+203EECDCD6004A: "Settlements rebooted" => "定居点重启"
+
+SECTION CraftingClass
+
+81036C7C18D827: "Engineers Used" => "工程师使用"
+F169A8BA960ADC: "Blueprints" => "蓝图"
+91BDD001C82CFD: "At Level 1" => "等级1"
+8079284E27BED6: "At Level 2" => "等级2"
+5470136E5FD56C: "At Level 3" => "等级3"
+FEE019881F64BE: "At Level 4" => "等级4"
+E04B15001A8913: "At Level 5" => "等级5"
+F3B761F0ED8F92: "Suit Modifications Applied" => "套装改装"
+5C37EE8DAD87A7: "Weapon Modifications Applied" => "武器改装"
+B783E7D9151FF4: "Suit Upgrades Applied" => "套装升级"
+85DF4C605F7A62: "Weapon Upgrades Applied" => "武器升级"
+54685F7FD4E3B3: "Suits fully Upgraded" => "套装完全升级"
+A92CED08A6B6C6: "Weapons fully Upgraded" => "武器完全升级"
+C7DD5E12E4315C: "Suits fully Modified" => "套装完全改装"
+98421491187378: "Weapons fully Modified" => "武器完全改装"
+
+
+SECTION SuitsWeapons
+
+CC459F63A7AECD: "Mods" => "模组"
+9E7FD7DDAEE291: "Loadout" => "配置"
+
+SECTION CrewClass
+
+F0D6732B1EC6D7: "Total Wages" => "总工资支出"
+115779EF18B63C: "Hired" => "雇佣人数"
+1B15CAF9936CFA: "Fired" => "解雇人数"
+E3D01DF2EE8493: "Killed in Action" => "阵亡人数"
+
+SECTION MulticrewClass
+
+8CE2E6C39769DC: "Total Time" => "总时长"
+B8759E7DAEEB15: "Gunner Time" => "炮手时长"
+A2D11970FCAA8C: "Fighter Time" => "飞行员时长"
+
+SECTION MaterialTraderStatsClass
+
+4F3F40FB209CEA: "Material Trades Completed" => "材料交易完成次数"
+4363FDBE63EFA5: "Material Traded" => "交易的材料数量"
+5C1D6A400D9CEF: "Encoded Materials traded" => "交易的编码材料数量"
+E8C3E03715E7E3: "Raw Materials traded" => "交易的原材料数量"
+0DE44837239D01: "Grade 1 Materials Traded" => "交易的1级材料数量"
+B5CDF5F87FB897: "Grade 2 Materials Traded" => "交易的2级材料数量"
+7848A086027338: "Grade 3 Materials Traded" => "交易的3级材料数量"
+D6B2DF7709085E: "Grade 4 Materials Traded" => "交易的4级材料数量"
+6FD4EF00CD21B6: "Grade 5 Materials Traded" => "交易的5级材料数量"
+800BFEB95D32C0: "Assets Gained in Trade" => "交易获得的资产"
+0BC71D362E3571: "Assets Spent in Trade" => "交易花费的资产"
+
+SECTION CQCClass
+
+CC92212A3F27F2: "Profits from CQC" => "竞技场收益："
+75D8C63318C0CD: "K/D Ratio" => "击杀/死亡比："
+D5355B2E39208E: "Win/Loss Ratio" => "胜/负比："
+
+SECTION FLEETCARRIERClass
+
+19BC53F95E7001: "Total Commodities Exported" => "商品总出口量"
+01834AD00AF1A3: "Total Commodities Imported" => "商品总进口量"
+67E77FEA27AECB: "Credits earned from Commodities" => "商品交易收益"
+19599B44516113: "Credits spent on Commodities" => "商品交易支出"
+E11BC535356363: "Credits earned from Stolen Goods" => "赃物交易收益"
+C1CD4A1188958B: "Credits spent on Stolen Goods" => "赃物交易支出"
+B77A3F3BB14F1E: "Total Travel Distance" => "总航行距离"
+6353B498F8F289: "Number of Carrier Jumps" => "航母跳跃次数"
+E2064BAEA1BB32: "Total Ships Sold" => "飞船总销量"
+361C6E79A093B1: "Credits earned from Shipyard" => "飞船销售收益"
+A684EFCB422C23: "Total Modules Sold" => "模块总销量"
+1224CE7162D545: "Credits earned from Outfitting" => "改装收益"
+490FB6CC1E7E91: "Total Ships Restocked" => "飞船补给次数"
+07A2BC2B8E7D1A: "Total Ships Refuelled" => "飞船加油次数"
+C6202A72930B30: "Credits earned from Refuelling" => "加油收益"
+EBD634ECEBE511: "Total Ships Repaired" => "飞船维修次数"
+DFF25F6CD8C735: "Redemption Office Exchanges" => "兑换处交易次数"
+31D36097A41711: "Redemption Office Payouts" => "兑换处支出"
+
+SECTION ExobiologyClass
+
+BD58B4A8A5E3EC: "Unique Genus Encountered" => "已发现独特属种："
+8F11BAC18D7AC1: "Unique Species Encountered" => "已发现独特物种："
+00694E28B85C7E: "Unique Variants Encountered" => "已发现独特变种："
+2E94FC82719982: "Profit from Organic Data" => "有机数据收益："
+AE1A3628A24D1E: "Organic Data Registered" => "已记录有机数据："
+4BF2AEE6021E43: "Profit from First Logged" => "首次发现收益："
+26D3486CCFCD1F: "First Logged" => "首次发现数量："
+BA9A3119D6AED8: "Systems with Organic Life" => "存在有机生命的星系："
+133A2126F9243D: "Planets with Organic Life" => "存在有机生命的行星："
+0DC504F9B615B2: "Unique Genus Data Logged" => "已记录独特属种数据："
+3877D6CDC8D492: "Unique Species Data Logged" => "已记录独特物种数据："
+
+SECTION ThargoidsClass
+
+D1E19CA15B146D: "Thargoid wakes scanned" => "扫描的Thargoid跃迁痕迹"
+1C837D4242A162: "Thargoids killed" => "击杀的Thargoid数量"
+802CED56D78E4A: "Thargoid structures" => "发现的Thargoid结构"
+EA376CA94D128A: "Total encounters" => "遭遇总次数"
+6BE262170622C0: "Last seen in" => "最后出现于星系"
+7E967FB5DA23E0: "Last seen on" => "最后出现于日期"
+24CD0F239B6A95: "Last ship involved" => "最后使用飞船"
+
+SECTION SquadronClass
+
+ADC201E865809C: "Credits deposited in bank" @
+CCEE8FDC5C8803: "Credits withdrawn from bank" @
+A8934D0301AFA3: "Times commodities were deposited" @
+2C73B2FAB30A15: "Value of deposited commodities" @
+2B203E382C224C: "Times commodities were withdrawn" @
+B35FF109C4292F: "Value of withdrawn commodities" @
+E4DCD977FF8F83: "Times personal assets were deposited" @
+DD6921BC905F5B: "Value of deposited personal assets" @
+71CD543001A7C9: "Times personal assets were withdrawn" @
+5F4532314D8463: "Value of withdrawn personal assets" @
+F7C365BF254579: "Times ships were deposited" @
+80F18404BC82B2: "Value of deposited ships" @
+FC8168050E1872: "Highest contribution for Aegis leaderboard" @
+34473E055B9521: "Highest contribution for BGS leaderboard" @
+6252428FD70811: "Highest contribution for Bounty leaderboard" @
+CACE07E4DC41F0: "Highest contribution for Colonisation Contribution leaderboard" @
+0F920B83994980: "Highest contribution for Combat leaderboard" @
+AA0DDB3AE0905E: "Highest contribution for CQC leaderboard" @
+7349D6DDEAD4B5: "Highest contribution for Exploration leaderboard" @
+C2CD9242FA517E: "Highest contribution for Mining leaderboard" @
+39DFCFD5E6E429: "Highest contribution for Powerplay leaderboard" @
+CF4B201DC5DF9B: "Highest contribution for Trade leaderboard" @
+41706D1F584F74: "Highest contribution for Illicit Trade leaderboard" @
+134BE3AED0E132: "Highest contribution for Operations leaderboard" @
+BF7FD0D351E253: "Times squadron got a podium place" @
+
+SECTION JournalStoredModules
+
+
+SECTION JournalSupercruiseExit
+
+
+SECTION JournalStoredShips
+
+EC5905CB483B0B: "At starport" => "在空间站中"
+A9DB6CA00CA90B: "Other locations" => "其他位置"
+C93F6536DCFBEE: "Remote" => "远程"
+
+SECTION JournalSuperCruiseEntry
+
+
+SECTION JournalUnderAttack
+
+
+SECTION JournalNavRoute
+
+
+SECTION JournalApproachBody
+
+
+SECTION JournalEntry
+
+3DEBAFED05C80C: "{0} days {1} hours {2} minutes" => "{0}天{1}小时{2}分"
+C427C71598A102: "Hyperspace" => "超空间"
+AA10128899005B: "Supercruise" => "进入巡航"
+ABC4DE9A615B76: "Victim faction" => "受害者派系："
+926829075296E5: "Due to" => "由于"
+2D19E3D79157EE: "Against" => "受害人："
+348E1B0E625A50: "Offender" => "罪犯"
+A882CCA9D54FBC: "Broker" => "中介人收取了的手续费"
+43DC8532F7E57B: "Amount" => "金额"
+9F9F5223C8298B: "No Cargo" => "无货物"
+6EBDDEBE116CFD: "Mission Cargo" => "任务货物"
+770B6A2A562593: "PowerPlay" => "势力斗争"
+5B0F7590D06F96: "Collected" => "收集的："
+EEA956CDE875F0: "Delivered" => "运送"
+0995BCD9E22E34: "To Go" => "显示所需的FSD跳跃次数"
+7AF178D8A66973: "Progress Left" => "剩余进度"
+7BE44386C602D7: "Starting Package" => "初始补给包(Starting Package)"
+71DDA61ACB8157: "Telepresence" => "远程临场"
+CE978E2021C10C: "Due to Crime" @
+C3F104D1365744: "Role" => "更改船员职责"
+FA4417824B6B53: "Crew Member" => "机组人员"
+0A98B391C30338: "Captain" => "舰长"
+BFBE5F8A721BE8: "Killed by" @
+96E930300EB555: "Boom!" @
+E31D972229DE38: "Option" => "可选"
+A427FB72311481: "Bankrupt" => "破产"
+B0D1107B426FB8: "New bodies discovered" => "发现了新的星体"
+D8451D7C6C2912: "Active Fine" => "有罚款"
+2179F6518767A0: "Station services" => "可用服务："
+7AB35C38FC4EB9: "Economies" => "经济："
+8F9F60B376DB53: "On Pad" => "降落坪："
+B56631BC889045: "Cockpit" => "驾驶舱修复量："
+408DF9CD449307: "Corrosion" => "侵蚀修复量："
+B5D8DA40F3ED31: "Total Cost" => "总花费："
+E9415863CFCC3D: "Total Sale" => "总出售"
+3633746B067241: "Each" => "单价："
+B90EBC91B3A742: "Drones" => "无人机"
+06992D2C6A4FD0: "Blueprint" => "蓝图"
+D8169782B57C7A: "Material" => "所持材料列表"
+C06411E10A71E6: "Total Quantity" => "总数"
+9085D8627BED7E: "In Slot" => "插槽内"
+CFADBD7A577133: "By" => "被："
+ACBB9E004BB3EA: "Discovered" => "发现材料"
+8D46C0467AFCE3: "NPC Controlled" => "NPC控制"
+BBD80CF7E2DED5: "Build" @
+88BE9D62D71BAB: "Part" => "搜索特定的条目"
+88027E516ABD34: "Not Landed;Landed" => "不在星球上;在星球上"
+49C0A0F7D44841: "Fuel Level" => "燃料量"
+45BD908DF490ED: "Capacity" => "燃料箱大小"
+7C7D492381C592: "Cash total differs, adjustment" => "现金总额不符,已调整"
+50905F52C647BD: "Number of Statuses" => "状态数量"
+C3E839DF608469: "Online" => "在线"
+E01FA717BACCF9: "Offline" => "离线"
+2AA1CF3369C989: "Unfriended" => "解除好友关系"
+FF59B80FE424C3: "Declined" => "已拒绝"
+7032F347790214: "Requested Friend" => "已发送好友请求"
+D3FC1E3648741C: "Added Friend" => "已添加好友"
+564B6CEAE398EC: ";Submitted" => ";已提交"
+F0CD420723AAE8: "NPC" => "NPC"
+E53407CFE1A515: "Player" => "玩家"
+7E622DDD8189FC: "Failed to interdict" => "拦截失败"
+BA7BE969E7C1BB: "Buy price" => "够买价格"
+D57E7FA2CAA064: "Sell price" => "出售价格"
+3576A295DC62CE: "Legal;Illegal" => "合法物品;违禁品"
+B965812110F44B: "Not Stolen;Stolen" => "非赃物;赃物"
+94CF760FC133A6: "Market;BlackMarket" => "贸易市场;黑市"
+E6560D9C298E72: "Sold" => "出售"
+27548C4FC95D7C: "Received" => "接收"
+A733B809D2F123: "Active" => "正在进行的任务数："
+09FEF5D8D9A3C8: "Failed" => "失败的任务数："
+1798B3BA42EE08: "Completed" => "完成的任务数："
+45EAAD8B8CE857: "Settlement" => "接近地表移民地"
+2C09302558D86A: "Donation" => "捐赠"
+3AF114B6246603: "Permits" => "通行证"
+2F4F4B7FBC81BC: "Rewards" => "任务奖励："
+226D7EC9AFB279: "Fine" => "定义按键"
+A9E6320C912D31: "Mission name" => "任务名称："
+B51A531A8ECBEC: "Hull Health" => "船体HP"
+6D5C757BD599A0: "Rebuy" => "保险费用："
+A379C85F8C69A0: "into" => "进入"
+4DB98AF9E39320: "Replaced by" => "已被替换为"
+405F45092D843A: "Modifications" => "改装件"
+0AF7A8485BB2D2: "Swapped with" @
+66FA2F4FDF0315: "Transfer Cost" => "转移费用"
+F398AE993C17B4: "Total modules" => "总模块数"
+F10983CD704614: "Into ship" => "转移至飞船"
+AD277E4A02CD50: "Transfer Time" => "运送时长："
+4B8A3E370AEDAF: "Music Track" => "音乐曲目："
+060718AE80FBBA: "Wages" => "工资用于"
+2A846ED7477092: "items available" => "可用物品"
+166D76AE76F567: "No Passengers" => "无乘客"
+12473AE7FBD7A8: "Merits" => "功绩"
+B66C4B2775554E: "Votes" => "投票数"
+8B6EFFD47EFDEC: "Pledged" => "已宣誓"
+C65D5243E9C5E6: "From Power" @
+BF2C7EF9644B5F: "To Power" @
+E26DFC1F8D9688: "Systems" => "星系"
+FBA2A215328E6A: "Lost Target" => "目标丢失"
+11530A93A09C51: "Shields Down;Shields Up" => "护盾离线;护盾在线"
+CEB1994BDE5913: "Latitude: ;°;F4" => "纬度: ;°;F4"
+FDCDCA316D9694: "Longitude: ;°;F4" => "经度: ;°;F4"
+8A24E40402207B: "Num" => "输入想要跳至的行"
+B8A54799BE1F4D: "Ships" => "飞船及其装备的模组"
+8AA2DD0F5E9E76: "Threat" => "危险等级："
+267537A7006640: "Remaining Jumps" => "剩余跳跃次数"
+76B1EBC80AA9A9: "Nearest" => "距离当前位置最近的星系列表"
+FBB3C38F715793: "Old" => "标签页启动失败。\r\n这是异常状况，请通过Discord或者Github告知开发团队。\r\n你可以尝试按住Shift键的同时双击EDDiscovery的图标进入安全模式。\r\n选择重置标签页后，点击运行程序。这样也许会解决问题。"
+6403F2B7EB2AAA: "New" => "选择新的配置文件或更改配置文件设置"
+D23A1C9FB35FE6: "Diff" @
+FCC451567343E0: "Near" => "距离当前位置最近的星系列表"
+E89D65A6A18478: "On Foot at" => "在处(步行状态)"
+82E2B91027511A: "Taxi" => "出租车"
+3C769675CD0F12: "Pilot" => "飞行员"
+C6BDFB2221032F: "Redeemed and deployed ship {0} at {1} into shipyard" => "已在{1}处兑换并部署飞船{0}至船坞"
+13E8B7503843F9: "Redeem ship {0} at {1}, available to deploy" => "在{1}处兑换飞船{0},可用于部署"
+
+SECTION JournalCarrierJump
+
+306A80A9A08A8E: "Carrier jumped to" => "航母跳跃到"
+
+SECTION JournalCarrier
+
+808572574FD987: "Call Sign" => "呼号"
+8359F3D1A48C34: "Carrier Type" @
+B6DF35DBE80033: "Carrier Balance" => "航母余额"
+BE5C7D808D15B4: "Reserve Balance" => "储备余额"
+396A220E3E6B36: "Available Balance" => "可用余额"
+1DBA9826D6F215: "Reserve Percent" => "储备百分比"
+3C78B78D476A63: "Tax Rate Pioneersupplies" => "先驱物资税率"
+162BA63324927B: "Tax Rate Shipyard" => "造船厂税率"
+D20A1DD9AD895A: "Tax Rate Rearm" => "重新武装税率"
+C25B3DB6BDD02A: "Tax Rate Outfitting" => "改装税率"
+94B20C35574451: "Tax Rate Refuel" => "燃料税率"
+739AA04282D30E: "Tax Rate Repair" => "维修税率"
+7246FA5C1BB112: "Total Capacity" => "总容量"
+2E330C845EDFD7: "Cargo Space Reserved" => "保留货舱空间"
+8D639F579B9C33: "Ship Packs" => "飞船套装"
+502849675D7247: "Module Packs" => "模块套装"
+C8E72CE20762EF: "Free Space" => "可用空间"
+E17C8AD0DC2E27: "Refund" => "退款"
+E7B0B317A6E8F7: "Deposit" => "存款"
+47E564194604F8: "Withdraw" => "取款"
+430D32076EB256: "Operation" => "操作"
+5BD44EBE63CD3B: "Tier" => "等级"
+BFF04E12429E0D: "Cancel Sell of" => "取消出售"
+2F81A22DE0AF5E: "Access" => "访问"
+DB5E11964705C3: ";Allow Notorious" => ";允许恶名"
+
+SECTION JournalMicroResources
+
+44D25B5D1B6D98: "Items" => "物品"
+9289473EEEDAEE: "Components" => "组件"
+4190D6D0F5DF6D: "Consumables" => "消耗品"
+
+SECTION JournalScanInfo
+
+794AD1AAD63C28: "is a" => "是"
+221026370F53E1: "Atmosphere" => "大气"
+3D9E27EEB502A5: "Surface temperature" => "地表温度"
+65C132989A3982: "Is tiny" => "小型"
+9538FA9B132C61: "Is large" => "巨大"
+82F3FD284D56A8: "Has mining signals" => "有采矿信号"
+44012680B4AA93: "Biological signals" => "生物信号"
+272D385F696052: "Geological signals" => "地质信号"
+DFE7B6F92EAFC7: "Thargoid signals" => "Thargoid信号"
+FE28F41AF4A444: "Guardian signals" => "守护者(Guardian)信号"
+C9FC56997F2C9D: "Human signals" => "人类信号"
+B21F6D1C4E7A48: "Other signals" => "'其他'信号"
+6E5D8362D37548: "Mapped & Discovered" => "已绘图并发现"
+CE22096993313A: "Mapped & Discovered & Footfalled" @
+BEB183389084ED: "Discovered & Footfalled" @
+B710B364F8E0F6: "Mapped & Footfalled" @
+87BD92F82FDE9A: "Footfalled" @
+D6841AFCAD4973: "Is landable" => "可登录"
+502FD1BD73C3D7: "Is ringed" => "有星环"
+A6C3E88F2D1C97: "Has an high eccentricity of" => "轨道离心率高达"
+AA2C96DACF00C4: "Basic" => "基础"
+6C2F2888C561E0: "Premium" => "高级"
+82DA45C64A0D04: "{0} has {1} level elements." => "{0} 上有 {1} 的元素。"
+C154F6FA296D4B: "Has been scanned for organics" => "已扫描有机物"
+
+SECTION Services
+
+F47FDB993838A7: "Bridge Crew" => "舰桥船员"
+1BABA82CF3020D: "Commodity Trading" => "商品贸易"
+C6230E81C93721: "Tritium Depot" => "氚燃料仓库"
+AA61104F28684E: "Refuel Station" => "加油站"
+CA4B1A71D2F677: "Repair Crews" => "维修人员"
+6A53D52EB6662E: "Armoury" => "军械库"
+7B2CA12E214447: "Redemption Office" => "赎罪办公室"
+9BAD2DA74D2D7D: "Secure Warehouse" => "安全仓库"
+419A2D5301C0DA: "Universal Cartographics" => "环球制图公司"
+CF7C02B2B0079B: "Concourse Bar" => "大堂酒吧"
+F157DA72429B0A: "Vista Genomics" => "Vista基因公司"
+AA5680B5B5B241: "Pioneer Supplies" => "先锋物资商店"
+F1A87D41F026EE: "Squadron Bank" @
+
+SECTION JournalScanOrganics
+
+7C101242BCDD46: "Potential Value" => "潜在价值"
+60B15E90591861: "Was logged" @
+FB0FEB4A33D00B: "Was not logged" @
+
+SECTION AtmosphereTypes
+
+0A1DC5CE861C38: "Ammonia Atmosphere" => "氨气大气"
+34E1E2662E5B20: "No Atmosphere" @
+E36E2226CA24CD: "Hot Thick Ammonia Atmosphere" => "高温浓密氨气大气"
+F6022553670A62: "Hot Thick Ammonia Rich Atmosphere" => "高温浓密富氨大气"
+7559217BB156DC: "Ammonia Rich Atmosphere" => "富氨大气"
+8D2251E1745895: "Thick Ammonia Atmosphere" => "浓密氨气大气"
+B1C527A623EB27: "Thick Ammonia Rich Atmosphere" => "浓密富氨大气"
+0480FF061EFDD1: "Thin Ammonia Atmosphere" => "稀薄氨气大气"
+92B4C387CDCDD5: "Argon Atmosphere" => "氩气大气"
+37D04A08DE9C71: "Hot Thick Argon Atmosphere" => "高温浓密氩气大气"
+1688398A1158C8: "Hot Thick Argon Rich Atmosphere" => "高温浓密富氩大气"
+E5A0FE014C9378: "Argon Rich Atmosphere" => "富氩大气"
+015E4DDC3D94B3: "Thick Argon Atmosphere" => "浓密氩气大气"
+5EBA8187E1012B: "Thick Argon Rich Atmosphere" => "浓密富氩大气"
+8459BAEB557A3F: "Thin Argon Atmosphere" => "稀薄氩气大气"
+E68F89BE004D27: "Thin Argon Rich Atmosphere" => "稀薄富氩大气"
+3E00F7F985C690: "Carbon Dioxide Atmosphere" => "二氧化碳大气"
+70B1C829C32B0C: "Hot Carbon Dioxide Atmosphere" => "高温二氧化碳大气"
+205D687FE949F0: "Hot Carbon Dioxide Rich Atmosphere" => "高温富二氧化碳大气"
+D1EAE58822D16F: "Hot Thick Carbon Dioxide Atmosphere" => "高温浓密二氧化碳大气"
+36B2B7A1B6AC2A: "Hot Thick Carbon Dioxide Rich Atmosphere" => "高温浓密富二氧化碳大气"
+0A4F91AD30715C: "Hot Thin Carbon Dioxide Atmosphere" => "高温稀薄二氧化碳大气"
+71717A1A2637E3: "Carbon Dioxide Rich Atmosphere" => "富二氧化碳大气"
+62DEC62FA197F7: "Thick Carbon Dioxide Atmosphere" => "浓密二氧化碳大气"
+16500A64C176A0: "Thick Carbon Dioxide Rich Atmosphere" => "浓密富二氧化碳大气"
+6B0D3A69CA22BA: "Thin Carbon Dioxide Atmosphere" => "稀薄二氧化碳大气"
+113ED48B8FB781: "Thin Carbon Dioxide Rich Atmosphere" => "稀薄富二氧化碳大气"
+0E3AF834913154: "Earth Like Atmosphere" => "类地大气"
+A19D190F7F7EDB: "Thick Earth Like Atmosphere" => "浓密类地大气"
+683A2BE21F3496: "Helium Atmosphere" => "氦气大气"
+66145BFE7F9599: "Thick Helium Atmosphere" => "浓密氦气大气"
+113FB552207696: "Thin Helium Atmosphere" => "稀薄氦气大气"
+E6B08CF7C135CC: "Hot Thick Metallic Vapour Atmosphere" => "高温浓密金属蒸汽大气"
+C282B84D7F3421: "Methane Atmosphere" => "甲烷大气"
+5BA2B5C5725675: "Hot Thick Methane Atmosphere" => "高温浓密甲烷大气"
+5CE5AAEEA3D075: "Hot Thick Methane Rich Atmosphere" => "高温浓密富甲烷大气"
+EBE890E133629D: "Methane Rich Atmosphere" => "富甲烷大气"
+7FF344743E62BB: "Thick Methane Atmosphere" => "浓密甲烷大气"
+DA9BF706279D64: "Thick Methane Rich Atmosphere" => "浓密富甲烷大气"
+DFF9092A2B7842: "Thin Methane Atmosphere" => "稀薄甲烷大气"
+2DBC0653044AB8: "Thin Methane Rich Atmosphere" => "稀薄富甲烷大气"
+C8F858586EE5FE: "Neon Rich Atmosphere" => "富氖大气"
+5B33B63CB4CE31: "Thin Neon Atmosphere" => "稀薄氖气大气"
+73D224A0DE20B9: "Thin Neon Rich Atmosphere" => "稀薄富氖大气"
+AE7CC4BBE7403A: "Nitrogen Atmosphere" => "氮气大气"
+39998516995080: "Hot Thick Nitrogen Atmosphere" => "高温浓密氮气大气"
+AB0E166ED5A0E3: "Thick Nitrogen Atmosphere" => "浓密氮气大气"
+3FE79B30BAF813: "Thin Nitrogen Atmosphere" => "稀薄氮气大气"
+F33298A7DC6E19: "Oxygen Atmosphere" => "氧气大气"
+FAFA0A9F3AC3A9: "Thin Oxygen Atmosphere" => "稀薄氧气大气"
+D5C198FC5CFFA5: "Hot Silicate Vapour Atmosphere" => "高温硅酸盐蒸汽大气"
+A9A2C4F133C767: "Hot Thick Silicate Vapour Atmosphere" => "高温浓密硅酸盐蒸汽大气"
+017BFAA523D309: "Hot Thin Silicate Vapour Atmosphere" => "高温稀薄硅酸盐蒸汽大气"
+5BEC71B86CD1D6: "Sulphur Dioxide Atmosphere" => "二氧化硫大气"
+AB2424E38DB56E: "Hot Sulphur Dioxide Atmosphere" => "高温二氧化硫大气"
+08CD6FFA7A88A4: "Hot Thick Sulphur Dioxide Atmosphere" => "高温浓密二氧化硫大气"
+030D70E4A07CB2: "Hot Thin Sulphur Dioxide Atmosphere" => "高温稀薄二氧化硫大气"
+D292938F1D0303: "Thick Sulphur Dioxide Atmosphere" => "浓密二氧化硫大气"
+01D4ABC6251573: "Thin Sulphur Dioxide Atmosphere" => "稀薄二氧化硫大气"
+8F08597CF3DE03: "Unknown Atmosphere" => "未知大气"
+E436FB98308A84: "Water Atmosphere" => "水蒸气大气"
+928784ECF69018: "Hot Water Atmosphere" => "高温水蒸气大气"
+1D06B7FAD73C42: "Hot Water Rich Atmosphere" => "高温富水蒸气大气"
+49B78D5AC54EE6: "Hot Thick Water Atmosphere" => "高温浓密水蒸气大气"
+0F20899F0F07AF: "Hot Thick Water Rich Atmosphere" => "高温浓密富水蒸气大气"
+2A9DA46CD56035: "Water Rich Atmosphere" => "富水蒸气大气"
+90F545822826C4: "Thick Water Atmosphere" => "浓密水蒸气大气"
+9E22EAF6BC437B: "Thick Water Rich Atmosphere" => "浓密富水蒸气大气"
+85E578C1152B35: "Thin Water Atmosphere" => "稀薄水蒸气大气"
+4C623AF9C5D4BF: "Thin Water Rich Atmosphere" => "稀薄富水蒸气大气"
+
+// added
+
+F1D71513E026A6: "Thin Ammonia Rich Atmosphere" => "稀薄富氨大气"
+EC6DDB27FA16BC: "Hot Argon Atmosphere" => "高温氩气大气"
+5289C59164BE44: "Hot Argon Rich Atmosphere" => "高温富氩大气"
+7909C52AAE1A7B: "Hot Metallic Vapour Atmosphere" => "高温金属蒸汽大气"
+C1C9D393CAD88B: "Hot Thin Metallic Vapour Atmosphere" => "高温稀薄金属蒸汽大气"
+
+SECTION VolcanismTypes
+
+C7C212A78D8056: "Minor Ammonia Magma Volcanism" => "氨岩浆轻微火山活动"
+64C83D51991EE6: "Carbon Dioxide Geysers Volcanism" => "二氧化碳间歇泉火山活动"
+EC9BA750D20663: "Minor Carbon Dioxide Geysers Volcanism" => "二氧化碳间歇泉轻微火山活动"
+CE1372BD34FE4B: "Metallic Magma Volcanism" => "金属岩浆火山活动"
+A2D1C2CB863ADE: "Major Metallic Magma Volcanism" => "金属岩浆剧烈火山活动"
+67770CE6C800D3: "Minor Metallic Magma Volcanism" => "金属岩浆轻微火山活动"
+EA076638B48974: "Minor Methane Magma Volcanism" => "甲烷岩浆轻微火山活动"
+8F05ED17DCD392: "Minor Nitrogen Magma Volcanism" => "氮岩浆轻微火山活动"
+B7CCDEFACC4D5B: "Rocky Magma Volcanism" => "岩质岩浆火山活动"
+017364055B4FB6: "Major Rocky Magma Volcanism" => "岩质岩浆剧烈火山活动"
+DDE943B43B148C: "Minor Rocky Magma Volcanism" => "岩质岩浆轻微火山活动"
+4C3BBC3889C172: "Silicate Vapour Geysers Volcanism" => "硅酸盐蒸汽间歇泉火山活动"
+A1F7196AC91711: "Major Silicate Vapour Geysers Volcanism" => "硅酸盐蒸汽间歇泉剧烈火山活动"
+E12C5172C71943: "Minor Silicate Vapour Geysers Volcanism" => "硅酸盐蒸汽间歇泉轻微火山活动"
+E5523B05164496: "Water Geysers Volcanism" => "水间歇泉火山活动"
+256B10A358431A: "Major Water Geysers Volcanism" => "水间歇泉剧烈火山活动"
+3689BBDEB38CE4: "Minor Water Geysers Volcanism" => "水间歇泉轻微火山活动"
+061B430E3860A3: "Water Magma Volcanism" => "水岩浆火山活动"
+DEA987C0845103: "Major Water Magma Volcanism" => "水岩浆剧烈火山活动"
+B6AEF3724D1973: "Minor Water Magma Volcanism" => "水岩浆轻微火山活动"
+
+// added
+
+03966C34CFE140: "Unknown Volcanism" => "未知火山活动"
+

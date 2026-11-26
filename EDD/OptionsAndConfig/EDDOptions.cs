@@ -148,7 +148,7 @@ namespace EDDiscovery
         public bool SetEDDNforNewCommanders { get; private set; } = true;
         public string ShipLoadoutsDirectory() { return SubAppDirectory("Loadouts"); }
         static public string ExeDirectory() { return System.AppDomain.CurrentDomain.BaseDirectory;  }
-        public string[] TranslatorFolders() { return new string[] { TranslatorDirectory(), ExeDirectory() }; }
+        public string[] TranslatorFolders() { return new string[] { TranslatorDirectory(), ExeDirectory(), @"..\..\..\Translations" }; }
         public string FrontierBindingsFolder { get; set; }
         
         #endregion

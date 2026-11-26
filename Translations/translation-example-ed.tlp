@@ -1,0 +1,1721 @@
+﻿
+SECTION Bodies
+
+C5C83D37FC24C9: "Luminous Hot {0} class star" @
+A6575650F6A219: "Luminous Blue {0} class star" @
+89F39A30E7DE6F: "Bluish-White {0} class star" @
+060F7B31C5F584: "White {0} class star" @
+3FB2857EDF5091: "Yellow {0} class star" @
+99E105D59BB657: "Orange {0} class star" @
+008BE0893471FC: "Red {0} class star" @
+23D65D87FD591F: "Dark Red {0} class star" @
+45EEBAD04A9274: "Methane Dwarf T class star" @
+1D0F8DB21F48C9: "Brown Dwarf Y class star" @
+F96FC172EEE044: "Herbig Ae/Be class star" @
+0B02505D1BF26B: "T Tauri star" @
+3DFECCB7DD6E22: "Wolf-Rayet {0} class star" @
+08669A9269C246: "Carbon {0} class star" @
+7BF6F814D38980: "Intermediate low Zirconium Monoxide MS class star" @
+170A80DC1E0554: "Cool Giant Zirconium Monoxide rich S class star" @
+8CDEC5119408C0: "White Dwarf {0} class star" @
+88F658977AF588: "Neutron Star" @
+B5E13D6534B85B: "Black Hole" @
+00474EC1A0DD8B: "Exotic" @
+15689BE90D7A28: "Super Massive Black Hole" @
+60D23737096015: "A Blue White Super Giant" @
+A5F40A0594E64E: "B Blue White Super Giant" @
+FC286F38B230C6: "F White Super Giant" @
+5C5DD0E5D06E4B: "G White Super Giant" @
+AEB820E13BA851: "M Red Super Giant" @
+67E35BE54A2E33: "M Red Giant" @
+843E61D2A13E15: "K Orange Giant" @
+F966E50854E3BE: "Rogue Planet" @
+A796E9CB0C487E: "Nebula" @
+6291A56BDE2FBC: "Stellar Remnant Nebula" @
+457A6D2361E0B4: "Unknown star class" @
+
+SECTION EDPlanet
+
+CF10E0AE2B9AC7: "High metal content world" @
+CAE8513F05FCFA: "Rocky body" @
+ADC592859327D2: "Icy body" @
+9EEC22A08CA741: "Rocky ice world" @
+8D5CDA53992AAF: "Earth-like world" @
+299654D0B7EE38: "Water world" @
+D18619BF6E92A2: "Ammonia world" @
+2726CE623674C0: "Water giant" @
+170121C537E10B: "Water giant with life" @
+193ED308212A2C: "Gas giant with water-based life" @
+4B233B9E1CB140: "Gas giant with ammonia-based life" @
+5BBE5BB84FEC75: "Class I gas giant" @
+1530B559BA5A0E: "Class II gas giant" @
+76E5885EA244C4: "Class III gas giant" @
+4F0A406CA1CBE1: "Class IV gas giant" @
+516C1F5067F7C0: "Class V gas giant" @
+38DDFB042EB33D: "Helium-rich gas giant" @
+F73669E0485E17: "Helium gas giant" @
+580389991CFF63: "Unknown planet type" @
+
+SECTION MaterialCommodityMicroResourceType
+
+A6D9973DE820A4: "Very Common" @
+7DE90A65241A6C: "Common" @
+2DFA66079D9B72: "Standard" @
+C1E14E9A75C6B0: "Very Rare" @
+FCF57649FCDB88: "Salvage" @
+AE0D3308055F20: "Chemicals" @
+1AF68C08AA5A71: "Consumer Items" @
+BD32EE72CD5171: "Foods" @
+D526BE963D9D64: "Industrial Materials" @
+30AF524DE9D5AA: "Legal Drugs" @
+53162117F4F102: "Machinery" @
+3E833B80A70E8A: "Medicines" @
+30AA3B09FF827E: "Metals" @
+BB52440F7DB11C: "Minerals" @
+61EA9D41B69CA6: "Narcotics" @
+D27BB169DB8306: "Slaves" @
+D018B082E8A372: "Technology" @
+41129461CC1C57: "Textiles" @
+42316A12B62CC1: "Waste" @
+E59834BC3D5687: "Power Play" @
+5F957C031DD5AB: "Encoded Guardian" @
+D7F2D358727387: "Encoded Guardian Obelisk" @
+C9D1430D58DB76: "Encoded Thargoid 1" @
+9549AC63C7D34E: "Encoded Thargoid 2" @
+5F29B110C48E8A: "Manufactured Guardian" @
+7D5EB9573ECC33: "Manufactured Thargoid 1" @
+B7875D448ED47A: "Manufactured Thargoid 2" @
+D96DF76AA29F8C: "Manufactured Thargoid 3" @
+47B291C855F125: "Manufactured Thargoid 4" @
+2307D1C25A5EB6: "Raw Category 1" @
+752D2DA4015B13: "Raw Category 2" @
+4D319D82C555FD: "Raw Category 3" @
+79F5A1C09B2855: "Raw Category 4" @
+5F2076CB478643: "Raw Category 5" @
+7267E100B3800F: "Raw Category 6" @
+94D742F7D15A43: "Raw Category 7" @
+A41566938C42DD: "Encoded Emission Data" @
+29996EC6CA2415: "Encoded Wake Scans" @
+019B9BDD8A6535: "Encoded Shield Data" @
+DFB37417B14001: "Encoded Encryption Files" @
+21FF38E8FDAE70: "Encoded Data Archives" @
+5C397968455CB1: "Encoded Firmware" @
+6A22D4E92FBC5B: "Manufactured Chemical" @
+98AFFA1B722226: "Manufactured Thermic" @
+D78202200ADC8D: "Manufactured Heat" @
+CAD0EC200941F7: "Manufactured Conductive" @
+EB976C484DC98F: "Manufactured Mechanical Components" @
+93944DD7B06E41: "Manufactured Capacitors" @
+B68E9F3FF3BAE2: "Manufactured Shielding" @
+5A07705295C954: "Manufactured Composite" @
+282C2B5B9501D3: "Manufactured Crystals" @
+C149E954057508: "Manufactured Alloys" @
+3FEDA0153EEE13: "NA" @
+
+6097563751A0DD: "Carbon" @
+8564FE3B4B674B: "Iron" @
+D8DAAFDCF1EBBB: "Nickel" @
+D78770B2D0DA77: "Phosphorus" @
+06FA85591EF9F5: "Sulphur" @
+C6F71D85AEAA3B: "Lead" @
+694C89929DF0C3: "Rhenium" @
+32166E83EED381: "Chromium" @
+7FD1880116B24F: "Germanium" @
+F53B3D840BA643: "Manganese" @
+2EF29114B97E27: "Vanadium" @
+1A8DA3E397E6FC: "Zinc" @
+38AD3D9D1B0D4E: "Zirconium" @
+0CBC90A09474A9: "Arsenic" @
+DD6B8D514D4E5C: "Niobium" @
+C5746CEE780513: "Tungsten" @
+A7E0DDE67D845A: "Molybdenum" @
+606CB109E24D78: "Mercury" @
+BD833D839EF85A: "Boron" @
+5115CD70FBFF44: "Cadmium" @
+3F6D6A8699144A: "Tin" @
+D9FEEABBE75010: "Selenium" @
+C3250BCC20769B: "Yttrium" @
+284B4228F9F74E: "Technetium" @
+5657917CE945AB: "Tellurium" @
+5FD970025B5D08: "Ruthenium" @
+1D6ED49B6B8C93: "Polonium" @
+0600013568FB4F: "Antimony" @
+2964E83BC07CAF: "Fertiliser" @
+42EBBC218EEB76: "Anomalous Bulk Scan Data" @
+8B7378ABD1F639: "Atypical Disrupted Wake Echoes" @
+38E13C6CC1BD21: "Distorted Shield Cycle Recordings" @
+E62BE4F2E1096C: "Exceptional Scrambled Emission Data" @
+89EBB684CB9370: "Specialised Legacy Firmware" @
+0FED3E97C2F9AF: "Unusual Encrypted Files" @
+B900522BDD686B: "Anomalous FSD Telemetry" @
+8F8A1B01486A11: "Inconsistent Shield Soak Analysis" @
+8131743DB61407: "Irregular Emission Data" @
+4A1CD74D0012BC: "Modified Consumer Firmware" @
+63EFC4E9EC3435: "Tagged Encryption Codes" @
+8E160300EE50C0: "Unidentified Scan Archives" @
+080261BEDE9388: "Pattern Beta Obelisk Data" @
+11CC345DC23A4D: "Pattern Gamma Obelisk Data" @
+904999D34F2144: "Classified Scan Databanks" @
+88ED996447F6CA: "Cracked Industrial Firmware" @
+396DACBF33A5B6: "Open Symmetric Keys" @
+4595ACDD3DC550: "Strange Wake Solutions" @
+E18A23CB0C29C3: "Unexpected Emission Data" @
+EC8B1A556D3CA6: "Untypical Shield Scans" @
+74973A8877D752: "Abnormal Compact Emissions Data" @
+1226682A6B609F: "Pattern Alpha Obelisk Data" @
+5F7DD5CCFB314A: "Aberrant Shield Pattern Analysis" @
+A94EF175EA694C: "Atypical Encryption Archives" @
+93BEA69090142E: "Decoded Emission Data" @
+FA0707FE1E46B0: "Divergent Scan Data" @
+C830FDE0DE2533: "Eccentric Hyperspace Trajectories" @
+679F0412BF2541: "Security Firmware Patch" @
+4A79C5BDA724AE: "Pattern Delta Obelisk Data" @
+A7605C82EA79E2: "Classified Scan Fragment" @
+0DC3921B72B717: "Modified Embedded Firmware" @
+F691D48753CEEF: "Adaptive Encryptors Capture" @
+3C0ACCBE43B9B6: "Datamined Wake Exceptions" @
+84321D6E6FB40E: "Peculiar Shield Frequency Data" @
+60290B3E774DC0: "Pattern Epsilon Obelisk Data" @
+6A470BE4115337: "Basic Conductors" @
+03FB287451C64C: "Chemical Storage Units" @
+91B2C9F53D274D: "Compact Composites" @
+902F03C00B8133: "Crystal Shards" @
+3CDF5AF6BC1F7B: "Grid Resistors" @
+CDFFAE5F1E9818: "Heat Conduction Wiring" @
+A57B80FF816B5A: "Mechanical Scrap" @
+34414884F8F491: "Salvaged Alloys" @
+74808607B09BF5: "Worn Shield Emitters" @
+655CDE25FAF592: "Tempered Alloys" @
+C8E2F7B31329F7: "Chemical Processors" @
+410D408073FE48: "Conductive Components" @
+CED57DBC6F91A4: "Filament Composites" @
+33BA868C87D882: "Flawed Focus Crystals" @
+E96EB9CE3FA67D: "Galvanising Alloys" @
+FAAB8464876FC2: "Heat Dispersion Plate" @
+45F7506E77B2FF: "Heat Resistant Ceramics" @
+E9D70A78B2E53C: "Hybrid Capacitors" @
+0F43682A75E032: "Mechanical Equipment" @
+56578693E30C35: "Shield Emitters" @
+26AC8214B60DE2: "Chemical Distillery" @
+B5C7CFF4147BF6: "Conductive Ceramics" @
+EFFED1DEB2DB0A: "Electrochemical Arrays" @
+974FF3A82B1F22: "Focus Crystals" @
+5ED4E3464C1092: "Heat Exchangers" @
+99FF51834068CA: "High Density Composites" @
+17654A77F9A43C: "Mechanical Components" @
+F19369D928EA22: "Phase Alloys" @
+4FA57A4753AAB5: "Precipitated Alloys" @
+9122046649771F: "Shielding Sensors" @
+CFEEBC40AB382C: "Guardian Power Cell" @
+BFCDC6A9BACA1C: "Guardian Power Conduit" @
+660817A28E5D9C: "Guardian Technology Component" @
+D1BB9C0757679F: "Guardian Sentinel Weapon Parts" @
+9496C15E8B659A: "Guardian Wreckage Components" @
+367E6399D88A7A: "Guardian Weapon Blueprint Fragment" @
+9BFCA423A799A1: "Guardian Module Blueprint Fragment" @
+F87221013CFA10: "Bio-Mechanical Conduits" @
+E4946E592326B2: "Propulsion Elements" @
+9702B9B031A142: "Weapon Parts" @
+4C54E7748365D7: "Wreckage Components" @
+3600D2EA8BAC60: "Ship Flight Data" @
+E274C81C253E26: "Ship Systems Data" @
+25ADE492E998E5: "Chemical Manipulators" @
+EF18B30033F946: "Compound Shielding" @
+1BFB0748234944: "Conductive Polymers" @
+EBDBDF17505F57: "Configurable Components" @
+EE574F4DEDE826: "Heat Vanes" @
+FED78267DF0709: "Polymer Capacitors" @
+901C9E5C25940F: "Proto Light Alloys" @
+CDF2E65FD99A24: "Refined Focus Crystals" @
+F7812E4A8ADF36: "Proprietary Composites" @
+0F11CCBDC41507: "Thermic Alloys" @
+4C014749C47B10: "Core Dynamics Composites" @
+79A70FE96D42A5: "Biotech Conductors" @
+64DDAD59CB6DC5: "Exquisite Focus Crystals" @
+EFF3BC8B225298: "Imperial Shielding" @
+01A96EE165C5EE: "Improvised Components" @
+D254889CA0F529: "Military Grade Alloys" @
+45D5691DDFB65D: "Military Supercapacitors" @
+7F44AB1A1540AC: "Pharmaceutical Isolators" @
+E6680B6824A93E: "Proto Heat Radiators" @
+D79EF379D57BD7: "Proto Radiolic Alloys" @
+11AEFFF829EA78: "Thargoid Sensor" @
+00E1C5D13B4423: "Thargoid Probe" @
+F24B8BAD7ABAEC: "Thargoid Link" @
+AA24340F722FFB: "Thargoid Resin" @
+F48ACDEBE64AC7: "Thargoid Biological Matter" @
+E5EC4B1D600814: "Thargoid Technology Samples" @
+FD0794F8627A90: "Thargoid Carapace" @
+DFF560FAEB7985: "Thargoid Energy Cell" @
+5740E8A9EF0938: "Thargoid Organic Circuitry" @
+42EBF107AD73A8: "Thargoid Technological Components" @
+C83963F2D37FFA: "Sensor Fragment" @
+ED3A4933BF5B8D: "Thargoid Material Composition Data" @
+775978C4269BEC: "Thargoid Structural Data" @
+D7DE3FC6E4BA65: "Thargoid Residue Data" @
+BF6565D3A463FF: "Thargoid Ship Signature" @
+FD71F7DC9B6022: "Thargoid Wake Data" @
+4346928F232897: "Explosives" @
+76D12F5D36FAB0: "Hydrogen Fuel" @
+6F51F6D2CB4550: "Hydrogen Peroxide" @
+947DE74643875D: "Liquid Oxygen" @
+B59D92EA592420: "Mineral Oil" @
+957ADC04F3E23B: "Nerve Agents" @
+0B2301806255D0: "Pesticides" @
+B8932F08E18A7B: "Surface Stabilisers" @
+16702D35FF9AFB: "Synthetic Reagents" @
+DE9B1BE49DAE27: "Water" @
+D31D367BC5C7FD: "Clothing" @
+C1EB0B6281EFCB: "Consumer Technology" @
+6CA5920827E1B5: "Domestic Appliances" @
+304BB6F804BC57: "Evacuation Shelter" @
+896982002ABBF8: "Survival Equipment" @
+369ABB6DD9E582: "Algae" @
+CB1356C93C892A: "Animal Meat" @
+BB4DD43B4E074E: "Coffee" @
+3030E8EC7633EC: "Fish" @
+11D4BC6B0097A4: "Food Cartridges" @
+3BC7F21AA97E04: "Fruit and Vegetables" @
+16D82F9F85D57C: "Grain" @
+115E5617FC75F4: "Synthetic Meat" @
+C675BC77DB00A2: "Tea" @
+6EE6CD353562D6: "Ceramic Composites" @
+B0DE6F45FEBABA: "Insulating Membrane" @
+FE1992FE4BD87A: "Polymers" @
+F2387660A5073B: "Semiconductors" @
+3C279E866CC122: "Superconductors" @
+E2F11348DAE59B: "Meta-Alloys" @
+22A08D31F073AE: "Micro-Weave Cooling Hoses" @
+44F2804E66C129: "Neofabric Insulation" @
+756BBF17814CDD: "CMM Composite" @
+6A9D220B874DD2: "Beer" @
+F8F0F62A0B296C: "Bootleg Liquor" @
+197C013A1C532D: "Liquor" @
+1EF1D544F40DE9: "Tobacco" @
+80ED1492C7690D: "Wine" @
+E2ABBA456F2629: "Atmospheric Processors" @
+BB4EAFB4183E26: "Marine Equipment" @
+2F0503A5E5D903: "Microbial Furnaces" @
+E084A0E14DD3E7: "Skimmer Components" @
+D8E297BA373DE6: "Building Fabricators" @
+563937E0CAB446: "Crop Harvesters" @
+F715AD1FC8083F: "Emergency Power Cells" @
+86545FD7E4476C: "Exhaust Manifold" @
+98D1EF22076CA8: "Geological Equipment" @
+E15C2DDA123565: "HN Shock Mount" @
+F21518488E6B99: "Mineral Extractors" @
+14C31BB5C2C209: "Modular Terminals" @
+E5E3D91F9C29AF: "Power Generators" @
+FF5F7305579710: "Thermal Cooling Units" @
+54DF1E1FB5BAC7: "Water Purifiers" @
+7B7BBA31C784D5: "Heatsink Interlink" @
+A55970BCA515BF: "Energy Grid Assembly" @
+67D03A4F2F785F: "Radiation Baffle" @
+672080FB5FD42F: "Magnetic Emitter Coil" @
+7F3CE6A2B91869: "Articulation Motors" @
+4676DAE290B0E9: "Reinforced Mounting Plate" @
+E1758D8EF2ABAA: "Power Transfer Bus" @
+B07C0FC9173ECA: "Power Converter" @
+C63A06E7158CD4: "Ion Distributor" @
+BBCEF1E252E465: "Advanced Medicines" @
+8C4E5351032381: "Basic Medicines" @
+2A63541A88B865: "Combat Stabilisers" @
+F24E3938BB4E4C: "Performance Enhancers" @
+4C65DFD6346A45: "Progenitor Cells" @
+D6438E1058F0B4: "Agri-Medicines" @
+84DED5CAC96B7C: "Aluminium" @
+6173D990C9583A: "Beryllium" @
+78C3599CE927F9: "Bismuth" @
+C509EAC2111B5B: "Cobalt" @
+392696B691848E: "Copper" @
+71906AEF01E911: "Gallium" @
+C57604DB5869F6: "Gold" @
+515762B66DBC13: "Hafnium 178" @
+013C50E072B93C: "Indium" @
+890CF56B3939C1: "Lanthanum" @
+AD08E481DFFC91: "Lithium" @
+D967F311299B51: "Osmium" @
+12D0DB594CF6F0: "Palladium" @
+C93FA0A5953EA7: "Platinum" @
+32D79E5FF802DF: "Praseodymium" @
+B8027C819BA246: "Samarium" @
+8697F432058B91: "Silver" @
+0F8BAFB6A81E97: "Tantalum" @
+64DB8F9C6D484C: "Thallium" @
+5D1F810CCC7CC5: "Thorium" @
+6D1DEF3D08576E: "Titanium" @
+BABFA2DBB1285A: "Uranium" @
+6018DE21870658: "Platinum Alloy" @
+58643D6DB6BA32: "Bauxite" @
+70E6F26939C0AB: "Bertrandite" @
+F8574840E0F0B1: "Bromellite" @
+6F8EB57E03AB19: "Coltan" @
+F38618732BB19E: "Cryolite" @
+BD10491DA22C95: "Gallite" @
+DB7F9D2253BC1C: "Goslarite" @
+48C47FA4EAA971: "Methane Clathrate" @
+7B58B2343B546A: "Indite" @
+2A2539749F04F3: "Jadeite" @
+A45D48DC9040A6: "Lepidolite" @
+A53F81FC22C1C6: "Lithium Hydroxide" @
+9E4EF32FC557C8: "Moissanite" @
+102E6D71C2648C: "Painite" @
+226ABC3C40DEE3: "Pyrophyllite" @
+06BCDD5ED5E2EC: "Rutile" @
+D24E5FC12F25EB: "Taaffeite" @
+BEC98421B9A1DB: "Uraninite" @
+A6F13CFA5881BB: "Methanol Monohydrate Crystals" @
+E2B61CFCF527A9: "Low Temperature Diamonds" @
+C1B3314B6DE301: "Trinkets of Hidden Fortune" @
+3C3302D32743D8: "Gene Bank" @
+8A6822B9E49DC7: "Time Capsule" @
+B7DC0943CF1CA4: "Damaged Escape Pod" @
+9A46058432443F: "Thargoid Heart" @
+F142384CD9CE2B: "Thargoid Cyclops Tissue Sample" @
+458071919A83B6: "Thargoid Basilisk Tissue Sample" @
+65CEFFF43F7380: "Thargoid Medusa Tissue Sample" @
+4A5AA9220AC101: "Thargoid Scout Tissue Sample" @
+2F0EB0EF1FA5E1: "Antique Jewellery" @
+699AF6DC92E8B4: "Ai Relics" @
+CA9669614C0A00: "Antimatter Containment Unit" @
+20F1518AB689D9: "Antiquities" @
+9D6EDDB4165163: "Assault Plans" @
+3DE6704EF78D06: "Data Core" @
+F29582CF2B5865: "Diplomatic Bag" @
+63B6E1B0473533: "Encrypted Correspondence" @
+37401AFB036B7D: "Fossil Remnants" @
+AD0932BE1E4BDF: "Geological Samples" @
+41558DD8545D09: "Hostages" @
+3A0BA292093B99: "Military Intelligence" @
+2DD43498DBC5D8: "Mysterious Idol" @
+61B98838C5BE9F: "Occupied Escape Pod" @
+ACF30B0429DB6B: "Personal Effects" @
+E6627F880A08C7: "Political Prisoners" @
+CF9199065FA701: "Precious Gems" @
+719DC9A523C469: "Prohibited Research Materials" @
+DD3802EE0AE3CB: "Sap 8 Core Container" @
+DF017780546F43: "Scientific Samples" @
+4A72C9FAE19E57: "Space Pioneer Relics" @
+8733A6BB90AEB2: "Tactical Data" @
+1F1F503CF3CE88: "Unstable Data Core" @
+E19C2225A55788: "Large Survey Data Cache" @
+51FD999F7723C3: "Small Survey Data Cache" @
+523E6E7CF22A0B: "Ancient Artefact" @
+45240EBE2706A4: "Black Box" @
+538F22EECD9EC0: "Commercial Samples" @
+A48C28ACD6A5EF: "Encrypted Data Storage" @
+96FCF7717B582E: "Experimental Chemicals" @
+A82463E2E00169: "Military Plans" @
+C14E8F83D47FAB: "Prototype Tech" @
+D7A7445908B467: "Rare Artwork" @
+74910D01B49690: "Rebel Transmissions" @
+0DF7D1EE30A9E0: "Technical Blueprints" @
+B3BB5D5823ED15: "Trade Data" @
+E8FB972E185CC0: "Guardian Relic" @
+364F055F92F98E: "Guardian Orb" @
+4CF24398EB3508: "Guardian Casket" @
+93C772B2141303: "Guardian Tablet" @
+0FFBF5C90E3555: "Guardian Urn" @
+91B447B2323055: "Guardian Totem" @
+49AD33C8BB3B9A: "Imperial Slaves" @
+6DC01C89F230CB: "Advanced Catalysers" @
+DAEB3F7194F646: "Animal Monitors" @
+32D18C8CE3A400: "Aquaponic Systems" @
+B6B866B5DAAC65: "Bioreducing Lichen" @
+CEAC71A4D74625: "Computer Components" @
+6148142D7D94F0: "Auto-Fabricators" @
+DF30CAD351F685: "Micro Controllers" @
+C12004255BCB23: "Medical Diagnostic Equipment" @
+A5C42412AD8FC4: "Nanobreakers" @
+490B08527D4BBE: "Resonating Separators" @
+D058025DBC42A6: "Robotics" @
+FDF528AB03F088: "Structural Regulators" @
+B096E86F921F69: "Telemetry Suite" @
+1D5E85CC187E56: "H.E. Suits" @
+F8EBA82784DB8D: "Hardware Diagnostic Sensor" @
+2A2D980D6BDE60: "Muon Imager" @
+67C4D9CFDCAB77: "Land Enrichment Systems" @
+1E4A380A234F58: "Conductive Fabrics" @
+6B0C0B7D69131D: "Leather" @
+0FEA34EBA2CD7A: "Military Grade Fabrics" @
+A1D8D09C6FC0A9: "Natural Fabrics" @
+D01CE895AA1E7B: "Synthetic Fabrics" @
+2524B75CDE0E8A: "Biowaste" @
+1BC83E30FBDC76: "Chemical Waste" @
+65A0E0BB36CC63: "Scrap" @
+DC03CD66F4D30F: "Toxic Waste" @
+3B43BF97AB78C1: "Battle Weapons" @
+3146917F21821F: "Landmines" @
+48D2EAE8D97E86: "Personal Weapons" @
+D93260D26C8B93: "Reactive Armour" @
+177EF6C28E422A: "Non-Lethal Weapons" @
+028C61C7C1F414: "The Hutton Mug" @
+AE10448E70524B: "Eranin Pearl Whisky" @
+33B88D7E8C3360: "Lavian Brandy" @
+61BA918A2491CD: "HIP 10175 Bush Meat" @
+9CFBE6C2590CFA: "Albino Quechua Mammoth Meat" @
+D3E6A9667A3D79: "Utgaroar Millennial Eggs" @
+00618A15996895: "Witchhaul Kobe Beef" @
+798697F0FA5060: "Karsuki Locusts" @
+F0E232118B2800: "Giant Irukama Snails" @
+3E0C81272FFA89: "Baltah'sine Vacuum Krill" @
+497ABC23EC6F51: "Ceti Rabbits" @
+7C9B6EAF6267B7: "Kachirigin Filter Leeches" @
+5EBB506BCB92A9: "Lyrae Weed" @
+59EF236520EFC4: "Onionhead" @
+7F2B71A5A72378: "Tarach Spice" @
+2F73E35C68DC2D: "Wolf Fesh" @
+9163F9EF0C2C04: "Borasetani Pathogenetics" @
+0728E053E82AA0: "HIP 118311 Swarm" @
+40B13AA17DDF43: "Kongga Ale" @
+622C5C303B08C1: "Wuthielo Ku Froth" @
+BBF2848DCE60A0: "Alacarakmo Skin Art" @
+4D159067C72C82: "Eleu Thermals" @
+5C0F78AEC75A60: "Eshu Umbrellas" @
+E850FFC8058E4A: "Karetii Couture" @
+4914336269AA0E: "Njangari Saddles" @
+303CC54752D1B7: "Any Na Coffee" @
+5310F83B5FF531: "CD-75 Kitten Brand Coffee" @
+74AA41A894BFDE: "Goman Yaupon Coffee" @
+2785CF1B81BA52: "Volkhab Bee Drones" @
+06A0F729444480: "Kinago Violins" @
+727EE39E1C800C: "Nguna Modern Antiques" @
+270168E344EF26: "Rajukru Multi-Stoves" @
+D3D9DC5FD32582: "Tiolce Waste2Paste Units" @
+1FC95F3E4CD1D2: "Chi Eridani Marine Paste" @
+EE173ADED95A99: "Esuseku Caviar" @
+C08E734E4A594B: "Live Hecate Sea Worms" @
+D77722F1606A6C: "Helvetitj Pearls" @
+372C45AE92892D: "HIP Proto-Squid" @
+129DCF0AF5CE1C: "Coquim Spongiform Victuals" @
+A025FEA5CA9F50: "Eden Apples Of Aerial" @
+A636F93698B243: "Neritus Berries" @
+0F1DFF9F025B24: "Ochoeng Chillies" @
+57217C09E6C0FE: "Deuringas Truffles" @
+BC7EC82C78E1DD: "HR 7221 Wheat" @
+74FAF3DD8CED1D: "Jaroua Rice" @
+F7BA91EAB51E16: "Belalans Ray Leather" @
+17805F289EC56C: "Damna Carapaces" @
+89FFACA19764E3: "Rapa Bao Snake Skins" @
+41FAE8127998DC: "Vanayequi Ceratomorpha Fur" @
+AB98807836C52F: "Bast Snake Gin" @
+24AF291F435D55: "Thrutis Cream" @
+F4A88AA0933FB7: "Wulpa Hyperbore Systems" @
+0097B1E39EA495: "Aganippe Rush" @
+EE12A887DF24AA: "Terra Mater Blood Bores" @
+898CBDDCD7CEFD: "Holva Duelling Blades" @
+BA9CD2CF85DB36: "Kamorin Historic Weapons" @
+4E675421277D89: "Gilya Signature Weapons" @
+1D561168C468A0: "Delta Phoenicis Palms" @
+444809F88CED9E: "Toxandji Virocide" @
+157D30A508E20D: "Xihe Biomorphic Companions" @
+185891B210B015: "Sanuma Decorative Meat" @
+9017F0E4F4E9BC: "Ethgreze Tea Buds" @
+E7A9C1DC5BAA34: "Ceremonial Heike Tea" @
+06C7355212D79B: "Tanmark Tranquil Tea" @
+22845594BB90A5: "AZ Cancri Formula 42" @
+C6DD0F6CD1AA90: "Sothis Crystalline Gold" @
+AD3910B53AEB2A: "Kamitra Cigars" @
+563AEFD004C328: "Rusani Old Smokey" @
+6E7A1905BD4995: "Yaso Kondi Leaf" @
+5324F4F77AD879: "Chateau De Aegaeon" @
+0FEB62E46A392A: "The Waters Of Shintara" @
+02BC13295301C1: "Ophiuch Exino Artefacts" @
+DA50ED92709B2F: "Baked Greebles" @
+D5CBB9EEC0FADE: "Aepyornis Egg" @
+E19B3A38D1F30E: "Saxon Wine" @
+D604DE6147CBC9: "Centauri Mega Gin" @
+FF645EDD0DE504: "Anduliga Fire Works" @
+8E88B9BEE76BC2: "Banki Amphibious Leather" @
+645D854767A2BC: "Cherbones Blood Crystals" @
+3B7CFC0B32AD45: "Motrona Experience Jelly" @
+D338DA90D0B8D0: "Geawen Dance Dust" @
+885128B38B7B6C: "Gerasian Gueuze Beer" @
+24CBC0A8FCCFC0: "Haiden Black Brew" @
+92555F635D2CBC: "Havasupai Dream Catcher" @
+403BB4520FEFE4: "Burnham Bile Distillate" @
+6C6233203C8C63: "Hip Organophosphates" @
+7C6217009AE5D0: "Jaradharre Puzzle Box" @
+668D6E4EA09F60: "Koro Kung Pellets" @
+1C20F364E38DB8: "Void Extract Coffee" @
+7797888927B407: "Honesty Pills" @
+ED216A850A1BA4: "Non Euclidian Exotanks" @
+B97C725660DED2: "LTT Hyper Sweet" @
+6361091264C263: "Mechucos High Tea" @
+90A69C8413AB04: "Medb Starlube" @
+BCCAF0223B6A33: "Mokojing Beast Feast" @
+B6CF49A1EC0CE1: "Mukusubii Chitin-os" @
+50FB55350A151D: "Mulachi Giant Fungus" @
+080EE7BBB81FBF: "Ngadandari Fire Opals" @
+861B4DA9F3D647: "Tiegfries Synth Silk" @
+67D6CF29DDD253: "Uzumoku Low-G Wings" @
+AFB2D8689CE8F2: "V Herculis Body Rub" @
+6D4B8EEF1A07EE: "Wheemete Wheat Cakes" @
+B4AF44B8A3B812: "Vega Slimweed" @
+3BF255DB592DF3: "Altairian Skin" @
+A1D9B7F4EF79BD: "Pavonis Ear Grubs" @
+2D0294CC0B93D1: "Jotun Mookah" @
+1188E5A745AF05: "Giant Verrix" @
+2491264BA14D65: "Indi Bourbon" @
+2548C00DDE2B05: "Arouca Conventual Sweets" @
+4EA501FA272541: "Tauri Chimes" @
+C7E1E93BDB7CA3: "Zeessze Ant Grub Glue" @
+62EBF5CF0073D2: "Pantaa Prayer Sticks" @
+9E9082C81412F7: "Fujin Tea" @
+99F941255F6522: "Chameleon Cloth" @
+A27808BCEAAC87: "Orrerian Vicious Brew" @
+5A0717DCDF4100: "Uszaian Tree Grub" @
+E7570BC91952F9: "Momus Bog Spaniel" @
+0CFA590CDE16B0: "Diso Ma Corn" @
+828F5FCA3ADB0F: "Leestian Evil Juice" @
+389AB87D9AF51C: "Azure Milk" @
+AE00CB1E7D3DE5: "Leathery Eggs" @
+C473622884F390: "Alya Body Soap" @
+EE61C77C808DD2: "Vidavantian Lace" @
+790BF2CD033136: "Lucan Onionhead" @
+B3FFF7EED5C952: "Jaques Quinentian Still" @
+0476B3B1BE18E0: "Soontill Relics" @
+600D7F1E909091: "Onionhead Alpha Strain" @
+D1CEC9EB16F529: "Onionhead Beta Strain" @
+AA7A9FFCC6F04F: "Galactic Travel Guide" @
+526B9785E9D48D: "Crom Silver Fesh" @
+7CE90929522891: "Shan's Charis Orchid" @
+1251F500B08145: "Buckyball Beer Mats" @
+5ABFE8E2962087: "Master Chefs" @
+13BDB4C2B3465B: "Personal Gifts" @
+253D9AD803FCD9: "Crystalline Spheres" @
+4CF927151156C7: "Ultra-Compact Processor Prototypes" @
+55CAF7D987C652: "Harma Silver Sea Rum" @
+B99038FC4788F2: "Earth Relics" @
+49BF51C482BEE0: "Aisling Media Materials" @
+F82EA89F5FD050: "Aisling Sealed Contracts" @
+68E0F3346E7107: "Aisling Programme Materials" @
+3BCD569A751C69: "Alliance Trade Agreements" @
+91A6CC2D74AE7C: "Alliance Legislative Contracts" @
+116C9D6D3BC217: "Alliance Legislative Records" @
+12058ADE420834: "Lavigny Corruption Reports" @
+0E19CF2AB84197: "Lavigny Field Supplies" @
+8F4EDA6599BAD8: "Lavigny Garrison Supplies" @
+7EB3483A4E0918: "Core Restricted Package" @
+EFD3951F2AECE9: "Liberal Propaganda" @
+AD0B4A9B98245E: "Liberal Federal Aid" @
+13202FE1012063: "Liberal Federal Packages" @
+C5B92143CC8941: "Marked Military Arms" @
+6D941D386F2519: "Patreus Field Supplies" @
+DE915648DC7D4B: "Patreus Garrison Supplies" @
+7A7DCE342D2942: "Hudson's Restricted Intel" @
+6D31BE1E637671: "Hudson's Field Supplies" @
+EFDE462DF5F85F: "Hudson Garrison Supplies" @
+80BF696EA27873: "Sirius Franchise Package" @
+CB3CB7963F5671: "Sirius Corporate Contracts" @
+26F7CB8B2AA772: "Sirius Industrial Equipment" @
+DA082C0D8F3D98: "Torval Trade Agreements" @
+53A29504018487: "Torval Political Prisoners" @
+6770720A1371C4: "Utopian Publicity" @
+65DB0D1A28FE0B: "Utopian Supplies" @
+6DF678E1E53D5E: "Utopian Dissident" @
+433FCB299DC7C2: "Kumo Contraband Package" @
+761E222BF6ACC4: "Unmarked Military supplies" @
+0D2E6737704D49: "Onionhead Samples" @
+670CF693F7348A: "Revolutionary supplies" @
+3A3562AE34C06D: "Onionhead Derivatives" @
+FDB82E9912D263: "Out Of Date Goods" @
+4D036460A674F7: "Grom Underground Support" @
+731C2A55757AC6: "Grom Counter Intelligence" @
+C1546E24270533: "Yuri Grom's Military Supplies" @
+80B28BF8F02044: "Marked Slaves" @
+B96D6E675B6864: "Torval Deeds" @
+0CEB45762CE0EB: "Guardian Vessel Blueprint Fragment" @
+E674FE017C376B: "Duradrives" @
+73CFFD701C1599: "Nanomedicines" @
+DEFA6650D427BF: "Rhodplumsite" @
+C7CF2220899676: "Serendibite" @
+63166AC40FA5EC: "Monazite" @
+14255CC509B949: "Musgravite" @
+7AD7C53BBADDEA: "Benitoite" @
+F7DA48383A4F83: "Grandidierite" @
+50E46BD62843A5: "Alexandrite" @
+72C32A85578D1C: "Void Opal" @
+E51C748BE670B7: "Thargoid Hydra Tissue Sample" @
+EA97D7BCF3DAF7: "Ancient Key" @
+FEFE876A3E666B: "Rockforth Fertiliser" @
+429E4B8BC18849: "Agronomic Treatment" @
+EE38D6EFFA1E48: "Mollusc Soft Tissue" @
+D0425A5D8554D5: "Pod Core Tissue" @
+70260F49D8C677: "Pod Dead Tissue" @
+C9F64AE875BEA2: "Pod Surface Tissue" @
+B9935BB7C4E9FE: "Mollusc Membrane" @
+E95A101CE286DE: "Mollusc Mycelium" @
+705649BA9EF685: "Mollusc Spores" @
+742B93B416B081: "Pod Shell Tissue" @
+5A8DF16D603202: "Apa Vietii" @
+E4A15F99FF35EE: "Tritium" @
+FD342C31D0669F: "Pod Mesoglea" @
+84CB6D6038D0AF: "Pod Outer Tissue" @
+B686372820D16D: "E-Breach" @
+56B6C5999CA2F1: "Energy Cell" @
+2C538F773C6E35: "Medkit" @
+05FDA03C4327EF: "Frag Grenade" @
+BAB1B86AF01C8C: "Shield Disruptor" @
+A6C08FB5C6231E: "Shield Projector" @
+46B906744496C8: "Power Regulator" @
+13ED863C691D05: "Compact Library" @
+0219FD54BD5841: "Infinity" @
+3EA7F625D591ED: "Insight Entertainment Suite" @
+5E9F20FDCF5876: "Lazarus" @
+908B1A10947DE6: "Universal Translator" @
+54DE3481EEABAF: "Biochemical Agent" @
+FF63D344B7D43F: "Degraded Power Regulator" @
+91069D2DC1BAD4: "Hush" @
+8F7F57B519FC9B: "Push" @
+310CDDCEC7D396: "Synthetic Pathogen" @
+8B9064183EF53B: "Building Schematic" @
+1ED1264F96B2BA: "Insight" @
+814A8773345E0D: "Compression-Liquefied Gas" @
+C4ABC3FC85B8E9: "Health Monitor" @
+E320E61B0E04A9: "Inertia Canister" @
+74909A803C14FE: "Ionised Gas" @
+A253AD904DB98A: "Ship Schematic" @
+BAB6D6A9208C8E: "Suit Schematic" @
+D5206878E214AA: "Vehicle Schematic" @
+7B745AA1B0AAB3: "Weapon Schematic" @
+FD3172119E0422: "True Form Fossil" @
+B11D67CC236F68: "Carbon Fibre Plating" @
+07A4F1D7AA1CB8: "Encrypted Memory Chip" @
+7EA816472F3D24: "Epoxy Adhesive" @
+8507B79695D14C: "Graphene" @
+14EA4FAB8E9E29: "Memory Chip" @
+AD77AE42B37584: "Microelectrode" @
+B6395000A9A879: "Micro Hydraulics" @
+DBD437248E19BF: "Micro Thrusters" @
+4BD4D4C4B385E4: "Optical Fibre" @
+2AC2F245FD5F54: "Optical Lens" @
+4E87F05FFB19BB: "RDX" @
+FA4EE329A92C83: "Titanium Plating" @
+0BFE29130D90BE: "Tungsten Carbide" @
+C0A121BF3E92D9: "Weapon Component" @
+92668DB83A0206: "Aerogel" @
+1B4A10ECED0CF9: "Chemical Superbase" @
+9ADE2BC23EB172: "Circuit Board" @
+FE974CC177F2AA: "Circuit Switch" @
+CC7D1A8BC54DC9: "Electrical Wiring" @
+EF5BD47F89CDA2: "Electromagnet" @
+BE92ABBC8DBE75: "Metal Coil" @
+CEAED7978D18F1: "Motor" @
+9DB081C011CCC6: "Chemical Catalyst" @
+963B3020895B30: "Micro Transformer" @
+6CB7653E3039C7: "Electrical Fuse" @
+153F57302798E3: "Micro Supercapacitor" @
+70925D9DB32620: "Viscoelastic Polymer" @
+D8FD448329A2B2: "Ion Battery" @
+9FEB0F479D126D: "Scrambler" @
+8E347D35BEA679: "Chemical Inventory" @
+CCEB5C0E47193A: "Duty Rota" @
+9BA967998E1E49: "Evacuation Protocols" @
+078701699B4FA6: "Exploration Journals" @
+4804DF31CB6C23: "Faction News" @
+A8802CDECD7A78: "Financial Projections" @
+DB51C3A2F52F9E: "Sales Records" @
+7663B808BB5161: "Union Membership" @
+910AC2445574B7: "Maintenance Logs" @
+7C717E23251FE6: "Patrol Routes" @
+8A12E1D0DBD433: "Settlement Defence Plans" @
+20490487E3DA20: "Surveillance Logs" @
+7059BEC1AF94B2: "Operational Manual" @
+A525114747E19B: "Blacklist Data" @
+CC20A1D255BF58: "Air Quality Reports" @
+041E25C13E6B14: "Employee Directory" @
+361D90389EC664: "Faction Associates" @
+2D4702638BC349: "Meeting Minutes" @
+F76635BBDA0D97: "Multimedia Entertainment" @
+D52CE16BFFA7F5: "Network Access History" @
+732D3D10FD6074: "Purchase Records" @
+80B56B7D2D09EF: "Radioactivity Data" @
+FAC2A65BDC50F0: "Residential Directory" @
+61D24738442AAA: "Shareholder Information" @
+0C988F7CBE6B01: "Travel Permits" @
+FA52BA81A3E1C8: "Accident Logs" @
+C013528544EA14: "Campaign Plans" @
+10B5CE65C0E5A8: "Combat Training Material" @
+CE585B47A11492: "Internal Correspondence" @
+BD46FA16350982: "Payroll Information" @
+FBEB4C81BEDE75: "Personal Logs" @
+8C7E48ECD7F176: "Weapon Inventory" @
+253CF89E78DB01: "Atmospheric Data" @
+2C14D5B03B70FA: "Topographical Surveys" @
+FA4B52A49DEC89: "Literary Fiction" @
+EABC6312A02720: "Reactor Output Review" @
+704611E81694AE: "Next of Kin Records" @
+6FCEBA68EAC856: "Purchase Requests" @
+DDB919EF7E34C5: "Tax Records" @
+FA674E36F1032A: "Visitor Register" @
+99E2F755DF0828: "Pharmaceutical Patents" @
+E3B3CE376E22EF: "Vaccine Research" @
+0FC55F7DCDE252: "Virology Data" @
+0FB118E78CED35: "Vaccination Records" @
+48046081F787CE: "Census Data" @
+E9450A24ED3254: "Geographical Data" @
+F2EE7B48467478: "Mineral Survey" @
+28290FC8B7A48D: "Chemical Formulae" @
+0FB6054F199E83: "Chemical Experiment Data" @
+E354940BA4D71D: "Chemical Patents" @
+8889D604EBB2DE: "Production Reports" @
+DD5ACDC094127C: "Production Schedule" @
+BE70200358219C: "Blood Test Results" @
+33B92E67B71697: "Combatant Performance" @
+50F9E580F090BF: "Troop Deployment Records" @
+F5CA1EF151E530: "Cat Media" @
+E9B0FB3365842A: "Employee Genetic Data" @
+5DF5DBC4F23D09: "Faction Donator List" @
+DF53CCC148DD31: "NOC Data" @
+29C68F745A875A: "Manufacturing Instructions" @
+3F5C7408E911D3: "Mollusc Fluid" @
+AB97C4E635EF02: "Mollusc Brain Tissue" @
+C90C75AC3132B2: "Pod Tissue" @
+5F4285C433B765: "Agricultural Process Sample" @
+1374A6FC13DD9E: "Biological Sample" @
+46F9B870105613: "Californium" @
+B427EBBAC47730: "Cast Fossil" @
+1D2F8552BFA5A2: "Chemical Process Sample" @
+1F0E38B7798EEE: "Chemical Sample" @
+9210CB780867BA: "Deep Mantle Sample" @
+9D4FEF132B7C20: "Genetic Repair Meds" @
+2559D014F7472A: "G-Meds" @
+6595FA5ED08279: "Inorganic Contaminant" @
+28D4BC969512A0: "Insight Data Bank" @
+4739103A94D195: "Microbial Inhibitor" @
+7B4E07A4BE12DC: "Mutagenic Catalyst" @
+B324038726E947: "Nutritional Concentrate" @
+B36EFDFAD52188: "Personal Computer" @
+D34DF235EE1247: "Personal Documents" @
+5376E35D4CD995: "Petrified Fossil" @
+31B79A0086E7AC: "Pyrolytic Catalyst" @
+B09A8727F143DD: "Refinement Process Sample" @
+82B6B5FE1D9C6B: "Surveillance Equipment" @
+55FBFD80010F20: "Synthetic Genome" @
+EB770C5D9887E6: "Oxygenic Bacteria" @
+092383AAEABDB1: "Epinephrine" @
+2E49C5FB2803C1: "pH Neutraliser" @
+DA34BA9DE444C9: "Transmitter" @
+5929D88EBD3AE3: "Propaganda" @
+AE693D4F69920E: "Security Expenses" @
+F6AD6484AD4231: "Weapon Test Data" @
+BBEEA64594B99F: "Audio Logs" @
+55AAB72FA928FC: "AX Combat Logs" @
+B479B12F39AD7B: "Ballistics Data" @
+0136BE1E498226: "Biological Weapon Data" @
+C2D379DDB5B201: "Biometric Data" @
+4AA0E46CA46245: "Chemical Weapon Data" @
+84795C1388B982: "Classic Entertainment" @
+AC47880D04A6FE: "Cocktail Recipes" @
+AD8F9E6F2E3E33: "Conflict History" @
+2A1DAB94C14D71: "Criminal Records" @
+62B54B1230FADE: "Crop Yield Analysis" @
+D180322118809C: "Culinary Recipes" @
+844D883FC6D5F5: "Digital Designs" @
+06638F4EAD54C7: "Employee Expenses" @
+324597A3E90156: "Employment History" @
+2751A5E372FAE1: "Enhanced Interrogation Recordings" @
+ABBCE35258F9D8: "Espionage Material" @
+782A0CB7CCF562: "Extraction Yield Data" @
+22DE57EA5F1225: "Fleet Registry" @
+BB313830994F38: "Gene Sequencing Data" @
+F888C312B297D9: "Genetic Research" @
+4EF55097B729A1: "Geological Data" @
+AEF5CECD0B4C13: "Hydroponic Data" @
+3DA00DEDBE61BE: "Incident Logs" @
+2F8909295FAAEF: "Influence Projections" @
+94101FE8842BDA: "Interrogation Recordings" @
+E8A35A474E4010: "Interview Recordings" @
+5C64DD9CC5BF87: "Job Applications" @
+628C76BCF3245D: "Kompromat" @
+61B24E80B963A3: "Medical Records" @
+EBE202F81E4FFD: "Clinical Trial Records" @
+EAA3CB406D5E79: "Mining Analytics" @
+6B77D84694D38C: "Network Security Protocols" @
+B02F8018BAB111: "Opinion Polls" @
+C0AF61E3027728: "Patient History" @
+B4B5DDCFD876DE: "Photo Albums" @
+BD94B46475B620: "Plant Growth Charts" @
+62044C60C090D4: "Political Affiliations" @
+951BF6B687BBC8: "Prisoner Logs" @
+C0D0026AEF8F26: "Recycling Logs" @
+9F1FD6B3A47DFE: "Risk Assessments" @
+0C20F6688E1983: "Seed Geneaology" @
+EDBF0F6E7911FC: "Settlement Assault Plans" @
+3E0F08F9989D88: "Slush Fund Logs" @
+17C89AC4828B9D: "Smear Campaign Plans" @
+96F663B681175C: "Spectral Analysis Data" @
+34CAD5ABAA7C3C: "Spyware" @
+282CC56D8E2F05: "Stellar Activity Logs" @
+898D49A9DC8514: "Tactical Plans" @
+B78F1464BB330D: "VIP Security Detail" @
+10E7006889348F: "Virus" @
+19395A79FA0544: "Xeno-Defence Protocols" @
+6DE31E0682AA2C: "Hardened Surface Fragments" @
+F3F91AD10AECC1: "Phasing Membrane Residue" @
+840E7BE22DA788: "Heat Exposure Specimen" @
+61BF0EFE31ED72: "Caustic Crystal" @
+8B37585700D7C4: "Caustic Shard" @
+00722BFBA39027: "Corrosive Mechanisms" @
+1F3E280B1BBF84: "Massive Energy Surge Analytics" @
+2FE6E3C09CE4B4: "Thargoid Interdiction Telemetry" @
+CAEB1D03B1C5B1: "Unclassified Relic" @
+0D36F71A7F0448: "Anomaly Particles" @
+8A33A1935C0ED8: "Titan Maw Partial Tissue Sample" @
+CE592430FEB2B9: "Thargoid Orthrus Tissue Sample" @
+CC783A11934379: "Caustic Tissue Sample" @
+10EA87C677F7E4: "Unoccupied Escape Pod" @
+EE620BCF314DE0: "Thargoid Glaive Tissue Sample" @
+8F0343D40DFD37: "Titan Deep Tissue Sample" @
+986D41183BE4C4: "Titan Tissue Sample" @
+2D8E663BFACB48: "Titan Partial Tissue Sample" @
+FD65C748C50196: "Titan Maw Deep Tissue Sample" @
+7E64AF58213DBC: "Titan Maw Tissue Sample" @
+B653BD96C99482: "Thargoid Scythe Tissue Sample" @
+C24BFA8921E5FA: "Protective Membrane Scrap" @
+A84C9CD31417F7: "Xenobiological Prison Pod" @
+5DF67B04657E35: "Coral Sap" @
+166785E49A9A74: "Onionhead Gamma Strain" @
+671C1633687558: "Classified Experimental Equipment" @
+BE14C595DD96B0: "Impure Spire Mineral" @
+79D81CAD13966C: "Semi-Refined Spire Mineral" @
+14785DB1611534: "Titan Drive Component" @
+D3B678A4A81E5C: "Cyst Specimen" @
+FC48D911046A60: "Bone Fragments" @
+3A28DC61040550: "Organ Sample" @
+6B164FC0B3CA5A: "Tactical Core Chip" @
+
+D2B435BD2F3E46: "Industrial Component" @
+C1CE31586A391E: "Industrial Machinery" @
+2DCB764B313D21: "Inventory Record" @
+EA1CDBB770CC86: "Military Schematic" @
+1792DD8962F49D: "Electronics Package" @
+CACAE8D037A65E: "Computer Parts" @
+D951A767ACC061: "Experimental Prototype" @
+25946A7A1E6FF5: "Agricultural Sample" @
+330C82CE91032A: "Extraction Sample" @
+F8CEFA975F677C: "Personal Protective Equipment" @
+11BAFA088A95B6: "Medical sample" @
+83D10B63DD86F5: "Data Storage Device" @
+ED2D074319EE5D: "Security Logs" @
+E2EB8DA18DEDC2: "Energy Regulator" @
+F14F348E8705FC: "Research Notes" @
+B78364EC31B550: "Power Injection Malware" @
+FF45E2F509D37D: "Power Tracker Malware" @
+4A3FD7417F083B: "Power Research Data" @
+A70BEDE79B1B91: "Power Association Data" @
+3E41776DD38D94: "Power Industrial Data" @
+610F70C31BFBFE: "Power Political Data" @
+45F97EC4AE8647: "Power Classified Data" @
+C0406718170188: "Power Megaship Data" @
+09174EAAB9A86E: "Spire Refinery Compound" @
+C9E4E38F3EFB08: "Contaminated Spire Compound" @
+FDCDA739585356: "Thargoid Capital Ship Data" @
+9F0A7BE43C6581: "Search and Rescue Voucher" @
+F958260588E1AF: "Steel" @
+4A1B391ED87F19: "Haematite" @
+922D5AFF6174D5: "Curated Commodity Package" @
+0FA9BF602DF552: "Helium" @
+726649A6D4AAD6: "Helium-3" @
+30991C21BF4120: "Iridium" @
+6F47A8754E5985: "Bastnasite" @
+008DB8CEBD3D5E: "Deuterium" @
+9C89C256CA86B1: "Thortveitite" @
+11790189695FCD: "Quartz Pyroxenite" @
+5130CE9DCBCAD1: "Olivine" @
+6989B2A2928F3B: "Periclase Dunite" @
+52086129A3B5FC: "Sapphire" @
+B3850E04B5CC10: "Diamond" @
+B217E98C3BF70F: "Ruby" @
+9BA77EC5EFBA5A: "Magnesite" @
+455D8F1FD279E9: "Operations Strike Data" @
+6206BF660FE9B5: "Operations Counter Attack Data" @
+528C2290F89AFD: "Unica Seed" @
+
+0699E02BB02A10: "Lavigny Strategic Reports" @
+EA6D434BC1E5D6: "Kaine Aid Supplies" @
+5DB14E9EEAF322: "Kaine Misinformation" @
+81320CA23D7CCE: "Kaine Lobbying Material" @
+62DCE2D4E6193E: "Vault Codes" @
+C3BFDD370DE4F3: "Classified Material" @
+
+SECTION MaterialTypes
+
+38DFC233193C18: "Commodity" @
+DA433CD41E7FB7: "Raw" @
+58AC2F7D78D326: "Encoded" @
+8AB3DB9BFC3921: "Manufactured" @
+C92C529E0731C5: "Component" @
+E5E429BCC9C2E4: "Data" @
+297D709EBEB7F1: "Goods" @
+8DEC7F27C9D37E: "Consumable" @
+
+SECTION EngineeringData
+
+05FC94B0147F09: "Engineer" @
+A60F2C73604F62: "Quality" @
+A5BADB0C4C0940: "Experimental Effect" @
+C0A8060F3B1102: "Original" @
+B032583DB6CF07: "Multiplier" @
+DD1F00569CD7B2: "Worse" @
+303CFD6EA9AABD: "Better" @
+
+SECTION MissionState
+
+
+SECTION CommanderForm
+
+C8742B3010C3C5: "Commander Form" @
+6E6A6F2086BB5F: "Other" @
+B26565C54E6DA2: "Default Map Color" @
+F3646F7AE1228F: "Home System" @
+2737A55B1A4751: "Inara Information (optional)" @
+BC5F6A124741B3: "Inara Name" @
+8A77089A093CC5: "Inara API Key" @
+137D072F2C9C3C: "Sync to Inara" @
+C43E80AA3B8661: "EDDN" @
+9DA63A795A3C3E: "Send Event Information to EDDN" @
+AC4970F6799584: "EDSM Information (optional)" @
+C99C6E4AE25A6A: "Sync From EDSM" @
+F5E545BFC9C3EA: "EDSM API Key" @
+285B6B2BAD13A6: "Sync to EDSM" @
+DA99D6AA2339EB: "Journal Related Information" @
+118C7887B7CC7E: "Commander Name" @
+5FB324A0C0B9BF: "Journal Location" @
+519D5F0E4852BC: "New travel entries get this colour on the map" @
+D24093C6144C3D: "Give the user name for this commander on Inara" @
+869ACEC134C95E: "Sync with Inara" @
+C747D3A6040F7B: "Enter the API key from the Inara Website\r\nGet an Inara API key from https://inara.cz" @
+6B75A3DB046011: "Click to send journal information to EDDN. EDDN feeds tools such as EDDB, EDSM, Inara with data from commanders. All data is made anonymised" @
+52503993582E1E: "Receive any FSD jumps from EDSM that are on their database but not in EDDiscovery" @
+669BEBF7483A79: "Send your travel and ship data to EDSM" @
+034723940C1DC8: "Enter the API key from the EDSM Website\r\nGet an EDSM API key from https://www.edsm.net in \"My account\" menu" @
+8D74BA59E06617: "Give the name this commander is known as in EDSM" @
+BB1D039B4A17EB: "Browse to the the journal folder" @
+D589A4444C45C3: "Enter commander name as used in Elite Dangerous" @
+336EE34F690338: "Enter the journal location folder.  Normally leave this field blank only if you are using EDD on another computer than your play computer\r\nLeave override journal location blank to use the standard Frontier location for journals" @
+6841D35D0AFBD2: "Select folder where Journal*.log files are stored by Frontier in" @
+C8F2449029DBE8: "Folder does not exist" @
+017A61D0567AB2: "Console Commander" @
+6D5EE3C260CB5A: "EDAstro" @
+90731B79C24461: "Send Events to EDAstro" @
+A0801CDD86D5EA: "Include Subfolders" @
+
+SECTION ScreenshotDirectoryWatcher
+
+779892E0617E90: "Scanning for {0} screenshots in {1}" @
+E9338ED72024B3: "Folder specified for image conversion does not exist, check screenshot settings in the Settings panel" @
+831FE55DFAD611: "Error in executing image conversion, try another screenshot, check output path settings. (Exception " @
+
+SECTION ScreenShotImageConverter
+
+72B27D7E91F4C3: "Converted {0} to {1}" @
+
+SECTION ScreenShotConfigureForm
+
+8AE1C34BD37FAD: "Left" @
+835B2880FDF517: "Screen Shot Configure" @
+0B9344A6FEDB18: "Crop/Resize Settings" @
+CAE0435C41E816: "Top" @
+78140597ADB96D: "ED/Steam Screenshot folder" @
+F5CC0954288A69: "In Sub folder" @
+D6FFBC87287643: "In Filename format" @
+0DAC34213D6A8C: "Store Converted pictures" @
+8162F4343AF886: "Scan for" @
+F313A0B1810B43: "Save as" @
+62635B2F5446D8: "Keep master converted image" @
+9615CE035BB190: "Image 2" @
+13B4510E5F30B2: "Image 1" @
+028F003916130A: "Crop/Resize Options" @
+28B7E35F9B39EB: "Conversion Enabled" @
+A94BDE0A67C8B5: "Mark HiRes Files" @
+5EFE0C9323A499: "Clipboard" @
+5B5F0166120216: "Original Image" @
+0022FD2EB8F912: "JPEG Quality" @
+
+SECTION Screenshot
+
+8AE834B8E13929: "Folder specified does not exist" @
+C180FD4808AE6C: "Select screenshot folder" @
+64A4C2645669E9: "Cannot set input and output to identical types and the same folder" @
+
+SECTION ScanDisplayUserControl
+
+AD7F166EE19EC4: "No scan data available" @
+F50801EB15AB8D: "Surface features" @
+2346A18EA3002F: "Signals" @
+2C5D5B88672D11: "Codex" @
+85373BC01466D9: "Organics" @
+B3C13D36C779CE: "Genuses" @
+
+SECTION Stations
+
+4CB8D8545ED6BF: "Station" @
+
+SECTION Misc
+7548AB52C3D1D5: "Power" @
+44F6AF6945544C: "Quantity" @
+171A0606F7C745: "Group" @
+160F06D4799C85: "Purchase" @
+C7AD6F7B6831A8: "Redeem Voucher" @
+2C60D95A352DA3: "Pay Fines" @
+B83FE58DB23E57: "Interdicted" @
+C21AFB3EFA18AB: "Interdiction" @
+F25CE1B8A399BD: "Security" @
+A7B93D2128E820: "Mode" @
+7E8548C30FEF17: "Economy" @
+E471FACAC24C5F: "Allegiance" @
+A7250206751868: "State" @
+5C9CB498F540DF: "Government" @
+4D064726954A17: "Advanced" @
+79056C7AE5C30B: "Commander" @
+F5110F31C60E83: "EDSM Name" @
+96DDACCF581F48: "Ring" @
+2DBDE6DD6FB541: "Belt" @
+A689A999A5E620: "Expired" @
+41FF354B2B330B: "Class" @
+E5AAEAAC2E19A2: "Radius" @
+AE79EA1E9C6391: "To" @
+B25928C6990255: "Total" @
+0CF5E327910E74: "Fleet Carrier" @
+7F0950D59B1A34: "Squadron Carrier" @
+3F66052A107EAF: "From" @
+F32D0645A8333F: "Weapons" @
+ECE2AC10D7266F: "Slot" @
+B2B53EE4FC1A90: "Stored" @
+CA73BB4E22EBFD: "Stored Modules" @
+ECDDA59AEA5EE6: "Item" @
+FAB9348C4FD97F: "Armour" @
+323D4FC7337134: "Ship" @
+AF0AD10B2A196B: "Mass" @
+64AE43E8FE7620: "Cost" @
+B10CFFF10BABC0: "Nav Route" @
+A9292825CC0CA6: "Landable" @
+EA5B349025CF82: "Metal-rich body" @
+1B90271D66CF2D: "Progress" @
+4DA805AFD83F17: "Ship Locker" @
+CCE370D2F9781A: "Rare" @
+0CCF90EB09D636: "Backpack" @
+A3C686E711E472: "Category" @
+FA3CF2AD51E078: "Sell" @
+7CECA51FCAFE42: "Buy" @
+6C98E86FC49B32: "Cargo" @
+4A7C05BDEB22B3: "Mapped" @
+21B572F3D9F3E3: "Already Mapped" @
+43DF814DBC5742: "Already Discovered" @
+B8FF02892916FF: "Module" @
+7C7F5D049FAD25: "Level" @
+D219C68101F532: "Location" @
+C7D7652EC6A795: "Reward" @
+BFAC50D6424B51: "Credits" @
+68316444B99C6B: "Died" @
+61AD50A9B9189C: "Target" @
+9D269517397775: "Faction" @
+FCAA3EA68677B6: "Target Faction" @
+BC0792D8DC81E8: "System" @
+3DEB7456519697: "Type" @
+2DA600BF940484: "Version" @
+709A23220F2C3D: "Name" @
+4DFB01DC92677C: "Colonisation" @
+C6C5065C1BFCBE: "Engineers" @
+91B0BA24657FE5: "Carrier" @
+20063AD9053289: "Enable" @
+84219262228FD0: "Override" @
+2F3B5C55BC27CD: "Browse" @
+86896507A6ED88: "Material Trader" @
+AF169BB89CFBA4: "Combat" @
+28CBA55D2AADF5: "Scan" @
+3A9DCDFF45AC4F: "MercCoins" @
+D7B22A6928D409: "Synthesis" @
+DEF494BAD4AAB6: "Outfitting" @
+2086B21F8F4927: "Statistics" @
+323EA30C1DCCD5: "Missions" @
+2402EA36326521: "Materials" @
+
+E8249C664732DF: "Remove All" @
+
+49CE5DE18C09AA: "Hostile" @
+C65CDEF3DEF45A: "Unfriendly" @
+4BD29139454399: "Neutral" @
+713DB5C16D862F: "Cordial" @
+BF567DC7870262: "Friendly" @
+81F1B69D074090: "Allied" @
+
+6C82E6DD86807E: "Time" @
+BC7819B34FF875: "Unknown" @
+6EEF6648406C33: "None" @
+9CE3BD4224C8C1: "OK" @
+77DFD2135F4DB7: "Cancel" @
+E9C45563358E81: "Warning" @
+
+
+SECTION Stats
+022AFB2A3DD28F: "Ident" @
+BF95513D610332: "Jet Cone Boost" @
+D436FDB4D178CC: "Belt Cluster" @
+6D391E1333D9E0: "Bank Account" @
+1B5A20A804DC74: "Crime" @
+6BEEE635DCA549: "Smuggling" @
+49352196F6D28E: "Trading" @
+FAABCF8B4B60DB: "Mining" @
+957464A0F91C56: "Exploration" @
+AB86B441AD93E7: "Passengers" @
+DD48A1149548F0: "Rank" @
+955A4E9A59BF11: "Powerplay" @
+67711E423601BA: "Squadron" @
+E72ED7A5BCA163: "Bounties on Thargoids" @
+C070DE1BD06E83: "Bounties on On Foot NPC" @
+6273A2A0CA35EF: "Bounties on Skimmers" @
+9A18F8035AAEA1: "Ships Unknown Rank" @
+BAC11F62A1EE7D: "Ships Elite Rank" @
+6ED71D543A46B5: "Ships Deadly Rank" @
+C154182DA6A0EA: "Ships Dangerous Rank" @
+366E78B1602F76: "Ships Master Rank" @
+457AA8E691A5DA: "Ships Expert Rank" @
+68F8A460EF2B65: "Ships Competent Rank" @
+8FAD289393971D: "Ships Novice Rank" @
+8727F6D4EE824C: "Ships Harmless Rank" @
+EAF8AE7FAE1187: "PVP Elite Rank" @
+B313E7107D5C86: "PVP Deadly Rank" @
+7743458F23BEEB: "PVP Dangerous Rank" @
+28AF125F4DCEB4: "PVP Master Rank" @
+A6E743F4A8DA1F: "PVP Expert Rank" @
+0D4936734E146A: "PVP Competent Rank" @
+0A7B5DB004014C: "PVP Novice Rank" @
+8BED567DC90C30: "PVP Harmless Rank" @
+E0C47B9F787BC5: "Search and Rescue" @
+4EC8D6E506ED34: "Fleetcarrier" @
+B663617A36922A: "CQC" @
+E41CFBE34F8307: "Exobiology" @
+57D866D2E06189: "Thargoids" @
+DE463BA892C2F3: "Crew" @
+
+
+SECTION Signals
+
+B0AC0AEBCCF16C: "Ring Hot Spot of type" @
+
+SECTION Crimes
+
+D8875269EA787E: "Assault" @
+7E69F306524234: "Collided at speed in a no fire zone" @
+286C8E9A967A57: "Collided at speed in a no fire zone resulting in hull damage" @
+B0065185CC111E: "Disobeyed a order from the police" @
+2A21FFF431E992: "Blocking an airlock" @
+8BE64DD5E3BFAF: "Blocking a landing pad" @
+F2D66626EB276D: "Tresspass" @
+CEAFDD2E153F96: "Minor blocking of an airlock" @
+4464B7564F5819: "Minor blocking of a landing pad" @
+D4213851A769A7: "Minor tresspass" @
+DB9820D786ACFA: "Ejecting goods in a dangerous place" @
+7A1C563C95160F: "Ejecting goods near station" @
+0A9F23A149C620: "Firing weapons in a no fire zone" @
+80BEEDE43DD099: "Firing inside station" @
+4E4C900819AB85: "Carrying illegal cargo" @
+79AD7CECB12BA3: "Murder of pilot on ship" @
+200674A3D4E0BA: "Using an arc cutter" @
+EFED1634A0BC04: "Illegal Entry" @
+2E105C09DA965B: "Carrying illegal data" @
+0CB2C0C0837406: "Carrying illegal goods" @
+633475D77702C0: "Carrying stolen goods" @
+D73556D282092D: "Damaging station defenses" @
+84B728DB76DC5C: "Illegal transfer of data" @
+626B045FD2490F: "Carrying a weapon in violation of rules" @
+F34179E351C85D: "Using an E Breach" @
+BC70569D4EAB01: "Failure to submit to scan" @
+C5D3316FF12496: "Identity theft" @
+A6E8313B589277: "Murder of a person" @
+12E9AABE42C954: "Intending to overcharge an access port" @
+683852E640C112: "Illegal Overcharging an access port" @
+92B4CBAB5D18FD: "Cloning a persons security profile" @
+B56237DBC25E7E: "Theft of station property" @
+000328EC01CEF4: "Reckless Endangerment" @
+34259DC09760BC: "Theft of items" @
+4A0C279BB3A0CB: "Tresspass on station" @
+E3A998C0E178AC: "Wanted passenger" @
+30EA427C049756: "Piracy" @
+771CD10722A7D2: "Discharging a weapon" @
+0F204F94B09CCD: "Destroying an APEX Shuttle" @
+04E4EDA53C745B: "Tampering with a station" @
+157F19260E9D31: "Assaulting a Person" @
+
+SECTION FactionStates
+
+2B430A92D31252: "Unknown Spansh" @
+4EE5308E2E70F4: "Boom" @
+E49F1B828CEC9B: "Bust" @
+A94C88D10627AF: "Civil Unrest" @
+AB94603F9DBF62: "Civil War" @
+217DA2DCEFEEBA: "Election" @
+5210FC6FC23F69: "Expansion" @
+36B875EDCEEDDF: "Famine" @
+0401729C31EA52: "Investment" @
+8BA04349B45EB2: "Lockdown" @
+C3DC83475D5860: "Outbreak" @
+81D8D99EA2C4FA: "Retreat" @
+F3C59920B10916: "War" @
+4846DFEAC68196: "Civil Liberty" @
+1D84F47CBBA154: "Pirate Attack" @
+6C7FE02750CB89: "Blight" @
+225C88A863D0BD: "Drought" @
+BDC127528AB0C6: "Infrastructure Failure" @
+4D784C67BA4E12: "Natural Disaster" @
+D9A673D9DBA870: "Public Holiday" @
+F25FB448CEA0EA: "Terrorism" @
+65A64D0FA63FE9: "Cold War" @
+34FDB0A2BFD8F0: "Historic Event" @
+726830EC042D32: "Revolution" @
+6443C50BCCD300: "Technological Leap" @
+ECD42F44D582A9: "Trade War" @
+6E292633B0D81A: "Exploited" @
+
+SECTION Allegiances
+
+228505F85662D9: "Independent" @
+A21193C4A51E0D: "Alliance" @
+6809E8745EABCE: "Guardian" @
+824377DA32D5A8: "Thargoid" @
+7EE28AFA2ED21A: "Pilots Federation" @
+55492602030481: "Player Pilots" @
+
+
+SECTION GovernmentTypes
+
+C65B57585778D6: "Anarchy" @
+3EAB10EF58C8F1: "Communism" @
+9001B3A1D67EDB: "Confederacy" @
+11C0E9B8B4B018: "Cooperative" @
+A83ED75221E875: "Corporate" @
+A83522C3E1F334: "Democracy" @
+899F1271330C93: "Dictatorship" @
+4995BBA6CF0B9D: "Feudal" @
+5D3908AC11C06A: "Imperial" @
+3CA0A4D60502DA: "Patronage" @
+D8D4559A372171: "Prison" @
+9DB9478502242D: "Prison Colony" @
+AB1A1F939BDE0E: "Theocracy" @
+0646F4AFD90C8F: "Undefined" @
+750A7CEF420603: "Megaconstruction" @
+
+SECTION EconomyTypes
+
+F5A68A44533A39: "Agri" @
+1758C0C9560790: "Colony" @
+2552A425FB8790: "Extraction" @
+DB17FE39BE1106: "High Tech" @
+7DB3CF51525D67: "Industrial" @
+430853FBD980AA: "Military" @
+1AD1F0C5C04761: "Refinery" @
+329CB8B6BA8C42: "Service" @
+A018B12A2AD28C: "Terraforming" @
+7D62DD12AFFDD8: "Tourism" @
+052FC79809942F: "Damaged" @
+6A5DA7147407CC: "Rescue" @
+
+SECTION SecurityTypes
+
+A124947CBD2D1D: "Low" @
+D404968EA90B07: "Medium" @
+B1A5954A483F8F: "High" @
+765F9880243902: "Lawless" @
+
+SECTION StarportStates
+
+643321EE0FC5B8: "Under Repairs" @
+F34FB6E3669DFD: "Abandoned" @
+DA33E1B7E0C4EA: "Construction" @
+18FC67B9AB74B9: "Damaged Human" @
+
+SECTION StarportTypes
+
+6E4C6A39225E73: "Asteroid Base" @
+570C8ADC370DE1: "Coriolis" @
+1815546AA3D985: "Megaship" @
+FB3178D94F9E42: "Ocellus" @
+3EF72E85AA2D48: "Bernal" @
+00493BC6639D4E: "Orbis" @
+85B353889DE58E: "Outpost" @
+932FCD8429DDCB: "On Foot Settlement" @
+2C9F6741A4616A: "Surface Station" @
+F70A2D8CB9AC62: "Crater Outpost" @
+CD515256E31FA0: "Crater Port" @
+E2407F2BA86D9F: "Space Construction Depot" @
+72D0849A72AB18: "Planetary Construction Depot" @
+2D68CF109D6809: "Dockable Planet Station" @
+D089EF39D4EA65: "Construction POI" @
+39A76A40856116: "Dodec" @
+9267B3634807D3: "Outpost Scientific" @
+
+SECTION PowerPlayStates
+
+BAEE3A8199D1C1: "In Prepare Radius" @
+D8B21A674C893B: "Prepared" @
+FD83DA39F2DA91: "Contested" @
+30401222095701: "Controlled" @
+C0977D62F7F6E3: "Turmoil" @
+A306BDBFED7B4A: "Fortified" @
+AC9F27AD74A115: "Unoccupied" @
+F6D3C9C3B20E15: "Stronghold" @
+
+
+// these are the ones which can't be satisfied from ModulePartNames
+
+SECTION ModuleTypeNames
+7B680AE998E654: "Surface Mining" @
+74C8CD195A9A7B: "Pacifier Frag Cannon" @
+84B8326146D262: "Cargo Scanner" @
+FF989D476F1F12: "Guardian Module Reinforcement" @
+A78907591643F9: "Guardian Shield Reinforcement" @
+757166A532FC06: "Guardian FSD Booster" @
+D0BA3A15789844: "Guardian Hull Reinforcement" @
+FC959E391D33D3: "Meta Alloy Hull Reinforcement" @
+836C41406E876F: "Operations Multi Limpet Controller" @
+7995EF635236F0: "Rescue Multi Limpet Controller" @
+15DA658272ACD6: "Xeno Multi Limpet Controller" @
+FAEDBE6F1A4F34: "Mining Lance" @
+653BBF7510FED7: "Torpedo Pylon" @
+41A949FCC7A77A: "Rocket Propelled FSD Disruptor" @
+9E736BAECDD6ED: "Economy Class Passenger Cabin" @
+FA1A81896E2C73: "Business Class Passenger Cabin" @
+B73C7C091DEDB1: "First Class Passenger Cabin" @
+1FDF40C0302B8A: "Luxury Class Passenger Cabin" @
+D99A8D85FA5C90: "Advanced Planetary Approach Suite" @
+D34DD311322502: "Planetary Approach Suite" @
+AD2618B16E649A: "Discovery Scanner" @
+A20FD9AA9142BF: "Cockpit Type" @
+E56766478D5E9E: "Data Link Scanner" @
+A6C269B1A02EF9: "Prison Cells" @
+4075F1A901AC84: "Cargo Bay Door Type" @
+EB702E354D4040: "Fighter Weapon" @
+1CC4848D27B6F3: "Wear And Tear Type" @
+86B9B261DED066: "Vanity Type" @
+352374D32CCD3B: "Unknown Type" @
+45D2597560EB4A: "SRV Scanner" @
+036F587DDBE3AB: "Lightweight Alloy (Default)" @
+7F3C61AC8B0BA8: "Fighter" @
+EAD533685E262E: "Weapon" @
+F69654FCE2BE39: "Suit" @
+
+SECTION ModulePartNames
+
+6437B7BF655854: "Rating" @
+18CA7013AA73C5: "Gimbal" @
+AB98F5B85764B8: "Fixed" @
+281D014FC5B622: "Turret" @
+C74FD9714E38B2: "Small" @
+738FD1D2452FC3: "Large" @
+32978FBE93D3BE: "Huge" @
+DEB4A070484561: "Tiny" @
+
+1F4A6D7872C157: "Lightweight Alloy" @
+2FFB3A2CBCF67A: "Reinforced Alloy" @
+57ECD1BCDAF154: "Military Grade Composite" @
+1CAC669157D892: "Mirrored Surface Composite" @
+C8590A891E828F: "Reactive Surface Composite" @
+BAD1C5B09CF01E: "Auto Field Maintenance Unit" @
+64CC6706B99A5A: "Beam Laser" @
+963B8DFDDD6029: "Retributor Beam Laser" @
+9BB0161952B8A2: "Burst Laser" @
+E4B1AB2D0505E8: "Cytoscrambler Burst Laser" @
+8A417F5C472FE6: "Cannon" @
+306BFD525FA9C5: "Fragment Cannon" @
+8DFC90E4A072C6: "Pacifier Fragment Cannon" @
+D3BBF2FAE69CDA: "Corrosion Resistant Cargo Rack" @
+4C621ED5B80D7D: "Anti Corrosion Cargo Rack" @
+93C5390A421D81: "Cargo Rack" @
+AC08D99EB032B0: "Agile Boost Engine" @
+9917741FA0BE27: "Manifest Scanner" @
+09CE66844887F5: "Chaff Launcher" @
+C72CB5EAFA5795: "Electronic Countermeasure" @
+0704707CF48360: "Heat Sink Launcher" @
+9327CC68A44A77: "Caustic Sink Launcher" @
+46169139E4459B: "Point Defence" @
+9C8CE66481B70F: "Kill Warrant Scanner" @
+6D14E5FC0B7237: "Detailed Surface Scanner" @
+E89383A3EAE0FE: "Surface Scanner" @
+1E150F53516D41: "Standard Docking Computer" @
+300DCF505B20B3: "Advanced Docking Computer" @
+70523AB707ECE7: "Fighter Hangar" @
+A96D1886F17C53: "Large Planetary Vehicle Hangar" @
+27D1F4AD17F1C0: "MKII Large Planetary Vehicle Hangar" @
+F29E64CC9E04F3: "Remote Release Flak Launcher" @
+1080CBE65D9A1D: "Remote Release Flechette Launcher" @
+96D6DE2D0ECA17: "Frame Shift Drive Interdictor" @
+2CB280A97E5A91: "Fuel Tank" @
+690694EF82363C: "Guardian Plasma Charger" @
+65206BEEF3B609: "Guardian Shard Cannon" @
+9A31FB88856271: "Guardian Gauss Cannon" @
+5016AC5C7A98F1: "Guardian Module Reinforcement Package" @
+E2DA89A1E83995: "Guardian Shield Reinforcement Package" @
+D85841371D587A: "Guardian Frame Shift Drive Booster" @
+6074FA1EC8BC09: "Guardian Hybrid Power Distributor" @
+C63B1C1BCFD89F: "Guardian Hybrid Power Plant" @
+2E490043296324: "Hull Reinforcement Package" @
+3F3ECEFA577C63: "Guardian Hull Reinforcement Package" @
+53C8470A362144: "Meta Alloy Hull Reinforcement Package" @
+286E5F17D2DFFE: "Frame Shift Drive" @
+BC7C4D39E10588: "Frame Shift Drive (SCO)" @
+7E102B2176905C: "Frame Shift Wake Scanner" @
+23F2C43DDC4C99: "Wake Scanner" @
+9275CA7358B155: "Life Support" @
+A65DF936BCD66F: "Collector Limpet Controller" @
+010A01796C54DA: "Fuel Transfer Limpet Controller" @
+D800B8604577F9: "Hatch Breaker Limpet Controller" @
+46895A7E784BB1: "Prospector Limpet Controller" @
+83DA3EEF1CA30A: "Repair Limpet Controller" @
+61FE350795984C: "Research Limpet Controller" @
+33DC9A3F619FE3: "Decontamination Limpet Controller" @
+45E3A623B94955: "Recon Limpet Controller" @
+07A96DB8AB36EE: "Mining Multi Limpet Controller" @
+5A296E04CA7CEC: "Operations Limpet Controller" @
+9F686F82A534E7: "Rescue Limpet Controller" @
+05E2BAA5813FF1: "Xeno Limpet Controller" @
+8ADBF0F4706D99: "Universal Multi Limpet Controller" @
+7053E88EB58EE7: "Mine Launcher" @
+80DAB55450B89D: "Shock Mine Launcher" @
+2D355576AB8BE1: "Abrasion Blaster" @
+7458B9B45AF75C: "Seismic Charge Launcher" @
+7501F5C476A95E: "Sub Surface Displacement Missile" @
+0B330E37DFDB6F: "Mining Laser" @
+BE6622D947D845: "Mining Lance Beam Laser" @
+01F6E4BB0ABAB1: "AX Missile Rack" @
+0B7F815A04EA1F: "Enhanced AX Missile Rack" @
+2EEEDBE87FDC88: "Guardian Nanite Torpedo Pylon" @
+5FC2FBF0CEF16E: "Seeker Missile Rack" @
+8B2C23821BE9A0: "Missile Rack" @
+C008DCFA55478D: "Rocket Propelled FSD Disrupter" @
+8E84C39592581B: "Pack Hound Missile Rack" @
+CD7FA37A5942F0: "Advanced Torp Pylon" @
+D47989B5AEA7E2: "Advanced Missile Rack" @
+41CF6E004D66DD: "Sub surface Extraction Missile" @
+B3A021E4800549: "Enzyme Missile Rack" @
+94E9918390EAA7: "Module Reinforcement Package" @
+8454F69AA40E0B: "AX Multi Cannon" @
+7613DA5FCB46C3: "Enhanced AX Multi Cannon" @
+E3DFD04A073CB1: "Multi Cannon" @
+602DBF4D79F6A1: "Enforcer Cannon" @
+8B96379F08809F: "Advanced Multi Cannon" @
+D6663DDA5FE9B2: "Business" @
+916A78D701DED3: "First" @
+2F2F07428B7DFC: "Luxury" @
+CA39470A7A6DED: "Advanced Planet Approach Suite" @
+376992DE1C37B6: "Planet Approach Suite" @
+5F7CF7A85C6B10: "Planetary Vehicle Hangar" @
+36AA174EFAA515: "Plasma Accelerator" @
+F79B4B8AD884B9: "Advanced Plasma Accelerator" @
+1D202C4D8DA513: "Shock Cannon" @
+0CDA078656B69A: "Shock Cannon MK II" @
+7A5078EF876AD6: "Power Distributor" @
+717B5FB556BE67: "Power Plant" @
+B274BC2A7429E0: "Pulse Laser" @
+1B945A1283E87F: "Pulse Disruptor Laser" @
+7809B2B30F59B4: "Pulse Wave Analyser" @
+5BB7DBB8683EC3: "Rail Gun" @
+EAC52E34209313: "Imperial Hammer Rail Gun" @
+9101FC1744AB27: "Sensor" @
+0F094935AF23BE: "Shield Booster" @
+13AFA94574C563: "Shield Cell Bank" @
+7278A03C01494A: "Shield Generator" @
+E4A485CF62B0F6: "Prismatic Shield Generator" @
+D40A95D31F4184: "Bi Weave Shield Generator" @
+18FB5A3D52BB2B: "Shutdown Field Neutraliser" @
+497BFCDF3C5164: "Thargoid Pulse Neutraliser" @
+D342181A121125: "Experimental Weapon Stabiliser" @
+E6B48D253A5BD7: "Supercruise Assist" @
+6A4768B56F68C3: "Stellar Body Discovery Scanner" @
+B1CFE72FD27178: "Intermediate" @
+A8DC0C1CE3892F: "Thrusters" @
+E8B772D1BC2A20: "Enhanced Performance Thrusters" @
+0DF5187CDB1495: "Xeno Scanner" @
+70EA63BC991A90: "Enhanced Xeno Scanner" @
+6F55767D3D0B28: "Pulse Wave Xeno Scanner" @
+FFE926B9A1E06C: "Concord Cannon" @
+492166ECE113AD: "Colonisation Module" @
+0DB27EBBF41345: "Large Cargo Rack" @
+80C6C2BEA1E3BF: "Mining Volley Repeater" @
+14727AE1418827: "MKII Vessel Hangar (Free)" @
+01CE358DB16568: "MKII Vessel Hangar" @
+
+SECTION ShipSlots
+4DC14EFAB1E6E6: "Mining Rig" @
+815B944A41FF1D: "Deposit Scanner" @
+
+F5B0EF731C022D: "Bobble Position 1" @
+7E3AF4B6256EFA: "Bobble Position 2" @
+F213415E8C5019: "Bobble Position 3" @
+C0925E65AD676A: "Bobble Position 4" @
+0E4B4C02034696: "Bobble Position 5" @
+7C6D79B3D0C991: "Bobble Position 6" @
+FFE627AA2211D4: "Bobble Position 7" @
+EF443E79E76E9C: "Bobble Position 8" @
+E223117F612687: "Bobble Position 9" @
+94324B04A9490F: "Bobble Position 10" @
+909864C061970A: "Cargo Hatch" @
+99409BD53C5299: "Codex Scanner" @
+160F9FFC7620A0: "Decal Front" @
+DB796083868753: "Decal Right" @
+79549C332B0274: "Decal Left" @
+988E508955A414: "Engine Colour" @
+F83D1753113967: "Federation Fighter Shield" @
+C826742CF71A04: "GDN Hybrid Fighter V 1 Shield" @
+02D7E123A7CF23: "GDN Hybrid Fighter V 2 Shield" @
+5BC09860CFA756: "GDN Hybrid Fighter V 3 Shield" @
+4FA6E3C0BD17A5: "Huge Hardpoint 1" @
+AE382721B3A4E7: "Huge Hardpoint 2" @
+DC135E620E72E8: "Independent Fighter Shield" @
+B03ABC8A35C117: "Large Hardpoint 1" @
+1C180CE9EE73C5: "Large Hardpoint 2" @
+659C0C876C2160: "Large Hardpoint 3" @
+F43AA964229084: "Large Hardpoint 4" @
+A170BDDB57407E: "Medium Hardpoint 1" @
+BE7DD45637B559: "Medium Hardpoint 2" @
+4BBD04305C4BF0: "Medium Hardpoint 3" @
+485F68ABD0CDE8: "Medium Hardpoint 4" @
+A7AB21F5CF19AE: "Medium Hardpoint 5" @
+890406A48C1D3F: "Medium Hardpoint 6" @
+77E9039F43F6E2: "Military Slot 1" @
+A22CCB7E4839AD: "Military Slot 2" @
+62898937228B9D: "Military Slot 3" @
+12B03109BE7102: "Passenger Slot 1" @
+4CA5B20A43C19C: "Passenger Slot 3" @
+1A1276E80D136D: "Passenger Slot 2" @
+659756B43DB6FA: "Paint Job" @
+1247331999BD41: "Ship Cockpit" @
+B94A658100919D: "Ship ID Right" @
+1E5D7A96ED6F01: "Ship ID Left" @
+986D947429065E: "Ship Kit Bumper" @
+91DC0A268418F5: "Ship Kit Spoiler" @
+02D73E3B642B27: "Ship Kit Internal" @
+993E2B74B2EA99: "Ship Kit Tail" @
+9E0027E395B765: "Ship Kit Wings" @
+BC9DE092B7E58D: "Nameplate Right" @
+DC73070F29FAA0: "Nameplate Left" @
+86B05A17A986F4: "Optional Slot 0 Class 6" @
+878184904938D1: "Optional Slot 0 Class 7" @
+E7D24C92C73F25: "Optional Slot 0 Class 8" @
+885F2C9C4B7E8B: "Optional Slot 1 Class 2" @
+0B0A56C382EEA6: "Optional Slot 1 Class 3" @
+C9A17528CC37B0: "Optional Slot 1 Class 4" @
+2C7FD86E379618: "Optional Slot 1 Class 5" @
+F8FB55BDF37E40: "Optional Slot 1 Class 6" @
+687ABCAC283ADB: "Optional Slot 1 Class 7" @
+1E0D086F2FB4E6: "Optional Slot 1 Class 8" @
+8B0615BD3806C3: "Optional Slot 2 Class 2" @
+5CDA34D1E25E96: "Optional Slot 2 Class 3" @
+678BA252A5F335: "Optional Slot 2 Class 4" @
+FC2B8F1471FE83: "Optional Slot 2 Class 5" @
+A99AECBA034113: "Optional Slot 2 Class 6" @
+5E6EDF8048AA39: "Optional Slot 2 Class 7" @
+BCB6A6E2F45E60: "Optional Slot 2 Class 8" @
+F635FCE4025991: "Optional Slot 3 Class 1" @
+A21693950B15EE: "Optional Slot 3 Class 2" @
+22FA6ADED763B6: "Optional Slot 3 Class 3" @
+D55FCBE2A09B17: "Optional Slot 3 Class 4" @
+76607186CC3761: "Optional Slot 3 Class 5" @
+5FB6E8BAC9DC88: "Optional Slot 3 Class 6" @
+E61A1E9AE1B27B: "Optional Slot 3 Class 7" @
+32B21D22839308: "Optional Slot 4 Class 1" @
+AAE41EE98815F8: "Optional Slot 4 Class 2" @
+05696B07DD1B20: "Optional Slot 4 Class 3" @
+E968C6B6BA8D27: "Optional Slot 4 Class 4" @
+AE98D3B8BC52AE: "Optional Slot 4 Class 5" @
+A2428300BAE68E: "Optional Slot 4 Class 6" @
+C801DC9A469868: "Optional Slot 5 Class 1" @
+B34229AFC4A922: "Optional Slot 5 Class 2" @
+A85924BEFF814E: "Optional Slot 5 Class 3" @
+2AEBCE58D0354E: "Optional Slot 5 Class 4" @
+56241B4E1A9F20: "Optional Slot 5 Class 5" @
+9C40E1F910147A: "Optional Slot 5 Class 6" @
+CA09113685A4B9: "Optional Slot 6 Class 1" @
+08A40BEAE2D9AC: "Optional Slot 6 Class 2" @
+713A085D7A6B60: "Optional Slot 6 Class 3" @
+D86F58EA5DD1CD: "Optional Slot 6 Class 4" @
+4E1D21ED0771CD: "Optional Slot 6 Class 5" @
+F8ADF37E07F6EC: "Optional Slot 7 Class 1" @
+910C1FAC529F9A: "Optional Slot 7 Class 2" @
+AFB271774C7ECF: "Optional Slot 7 Class 3" @
+CE3ADBA96B0C99: "Optional Slot 7 Class 4" @
+2A3CB0FE6A9540: "Optional Slot 7 Class 5" @
+25092FCB6372A8: "Optional Slot 8 Class 1" @
+9BB4C22DF1C07F: "Optional Slot 8 Class 2" @
+C4525B53F318D1: "Optional Slot 8 Class 3" @
+F0B18965D06832: "Optional Slot 8 Class 4" @
+0B34FF14CF4D01: "Optional Slot 9 Class 1" @
+FE6A27546E56FC: "Optional Slot 9 Class 2" @
+37EBB40B5D1CC8: "Optional Slot 9 Class 3" @
+9D66A1EEBAC0DD: "Optional Slot 9 Class 4" @
+1D789803629DBF: "Optional Slot 10 Class 1" @
+9E1FDD91F3034C: "Optional Slot 10 Class 2" @
+FE77DED06FC359: "Optional Slot 10 Class 3" @
+B9F7EC2C516319: "Optional Slot 10 Class 4" @
+9E334982917548: "Optional Slot 11 Class 1" @
+2E43536EE0228A: "Optional Slot 11 Class 2" @
+396FF2847C8FAD: "Optional Slot 11 Class 3" @
+7B3D33D0B5E58B: "Optional Slot 12 Class 1" @
+99231038FC49DD: "Optional Slot 13 Class 1" @
+EB2C412690A12A: "Optional Slot 13 Class 2" @
+F448DCEB3AF33F: "Optional Slot 14 Class 1" @
+45A1DD67CDD695: "Optional Slot 14 Class 2" @
+EB2E26440F6DEA: "Small Hardpoint 1" @
+D55A80FE439B81: "Small Hardpoint 2" @
+F947800CCCE7FF: "Small Hardpoint 3" @
+3F6DB68E74DE60: "Small Hardpoint 4" @
+0CEC961D38E574: "Small Hardpoint 5" @
+16D34D20B21E87: "Small Hardpoint 6" @
+A0B05903143371: "String Lights" @
+4F751D52E89B5F: "Utility Mount 1" @
+6BA0C5CC04F00A: "Utility Mount 2" @
+DCD4E538925A66: "Utility Mount 3" @
+AD2158F5BFF769: "Utility Mount 4" @
+8C99DEB528D776: "Utility Mount 5" @
+359062D37B0D91: "Utility Mount 6" @
+52175069090626: "Utility Mount 7" @
+D45B70672A3B36: "Utility Mount 8" @
+E4DD5EE5641BD6: "Vessel Voice" @
+3CE46E3FB1D343: "Weapon Colour" @
+D96AA577649F7B: "Turret Type 2" @
+3AE8579069394D: "Sine Wave Scanner" @
+50128387AF1F10: "Biological Scanner" @
+BCC6D8B8761B2B: "Colonisation Suite" @
+1D10985EBE451F: "Large Cargo 1" @
+FA9AB13CECC85C: "Large Cargo 2" @
+915A0715B57347: "Medium Mining Hardpoint 1" @
+E104214FD34AC0: "Medium Mining Hardpoint 2" @
+5E6DE9C9A368F8: "Small Mining Hardpoint 1" @
+B682567449A543: "Large Mining Hardpoint 1" @
+F4A2558C583E61: "Limpet Controller 1" @
+0B523B44CCD4E7: "Fighter Bay 1" @
+09D463E32B04B2: "Hologram" @
+
+SECTION StationServices
+
+4D720898E61E8B: "Apex Interstellar" @
+A8CF8DE554773A: "Autodock" @
+882219054258CA: "Bartender" @
+E994445B523BBA: "Black Market" @
+B0DD615CBBDCBF: "Contacts" @
+9C67E23C401E4C: "Crew Lounge" @
+E8B5CBF904F402: "Dock" @
+13B8FE38A93B1E: "Workshop" @
+40EEE9BBA83352: "Fleet Carrier Administration" @
+D7B33C2AD2D256: "Fleet Carrier Fuel" @
+5DFCF847B92DE4: "Fleet Carrier Management" @
+61538661D8E094: "Fleet Carrier Vendor" @
+BCF0B075B87A0B: "Flight Controller" @
+4E110FCC0D930E: "Frontline Solutions" @
+CE58D89A4E21CC: "Interstellar Factors Contact" @
+E2CCAE04963449: "Initiatives" @
+DF9FFF10547920: "Livery" @
+87E1A3CD31659F: "Missions Generated" @
+4C43E25D84B7F8: "On Dock Mission" @
+47B3D6DC1170FA: "Refuel" @
+3CCF7127AB2FFF: "Restock" @
+55DE88709232EC: "Shop" @
+AD038C447F5DE3: "Social Space" @
+D286137F857962: "Station Menu" @
+BB15267B3070D3: "Station Operations" @
+221B7518505747: "Tuning" @
+60200FB3E2E83B: "Construction Services" @
+AA300EF7059881: "Refinery Contact" @
+2E40E3A594EE09: "System Colonisation" @
