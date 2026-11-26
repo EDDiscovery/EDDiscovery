@@ -4,7 +4,7 @@ EDDiscovery is a captain's log and 2D/3D map for Elite Dangerous players. Find m
 
 [![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/EDDiscovery/EDDiscovery/master/LICENSE.md) (for public parts of the SW only)
 
-We purposely make this software open source so you have confidence in it, can inspect it, and can reuse aspects of it for your own use such as the data, classes etc.
+Since 2015 we purposely make this software open source so you have confidence in it, can inspect it, and can reuse aspects of it for your own use such as the data, classes etc. BUT.
 
 ** From 26/11/26, due to people using AI to scrape data from this program, core parts of this is now private and not on github **
 
