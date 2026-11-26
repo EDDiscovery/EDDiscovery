@@ -6,7 +6,7 @@ EDDiscovery is a captain's log and 2D/3D map for Elite Dangerous players. Find m
 
 Since 2015 we purposely make this software open source so you have confidence in it, can inspect it, and can reuse aspects of it for your own use such as the data, classes etc. BUT.
 
-** From 26/11/26, due to people using AI to scrape data from this program, core parts of this is now private and not on github **
+**From 26/11/26, due to people using AI to scrape data from this program, core parts of this is now private and not on github**
 
 Many thousands of hours of work has gone into this by its creators.  Its not fair if you just rip off whole features or data into your latest creation, AI generated or not, without asking explicit permission. It will discourage people from contributing to the program as they see their work ripped off by others.
 
