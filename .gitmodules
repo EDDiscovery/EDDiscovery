@@ -16,3 +16,6 @@
 [submodule "CAPI"]
 	path = CAPI
 	url = https://codeberg.org/EDDiscovery/CAPI.git
+[submodule "EDDIcons"]
+	path = EDDIcons
+	url = https://codeberg.org/EDDiscovery/EDDIcons.git
