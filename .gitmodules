@@ -7,12 +7,12 @@
 [submodule "ActionLanguage"]
 	path = ActionLanguage
 	url = https://github.com/EDDiscovery/ActionLanguage.git
-[submodule "CAPI"]
-	path = CAPI
-	url = https://github.com/EDDiscovery/CAPI.git
 [submodule "EliteDangerousCore"]
 	path = EliteDangerousCore
 	url = https://codeberg.org/EDDiscovery/EliteDangerousCore.git
 [submodule "EDD"]
 	path = EDD
 	url = https://codeberg.org/EDDiscovery/EDD.git
+[submodule "CAPI"]
+	path = CAPI
+	url = https://codeberg.org/EDDiscovery/CAPI.git
