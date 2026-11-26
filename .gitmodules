@@ -13,3 +13,6 @@
 [submodule "EliteDangerousCore"]
 	path = EliteDangerousCore
 	url = https://codeberg.org/EDDiscovery/EliteDangerousCore.git
+[submodule "EDD"]
+	path = EDD
+	url = https://codeberg.org/EDDiscovery/EDD.git
