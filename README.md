@@ -2,15 +2,19 @@ EDDiscovery is a captain's log and 2D/3D map for Elite Dangerous players. Find m
 
 # License and use
 
-[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/EDDiscovery/EDDiscovery/master/LICENSE.md)
+[![GitHub license](https://img.shields.io/badge/license-Apache%202-blue.svg)](https://raw.githubusercontent.com/EDDiscovery/EDDiscovery/master/LICENSE.md) (for public parts of the SW only)
 
-We purposely make this software open source so you have confidence in it, can inspect it, and can reuse aspects of it for your own use such as the data, classes etc.
+Since 2015 we purposely make this software open source so you have confidence in it, can inspect it, and can reuse aspects of it for your own use such as the data, classes etc. BUT.
 
-**WE DO NOT PERMIT wholescale copying of features of this program into your latest Elite Dangerous project**
+**From 26/11/26, due to people using AI to scrape data from this program, core parts of this is now private and not on github**
 
-Many thousands of hours of work has gone into this by its creators.  Its not fair if you just rip off whole features into your latest creation, AI generated or not. It will discourage people from contributing to the program as they see their work ripped off by others.
+Many thousands of hours of work has gone into this by its creators.  Its not fair if you just rip off whole features or data into your latest creation, AI generated or not, without asking explicit permission. It will discourage people from contributing to the program as they see their work ripped off by others.
 
-If copying occurs, then we will be forced to move the crucial parts of it (the panels, EDC core) to closed source to stop the copying.  We really don't want to do that.  It will affect Mono users and people who just want to be able to compile it themselves.
+Github also allows AI scraping of data in their repos for non buisnesses, private repo or not.  Github is not AI safe.
+
+We have therefore regretfully after 11 years of being open and encouraging collaboration had to place some key SW behind a wall to prevent wholescale copying or AI reengineering.
+
+If you want to collaborate, we can discuss this via Discord.
 
 # Youtube
 
