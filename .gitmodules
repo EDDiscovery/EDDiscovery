@@ -4,9 +4,6 @@
 [submodule "BaseUtilities"]
 	path = BaseUtilities
 	url = https://github.com/EDDiscovery/BaseUtilities.git
-[submodule "ActionLanguage"]
-	path = ActionLanguage
-	url = https://github.com/EDDiscovery/ActionLanguage.git
 [submodule "EliteDangerousCore"]
 	path = EliteDangerousCore
 	url = https://codeberg.org/EDDiscovery/EliteDangerousCore.git
@@ -19,3 +16,6 @@
 [submodule "EDDIcons"]
 	path = EDDIcons
 	url = https://codeberg.org/EDDiscovery/EDDIcons.git
+[submodule "ActionLanguage"]
+	path = ActionLanguage
+	url = https://codeberg.org/EDDiscovery/ActionLanguage.git
